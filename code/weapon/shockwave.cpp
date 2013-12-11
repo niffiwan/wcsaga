@@ -34,8 +34,7 @@ typedef struct shockwave_info
 	int fps;
 
 	shockwave_info()
-		: num_frames ( 0 ),
-		  fps ( 0 )
+		: num_frames ( 0 ), fps ( 0 )
 	{
 		filename[ 0 ] = '\0';
 		bitmap_id = -1;
@@ -160,9 +159,8 @@ int shockwave_create ( int parent_objnum, vec3d *pos, shockwave_create_info *sci
 	}
 
 	// real_parent is the guy who caused this shockwave to happen
-	if ( parent_objnum == -1 )
+	if ( parent_objnum == -1 ) // Goober5000
 	{
-		// Goober5000
 		real_parent = -1;
 	}
 	else if ( Objects[parent_objnum].type == OBJ_WEAPON )
@@ -199,9 +197,8 @@ int shockwave_create ( int parent_objnum, vec3d *pos, shockwave_create_info *sci
 	//  sw->total_time = i2fl(si->num_frames) / si->fps;    // in seconds
 	sw->total_time = sw->outer_radius / sw->speed;
 
-	if ( ( parent_objnum != -1 ) && Objects[parent_objnum].type == OBJ_WEAPON )
+	if ( ( parent_objnum != -1 ) && Objects[parent_objnum].type == OBJ_WEAPON ) // Goober5000: allow -1
 	{
-		// Goober5000: allow -1
 		sw->weapon_info_index = Weapons[Objects[parent_objnum].instance].weapon_info_index;
 	}
 	else
@@ -410,8 +407,7 @@ void shockwave_move ( object *shockwave_objp, float frametime )
 			continue;
 		}
 
-		if ( weapon_area_calc_damage ( objp, &sw->pos, sw->inner_radius, sw->outer_radius, sw->blast,
-		                               sw->damage, &blast, &damage, sw->radius ) == -1 )
+		if ( weapon_area_calc_damage ( objp, &sw->pos, sw->inner_radius, sw->outer_radius, sw->blast, sw->damage, &blast, &damage, sw->radius ) == -1 )
 		{
 			continue;
 		}
@@ -485,14 +481,12 @@ void shockwave_render ( object *objp )
 	{
 		float model_Interp_scale_xyz = sw->radius / 50.0f;
 
-		model_set_warp_globals ( model_Interp_scale_xyz, model_Interp_scale_xyz, model_Interp_scale_xyz, -1,
-		                         1.0f - ( sw->radius / sw->outer_radius ) );
+		model_set_warp_globals ( model_Interp_scale_xyz, model_Interp_scale_xyz, model_Interp_scale_xyz, -1, 1.0f - ( sw->radius / sw->outer_radius ) );
 
 		float dist = vm_vec_dist_quick ( &sw->pos, &Eye_position );
 
 		model_set_detail_level ( ( int ) ( dist / ( sw->radius * 10.0f ) ) );
-		model_render ( sw->model_id, &Objects[sw->objnum].orient, &sw->pos, MR_NO_LIGHTING | MR_NO_FOGGING | MR_NORMAL |
-		               MR_CENTER_ALPHA | MR_NO_CULL, sw->objnum );
+		model_render ( sw->model_id, &Objects[sw->objnum].orient, &sw->pos, MR_NO_LIGHTING | MR_NO_FOGGING | MR_NORMAL | MR_CENTER_ALPHA | MR_NO_CULL, sw->objnum );
 
 		model_set_warp_globals();
 	}
@@ -620,8 +614,7 @@ void shockwave_level_init()
 			if ( i >= 0 )
 				mprintf ( ( "SHOCKWAVE =>  Default animation load: SUCCEEDED!!\n" ) );
 			else
-				mprintf ( ( "SHOCKWAVE =>  Default animation load: FAILED!!  Checking if 3d effect was already tried...\n"
-				          ) );
+				mprintf ( ( "SHOCKWAVE =>  Default animation load: FAILED!!  Checking if 3d effect was already tried...\n" ) );
 		}
 
 		// chief1983 - The first patch broke mods that don't provide a 2d shockwave or define a specific shockwave for each model/weapon (shame on them)
@@ -710,7 +703,9 @@ void shockwave_level_close()
 //
 //  Called at game-shutdown to
 //
-void shockwave_close() {}
+void shockwave_close()
+{
+}
 
 // ------------------------------------------------------------------------------------
 // shockwave_move_all()

@@ -347,8 +347,7 @@ void trail_render ( trail *trailp )
 
 
 	gr_set_bitmap ( ti->texture.bitmap_id, GR_ALPHABLEND_FILTER, GR_BITBLT_MODE_NORMAL, 1.0f );
-	g3_draw_poly ( nv, Trail_vlist, TMAP_FLAG_TEXTURED | TMAP_FLAG_ALPHA | TMAP_FLAG_GOURAUD | TMAP_FLAG_RGB |
-	               TMAP_HTL_3D_UNLIT | TMAP_FLAG_TRISTRIP );
+	g3_draw_poly ( nv, Trail_vlist, TMAP_FLAG_TEXTURED | TMAP_FLAG_ALPHA | TMAP_FLAG_GOURAUD | TMAP_FLAG_RGB | TMAP_HTL_3D_UNLIT | TMAP_FLAG_TRISTRIP );
 }
 
 
@@ -403,8 +402,7 @@ void trail_move_all ( float frametime )
 			do
 			{
 				n--;
-				if ( n < 0 )
-					n = NUM_TRAIL_SECTIONS - 1;
+				if ( n < 0 ) n = NUM_TRAIL_SECTIONS - 1;
 
 				trailp->val[n] += time_delta;
 

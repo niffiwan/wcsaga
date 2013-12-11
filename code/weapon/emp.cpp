@@ -60,56 +60,9 @@ wacky_text Emp_wacky_text[NUM_TEXT_STAMPS];
 #define NUM_RANDOM_CHARS        51
 char Emp_random_char[NUM_RANDOM_CHARS] =
 {
-	'a',
-	'b',
-	'c',
-	'd',
-	'e',
-	'f',
-	'g',
-	'4',
-	'h',
-	'8',
-	'_',
-	'$',
-	')',
-	'-',
-	'~',
-	'u',
-	'q',
-	'.',
-	'x',
-	'h',
-	'&',
-	'%',
-	'*',
-	'1',
-	'3',
-	't',
-	'h',
-	'o',
-	'p',
-	'@',
-	'h',
-	'i',
-	'v',
-	'+',
-	'=',
-	'|',
-	'{',
-	'}',
-	':',
-	';',
-	'^',
-	'l',
-	'z',
-	'u',
-	'v',
-	'<',
-	'>',
-	'?',
-	'5',
-	'8'
+	'a', 'b', 'c', 'd', 'e', 'f', 'g', '4', 'h', '8', '_', '$', ')', '-', '~', 'u', 'q',
+	'.', 'x', 'h', '&', '%', '*', '1', '3', 't', 'h', 'o', 'p', '@', 'h', 'i', 'v', '+', '=',
+	'|', '{', '}', ':', ';', '^', 'l', 'z', 'u', 'v', '<', '>', '?', '5', '8'
 };
 
 // EMP EFFECTS ON PLAYERS -----
@@ -274,9 +227,7 @@ void emp_apply ( vec3d *pos, float inner_radius, float outer_radius, float emp_i
 					// disrupt the turret
 					ship_subsys_set_disrupted ( moveup, ( int ) ( MAX_TURRET_DISRUPT_TIME * scale_factor ) );
 
-					mprintf ( ( "EMP disrupting subsys %s on ship %s (%f, %f)\n", moveup->system_info->subobj_name,
-					            Ships[Objects[so->objnum].instance].ship_name, scale_factor, MAX_TURRET_DISRUPT_TIME *
-					            scale_factor ) );
+					mprintf ( ( "EMP disrupting subsys %s on ship %s (%f, %f)\n", moveup->system_info->subobj_name, Ships[Objects[so->objnum].instance].ship_name, scale_factor, MAX_TURRET_DISRUPT_TIME * scale_factor ) );
 				}
 
 				// next item
@@ -640,21 +591,14 @@ void emp_maybe_reformat_text ( char *text, int max_len, int gauge_id )
 		switch ( gauge_id )
 		{
 		//  weapons
-		case EG_WEAPON_TITLE:
-		case EG_WEAPON_P1:
-		case EG_WEAPON_P2:
-		case EG_WEAPON_P3:
-		case EG_WEAPON_S1:
-		case EG_WEAPON_S2:
+		case EG_WEAPON_TITLE: case EG_WEAPON_P1: case EG_WEAPON_P2: case EG_WEAPON_P3: case EG_WEAPON_S1: case EG_WEAPON_S2:
 			int wep_index;
 			wep_index = ( int ) frand_range ( 0.0f, ( float ) ( MAX_WEAPON_TYPES - 1 ) );
 			strcpy_s ( wt->str, Weapon_info[ wep_index >= MAX_WEAPON_TYPES ? 0 : wep_index ].name );
 			break;
 
 		// escort list
-		case EG_ESCORT1:
-		case EG_ESCORT2:
-		case EG_ESCORT3:
+		case EG_ESCORT1: case EG_ESCORT2: case EG_ESCORT3:
 			// choose a random ship
 			int shipnum;
 			shipnum = ship_get_random_targetable_ship();
@@ -670,40 +614,21 @@ void emp_maybe_reformat_text ( char *text, int max_len, int gauge_id )
 			break;
 
 		// directives themselves
-		case EG_OBJ1:
-		case EG_OBJ2:
-		case EG_OBJ3:
-		case EG_OBJ4:
-		case EG_OBJ5:
+		case EG_OBJ1: case EG_OBJ2: case EG_OBJ3: case EG_OBJ4: case EG_OBJ5:
 			strcpy_s ( wt->str, text );
 			emp_randomize_chars ( wt->str );
 			break;
 
 		// target box info
-		case EG_TBOX_EXTRA1:
-		case EG_TBOX_EXTRA2:
-		case EG_TBOX_EXTRA3:
-		case EG_TBOX_CLASS:
-		case EG_TBOX_DIST:
-		case EG_TBOX_CARGO:
-		case EG_TBOX_HULL:
-		case EG_TBOX_NAME:
-		case EG_TBOX_INTEG:
+		case EG_TBOX_EXTRA1: case EG_TBOX_EXTRA2: case EG_TBOX_EXTRA3: case EG_TBOX_CLASS:
+		case EG_TBOX_DIST: case EG_TBOX_CARGO: case EG_TBOX_HULL: case EG_TBOX_NAME: case EG_TBOX_INTEG:
 			strcpy_s ( wt->str, text );
 			emp_randomize_chars ( wt->str );
 			break;
 
 		// squadmsg menu
-		case EG_SQ1:
-		case EG_SQ2:
-		case EG_SQ3:
-		case EG_SQ4:
-		case EG_SQ5:
-		case EG_SQ6:
-		case EG_SQ7:
-		case EG_SQ8:
-		case EG_SQ9:
-		case EG_SQ10:
+		case EG_SQ1: case EG_SQ2: case EG_SQ3: case EG_SQ4: case EG_SQ5: case EG_SQ6: case EG_SQ7:
+		case EG_SQ8: case EG_SQ9: case EG_SQ10:
 			strcpy_s ( wt->str, text );
 			emp_randomize_chars ( wt->str );
 			break;

@@ -42,10 +42,7 @@ typedef struct shockwave_create_info
 	void load();
 
 	shockwave_create_info()
-		: inner_rad ( 0.f ),
-		  outer_rad ( 0.f ),
-		  damage ( 0.f ),
-		  blast ( 0.f )
+		: inner_rad ( 0.f ), outer_rad ( 0.f ), damage ( 0.f ), blast ( 0.f )
 	{
 		name[ 0 ] = '\0';
 		pof_name[ 0 ] = '\0';

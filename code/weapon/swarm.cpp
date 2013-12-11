@@ -483,13 +483,9 @@ void turret_swarm_set_up_info ( int parent_objnum, ship_subsys *turret, weapon_i
 	target_obj = &Objects[turret->turret_enemy_objnum];
 
 	// valid swarm weapon
-	Assert ( ( ( wip->wi_flags & WIF_SWARM ) && ( wip->swarm_count > 0 ) ) || ( ( wip->wi_flags &
-	         WIF_CORKSCREW ) && ( wip->cs_num_fired > 0 ) ) );
+	Assert ( ( ( wip->wi_flags & WIF_SWARM ) && ( wip->swarm_count > 0 ) ) || ( ( wip->wi_flags & WIF_CORKSCREW ) && ( wip->cs_num_fired > 0 ) ) );
 
-	if ( ! ( ( wip->wi_flags & WIF_SWARM ) || ( wip->wi_flags & WIF_CORKSCREW ) ) || ( ( wip->wi_flags &
-	        WIF_SWARM ) &&
-	        ( wip->swarm_count <= 0 ) ) ||
-	        ( ( wip->wi_flags & WIF_CORKSCREW ) && ( wip->cs_num_fired <= 0 ) ) )
+	if ( ! ( ( wip->wi_flags & WIF_SWARM ) || ( wip->wi_flags & WIF_CORKSCREW ) ) || ( ( wip->wi_flags & WIF_SWARM ) && ( wip->swarm_count <= 0 ) ) || ( ( wip->wi_flags & WIF_CORKSCREW ) && ( wip->cs_num_fired <= 0 ) ) )
 		return;
 
 	// get turret_swarm_info
@@ -570,8 +566,7 @@ void turret_swarm_maybe_fire_missile ( int shipnum )
 	num_turret_swarm_turrets_left = shipp->num_turret_swarm_info;
 
 	// search ship subsystems for turrets with valid turret_swarm_info_index
-	for ( subsys = GET_FIRST ( &shipp->subsys_list ); subsys != END_OF_LIST ( &shipp->subsys_list );
-	        subsys = GET_NEXT ( subsys ) )
+	for ( subsys = GET_FIRST ( &shipp->subsys_list ); subsys != END_OF_LIST ( &shipp->subsys_list ); subsys = GET_NEXT ( subsys ) )
 	{
 		if ( subsys->turret_swarm_num > 0 )
 		{
@@ -634,8 +629,7 @@ void turret_swarm_maybe_fire_missile ( int shipnum )
 							// we are done firing, so see about resetting any animation timestamps for reversal (closing)...
 							// (I figure that a good estimate is to trigger a close after three additional swarms had fired - taylor)
 							if ( subsys->turret_animation_position == MA_POS_READY )
-								subsys->turret_animation_done_time = timestamp ( Weapon_info[tsi->weapon_class].
-								                                     SwarmWait * 3 );
+								subsys->turret_animation_done_time = timestamp ( Weapon_info[tsi->weapon_class].SwarmWait * 3 );
 
 							shipp->num_turret_swarm_info--;
 							subsys->turret_swarm_num--;
@@ -646,9 +640,7 @@ void turret_swarm_maybe_fire_missile ( int shipnum )
 				}
 				else
 				{
-					Warning ( LOCATION,
-					          "Found turret swarm info on ship: %s with turret: %s, but signature does not match.",
-					          shipp->ship_name, subsys->system_info->subobj_name );
+					Warning ( LOCATION, "Found turret swarm info on ship: %s with turret: %s, but signature does not match.", shipp->ship_name, subsys->system_info->subobj_name );
 					shipp->num_turret_swarm_info--;
 					subsys->turret_swarm_num--;
 					turret_swarm_delete ( subsys->turret_swarm_info_index[k] );

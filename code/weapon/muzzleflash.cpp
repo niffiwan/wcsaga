@@ -36,8 +36,8 @@ typedef struct mflash_blob_info
 		radius = mbi.radius;
 	}
 
-	mflash_blob_info()
-		: anim_id ( -1 ),
+	mflash_blob_info() :
+		  anim_id ( -1 ),
 		  offset ( 0.0 ),
 		  radius ( 0.0 )
 	{
@@ -216,8 +216,7 @@ void mflash_page_in ( bool load_all )
 		// blobs
 		for ( idx = 0; idx < Mflash_info[i].blobs.size(); idx++ )
 		{
-			Mflash_info[i].blobs[idx].anim_id = bm_load_animation ( Mflash_info[i].blobs[idx].name, &num_frames, &fps,
-			                                    NULL, 1 );
+			Mflash_info[i].blobs[idx].anim_id = bm_load_animation ( Mflash_info[i].blobs[idx].name, &num_frames, &fps, NULL, 1 );
 			Assert ( Mflash_info[i].blobs[idx].anim_id >= 0 );
 			bm_page_in_xparent_texture ( Mflash_info[i].blobs[idx].anim_id );
 		}
@@ -398,7 +397,9 @@ void mflash_process_all()
 	*/
 }
 
-void mflash_render_all() {}
+void mflash_render_all()
+{
+}
 
 // lookup type by name
 int mflash_lookup ( char *name )
