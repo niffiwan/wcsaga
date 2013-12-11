@@ -9,16 +9,17 @@
 # include <boost/concept/assert.hpp>
 # include <boost/preprocessor/seq/for_each.hpp>
 
-namespace boost { 
+namespace boost
+{
 
 // Template for use in handwritten assertions
 template <class Model, class More>
 struct requires_ : More
 {
 # if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-    typedef typename More::type type;
-# endif 
-    BOOST_CONCEPT_ASSERT((Model));
+	typedef typename More::type type;
+# endif
+	BOOST_CONCEPT_ASSERT ( ( Model ) );
 };
 
 // Template for use by macros, where models must be wrapped in parens.
@@ -27,21 +28,21 @@ struct requires_ : More
 template <class ModelFn>
 struct _requires_
 {
-    enum { value = 0 };
-    BOOST_CONCEPT_ASSERT_FN(ModelFn);
+	enum { value = 0 };
+	BOOST_CONCEPT_ASSERT_FN ( ModelFn );
 };
 
 template <int check, class Result>
 struct Requires_ : ::boost::parameter::aux::unaryfunptr_arg_type<Result>
 {
 # if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-    typedef typename ::boost::parameter::aux::unaryfunptr_arg_type<Result>::type type;
-# endif 
+	typedef typename ::boost::parameter::aux::unaryfunptr_arg_type<Result>::type type;
+# endif
 };
 
 # if BOOST_WORKAROUND(BOOST_INTEL_WIN, BOOST_TESTED_AT(1010))
 #  define BOOST_CONCEPT_REQUIRES_(r,data,t) | (::boost::_requires_<void(*)t>::value)
-# else 
+# else
 #  define BOOST_CONCEPT_REQUIRES_(r,data,t) + (::boost::_requires_<void(*)t>::value)
 # endif
 
@@ -68,7 +69,7 @@ struct Requires_ : ::boost::parameter::aux::unaryfunptr_arg_type<Result>
       void(*)result                                                                 \
     >::type
 
-#endif 
+#endif
 
 // C++0x proposed syntax changed.  This supports an older usage
 #define BOOST_CONCEPT_WHERE(models,result) BOOST_CONCEPT_REQUIRES(models,result)

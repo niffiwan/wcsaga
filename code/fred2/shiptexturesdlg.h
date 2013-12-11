@@ -6,41 +6,41 @@
 #ifndef _SHIPTEXTURESDLG_H
 #define _SHIPTEXTURESDLG_H
 
-#define SORT_OLD	0
-#define SORT_NEW	1
+#define SORT_OLD    0
+#define SORT_NEW    1
 
 /////////////////////////////////////////////////////////////////////////////
 // CShipTexturesDlg dialog
 
 class CShipTexturesDlg : public CDialog
 {
-// Construction
+	// Construction
 public:
-	CShipTexturesDlg(CWnd* pParent = NULL);   // standard constructor
+	CShipTexturesDlg ( CWnd *pParent = NULL ); // standard constructor
 
 	int self_ship;
 	int active_texture_index;
 	int modified;
 	int texture_count;
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(CShipTexturesDlg)
 	enum { IDD = IDD_SHIP_TEXTURES };
-	CString	m_new_texture;
-	int		m_old_texture_list;
+	CString m_new_texture;
+	int     m_old_texture_list;
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CShipTexturesDlg)
-	public:
-	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+public:
+	virtual BOOL Create ( LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT &rect, CWnd *pParentWnd, UINT nID, CCreateContext *pContext = NULL );
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions
@@ -57,9 +57,9 @@ private:
 	char old_texture_name[MAX_REPLACEMENT_TEXTURES][MAX_FILENAME_LEN];
 	char new_texture_name[MAX_REPLACEMENT_TEXTURES][MAX_FILENAME_LEN];
 	int query_modified();
-	void sort_textures(int test = SORT_OLD);
-	void swap_strings(char *str1, char *str2);
-	texture_replace *texture_set(texture_replace *dest, const texture_replace *src);
+	void sort_textures ( int test = SORT_OLD );
+	void swap_strings ( char *str1, char *str2 );
+	texture_replace *texture_set ( texture_replace *dest, const texture_replace *src );
 };
 
 //{{AFX_INSERT_LOCATION(CShipTexturesDlg)

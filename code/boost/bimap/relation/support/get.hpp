@@ -29,10 +29,14 @@
 #ifdef BOOST_BIMAP_ONLY_DOXYGEN_WILL_PROCESS_THE_FOLLOWING_LINES
 
 
-namespace boost {
-namespace bimaps {
-namespace relation {
-namespace support {
+namespace boost
+{
+namespace bimaps
+{
+namespace relation
+{
+namespace support
+{
 
 /** \brief Gets a pair view of the relation.
 
@@ -40,8 +44,8 @@ namespace support {
                                                                         **/
 
 template< class Tag, class SymmetricType >
-BOOST_DEDUCED_TYPENAME result_of::get<Tag,SymmetricType>::type
-    get( SymmetricType & );
+BOOST_DEDUCED_TYPENAME result_of::get<Tag, SymmetricType>::type
+get ( SymmetricType & );
 
 } // namespace support
 } // namespace relation
@@ -54,10 +58,14 @@ BOOST_DEDUCED_TYPENAME result_of::get<Tag,SymmetricType>::type
 
 #ifndef BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
 
-namespace boost {
-namespace bimaps {
-namespace relation {
-namespace support {
+namespace boost
+{
+namespace bimaps
+{
+namespace relation
+{
+namespace support
+{
 
 // Since it is very error-prone to directly write the hole bunch
 // of relation accesor. They are buil from litle macro blocks that
@@ -108,14 +116,15 @@ BOOST_BIMAP_SYMMETRIC_ACCESS_IMPLEMENTATION_BUILDER
     return st.get_right()
 )
 
-namespace detail {
+namespace detail
+{
 
 template< class SymmetricType >
-BOOST_DEDUCED_TYPENAME result_of::get<
-    ::boost::bimaps::relation::member_at::info, SymmetricType >::type
-get(::boost::bimaps::relation::member_at::info, SymmetricType & rel)
+BOOST_DEDUCED_TYPENAME result_of::get <
+::boost::bimaps::relation::member_at::info, SymmetricType >::type
+get ( ::boost::bimaps::relation::member_at::info, SymmetricType &rel )
 {
-    return rel.info;
+	return rel.info;
 }
 
 } // namespace detail

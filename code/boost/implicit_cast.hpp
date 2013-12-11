@@ -7,7 +7,8 @@
 
 # include <boost/mpl/identity.hpp>
 
-namespace boost {
+namespace boost
+{
 
 // implementation originally suggested by C. Green in
 // http://lists.boost.org/MailArchives/boost/msg00886.php
@@ -15,8 +16,9 @@ namespace boost {
 // The use of identity creates a non-deduced form, so that the
 // explicit template argument must be supplied
 template <typename T>
-inline T implicit_cast (typename mpl::identity<T>::type x) {
-    return x;
+inline T implicit_cast ( typename mpl::identity<T>::type x )
+{
+	return x;
 }
 
 // incomplete return type now is here

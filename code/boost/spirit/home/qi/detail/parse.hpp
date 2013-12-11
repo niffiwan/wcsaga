@@ -18,80 +18,89 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/bool.hpp>
 
-namespace boost { namespace spirit { namespace qi { namespace detail
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Expr, typename Enable = void>
-    struct parse_impl
-    {
-        // Report invalid expression error as early as possible.
-        // If you got an error_invalid_expression error message here,
-        // then the expression (expr) is not a valid spirit qi expression.
-        // Did you intend to use the auto_ facilities while forgetting to 
-        // #include <boost/spirit/include/qi_auto.hpp>?
-        BOOST_SPIRIT_ASSERT_MATCH(qi::domain, Expr);
-    };
+namespace spirit
+{
+namespace qi
+{
+namespace detail
+{
+///////////////////////////////////////////////////////////////////////////
+template <typename Expr, typename Enable = void>
+struct parse_impl
+{
+	// Report invalid expression error as early as possible.
+	// If you got an error_invalid_expression error message here,
+	// then the expression (expr) is not a valid spirit qi expression.
+	// Did you intend to use the auto_ facilities while forgetting to
+	// #include <boost/spirit/include/qi_auto.hpp>?
+	BOOST_SPIRIT_ASSERT_MATCH ( qi::domain, Expr );
+};
 
-    template <typename Expr>
-    struct parse_impl<Expr
-      , typename enable_if<traits::matches<qi::domain, Expr> >::type>
-    {
-        template <typename Iterator>
-        static bool call(
-            Iterator& first
-          , Iterator last
-          , Expr const& expr)
-        {
-            return compile<qi::domain>(expr).parse(
-                first, last, unused, unused, unused);
-        }
-    };
+template <typename Expr>
+struct parse_impl<Expr
+		, typename enable_if<traits::matches<qi::domain, Expr> >::type>
+{
+	template <typename Iterator>
+	static bool call (
+	    Iterator &first
+	    , Iterator last
+	    , Expr const &expr )
+	{
+		return compile<qi::domain> ( expr ).parse (
+		           first, last, unused, unused, unused );
+	}
+};
 
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Expr, typename Enable = void>
-    struct phrase_parse_impl
-    {
-        // Report invalid expression error as early as possible.
-        // If you got an error_invalid_expression error message here,
-        // then the expression (expr) is not a valid spirit qi expression.
-        // Did you intend to use the auto_ facilities while forgetting to 
-        // #include <boost/spirit/include/qi_auto.hpp>?
-        BOOST_SPIRIT_ASSERT_MATCH(qi::domain, Expr);
-    };
+///////////////////////////////////////////////////////////////////////////
+template <typename Expr, typename Enable = void>
+struct phrase_parse_impl
+{
+	// Report invalid expression error as early as possible.
+	// If you got an error_invalid_expression error message here,
+	// then the expression (expr) is not a valid spirit qi expression.
+	// Did you intend to use the auto_ facilities while forgetting to
+	// #include <boost/spirit/include/qi_auto.hpp>?
+	BOOST_SPIRIT_ASSERT_MATCH ( qi::domain, Expr );
+};
 
-    template <typename Expr>
-    struct phrase_parse_impl<Expr
-      , typename enable_if<traits::matches<qi::domain, Expr> >::type>
-    {
-        template <typename Iterator, typename Skipper>
-        static bool call(
-            Iterator& first
-          , Iterator last
-          , Expr const& expr
-          , Skipper const& skipper
-          , BOOST_SCOPED_ENUM(skip_flag) post_skip)
-        {
-            // Report invalid expression error as early as possible.
-            // If you got an error_invalid_expression error message here,
-            // then the skipper is not a valid spirit qi expression.
-            BOOST_SPIRIT_ASSERT_MATCH(qi::domain, Skipper);
+template <typename Expr>
+struct phrase_parse_impl<Expr
+		, typename enable_if<traits::matches<qi::domain, Expr> >::type>
+{
+	template <typename Iterator, typename Skipper>
+	static bool call (
+	    Iterator &first
+	    , Iterator last
+	    , Expr const &expr
+	    , Skipper const &skipper
+	    , BOOST_SCOPED_ENUM ( skip_flag ) post_skip )
+	{
+		// Report invalid expression error as early as possible.
+		// If you got an error_invalid_expression error message here,
+		// then the skipper is not a valid spirit qi expression.
+		BOOST_SPIRIT_ASSERT_MATCH ( qi::domain, Skipper );
 
-            typedef
-                typename result_of::compile<qi::domain, Skipper>::type
-            skipper_type;
-            skipper_type const skipper_ = compile<qi::domain>(skipper);
+		typedef
+		typename result_of::compile<qi::domain, Skipper>::type
+		skipper_type;
+		skipper_type const skipper_ = compile<qi::domain> ( skipper );
 
-            if (!compile<qi::domain>(expr).parse(
-                    first, last, unused, skipper_, unused))
-                return false;
+		if ( !compile<qi::domain> ( expr ).parse (
+		            first, last, unused, skipper_, unused ) )
+			return false;
 
-            if (post_skip == skip_flag::postskip)
-                qi::skip_over(first, last, skipper_);
-            return true;
-        }
-    };
+		if ( post_skip == skip_flag::postskip )
+			qi::skip_over ( first, last, skipper_ );
+		return true;
+	}
+};
 
-}}}}
+}
+}
+}
+}
 
 #endif
 

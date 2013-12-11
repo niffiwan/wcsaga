@@ -20,18 +20,20 @@
 #include <boost/interprocess/detail/config_begin.hpp>
 #include <boost/interprocess/detail/workaround.hpp>
 
-namespace boost {
-namespace interprocess { 
+namespace boost
+{
+namespace interprocess
+{
 
 template<class T>
-const T &max_value(const T &a, const T &b)
+const T &max_value ( const T &a, const T &b )
 {  return a > b ? a : b;   }
 
 template<class T>
-const T &min_value(const T &a, const T &b)
+const T &min_value ( const T &a, const T &b )
 {  return a < b ? a : b;   }
 
-}  //namespace interprocess { 
+}  //namespace interprocess {
 }  //namespace boost {
 
 #include <boost/interprocess/detail/config_end.hpp>

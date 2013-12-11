@@ -13,7 +13,8 @@
 // TODO: This should really be part of the property maps library rather than
 // the Boost.Graph library.
 
-namespace boost {
+namespace boost
+{
 
 /**
  * A constant property is one, that regardless of the edge or vertex given,
@@ -21,38 +22,38 @@ namespace boost {
  */
 template <typename Key, typename Value>
 struct constant_property_map
-    : public boost::put_get_helper<
-            const Value&,
-            constant_property_map<Key, Value>
-    >
+		: public boost::put_get_helper <
+		const Value &,
+		constant_property_map<Key, Value>
+		>
 {
-    typedef Key key_type;
-    typedef Value value_type;
-    typedef const Value& reference;
-    typedef boost::readable_property_map_tag category;
+	typedef Key key_type;
+	typedef Value value_type;
+	typedef const Value &reference;
+	typedef boost::readable_property_map_tag category;
 
-    constant_property_map()
-        : m_value()
-    { }
+	constant_property_map()
+		: m_value()
+	{ }
 
-    constant_property_map(const value_type &value)
-        : m_value(value)
-    { }
+	constant_property_map ( const value_type &value )
+		: m_value ( value )
+	{ }
 
-    constant_property_map(const constant_property_map& copy)
-        : m_value(copy.m_value)
-    { }
+	constant_property_map ( const constant_property_map &copy )
+		: m_value ( copy.m_value )
+	{ }
 
-    inline reference operator [](const key_type&) const
-    { return m_value; }
+	inline reference operator [] ( const key_type & ) const
+	{ return m_value; }
 
-    value_type m_value;
+	value_type m_value;
 };
 
 template <typename Key, typename Value>
 inline constant_property_map<Key, Value>
-make_constant_property(const Value& value)
-{ return constant_property_map<Key, Value>(value); }
+make_constant_property ( const Value &value )
+{ return constant_property_map<Key, Value> ( value ); }
 
 } /* namespace boost */
 

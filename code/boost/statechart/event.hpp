@@ -27,41 +27,41 @@ namespace statechart
 
 //////////////////////////////////////////////////////////////////////////////
 template< class MostDerived, class Allocator = std::allocator< void > >
-class event : public detail::rtti_policy::rtti_derived_type<
-  MostDerived, event_base >
+class event : public detail::rtti_policy::rtti_derived_type <
+	MostDerived, event_base >
 {
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    // Compiler-generated copy constructor and copy assignment operator are
-    // fine
+public:
+	//////////////////////////////////////////////////////////////////////////
+	// Compiler-generated copy constructor and copy assignment operator are
+	// fine
 
-    void * operator new( std::size_t size )
-    {
-      return detail::allocate< MostDerived, Allocator >( size );
-    }
+	void *operator new ( std::size_t size )
+	{
+		return detail::allocate< MostDerived, Allocator > ( size );
+	}
 
-    void * operator new( std::size_t, void * p )
-    {
-      return p;
-    }
+	void *operator new ( std::size_t, void *p )
+	{
+		return p;
+	}
 
-    void operator delete( void * pEvent )
-    {
-      detail::deallocate< MostDerived, Allocator >( pEvent );
-    }
+	void operator delete ( void *pEvent )
+	{
+		detail::deallocate< MostDerived, Allocator > ( pEvent );
+	}
 
-  protected:
-    //////////////////////////////////////////////////////////////////////////
-    event() {}
-    virtual ~event() {}
+protected:
+	//////////////////////////////////////////////////////////////////////////
+	event() {}
+	virtual ~event() {}
 
-  private:
-    //////////////////////////////////////////////////////////////////////////
-    virtual intrusive_ptr< const event_base > clone() const
-    {
-      return intrusive_ptr< const event_base >( new MostDerived(
-        *polymorphic_downcast< const MostDerived * >( this ) ) );
-    }
+private:
+	//////////////////////////////////////////////////////////////////////////
+	virtual intrusive_ptr< const event_base > clone() const
+	{
+		return intrusive_ptr< const event_base > ( new MostDerived (
+		            *polymorphic_downcast< const MostDerived * > ( this ) ) );
+	}
 };
 
 

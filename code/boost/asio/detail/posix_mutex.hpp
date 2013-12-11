@@ -33,69 +33,72 @@
 #include <boost/asio/detail/noncopyable.hpp>
 #include <boost/asio/detail/scoped_lock.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 class posix_event;
 
 class posix_mutex
-  : private noncopyable
+	: private noncopyable
 {
 public:
-  typedef boost::asio::detail::scoped_lock<posix_mutex> scoped_lock;
+	typedef boost::asio::detail::scoped_lock<posix_mutex> scoped_lock;
 
-  // Constructor.
-  posix_mutex()
-  {
-    int error = ::pthread_mutex_init(&mutex_, 0);
-    if (error != 0)
-    {
-      boost::system::system_error e(
-          boost::system::error_code(error,
-            boost::asio::error::get_system_category()),
-          "mutex");
-      boost::throw_exception(e);
-    }
-  }
+	// Constructor.
+	posix_mutex()
+	{
+		int error = ::pthread_mutex_init ( &mutex_, 0 );
+		if ( error != 0 )
+		{
+			boost::system::system_error e (
+			    boost::system::error_code ( error,
+			                                boost::asio::error::get_system_category() ),
+			    "mutex" );
+			boost::throw_exception ( e );
+		}
+	}
 
-  // Destructor.
-  ~posix_mutex()
-  {
-    ::pthread_mutex_destroy(&mutex_);
-  }
+	// Destructor.
+	~posix_mutex()
+	{
+		::pthread_mutex_destroy ( &mutex_ );
+	}
 
-  // Lock the mutex.
-  void lock()
-  {
-    int error = ::pthread_mutex_lock(&mutex_);
-    if (error != 0)
-    {
-      boost::system::system_error e(
-          boost::system::error_code(error,
-            boost::asio::error::get_system_category()),
-          "mutex");
-      boost::throw_exception(e);
-    }
-  }
+	// Lock the mutex.
+	void lock()
+	{
+		int error = ::pthread_mutex_lock ( &mutex_ );
+		if ( error != 0 )
+		{
+			boost::system::system_error e (
+			    boost::system::error_code ( error,
+			                                boost::asio::error::get_system_category() ),
+			    "mutex" );
+			boost::throw_exception ( e );
+		}
+	}
 
-  // Unlock the mutex.
-  void unlock()
-  {
-    int error = ::pthread_mutex_unlock(&mutex_);
-    if (error != 0)
-    {
-      boost::system::system_error e(
-          boost::system::error_code(error,
-            boost::asio::error::get_system_category()),
-          "mutex");
-      boost::throw_exception(e);
-    }
-  }
+	// Unlock the mutex.
+	void unlock()
+	{
+		int error = ::pthread_mutex_unlock ( &mutex_ );
+		if ( error != 0 )
+		{
+			boost::system::system_error e (
+			    boost::system::error_code ( error,
+			                                boost::asio::error::get_system_category() ),
+			    "mutex" );
+			boost::throw_exception ( e );
+		}
+	}
 
 private:
-  friend class posix_event;
-  ::pthread_mutex_t mutex_;
+	friend class posix_event;
+	::pthread_mutex_t mutex_;
 };
 
 } // namespace detail

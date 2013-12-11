@@ -25,41 +25,44 @@
 #include <boost/fusion/view/filter_view/detail/value_of_data_impl.hpp>
 #include <boost/fusion/view/filter_view/detail/key_of_impl.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct filter_view_iterator_tag;
-    struct forward_traversal_tag;
+namespace fusion
+{
+struct filter_view_iterator_tag;
+struct forward_traversal_tag;
 
-    template <typename Category, typename First, typename Last, typename Pred>
-    struct filter_iterator : iterator_base<filter_iterator<Category, First, Last, Pred> >
-    {
-        typedef convert_iterator<First> first_converter;
-        typedef typename first_converter::type first_iter;
-        typedef convert_iterator<Last> last_converter;
-        typedef typename last_converter::type last_iter;
+template <typename Category, typename First, typename Last, typename Pred>
+struct filter_iterator : iterator_base<filter_iterator<Category, First, Last, Pred> >
+{
+	typedef convert_iterator<First> first_converter;
+	typedef typename first_converter::type first_iter;
+	typedef convert_iterator<Last> last_converter;
+	typedef typename last_converter::type last_iter;
 
-        typedef filter_view_iterator_tag fusion_tag;
-        typedef Category category;
-        typedef
-            detail::static_find_if<
-                first_iter
-              , last_iter
-              , mpl::bind1<
-                    typename mpl::lambda<Pred>::type
-                  , mpl::bind1<mpl::quote1<result_of::value_of>,mpl::_1>
-                >
-            >
-        filter;
-        typedef typename filter::type first_type;
-        typedef last_iter last_type;
-        typedef Pred pred_type;
+	typedef filter_view_iterator_tag fusion_tag;
+	typedef Category category;
+	typedef
+	detail::static_find_if <
+	first_iter
+	, last_iter
+	, mpl::bind1 <
+	typename mpl::lambda<Pred>::type
+	, mpl::bind1<mpl::quote1<result_of::value_of>, mpl::_1>
+	>
+	>
+	filter;
+	typedef typename filter::type first_type;
+	typedef last_iter last_type;
+	typedef Pred pred_type;
 
-        filter_iterator(First const& first)
-            : first(filter::call(first_converter::call(first))) {}
+	filter_iterator ( First const &first )
+		: first ( filter::call ( first_converter::call ( first ) ) ) {}
 
-        first_type first;
-    };
-}}
+	first_type first;
+};
+}
+}
 
 #endif
 

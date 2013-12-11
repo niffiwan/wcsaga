@@ -1,7 +1,7 @@
 // Copyright Alexander Nasonov 2006-2009
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef FILE_boost_scope_exit_hpp_INCLUDED
@@ -29,84 +29,98 @@
 #endif
 
 // Steven Watanabe's trick with a modification suggested by Kim Barrett
-namespace boost { namespace scope_exit { namespace aux {
+namespace boost
+{
+namespace scope_exit
+{
+namespace aux
+{
 
-    // Type of a local boost_scope_exit_args variable.
-    // First use in a local scope will declare the boost_scope_exit_args
-    // variable, subsequent uses will be resolved as two comparisons
-    // (cmp1 with 0 and cmp2 with boost_scope_exit_args).
-    template<int Dummy = 0>
-    struct declared
+// Type of a local boost_scope_exit_args variable.
+// First use in a local scope will declare the boost_scope_exit_args
+// variable, subsequent uses will be resolved as two comparisons
+// (cmp1 with 0 and cmp2 with boost_scope_exit_args).
+template<int Dummy = 0>
+struct declared
+{
+void *value;
+static int const cmp2 = 0;
+friend void operator> ( int, declared const & ) {}
+};
+
+struct undeclared { declared<> dummy[2]; };
+
+template<int> struct resolve;
+
+template<>
+struct resolve<sizeof ( declared<> ) >
+{
+    static const int cmp1 = 0;
+};
+
+template<>
+struct resolve<sizeof ( undeclared ) >
+{
+    template<int>
+    struct cmp1
     {
-        void* value;
         static int const cmp2 = 0;
-        friend void operator>(int, declared const&) {}
     };
-
-    struct undeclared { declared<> dummy[2]; };
-
-    template<int> struct resolve;
-
-    template<>
-    struct resolve<sizeof(declared<>)>
-    {
-        static const int cmp1 = 0;
-    };
-
-    template<>
-    struct resolve<sizeof(undeclared)>
-    {
-        template<int>
-        struct cmp1
-        {
-            static int const cmp2 = 0;
-        };
-    };
-} } }
+            };
+}
+}
+}
 
 extern boost::scope_exit::aux::undeclared boost_scope_exit_args; // undefined
 
 
-namespace boost { namespace scope_exit { namespace aux {
+namespace boost
+{
+namespace scope_exit
+{
+namespace aux
+{
 
-typedef void (*ref_tag)(int&);
-typedef void (*val_tag)(int );
+typedef void ( *ref_tag ) ( int & );
+typedef void ( *val_tag ) ( int );
 
 template<class T, class Tag> struct member;
 
 template<class T>
-struct member<T,ref_tag>
+struct member<T, ref_tag>
 {
-    T& value;
+T &value;
 #ifndef BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND
-    member(T& ref) : value(ref) {}
+member ( T &ref ) : value ( ref ) {}
 #endif
 };
 
 template<class T>
-struct member<T,val_tag>
+struct member<T, val_tag>
 {
-    T value;
+T value;
 #ifndef BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND
-    member(T& val) : value(val) {}
+member ( T &val ) : value ( val ) {}
 #endif
 };
 
-template<class T> inline T& deref(T* p, ref_tag) { return *p; }
-template<class T> inline T& deref(T& r, val_tag) { return  r; }
+template<class T> inline T &deref ( T *p, ref_tag ) { return *p; }
+template<class T> inline T &deref ( T &r, val_tag ) { return  r; }
 
 template<class T>
 struct wrapper
 {
-    typedef T type;
+typedef T type;
 };
 
-template<class T> wrapper<T> wrap(T&);
+template<class T> wrapper<T> wrap ( T & );
 
-} } }
+}
+}
+}
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::scope_exit::aux::wrapper, 1)
+BOOST_TYPEOF_REGISTER_TEMPLATE ( boost::scope_exit::aux::wrapper, 1 )
 
 #define BOOST_SCOPE_EXIT_AUX_GUARD(id)     BOOST_PP_CAT(boost_se_guard_,    id)
 #define BOOST_SCOPE_EXIT_AUX_GUARD_T(id)   BOOST_PP_CAT(boost_se_guard_t_,  id)
@@ -142,7 +156,7 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::scope_exit::aux::wrapper, 1)
     BOOST_PP_COMMA_IF(i) BOOST_PP_TUPLE_ELEM(2,1,idty)             \
     BOOST_SCOPE_EXIT_AUX_PARAMS_T(BOOST_PP_TUPLE_ELEM(2,0,idty)):: \
     BOOST_SCOPE_EXIT_AUX_PARAM_T(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var) var
- 
+
 #define BOOST_SCOPE_EXIT_AUX_ARG(r, id, i, var) BOOST_PP_COMMA_IF(i) \
     boost_se_params_->BOOST_SCOPE_EXIT_AUX_PARAM(id,i,var).value
 

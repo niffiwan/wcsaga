@@ -39,8 +39,10 @@
 #include <boost/bimap/views/map_view.hpp>
 #include <boost/bimap/views/set_view.hpp>
 
-namespace boost {
-namespace bimaps {
+namespace boost
+{
+namespace bimaps
+{
 
 /// \brief Set Type Specification
 /**
@@ -109,54 +111,54 @@ See also set_of_relation.
 template
 <
     class KeyType,
-    class KeyCompare = std::less< BOOST_DEDUCED_TYPENAME 
-        ::boost::bimaps::tags::support::value_type_of<KeyType>::type >
->
+    class KeyCompare = std::less< BOOST_DEDUCED_TYPENAME
+                                  ::boost::bimaps::tags::support::value_type_of<KeyType>::type >
+    >
 struct set_of : public ::boost::bimaps::detail::set_type_of_tag
 {
-    /// User type, can be tagged
-    typedef KeyType user_type;
+	/// User type, can be tagged
+	typedef KeyType user_type;
 
-    /// Type of the object that will be stored in the set
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::tags::support::
-        value_type_of<user_type>::type value_type;
+	/// Type of the object that will be stored in the set
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::tags::support::
+	value_type_of<user_type>::type value_type;
 
-    /// Functor that compare two keys
-    typedef KeyCompare key_compare;
+	/// Functor that compare two keys
+	typedef KeyCompare key_compare;
 
-    struct lazy_concept_checked
-    {
-        BOOST_CLASS_REQUIRE ( value_type,
-                              boost, AssignableConcept );
+	struct lazy_concept_checked
+	{
+		BOOST_CLASS_REQUIRE ( value_type,
+		                      boost, AssignableConcept );
 
-        BOOST_CLASS_REQUIRE4( key_compare, bool, value_type, value_type,
-                              boost, BinaryFunctionConcept );
+		BOOST_CLASS_REQUIRE4 ( key_compare, bool, value_type, value_type,
+		                       boost, BinaryFunctionConcept );
 
-        typedef set_of type;
-    };
+		typedef set_of type;
+	};
 
-    BOOST_BIMAP_GENERATE_INDEX_BINDER_1CP(
+	BOOST_BIMAP_GENERATE_INDEX_BINDER_1CP (
 
-        // binds to
-        multi_index::ordered_unique,
+	    // binds to
+	    multi_index::ordered_unique,
 
-        // with
-        key_compare
-    )
+	    // with
+	    key_compare
+	)
 
-    BOOST_BIMAP_GENERATE_MAP_VIEW_BINDER(
+	BOOST_BIMAP_GENERATE_MAP_VIEW_BINDER (
 
-        // binds to
-        views::map_view
-    )
+	    // binds to
+	    views::map_view
+	)
 
-    BOOST_BIMAP_GENERATE_SET_VIEW_BINDER(
+	BOOST_BIMAP_GENERATE_SET_VIEW_BINDER (
 
-        // binds to
-        views::set_view
-    )
+	    // binds to
+	    views::set_view
+	)
 
-    typedef mpl::bool_<false> mutable_key;
+	typedef mpl::bool_<false> mutable_key;
 };
 
 
@@ -182,20 +184,20 @@ See also set_of, is_set_type_of_relation.
 template< class KeyCompare = std::less< _relation > >
 struct set_of_relation : public ::boost::bimaps::detail::set_type_of_relation_tag
 {
-    /// Functor that compare two keys
-    typedef KeyCompare key_compare;
+	/// Functor that compare two keys
+	typedef KeyCompare key_compare;
 
-    BOOST_BIMAP_GENERATE_RELATION_BINDER_1CP(
+	BOOST_BIMAP_GENERATE_RELATION_BINDER_1CP (
 
-        // binds to
-        set_of,
+	    // binds to
+	    set_of,
 
-        // with
-        key_compare
-    )
+	    // with
+	    key_compare
+	)
 
-    typedef mpl::bool_<false>  left_mutable_key;
-    typedef mpl::bool_<false> right_mutable_key;
+	typedef mpl::bool_<false>  left_mutable_key;
+	typedef mpl::bool_<false> right_mutable_key;
 };
 
 } // namespace bimaps

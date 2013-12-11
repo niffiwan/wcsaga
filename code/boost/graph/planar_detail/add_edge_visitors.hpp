@@ -13,47 +13,47 @@
 namespace boost
 {
 
-  struct default_add_edge_visitor
-  {
+struct default_add_edge_visitor
+{
 
-    template <typename Graph, typename Vertex>
-    void visit_vertex_pair(Vertex u, Vertex v, Graph& g)
-    {
-      add_edge(u,v,g);
-    }
+	template <typename Graph, typename Vertex>
+	void visit_vertex_pair ( Vertex u, Vertex v, Graph &g )
+	{
+		add_edge ( u, v, g );
+	}
 
-  };
+};
 
-  template<typename EdgeIndexMap>
-  struct edge_index_update_visitor
-  {
+template<typename EdgeIndexMap>
+struct edge_index_update_visitor
+{
 
-    typedef typename 
-      property_traits<EdgeIndexMap>::value_type edge_index_value_t;
+	typedef typename
+	property_traits<EdgeIndexMap>::value_type edge_index_value_t;
 
-    edge_index_update_visitor(EdgeIndexMap em, 
-                              edge_index_value_t next_index_available
-                              ) : 
-      m_em(em),
-      m_next_index(next_index_available)
-    {}
-    
-    template <typename Graph, typename Vertex>
-    void visit_vertex_pair(Vertex u, Vertex v, Graph& g)
-    {
-      typedef typename graph_traits<Graph>::edge_descriptor edge_t;
-      std::pair<edge_t, bool> return_value = add_edge(u,v,g);
-      if (return_value.second)
-        put( m_em, return_value.first, m_next_index++);
-    }
+	edge_index_update_visitor ( EdgeIndexMap em,
+	                            edge_index_value_t next_index_available
+	                          ) :
+		m_em ( em ),
+		m_next_index ( next_index_available )
+	{}
 
-  private:
+	template <typename Graph, typename Vertex>
+	void visit_vertex_pair ( Vertex u, Vertex v, Graph &g )
+	{
+		typedef typename graph_traits<Graph>::edge_descriptor edge_t;
+		std::pair<edge_t, bool> return_value = add_edge ( u, v, g );
+		if ( return_value.second )
+			put ( m_em, return_value.first, m_next_index++ );
+	}
 
-    EdgeIndexMap m_em;
-    edge_index_value_t m_next_index;
+private:
 
-  };
+	EdgeIndexMap m_em;
+	edge_index_value_t m_next_index;
 
-} // namespace boost 
+};
+
+} // namespace boost
 
 #endif //__ADD_EDGE_VISITORS_HPP__

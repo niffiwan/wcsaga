@@ -6,10 +6,10 @@
 class Frustum
 {
 public:
-	Frustum(float fov, float aspect_ratio, float near_dist, float far_dist, vec3d* view_position, matrix* view_matrix);
+	Frustum ( float fov, float aspect_ratio, float near_dist, float far_dist, vec3d *view_position, matrix *view_matrix );
 
-	bool sphereInFrustum(vec3d* position, float radius);
-	bool sphereBehindPlane(vec3d* position, float radius, vec3d* planePoint, vec3d* planeNormal);
+	bool sphereInFrustum ( vec3d *position, float radius );
+	bool sphereBehindPlane ( vec3d *position, float radius, vec3d *planePoint, vec3d *planeNormal );
 
 private:
 	vec3d near_normal;

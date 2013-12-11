@@ -4,8 +4,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -22,12 +22,19 @@
     || BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x530)) \
     || BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x840))
 
-namespace boost { namespace mpl { namespace aux {
+namespace boost
+{
+namespace mpl
+{
+namespace aux
+{
 template< typename T > struct nested_type_wknd
-    : T::type
+		: T::type
 {
 };
-}}}
+}
+}
+}
 
 #if BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x840))
 #   define BOOST_MPL_AUX_NESTED_TYPE_WKND(T) \
@@ -43,6 +50,6 @@ template< typename T > struct nested_type_wknd
 
 #   define BOOST_MPL_AUX_NESTED_TYPE_WKND(T) T::type
 
-#endif 
+#endif
 
 #endif // BOOST_MPL_AUX_NESTED_TYPE_WKND_HPP_INCLUDED

@@ -26,29 +26,31 @@
    Describes sequential fit algorithm used to allocate objects in shared memory.
 */
 
-namespace boost {
+namespace boost
+{
 
-namespace interprocess {
+namespace interprocess
+{
 
 /*!This class implements the simple sequential fit algorithm with a simply
    linked list of free buffers.*/
 template<class MutexFamily, class VoidPtr>
-class multi_simple_seq_fit 
-   : public detail::simple_seq_fit_impl<MutexFamily, VoidPtr>
+class multi_simple_seq_fit
+	: public detail::simple_seq_fit_impl<MutexFamily, VoidPtr>
 {
-   typedef detail::simple_seq_fit_impl<MutexFamily, VoidPtr> base_t;
- public:
-   /*!Constructor. "size" is the total size of the managed memory segment, 
-      "extra_hdr_bytes" indicates the extra bytes beginning in the sizeof(multi_simple_seq_fit)
-      offset that the allocator should not use at all.*/
-   multi_simple_seq_fit           (std::size_t size, std::size_t extra_hdr_bytes)
-      : base_t(size, extra_hdr_bytes){}
+	typedef detail::simple_seq_fit_impl<MutexFamily, VoidPtr> base_t;
+public:
+	/*!Constructor. "size" is the total size of the managed memory segment,
+	   "extra_hdr_bytes" indicates the extra bytes beginning in the sizeof(multi_simple_seq_fit)
+	   offset that the allocator should not use at all.*/
+	multi_simple_seq_fit           ( std::size_t size, std::size_t extra_hdr_bytes )
+		: base_t ( size, extra_hdr_bytes ) {}
 
-   /*!Allocates bytes from existing segments. If there is no memory, it uses
-      the growing functor associated with the group to allocate a new segment.
-      If this fails, returns 0.*/
-   void* allocate             (std::size_t nbytes)
-      {  return base_t::multi_allocate(nbytes);   }
+	/*!Allocates bytes from existing segments. If there is no memory, it uses
+	   the growing functor associated with the group to allocate a new segment.
+	   If this fails, returns 0.*/
+	void *allocate             ( std::size_t nbytes )
+	{  return base_t::multi_allocate ( nbytes );   }
 };
 
 }  //namespace interprocess {

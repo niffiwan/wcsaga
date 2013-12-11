@@ -20,29 +20,29 @@
 #include <cstdlib>
 
 namespace
-boost
-    {
-    namespace
-    exception_detail
-        {
-        template <class T>
-        inline
-        std::string
-        object_hex_dump( T const & x, std::size_t max_size=16 )
-            {
-            std::ostringstream s;
-            s << "type: " << type_name<T>() << ", size: " << sizeof(T) << ", dump: ";
-            std::size_t n=sizeof(T)>max_size?max_size:sizeof(T);
-            s.fill('0');
-            s.width(2);
-            unsigned char const * b=reinterpret_cast<unsigned char const *>(&x);
-            s << std::setw(2) << std::hex << (unsigned int)*b;
-            for( unsigned char const * e=b+n; ++b!=e; )
-                s << " " << std::setw(2) << std::hex << (unsigned int)*b;
-            return s.str();
-            }
-        }
-    }
+		boost
+{
+namespace
+		exception_detail
+{
+template <class T>
+inline
+std::string
+object_hex_dump ( T const &x, std::size_t max_size = 16 )
+{
+	std::ostringstream s;
+	s << "type: " << type_name<T>() << ", size: " << sizeof ( T ) << ", dump: ";
+	std::size_t n = sizeof ( T ) > max_size ? max_size : sizeof ( T );
+	s.fill ( '0' );
+	s.width ( 2 );
+	unsigned char const *b = reinterpret_cast<unsigned char const *> ( &x );
+	s << std::setw ( 2 ) << std::hex << ( unsigned int ) *b;
+	for ( unsigned char const *e = b + n; ++b != e; )
+		s << " " << std::setw ( 2 ) << std::hex << ( unsigned int ) *b;
+	return s.str();
+}
+}
+}
 
 #if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
 #pragma warning(pop)

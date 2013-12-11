@@ -31,60 +31,62 @@
 #include <boost/fusion/include/for_each.hpp>
 #include <boost/fusion/include/filter_view.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 namespace detail
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    // accumulator_visitor
-    //   wrap a boost::parameter argument pack in a Fusion extractor object
-    template<typename Args>
-    struct accumulator_visitor
-    {
-        explicit accumulator_visitor(Args const &a)
-          : args(a)
-        {
-        }
+///////////////////////////////////////////////////////////////////////////////
+// accumulator_visitor
+//   wrap a boost::parameter argument pack in a Fusion extractor object
+template<typename Args>
+struct accumulator_visitor
+{
+	explicit accumulator_visitor ( Args const &a )
+		: args ( a )
+	{
+	}
 
-        template<typename Accumulator>
-        void operator ()(Accumulator &accumulator) const
-        {
-            accumulator(this->args);
-        }
+	template<typename Accumulator>
+	void operator () ( Accumulator &accumulator ) const
+	{
+		accumulator ( this->args );
+	}
 
-    private:
-        accumulator_visitor &operator =(accumulator_visitor const &);
-        Args const &args;
-    };
+private:
+	accumulator_visitor &operator = ( accumulator_visitor const & );
+	Args const &args;
+};
 
-    template<typename Args>
-    inline accumulator_visitor<Args> const make_accumulator_visitor(Args const &args)
-    {
-        return accumulator_visitor<Args>(args);
-    }
+template<typename Args>
+inline accumulator_visitor<Args> const make_accumulator_visitor ( Args const &args )
+{
+	return accumulator_visitor<Args> ( args );
+}
 
-    typedef
-        parameter::parameters<
-            parameter::required<tag::accumulator>
-          , parameter::optional<tag::sample>
-          // ... and others which are not specified here...
-        >
-    accumulator_params;
+typedef
+parameter::parameters <
+parameter::required<tag::accumulator>
+, parameter::optional<tag::sample>
+// ... and others which are not specified here...
+>
+accumulator_params;
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // accumulator_set_base
-    struct accumulator_set_base
-    {
-    };
+///////////////////////////////////////////////////////////////////////////////
+// accumulator_set_base
+struct accumulator_set_base
+{
+};
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // is_accumulator_set
-    template<typename T>
-    struct is_accumulator_set
-      : is_base_and_derived<accumulator_set_base, T>
-    {
-    };
+///////////////////////////////////////////////////////////////////////////////
+// is_accumulator_set
+template<typename T>
+struct is_accumulator_set
+		: is_base_and_derived<accumulator_set_base, T>
+{
+};
 
 } // namespace detail
 
@@ -105,73 +107,73 @@ namespace detail
 ///
 template<typename Sample, typename Features, typename Weight>
 struct accumulator_set
-  : detail::accumulator_set_base
+		: detail::accumulator_set_base
 {
-    typedef Sample sample_type;     ///< The type of the samples that will be accumulated
-    typedef Features features_type; ///< An MPL sequence of the features that should be accumulated.
-    typedef Weight weight_type;     ///< The type of the weight parameter. Must be a scalar. Defaults to void.
+	typedef Sample sample_type;     ///< The type of the samples that will be accumulated
+	typedef Features features_type; ///< An MPL sequence of the features that should be accumulated.
+	typedef Weight weight_type;     ///< The type of the weight parameter. Must be a scalar. Defaults to void.
 
-    /// INTERNAL ONLY
-    ///
-    typedef
-        typename detail::make_accumulator_tuple<
-            Features
-          , Sample
-          , Weight
-        >::type
-    accumulators_mpl_vector;
+	/// INTERNAL ONLY
+	///
+	typedef
+	typename detail::make_accumulator_tuple <
+	Features
+	, Sample
+	, Weight
+	>::type
+	accumulators_mpl_vector;
 
-    // generate a fusion::list of accumulators
-    /// INTERNAL ONLY
-    ///
-    typedef
-        typename detail::meta::make_acc_list<
-            accumulators_mpl_vector
-        >::type
-    accumulators_type;
+	// generate a fusion::list of accumulators
+	/// INTERNAL ONLY
+	///
+	typedef
+	typename detail::meta::make_acc_list <
+	accumulators_mpl_vector
+	>::type
+	accumulators_type;
 
-    /// INTERNAL ONLY
-    ///
-    //BOOST_MPL_ASSERT((mpl::is_sequence<accumulators_type>));
+	/// INTERNAL ONLY
+	///
+	//BOOST_MPL_ASSERT((mpl::is_sequence<accumulators_type>));
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// default-construct all contained accumulators
-    accumulator_set()
-      : accumulators(
-            detail::make_acc_list(
-                accumulators_mpl_vector()
-              , detail::accumulator_params()(*this)
-            )
-        )
-    {
-        // Add-ref the Features that the user has specified
-        this->template visit_if<detail::contains_feature_of_<Features> >(
-            detail::make_add_ref_visitor(detail::accumulator_params()(*this))
-        );
-    }
+	///////////////////////////////////////////////////////////////////////////////
+	/// default-construct all contained accumulators
+	accumulator_set()
+		: accumulators (
+		    detail::make_acc_list (
+		        accumulators_mpl_vector()
+		        , detail::accumulator_params() ( *this )
+		    )
+		)
+	{
+		// Add-ref the Features that the user has specified
+		this->template visit_if<detail::contains_feature_of_<Features> > (
+		    detail::make_add_ref_visitor ( detail::accumulator_params() ( *this ) )
+		);
+	}
 
-    /// \overload
-    ///
-    /// \param a1 Optional named parameter to be passed to all the accumulators
-    template<typename A1>
-    explicit accumulator_set(A1 const &a1)
-      : accumulators(
-            detail::make_acc_list(
-                accumulators_mpl_vector()
-              , detail::accumulator_params()(*this, a1)
-            )
-        )
-    {
-        // Add-ref the Features that the user has specified
-        this->template visit_if<detail::contains_feature_of_<Features> >(
-            detail::make_add_ref_visitor(detail::accumulator_params()(*this))
-        );
-    }
+	/// \overload
+	///
+	/// \param a1 Optional named parameter to be passed to all the accumulators
+	template<typename A1>
+	explicit accumulator_set ( A1 const &a1 )
+		: accumulators (
+		    detail::make_acc_list (
+		        accumulators_mpl_vector()
+		        , detail::accumulator_params() ( *this, a1 )
+		    )
+		)
+	{
+		// Add-ref the Features that the user has specified
+		this->template visit_if<detail::contains_feature_of_<Features> > (
+		    detail::make_add_ref_visitor ( detail::accumulator_params() ( *this ) )
+		);
+	}
 
-    // ... other overloads generated by Boost.Preprocessor:
+	// ... other overloads generated by Boost.Preprocessor:
 
-    /// INTERNAL ONLY
-    ///
+	/// INTERNAL ONLY
+	///
 #define BOOST_ACCUMULATORS_ACCUMULATOR_SET_CTOR(z, n, _)                                \
     template<BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)>                                  \
     accumulator_set(BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, A, const &a))                   \
@@ -190,74 +192,74 @@ struct accumulator_set
         );                                                                              \
     }
 
-    /// INTERNAL ONLY
-    ///
-    BOOST_PP_REPEAT_FROM_TO(
-        2
-      , BOOST_PP_INC(BOOST_ACCUMULATORS_MAX_ARGS)
-      , BOOST_ACCUMULATORS_ACCUMULATOR_SET_CTOR
-      , _
-    )
+	/// INTERNAL ONLY
+	///
+	BOOST_PP_REPEAT_FROM_TO (
+	    2
+	    , BOOST_PP_INC ( BOOST_ACCUMULATORS_MAX_ARGS )
+	    , BOOST_ACCUMULATORS_ACCUMULATOR_SET_CTOR
+	    , _
+	)
 
-    #ifdef BOOST_ACCUMULATORS_DOXYGEN_INVOKED
-    /// \overload
-    ///
-    template<typename A1, typename A2, ...>
-    accumulator_set(A1 const &a1, A2 const &a2, ...);
-    #endif
+#ifdef BOOST_ACCUMULATORS_DOXYGEN_INVOKED
+	/// \overload
+	///
+	template<typename A1, typename A2, ...>
+	accumulator_set ( A1 const &a1, A2 const &a2, ... );
+#endif
 
-    // ... other overloads generated by Boost.Preprocessor below ...
+	// ... other overloads generated by Boost.Preprocessor below ...
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// Visitation
-    /// \param func UnaryFunction which is invoked with each accumulator in turn.
-    template<typename UnaryFunction>
-    void visit(UnaryFunction const &func)
-    {
-        fusion::for_each(this->accumulators, func);
-    }
+	///////////////////////////////////////////////////////////////////////////////
+	/// Visitation
+	/// \param func UnaryFunction which is invoked with each accumulator in turn.
+	template<typename UnaryFunction>
+	void visit ( UnaryFunction const &func )
+	{
+		fusion::for_each ( this->accumulators, func );
+	}
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// Conditional visitation
-    /// \param func UnaryFunction which is invoked with each accumulator in turn,
-    ///     provided the accumulator satisfies the MPL predicate FilterPred.
-    template<typename FilterPred, typename UnaryFunction>
-    void visit_if(UnaryFunction const &func)
-    {
-        fusion::filter_view<accumulators_type, FilterPred> filtered_accs(this->accumulators);
-        fusion::for_each(filtered_accs, func);
-    }
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    /// The return type of the operator() overloads is void.
-    typedef void result_type;
+	///////////////////////////////////////////////////////////////////////////////
+	/// Conditional visitation
+	/// \param func UnaryFunction which is invoked with each accumulator in turn,
+	///     provided the accumulator satisfies the MPL predicate FilterPred.
+	template<typename FilterPred, typename UnaryFunction>
+	void visit_if ( UnaryFunction const &func )
+	{
+		fusion::filter_view<accumulators_type, FilterPred> filtered_accs ( this->accumulators );
+		fusion::for_each ( filtered_accs, func );
+	}
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// Accumulation
-    /// \param a1 Optional named parameter to be passed to all the accumulators
-    void operator ()()
-    {
-        this->visit(
-            detail::make_accumulator_visitor(
-                detail::accumulator_params()(*this)
-            )
-        );
-    }
+	///////////////////////////////////////////////////////////////////////////////
+	/// The return type of the operator() overloads is void.
+	typedef void result_type;
 
-    template<typename A1>
-    void operator ()(A1 const &a1)
-    {
-        this->visit(
-            detail::make_accumulator_visitor(
-                detail::accumulator_params()(*this, a1)
-            )
-        );
-    }
+	///////////////////////////////////////////////////////////////////////////////
+	/// Accumulation
+	/// \param a1 Optional named parameter to be passed to all the accumulators
+	void operator () ()
+	{
+		this->visit (
+		    detail::make_accumulator_visitor (
+		        detail::accumulator_params() ( *this )
+		    )
+		);
+	}
 
-    // ... other overloads generated by Boost.Preprocessor:
+	template<typename A1>
+	void operator () ( A1 const &a1 )
+	{
+		this->visit (
+		    detail::make_accumulator_visitor (
+		        detail::accumulator_params() ( *this, a1 )
+		    )
+		);
+	}
 
-    /// INTERNAL ONLY
-    ///
+	// ... other overloads generated by Boost.Preprocessor:
+
+	/// INTERNAL ONLY
+	///
 #define BOOST_ACCUMULATORS_ACCUMULATOR_SET_FUN_OP(z, n, _)                              \
     template<BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)>                                  \
     void operator ()(BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, A, const &a))                  \
@@ -271,76 +273,76 @@ struct accumulator_set
         );                                                                              \
     }
 
-    /// INTERNAL ONLY
-    ///
-    BOOST_PP_REPEAT_FROM_TO(
-        2
-      , BOOST_PP_INC(BOOST_ACCUMULATORS_MAX_ARGS)
-      , BOOST_ACCUMULATORS_ACCUMULATOR_SET_FUN_OP
-      , _
-    )
+	/// INTERNAL ONLY
+	///
+	BOOST_PP_REPEAT_FROM_TO (
+	    2
+	    , BOOST_PP_INC ( BOOST_ACCUMULATORS_MAX_ARGS )
+	    , BOOST_ACCUMULATORS_ACCUMULATOR_SET_FUN_OP
+	    , _
+	)
 
-    #ifdef BOOST_ACCUMULATORS_DOXYGEN_INVOKED
-    /// \overload
-    ///
-    template<typename A1, typename A2, ...>
-    void operator ()(A1 const &a1, A2 const &a2, ...);
-    #endif
+#ifdef BOOST_ACCUMULATORS_DOXYGEN_INVOKED
+	/// \overload
+	///
+	template<typename A1, typename A2, ...>
+	void operator () ( A1 const &a1, A2 const &a2, ... );
+#endif
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// Extraction
-    template<typename Feature>
-    struct apply
-      : fusion::result_of::value_of<
-            typename fusion::result_of::find_if<
-                accumulators_type
-              , detail::matches_feature<Feature>
-            >::type
-        >
-    {
-    };
+	///////////////////////////////////////////////////////////////////////////////
+	/// Extraction
+	template<typename Feature>
+	struct apply
+			: fusion::result_of::value_of <
+			typename fusion::result_of::find_if <
+			accumulators_type
+			, detail::matches_feature<Feature>
+			>::type
+			>
+	{
+	};
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// Extraction
-    template<typename Feature>
-    typename apply<Feature>::type &extract()
-    {
-        return *fusion::find_if<detail::matches_feature<Feature> >(this->accumulators);
-    }
+	///////////////////////////////////////////////////////////////////////////////
+	/// Extraction
+	template<typename Feature>
+	typename apply<Feature>::type &extract()
+	{
+		return *fusion::find_if<detail::matches_feature<Feature> > ( this->accumulators );
+	}
 
-    /// \overload
-    template<typename Feature>
-    typename apply<Feature>::type const &extract() const
-    {
-        return *fusion::find_if<detail::matches_feature<Feature> >(this->accumulators);
-    }
+	/// \overload
+	template<typename Feature>
+	typename apply<Feature>::type const &extract() const
+	{
+		return *fusion::find_if<detail::matches_feature<Feature> > ( this->accumulators );
+	}
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// Drop
-    template<typename Feature>
-    void drop()
-    {
-        // You can only drop the features that you have specified explicitly
-        typedef typename apply<Feature>::type the_accumulator;
-        BOOST_MPL_ASSERT((detail::contains_feature_of<Features, the_accumulator>));
+	///////////////////////////////////////////////////////////////////////////////
+	/// Drop
+	template<typename Feature>
+	void drop()
+	{
+		// You can only drop the features that you have specified explicitly
+		typedef typename apply<Feature>::type the_accumulator;
+		BOOST_MPL_ASSERT ( ( detail::contains_feature_of<Features, the_accumulator> ) );
 
-        typedef
-            typename feature_of<typename as_feature<Feature>::type>::type
-        the_feature;
+		typedef
+		typename feature_of<typename as_feature<Feature>::type>::type
+		the_feature;
 
-        (*fusion::find_if<detail::matches_feature<Feature> >(this->accumulators))
-            .drop(detail::accumulator_params()(*this));
+		( *fusion::find_if<detail::matches_feature<Feature> > ( this->accumulators ) )
+		.drop ( detail::accumulator_params() ( *this ) );
 
-        // Also drop accumulators that this feature depends on
-        typedef typename the_feature::dependencies dependencies;
-        this->template visit_if<detail::contains_feature_of_<dependencies> >(
-            detail::make_drop_visitor(detail::accumulator_params()(*this))
-        );
-    }
+		// Also drop accumulators that this feature depends on
+		typedef typename the_feature::dependencies dependencies;
+		this->template visit_if<detail::contains_feature_of_<dependencies> > (
+		    detail::make_drop_visitor ( detail::accumulator_params() ( *this ) )
+		);
+	}
 
 private:
 
-    accumulators_type accumulators;
+	accumulators_type accumulators;
 };
 
 #ifdef _MSC_VER
@@ -352,17 +354,17 @@ private:
 //   find an accumulator in an accumulator_set corresponding to a feature
 template<typename Feature, typename AccumulatorSet>
 typename mpl::apply<AccumulatorSet, Feature>::type &
-find_accumulator(AccumulatorSet &acc BOOST_ACCUMULATORS_PROTO_DISABLE_IF_IS_CONST(AccumulatorSet))
+find_accumulator ( AccumulatorSet &acc BOOST_ACCUMULATORS_PROTO_DISABLE_IF_IS_CONST ( AccumulatorSet ) )
 {
-    return acc.template extract<Feature>();
+	return acc.template extract<Feature>();
 }
 
 /// \overload
 template<typename Feature, typename AccumulatorSet>
 typename mpl::apply<AccumulatorSet, Feature>::type const &
-find_accumulator(AccumulatorSet const &acc)
+find_accumulator ( AccumulatorSet const &acc )
 {
-    return acc.template extract<Feature>();
+	return acc.template extract<Feature>();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -390,12 +392,13 @@ find_accumulator(AccumulatorSet const &acc)
         );                                                                  \
     }
 
-BOOST_PP_REPEAT(
-    BOOST_PP_INC(BOOST_ACCUMULATORS_MAX_ARGS)
-  , BOOST_ACCUMULATORS_EXTRACT_RESULT_FUN
-  , _
+BOOST_PP_REPEAT (
+    BOOST_PP_INC ( BOOST_ACCUMULATORS_MAX_ARGS )
+    , BOOST_ACCUMULATORS_EXTRACT_RESULT_FUN
+    , _
 )
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

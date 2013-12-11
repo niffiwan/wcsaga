@@ -1,11 +1,11 @@
-//  (C) Copyright John Maddock 2001 - 2003. 
-//  (C) Copyright Darin Adler 2001 - 2002. 
-//  (C) Copyright Peter Dimov 2001. 
-//  (C) Copyright Aleksey Gurtovoy 2002. 
-//  (C) Copyright David Abrahams 2002 - 2003. 
-//  (C) Copyright Beman Dawes 2002 - 2003. 
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  (C) Copyright John Maddock 2001 - 2003.
+//  (C) Copyright Darin Adler 2001 - 2002.
+//  (C) Copyright Peter Dimov 2001.
+//  (C) Copyright Aleksey Gurtovoy 2002.
+//  (C) Copyright David Abrahams 2002 - 2003.
+//  (C) Copyright Beman Dawes 2002 - 2003.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
@@ -33,8 +33,8 @@
 #    define BOOST_NO_STD_TYPEINFO
 #  endif
 
-   // disable min/max macro defines on vc6:
-   //
+// disable min/max macro defines on vc6:
+//
 #endif
 
 #if (_MSC_VER <= 1300)  // 1300 == VC++ 7.0
@@ -75,7 +75,7 @@
 
 #endif
 
-#if _MSC_VER < 1400 
+#if _MSC_VER < 1400
 // although a conforming signature for swprint exists in VC7.1
 // it appears not to actually work:
 #  define BOOST_NO_SWPRINTF
@@ -95,7 +95,7 @@
 #endif
 
 #if _MSC_VER == 1500  // 1500 == VC++ 9.0
-   // A bug in VC9:
+// A bug in VC9:
 #  define BOOST_NO_ADL_BARRIER
 #endif
 
@@ -113,11 +113,11 @@
 #  define BOOST_NO_SWPRINTF
 #endif
 
-//   
-// check for exception handling support:   
-#ifndef _CPPUNWIND 
-#  define BOOST_NO_EXCEPTIONS   
-#endif 
+//
+// check for exception handling support:
+#ifndef _CPPUNWIND
+#  define BOOST_NO_EXCEPTIONS
+#endif
 
 //
 // __int64 support:
@@ -195,14 +195,14 @@
 #endif
 
 // TODO:
-// these things are mostly bogus. 1200 means version 12.0 of the compiler. The 
+// these things are mostly bogus. 1200 means version 12.0 of the compiler. The
 // artificial versions assigned to them only refer to the versions of some IDE
 // these compilers have been shipped with, and even that is not all of it. Some
 // were shipped with freely downloadable SDKs, others as crosscompilers in eVC.
 // IOW, you can't use these 'versions' in any sensible way. Sorry.
 # if defined(UNDER_CE)
 #   if _MSC_VER < 1200
-      // Note: these are so far off, they are not really supported
+// Note: these are so far off, they are not really supported
 #   elif _MSC_VER < 1300 // eVC++ 4 comes with 1200-1202
 #     define BOOST_COMPILER_VERSION evc4.0
 #   elif _MSC_VER == 1400
@@ -220,7 +220,7 @@
 #   endif
 # else
 #   if _MSC_VER < 1200
-      // Note: these are so far off, they are not really supported
+// Note: these are so far off, they are not really supported
 #     define BOOST_COMPILER_VERSION 5.0
 #   elif _MSC_VER < 1300
 #       define BOOST_COMPILER_VERSION 6.0

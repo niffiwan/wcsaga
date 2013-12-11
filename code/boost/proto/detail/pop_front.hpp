@@ -13,31 +13,34 @@
 #include <boost/spirit/fusion/sequence/end.hpp>
 #include <boost/spirit/fusion/iterator/next.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    namespace meta
-    {
-        template <typename Sequence>
-        struct pop_front
-        {
-            typedef
-                range<
-                    typename next<
-                        typename begin<Sequence>::type
-                    >::type
-                  , typename end<Sequence>::type
-                >
-            type;
-        };
-    }
+namespace fusion
+{
+namespace meta
+{
+template <typename Sequence>
+struct pop_front
+{
+	typedef
+	range <
+	typename next <
+	typename begin<Sequence>::type
+	>::type
+	, typename end<Sequence>::type
+	>
+	type;
+};
+}
 
-    template <typename Sequence>
-    inline typename meta::pop_front<Sequence const>::type
-    pop_front(Sequence const& seq)
-    {
-        typedef typename meta::pop_front<Sequence const>::type result;
-        return result(fusion::next(fusion::begin(seq)), fusion::end(seq));
-    }
-}}
+template <typename Sequence>
+inline typename meta::pop_front<Sequence const>::type
+pop_front ( Sequence const &seq )
+{
+	typedef typename meta::pop_front<Sequence const>::type result;
+	return result ( fusion::next ( fusion::begin ( seq ) ), fusion::end ( seq ) );
+}
+}
+}
 
 #endif

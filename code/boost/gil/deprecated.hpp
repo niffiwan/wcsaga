@@ -1,6 +1,6 @@
 /*
     Copyright 2005-2007 Adobe Systems Incorporated
-   
+
     Use, modification and distribution are subject to the Boost Software License,
     Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt).
@@ -14,10 +14,10 @@
 #define GIL_DEPRECATED_HPP
 
 ////////////////////////////////////////////////////////////////////////////////////////
-/// \file               
+/// \file
 /// \brief Deprecated names
 ///        This file is provided as a courtesy to ease upgrading GIL client code.
-///        Please make sure your code compiles when this file is not included. 
+///        Please make sure your code compiles when this file is not included.
 ///
 /// \author Lubomir Bourdev and Hailin Jin \n
 ///         Adobe Systems Incorporated
@@ -45,19 +45,21 @@
 #define semantic_channel    semantic_at_c
 
 template <typename Img>
-void resize_clobber_image(Img& img, const typename Img::point_t& new_dims) {
-    img.recreate(new_dims);
+void resize_clobber_image ( Img &img, const typename Img::point_t &new_dims )
+{
+	img.recreate ( new_dims );
 }
 
 template <typename Img>
-void resize_clobber_image(Img& img, const typename Img::x_coord_t& width, const typename Img::y_coord_t& height) {
-    img.recreate(width,height);
+void resize_clobber_image ( Img &img, const typename Img::x_coord_t &width, const typename Img::y_coord_t &height )
+{
+	img.recreate ( width, height );
 }
 
-template <typename T> typename T::x_coord_t get_width(const T& a) { return a.width(); }
-template <typename T> typename T::y_coord_t get_height(const T& a) { return a.height(); }
-template <typename T> typename T::point_t get_dimensions(const T& a) { return a.dimensions(); }
-template <typename T> std::size_t get_num_channels(const T& a) { return a.num_channels(); }
+template <typename T> typename T::x_coord_t get_width ( const T &a ) { return a.width(); }
+template <typename T> typename T::y_coord_t get_height ( const T &a ) { return a.height(); }
+template <typename T> typename T::point_t get_dimensions ( const T &a ) { return a.dimensions(); }
+template <typename T> std::size_t get_num_channels ( const T &a ) { return a.num_channels(); }
 
 #define GIL boost::gil
 #define ADOBE_GIL_NAMESPACE_BEGIN  namespace boost { namespace gil {

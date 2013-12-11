@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,14 +14,16 @@
 #include <boost/units/config.hpp>
 #include <boost/units/base_dimension.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
 /// base dimension of plane angle
-struct plane_angle_base_dimension : 
-    boost::units::base_dimension<plane_angle_base_dimension,-2> 
-{ };               
+struct plane_angle_base_dimension :
+		boost::units::base_dimension < plane_angle_base_dimension, -2 >
+{ };
 
 } // namespace units
 
@@ -31,13 +33,15 @@ struct plane_angle_base_dimension :
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 
-BOOST_TYPEOF_REGISTER_TYPE(boost::units::plane_angle_base_dimension)
+BOOST_TYPEOF_REGISTER_TYPE ( boost::units::plane_angle_base_dimension )
 
 #endif
 
-namespace boost {
+namespace boost
+{
 
-namespace units {
+namespace units
+{
 
 /// base dimension of plane angle (QP)
 typedef plane_angle_base_dimension::dimension_type    plane_angle_dimension;

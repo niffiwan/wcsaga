@@ -8,8 +8,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2008
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -56,57 +56,61 @@
 
 #if !defined(BOOST_MPL_CFG_NO_QUOTE_TEMPLATE)
 
-namespace boost { namespace mpl {
+namespace boost
+{
+namespace mpl
+{
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< typename T, bool has_type_ >
 struct quote_impl
-// GCC has a problem with metafunction forwarding when T is a
-// specialization of a template called 'type'.
+		// GCC has a problem with metafunction forwarding when T is a
+		// specialization of a template called 'type'.
 # if BOOST_WORKAROUND(__GNUC__, BOOST_TESTED_AT(4)) \
     && BOOST_WORKAROUND(__GNUC_MINOR__, BOOST_TESTED_AT(0)) \
     && BOOST_WORKAROUND(__GNUC_PATCHLEVEL__, BOOST_TESTED_AT(2))
 {
-    typedef typename T::type type;
+	typedef typename T::type type;
 };
-# else 
-    : T
+# else
+		: T
 {
 };
-# endif 
+# endif
 
 template< typename T >
-struct quote_impl<T,false>
+struct quote_impl<T, false>
 {
-    typedef T type;
+	typedef T type;
 };
 
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 template< bool > struct quote_impl
 {
-    template< typename T > struct result_
-        : T
-    {
-    };
+	template< typename T > struct result_
+			: T
+	{
+	};
 };
 
 template<> struct quote_impl<false>
 {
-    template< typename T > struct result_
-    {
-        typedef T type;
-    };
+	template< typename T > struct result_
+	{
+		typedef T type;
+	};
 };
 
-#endif 
+#endif
 
 #define BOOST_PP_ITERATION_PARAMS_1 \
     (3,(1, BOOST_MPL_LIMIT_METAFUNCTION_ARITY, <boost/mpl/quote.hpp>))
 #include BOOST_PP_ITERATE()
 
-}}
+}
+}
 
 #endif // BOOST_MPL_CFG_NO_QUOTE_TEMPLATE
 
@@ -118,32 +122,32 @@ template<> struct quote_impl<false>
 #else
 #define i_ BOOST_PP_FRAME_ITERATION(1)
 
-template<
-      template< BOOST_MPL_PP_PARAMS(i_, typename P) > class F
+template <
+    template< BOOST_MPL_PP_PARAMS ( i_, typename P ) > class F
     , typename Tag = void_
     >
-struct BOOST_PP_CAT(quote,i_)
+struct BOOST_PP_CAT ( quote, i_ )
 {
-    template< BOOST_MPL_PP_PARAMS(i_, typename U) > struct apply
+	template< BOOST_MPL_PP_PARAMS ( i_, typename U ) > struct apply
 #if defined(BOOST_MPL_CFG_BCC590_WORKAROUNDS)
-    {
-        typedef typename quote_impl<
-              F< BOOST_MPL_PP_PARAMS(i_, U) >
-            , aux::has_type< F< BOOST_MPL_PP_PARAMS(i_, U) > >::value
-            >::type type;
-    };
+	{
+		typedef typename quote_impl <
+		F< BOOST_MPL_PP_PARAMS ( i_, U ) >
+		, aux::has_type< F< BOOST_MPL_PP_PARAMS ( i_, U ) > >::value
+		>::type type;
+	};
 #elif !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-        : quote_impl<
-              F< BOOST_MPL_PP_PARAMS(i_, U) >
-            , aux::has_type< F< BOOST_MPL_PP_PARAMS(i_, U) > >::value
-            >
-    {
-    };
+			: quote_impl <
+	F< BOOST_MPL_PP_PARAMS ( i_, U ) >
+	, aux::has_type< F< BOOST_MPL_PP_PARAMS ( i_, U ) > >::value
+	>
+	{
+	};
 #else
-        : quote_impl< aux::has_type< F< BOOST_MPL_PP_PARAMS(i_, U) > >::value >
-            ::template result_< F< BOOST_MPL_PP_PARAMS(i_, U) > >
-    {
-    };
+	: quote_impl< aux::has_type< F< BOOST_MPL_PP_PARAMS ( i_, U ) > >::value >
+	::template result_< F< BOOST_MPL_PP_PARAMS ( i_, U ) > >
+	{
+	};
 #endif
 };
 

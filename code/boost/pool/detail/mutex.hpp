@@ -24,23 +24,23 @@
 #endif
 
 #ifdef BOOST_NO_MT
-  // No multithreading -> make locks into no-ops
-  #define BOOST_MUTEX_HELPER BOOST_MUTEX_HELPER_NONE
+// No multithreading -> make locks into no-ops
+#define BOOST_MUTEX_HELPER BOOST_MUTEX_HELPER_NONE
 #else
-  #ifdef BOOST_WINDOWS
-    #define BOOST_MUTEX_HELPER BOOST_MUTEX_HELPER_WIN32
-  #else
-    #if defined(BOOST_HAS_UNISTD_H)
-      #include <unistd.h>
-    #endif
-    #if defined(_POSIX_THREADS) || defined(BOOST_HAS_PTHREADS)
-      #define BOOST_MUTEX_HELPER BOOST_MUTEX_HELPER_PTHREAD
-    #endif
-  #endif
+#ifdef BOOST_WINDOWS
+#define BOOST_MUTEX_HELPER BOOST_MUTEX_HELPER_WIN32
+#else
+#if defined(BOOST_HAS_UNISTD_H)
+#include <unistd.h>
+#endif
+#if defined(_POSIX_THREADS) || defined(BOOST_HAS_PTHREADS)
+#define BOOST_MUTEX_HELPER BOOST_MUTEX_HELPER_PTHREAD
+#endif
+#endif
 #endif
 
 #ifndef BOOST_MUTEX_HELPER
-  #error Unable to determine platform mutex type; define BOOST_NO_MT to assume single-threaded
+#error Unable to determine platform mutex type; define BOOST_NO_MT to assume single-threaded
 #endif
 
 #ifndef BOOST_NO_MT
@@ -52,10 +52,13 @@
 # endif
 #endif
 
-namespace boost {
+namespace boost
+{
 
-namespace details {
-namespace pool {
+namespace details
+{
+namespace pool
+{
 
 #ifndef BOOST_NO_MT
 
@@ -63,24 +66,24 @@ namespace pool {
 
 class win32_mutex
 {
-  private:
-    ::CRITICAL_SECTION mtx;
+private:
+	::CRITICAL_SECTION mtx;
 
-    win32_mutex(const win32_mutex &);
-    void operator=(const win32_mutex &);
+	win32_mutex ( const win32_mutex & );
+	void operator= ( const win32_mutex & );
 
-  public:
-    win32_mutex()
-    { ::InitializeCriticalSection(&mtx); }
+public:
+	win32_mutex()
+	{ ::InitializeCriticalSection ( &mtx ); }
 
-    ~win32_mutex()
-    { ::DeleteCriticalSection(&mtx); }
+	~win32_mutex()
+	{ ::DeleteCriticalSection ( &mtx ); }
 
-    void lock()
-    { ::EnterCriticalSection(&mtx); }
+	void lock()
+	{ ::EnterCriticalSection ( &mtx ); }
 
-    void unlock()
-    { ::LeaveCriticalSection(&mtx); }
+	void unlock()
+	{ ::LeaveCriticalSection ( &mtx ); }
 };
 
 #endif // defined(BOOST_WINDOWS)
@@ -89,24 +92,24 @@ class win32_mutex
 
 class pthread_mutex
 {
-  private:
-    ::pthread_mutex_t mtx;
+private:
+	::pthread_mutex_t mtx;
 
-    pthread_mutex(const pthread_mutex &);
-    void operator=(const pthread_mutex &);
+	pthread_mutex ( const pthread_mutex & );
+	void operator= ( const pthread_mutex & );
 
-  public:
-    pthread_mutex()
-    { ::pthread_mutex_init(&mtx, 0); }
+public:
+	pthread_mutex()
+	{ ::pthread_mutex_init ( &mtx, 0 ); }
 
-    ~pthread_mutex()
-    { ::pthread_mutex_destroy(&mtx); }
+	~pthread_mutex()
+	{ ::pthread_mutex_destroy ( &mtx ); }
 
-    void lock()
-    { ::pthread_mutex_lock(&mtx); }
+	void lock()
+	{ ::pthread_mutex_lock ( &mtx ); }
 
-    void unlock()
-    { ::pthread_mutex_unlock(&mtx); }
+	void unlock()
+	{ ::pthread_mutex_unlock ( &mtx ); }
 };
 
 #endif // defined(_POSIX_THREADS) || defined(BOOST_HAS_PTHREADS)
@@ -115,23 +118,23 @@ class pthread_mutex
 
 class null_mutex
 {
-  private:
-    null_mutex(const null_mutex &);
-    void operator=(const null_mutex &);
+private:
+	null_mutex ( const null_mutex & );
+	void operator= ( const null_mutex & );
 
-  public:
-    null_mutex() { }
+public:
+	null_mutex() { }
 
-    static void lock() { }
-    static void unlock() { }
+	static void lock() { }
+	static void unlock() { }
 };
 
 #if BOOST_MUTEX_HELPER == BOOST_MUTEX_HELPER_NONE
-  typedef null_mutex default_mutex;
+typedef null_mutex default_mutex;
 #elif BOOST_MUTEX_HELPER == BOOST_MUTEX_HELPER_WIN32
-  typedef win32_mutex default_mutex;
+typedef win32_mutex default_mutex;
 #elif BOOST_MUTEX_HELPER == BOOST_MUTEX_HELPER_PTHREAD
-  typedef pthread_mutex default_mutex;
+typedef pthread_mutex default_mutex;
 #endif
 
 } // namespace pool

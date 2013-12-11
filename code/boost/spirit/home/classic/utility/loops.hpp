@@ -16,302 +16,307 @@
 #include <boost/spirit/home/classic/core/composite/composite.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit {
+namespace boost
+{
+namespace spirit
+{
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    //  fixed_loop class
-    //
-    //      This class takes care of the construct:
-    //
-    //          repeat_p (exact) [p]
-    //
-    //      where 'p' is a parser and 'exact' is the number of times to
-    //      repeat. The parser iterates over the input exactly 'exact' times.
-    //      The parse function fails if the parser does not match the input
-    //      exactly 'exact' times.
-    //
-    //      This class is parametizable and can accept constant arguments
-    //      (e.g. repeat_p (5) [p]) as well as references to variables (e.g.
-    //      repeat_p (ref (n)) [p]).
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename ParserT, typename ExactT>
-    class fixed_loop
-    : public unary<ParserT, parser <fixed_loop <ParserT, ExactT> > >
-    {
-    public:
+///////////////////////////////////////////////////////////////////////////
+//
+//  fixed_loop class
+//
+//      This class takes care of the construct:
+//
+//          repeat_p (exact) [p]
+//
+//      where 'p' is a parser and 'exact' is the number of times to
+//      repeat. The parser iterates over the input exactly 'exact' times.
+//      The parse function fails if the parser does not match the input
+//      exactly 'exact' times.
+//
+//      This class is parametizable and can accept constant arguments
+//      (e.g. repeat_p (5) [p]) as well as references to variables (e.g.
+//      repeat_p (ref (n)) [p]).
+//
+///////////////////////////////////////////////////////////////////////////
+template <typename ParserT, typename ExactT>
+class fixed_loop
+	: public unary<ParserT, parser <fixed_loop <ParserT, ExactT> > >
+{
+public:
 
-        typedef fixed_loop<ParserT, ExactT>     self_t;
-        typedef unary<ParserT, parser<self_t> >  base_t;
+	typedef fixed_loop<ParserT, ExactT>     self_t;
+	typedef unary<ParserT, parser<self_t> >  base_t;
 
-        fixed_loop (ParserT const & subject, ExactT const & exact)
-        : base_t(subject), m_exact(exact) {}
+	fixed_loop ( ParserT const &subject, ExactT const &exact )
+		: base_t ( subject ), m_exact ( exact ) {}
 
-        template <typename ScannerT>
-        typename parser_result <self_t, ScannerT>::type
-        parse (ScannerT const & scan) const
-        {
-            typedef typename parser_result<self_t, ScannerT>::type result_t;
-            result_t hit = scan.empty_match();
-            std::size_t n = m_exact;
+	template <typename ScannerT>
+	typename parser_result <self_t, ScannerT>::type
+	parse ( ScannerT const &scan ) const
+	{
+		typedef typename parser_result<self_t, ScannerT>::type result_t;
+		result_t hit = scan.empty_match();
+		std::size_t n = m_exact;
 
-            for (std::size_t i = 0; i < n; ++i)
-            {
-                if (result_t next = this->subject().parse(scan))
-                {
-                    scan.concat_match(hit, next);
-                }
-                else
-                {
-                    return scan.no_match();
-                }
-            }
+		for ( std::size_t i = 0; i < n; ++i )
+		{
+			if ( result_t next = this->subject().parse ( scan ) )
+			{
+				scan.concat_match ( hit, next );
+			}
+			else
+			{
+				return scan.no_match();
+			}
+		}
 
-            return hit;
-        }
+		return hit;
+	}
 
-        template <typename ScannerT>
-        struct result
-        {
-            typedef typename match_result<ScannerT, nil_t>::type type;
-        };
+	template <typename ScannerT>
+	struct result
+	{
+		typedef typename match_result<ScannerT, nil_t>::type type;
+	};
 
-    private:
+private:
 
-        ExactT m_exact;
-    };
+	ExactT m_exact;
+};
 
-    ///////////////////////////////////////////////////////////////////////////////
-    //
-    //  finite_loop class
-    //
-    //      This class takes care of the construct:
-    //
-    //          repeat_p (min, max) [p]
-    //
-    //      where 'p' is a parser, 'min' and 'max' specifies the minimum and
-    //      maximum iterations over 'p'. The parser iterates over the input
-    //      at least 'min' times and at most 'max' times. The parse function
-    //      fails if the parser does not match the input at least 'min' times
-    //      and at most 'max' times.
-    //
-    //      This class is parametizable and can accept constant arguments
-    //      (e.g. repeat_p (5, 10) [p]) as well as references to variables
-    //      (e.g. repeat_p (ref (n1), ref (n2)) [p]).
-    //
-    ///////////////////////////////////////////////////////////////////////////////
-    template <typename ParserT, typename MinT, typename MaxT>
-    class finite_loop
-    : public unary<ParserT, parser<finite_loop<ParserT, MinT, MaxT> > >
-    {
-    public:
+///////////////////////////////////////////////////////////////////////////////
+//
+//  finite_loop class
+//
+//      This class takes care of the construct:
+//
+//          repeat_p (min, max) [p]
+//
+//      where 'p' is a parser, 'min' and 'max' specifies the minimum and
+//      maximum iterations over 'p'. The parser iterates over the input
+//      at least 'min' times and at most 'max' times. The parse function
+//      fails if the parser does not match the input at least 'min' times
+//      and at most 'max' times.
+//
+//      This class is parametizable and can accept constant arguments
+//      (e.g. repeat_p (5, 10) [p]) as well as references to variables
+//      (e.g. repeat_p (ref (n1), ref (n2)) [p]).
+//
+///////////////////////////////////////////////////////////////////////////////
+template <typename ParserT, typename MinT, typename MaxT>
+class finite_loop
+	: public unary<ParserT, parser<finite_loop<ParserT, MinT, MaxT> > >
+{
+public:
 
-        typedef finite_loop <ParserT, MinT, MaxT> self_t;
-        typedef unary<ParserT, parser<self_t> >   base_t;
+	typedef finite_loop <ParserT, MinT, MaxT> self_t;
+	typedef unary<ParserT, parser<self_t> >   base_t;
 
-        finite_loop (ParserT const & subject, MinT const & min, MaxT const & max)
-        : base_t(subject), m_min(min), m_max(max) {}
+	finite_loop ( ParserT const &subject, MinT const &min, MaxT const &max )
+		: base_t ( subject ), m_min ( min ), m_max ( max ) {}
 
-        template <typename ScannerT>
-        typename parser_result <self_t, ScannerT>::type
-        parse(ScannerT const & scan) const
-        {
-            BOOST_SPIRIT_ASSERT(m_min <= m_max);
-            typedef typename parser_result<self_t, ScannerT>::type result_t;
-            result_t hit = scan.empty_match();
+	template <typename ScannerT>
+	typename parser_result <self_t, ScannerT>::type
+	parse ( ScannerT const &scan ) const
+	{
+		BOOST_SPIRIT_ASSERT ( m_min <= m_max );
+		typedef typename parser_result<self_t, ScannerT>::type result_t;
+		result_t hit = scan.empty_match();
 
-            std::size_t n1 = m_min;
-            std::size_t n2 = m_max;
+		std::size_t n1 = m_min;
+		std::size_t n2 = m_max;
 
-            for (std::size_t i = 0; i < n2; ++i)
-            {
-                typename ScannerT::iterator_t save = scan.first;
-                result_t next = this->subject().parse(scan);
- 
-                if (!next)
-                {
-                    if (i >= n1)
-                    {
-                        scan.first = save;
-                        break;
-                    }
-                    else
-                    {
-                        return scan.no_match();
-                    }
-                }
+		for ( std::size_t i = 0; i < n2; ++i )
+		{
+			typename ScannerT::iterator_t save = scan.first;
+			result_t next = this->subject().parse ( scan );
 
-                scan.concat_match(hit, next);
-            }
+			if ( !next )
+			{
+				if ( i >= n1 )
+				{
+					scan.first = save;
+					break;
+				}
+				else
+				{
+					return scan.no_match();
+				}
+			}
 
-            return hit;
-        }
+			scan.concat_match ( hit, next );
+		}
 
-        template <typename ScannerT>
-        struct result
-        {
-            typedef typename match_result<ScannerT, nil_t>::type type;
-        };
+		return hit;
+	}
 
-    private:
+	template <typename ScannerT>
+	struct result
+	{
+		typedef typename match_result<ScannerT, nil_t>::type type;
+	};
 
-        MinT    m_min;
-        MaxT    m_max;
-    };
+private:
 
-    ///////////////////////////////////////////////////////////////////////////////
-    //
-    //  infinite_loop class
-    //
-    //      This class takes care of the construct:
-    //
-    //          repeat_p (min, more) [p]
-    //
-    //      where 'p' is a parser, 'min' is the minimum iteration over 'p'
-    //      and more specifies that the iteration should proceed
-    //      indefinitely. The parser iterates over the input at least 'min'
-    //      times and continues indefinitely until 'p' fails or all of the
-    //      input is parsed. The parse function fails if the parser does not
-    //      match the input at least 'min' times.
-    //
-    //      This class is parametizable and can accept constant arguments
-    //      (e.g. repeat_p (5, more) [p]) as well as references to variables
-    //      (e.g. repeat_p (ref (n), more) [p]).
-    //
-    ///////////////////////////////////////////////////////////////////////////////
+	MinT    m_min;
+	MaxT    m_max;
+};
 
-    struct more_t {};
-    more_t const more = more_t ();
+///////////////////////////////////////////////////////////////////////////////
+//
+//  infinite_loop class
+//
+//      This class takes care of the construct:
+//
+//          repeat_p (min, more) [p]
+//
+//      where 'p' is a parser, 'min' is the minimum iteration over 'p'
+//      and more specifies that the iteration should proceed
+//      indefinitely. The parser iterates over the input at least 'min'
+//      times and continues indefinitely until 'p' fails or all of the
+//      input is parsed. The parse function fails if the parser does not
+//      match the input at least 'min' times.
+//
+//      This class is parametizable and can accept constant arguments
+//      (e.g. repeat_p (5, more) [p]) as well as references to variables
+//      (e.g. repeat_p (ref (n), more) [p]).
+//
+///////////////////////////////////////////////////////////////////////////////
 
-    template <typename ParserT, typename MinT>
-    class infinite_loop
-     : public unary<ParserT, parser<infinite_loop<ParserT, MinT> > >
-    {
-    public:
+struct more_t {};
+more_t const more = more_t ();
 
-        typedef infinite_loop <ParserT, MinT>   self_t;
-        typedef unary<ParserT, parser<self_t> > base_t;
+template <typename ParserT, typename MinT>
+class infinite_loop
+	: public unary<ParserT, parser<infinite_loop<ParserT, MinT> > >
+{
+public:
 
-        infinite_loop (
-            ParserT const& subject,
-            MinT const& min,
-            more_t const&
-        )
-        : base_t(subject), m_min(min) {}
+	typedef infinite_loop <ParserT, MinT>   self_t;
+	typedef unary<ParserT, parser<self_t> > base_t;
 
-        template <typename ScannerT>
-        typename parser_result <self_t, ScannerT>::type
-        parse(ScannerT const & scan) const
-        {
-            typedef typename parser_result<self_t, ScannerT>::type result_t;
-            result_t hit = scan.empty_match();
-            std::size_t n = m_min;
+	infinite_loop (
+	    ParserT const &subject,
+	    MinT const &min,
+	    more_t const &
+	)
+		: base_t ( subject ), m_min ( min ) {}
 
-            for (std::size_t i = 0; ; ++i)
-            {
-                typename ScannerT::iterator_t save = scan.first;
-                result_t next = this->subject().parse(scan);
+	template <typename ScannerT>
+	typename parser_result <self_t, ScannerT>::type
+	parse ( ScannerT const &scan ) const
+	{
+		typedef typename parser_result<self_t, ScannerT>::type result_t;
+		result_t hit = scan.empty_match();
+		std::size_t n = m_min;
 
-                if (!next)
-                {
-                    if (i >= n)
-                    {
-                        scan.first = save;
-                        break;
-                    }
-                    else
-                    {
-                        return scan.no_match();
-                    }
-                }
+		for ( std::size_t i = 0; ; ++i )
+		{
+			typename ScannerT::iterator_t save = scan.first;
+			result_t next = this->subject().parse ( scan );
 
-                scan.concat_match(hit, next);
-            }
+			if ( !next )
+			{
+				if ( i >= n )
+				{
+					scan.first = save;
+					break;
+				}
+				else
+				{
+					return scan.no_match();
+				}
+			}
 
-            return hit;
-        }
+			scan.concat_match ( hit, next );
+		}
 
-        template <typename ScannerT>
-        struct result
-        {
-            typedef typename match_result<ScannerT, nil_t>::type type;
-        };
+		return hit;
+	}
 
-        private:
+	template <typename ScannerT>
+	struct result
+	{
+		typedef typename match_result<ScannerT, nil_t>::type type;
+	};
 
-        MinT m_min;
-    };
+private:
 
-    template <typename ExactT>
-    struct fixed_loop_gen
-    {
-        fixed_loop_gen (ExactT const & exact)
-        : m_exact (exact) {}
+	MinT m_min;
+};
 
-        template <typename ParserT>
-        fixed_loop <ParserT, ExactT>
-        operator[](parser <ParserT> const & subject) const
-        {
-            return fixed_loop <ParserT, ExactT> (subject.derived (), m_exact);
-        }
+template <typename ExactT>
+struct fixed_loop_gen
+{
+	fixed_loop_gen ( ExactT const &exact )
+		: m_exact ( exact ) {}
 
-        ExactT m_exact;
-    };
+	template <typename ParserT>
+	fixed_loop <ParserT, ExactT>
+	operator[] ( parser <ParserT> const &subject ) const
+	{
+		return fixed_loop <ParserT, ExactT> ( subject.derived (), m_exact );
+	}
 
-    namespace impl {
+	ExactT m_exact;
+};
 
-        template <typename ParserT, typename MinT, typename MaxT>
-        struct loop_traits
-        {
-            typedef typename mpl::if_<
-                boost::is_same<MaxT, more_t>,
-                infinite_loop<ParserT, MinT>,
-                finite_loop<ParserT, MinT, MaxT>
-            >::type type;
-        };
+namespace impl
+{
 
-    } // namespace impl
+template <typename ParserT, typename MinT, typename MaxT>
+struct loop_traits
+{
+	typedef typename mpl::if_ <
+	boost::is_same<MaxT, more_t>,
+	      infinite_loop<ParserT, MinT>,
+	      finite_loop<ParserT, MinT, MaxT>
+	      >::type type;
+};
 
-    template <typename MinT, typename MaxT>
-    struct nonfixed_loop_gen
-    {
-       nonfixed_loop_gen (MinT min, MaxT max)
-        : m_min (min), m_max (max) {}
+} // namespace impl
 
-       template <typename ParserT>
-       typename impl::loop_traits<ParserT, MinT, MaxT>::type
-       operator[](parser <ParserT> const & subject) const
-       {
-           typedef typename impl::loop_traits<ParserT, MinT, MaxT>::type ret_t;
-           return ret_t(
-                subject.derived(),
-                m_min,
-                m_max);
-       }
+template <typename MinT, typename MaxT>
+struct nonfixed_loop_gen
+{
+	nonfixed_loop_gen ( MinT min, MaxT max )
+		: m_min ( min ), m_max ( max ) {}
 
-       MinT m_min;
-       MaxT m_max;
-    };
+	template <typename ParserT>
+	typename impl::loop_traits<ParserT, MinT, MaxT>::type
+	operator[] ( parser <ParserT> const &subject ) const
+	{
+		typedef typename impl::loop_traits<ParserT, MinT, MaxT>::type ret_t;
+		return ret_t (
+		           subject.derived(),
+		           m_min,
+		           m_max );
+	}
 
-    template <typename ExactT>
-    fixed_loop_gen <ExactT>
-    repeat_p(ExactT const & exact)
-    {
-        return fixed_loop_gen <ExactT> (exact);
-    }
+	MinT m_min;
+	MaxT m_max;
+};
 
-    template <typename MinT, typename MaxT>
-    nonfixed_loop_gen <MinT, MaxT>
-    repeat_p(MinT const & min, MaxT const & max)
-    {
-        return nonfixed_loop_gen <MinT, MaxT> (min, max);
-    }
+template <typename ExactT>
+fixed_loop_gen <ExactT>
+repeat_p ( ExactT const &exact )
+{
+	return fixed_loop_gen <ExactT> ( exact );
+}
+
+template <typename MinT, typename MaxT>
+nonfixed_loop_gen <MinT, MaxT>
+repeat_p ( MinT const &min, MaxT const &max )
+{
+	return nonfixed_loop_gen <MinT, MaxT> ( min, max );
+}
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}} // namespace BOOST_SPIRIT_CLASSIC_NS
+}
+} // namespace BOOST_SPIRIT_CLASSIC_NS
 
 #endif // #if !defined(BOOST_SPIRIT_LOOPS_HPP)

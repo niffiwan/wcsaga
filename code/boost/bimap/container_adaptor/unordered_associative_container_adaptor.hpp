@@ -25,9 +25,12 @@
 #include <boost/mpl/aux_/na.hpp>
 #include <boost/call_traits.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace container_adaptor {
+namespace boost
+{
+namespace bimaps
+{
+namespace container_adaptor
+{
 
 
 #ifndef BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
@@ -42,42 +45,42 @@ template
     class ValueToBaseConverter, class ValueFromBaseConverter,
     class KeyToBaseConverter,
     class FunctorsFromDerivedClasses
->
+    >
 struct unordered_associative_container_adaptor_base
 {
 
-    typedef associative_container_adaptor
-    <
-        Base, Iterator, ConstIterator, KeyType,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        ValueToBaseConverter   , ValueFromBaseConverter,
-        KeyToBaseConverter,
+	typedef associative_container_adaptor
+	<
+	Base, Iterator, ConstIterator, KeyType,
+	      IteratorToBaseConverter, IteratorFromBaseConverter,
+	      ValueToBaseConverter   , ValueFromBaseConverter,
+	      KeyToBaseConverter,
 
-        BOOST_DEDUCED_TYPENAME mpl::push_front<
+	      BOOST_DEDUCED_TYPENAME mpl::push_front <
 
-            FunctorsFromDerivedClasses,
+	      FunctorsFromDerivedClasses,
 
-            BOOST_DEDUCED_TYPENAME mpl::if_<
-                ::boost::mpl::is_na<LocalIteratorFromBaseConverter>,
-            // {
-                    detail::iterator_from_base_identity
-                    <
-                        BOOST_DEDUCED_TYPENAME Base::local_iterator,
-                        LocalIterator,
-                        BOOST_DEDUCED_TYPENAME Base::const_local_iterator,
-                        ConstLocalIterator
-                    >,
-            // }
-            // else
-            // {
-                    LocalIteratorFromBaseConverter
-            // }
+	      BOOST_DEDUCED_TYPENAME mpl::if_ <
+	      ::boost::mpl::is_na<LocalIteratorFromBaseConverter>,
+	      // {
+	      detail::iterator_from_base_identity
+	      <
+	      BOOST_DEDUCED_TYPENAME Base::local_iterator,
+	      LocalIterator,
+	      BOOST_DEDUCED_TYPENAME Base::const_local_iterator,
+	      ConstLocalIterator
+	      >,
+	      // }
+	      // else
+	      // {
+	      LocalIteratorFromBaseConverter
+	      // }
 
-            >::type
+	      >::type
 
-        >::type
+	      >::type
 
-    > type;
+	      > type;
 };
 
 #endif // BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
@@ -106,181 +109,181 @@ template
 
     class FunctorsFromDerivedClasses     = mpl::vector<>
 
->
+    >
 class unordered_associative_container_adaptor :
 
-    public unordered_associative_container_adaptor_base
-    <
-        Base, Iterator, ConstIterator,
-        LocalIterator, ConstLocalIterator,
-        KeyType,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        LocalIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        KeyToBaseConverter,
-        FunctorsFromDerivedClasses
+	public unordered_associative_container_adaptor_base
+	<
+	Base, Iterator, ConstIterator,
+	LocalIterator, ConstLocalIterator,
+	KeyType,
+	IteratorToBaseConverter, IteratorFromBaseConverter,
+	LocalIteratorFromBaseConverter,
+	ValueToBaseConverter, ValueFromBaseConverter,
+	KeyToBaseConverter,
+	FunctorsFromDerivedClasses
 
-    >::type
+	>::type
 {
-    typedef BOOST_DEDUCED_TYPENAME unordered_associative_container_adaptor_base
-    <
-        Base, Iterator, ConstIterator,
-        LocalIterator, ConstLocalIterator,
-        KeyType,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        LocalIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        KeyToBaseConverter,
-        FunctorsFromDerivedClasses
+	typedef BOOST_DEDUCED_TYPENAME unordered_associative_container_adaptor_base
+	<
+	Base, Iterator, ConstIterator,
+	      LocalIterator, ConstLocalIterator,
+	      KeyType,
+	      IteratorToBaseConverter, IteratorFromBaseConverter,
+	      LocalIteratorFromBaseConverter,
+	      ValueToBaseConverter, ValueFromBaseConverter,
+	      KeyToBaseConverter,
+	      FunctorsFromDerivedClasses
 
-    >::type base_;
+	      >::type base_;
 
-    // Metadata ---------------------------------------------------------------
+	// Metadata ---------------------------------------------------------------
 
-    public:
+public:
 
-    typedef BOOST_DEDUCED_TYPENAME Base::key_equal key_equal;
-    typedef BOOST_DEDUCED_TYPENAME Base::hasher hasher;
+	typedef BOOST_DEDUCED_TYPENAME Base::key_equal key_equal;
+	typedef BOOST_DEDUCED_TYPENAME Base::hasher hasher;
 
-    typedef LocalIterator      local_iterator;
-    typedef ConstLocalIterator const_local_iterator;
+	typedef LocalIterator      local_iterator;
+	typedef ConstLocalIterator const_local_iterator;
 
-    protected:
+protected:
 
-    typedef BOOST_DEDUCED_TYPENAME mpl::if_<
-        ::boost::mpl::is_na<LocalIteratorFromBaseConverter>,
-        // {
-                detail::iterator_from_base_identity
-                <
-                    BOOST_DEDUCED_TYPENAME Base::local_iterator,
-                    local_iterator,
-                    BOOST_DEDUCED_TYPENAME Base::const_local_iterator,
-                    const_local_iterator
-                >,
-        // }
-        // else
-        // {
-                LocalIteratorFromBaseConverter
-        // }
+	typedef BOOST_DEDUCED_TYPENAME mpl::if_ <
+	::boost::mpl::is_na<LocalIteratorFromBaseConverter>,
+	// {
+	detail::iterator_from_base_identity
+	<
+	BOOST_DEDUCED_TYPENAME Base::local_iterator,
+	local_iterator,
+	BOOST_DEDUCED_TYPENAME Base::const_local_iterator,
+	const_local_iterator
+	>,
+	// }
+	// else
+	// {
+	LocalIteratorFromBaseConverter
+	// }
 
-        >::type local_iterator_from_base;
+	>::type local_iterator_from_base;
 
-    // Access -----------------------------------------------------------------
+	// Access -----------------------------------------------------------------
 
-    public:
+public:
 
-    explicit unordered_associative_container_adaptor(Base & c)
-        : base_(c) {}
+	explicit unordered_associative_container_adaptor ( Base &c )
+		: base_ ( c ) {}
 
-    protected:
+protected:
 
 
-    typedef unordered_associative_container_adaptor
-                unordered_associative_container_adaptor_;
+	typedef unordered_associative_container_adaptor
+	unordered_associative_container_adaptor_;
 
-    // Interface --------------------------------------------------------------
+	// Interface --------------------------------------------------------------
 
-    public:
+public:
 
-    // bucket interface:
+	// bucket interface:
 
-    BOOST_DEDUCED_TYPENAME base_::size_type bucket_count() const
-    {
-        return this->base().bucket_count();
-    }
+	BOOST_DEDUCED_TYPENAME base_::size_type bucket_count() const
+	{
+		return this->base().bucket_count();
+	}
 
-    BOOST_DEDUCED_TYPENAME base_::size_type max_bucket_count() const
-    {
-        return this->base().max_bucket_count();
-    }
+	BOOST_DEDUCED_TYPENAME base_::size_type max_bucket_count() const
+	{
+		return this->base().max_bucket_count();
+	}
 
-    BOOST_DEDUCED_TYPENAME base_::size_type bucket_size(
-        BOOST_DEDUCED_TYPENAME base_::size_type n) const
-    {
-        return this->base().bucket_size(n);
-    }
+	BOOST_DEDUCED_TYPENAME base_::size_type bucket_size (
+	    BOOST_DEDUCED_TYPENAME base_::size_type n ) const
+	{
+		return this->base().bucket_size ( n );
+	}
 
-    template< class CompatibleKey >
-    BOOST_DEDUCED_TYPENAME base_::size_type bucket(
-        const CompatibleKey & k) const
-    {
-        typedef BOOST_DEDUCED_TYPENAME base_::key_to_base key_to_base;
-        return this->base().bucket(
-            this->template functor<key_to_base>()(k)
-        );
-    }
+	template< class CompatibleKey >
+	BOOST_DEDUCED_TYPENAME base_::size_type bucket (
+	    const CompatibleKey &k ) const
+	{
+		typedef BOOST_DEDUCED_TYPENAME base_::key_to_base key_to_base;
+		return this->base().bucket (
+		           this->template functor<key_to_base>() ( k )
+		                                 );
+	}
 
-    local_iterator       begin(BOOST_DEDUCED_TYPENAME base_::size_type n)
-    {
-        return this->template functor<
-            local_iterator_from_base
-        >()                          ( this->base().begin(n) );
-    }
+	local_iterator       begin ( BOOST_DEDUCED_TYPENAME base_::size_type n )
+	{
+		return this->template functor <
+		           local_iterator_from_base
+		           > ()                          ( this->base().begin ( n ) );
+	}
 
-    const_local_iterator begin(BOOST_DEDUCED_TYPENAME base_::size_type n) const
-    {
-        return this->template functor<
-            local_iterator_from_base
-        >()                          ( this->base().begin(n) );
-    }
+	const_local_iterator begin ( BOOST_DEDUCED_TYPENAME base_::size_type n ) const
+	{
+		return this->template functor <
+		           local_iterator_from_base
+		           > ()                          ( this->base().begin ( n ) );
+	}
 
-    local_iterator       end(BOOST_DEDUCED_TYPENAME base_::size_type n)
-    {
-        return this->template functor<
-            local_iterator_from_base
-        >()                          ( this->base().end(n) );
-    }
+	local_iterator       end ( BOOST_DEDUCED_TYPENAME base_::size_type n )
+	{
+		return this->template functor <
+		           local_iterator_from_base
+		           > ()                          ( this->base().end ( n ) );
+	}
 
-    const_local_iterator end(BOOST_DEDUCED_TYPENAME base_::size_type n) const
-    {
-        return this->template functor<
-            local_iterator_from_base
-        >()                          ( this->base().end(n) );
-    }
+	const_local_iterator end ( BOOST_DEDUCED_TYPENAME base_::size_type n ) const
+	{
+		return this->template functor <
+		           local_iterator_from_base
+		           > ()                          ( this->base().end ( n ) );
+	}
 
-    // hash policy
+	// hash policy
 
-    float load_factor() const
-    {
-        return this->base().load_factor();
-    }
+	float load_factor() const
+	{
+		return this->base().load_factor();
+	}
 
-    float max_load_factor() const
-    {
-        return this->base().max_load_factor();
-    }
+	float max_load_factor() const
+	{
+		return this->base().max_load_factor();
+	}
 
-    void max_load_factor(float z)
-    {
-        return this->base().max_load_factor(z);
-    }
+	void max_load_factor ( float z )
+	{
+		return this->base().max_load_factor ( z );
+	}
 
-    void rehash(BOOST_DEDUCED_TYPENAME base_::size_type n)
-    {
-        return this->base().rehash(n);
-    }
+	void rehash ( BOOST_DEDUCED_TYPENAME base_::size_type n )
+	{
+		return this->base().rehash ( n );
+	}
 
-    // We have redefined end and begin so we have to manually route the old ones
+	// We have redefined end and begin so we have to manually route the old ones
 
-    BOOST_DEDUCED_TYPENAME base_::iterator begin()
-    {
-        return base_::container_adaptor_::begin();
-    }
+	BOOST_DEDUCED_TYPENAME base_::iterator begin()
+	{
+		return base_::container_adaptor_::begin();
+	}
 
-    BOOST_DEDUCED_TYPENAME base_::iterator end()
-    {
-        return base_::container_adaptor_::end();
-    }
+	BOOST_DEDUCED_TYPENAME base_::iterator end()
+	{
+		return base_::container_adaptor_::end();
+	}
 
-    BOOST_DEDUCED_TYPENAME base_::const_iterator begin() const
-    {
-        return base_::container_adaptor_::begin();
-    }
+	BOOST_DEDUCED_TYPENAME base_::const_iterator begin() const
+	{
+		return base_::container_adaptor_::begin();
+	}
 
-    BOOST_DEDUCED_TYPENAME base_::const_iterator end() const
-    {
-        return base_::container_adaptor_::end();
-    }
+	BOOST_DEDUCED_TYPENAME base_::const_iterator end() const
+	{
+		return base_::container_adaptor_::end();
+	}
 
 };
 

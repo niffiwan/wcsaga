@@ -28,7 +28,8 @@
 // should be the last #include
 #include "boost/type_traits/detail/bool_trait_def.hpp"
 
-namespace boost {
+namespace boost
+{
 
 //////////////////////////////////////////////////////////////////////////
 // class template recursive_wrapper
@@ -54,52 +55,53 @@ template <typename T> class recursive_wrapper;
 // True iff specified type matches recursive_wrapper<T>.
 //
 
-namespace detail {
+namespace detail
+{
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template <typename T>
 struct is_recursive_wrapper_impl
-    : mpl::false_
+		: mpl::false_
 {
 };
 
 template <typename T>
 struct is_recursive_wrapper_impl< recursive_wrapper<T> >
-    : mpl::true_
+		: mpl::true_
 {
 };
 
 #else // defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
-typedef char (&yes_recursive_wrapper_t)[1];
-typedef char (&no_recursive_wrapper_t)[2];
+typedef char ( &yes_recursive_wrapper_t ) [1];
+typedef char ( &no_recursive_wrapper_t ) [2];
 
-no_recursive_wrapper_t is_recursive_wrapper_test(...);
+no_recursive_wrapper_t is_recursive_wrapper_test ( ... );
 
 template<typename T>
-yes_recursive_wrapper_t is_recursive_wrapper_test(
-      type< ::boost::recursive_wrapper<T> >
-    );
+yes_recursive_wrapper_t is_recursive_wrapper_test (
+    type< ::boost::recursive_wrapper<T> >
+);
 
 template<typename T>
 struct is_recursive_wrapper_impl
 {
-    BOOST_STATIC_CONSTANT(bool, value = (
-          sizeof(is_recursive_wrapper_test(type<T>()))
-          == sizeof(yes_recursive_wrapper_t)
-        ));
+	BOOST_STATIC_CONSTANT ( bool, value = (
+	        sizeof ( is_recursive_wrapper_test ( type<T>() ) )
+	        == sizeof ( yes_recursive_wrapper_t )
+	                                      ) );
 };
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION workaround
 
 } // namespace detail
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(
-      is_recursive_wrapper
+BOOST_TT_AUX_BOOL_TRAIT_DEF1 (
+    is_recursive_wrapper
     , T
-    , (::boost::detail::is_recursive_wrapper_impl<T>::value)
-    )
+    , ( ::boost::detail::is_recursive_wrapper_impl<T>::value )
+)
 
 ///////////////////////////////////////////////////////////////////////////////
 // metafunction unwrap_recursive
@@ -112,30 +114,30 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF1(
 template <typename T>
 struct unwrap_recursive
 {
-    typedef T type;
+	typedef T type;
 
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,unwrap_recursive,(T))
+	BOOST_MPL_AUX_LAMBDA_SUPPORT ( 1, unwrap_recursive, ( T ) )
 };
 
 template <typename T>
 struct unwrap_recursive< recursive_wrapper<T> >
 {
-    typedef T type;
+	typedef T type;
 
-    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(1,unwrap_recursive,(T))
+	BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC ( 1, unwrap_recursive, ( T ) )
 };
 
 #else // defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template <typename T>
 struct unwrap_recursive
-    : mpl::eval_if<
-          is_recursive_wrapper<T>
-        , T
-        , mpl::identity< T >
-        >
+		: mpl::eval_if <
+		is_recursive_wrapper<T>
+		, T
+		, mpl::identity< T >
+		>
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,unwrap_recursive,(T))
+	BOOST_MPL_AUX_LAMBDA_SUPPORT ( 1, unwrap_recursive, ( T ) )
 };
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION workaround

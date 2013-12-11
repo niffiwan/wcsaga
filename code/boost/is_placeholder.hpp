@@ -23,7 +23,7 @@ namespace boost
 
 template< class T > struct is_placeholder
 {
-    enum _vt { value = 0 };
+	enum _vt { value = 0 };
 };
 
 } // namespace boost

@@ -17,7 +17,10 @@
 #include <boost/spirit/home/classic/meta/impl/refactoring.ipp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit {
+namespace boost
+{
+namespace spirit
+{
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
@@ -55,56 +58,58 @@ class refactor_unary_gen;
 
 template <typename BinaryT, typename NestedT = non_nested_refactoring>
 class refactor_unary_parser :
-    public parser<refactor_unary_parser<BinaryT, NestedT> > {
+	public parser<refactor_unary_parser<BinaryT, NestedT> >
+{
 
 public:
-    //  the parser to refactor has to be at least a binary_parser_category
-    //  parser
-    BOOST_STATIC_ASSERT((
-        boost::is_convertible<typename BinaryT::parser_category_t,
-            binary_parser_category>::value
-    ));
+	//  the parser to refactor has to be at least a binary_parser_category
+	//  parser
+	BOOST_STATIC_ASSERT ( (
+	                          boost::is_convertible<typename BinaryT::parser_category_t,
+	                          binary_parser_category>::value
+	                      ) );
 
-    refactor_unary_parser(BinaryT const& binary_, NestedT const& nested_)
-    : binary(binary_), nested(nested_) {}
+	refactor_unary_parser ( BinaryT const &binary_, NestedT const &nested_ )
+		: binary ( binary_ ), nested ( nested_ ) {}
 
-    typedef refactor_unary_parser<BinaryT, NestedT> self_t;
-    typedef refactor_unary_gen<NestedT> parser_generator_t;
-    typedef typename BinaryT::left_t::parser_category_t parser_category_t;
+	typedef refactor_unary_parser<BinaryT, NestedT> self_t;
+	typedef refactor_unary_gen<NestedT> parser_generator_t;
+	typedef typename BinaryT::left_t::parser_category_t parser_category_t;
 
-    template <typename ScannerT>
-    typename parser_result<self_t, ScannerT>::type
-    parse(ScannerT const& scan) const
-    {
-        return impl::refactor_unary_type<NestedT>::
-            parse(*this, scan, binary, nested);
-    }
+	template <typename ScannerT>
+	typename parser_result<self_t, ScannerT>::type
+	parse ( ScannerT const &scan ) const
+	{
+		return impl::refactor_unary_type<NestedT>::
+		       parse ( *this, scan, binary, nested );
+	}
 
 private:
-    typename as_parser<BinaryT>::type::embed_t binary;
-    typename NestedT::embed_t nested;
+	typename as_parser<BinaryT>::type::embed_t binary;
+	typename NestedT::embed_t nested;
 };
 
 //////////////////////////////////
 template <typename NestedT>
-class refactor_unary_gen {
+class refactor_unary_gen
+{
 
 public:
-    typedef refactor_unary_gen<NestedT> embed_t;
+	typedef refactor_unary_gen<NestedT> embed_t;
 
-    refactor_unary_gen(NestedT const& nested_ = non_nested_refactoring())
-    : nested(nested_) {}
+	refactor_unary_gen ( NestedT const &nested_ = non_nested_refactoring() )
+		: nested ( nested_ ) {}
 
-    template <typename ParserT>
-    refactor_unary_parser<ParserT, NestedT>
-    operator[](parser<ParserT> const& subject) const
-    {
-        return refactor_unary_parser<ParserT, NestedT>
-            (subject.derived(), nested);
-    }
+	template <typename ParserT>
+	refactor_unary_parser<ParserT, NestedT>
+	operator[] ( parser<ParserT> const &subject ) const
+	{
+		return refactor_unary_parser<ParserT, NestedT>
+		       ( subject.derived(), nested );
+	}
 
 private:
-    typename NestedT::embed_t nested;
+	typename NestedT::embed_t nested;
 };
 
 const refactor_unary_gen<> refactor_unary_d = refactor_unary_gen<>();
@@ -138,56 +143,58 @@ class refactor_action_gen;
 
 template <typename BinaryT, typename NestedT = non_nested_refactoring>
 class refactor_action_parser :
-    public parser<refactor_action_parser<BinaryT, NestedT> > {
+	public parser<refactor_action_parser<BinaryT, NestedT> >
+{
 
 public:
-    //  the parser to refactor has to be at least a binary_parser_category
-    //  parser
-    BOOST_STATIC_ASSERT((
-        boost::is_convertible<typename BinaryT::parser_category_t,
-            binary_parser_category>::value
-    ));
+	//  the parser to refactor has to be at least a binary_parser_category
+	//  parser
+	BOOST_STATIC_ASSERT ( (
+	                          boost::is_convertible<typename BinaryT::parser_category_t,
+	                          binary_parser_category>::value
+	                      ) );
 
-    refactor_action_parser(BinaryT const& binary_, NestedT const& nested_)
-    : binary(binary_), nested(nested_) {}
+	refactor_action_parser ( BinaryT const &binary_, NestedT const &nested_ )
+		: binary ( binary_ ), nested ( nested_ ) {}
 
-    typedef refactor_action_parser<BinaryT, NestedT> self_t;
-    typedef refactor_action_gen<NestedT> parser_generator_t;
-    typedef typename BinaryT::left_t::parser_category_t parser_category_t;
+	typedef refactor_action_parser<BinaryT, NestedT> self_t;
+	typedef refactor_action_gen<NestedT> parser_generator_t;
+	typedef typename BinaryT::left_t::parser_category_t parser_category_t;
 
-    template <typename ScannerT>
-    typename parser_result<self_t, ScannerT>::type
-    parse(ScannerT const& scan) const
-    {
-        return impl::refactor_action_type<NestedT>::
-            parse(*this, scan, binary, nested);
-    }
+	template <typename ScannerT>
+	typename parser_result<self_t, ScannerT>::type
+	parse ( ScannerT const &scan ) const
+	{
+		return impl::refactor_action_type<NestedT>::
+		       parse ( *this, scan, binary, nested );
+	}
 
 private:
-    typename as_parser<BinaryT>::type::embed_t binary;
-    typename NestedT::embed_t nested;
+	typename as_parser<BinaryT>::type::embed_t binary;
+	typename NestedT::embed_t nested;
 };
 
 //////////////////////////////////
 template <typename NestedT>
-class refactor_action_gen {
+class refactor_action_gen
+{
 
 public:
-    typedef refactor_action_gen<NestedT> embed_t;
+	typedef refactor_action_gen<NestedT> embed_t;
 
-    refactor_action_gen(NestedT const& nested_ = non_nested_refactoring())
-    : nested(nested_) {}
+	refactor_action_gen ( NestedT const &nested_ = non_nested_refactoring() )
+		: nested ( nested_ ) {}
 
-    template <typename ParserT>
-    refactor_action_parser<ParserT, NestedT>
-    operator[](parser<ParserT> const& subject) const
-    {
-        return refactor_action_parser<ParserT, NestedT>
-            (subject.derived(), nested);
-    }
+	template <typename ParserT>
+	refactor_action_parser<ParserT, NestedT>
+	operator[] ( parser<ParserT> const &subject ) const
+	{
+		return refactor_action_parser<ParserT, NestedT>
+		       ( subject.derived(), nested );
+	}
 
 private:
-    typename NestedT::embed_t nested;
+	typename NestedT::embed_t nested;
 };
 
 const refactor_action_gen<> refactor_action_d = refactor_action_gen<>();
@@ -220,56 +227,58 @@ class attach_action_gen;
 
 template <typename ActionT, typename NestedT = non_nested_refactoring>
 class attach_action_parser :
-    public parser<attach_action_parser<ActionT, NestedT> > {
+	public parser<attach_action_parser<ActionT, NestedT> >
+{
 
 public:
-    //  the parser to refactor has to be at least a action_parser_category
-    //  parser
-    BOOST_STATIC_ASSERT((
-        boost::is_convertible<typename ActionT::parser_category_t,
-            action_parser_category>::value
-    ));
+	//  the parser to refactor has to be at least a action_parser_category
+	//  parser
+	BOOST_STATIC_ASSERT ( (
+	                          boost::is_convertible<typename ActionT::parser_category_t,
+	                          action_parser_category>::value
+	                      ) );
 
-    attach_action_parser(ActionT const& actor_, NestedT const& nested_)
-    : actor(actor_), nested(nested_) {}
+	attach_action_parser ( ActionT const &actor_, NestedT const &nested_ )
+		: actor ( actor_ ), nested ( nested_ ) {}
 
-    typedef attach_action_parser<ActionT, NestedT> self_t;
-    typedef attach_action_gen<NestedT> parser_generator_t;
-    typedef typename ActionT::parser_category_t parser_category_t;
+	typedef attach_action_parser<ActionT, NestedT> self_t;
+	typedef attach_action_gen<NestedT> parser_generator_t;
+	typedef typename ActionT::parser_category_t parser_category_t;
 
-    template <typename ScannerT>
-    typename parser_result<self_t, ScannerT>::type
-    parse(ScannerT const& scan) const
-    {
-        return impl::attach_action_type<NestedT>::
-            parse(*this, scan, actor, nested);
-    }
+	template <typename ScannerT>
+	typename parser_result<self_t, ScannerT>::type
+	parse ( ScannerT const &scan ) const
+	{
+		return impl::attach_action_type<NestedT>::
+		       parse ( *this, scan, actor, nested );
+	}
 
 private:
-    typename as_parser<ActionT>::type::embed_t actor;
-    typename NestedT::embed_t nested;
+	typename as_parser<ActionT>::type::embed_t actor;
+	typename NestedT::embed_t nested;
 };
 
 //////////////////////////////////
 template <typename NestedT>
-class attach_action_gen {
+class attach_action_gen
+{
 
 public:
-    typedef attach_action_gen<NestedT> embed_t;
+	typedef attach_action_gen<NestedT> embed_t;
 
-    attach_action_gen(NestedT const& nested_ = non_nested_refactoring())
-    : nested(nested_) {}
+	attach_action_gen ( NestedT const &nested_ = non_nested_refactoring() )
+		: nested ( nested_ ) {}
 
-    template <typename ParserT, typename ActionT>
-    attach_action_parser<action<ParserT, ActionT>, NestedT>
-    operator[](action<ParserT, ActionT> const& actor) const
-    {
-        return attach_action_parser<action<ParserT, ActionT>, NestedT>
-            (actor, nested);
-    }
+	template <typename ParserT, typename ActionT>
+	attach_action_parser<action<ParserT, ActionT>, NestedT>
+	operator[] ( action<ParserT, ActionT> const &actor ) const
+	{
+		return attach_action_parser<action<ParserT, ActionT>, NestedT>
+		       ( actor, nested );
+	}
 
 private:
-    typename NestedT::embed_t nested;
+	typename NestedT::embed_t nested;
 };
 
 const attach_action_gen<> attach_action_d = attach_action_gen<>();
@@ -281,7 +290,8 @@ const attach_action_gen<> attach_action_d = attach_action_gen<>();
 ///////////////////////////////////////////////////////////////////////////////
 BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}} // namespace BOOST_SPIRIT_CLASSIC_NS
+}
+} // namespace BOOST_SPIRIT_CLASSIC_NS
 
 #endif // BOOST_SPIRIT_REFACTORING_HPP
 

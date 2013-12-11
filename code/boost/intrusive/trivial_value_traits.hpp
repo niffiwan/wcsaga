@@ -15,8 +15,10 @@
 
 #include <boost/intrusive/link_mode.hpp>
 
-namespace boost {
-namespace intrusive {
+namespace boost
+{
+namespace intrusive
+{
 
 //!This value traits template is used to create value traits
 //!from user defined node traits where value_traits::value_type and
@@ -24,20 +26,20 @@ namespace intrusive {
 template<class NodeTraits, link_mode_type LinkMode = normal_link>
 struct trivial_value_traits
 {
-   typedef NodeTraits                                          node_traits;
-   typedef typename node_traits::node_ptr                      node_ptr;
-   typedef typename node_traits::const_node_ptr                const_node_ptr;
-   typedef typename node_traits::node                          value_type;
-   typedef node_ptr                                            pointer;
-   typedef const_node_ptr                                      const_pointer;
-   static const link_mode_type link_mode = LinkMode;
-   static node_ptr       to_node_ptr (value_type &value)       {  return node_ptr(&value); }
-   static const_node_ptr to_node_ptr (const value_type &value) {  return const_node_ptr(&value); }
-   static pointer        to_value_ptr(node_ptr n)              {  return pointer(n); }
-   static const_pointer  to_value_ptr(const_node_ptr n)        {  return const_pointer(n); }
+	typedef NodeTraits                                          node_traits;
+	typedef typename node_traits::node_ptr                      node_ptr;
+	typedef typename node_traits::const_node_ptr                const_node_ptr;
+	typedef typename node_traits::node                          value_type;
+	typedef node_ptr                                            pointer;
+	typedef const_node_ptr                                      const_pointer;
+	static const link_mode_type link_mode = LinkMode;
+	static node_ptr       to_node_ptr ( value_type &value )       {  return node_ptr ( &value ); }
+	static const_node_ptr to_node_ptr ( const value_type &value ) {  return const_node_ptr ( &value ); }
+	static pointer        to_value_ptr ( node_ptr n )              {  return pointer ( n ); }
+	static const_pointer  to_value_ptr ( const_node_ptr n )        {  return const_pointer ( n ); }
 };
 
-} //namespace intrusive 
-} //namespace boost 
+} //namespace intrusive
+} //namespace boost
 
 #endif //BOOST_INTRUSIVE_TRIVIAL_VALUE_TRAITS_HPP

@@ -23,8 +23,10 @@
 #if defined(BOOST_ASIO_HAS_SERIAL_PORT) \
   || defined(GENERATING_DOCUMENTATION)
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 /// Typedef for the typical usage of a serial port.
 typedef basic_serial_port<> serial_port;
@@ -33,7 +35,7 @@ typedef basic_serial_port<> serial_port;
 } // namespace boost
 
 #endif // defined(BOOST_ASIO_HAS_SERIAL_PORT)
-       //   || defined(GENERATING_DOCUMENTATION)
+//   || defined(GENERATING_DOCUMENTATION)
 
 #include <boost/asio/detail/pop_options.hpp>
 

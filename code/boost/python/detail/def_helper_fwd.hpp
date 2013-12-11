@@ -7,11 +7,18 @@
 
 # include <boost/python/detail/not_specified.hpp>
 
-namespace boost { namespace python { namespace detail { 
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
 template <class T1, class T2 = not_specified, class T3 = not_specified, class T4 = not_specified>
 struct def_helper;
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 
 #endif // DEF_HELPER_FWD_DWA2003810_HPP

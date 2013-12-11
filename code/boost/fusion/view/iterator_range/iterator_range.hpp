@@ -18,31 +18,34 @@
 #include <boost/fusion/view/iterator_range/detail/value_at_impl.hpp>
 #include <boost/fusion/adapted/mpl/mpl_iterator.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct iterator_range_tag;
-    struct fusion_sequence_tag;
+namespace fusion
+{
+struct iterator_range_tag;
+struct fusion_sequence_tag;
 
-    template <typename First, typename Last>
-    struct iterator_range : sequence_base<iterator_range<First, Last> >
-    {
-        typedef typename convert_iterator<First>::type begin_type;
-        typedef typename convert_iterator<Last>::type end_type;
-        typedef iterator_range_tag fusion_tag;
-        typedef fusion_sequence_tag tag; // this gets picked up by MPL
-        typedef typename result_of::distance<begin_type, end_type>::type size;
-        typedef mpl::true_ is_view;
+template <typename First, typename Last>
+struct iterator_range : sequence_base<iterator_range<First, Last> >
+{
+	typedef typename convert_iterator<First>::type begin_type;
+	typedef typename convert_iterator<Last>::type end_type;
+	typedef iterator_range_tag fusion_tag;
+	typedef fusion_sequence_tag tag; // this gets picked up by MPL
+	typedef typename result_of::distance<begin_type, end_type>::type size;
+	typedef mpl::true_ is_view;
 
-        typedef typename traits::category_of<begin_type>::type category;
+	typedef typename traits::category_of<begin_type>::type category;
 
-        iterator_range(First const& first, Last const& last)
-            : first(convert_iterator<First>::call(first))
-            , last(convert_iterator<Last>::call(last)) {}
+	iterator_range ( First const &first, Last const &last )
+		: first ( convert_iterator<First>::call ( first ) )
+		, last ( convert_iterator<Last>::call ( last ) ) {}
 
-        begin_type first;
-        end_type last;
-    };
-}}
+	begin_type first;
+	end_type last;
+};
+}
+}
 
 #endif
 

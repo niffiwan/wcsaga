@@ -14,50 +14,50 @@
 
 namespace boost
 {
-    namespace detail
-    {
-        typedef ::boost::detail::basic_timed_mutex underlying_mutex;
-    }
+namespace detail
+{
+typedef ::boost::detail::basic_timed_mutex underlying_mutex;
+}
 
-    class mutex:
-        boost::noncopyable,
-        public ::boost::detail::underlying_mutex
-    {
-    public:
-        mutex()
-        {
-            initialize();
-        }
-        ~mutex()
-        {
-            destroy();
-        }
+class mutex:
+	boost::noncopyable,
+	public ::boost::detail::underlying_mutex
+{
+public:
+	mutex()
+	{
+		initialize();
+	}
+	~mutex()
+	{
+		destroy();
+	}
 
-        typedef unique_lock<mutex> scoped_lock;
-        typedef detail::try_lock_wrapper<mutex> scoped_try_lock;
-    };
+	typedef unique_lock<mutex> scoped_lock;
+	typedef detail::try_lock_wrapper<mutex> scoped_try_lock;
+};
 
-    typedef mutex try_mutex;
+typedef mutex try_mutex;
 
-    class timed_mutex:
-        boost::noncopyable,
-        public ::boost::detail::basic_timed_mutex
-    {
-    public:
-        timed_mutex()
-        {
-            initialize();
-        }
+class timed_mutex:
+	boost::noncopyable,
+	public ::boost::detail::basic_timed_mutex
+{
+public:
+	timed_mutex()
+	{
+		initialize();
+	}
 
-        ~timed_mutex()
-        {
-            destroy();
-        }
+	~timed_mutex()
+	{
+		destroy();
+	}
 
-        typedef unique_lock<timed_mutex> scoped_timed_lock;
-        typedef detail::try_lock_wrapper<timed_mutex> scoped_try_lock;
-        typedef scoped_timed_lock scoped_lock;
-    };
+	typedef unique_lock<timed_mutex> scoped_timed_lock;
+	typedef detail::try_lock_wrapper<timed_mutex> scoped_try_lock;
+	typedef scoped_timed_lock scoped_lock;
+};
 }
 
 #include <boost/config/abi_suffix.hpp>

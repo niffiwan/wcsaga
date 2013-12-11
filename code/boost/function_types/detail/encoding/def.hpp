@@ -41,7 +41,7 @@
 #define BOOST_FT_default_cc                           0x00008000
 #define BOOST_FT_cc_mask                              0x00ff8000
 
-#define BOOST_FT_kind_mask                            0x000000fc 
+#define BOOST_FT_kind_mask                            0x000000fc
 
 #define BOOST_FT_flags_mask                           0x00000fff
 #define BOOST_FT_full_mask                            0x00ff0fff

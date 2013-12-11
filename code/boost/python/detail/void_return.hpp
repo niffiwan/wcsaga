@@ -7,26 +7,31 @@
 
 # include <boost/config.hpp>
 
-namespace boost { namespace python { namespace detail { 
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
 struct void_return
 {
-    void_return() {}
- private: 
-    void operator=(void_return const&);
+	void_return() {}
+private:
+	void operator= ( void_return const & );
 };
 
 template <class T>
 struct returnable
 {
-    typedef T type;
+	typedef T type;
 };
 
 # ifdef BOOST_NO_VOID_RETURNS
 template <>
 struct returnable<void>
 {
-    typedef void_return type;
+	typedef void_return type;
 };
 
 #  ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
@@ -37,6 +42,8 @@ template <> struct returnable<const volatile void> : returnable<void> {};
 
 # endif // BOOST_NO_VOID_RETURNS
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 
 #endif // VOID_RETURN_DWA200274_HPP

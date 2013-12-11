@@ -14,8 +14,10 @@
 #include <boost/interprocess/detail/config_begin.hpp>
 #include <boost/interprocess/detail/workaround.hpp>
 
-namespace boost {
-namespace interprocess {
+namespace boost
+{
+namespace interprocess
+{
 
 //!Tag to indicate that the resource must
 //!be only created
@@ -57,7 +59,8 @@ static const open_or_create_t open_or_create = open_or_create_t();
 //!be only opened for reading
 static const open_copy_on_write_t open_copy_on_write = open_copy_on_write_t();
 
-namespace detail {
+namespace detail
+{
 
 enum create_enum_t
 {  DoCreate, DoOpen, DoOpenOrCreate   };

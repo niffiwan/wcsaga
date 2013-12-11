@@ -18,47 +18,49 @@
 #include <boost/accumulators/framework/depends_on.hpp>
 #include <boost/accumulators/statistics_fwd.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 namespace impl
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    // weighted_sum_impl
-    template<typename Sample, typename Weight, typename Tag>
-    struct weighted_sum_impl
-      : accumulator_base
-    {
-        typedef typename numeric::functional::multiplies<Sample, Weight>::result_type weighted_sample;
+///////////////////////////////////////////////////////////////////////////////
+// weighted_sum_impl
+template<typename Sample, typename Weight, typename Tag>
+struct weighted_sum_impl
+		: accumulator_base
+{
+	typedef typename numeric::functional::multiplies<Sample, Weight>::result_type weighted_sample;
 
-        // for boost::result_of
-        typedef weighted_sample result_type;
+	// for boost::result_of
+	typedef weighted_sample result_type;
 
-        template<typename Args>
-        weighted_sum_impl(Args const &args)
-          : weighted_sum_(
-                args[parameter::keyword<Tag>::get() | Sample()]
-                  * numeric::one<Weight>::value
-            )
-        {
-        }
+	template<typename Args>
+	weighted_sum_impl ( Args const &args )
+		: weighted_sum_ (
+		    args[parameter::keyword<Tag>::get() | Sample()]
+		    * numeric::one<Weight>::value
+		)
+	{
+	}
 
-        template<typename Args>
-        void operator ()(Args const &args)
-        {
-            // what about overflow?
-            this->weighted_sum_ += args[parameter::keyword<Tag>::get()] * args[weight];
-        }
+	template<typename Args>
+	void operator () ( Args const &args )
+	{
+		// what about overflow?
+		this->weighted_sum_ += args[parameter::keyword<Tag>::get()] * args[weight];
+	}
 
-        result_type result(dont_care) const
-        {
-            return this->weighted_sum_;
-        }
+	result_type result ( dont_care ) const
+	{
+		return this->weighted_sum_;
+	}
 
-    private:
+private:
 
-        weighted_sample weighted_sum_;
-    };
+	weighted_sample weighted_sum_;
+};
 
 } // namespace impl
 
@@ -67,27 +69,27 @@ namespace impl
 //
 namespace tag
 {
-    struct weighted_sum
-      : depends_on<>
-    {
-        /// INTERNAL ONLY
-        ///
-        typedef accumulators::impl::weighted_sum_impl<mpl::_1, mpl::_2, tag::sample> impl;
-    };
+struct weighted_sum
+		: depends_on<>
+{
+	/// INTERNAL ONLY
+	///
+	typedef accumulators::impl::weighted_sum_impl<mpl::_1, mpl::_2, tag::sample> impl;
+};
 
-    template<typename VariateType, typename VariateTag>
-    struct weighted_sum_of_variates
-      : depends_on<>
-    {
-        /// INTERNAL ONLY
-        ///
-        typedef accumulators::impl::weighted_sum_impl<VariateType, mpl::_2, VariateTag> impl;
-    };
+template<typename VariateType, typename VariateTag>
+struct weighted_sum_of_variates
+		: depends_on<>
+{
+	/// INTERNAL ONLY
+	///
+	typedef accumulators::impl::weighted_sum_impl<VariateType, mpl::_2, VariateTag> impl;
+};
 
-    struct abstract_weighted_sum_of_variates
-      : depends_on<>
-    {
-    };
+struct abstract_weighted_sum_of_variates
+		: depends_on<>
+{
+};
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -95,11 +97,11 @@ namespace tag
 //
 namespace extract
 {
-    extractor<tag::weighted_sum> const weighted_sum = {};
-    extractor<tag::abstract_weighted_sum_of_variates> const weighted_sum_of_variates = {};
+extractor<tag::weighted_sum> const weighted_sum = {};
+extractor<tag::abstract_weighted_sum_of_variates> const weighted_sum_of_variates = {};
 
-    BOOST_ACCUMULATORS_IGNORE_GLOBAL(weighted_sum)
-    BOOST_ACCUMULATORS_IGNORE_GLOBAL(weighted_sum_of_variates)
+BOOST_ACCUMULATORS_IGNORE_GLOBAL ( weighted_sum )
+BOOST_ACCUMULATORS_IGNORE_GLOBAL ( weighted_sum_of_variates )
 }
 
 using extract::weighted_sum;
@@ -107,10 +109,11 @@ using extract::weighted_sum_of_variates;
 
 template<typename VariateType, typename VariateTag>
 struct feature_of<tag::weighted_sum_of_variates<VariateType, VariateTag> >
-  : feature_of<tag::abstract_weighted_sum_of_variates>
+		: feature_of<tag::abstract_weighted_sum_of_variates>
 {
 };
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

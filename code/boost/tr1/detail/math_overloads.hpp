@@ -19,40 +19,44 @@
 #  include <boost/type_traits/is_same.hpp>
 #  include <boost/mpl/if.hpp>
 
-namespace boost{ namespace tr1_detail{
+namespace boost
+{
+namespace tr1_detail
+{
 
 template <class T, class U>
 struct largest_real
 {
-   typedef typename boost::mpl::if_<
-      boost::is_same<long double, T>,
-      long double,
-      typename boost::mpl::if_<
-         boost::is_same<long double, U>,
-         long double,
-         typename boost::mpl::if_<
-            boost::is_same<double, T>,
-            double,
-            typename boost::mpl::if_<
-               boost::is_same<double, U>,
-               double,
-               float
-            >::type
-         >::type
-      >::type
-   >::type type;
+	typedef typename boost::mpl::if_ <
+	boost::is_same<long double, T>,
+	      long double,
+	      typename boost::mpl::if_ <
+	      boost::is_same<long double, U>,
+	      long double,
+	      typename boost::mpl::if_ <
+	      boost::is_same<double, T>,
+	      double,
+	      typename boost::mpl::if_ <
+	      boost::is_same<double, U>,
+	      double,
+	      float
+	      >::type
+	      >::type
+	      >::type
+	      >::type type;
 };
 
 template <class T, class U>
 struct promote_to_real
 {
-   typedef typename largest_real<
-      typename boost::mpl::if_< boost::is_floating_point<T>, T, double>::type,
-      typename boost::mpl::if_< boost::is_floating_point<U>, U, double>::type
-   >::type type;
+	typedef typename largest_real <
+	typename boost::mpl::if_< boost::is_floating_point<T>, T, double>::type,
+	         typename boost::mpl::if_< boost::is_floating_point<U>, U, double>::type
+	         >::type type;
 };
 
-} }
+}
+}
 
 #endif
 

@@ -8,14 +8,21 @@
 #include <boost/python/detail/is_auto_ptr.hpp>
 #include <boost/mpl/bool.hpp>
 
-namespace boost { namespace python { namespace detail { 
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
 template <class T>
 struct copy_ctor_mutates_rhs
-    : is_auto_ptr<T>
+		: is_auto_ptr<T>
 {
 };
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 
 #endif // COPY_CTOR_MUTATES_RHS_DWA2003219_HPP

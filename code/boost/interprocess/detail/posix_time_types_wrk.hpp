@@ -15,7 +15,7 @@
 
 #ifdef _WIN32
 #ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN 
+#define WIN32_LEAN_AND_MEAN
 #define BOOST_INTERPROCESS_WIN32_LEAN_AND_MEAN
 #endif   //#ifndef WIN32_LEAN_AND_MEAN
 #endif   //#ifdef _WIN32
@@ -24,8 +24,10 @@
 //#include <boost/date_time/microsec_time_clock.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 
-namespace boost {
-namespace interprocess {
+namespace boost
+{
+namespace interprocess
+{
 
 typedef boost::date_time::microsec_clock<boost::posix_time::ptime> microsec_clock;
 

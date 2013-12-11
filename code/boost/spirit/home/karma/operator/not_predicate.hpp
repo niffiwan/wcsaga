@@ -18,73 +18,88 @@
 #include <boost/spirit/home/support/attributes.hpp>
 #include <boost/spirit/home/support/info.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <>
-    struct use_operator<karma::domain, proto::tag::logical_not> // enables !g
-      : mpl::true_ {};
-
-}}
-
-namespace boost { namespace spirit { namespace karma
+namespace spirit
 {
-    template <typename Subject>
-    struct not_predicate : unary_generator<not_predicate<Subject> >
-    {
-        typedef Subject subject_type;
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
+template <>
+struct use_operator<karma::domain, proto::tag::logical_not> // enables !g
+		: mpl::true_ {};
 
-        typedef mpl::int_<
-            generator_properties::countingbuffer | 
-            subject_type::properties::value
-        > properties;
+}
+}
 
-        template <typename Context, typename Iterator>
-        struct attribute
-          : traits::attribute_of<subject_type, Context, Iterator>
-        {};
-
-        not_predicate(Subject const& subject)
-          : subject(subject) {}
-
-        template <
-            typename OutputIterator, typename Context, typename Delimiter
-          , typename Attribute>
-        bool generate(OutputIterator& sink, Context& ctx, Delimiter const& d
-          , Attribute const& attr) const
-        {
-            // inhibits (redirects) output, disable counting
-            detail::enable_buffering<OutputIterator> buffering(sink);
-            detail::disable_counting<OutputIterator> nocounting(sink);
-            return !subject.generate(sink, ctx, d, attr);
-        }
-
-        template <typename Context>
-        info what(Context& context) const
-        {
-            return info("not-predicate", subject.what(context));
-        }
-
-        Subject subject;
-    };
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Generator generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Elements, typename Modifiers>
-    struct make_composite<proto::tag::logical_not, Elements, Modifiers>
-      : make_unary_composite<Elements, not_predicate> {};
-
-}}}
-
-namespace boost { namespace spirit { namespace traits
+namespace boost
 {
-    template <typename Subject>
-    struct has_semantic_action<karma::not_predicate<Subject> >
-      : unary_has_semantic_action<Subject> {};
+namespace spirit
+{
+namespace karma
+{
+template <typename Subject>
+struct not_predicate : unary_generator<not_predicate<Subject> >
+{
+	typedef Subject subject_type;
 
-}}}
+	typedef mpl::int_ <
+	generator_properties::countingbuffer |
+	subject_type::properties::value
+	> properties;
+
+	template <typename Context, typename Iterator>
+	struct attribute
+			: traits::attribute_of<subject_type, Context, Iterator>
+	{};
+
+	not_predicate ( Subject const &subject )
+		: subject ( subject ) {}
+
+	template <
+	    typename OutputIterator, typename Context, typename Delimiter
+	    , typename Attribute >
+	bool generate ( OutputIterator &sink, Context &ctx, Delimiter const &d
+	                , Attribute const &attr ) const
+	{
+		// inhibits (redirects) output, disable counting
+		detail::enable_buffering<OutputIterator> buffering ( sink );
+		detail::disable_counting<OutputIterator> nocounting ( sink );
+		return !subject.generate ( sink, ctx, d, attr );
+	}
+
+	template <typename Context>
+	info what ( Context &context ) const
+	{
+		return info ( "not-predicate", subject.what ( context ) );
+	}
+
+	Subject subject;
+};
+
+///////////////////////////////////////////////////////////////////////////
+// Generator generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+template <typename Elements, typename Modifiers>
+struct make_composite<proto::tag::logical_not, Elements, Modifiers>
+		: make_unary_composite<Elements, not_predicate> {};
+
+}
+}
+}
+
+namespace boost
+{
+namespace spirit
+{
+namespace traits
+{
+template <typename Subject>
+struct has_semantic_action<karma::not_predicate<Subject> >
+		: unary_has_semantic_action<Subject> {};
+
+}
+}
+}
 
 #endif

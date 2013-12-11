@@ -18,31 +18,34 @@
 #include <boost/fusion/view/repetitive_view/detail/end_impl.hpp>
 
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct repetitive_view_tag;
-    struct fusion_sequence_tag;
+namespace fusion
+{
+struct repetitive_view_tag;
+struct fusion_sequence_tag;
 
-    template<typename Sequence> struct repetitive_view 
-        : sequence_base< repetitive_view<Sequence> >
-    {
-        typedef repetitive_view_tag fusion_tag;
-        typedef fusion_sequence_tag tag; // this gets picked up by MPL
-        typedef mpl::true_ is_view;
+template<typename Sequence> struct repetitive_view
+		: sequence_base< repetitive_view<Sequence> >
+{
+	typedef repetitive_view_tag fusion_tag;
+	typedef fusion_sequence_tag tag; // this gets picked up by MPL
+	typedef mpl::true_ is_view;
 
-        typedef single_pass_traversal_tag category;
+	typedef single_pass_traversal_tag category;
 
-        typedef typename boost::remove_reference<Sequence>::type sequence_type;
-        typedef typename 
-            mpl::if_<traits::is_view<Sequence>, Sequence, sequence_type&>::type
-        stored_seq_type;
+	typedef typename boost::remove_reference<Sequence>::type sequence_type;
+	typedef typename
+	mpl::if_<traits::is_view<Sequence>, Sequence, sequence_type &>::type
+	stored_seq_type;
 
-        repetitive_view(Sequence& seq)
-            : seq(seq) {}
+	repetitive_view ( Sequence &seq )
+		: seq ( seq ) {}
 
-        stored_seq_type seq;
-    };
+	stored_seq_type seq;
+};
 
-}}
+}
+}
 
 #endif

@@ -17,7 +17,11 @@
 #include <boost/cstdint.hpp> // for BOOST_STATIC_CONSTANT
 #include <boost/detail/workaround.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+namespace boost
+{
+namespace xpressive
+{
+namespace detail
 {
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -29,7 +33,7 @@ struct char_literal;
 template<typename Char, boost::intmax_t Ch>
 struct char_literal<Char, Ch, Ch>
 {
-    BOOST_STATIC_CONSTANT(boost::intmax_t, value = Ch);
+	BOOST_STATIC_CONSTANT ( boost::intmax_t, value = Ch );
 };
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
@@ -43,29 +47,29 @@ struct string_literal;
 template<>
 struct string_literal<char>
 {
-    static char const *pick(char const *cstr, wchar_t const *)
-    {
-        return cstr;
-    }
+	static char const *pick ( char const *cstr, wchar_t const * )
+	{
+		return cstr;
+	}
 
-    static char pick(char ch, wchar_t)
-    {
-        return ch;
-    }
+	static char pick ( char ch, wchar_t )
+	{
+		return ch;
+	}
 };
 
 template<>
 struct string_literal<wchar_t>
 {
-    static wchar_t const *pick(char const *, wchar_t const *cstr)
-    {
-        return cstr;
-    }
+	static wchar_t const *pick ( char const *, wchar_t const *cstr )
+	{
+		return cstr;
+	}
 
-    static wchar_t pick(char, wchar_t ch)
-    {
-        return ch;
-    }
+	static wchar_t pick ( char, wchar_t ch )
+	{
+		return ch;
+	}
 };
 
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206))
@@ -80,6 +84,8 @@ struct string_literal<wchar_t>
 
 #endif
 
-}}} // namespace boost::xpressive::detail
+}
+}
+} // namespace boost::xpressive::detail
 
 #endif

@@ -11,8 +11,8 @@
 #if defined _MSC_VER && _MSC_VER <= 1200
 namespace std
 {
-    using ::ptrdiff_t;
-    using ::size_t;
+using ::ptrdiff_t;
+using ::size_t;
 }
 #else
 #include <string>

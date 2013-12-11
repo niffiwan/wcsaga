@@ -15,61 +15,63 @@
 #include <boost/accumulators/framework/accumulator_base.hpp>
 #include <boost/accumulators/framework/extractor.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 namespace impl
 {
-    //////////////////////////////////////////////////////////////////////////
-    // reference_accumulator_impl
-    //
-    template<typename Referent, typename Tag>
-    struct reference_accumulator_impl
-      : accumulator_base
-    {
-        typedef Referent &result_type;
+//////////////////////////////////////////////////////////////////////////
+// reference_accumulator_impl
+//
+template<typename Referent, typename Tag>
+struct reference_accumulator_impl
+		: accumulator_base
+{
+	typedef Referent &result_type;
 
-        template<typename Args>
-        reference_accumulator_impl(Args const &args)
-          : ref(args[parameter::keyword<Tag>::get()])
-        {
-        }
+	template<typename Args>
+	reference_accumulator_impl ( Args const &args )
+		: ref ( args[parameter::keyword<Tag>::get()] )
+	{
+	}
 
-        result_type result(dont_care) const
-        {
-            return this->ref;
-        }
+	result_type result ( dont_care ) const
+	{
+		return this->ref;
+	}
 
-    private:
-        reference_wrapper<Referent> ref;
-    };
+private:
+	reference_wrapper<Referent> ref;
+};
 } // namespace impl
 
 namespace tag
 {
-    //////////////////////////////////////////////////////////////////////////
-    // reference_tag
-    template<typename Tag>
-    struct reference_tag
-    {
-    };
+//////////////////////////////////////////////////////////////////////////
+// reference_tag
+template<typename Tag>
+struct reference_tag
+{
+};
 
-    //////////////////////////////////////////////////////////////////////////
-    // reference
-    template<typename Referent, typename Tag>
-    struct reference
-      : depends_on<>
-    {
-        /// INTERNAL ONLY
-        ///
-        typedef mpl::always<accumulators::impl::reference_accumulator_impl<Referent, Tag> > impl;
-    };
+//////////////////////////////////////////////////////////////////////////
+// reference
+template<typename Referent, typename Tag>
+struct reference
+		: depends_on<>
+{
+	/// INTERNAL ONLY
+	///
+	typedef mpl::always<accumulators::impl::reference_accumulator_impl<Referent, Tag> > impl;
+};
 }
 
 namespace extract
 {
-    BOOST_ACCUMULATORS_DEFINE_EXTRACTOR(tag, reference, (typename)(typename))
-    BOOST_ACCUMULATORS_DEFINE_EXTRACTOR(tag, reference_tag, (typename))
+BOOST_ACCUMULATORS_DEFINE_EXTRACTOR ( tag, reference, ( typename ) ( typename ) )
+BOOST_ACCUMULATORS_DEFINE_EXTRACTOR ( tag, reference_tag, ( typename ) )
 }
 
 using extract::reference;
@@ -80,10 +82,11 @@ using extract::reference_tag;
 // without specifying the referent type.
 template<typename ValueType, typename Tag>
 struct feature_of<tag::reference<ValueType, Tag> >
-  : feature_of<tag::reference_tag<Tag> >
+		: feature_of<tag::reference_tag<Tag> >
 {
 };
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

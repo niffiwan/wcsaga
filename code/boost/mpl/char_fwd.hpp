@@ -4,8 +4,8 @@
 
 // Copyright Eric Niebler 2008
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -19,9 +19,9 @@
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 
-template< BOOST_MPL_AUX_NTTP_DECL(char, N) > struct char_;
+template< BOOST_MPL_AUX_NTTP_DECL ( char, N ) > struct char_;
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
-BOOST_MPL_AUX_ADL_BARRIER_DECL(char_)
+BOOST_MPL_AUX_ADL_BARRIER_DECL ( char_ )
 
 #endif // BOOST_MPL_CHAR_FWD_HPP_INCLUDED

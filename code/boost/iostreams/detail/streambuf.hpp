@@ -10,14 +10,14 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
-                 
+#endif
+
 #include <boost/iostreams/detail/config/wide_streams.hpp>
 #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
 # include <streambuf>
-#else 
+#else
 # include <streambuf.h>
-#endif 
+#endif
 
 #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
 # define BOOST_IOSTREAMS_BASIC_STREAMBUF(ch, tr) std::basic_streambuf< ch, tr >

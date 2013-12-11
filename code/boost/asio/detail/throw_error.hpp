@@ -24,17 +24,20 @@
 #include <boost/asio/detail/pop_options.hpp>
 
 
-namespace boost {
-namespace asio {
-namespace detail {
-
-inline void throw_error(const boost::system::error_code& err)
+namespace boost
 {
-  if (err)
-  {
-    boost::system::system_error e(err);
-    boost::throw_exception(e);
-  }
+namespace asio
+{
+namespace detail
+{
+
+inline void throw_error ( const boost::system::error_code &err )
+{
+	if ( err )
+	{
+		boost::system::system_error e ( err );
+		boost::throw_exception ( e );
+	}
 }
 
 } // namespace detail

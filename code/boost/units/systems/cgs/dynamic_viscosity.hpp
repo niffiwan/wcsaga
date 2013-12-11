@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,15 +14,18 @@
 #include <boost/units/systems/cgs/base.hpp>
 #include <boost/units/physical_dimensions/dynamic_viscosity.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace cgs {
+namespace cgs
+{
 
-typedef unit<dynamic_viscosity_dimension,cgs::system>     dynamic_viscosity;
-    
-BOOST_UNITS_STATIC_CONSTANT(poise,dynamic_viscosity);    
+typedef unit<dynamic_viscosity_dimension, cgs::system>     dynamic_viscosity;
+
+BOOST_UNITS_STATIC_CONSTANT ( poise, dynamic_viscosity );
 
 } // namespace cgs
 

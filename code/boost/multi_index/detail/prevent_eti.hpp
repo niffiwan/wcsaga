@@ -22,11 +22,14 @@
 #include <boost/mpl/aux_/msvc_never_true.hpp>
 #endif
 
-namespace boost{
+namespace boost
+{
 
-namespace multi_index{
+namespace multi_index
+{
 
-namespace detail{
+namespace detail
+{
 
 #if BOOST_WORKAROUND(BOOST_MSVC,<1300)
 /* See
@@ -34,20 +37,20 @@ namespace detail{
  * Item 5.6, Beware of the 'early template instantiation' trap.
  */
 
-template<typename Type,typename Construct>
+template<typename Type, typename Construct>
 struct prevent_eti
 {
-  typedef typename mpl::if_<
-    mpl::aux::msvc_never_true<Type>,
-    mpl::integral_c<int,0>,
-    Construct
-  >::type type;
+	typedef typename mpl::if_ <
+	mpl::aux::msvc_never_true<Type>,
+	    mpl::integral_c<int, 0>,
+	    Construct
+	    >::type type;
 };
 #else
-template<typename Type,typename Construct>
+template<typename Type, typename Construct>
 struct prevent_eti
 {
-  typedef Construct type;
+	typedef Construct type;
 };
 #endif
 

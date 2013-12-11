@@ -16,80 +16,80 @@
 
 namespace boost
 {
-    class condition_variable
-    {
-    private:
-        pthread_cond_t cond;
-        
-        condition_variable(condition_variable&);
-        condition_variable& operator=(condition_variable&);
+class condition_variable
+{
+private:
+	pthread_cond_t cond;
 
-    public:
-        condition_variable()
-        {
-            int const res=pthread_cond_init(&cond,NULL);
-            if(res)
-            {
-                throw thread_resource_error();
-            }
-        }
-        ~condition_variable()
-        {
-            BOOST_VERIFY(!pthread_cond_destroy(&cond));
-        }
+	condition_variable ( condition_variable & );
+	condition_variable &operator= ( condition_variable & );
 
-        void wait(unique_lock<mutex>& m);
+public:
+	condition_variable()
+	{
+		int const res = pthread_cond_init ( &cond, NULL );
+		if ( res )
+		{
+			throw thread_resource_error();
+		}
+	}
+	~condition_variable()
+	{
+		BOOST_VERIFY ( !pthread_cond_destroy ( &cond ) );
+	}
 
-        template<typename predicate_type>
-        void wait(unique_lock<mutex>& m,predicate_type pred)
-        {
-            while(!pred()) wait(m);
-        }
+	void wait ( unique_lock<mutex> &m );
 
-        bool timed_wait(unique_lock<mutex>& m,boost::system_time const& wait_until);
-        bool timed_wait(unique_lock<mutex>& m,xtime const& wait_until)
-        {
-            return timed_wait(m,system_time(wait_until));
-        }
+	template<typename predicate_type>
+	void wait ( unique_lock<mutex> &m, predicate_type pred )
+	{
+		while ( !pred() ) wait ( m );
+	}
 
-        template<typename duration_type>
-        bool timed_wait(unique_lock<mutex>& m,duration_type const& wait_duration)
-        {
-            return timed_wait(m,get_system_time()+wait_duration);
-        }
+	bool timed_wait ( unique_lock<mutex> &m, boost::system_time const &wait_until );
+	bool timed_wait ( unique_lock<mutex> &m, xtime const &wait_until )
+	{
+		return timed_wait ( m, system_time ( wait_until ) );
+	}
 
-        template<typename predicate_type>
-        bool timed_wait(unique_lock<mutex>& m,boost::system_time const& wait_until,predicate_type pred)
-        {
-            while (!pred())
-            {
-                if(!timed_wait(m, wait_until))
-                    return pred();
-            }
-            return true;
-        }
+	template<typename duration_type>
+	bool timed_wait ( unique_lock<mutex> &m, duration_type const &wait_duration )
+	{
+		return timed_wait ( m, get_system_time() + wait_duration );
+	}
 
-        template<typename predicate_type>
-        bool timed_wait(unique_lock<mutex>& m,xtime const& wait_until,predicate_type pred)
-        {
-            return timed_wait(m,system_time(wait_until),pred);
-        }
+	template<typename predicate_type>
+	bool timed_wait ( unique_lock<mutex> &m, boost::system_time const &wait_until, predicate_type pred )
+	{
+		while ( !pred() )
+		{
+			if ( !timed_wait ( m, wait_until ) )
+				return pred();
+		}
+		return true;
+	}
 
-        template<typename duration_type,typename predicate_type>
-        bool timed_wait(unique_lock<mutex>& m,duration_type const& wait_duration,predicate_type pred)
-        {
-            return timed_wait(m,get_system_time()+wait_duration,pred);
-        }
+	template<typename predicate_type>
+	bool timed_wait ( unique_lock<mutex> &m, xtime const &wait_until, predicate_type pred )
+	{
+		return timed_wait ( m, system_time ( wait_until ), pred );
+	}
 
-        typedef pthread_cond_t* native_handle_type;
-        native_handle_type native_handle()
-        {
-            return &cond;
-        }
+	template<typename duration_type, typename predicate_type>
+	bool timed_wait ( unique_lock<mutex> &m, duration_type const &wait_duration, predicate_type pred )
+	{
+		return timed_wait ( m, get_system_time() + wait_duration, pred );
+	}
 
-        void notify_one();
-        void notify_all();
-    };
+	typedef pthread_cond_t *native_handle_type;
+	native_handle_type native_handle()
+	{
+		return &cond;
+	}
+
+	void notify_one();
+	void notify_all();
+};
 }
 
 #include <boost/config/abi_suffix.hpp>

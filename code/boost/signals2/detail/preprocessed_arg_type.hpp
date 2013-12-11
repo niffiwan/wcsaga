@@ -21,14 +21,14 @@
 
 namespace boost
 {
-  namespace signals2
-  {
-    namespace detail
-    {
-      struct std_functional_base
-      {};
-    } // namespace detail
-  } // namespace signals2
+namespace signals2
+{
+namespace detail
+{
+struct std_functional_base
+{};
+} // namespace detail
+} // namespace signals2
 } // namespace boost
 
 #endif // BOOST_SIGNALS2_PREPROCESSED_ARG_TYPE_HPP

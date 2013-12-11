@@ -13,19 +13,23 @@
 
 # include <boost/python/detail/value_arg.hpp>
 
-namespace boost { namespace python { 
+namespace boost
+{
+namespace python
+{
 
 struct return_by_value
 {
-    template <class R>
-    struct apply
-    {
-       typedef to_python_value<
-           typename detail::value_arg<R>::type
-       > type;
-    };
+	template <class R>
+	struct apply
+	{
+		typedef to_python_value <
+		typename detail::value_arg<R>::type
+		> type;
+	};
 };
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 #endif // BY_VALUE_DWA20021015_HPP

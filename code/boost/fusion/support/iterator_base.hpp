@@ -7,25 +7,28 @@
 #if !defined(FUSION_ITERATOR_BASE_05042005_1008)
 #define FUSION_ITERATOR_BASE_05042005_1008
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct iterator_root {};
+namespace fusion
+{
+struct iterator_root {};
 
-    template <typename Iterator>
-    struct iterator_base : iterator_root
-    {
-        Iterator const&
-        cast() const
-        {
-            return static_cast<Iterator const&>(*this);
-        }
+template <typename Iterator>
+struct iterator_base : iterator_root
+{
+	Iterator const &
+	cast() const
+	{
+		return static_cast<Iterator const &> ( *this );
+	}
 
-        Iterator&
-        cast()
-        {
-            return static_cast<Iterator&>(*this);
-        }
-    };
-}}
+	Iterator &
+	cast()
+	{
+		return static_cast<Iterator &> ( *this );
+	}
+};
+}
+}
 
 #endif

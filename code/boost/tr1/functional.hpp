@@ -26,13 +26,17 @@
 
 #include <boost/ref.hpp>
 
-namespace std{ namespace tr1{
+namespace std
+{
+namespace tr1
+{
 
-   using ::boost::reference_wrapper;
-   using ::boost::ref;
-   using ::boost::cref;
+using ::boost::reference_wrapper;
+using ::boost::ref;
+using ::boost::cref;
 
-} }
+}
+}
 
 #endif  // BOOST_HAS_TR1_REFERENCE_WRAPPER
 
@@ -46,11 +50,15 @@ namespace std{ namespace tr1{
 //
 #include <boost/utility/result_of.hpp>
 
-namespace std{ namespace tr1{
+namespace std
+{
+namespace tr1
+{
 
-   using ::boost::result_of;
+using ::boost::result_of;
 
-} }
+}
+}
 
 #endif // BOOST_HAS_TR1_RESULT_OF
 
@@ -58,11 +66,15 @@ namespace std{ namespace tr1{
 // mem_fn:
 #include <boost/mem_fn.hpp>
 
-namespace std{ namespace tr1{
+namespace std
+{
+namespace tr1
+{
 
 using boost::mem_fn;
 
-} }
+}
+}
 
 #endif // BOOST_HAS_TR1_MEM_FN
 
@@ -71,26 +83,31 @@ using boost::mem_fn;
 // Bind:
 #include <boost/bind.hpp>
 
-namespace std{ namespace tr1{
+namespace std
+{
+namespace tr1
+{
 
-   using ::boost::is_bind_expression;
-   using ::boost::is_placeholder;
-   using ::boost::bind;
-   namespace placeholders {
+using ::boost::is_bind_expression;
+using ::boost::is_placeholder;
+using ::boost::bind;
+namespace placeholders
+{
 #ifndef BOOST_BIND_NO_PLACEHOLDERS
-      using ::_1;
-      using ::_2;
-      using ::_3;
-      using ::_4;
-      using ::_5;
-      using ::_6;
-      using ::_7;
-      using ::_8;
-      using ::_9;
+using ::_1;
+using ::_2;
+using ::_3;
+using ::_4;
+using ::_5;
+using ::_6;
+using ::_7;
+using ::_8;
+using ::_9;
 #endif
-   } // placeholders
+} // placeholders
 
-} }
+}
+}
 
 #endif
 
@@ -102,13 +119,17 @@ namespace std{ namespace tr1{
 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x582) \
     && !BOOST_WORKAROUND(BOOST_MSVC, < 1310) \
     && !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
-namespace std{ namespace tr1{
+namespace std
+{
+namespace tr1
+{
 
-   using ::boost::bad_function_call;
-   using ::boost::function;
-   using ::boost::swap;
+using ::boost::bad_function_call;
+using ::boost::function;
+using ::boost::swap;
 
-}}
+}
+}
 #endif
 
 #endif // BOOST_HAS_TR1_FUNCTION
@@ -120,14 +141,19 @@ namespace std{ namespace tr1{
 // we forward declare boost::hash and include
 // the actual header later.
 //
-namespace boost{
+namespace boost
+{
 template <class T> struct hash;
 }
 
-namespace std{ namespace tr1{
-   using ::boost::hash;
+namespace std
+{
+namespace tr1
+{
+using ::boost::hash;
 
-}}
+}
+}
 
 #include <boost/functional/hash.hpp>
 

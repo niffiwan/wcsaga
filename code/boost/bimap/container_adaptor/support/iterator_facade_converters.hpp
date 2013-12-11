@@ -18,13 +18,17 @@
 
 #include <boost/config.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace container_adaptor {
+namespace boost
+{
+namespace bimaps
+{
+namespace container_adaptor
+{
 
 /// \brief Utilities to help in the construction of a container adaptor
 
-namespace support {
+namespace support
+{
 
 /// \brief Converter for Boost.Iterators based iterators.
 /**
@@ -35,18 +39,18 @@ template
 <
     class Iterator,
     class ConstIterator
->
+    >
 struct iterator_facade_to_base
 {
-    BOOST_DEDUCED_TYPENAME Iterator::base_type operator()(Iterator iter) const
-    {
-        return iter.base();
-    }
+	BOOST_DEDUCED_TYPENAME Iterator::base_type operator() ( Iterator iter ) const
+	{
+		return iter.base();
+	}
 
-    BOOST_DEDUCED_TYPENAME ConstIterator::base_type operator()(ConstIterator iter) const
-    {
-        return iter.base();
-    }
+	BOOST_DEDUCED_TYPENAME ConstIterator::base_type operator() ( ConstIterator iter ) const
+	{
+		return iter.base();
+	}
 };
 
 #ifndef BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
@@ -54,13 +58,13 @@ struct iterator_facade_to_base
 template
 <
     class Iterator
->
-struct iterator_facade_to_base<Iterator,Iterator>
+    >
+struct iterator_facade_to_base<Iterator, Iterator>
 {
-    BOOST_DEDUCED_TYPENAME Iterator::base_type operator()(Iterator iter) const
-    {
-        return iter.base();
-    }
+	BOOST_DEDUCED_TYPENAME Iterator::base_type operator() ( Iterator iter ) const
+	{
+		return iter.base();
+	}
 };
 
 #endif // BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES

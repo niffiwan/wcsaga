@@ -9,15 +9,15 @@
 #include <string>
 
 namespace
-boost
-    {
-    template <class Tag,class T> class error_info;
+		boost
+{
+template <class Tag, class T> class error_info;
 
-    //Usage hint:
-    //BOOST_THROW_EXCEPTION(
-    //    bad_type() <<
-    //    errinfo_type_info_name(typeid(x).name()) );
-    typedef error_info<struct errinfo_type_info_name_,std::string> errinfo_type_info_name;
-    }
+//Usage hint:
+//BOOST_THROW_EXCEPTION(
+//    bad_type() <<
+//    errinfo_type_info_name(typeid(x).name()) );
+typedef error_info<struct errinfo_type_info_name_, std::string> errinfo_type_info_name;
+}
 
 #endif

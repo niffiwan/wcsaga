@@ -14,23 +14,27 @@
 #endif
 # include <boost/python/type_id.hpp>
 
-namespace boost { namespace python { 
+namespace boost
+{
+namespace python
+{
 
 template <class Source, class Target>
-void implicitly_convertible(boost::type<Source>* = 0, boost::type<Target>* = 0)
+void implicitly_convertible ( boost::type<Source> * = 0, boost::type<Target> * = 0 )
 {
-    typedef converter::implicit<Source,Target> functions;
-    
-    converter::registry::push_back(
-          &functions::convertible
-        , &functions::construct
-        , type_id<Target>()
+	typedef converter::implicit<Source, Target> functions;
+
+	converter::registry::push_back (
+	    &functions::convertible
+	    , &functions::construct
+	    , type_id<Target>()
 #ifndef BOOST_PYTHON_NO_PY_SIGNATURES
-        , &converter::expected_from_python_type_direct<Source>::get_pytype
+	    , &converter::expected_from_python_type_direct<Source>::get_pytype
 #endif
-        );
+	);
 }
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 #endif // IMPLICIT_DWA2002325_HPP

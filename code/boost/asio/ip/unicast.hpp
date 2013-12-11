@@ -24,10 +24,14 @@
 
 #include <boost/asio/ip/detail/socket_option.hpp>
 
-namespace boost {
-namespace asio {
-namespace ip {
-namespace unicast {
+namespace boost
+{
+namespace asio
+{
+namespace ip
+{
+namespace unicast
+{
 
 /// Socket option for time-to-live associated with outgoing unicast packets.
 /**
@@ -36,7 +40,7 @@ namespace unicast {
  * @par Examples
  * Setting the option:
  * @code
- * boost::asio::ip::udp::socket socket(io_service); 
+ * boost::asio::ip::udp::socket socket(io_service);
  * ...
  * boost::asio::ip::unicast::hops option(4);
  * socket.set_option(option);
@@ -45,7 +49,7 @@ namespace unicast {
  * @par
  * Getting the current option value:
  * @code
- * boost::asio::ip::udp::socket socket(io_service); 
+ * boost::asio::ip::udp::socket socket(io_service);
  * ...
  * boost::asio::ip::unicast::hops option;
  * socket.get_option(option);
@@ -58,8 +62,8 @@ namespace unicast {
 #if defined(GENERATING_DOCUMENTATION)
 typedef implementation_defined hops;
 #else
-typedef boost::asio::ip::detail::socket_option::unicast_hops<
-  IPPROTO_IP, IP_TTL, IPPROTO_IPV6, IPV6_UNICAST_HOPS> hops;
+typedef boost::asio::ip::detail::socket_option::unicast_hops <
+IPPROTO_IP, IP_TTL, IPPROTO_IPV6, IPV6_UNICAST_HOPS > hops;
 #endif
 
 } // namespace unicast

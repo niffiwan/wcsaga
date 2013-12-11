@@ -32,54 +32,54 @@ namespace boost
 namespace detail
 {
 
-inline int & test_errors()
+inline int &test_errors()
 {
-    static int x = 0;
-    return x;
+static int x = 0;
+return x;
 }
 
-inline void test_failed_impl(char const * expr, char const * file, int line, char const * function)
+inline void test_failed_impl ( char const *expr, char const *file, int line, char const *function )
 {
-    std::cerr << file << "(" << line << "): test '" << expr << "' failed in function '" << function << "'" << std::endl;
-    ++test_errors();
+std::cerr << file << "(" << line << "): test '" << expr << "' failed in function '" << function << "'" << std::endl;
+++test_errors();
 }
 
-inline void error_impl(char const * msg, char const * file, int line, char const * function)
+inline void error_impl ( char const *msg, char const *file, int line, char const *function )
 {
-    std::cerr << file << "(" << line << "): " << msg << " in function '" << function << "'" << std::endl;
-    ++test_errors();
+std::cerr << file << "(" << line << "): " << msg << " in function '" << function << "'" << std::endl;
+++test_errors();
 }
 
-template<class T, class U> inline void test_eq_impl( char const * expr1, char const * expr2, char const * file, int line, char const * function, T const & t, U const & u )
+template<class T, class U> inline void test_eq_impl ( char const *expr1, char const *expr2, char const *file, int line, char const *function, T const &t, U const &u )
 {
-    if( t == u )
-    {
-    }
-    else
-    {
-        std::cerr << file << "(" << line << "): test '" << expr1 << " == " << expr2
-            << "' failed in function '" << function << "': "
-            << "'" << t << "' != '" << u << "'" << std::endl;
-        ++test_errors();
-    }
+if ( t == u )
+{
+}
+else
+{
+	std::cerr << file << "(" << line << "): test '" << expr1 << " == " << expr2
+	          << "' failed in function '" << function << "': "
+	          << "'" << t << "' != '" << u << "'" << std::endl;
+	++test_errors();
+}
 }
 
 } // namespace detail
 
 inline int report_errors()
 {
-    int errors = detail::test_errors();
+int errors = detail::test_errors();
 
-    if( errors == 0 )
-    {
-        std::cerr << "No errors detected." << std::endl;
-        return 0;
-    }
-    else
-    {
-        std::cerr << errors << " error" << (errors == 1? "": "s") << " detected." << std::endl;
-        return 1;
-    }
+if ( errors == 0 )
+{
+	std::cerr << "No errors detected." << std::endl;
+	return 0;
+}
+else
+{
+	std::cerr << errors << " error" << ( errors == 1 ? "" : "s" ) << " detected." << std::endl;
+	return 1;
+}
 }
 
 } // namespace boost

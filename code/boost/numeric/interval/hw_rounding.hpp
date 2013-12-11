@@ -40,9 +40,12 @@
 #  error Boost.Numeric.Interval: Please specify rounding control mechanism.
 #endif
 
-namespace boost {
-namespace numeric {
-namespace interval_lib {
+namespace boost
+{
+namespace numeric
+{
+namespace interval_lib
+{
 
 /*
  * Three specializations of rounded_math<T>
@@ -50,17 +53,17 @@ namespace interval_lib {
 
 template<>
 struct rounded_math<float>
-  : save_state<rounded_arith_opp<float> >
+		: save_state<rounded_arith_opp<float> >
 {};
 
 template<>
 struct rounded_math<double>
-  : save_state<rounded_arith_opp<double> >
+		: save_state<rounded_arith_opp<double> >
 {};
 
 template<>
 struct rounded_math<long double>
-  : save_state<rounded_arith_opp<long double> >
+		: save_state<rounded_arith_opp<long double> >
 {};
 
 } // namespace interval_lib

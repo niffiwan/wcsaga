@@ -17,91 +17,91 @@
 #include <boost/assert.hpp>
 
 namespace
-boost
-    {
-    namespace
-    exception_detail
-        {
-        template <bool ToStringAvailable>
-        struct
-        to_string_dispatcher
-            {
-            template <class T,class Stub>
-            static
-            std::string
-            convert( T const & x, Stub )
-                {
-                return to_string(x);
-                }
-            };
+		boost
+{
+namespace
+		exception_detail
+{
+template <bool ToStringAvailable>
+struct
+		to_string_dispatcher
+{
+	template <class T, class Stub>
+	static
+	std::string
+	convert ( T const &x, Stub )
+	{
+		return to_string ( x );
+	}
+};
 
-        template <>
-        struct
-        to_string_dispatcher<false>
-            {
-            template <class T,class Stub>
-            static
-            std::string
-            convert( T const & x, Stub s )
-                {
-                return s(x);
-                }
+template <>
+struct
+		to_string_dispatcher<false>
+{
+	template <class T, class Stub>
+	static
+	std::string
+	convert ( T const &x, Stub s )
+	{
+		return s ( x );
+	}
 
-            template <class T>
-            static
-            std::string
-            convert( T const & x, std::string s )
-                {
-                return s;
-                }
+	template <class T>
+	static
+	std::string
+	convert ( T const &x, std::string s )
+	{
+		return s;
+	}
 
-            template <class T>
-            static
-            std::string
-            convert( T const & x, char const * s )
-                {
-                BOOST_ASSERT(s!=0);
-                return s;
-                }
-            };
+	template <class T>
+	static
+	std::string
+	convert ( T const &x, char const *s )
+	{
+		BOOST_ASSERT ( s != 0 );
+		return s;
+	}
+};
 
-        namespace
-        to_string_dispatch
-            {
-            template <class T,class Stub>
-            inline
-            std::string
-            dispatch( T const & x, Stub s )
-                {
-                return to_string_dispatcher<has_to_string<T>::value>::convert(x,s);
-                }
-            }
+namespace
+		to_string_dispatch
+{
+template <class T, class Stub>
+inline
+std::string
+dispatch ( T const &x, Stub s )
+{
+	return to_string_dispatcher<has_to_string<T>::value>::convert ( x, s );
+}
+}
 
-        template <class T>
-        inline
-        std::string
-        string_stub_dump( T const & x )
-            {
-            return "[ " + exception_detail::object_hex_dump(x) + " ]";
-            }
-        }
+template <class T>
+inline
+std::string
+string_stub_dump ( T const &x )
+{
+	return "[ " + exception_detail::object_hex_dump ( x ) + " ]";
+}
+}
 
-    template <class T>
-    inline
-    std::string
-    to_string_stub( T const & x )
-        {
-        return exception_detail::to_string_dispatch::dispatch(x,&exception_detail::string_stub_dump<T>);
-        }
+template <class T>
+inline
+std::string
+to_string_stub ( T const &x )
+{
+	return exception_detail::to_string_dispatch::dispatch ( x, &exception_detail::string_stub_dump<T> );
+}
 
-    template <class T,class Stub>
-    inline
-    std::string
-    to_string_stub( T const & x, Stub s )
-        {
-        return exception_detail::to_string_dispatch::dispatch(x,s);
-        }
-    }
+template <class T, class Stub>
+inline
+std::string
+to_string_stub ( T const &x, Stub s )
+{
+	return exception_detail::to_string_dispatch::dispatch ( x, s );
+}
+}
 
 #if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
 #pragma warning(pop)

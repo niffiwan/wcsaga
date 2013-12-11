@@ -10,26 +10,29 @@
 
 #include <boost/config/no_tr1/utility.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct struct_tag;
-    struct random_access_traversal_tag;
+namespace fusion
+{
+struct struct_tag;
+struct random_access_traversal_tag;
 
-    namespace extension
-    {
-        template<typename T>
-        struct category_of_impl;
+namespace extension
+{
+template<typename T>
+struct category_of_impl;
 
-        template<>
-        struct category_of_impl<struct_tag>
-        {
-            template<typename T>
-            struct apply
-            {
-                typedef random_access_traversal_tag type;
-            };
-        };
-    }
-}}
+template<>
+struct category_of_impl<struct_tag>
+{
+	template<typename T>
+	struct apply
+	{
+		typedef random_access_traversal_tag type;
+	};
+};
+}
+}
+}
 
 #endif

@@ -35,7 +35,7 @@ namespace PHOENIX_STD
 {
 //#endif
 
-    template<typename T> class complex;
+template<typename T> class complex;
 
 //#if !defined(PHOENIX_NO_STD_NAMESPACE)
 }
@@ -80,16 +80,16 @@ template <typename T> struct rank<PHOENIX_STD::complex<T> >
 //
 ///////////////////////////////////////////////////////////////////////////////
 #if defined(__GNUC__) && (__GNUC__ < 3)
-    #if defined(_STLPORT_VERSION)
-        #define PHOENIX_ISTREAM _IO_istream_withassign
-    #else
-        #define PHOENIX_ISTREAM PHOENIX_STD::_IO_istream_withassign
-    #endif
+#if defined(_STLPORT_VERSION)
+#define PHOENIX_ISTREAM _IO_istream_withassign
+#else
+#define PHOENIX_ISTREAM PHOENIX_STD::_IO_istream_withassign
+#endif
 #else
 //    #if (defined(__ICL) && defined(_STLPORT_VERSION))
 //        #define PHOENIX_ISTREAM istream_withassign
 //    #else
-        #define PHOENIX_ISTREAM PHOENIX_STD::istream
+#define PHOENIX_ISTREAM PHOENIX_STD::istream
 //    #endif
 #endif
 
@@ -99,9 +99,9 @@ template <typename T> struct rank<PHOENIX_STD::complex<T> >
 template <typename T1>
 struct binary_operator<shift_r_op, PHOENIX_ISTREAM, T1>
 {
-    typedef PHOENIX_STD::istream& result_type;
-    static result_type eval(PHOENIX_STD::istream& out, T1& rhs)
-    { return out >> rhs; }
+	typedef PHOENIX_STD::istream &result_type;
+	static result_type eval ( PHOENIX_STD::istream &out, T1 &rhs )
+	{ return out >> rhs; }
 };
 #endif
 
@@ -109,20 +109,20 @@ struct binary_operator<shift_r_op, PHOENIX_ISTREAM, T1>
 template <typename T1>
 struct binary_operator<shift_r_op, PHOENIX_STD::istream, T1>
 {
-    typedef PHOENIX_STD::istream& result_type;
-    static result_type eval(PHOENIX_STD::istream& out, T1& rhs)
-    { return out >> rhs; }
+	typedef PHOENIX_STD::istream &result_type;
+	static result_type eval ( PHOENIX_STD::istream &out, T1 &rhs )
+	{ return out >> rhs; }
 };
 
 //////////////////////////////////
 template <typename BaseT>
 inline typename impl::make_binary3
-    <shift_r_op, variable<PHOENIX_ISTREAM>, BaseT>::type
-operator>>(PHOENIX_ISTREAM& _0, actor<BaseT> const& _1)
+<shift_r_op, variable<PHOENIX_ISTREAM>, BaseT>::type
+operator>> ( PHOENIX_ISTREAM &_0, actor<BaseT> const &_1 )
 {
-    return impl::make_binary3
-    <shift_r_op, variable<PHOENIX_ISTREAM>, BaseT>
-    ::construct(var(_0), _1);
+	return impl::make_binary3
+	       <shift_r_op, variable<PHOENIX_ISTREAM>, BaseT>
+	       ::construct ( var ( _0 ), _1 );
 }
 
 #undef PHOENIX_ISTREAM
@@ -132,16 +132,16 @@ operator>>(PHOENIX_ISTREAM& _0, actor<BaseT> const& _1)
 //
 ///////////////////////////////////////////////////////////////////////////////
 #if defined(__GNUC__) && (__GNUC__ < 3)
-    #if defined(_STLPORT_VERSION)
-        #define PHOENIX_OSTREAM _IO_ostream_withassign
-    #else
-        #define PHOENIX_OSTREAM PHOENIX_STD::_IO_ostream_withassign
-    #endif
+#if defined(_STLPORT_VERSION)
+#define PHOENIX_OSTREAM _IO_ostream_withassign
+#else
+#define PHOENIX_OSTREAM PHOENIX_STD::_IO_ostream_withassign
+#endif
 #else
 //    #if (defined(__ICL) && defined(_STLPORT_VERSION))
 //        #define PHOENIX_OSTREAM ostream_withassign
 //    #else
-        #define PHOENIX_OSTREAM PHOENIX_STD::ostream
+#define PHOENIX_OSTREAM PHOENIX_STD::ostream
 //    #endif
 #endif
 
@@ -151,9 +151,9 @@ operator>>(PHOENIX_ISTREAM& _0, actor<BaseT> const& _1)
 template <typename T1>
 struct binary_operator<shift_l_op, PHOENIX_OSTREAM, T1>
 {
-    typedef PHOENIX_STD::ostream& result_type;
-    static result_type eval(PHOENIX_STD::ostream& out, T1 const& rhs)
-    { return out << rhs; }
+	typedef PHOENIX_STD::ostream &result_type;
+	static result_type eval ( PHOENIX_STD::ostream &out, T1 const &rhs )
+	{ return out << rhs; }
 };
 #endif
 
@@ -161,20 +161,20 @@ struct binary_operator<shift_l_op, PHOENIX_OSTREAM, T1>
 template <typename T1>
 struct binary_operator<shift_l_op, PHOENIX_STD::ostream, T1>
 {
-    typedef PHOENIX_STD::ostream& result_type;
-    static result_type eval(PHOENIX_STD::ostream& out, T1 const& rhs)
-    { return out << rhs; }
+	typedef PHOENIX_STD::ostream &result_type;
+	static result_type eval ( PHOENIX_STD::ostream &out, T1 const &rhs )
+	{ return out << rhs; }
 };
 
 //////////////////////////////////
 template <typename BaseT>
 inline typename impl::make_binary3
-    <shift_l_op, variable<PHOENIX_OSTREAM>, BaseT>::type
-operator<<(PHOENIX_OSTREAM& _0, actor<BaseT> const& _1)
+<shift_l_op, variable<PHOENIX_OSTREAM>, BaseT>::type
+operator<< ( PHOENIX_OSTREAM &_0, actor<BaseT> const &_1 )
 {
-    return impl::make_binary3
-    <shift_l_op, variable<PHOENIX_OSTREAM>, BaseT>
-    ::construct(var(_0), _1);
+	return impl::make_binary3
+	       <shift_l_op, variable<PHOENIX_OSTREAM>, BaseT>
+	       ::construct ( var ( _0 ), _1 );
 }
 
 #undef PHOENIX_OSTREAM
@@ -187,40 +187,40 @@ operator<<(PHOENIX_OSTREAM& _0, actor<BaseT> const& _1)
 template <typename T1>
 struct binary_operator<shift_r_op, PHOENIX_STD::PHOENIX_SSTREAM, T1>
 {
-    typedef PHOENIX_STD::istream& result_type;
-    static result_type eval(PHOENIX_STD::istream& out, T1& rhs)
-    { return out >> rhs; }
+	typedef PHOENIX_STD::istream &result_type;
+	static result_type eval ( PHOENIX_STD::istream &out, T1 &rhs )
+	{ return out >> rhs; }
 };
 
 //////////////////////////////////
 template <typename BaseT>
 inline typename impl::make_binary3
-    <shift_r_op, variable<PHOENIX_STD::PHOENIX_SSTREAM>, BaseT>::type
-operator>>(PHOENIX_STD::PHOENIX_SSTREAM& _0, actor<BaseT> const& _1)
+<shift_r_op, variable<PHOENIX_STD::PHOENIX_SSTREAM>, BaseT>::type
+operator>> ( PHOENIX_STD::PHOENIX_SSTREAM &_0, actor<BaseT> const &_1 )
 {
-    return impl::make_binary3
-    <shift_r_op, variable<PHOENIX_STD::PHOENIX_SSTREAM>, BaseT>
-    ::construct(var(_0), _1);
+	return impl::make_binary3
+	       <shift_r_op, variable<PHOENIX_STD::PHOENIX_SSTREAM>, BaseT>
+	       ::construct ( var ( _0 ), _1 );
 }
 
 //////////////////////////////////
 template <typename T1>
 struct binary_operator<shift_l_op, PHOENIX_STD::PHOENIX_SSTREAM, T1>
 {
-    typedef PHOENIX_STD::ostream& result_type;
-    static result_type eval(PHOENIX_STD::ostream& out, T1 const& rhs)
-    { return out << rhs; }
+	typedef PHOENIX_STD::ostream &result_type;
+	static result_type eval ( PHOENIX_STD::ostream &out, T1 const &rhs )
+	{ return out << rhs; }
 };
 
 //////////////////////////////////
 template <typename BaseT>
 inline typename impl::make_binary3
-    <shift_l_op, variable<PHOENIX_STD::PHOENIX_SSTREAM>, BaseT>::type
-operator<<(PHOENIX_STD::PHOENIX_SSTREAM& _0, actor<BaseT> const& _1)
+<shift_l_op, variable<PHOENIX_STD::PHOENIX_SSTREAM>, BaseT>::type
+operator<< ( PHOENIX_STD::PHOENIX_SSTREAM &_0, actor<BaseT> const &_1 )
 {
-    return impl::make_binary3
-    <shift_l_op, variable<PHOENIX_STD::PHOENIX_SSTREAM>, BaseT>
-    ::construct(var(_0), _1);
+	return impl::make_binary3
+	       <shift_l_op, variable<PHOENIX_STD::PHOENIX_SSTREAM>, BaseT>
+	       ::construct ( var ( _0 ), _1 );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -231,9 +231,9 @@ operator<<(PHOENIX_STD::PHOENIX_SSTREAM& _0, actor<BaseT> const& _1)
 #if (!defined(__GNUC__) || (__GNUC__ > 2))
 //    && !(defined(__ICL) && defined(_STLPORT_VERSION))
 
-typedef PHOENIX_STD::ios_base&  (*iomanip_t)(PHOENIX_STD::ios_base&);
-typedef PHOENIX_STD::istream&   (*imanip_t)(PHOENIX_STD::istream&);
-typedef PHOENIX_STD::ostream&   (*omanip_t)(PHOENIX_STD::ostream&);
+typedef PHOENIX_STD::ios_base &  ( *iomanip_t ) ( PHOENIX_STD::ios_base & );
+typedef PHOENIX_STD::istream &   ( *imanip_t ) ( PHOENIX_STD::istream & );
+typedef PHOENIX_STD::ostream &   ( *omanip_t ) ( PHOENIX_STD::ostream & );
 
 #if defined(__BORLANDC__)
 
@@ -270,33 +270,33 @@ omanip_t    flush_  = &PHOENIX_STD::flush;
 ///////////////////////////////////////////////////////////////////////////////
 template <typename BaseT>
 inline typename impl::make_binary1<shift_l_op, BaseT, imanip_t>::type
-operator>>(actor<BaseT> const& _0, imanip_t _1)
+operator>> ( actor<BaseT> const &_0, imanip_t _1 )
 {
-    return impl::make_binary1<shift_l_op, BaseT, imanip_t>::construct(_0, _1);
+	return impl::make_binary1<shift_l_op, BaseT, imanip_t>::construct ( _0, _1 );
 }
 
 //////////////////////////////////
 template <typename BaseT>
 inline typename impl::make_binary1<shift_l_op, BaseT, iomanip_t>::type
-operator>>(actor<BaseT> const& _0, iomanip_t _1)
+operator>> ( actor<BaseT> const &_0, iomanip_t _1 )
 {
-    return impl::make_binary1<shift_l_op, BaseT, iomanip_t>::construct(_0, _1);
+	return impl::make_binary1<shift_l_op, BaseT, iomanip_t>::construct ( _0, _1 );
 }
 
 //////////////////////////////////
 template <typename BaseT>
 inline typename impl::make_binary1<shift_l_op, BaseT, omanip_t>::type
-operator<<(actor<BaseT> const& _0, omanip_t _1)
+operator<< ( actor<BaseT> const &_0, omanip_t _1 )
 {
-    return impl::make_binary1<shift_l_op, BaseT, omanip_t>::construct(_0, _1);
+	return impl::make_binary1<shift_l_op, BaseT, omanip_t>::construct ( _0, _1 );
 }
 
 //////////////////////////////////
 template <typename BaseT>
 inline typename impl::make_binary1<shift_l_op, BaseT, iomanip_t>::type
-operator<<(actor<BaseT> const& _0, iomanip_t _1)
+operator<< ( actor<BaseT> const &_0, iomanip_t _1 )
 {
-    return impl::make_binary1<shift_l_op, BaseT, iomanip_t>::construct(_0, _1);
+	return impl::make_binary1<shift_l_op, BaseT, iomanip_t>::construct ( _0, _1 );
 }
 
 #endif // __BORLANDC__
@@ -310,27 +310,27 @@ operator<<(actor<BaseT> const& _0, iomanip_t _1)
 template <typename T>
 struct unary_operator<dereference_op, T>
 {
-    typedef typename T::reference result_type;
-    static result_type eval(T const& iter)
-    { return *iter; }
+	typedef typename T::reference result_type;
+	static result_type eval ( T const &iter )
+	{ return *iter; }
 };
 
 //////////////////////////////////
 template <typename T0, typename T1>
 struct binary_operator<index_op, T0, T1>
 {
-    typedef typename T0::reference result_type;
-    static result_type eval(T0& container, T1 const& index)
-    { return container[index]; }
+	typedef typename T0::reference result_type;
+	static result_type eval ( T0 &container, T1 const &index )
+	{ return container[index]; }
 };
 
 //////////////////////////////////
 template <typename T0, typename T1>
 struct binary_operator<index_op, T0 const, T1>
 {
-    typedef typename T0::const_reference result_type;
-    static result_type eval(T0 const& container, T1 const& index)
-    { return container[index]; }
+	typedef typename T0::const_reference result_type;
+	static result_type eval ( T0 const &container, T1 const &index )
+	{ return container[index]; }
 };
 
 ///////////////////////////////////////////////////////////////////////////////

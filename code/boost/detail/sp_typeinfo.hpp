@@ -32,49 +32,49 @@ class sp_typeinfo
 {
 private:
 
-    sp_typeinfo( sp_typeinfo const& );
-    sp_typeinfo& operator=( sp_typeinfo const& );
+	sp_typeinfo ( sp_typeinfo const & );
+	sp_typeinfo &operator= ( sp_typeinfo const & );
 
-    char const * name_;
+	char const *name_;
 
 public:
 
-    explicit sp_typeinfo( char const * name ): name_( name )
-    {
-    }
+	explicit sp_typeinfo ( char const *name ) : name_ ( name )
+	{
+	}
 
-    bool operator==( sp_typeinfo const& rhs ) const
-    {
-        return this == &rhs;
-    }
+	bool operator== ( sp_typeinfo const &rhs ) const
+	{
+		return this == &rhs;
+	}
 
-    bool operator!=( sp_typeinfo const& rhs ) const
-    {
-        return this != &rhs;
-    }
+	bool operator!= ( sp_typeinfo const &rhs ) const
+	{
+		return this != &rhs;
+	}
 
-    bool before( sp_typeinfo const& rhs ) const
-    {
-        return std::less< sp_typeinfo const* >()( this, &rhs );
-    }
+	bool before ( sp_typeinfo const &rhs ) const
+	{
+		return std::less< sp_typeinfo const * >() ( this, &rhs );
+	}
 
-    char const* name() const
-    {
-        return name_;
-    }
+	char const *name() const
+	{
+		return name_;
+	}
 };
 
 template<class T> struct sp_typeid_
 {
-    static sp_typeinfo ti_;
+	static sp_typeinfo ti_;
 
-    static char const * name()
-    {
-        return BOOST_CURRENT_FUNCTION;
-    }
+	static char const *name()
+	{
+		return BOOST_CURRENT_FUNCTION;
+	}
 };
 
-template<class T> sp_typeinfo sp_typeid_< T >::ti_( sp_typeid_< T >::name() );
+template<class T> sp_typeinfo sp_typeid_< T >::ti_ ( sp_typeid_< T >::name() );
 
 template<class T> struct sp_typeid_< T & >: sp_typeid_< T >
 {

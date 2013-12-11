@@ -10,20 +10,23 @@
 
 #include <boost/concept_check.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 template<typename Stat>
 struct accumulator_concept
 {
-    void constraints()
-    {
-        // TODO: define the stat concept
-    }
+	void constraints()
+	{
+		// TODO: define the stat concept
+	}
 
-    Stat stat;
+	Stat stat;
 };
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

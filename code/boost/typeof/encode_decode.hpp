@@ -36,7 +36,7 @@ struct encode_type_impl;
 template<class T, class Iter>
 struct decode_type_impl
 {
-    typedef int type;  // MSVC ETI workaround
+	typedef int type;  // MSVC ETI workaround
 };
 
 template<class T>
@@ -44,18 +44,22 @@ struct decode_nested_template_helper_impl;
 
 BOOST_TYPEOF_END_ENCODE_NS
 
-namespace boost { namespace type_of {
+namespace boost
+{
+namespace type_of
+{
 
-    template<class V, class T>
-    struct encode_type : BOOST_TYPEOF_ENCODE_NS_QUALIFIER::encode_type_impl<V, T>
-    {};
+template<class V, class T>
+struct encode_type : BOOST_TYPEOF_ENCODE_NS_QUALIFIER::encode_type_impl<V, T>
+{};
 
-    template<class Iter>
-    struct decode_type : BOOST_TYPEOF_ENCODE_NS_QUALIFIER::decode_type_impl<
-        typename Iter::type,
-        typename Iter::next
-    >
-    {};
-}}
+template<class Iter>
+struct decode_type : BOOST_TYPEOF_ENCODE_NS_QUALIFIER::decode_type_impl <
+		typename Iter::type,
+		typename Iter::next
+		>
+{};
+}
+}
 
 #endif//BOOST_TYPEOF_ENCODE_DECODE_HPP_INCLUDED

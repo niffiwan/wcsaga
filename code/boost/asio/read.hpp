@@ -25,8 +25,10 @@
 #include <boost/asio/basic_streambuf.hpp>
 #include <boost/asio/error.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 /**
  * @defgroup read boost::asio::read
@@ -73,7 +75,7 @@ namespace asio {
  *     boost::asio::transfer_all()); @endcode
  */
 template <typename SyncReadStream, typename MutableBufferSequence>
-std::size_t read(SyncReadStream& s, const MutableBufferSequence& buffers);
+std::size_t read ( SyncReadStream &s, const MutableBufferSequence &buffers );
 
 /// Attempt to read a certain amount of data from a stream before returning.
 /**
@@ -122,9 +124,9 @@ std::size_t read(SyncReadStream& s, const MutableBufferSequence& buffers);
  * std::vector.
  */
 template <typename SyncReadStream, typename MutableBufferSequence,
-  typename CompletionCondition>
-std::size_t read(SyncReadStream& s, const MutableBufferSequence& buffers,
-    CompletionCondition completion_condition);
+          typename CompletionCondition>
+std::size_t read ( SyncReadStream &s, const MutableBufferSequence &buffers,
+                   CompletionCondition completion_condition );
 
 /// Attempt to read a certain amount of data from a stream before returning.
 /**
@@ -166,9 +168,9 @@ std::size_t read(SyncReadStream& s, const MutableBufferSequence& buffers,
  * number of bytes successfully transferred prior to the error.
  */
 template <typename SyncReadStream, typename MutableBufferSequence,
-    typename CompletionCondition>
-std::size_t read(SyncReadStream& s, const MutableBufferSequence& buffers,
-    CompletionCondition completion_condition, boost::system::error_code& ec);
+          typename CompletionCondition>
+std::size_t read ( SyncReadStream &s, const MutableBufferSequence &buffers,
+                   CompletionCondition completion_condition, boost::system::error_code &ec );
 
 #if !defined(BOOST_NO_IOSTREAM)
 
@@ -197,7 +199,7 @@ std::size_t read(SyncReadStream& s, const MutableBufferSequence& buffers,
  *     boost::asio::transfer_all()); @endcode
  */
 template <typename SyncReadStream, typename Allocator>
-std::size_t read(SyncReadStream& s, basic_streambuf<Allocator>& b);
+std::size_t read ( SyncReadStream &s, basic_streambuf<Allocator> &b );
 
 /// Attempt to read a certain amount of data from a stream before returning.
 /**
@@ -233,9 +235,9 @@ std::size_t read(SyncReadStream& s, basic_streambuf<Allocator>& b);
  * @throws boost::system::system_error Thrown on failure.
  */
 template <typename SyncReadStream, typename Allocator,
-    typename CompletionCondition>
-std::size_t read(SyncReadStream& s, basic_streambuf<Allocator>& b,
-    CompletionCondition completion_condition);
+          typename CompletionCondition>
+std::size_t read ( SyncReadStream &s, basic_streambuf<Allocator> &b,
+                   CompletionCondition completion_condition );
 
 /// Attempt to read a certain amount of data from a stream before returning.
 /**
@@ -272,9 +274,9 @@ std::size_t read(SyncReadStream& s, basic_streambuf<Allocator>& b,
  * number of bytes successfully transferred prior to the error.
  */
 template <typename SyncReadStream, typename Allocator,
-    typename CompletionCondition>
-std::size_t read(SyncReadStream& s, basic_streambuf<Allocator>& b,
-    CompletionCondition completion_condition, boost::system::error_code& ec);
+          typename CompletionCondition>
+std::size_t read ( SyncReadStream &s, basic_streambuf<Allocator> &b,
+                   CompletionCondition completion_condition, boost::system::error_code &ec );
 
 #endif // !defined(BOOST_NO_IOSTREAM)
 
@@ -345,9 +347,9 @@ std::size_t read(SyncReadStream& s, basic_streambuf<Allocator>& b,
  *     handler); @endcode
  */
 template <typename AsyncReadStream, typename MutableBufferSequence,
-    typename ReadHandler>
-void async_read(AsyncReadStream& s, const MutableBufferSequence& buffers,
-    ReadHandler handler);
+          typename ReadHandler>
+void async_read ( AsyncReadStream &s, const MutableBufferSequence &buffers,
+                  ReadHandler handler );
 
 /// Start an asynchronous operation to read a certain amount of data from a
 /// stream.
@@ -413,9 +415,9 @@ void async_read(AsyncReadStream& s, const MutableBufferSequence& buffers,
  * std::vector.
  */
 template <typename AsyncReadStream, typename MutableBufferSequence,
-    typename CompletionCondition, typename ReadHandler>
-void async_read(AsyncReadStream& s, const MutableBufferSequence& buffers,
-    CompletionCondition completion_condition, ReadHandler handler);
+          typename CompletionCondition, typename ReadHandler>
+void async_read ( AsyncReadStream &s, const MutableBufferSequence &buffers,
+                  CompletionCondition completion_condition, ReadHandler handler );
 
 #if !defined(BOOST_NO_IOSTREAM)
 
@@ -463,8 +465,8 @@ void async_read(AsyncReadStream& s, const MutableBufferSequence& buffers,
  *     handler); @endcode
  */
 template <typename AsyncReadStream, typename Allocator, typename ReadHandler>
-void async_read(AsyncReadStream& s, basic_streambuf<Allocator>& b,
-    ReadHandler handler);
+void async_read ( AsyncReadStream &s, basic_streambuf<Allocator> &b,
+                  ReadHandler handler );
 
 /// Start an asynchronous operation to read a certain amount of data from a
 /// stream.
@@ -518,9 +520,9 @@ void async_read(AsyncReadStream& s, basic_streambuf<Allocator>& b,
  * boost::asio::io_service::post().
  */
 template <typename AsyncReadStream, typename Allocator,
-    typename CompletionCondition, typename ReadHandler>
-void async_read(AsyncReadStream& s, basic_streambuf<Allocator>& b,
-    CompletionCondition completion_condition, ReadHandler handler);
+          typename CompletionCondition, typename ReadHandler>
+void async_read ( AsyncReadStream &s, basic_streambuf<Allocator> &b,
+                  CompletionCondition completion_condition, ReadHandler handler );
 
 #endif // !defined(BOOST_NO_IOSTREAM)
 

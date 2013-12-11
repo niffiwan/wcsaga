@@ -13,7 +13,7 @@
 #  define BOOST_PARAMETER_SEQ_ENUM(seq) BOOST_PARAMETER_SEQ_ENUM_I(BOOST_PP_SEQ_SIZE(seq), seq)
 # else
 #  define BOOST_PARAMETER_SEQ_ENUM(seq) BOOST_PP_SEQ_ENUM(seq)
-# endif 
+# endif
 
 # if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 
@@ -36,7 +36,7 @@
 
 #  define BOOST_PARAMETER_MATCH_DEFAULTS(ArgTypes)
 
-# endif 
+# endif
 
 //
 // Generates, e.g.

@@ -15,7 +15,7 @@
 #include <boost/preprocessor/repetition/repeat.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 #include <boost/preprocessor/seq/elem.hpp>
-#include <boost/preprocessor/seq/for_each_product.hpp> 
+#include <boost/preprocessor/seq/for_each_product.hpp>
 #include <boost/preprocessor/seq/size.hpp>
 
 #define BOOST_FLYWEIGHT_CONST(b) BOOST_PP_CAT(BOOST_FLYWEIGHT_CONST,b)
@@ -44,7 +44,7 @@ BOOST_FLYWEIGHT_PERFECT_FWD_BODY(BOOST_PP_SEQ_SIZE(mask))
 #define BOOST_FLYWEIGHT_01(z,n,_) ((0)(1))
 
 /* Perfect forwarding overloads accepting 1 to n args */
- 
+
 #define BOOST_FLYWEIGHT_PERFECT_FWDS_N(z,n,_)                      \
 BOOST_PP_SEQ_FOR_EACH_PRODUCT(                                     \
   BOOST_FLYWEIGHT_PERFECT_FWD,                                     \
@@ -65,7 +65,7 @@ BOOST_FLYWEIGHT_PERFECT_FWD_OVERLOADS
 #undef BOOST_FLYWEIGHT_01
 #undef BOOST_FLYWEIGHT_PERFECT_FWD
 #undef BOOST_FLYWEIGHT_PERFECT_FWD_ARG
-#undef BOOST_FLYWEIGHT_CONST1 
+#undef BOOST_FLYWEIGHT_CONST1
 #undef BOOST_FLYWEIGHT_CONST0
 #undef BOOST_FLYWEIGHT_CONST
 

@@ -36,18 +36,18 @@
 
 #elif BOOST_FT_ARITY_LOOP_IS_ITERATING
 
-template< BOOST_FT_tplargs(BOOST_PP_IDENTITY(typename)), typename L>
+template< BOOST_FT_tplargs ( BOOST_PP_IDENTITY ( typename ) ), typename L>
 struct components_impl<BOOST_FT_type, L>
 {
-  typedef encode_bits<BOOST_FT_flags,BOOST_FT_cc_id> bits;
-  typedef constant<BOOST_FT_full_mask> mask;
+	typedef encode_bits<BOOST_FT_flags, BOOST_FT_cc_id> bits;
+	typedef constant<BOOST_FT_full_mask> mask;
 
-  typedef function_types::components<BOOST_FT_type, L> type;
-  typedef components_mpl_sequence_tag tag;
+	typedef function_types::components<BOOST_FT_type, L> type;
+	typedef components_mpl_sequence_tag tag;
 
-  typedef mpl::integral_c<std::size_t,BOOST_FT_arity> function_arity;
+	typedef mpl::integral_c<std::size_t, BOOST_FT_arity> function_arity;
 
-  typedef BOOST_PP_CAT(mpl::vector,BOOST_FT_n)< BOOST_FT_types > types;
+	typedef BOOST_PP_CAT ( mpl::vector, BOOST_FT_n ) < BOOST_FT_types > types;
 };
 
 #elif BOOST_FT_ARITY_LOOP_SUFFIX

@@ -17,55 +17,55 @@
 #include <boost/config.hpp>
 
 namespace
-boost
-    {
-    template <class T>
-    inline
-    char const *
-    tag_type_name()
-        {
+		boost
+{
+template <class T>
+inline
+char const *
+tag_type_name()
+{
 #ifdef BOOST_NO_TYPEID
-        return BOOST_CURRENT_FUNCTION;
+	return BOOST_CURRENT_FUNCTION;
 #else
-        return typeid(T*).name();
+	return typeid ( T * ).name();
 #endif
-        }
+}
 
-    template <class T>
-    inline
-    char const *
-    type_name()
-        {
+template <class T>
+inline
+char const *
+type_name()
+{
 #ifdef BOOST_NO_TYPEID
-        return BOOST_CURRENT_FUNCTION;
+	return BOOST_CURRENT_FUNCTION;
 #else
-        return typeid(T).name();
+	return typeid ( T ).name();
 #endif
-        }
+}
 
-    namespace
-    exception_detail
-        {
-        struct
-        type_info_
-            {
-            detail::sp_typeinfo const & type_;
+namespace
+		exception_detail
+{
+struct
+		type_info_
+{
+	detail::sp_typeinfo const &type_;
 
-            explicit
-            type_info_( detail::sp_typeinfo const & type ):
-                type_(type)
-                {
-                }
+	explicit
+	type_info_ ( detail::sp_typeinfo const &type ) :
+		type_ ( type )
+	{
+	}
 
-            friend
-            bool
-            operator<( type_info_ const & a, type_info_ const & b )
-                {
-                return 0!=(a.type_.before(b.type_));
-                }
-            };
-        }
-    }
+	friend
+	bool
+	operator< ( type_info_ const &a, type_info_ const &b )
+	{
+		return 0 != ( a.type_.before ( b.type_ ) );
+	}
+};
+}
+}
 
 #define BOOST_EXCEPTION_STATIC_TYPEID(T) ::boost::exception_detail::type_info_(BOOST_SP_TYPEID(T))
 

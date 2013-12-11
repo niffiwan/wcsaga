@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -19,9 +19,11 @@
 #include <boost/units/detail/one.hpp>
 #include <boost/units/detail/static_rational_power.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units {
+namespace units
+{
 
 template<class S, class Scale>
 struct scaled_base_unit;
@@ -31,14 +33,14 @@ struct scaled_base_unit;
 template<long Base, class Exponent>
 struct scale
 {
-    static const long base = Base;
-    typedef Exponent exponent;
-    typedef double value_type;
-    static value_type value() { return(detail::static_rational_power<Exponent>(static_cast<double>(base))); }
-    // These need to be defined in specializations for
-    // printing to work.
-    // static std::string name();
-    // static std::string symbol();
+	static const long base = Base;
+	typedef Exponent exponent;
+	typedef double value_type;
+	static value_type value() { return ( detail::static_rational_power<Exponent> ( static_cast<double> ( base ) ) ); }
+	// These need to be defined in specializations for
+	// printing to work.
+	// static std::string name();
+	// static std::string symbol();
 };
 
 template<long Base, class Exponent>
@@ -48,27 +50,27 @@ const long scale<Base, Exponent>::base;
 template<long Base>
 struct scale<Base, static_rational<0> >
 {
-    static const long base = Base;
-    typedef static_rational<0> exponent;
-    typedef one value_type;
-    static one value() { one result; return(result); }
-    static std::string name() { return(""); }
-    static std::string symbol() { return(""); }
+	static const long base = Base;
+	typedef static_rational<0> exponent;
+	typedef one value_type;
+	static one value() { one result; return ( result ); }
+	static std::string name() { return ( "" ); }
+	static std::string symbol() { return ( "" ); }
 };
 
 template<long Base>
 const long scale<Base, static_rational<0> >::base;
 
-template<long Base,class Exponent>
-std::string symbol_string(const scale<Base,Exponent>&)
+template<long Base, class Exponent>
+std::string symbol_string ( const scale<Base, Exponent> & )
 {
-    return scale<Base,Exponent>::symbol();
+	return scale<Base, Exponent>::symbol();
 }
 
-template<long Base,class Exponent>
-std::string name_string(const scale<Base,Exponent>&)
+template<long Base, class Exponent>
+std::string name_string ( const scale<Base, Exponent> & )
 {
-    return scale<Base,Exponent>::name();
+	return scale<Base, Exponent>::name();
 }
 
 #ifndef BOOST_UNITS_DOXYGEN
@@ -88,34 +90,34 @@ struct scale<base_, exponent_ >                                              \
 #define BOOST_UNITS_SCALE_DEF(exponent_,value_,name_,symbol_)                 \
 BOOST_UNITS_SCALE_SPECIALIZATION(10,static_rational<exponent_>,value_, name_, symbol_)
 
-BOOST_UNITS_SCALE_DEF(-24, 1e-24 ,yocto, y);
-BOOST_UNITS_SCALE_DEF(-21, 1e-21, zepto, z);
-BOOST_UNITS_SCALE_DEF(-18, 1e-18, atto, a);
-BOOST_UNITS_SCALE_DEF(-15, 1e-15, femto, f);
-BOOST_UNITS_SCALE_DEF(-12, 1e-12, pico, p);
-BOOST_UNITS_SCALE_DEF(-9, 1e-9, nano, n);
-BOOST_UNITS_SCALE_DEF(-6, 1e-6, micro, u);
-BOOST_UNITS_SCALE_DEF(-3, 1e-3, milli, m);
-BOOST_UNITS_SCALE_DEF(-2, 1e-2, centi, c);
-BOOST_UNITS_SCALE_DEF(-1, 1e-1, deci, d);
+BOOST_UNITS_SCALE_DEF ( -24, 1e-24 , yocto, y );
+BOOST_UNITS_SCALE_DEF ( -21, 1e-21, zepto, z );
+BOOST_UNITS_SCALE_DEF ( -18, 1e-18, atto, a );
+BOOST_UNITS_SCALE_DEF ( -15, 1e-15, femto, f );
+BOOST_UNITS_SCALE_DEF ( -12, 1e-12, pico, p );
+BOOST_UNITS_SCALE_DEF ( -9, 1e-9, nano, n );
+BOOST_UNITS_SCALE_DEF ( -6, 1e-6, micro, u );
+BOOST_UNITS_SCALE_DEF ( -3, 1e-3, milli, m );
+BOOST_UNITS_SCALE_DEF ( -2, 1e-2, centi, c );
+BOOST_UNITS_SCALE_DEF ( -1, 1e-1, deci, d );
 
-BOOST_UNITS_SCALE_DEF(1, 1e1, deka, da);
-BOOST_UNITS_SCALE_DEF(2, 1e2, hecto, h);
-BOOST_UNITS_SCALE_DEF(3, 1e3, kilo, k);
-BOOST_UNITS_SCALE_DEF(6, 1e6, mega, M);
-BOOST_UNITS_SCALE_DEF(9, 1e9, giga, G);
-BOOST_UNITS_SCALE_DEF(12, 1e12, tera, T);
-BOOST_UNITS_SCALE_DEF(15, 1e15, peta, P);
-BOOST_UNITS_SCALE_DEF(18, 1e18, exa, E);
-BOOST_UNITS_SCALE_DEF(21, 1e21, zetta, Z);
-BOOST_UNITS_SCALE_DEF(24, 1e24, yotta, Y);
+BOOST_UNITS_SCALE_DEF ( 1, 1e1, deka, da );
+BOOST_UNITS_SCALE_DEF ( 2, 1e2, hecto, h );
+BOOST_UNITS_SCALE_DEF ( 3, 1e3, kilo, k );
+BOOST_UNITS_SCALE_DEF ( 6, 1e6, mega, M );
+BOOST_UNITS_SCALE_DEF ( 9, 1e9, giga, G );
+BOOST_UNITS_SCALE_DEF ( 12, 1e12, tera, T );
+BOOST_UNITS_SCALE_DEF ( 15, 1e15, peta, P );
+BOOST_UNITS_SCALE_DEF ( 18, 1e18, exa, E );
+BOOST_UNITS_SCALE_DEF ( 21, 1e21, zetta, Z );
+BOOST_UNITS_SCALE_DEF ( 24, 1e24, yotta, Y );
 
-BOOST_UNITS_SCALE_SPECIALIZATION(2, static_rational<10>, 1024.0, kibi, Ki);
-BOOST_UNITS_SCALE_SPECIALIZATION(2, static_rational<20>, 1048576.0, mebi, Mi);
-BOOST_UNITS_SCALE_SPECIALIZATION(2, static_rational<30>, 1073741824.0, gibi, Gi);
-BOOST_UNITS_SCALE_SPECIALIZATION(2, static_rational<40>, 1099511627776.0, tebi, Ti);
-BOOST_UNITS_SCALE_SPECIALIZATION(2, static_rational<50>, 1125899906842624.0, pebi, Pi);
-BOOST_UNITS_SCALE_SPECIALIZATION(2, static_rational<60>, 1152921504606846976.0, exbi, Ei);
+BOOST_UNITS_SCALE_SPECIALIZATION ( 2, static_rational<10>, 1024.0, kibi, Ki );
+BOOST_UNITS_SCALE_SPECIALIZATION ( 2, static_rational<20>, 1048576.0, mebi, Mi );
+BOOST_UNITS_SCALE_SPECIALIZATION ( 2, static_rational<30>, 1073741824.0, gibi, Gi );
+BOOST_UNITS_SCALE_SPECIALIZATION ( 2, static_rational<40>, 1099511627776.0, tebi, Ti );
+BOOST_UNITS_SCALE_SPECIALIZATION ( 2, static_rational<50>, 1125899906842624.0, pebi, Pi );
+BOOST_UNITS_SCALE_SPECIALIZATION ( 2, static_rational<60>, 1152921504606846976.0, exbi, Ei );
 
 #undef BOOST_UNITS_SCALE_DEF
 #undef BOOST_UNITS_SCALE_SPECIALIZATION
@@ -130,7 +132,7 @@ BOOST_UNITS_SCALE_SPECIALIZATION(2, static_rational<60>, 1152921504606846976.0, 
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::units::scale, (long)(class))
+BOOST_TYPEOF_REGISTER_TEMPLATE ( boost::units::scale, ( long ) ( class ) )
 
 #endif
 

@@ -13,15 +13,21 @@
 # pragma once
 #endif
 
-namespace boost { namespace xpressive { namespace detail
+namespace boost
+{
+namespace xpressive
+{
+namespace detail
 {
 
-    template<typename T>
-    void ignore_unused(T const &)
-    {
-    }
+template<typename T>
+void ignore_unused ( T const & )
+{
+}
 
-}}}
+}
+}
+}
 
 #endif
 

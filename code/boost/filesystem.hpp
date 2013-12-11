@@ -8,7 +8,7 @@
 
 //  See library home page at http://www.boost.org/libs/filesystem
 
-//----------------------------------------------------------------------------// 
+//----------------------------------------------------------------------------//
 
 #ifndef BOOST_FILESYSTEM_FILESYSTEM_HPP
 #define BOOST_FILESYSTEM_FILESYSTEM_HPP

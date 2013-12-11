@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,16 +14,19 @@
 #include <boost/units/systems/cgs/base.hpp>
 #include <boost/units/physical_dimensions/pressure.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace cgs {
+namespace cgs
+{
 
-typedef unit<pressure_dimension,cgs::system>     pressure;
-    
-BOOST_UNITS_STATIC_CONSTANT(barye,pressure);    
-BOOST_UNITS_STATIC_CONSTANT(baryes,pressure);   
+typedef unit<pressure_dimension, cgs::system>     pressure;
+
+BOOST_UNITS_STATIC_CONSTANT ( barye, pressure );
+BOOST_UNITS_STATIC_CONSTANT ( baryes, pressure );
 
 } // namespace cgs
 

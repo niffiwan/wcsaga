@@ -6,7 +6,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 # ifndef POINTER_HOLDER_DWA20011215_HPP
-#  define POINTER_HOLDER_DWA20011215_HPP 
+#  define POINTER_HOLDER_DWA20011215_HPP
 
 # include <boost/get_pointer.hpp>
 #  include <boost/type.hpp>
@@ -35,137 +35,148 @@
 
 #  include <boost/detail/workaround.hpp>
 
-namespace boost { namespace python {
+namespace boost
+{
+namespace python
+{
 
 template <class T> class wrapper;
 
-}}
+}
+}
 
 
-namespace boost { namespace python { namespace objects {
+namespace boost
+{
+namespace python
+{
+namespace objects
+{
 
 #  if BOOST_WORKAROUND(__GNUC__, == 2)
 #   define BOOST_PYTHON_UNFORWARD_LOCAL(z, n, _) BOOST_PP_COMMA_IF(n) (typename unforward<A##n>::type)objects::do_unforward(a##n,0)
 #  else
 #   define BOOST_PYTHON_UNFORWARD_LOCAL(z, n, _) BOOST_PP_COMMA_IF(n) objects::do_unforward(a##n,0)
-#  endif 
+#  endif
 
 template <class Pointer, class Value>
 struct pointer_holder : instance_holder
 {
-    typedef Value value_type;
-    
-    pointer_holder(Pointer);
+	typedef Value value_type;
 
-    // Forward construction to the held object
+	pointer_holder ( Pointer );
+
+	// Forward construction to the held object
 
 #  define BOOST_PP_ITERATION_PARAMS_1 (4, (0, BOOST_PYTHON_MAX_ARITY, <boost/python/object/pointer_holder.hpp>, 1))
 #  include BOOST_PP_ITERATE()
 
- private: // types
-    
- private: // required holder implementation
-    void* holds(type_info, bool null_ptr_only);
-    
-    template <class T>
-    inline void* holds_wrapped(type_info dst_t, wrapper<T>*,T* p)
-    {
-        return python::type_id<T>() == dst_t ? p : 0;
-    }
-    
-    inline void* holds_wrapped(type_info, ...)
-    {
-        return 0;
-    }
+private: // types
 
- private: // data members
-    Pointer m_p;
+private: // required holder implementation
+	void *holds ( type_info, bool null_ptr_only );
+
+	template <class T>
+	inline void *holds_wrapped ( type_info dst_t, wrapper<T> *, T *p )
+	{
+		return python::type_id<T>() == dst_t ? p : 0;
+	}
+
+	inline void *holds_wrapped ( type_info, ... )
+	{
+		return 0;
+	}
+
+private: // data members
+	Pointer m_p;
 };
 
 template <class Pointer, class Value>
 struct pointer_holder_back_reference : instance_holder
 {
- private:
-    typedef typename python::pointee<Pointer>::type held_type;
- public:
-    typedef Value value_type;
+private:
+	typedef typename python::pointee<Pointer>::type held_type;
+public:
+	typedef Value value_type;
 
-    // Not sure about this one -- can it work? The source object
-    // undoubtedly does not carry the correct back reference pointer.
-    pointer_holder_back_reference(Pointer);
+	// Not sure about this one -- can it work? The source object
+	// undoubtedly does not carry the correct back reference pointer.
+	pointer_holder_back_reference ( Pointer );
 
-    // Forward construction to the held object
+	// Forward construction to the held object
 #  define BOOST_PP_ITERATION_PARAMS_1 (4, (0, BOOST_PYTHON_MAX_ARITY, <boost/python/object/pointer_holder.hpp>, 2))
 #  include BOOST_PP_ITERATE()
 
- private: // required holder implementation
-    void* holds(type_info, bool null_ptr_only);
+private: // required holder implementation
+	void *holds ( type_info, bool null_ptr_only );
 
- private: // data members
-    Pointer m_p;
+private: // data members
+	Pointer m_p;
 };
 
 #  undef BOOST_PYTHON_UNFORWARD_LOCAL
 
 template <class Pointer, class Value>
-inline pointer_holder<Pointer,Value>::pointer_holder(Pointer p)
-    : m_p(p)
+inline pointer_holder<Pointer, Value>::pointer_holder ( Pointer p )
+	: m_p ( p )
 {
 }
 
 template <class Pointer, class Value>
-inline pointer_holder_back_reference<Pointer,Value>::pointer_holder_back_reference(Pointer p)
-    : m_p(p)
+inline pointer_holder_back_reference<Pointer, Value>::pointer_holder_back_reference ( Pointer p )
+	: m_p ( p )
 {
 }
 
 template <class Pointer, class Value>
-void* pointer_holder<Pointer, Value>::holds(type_info dst_t, bool null_ptr_only)
+void *pointer_holder<Pointer, Value>::holds ( type_info dst_t, bool null_ptr_only )
 {
-    if (dst_t == python::type_id<Pointer>()
-        && !(null_ptr_only && get_pointer(this->m_p))
-    )
-        return &this->m_p;
+	if ( dst_t == python::type_id<Pointer>()
+	        && ! ( null_ptr_only && get_pointer ( this->m_p ) )
+	   )
+		return &this->m_p;
 
-    Value* p
+	Value *p
 #  if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
-        = static_cast<Value*>( get_pointer(this->m_p) )
-#  else 
-        = get_pointer(this->m_p)
+	    = static_cast<Value *> ( get_pointer ( this->m_p ) )
+#  else
+	    = get_pointer ( this->m_p )
 #  endif
-        ;
-    
-    if (p == 0)
-        return 0;
-    
-    if (void* wrapped = holds_wrapped(dst_t, p, p))
-        return wrapped;
-    
-    type_info src_t = python::type_id<Value>();
-    return src_t == dst_t ? p : find_dynamic_type(p, src_t, dst_t);
+	      ;
+
+	if ( p == 0 )
+		return 0;
+
+	if ( void *wrapped = holds_wrapped ( dst_t, p, p ) )
+		return wrapped;
+
+	type_info src_t = python::type_id<Value>();
+	return src_t == dst_t ? p : find_dynamic_type ( p, src_t, dst_t );
 }
 
 template <class Pointer, class Value>
-void* pointer_holder_back_reference<Pointer, Value>::holds(type_info dst_t, bool null_ptr_only)
+void *pointer_holder_back_reference<Pointer, Value>::holds ( type_info dst_t, bool null_ptr_only )
 {
-    if (dst_t == python::type_id<Pointer>()
-        && !(null_ptr_only && get_pointer(this->m_p))
-    )
-        return &this->m_p;
+	if ( dst_t == python::type_id<Pointer>()
+	        && ! ( null_ptr_only && get_pointer ( this->m_p ) )
+	   )
+		return &this->m_p;
 
-    if (!get_pointer(this->m_p))
-        return 0;
-    
-    Value* p = get_pointer(m_p);
-    
-    if (dst_t == python::type_id<held_type>())
-        return p;
+	if ( !get_pointer ( this->m_p ) )
+		return 0;
 
-    type_info src_t = python::type_id<Value>();
-    return src_t == dst_t ? p : find_dynamic_type(p, src_t, dst_t);
+	Value *p = get_pointer ( m_p );
+
+	if ( dst_t == python::type_id<held_type>() )
+		return p;
+
+	type_info src_t = python::type_id<Value>();
+	return src_t == dst_t ? p : find_dynamic_type ( p, src_t, dst_t );
 }
 
-}}} // namespace boost::python::objects
+}
+}
+} // namespace boost::python::objects
 
 # endif // POINTER_HOLDER_DWA20011215_HPP
 
@@ -182,15 +193,15 @@ void* pointer_holder_back_reference<Pointer, Value>::holds(type_info dst_t, bool
 # define N BOOST_PP_ITERATION()
 
 # if (N != 0)
-    template< BOOST_PP_ENUM_PARAMS_Z(1, N, class A) >
+template< BOOST_PP_ENUM_PARAMS_Z ( 1, N, class A ) >
 # endif
-    pointer_holder(PyObject* self BOOST_PP_COMMA_IF(N) BOOST_PP_ENUM_BINARY_PARAMS_Z(1, N, A, a))
-        : m_p(new Value(
-                BOOST_PP_REPEAT_1ST(N, BOOST_PYTHON_UNFORWARD_LOCAL, nil)
-            ))
-    {
-        python::detail::initialize_wrapper(self, get_pointer(this->m_p));
-    }
+pointer_holder ( PyObject *self BOOST_PP_COMMA_IF ( N ) BOOST_PP_ENUM_BINARY_PARAMS_Z ( 1, N, A, a ) )
+	: m_p ( new Value (
+	            BOOST_PP_REPEAT_1ST ( N, BOOST_PYTHON_UNFORWARD_LOCAL, nil )
+	        ) )
+{
+	python::detail::initialize_wrapper ( self, get_pointer ( this->m_p ) );
+}
 
 # undef N
 
@@ -199,19 +210,19 @@ void* pointer_holder_back_reference<Pointer, Value>::holds(type_info dst_t, bool
 # if !(BOOST_WORKAROUND(__MWERKS__, > 0x3100)                      \
         && BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3201)))
 #  line BOOST_PP_LINE(__LINE__, pointer_holder.hpp(pointer_holder_back_reference))
-# endif 
+# endif
 
 # define N BOOST_PP_ITERATION()
 
 # if (N != 0)
-    template < BOOST_PP_ENUM_PARAMS_Z(1, N, class A) >
+template < BOOST_PP_ENUM_PARAMS_Z ( 1, N, class A ) >
 # endif
-    pointer_holder_back_reference(
-        PyObject* p BOOST_PP_COMMA_IF(N) BOOST_PP_ENUM_BINARY_PARAMS_Z(1, N, A, a))
-        : m_p(new held_type(
-                    p BOOST_PP_COMMA_IF(N) BOOST_PP_REPEAT_1ST(N, BOOST_PYTHON_UNFORWARD_LOCAL, nil)
-            ))
-    {}
+pointer_holder_back_reference (
+    PyObject *p BOOST_PP_COMMA_IF ( N ) BOOST_PP_ENUM_BINARY_PARAMS_Z ( 1, N, A, a ) )
+	: m_p ( new held_type (
+	            p BOOST_PP_COMMA_IF ( N ) BOOST_PP_REPEAT_1ST ( N, BOOST_PYTHON_UNFORWARD_LOCAL, nil )
+	        ) )
+{}
 
 # undef N
 

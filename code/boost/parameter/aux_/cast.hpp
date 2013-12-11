@@ -13,7 +13,12 @@
 #  include <boost/type_traits/remove_const.hpp>
 # endif
 
-namespace boost { namespace parameter { namespace aux {
+namespace boost
+{
+namespace parameter
+{
+namespace aux
+{
 
 struct use_default_tag {};
 
@@ -44,79 +49,79 @@ template <class T>
 struct cast;
 
 template <>
-struct cast<void*>
+struct cast<void *>
 {
-    static use_default_tag execute(use_default_tag)
-    {
-        return use_default_tag();
-    }
+	static use_default_tag execute ( use_default_tag )
+	{
+		return use_default_tag();
+	}
 
-    static use_default_tag remove_const(use_default_tag)
-    {
-        return use_default_tag();
-    }
+	static use_default_tag remove_const ( use_default_tag )
+	{
+		return use_default_tag();
+	}
 
-    template <class U>
-    static U& execute(U& value)
-    {
-        return value;
-    }
+	template <class U>
+	static U &execute ( U &value )
+	{
+		return value;
+	}
 
-    template <class U>
-    static U& remove_const(U& x)
-    {
-        return x;
-    }
+	template <class U>
+	static U &remove_const ( U &x )
+	{
+		return x;
+	}
 };
 
 #if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x580))
 
-typedef void* voidstar;
+typedef void *voidstar;
 
 template <class T>
-struct cast<voidstar(T)>
-  : cast<void*>
+struct cast<voidstar ( T ) >
+: cast<void *>
 {
 };
 
 #else
 
 template <class T>
-struct cast<void*(T)>
-  : cast<void*>
+struct cast<void * ( T ) >
+: cast<void *>
 {
 };
 
 #endif
 
 template <class T>
-struct cast<void(T)>
+struct cast<void ( T ) >
 {
-    typedef typename boost::add_reference<
-        typename boost::remove_const<T>::type 
+    typedef typename boost::add_reference <
+    typename boost::remove_const<T>::type
     >::type reference;
 
-    static use_default_tag execute(use_default_tag)
-    {
-        return use_default_tag();
-    }
+    static use_default_tag execute ( use_default_tag )
+{
+	return use_default_tag();
+}
 
-    static use_default_tag remove_const(use_default_tag)
-    {
-        return use_default_tag();
-    }
+static use_default_tag remove_const ( use_default_tag )
+{
+	return use_default_tag();
+}
 
-    static T execute(T value)
-    {
-        return value;
-    }
+static T execute ( T value )
+{
+	return value;
+}
 
-    template <class U>
-    static reference remove_const(U const& x)
-    {
-        return const_cast<reference>(x);
-    }
-};
+template <class U>
+static reference remove_const ( U const &x )
+{
+	return const_cast<reference> ( x );
+}
+         };
 
 #  define BOOST_PARAMETER_FUNCTION_CAST(value, predicate) \
     boost::parameter::aux::cast<void predicate>::remove_const( \
@@ -125,7 +130,9 @@ struct cast<void(T)>
 
 # endif
 
-}}} // namespace boost::parameter::aux
+}
+}
+} // namespace boost::parameter::aux
 
 #endif // BOOST_PARAMETER_CAST_060902_HPP
 

@@ -39,22 +39,24 @@
 #pragma GCC system_header
 #endif
 
-namespace boost {
+namespace boost
+{
 template<class T>
 class integer_traits : public std::numeric_limits<T>
 {
 public:
-  BOOST_STATIC_CONSTANT(bool, is_integral = false);
+	BOOST_STATIC_CONSTANT ( bool, is_integral = false );
 };
 
-namespace detail {
+namespace detail
+{
 template<class T, T min_val, T max_val>
 class integer_traits_base
 {
 public:
-  BOOST_STATIC_CONSTANT(bool, is_integral = true);
-  BOOST_STATIC_CONSTANT(T, const_min = min_val);
-  BOOST_STATIC_CONSTANT(T, const_max = max_val);
+	BOOST_STATIC_CONSTANT ( bool, is_integral = true );
+	BOOST_STATIC_CONSTANT ( T, const_min = min_val );
+	BOOST_STATIC_CONSTANT ( T, const_max = max_val );
 };
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
@@ -73,39 +75,39 @@ const T integer_traits_base<T, min_val, max_val>::const_max;
 
 template<>
 class integer_traits<bool>
-  : public std::numeric_limits<bool>,
-    public detail::integer_traits_base<bool, false, true>
+	: public std::numeric_limits<bool>,
+	  public detail::integer_traits_base<bool, false, true>
 { };
 
 template<>
 class integer_traits<char>
-  : public std::numeric_limits<char>,
-    public detail::integer_traits_base<char, CHAR_MIN, CHAR_MAX>
+	: public std::numeric_limits<char>,
+	  public detail::integer_traits_base<char, CHAR_MIN, CHAR_MAX>
 { };
 
 template<>
 class integer_traits<signed char>
-  : public std::numeric_limits<signed char>,
-    public detail::integer_traits_base<signed char, SCHAR_MIN, SCHAR_MAX>
+	: public std::numeric_limits<signed char>,
+	  public detail::integer_traits_base<signed char, SCHAR_MIN, SCHAR_MAX>
 { };
 
 template<>
 class integer_traits<unsigned char>
-  : public std::numeric_limits<unsigned char>,
-    public detail::integer_traits_base<unsigned char, 0, UCHAR_MAX>
+	: public std::numeric_limits<unsigned char>,
+	  public detail::integer_traits_base<unsigned char, 0, UCHAR_MAX>
 { };
 
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
 template<>
 class integer_traits<wchar_t>
-  : public std::numeric_limits<wchar_t>,
-    // Don't trust WCHAR_MIN and WCHAR_MAX with Mac OS X's native
-    // library: they are wrong!
+	: public std::numeric_limits<wchar_t>,
+	  // Don't trust WCHAR_MIN and WCHAR_MAX with Mac OS X's native
+	  // library: they are wrong!
 #if defined(WCHAR_MIN) && defined(WCHAR_MAX) && !defined(__APPLE__)
-    public detail::integer_traits_base<wchar_t, WCHAR_MIN, WCHAR_MAX>
+	  public detail::integer_traits_base<wchar_t, WCHAR_MIN, WCHAR_MAX>
 #elif defined(__BORLANDC__) || defined(__CYGWIN__) || defined(__MINGW32__) || (defined(__BEOS__) && defined(__GNUC__))
-    // No WCHAR_MIN and WCHAR_MAX, whar_t is short and unsigned:
-    public detail::integer_traits_base<wchar_t, 0, 0xffff>
+	  // No WCHAR_MIN and WCHAR_MAX, whar_t is short and unsigned:
+	  public detail::integer_traits_base<wchar_t, 0, 0xffff>
 #elif (defined(__sgi) && (!defined(__SGI_STL_PORT) || __SGI_STL_PORT < 0x400))\
     || (defined __APPLE__)\
     || (defined(__OpenBSD__) && defined(__GNUC__))\
@@ -113,17 +115,17 @@ class integer_traits<wchar_t>
     || (defined(__FreeBSD__) && defined(__GNUC__))\
     || (defined(__DragonFly__) && defined(__GNUC__))\
     || (defined(__hpux) && defined(__GNUC__) && (__GNUC__ == 3) && !defined(__SGI_STL_PORT))
-    // No WCHAR_MIN and WCHAR_MAX, wchar_t has the same range as int.
-    //  - SGI MIPSpro with native library
-    //  - gcc 3.x on HP-UX
-    //  - Mac OS X with native library
-    //  - gcc on FreeBSD, OpenBSD and NetBSD
-    public detail::integer_traits_base<wchar_t, INT_MIN, INT_MAX>
+	  // No WCHAR_MIN and WCHAR_MAX, wchar_t has the same range as int.
+	  //  - SGI MIPSpro with native library
+	  //  - gcc 3.x on HP-UX
+	  //  - Mac OS X with native library
+	  //  - gcc on FreeBSD, OpenBSD and NetBSD
+	  public detail::integer_traits_base<wchar_t, INT_MIN, INT_MAX>
 #elif defined(__hpux) && defined(__GNUC__) && (__GNUC__ == 2) && !defined(__SGI_STL_PORT)
-    // No WCHAR_MIN and WCHAR_MAX, wchar_t has the same range as unsigned int.
-    //  - gcc 2.95.x on HP-UX
-    // (also, std::numeric_limits<wchar_t> appears to return the wrong values).
-    public detail::integer_traits_base<wchar_t, 0, UINT_MAX>
+	  // No WCHAR_MIN and WCHAR_MAX, wchar_t has the same range as unsigned int.
+	  //  - gcc 2.95.x on HP-UX
+	  // (also, std::numeric_limits<wchar_t> appears to return the wrong values).
+	  public detail::integer_traits_base<wchar_t, 0, UINT_MAX>
 #else
 #error No WCHAR_MIN and WCHAR_MAX present, please adjust integer_traits<> for your compiler.
 #endif
@@ -132,38 +134,38 @@ class integer_traits<wchar_t>
 
 template<>
 class integer_traits<short>
-  : public std::numeric_limits<short>,
-    public detail::integer_traits_base<short, SHRT_MIN, SHRT_MAX>
+	: public std::numeric_limits<short>,
+	  public detail::integer_traits_base<short, SHRT_MIN, SHRT_MAX>
 { };
 
 template<>
 class integer_traits<unsigned short>
-  : public std::numeric_limits<unsigned short>,
-    public detail::integer_traits_base<unsigned short, 0, USHRT_MAX>
+	: public std::numeric_limits<unsigned short>,
+	  public detail::integer_traits_base<unsigned short, 0, USHRT_MAX>
 { };
 
 template<>
 class integer_traits<int>
-  : public std::numeric_limits<int>,
-    public detail::integer_traits_base<int, INT_MIN, INT_MAX>
+	: public std::numeric_limits<int>,
+	  public detail::integer_traits_base<int, INT_MIN, INT_MAX>
 { };
 
 template<>
 class integer_traits<unsigned int>
-  : public std::numeric_limits<unsigned int>,
-    public detail::integer_traits_base<unsigned int, 0, UINT_MAX>
+	: public std::numeric_limits<unsigned int>,
+	  public detail::integer_traits_base<unsigned int, 0, UINT_MAX>
 { };
 
 template<>
 class integer_traits<long>
-  : public std::numeric_limits<long>,
-    public detail::integer_traits_base<long, LONG_MIN, LONG_MAX>
+	: public std::numeric_limits<long>,
+	  public detail::integer_traits_base<long, LONG_MIN, LONG_MAX>
 { };
 
 template<>
 class integer_traits<unsigned long>
-  : public std::numeric_limits<unsigned long>,
-    public detail::integer_traits_base<unsigned long, 0, ULONG_MAX>
+	: public std::numeric_limits<unsigned long>,
+	  public detail::integer_traits_base<unsigned long, 0, ULONG_MAX>
 { };
 
 #if !defined(BOOST_NO_INTEGRAL_INT64_T) && !defined(BOOST_NO_INT64_T)
@@ -171,52 +173,52 @@ class integer_traits<unsigned long>
 
 template<>
 class integer_traits< ::boost::long_long_type>
-  : public std::numeric_limits< ::boost::long_long_type>,
-    public detail::integer_traits_base< ::boost::long_long_type, LLONG_MIN, LLONG_MAX>
+	: public std::numeric_limits< ::boost::long_long_type>,
+	  public detail::integer_traits_base< ::boost::long_long_type, LLONG_MIN, LLONG_MAX>
 { };
 
 template<>
 class integer_traits< ::boost::ulong_long_type>
-  : public std::numeric_limits< ::boost::ulong_long_type>,
-    public detail::integer_traits_base< ::boost::ulong_long_type, 0, ULLONG_MAX>
+	: public std::numeric_limits< ::boost::ulong_long_type>,
+	  public detail::integer_traits_base< ::boost::ulong_long_type, 0, ULLONG_MAX>
 { };
 
 #elif defined(ULONG_LONG_MAX) && defined(BOOST_HAS_LONG_LONG)
 
 template<>
-class integer_traits< ::boost::long_long_type>  : public std::numeric_limits< ::boost::long_long_type>,    public detail::integer_traits_base< ::boost::long_long_type, LONG_LONG_MIN, LONG_LONG_MAX>{ };
+class integer_traits< ::boost::long_long_type>  : public std::numeric_limits< ::boost::long_long_type>,    public detail::integer_traits_base< ::boost::long_long_type, LONG_LONG_MIN, LONG_LONG_MAX> { };
 template<>
 class integer_traits< ::boost::ulong_long_type>
-  : public std::numeric_limits< ::boost::ulong_long_type>,
-    public detail::integer_traits_base< ::boost::ulong_long_type, 0, ULONG_LONG_MAX>
+	: public std::numeric_limits< ::boost::ulong_long_type>,
+	  public detail::integer_traits_base< ::boost::ulong_long_type, 0, ULONG_LONG_MAX>
 { };
 
 #elif defined(ULONGLONG_MAX) && defined(BOOST_HAS_LONG_LONG)
 
 template<>
 class integer_traits< ::boost::long_long_type>
-  : public std::numeric_limits< ::boost::long_long_type>,
-    public detail::integer_traits_base< ::boost::long_long_type, LONGLONG_MIN, LONGLONG_MAX>
+	: public std::numeric_limits< ::boost::long_long_type>,
+	  public detail::integer_traits_base< ::boost::long_long_type, LONGLONG_MIN, LONGLONG_MAX>
 { };
 
 template<>
 class integer_traits< ::boost::ulong_long_type>
-  : public std::numeric_limits< ::boost::ulong_long_type>,
-    public detail::integer_traits_base< ::boost::ulong_long_type, 0, ULONGLONG_MAX>
+	: public std::numeric_limits< ::boost::ulong_long_type>,
+	  public detail::integer_traits_base< ::boost::ulong_long_type, 0, ULONGLONG_MAX>
 { };
 
 #elif defined(_LLONG_MAX) && defined(_C2) && defined(BOOST_HAS_LONG_LONG)
 
 template<>
 class integer_traits< ::boost::long_long_type>
-  : public std::numeric_limits< ::boost::long_long_type>,
-    public detail::integer_traits_base< ::boost::long_long_type, -_LLONG_MAX - _C2, _LLONG_MAX>
+	: public std::numeric_limits< ::boost::long_long_type>,
+	  public detail::integer_traits_base < ::boost::long_long_type, -_LLONG_MAX - _C2, _LLONG_MAX >
 { };
 
 template<>
 class integer_traits< ::boost::ulong_long_type>
-  : public std::numeric_limits< ::boost::ulong_long_type>,
-    public detail::integer_traits_base< ::boost::ulong_long_type, 0, _ULLONG_MAX>
+	: public std::numeric_limits< ::boost::ulong_long_type>,
+	  public detail::integer_traits_base< ::boost::ulong_long_type, 0, _ULLONG_MAX>
 { };
 
 #elif defined(BOOST_HAS_LONG_LONG)
@@ -226,28 +228,28 @@ class integer_traits< ::boost::ulong_long_type>
 //
 template<>
 class integer_traits< ::boost::long_long_type>
-  : public std::numeric_limits< ::boost::long_long_type>,
-    public detail::integer_traits_base< ::boost::long_long_type, (1LL << (sizeof(::boost::long_long_type) - 1)), ~(1LL << (sizeof(::boost::long_long_type) - 1))>
+	: public std::numeric_limits< ::boost::long_long_type>,
+	  public detail::integer_traits_base < ::boost::long_long_type, ( 1LL << ( sizeof ( ::boost::long_long_type ) - 1 ) ), ~ ( 1LL << ( sizeof ( ::boost::long_long_type ) - 1 ) ) >
 { };
 
 template<>
 class integer_traits< ::boost::ulong_long_type>
-  : public std::numeric_limits< ::boost::ulong_long_type>,
-    public detail::integer_traits_base< ::boost::ulong_long_type, 0, ~0uLL>
+	: public std::numeric_limits< ::boost::ulong_long_type>,
+	  public detail::integer_traits_base < ::boost::ulong_long_type, 0, ~0uLL >
 { };
 
 #elif defined(BOOST_HAS_MS_INT64)
 
 template<>
 class integer_traits< __int64>
-  : public std::numeric_limits< __int64>,
-    public detail::integer_traits_base< __int64, _I64_MIN, _I64_MAX>
+	: public std::numeric_limits< __int64>,
+	  public detail::integer_traits_base< __int64, _I64_MIN, _I64_MAX>
 { };
 
 template<>
 class integer_traits< unsigned __int64>
-  : public std::numeric_limits< unsigned __int64>,
-    public detail::integer_traits_base< unsigned __int64, 0, _UI64_MAX>
+	: public std::numeric_limits< unsigned __int64>,
+	  public detail::integer_traits_base< unsigned __int64, 0, _UI64_MAX>
 { };
 
 #endif

@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,17 +14,20 @@
 #include <boost/units/systems/si/base.hpp>
 #include <boost/units/physical_dimensions/resistance.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace si {
+namespace si
+{
 
-typedef unit<resistance_dimension,si::system>    resistance;
+typedef unit<resistance_dimension, si::system>    resistance;
 
-BOOST_UNITS_STATIC_CONSTANT(ohm,resistance);    
-BOOST_UNITS_STATIC_CONSTANT(ohms,resistance);   
-                                            
+BOOST_UNITS_STATIC_CONSTANT ( ohm, resistance );
+BOOST_UNITS_STATIC_CONSTANT ( ohms, resistance );
+
 } // namespace si
 
 } // namespace units

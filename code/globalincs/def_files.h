@@ -12,9 +12,9 @@
 #define __DEF_FILES_H_
 
 //Used to retrieve pointer to file data from def_files.cpp
-char* defaults_get_file(char* filename);
+char *defaults_get_file ( char *filename );
 
-//WMC - 
+//WMC -
 //There are three parts to adding a file
 //:PART 1: Add variable declaration for new file
 //:PART 2: Add filename of default file to Default_files[] array, along with content variable

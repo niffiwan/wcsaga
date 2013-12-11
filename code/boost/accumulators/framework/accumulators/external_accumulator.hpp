@@ -15,85 +15,89 @@
 #include <boost/accumulators/framework/accumulator_base.hpp>
 #include <boost/accumulators/framework/accumulators/reference_accumulator.hpp>
 
-namespace boost { namespace accumulators { namespace impl
+namespace boost
+{
+namespace accumulators
+{
+namespace impl
 {
 
-    //////////////////////////////////////////////////////////////////////////
-    // external_impl
-    /// INTERNAL ONLY
-    ///
-    template<typename Accumulator, typename Tag>
-    struct external_impl
-      : accumulator_base
-    {
-        typedef typename Accumulator::result_type result_type;
-        typedef typename detail::feature_tag<Accumulator>::type feature_tag;
+//////////////////////////////////////////////////////////////////////////
+// external_impl
+/// INTERNAL ONLY
+///
+template<typename Accumulator, typename Tag>
+struct external_impl
+		: accumulator_base
+{
+	typedef typename Accumulator::result_type result_type;
+	typedef typename detail::feature_tag<Accumulator>::type feature_tag;
 
-        external_impl(dont_care) {}
+	external_impl ( dont_care ) {}
 
-        template<typename Args>
-        result_type result(Args const &args) const
-        {
-            return this->extract_(args, args[parameter::keyword<Tag>::get() | 0]);
-        }
+	template<typename Args>
+	result_type result ( Args const &args ) const
+	{
+		return this->extract_ ( args, args[parameter::keyword<Tag>::get() | 0] );
+	}
 
-    private:
+private:
 
-        template<typename Args>
-        static result_type extract_(Args const &args, int)
-        {
-            // No named parameter passed to the extractor. Maybe the external
-            // feature is held by reference<>.
-            extractor<feature_tag> extract;
-            return extract(accumulators::reference_tag<Tag>(args));
-        }
+	template<typename Args>
+	static result_type extract_ ( Args const &args, int )
+	{
+		// No named parameter passed to the extractor. Maybe the external
+		// feature is held by reference<>.
+		extractor<feature_tag> extract;
+		return extract ( accumulators::reference_tag<Tag> ( args ) );
+	}
 
-        template<typename Args, typename AccumulatorSet>
-        static result_type extract_(Args const &, AccumulatorSet const &acc)
-        {
-            // OK, a named parameter for this external feature was passed to the
-            // extractor, so use that.
-            extractor<feature_tag> extract;
-            return extract(acc);
-        }
-    };
+	template<typename Args, typename AccumulatorSet>
+	static result_type extract_ ( Args const &, AccumulatorSet const &acc )
+	{
+		// OK, a named parameter for this external feature was passed to the
+		// extractor, so use that.
+		extractor<feature_tag> extract;
+		return extract ( acc );
+	}
+};
 
 } // namespace impl
 
 namespace tag
 {
-    //////////////////////////////////////////////////////////////////////////
-    // external
-    template<typename Feature, typename Tag, typename AccumulatorSet>
-    struct external
-      : depends_on<reference<AccumulatorSet, Tag> >
-    {
-        typedef
-            accumulators::impl::external_impl<
-                detail::to_accumulator<Feature, mpl::_1, mpl::_2>
-              , Tag
-            >
-        impl;
-    };
+//////////////////////////////////////////////////////////////////////////
+// external
+template<typename Feature, typename Tag, typename AccumulatorSet>
+struct external
+		: depends_on<reference<AccumulatorSet, Tag> >
+{
+	typedef
+	accumulators::impl::external_impl <
+	detail::to_accumulator<Feature, mpl::_1, mpl::_2>
+	, Tag
+	>
+	impl;
+};
 
-    template<typename Feature, typename Tag>
-    struct external<Feature, Tag, void>
-      : depends_on<>
-    {
-        typedef
-            accumulators::impl::external_impl<
-                detail::to_accumulator<Feature, mpl::_1, mpl::_2>
-              , Tag
-            >
-        impl;
-    };
+template<typename Feature, typename Tag>
+struct external<Feature, Tag, void>
+		: depends_on<>
+{
+	typedef
+	accumulators::impl::external_impl <
+	detail::to_accumulator<Feature, mpl::_1, mpl::_2>
+	, Tag
+	>
+	impl;
+};
 }
 
 // for the purposes of feature-based dependency resolution,
 // external_accumulator<Feature, Tag> provides the same feature as Feature
 template<typename Feature, typename Tag, typename AccumulatorSet>
 struct feature_of<tag::external<Feature, Tag, AccumulatorSet> >
-  : feature_of<Feature>
+		: feature_of<Feature>
 {
 };
 
@@ -103,6 +107,7 @@ struct feature_of<tag::external<Feature, Tag, AccumulatorSet> >
 // without fear of a name conflict.
 using tag::external;
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

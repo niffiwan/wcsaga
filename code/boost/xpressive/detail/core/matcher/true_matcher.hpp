@@ -17,22 +17,28 @@
 #include <boost/xpressive/detail/core/quant_style.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+namespace boost
+{
+namespace xpressive
+{
+namespace detail
 {
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // true_matcher
-    //
-    struct true_matcher
-      : quant_style_assertion
-    {
-        template<typename BidiIter, typename Next>
-        static bool match(match_state<BidiIter> &, Next const &)
-        {
-            return true;
-        }
-    };
+///////////////////////////////////////////////////////////////////////////////
+// true_matcher
+//
+struct true_matcher
+		: quant_style_assertion
+{
+	template<typename BidiIter, typename Next>
+	static bool match ( match_state<BidiIter> &, Next const & )
+	{
+		return true;
+	}
+};
 
-}}}
+}
+}
+}
 
 #endif

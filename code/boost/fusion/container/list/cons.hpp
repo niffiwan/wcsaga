@@ -2,7 +2,7 @@
     Copyright (c) 2005 Joel de Guzman
     Copyright (c) 2005 Eric Niebler
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_CONS_07172005_0843)
@@ -26,118 +26,121 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/or.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct void_;
-    struct cons_tag;
-    struct forward_traversal_tag;
-    struct fusion_sequence_tag;
+namespace fusion
+{
+struct void_;
+struct cons_tag;
+struct forward_traversal_tag;
+struct fusion_sequence_tag;
 
-    struct nil : sequence_base<nil>
-    {
-        typedef mpl::int_<0> size;
-        typedef cons_tag fusion_tag;
-        typedef fusion_sequence_tag tag; // this gets picked up by MPL
-        typedef mpl::false_ is_view;
-        typedef forward_traversal_tag category;
-        typedef void_ car_type;
-        typedef void_ cdr_type;
+struct nil : sequence_base<nil>
+{
+	typedef mpl::int_<0> size;
+	typedef cons_tag fusion_tag;
+	typedef fusion_sequence_tag tag; // this gets picked up by MPL
+	typedef mpl::false_ is_view;
+	typedef forward_traversal_tag category;
+	typedef void_ car_type;
+	typedef void_ cdr_type;
 
-        nil() {}
+	nil() {}
 
-        template <typename Iterator>
-        nil(Iterator const& iter, mpl::true_ /*this_is_an_iterator*/)
-        {}
+	template <typename Iterator>
+	nil ( Iterator const &iter, mpl::true_ /*this_is_an_iterator*/ )
+	{}
 
-        template <typename Iterator>
-        void assign_from_iter(Iterator const& iter)
-        {
-        }
-    };
+	template <typename Iterator>
+	void assign_from_iter ( Iterator const &iter )
+	{
+	}
+};
 
-    template <typename Car, typename Cdr = nil>
-    struct cons : sequence_base<cons<Car, Cdr> >
-    {
-        typedef mpl::int_<Cdr::size::value+1> size;
-        typedef cons_tag fusion_tag;
-        typedef fusion_sequence_tag tag; // this gets picked up by MPL
-        typedef mpl::false_ is_view;
-        typedef forward_traversal_tag category;
-        typedef Car car_type;
-        typedef Cdr cdr_type;
+template <typename Car, typename Cdr = nil>
+struct cons : sequence_base<cons<Car, Cdr> >
+{
+	typedef mpl::int_ < Cdr::size::value + 1 > size;
+	typedef cons_tag fusion_tag;
+	typedef fusion_sequence_tag tag; // this gets picked up by MPL
+	typedef mpl::false_ is_view;
+	typedef forward_traversal_tag category;
+	typedef Car car_type;
+	typedef Cdr cdr_type;
 
-        cons()
-            : car(), cdr() {}
+	cons()
+		: car(), cdr() {}
 
-        explicit cons(typename detail::call_param<Car>::type car)
-            : car(car), cdr() {}
+	explicit cons ( typename detail::call_param<Car>::type car )
+		: car ( car ), cdr() {}
 
-        cons(
-            typename detail::call_param<Car>::type car
-          , typename detail::call_param<Cdr>::type cdr)
-            : car(car), cdr(cdr) {}
-        
-        template <typename Car2, typename Cdr2>
-        cons(cons<Car2, Cdr2> const& rhs)
-            : car(rhs.car), cdr(rhs.cdr) {}
+	cons (
+	    typename detail::call_param<Car>::type car
+	    , typename detail::call_param<Cdr>::type cdr )
+		: car ( car ), cdr ( cdr ) {}
 
-        cons(cons const& rhs)
-            : car(rhs.car), cdr(rhs.cdr) {}
+	template <typename Car2, typename Cdr2>
+	cons ( cons<Car2, Cdr2> const &rhs )
+		: car ( rhs.car ), cdr ( rhs.cdr ) {}
 
-        template <typename Sequence>
-        cons(
-            Sequence const& seq
-          , typename disable_if<
-                mpl::or_<
-                    is_convertible<Sequence, cons> // use copy ctor instead
-                  , is_convertible<Sequence, Car>  // use copy to car instead
-                > 
-            >::type* dummy = 0
-        )
-            : car(*fusion::begin(seq))
-            , cdr(fusion::next(fusion::begin(seq)), mpl::true_()) {}
+	cons ( cons const &rhs )
+		: car ( rhs.car ), cdr ( rhs.cdr ) {}
 
-        template <typename Iterator>
-        cons(Iterator const& iter, mpl::true_ /*this_is_an_iterator*/)
-            : car(*iter)
-            , cdr(fusion::next(iter), mpl::true_()) {}
+	template <typename Sequence>
+	cons (
+	    Sequence const &seq
+	    , typename disable_if <
+	    mpl::or_ <
+	    is_convertible<Sequence, cons> // use copy ctor instead
+	    , is_convertible<Sequence, Car>  // use copy to car instead
+	    >
+	    >::type *dummy = 0
+	)
+		: car ( *fusion::begin ( seq ) )
+		, cdr ( fusion::next ( fusion::begin ( seq ) ), mpl::true_() ) {}
 
-        template <typename Car2, typename Cdr2>
-        cons& operator=(cons<Car2, Cdr2> const& rhs)
-        {
-            car = rhs.car;
-            cdr = rhs.cdr;
-            return *this;
-        }
+	template <typename Iterator>
+	cons ( Iterator const &iter, mpl::true_ /*this_is_an_iterator*/ )
+		: car ( *iter )
+		, cdr ( fusion::next ( iter ), mpl::true_() ) {}
 
-        cons& operator=(cons const& rhs)
-        {
-            car = rhs.car;
-            cdr = rhs.cdr;
-            return *this;
-        }
+	template <typename Car2, typename Cdr2>
+	cons &operator= ( cons<Car2, Cdr2> const &rhs )
+	{
+		car = rhs.car;
+		cdr = rhs.cdr;
+		return *this;
+	}
 
-        template <typename Sequence>
-        typename disable_if<is_convertible<Sequence, Car>, cons&>::type
-        operator=(Sequence const& seq)
-        {
-            typedef typename result_of::begin<Sequence const>::type Iterator;
-            Iterator iter = fusion::begin(seq);
-            this->assign_from_iter(iter);
-            return *this;
-        }
+	cons &operator= ( cons const &rhs )
+	{
+		car = rhs.car;
+		cdr = rhs.cdr;
+		return *this;
+	}
 
-        template <typename Iterator>
-        void assign_from_iter(Iterator const& iter)
-        {
-            car = *iter;
-            cdr.assign_from_iter(fusion::next(iter));
-        }
+	template <typename Sequence>
+	typename disable_if<is_convertible<Sequence, Car>, cons &>::type
+	operator= ( Sequence const &seq )
+	{
+		typedef typename result_of::begin<Sequence const>::type Iterator;
+		Iterator iter = fusion::begin ( seq );
+		this->assign_from_iter ( iter );
+		return *this;
+	}
 
-        car_type car;
-        cdr_type cdr;
-    };
-}}
+	template <typename Iterator>
+	void assign_from_iter ( Iterator const &iter )
+	{
+		car = *iter;
+		cdr.assign_from_iter ( fusion::next ( iter ) );
+	}
+
+	car_type car;
+	cdr_type cdr;
+};
+}
+}
 
 #endif
 

@@ -1,8 +1,8 @@
-//  (C) Copyright John Maddock 2001 - 2003. 
-//  (C) Copyright Darin Adler 2001. 
-//  (C) Copyright Jens Maurer 2001 - 2003. 
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  (C) Copyright John Maddock 2001 - 2003.
+//  (C) Copyright Darin Adler 2001.
+//  (C) Copyright Jens Maurer 2001 - 2003.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
@@ -30,13 +30,13 @@
      ((__GNUC_MINOR__ < 95) || (__GNUC_MINOR__ == 96)) && \
      !defined(__STL_USE_NEW_IOSTREAMS) || \
    defined(__APPLE_CC__)
-   // Note that we only set this for GNU C++ prior to 2.95 since the
-   // latest patches for that release do contain a minimal <sstream>
-   // If you are running a 2.95 release prior to 2.95.3 then this will need
-   // setting, but there is no way to detect that automatically (other
-   // than by running the configure script).
-   // Also, the unofficial GNU C++ 2.96 included in RedHat 7.1 doesn't
-   // have <sstream>.
+// Note that we only set this for GNU C++ prior to 2.95 since the
+// latest patches for that release do contain a minimal <sstream>
+// If you are running a 2.95 release prior to 2.95.3 then this will need
+// setting, but there is no way to detect that automatically (other
+// than by running the configure script).
+// Also, the unofficial GNU C++ 2.96 included in RedHat 7.1 doesn't
+// have <sstream>.
 #  define BOOST_NO_STRINGSTREAM
 #endif
 

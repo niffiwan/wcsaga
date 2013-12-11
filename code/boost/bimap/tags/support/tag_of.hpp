@@ -43,10 +43,14 @@ See also tagged, value_type_of.
 
 #ifndef BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
 
-namespace boost {
-namespace bimaps {
-namespace tags {
-namespace support {
+namespace boost
+{
+namespace bimaps
+{
+namespace tags
+{
+namespace support
+{
 
 
 // tag_of metafunction
@@ -54,13 +58,13 @@ namespace support {
 template< class Type >
 struct tag_of
 {
-    BOOST_BIMAP_STATIC_ERROR( USING_TAG_OF_WITH_AN_UNTAGGED_TYPE, (Type) );
+	BOOST_BIMAP_STATIC_ERROR ( USING_TAG_OF_WITH_AN_UNTAGGED_TYPE, ( Type ) );
 };
 
 template< class Type, class Tag >
 struct tag_of< tagged< Type, Tag > >
 {
-    typedef Tag type;
+	typedef Tag type;
 };
 
 

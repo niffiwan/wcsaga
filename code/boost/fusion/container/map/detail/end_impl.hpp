@@ -11,33 +11,39 @@
 
 #include <boost/fusion/iterator/basic_iterator.hpp>
 
-namespace boost { namespace fusion { namespace extension
+namespace boost
 {
-    template <typename>
-    struct end_impl;
+namespace fusion
+{
+namespace extension
+{
+template <typename>
+struct end_impl;
 
-    template <>
-    struct end_impl<map_tag>
-    {
-        template <typename Seq>
-        struct apply
-        {
-            typedef
-                basic_iterator<
-                    map_iterator_tag
-                  , typename Seq::category
-                  , Seq
-                  , Seq::size::value
-                >
-            type;
+template <>
+struct end_impl<map_tag>
+{
+	template <typename Seq>
+	struct apply
+	{
+		typedef
+		basic_iterator <
+		map_iterator_tag
+		, typename Seq::category
+		, Seq
+		, Seq::size::value
+		>
+		type;
 
-            static type
-            call(Seq& seq)
-            {
-                return type(seq,0);
-            }
-        };
-    };
-}}}
+		static type
+		call ( Seq &seq )
+		{
+			return type ( seq, 0 );
+		}
+	};
+};
+}
+}
+}
 
 #endif

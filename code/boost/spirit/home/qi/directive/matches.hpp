@@ -19,79 +19,94 @@
 #include <boost/spirit/home/support/common_terminals.hpp>
 #include <boost/spirit/home/support/has_semantic_action.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <>
-    struct use_directive<qi::domain, tag::matches> // enables matches
-      : mpl::true_ {};
-}}
-
-namespace boost { namespace spirit { namespace qi
+namespace spirit
 {
-    using spirit::matches;
-    using spirit::matches_type;
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
+template <>
+struct use_directive<qi::domain, tag::matches> // enables matches
+		: mpl::true_ {};
+}
+}
 
-    ///////////////////////////////////////////////////////////////////////////
-    // matches_directive returns whether the embedded parser matched
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Subject>
-    struct matches_directive : unary_parser<matches_directive<Subject> >
-    {
-        typedef Subject subject_type;
-        matches_directive(Subject const& subject)
-          : subject(subject) {}
-
-        template <typename Context, typename Iterator>
-        struct attribute
-        {
-            typedef bool type;
-        };
-
-        template <typename Iterator, typename Context
-          , typename Skipper, typename Attribute>
-        bool parse(Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper, Attribute& attr) const
-        {
-            bool result = subject.parse(first, last, context, skipper, unused);
-            spirit::traits::assign_to(result, attr);
-            return true;
-        }
-
-        template <typename Context>
-        info what(Context& context) const
-        {
-            return info("matches", subject.what(context));
-        }
-
-        Subject subject;
-
-    private:
-        // silence MSVC warning C4512: assignment operator could not be generated
-        matches_directive& operator= (matches_directive const&);
-    };
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Subject, typename Modifiers>
-    struct make_directive<tag::matches, Subject, Modifiers>
-    {
-        typedef matches_directive<Subject> result_type;
-        result_type operator()(unused_type, Subject const& subject, unused_type) const
-        {
-            return result_type(subject);
-        }
-    };
-}}}
-
-namespace boost { namespace spirit { namespace traits
+namespace boost
 {
-    template <typename Subject>
-    struct has_semantic_action<qi::matches_directive<Subject> >
-      : unary_has_semantic_action<Subject> {};
-}}}
+namespace spirit
+{
+namespace qi
+{
+using spirit::matches;
+using spirit::matches_type;
+
+///////////////////////////////////////////////////////////////////////////
+// matches_directive returns whether the embedded parser matched
+///////////////////////////////////////////////////////////////////////////
+template <typename Subject>
+struct matches_directive : unary_parser<matches_directive<Subject> >
+{
+	typedef Subject subject_type;
+	matches_directive ( Subject const &subject )
+		: subject ( subject ) {}
+
+	template <typename Context, typename Iterator>
+	struct attribute
+	{
+		typedef bool type;
+	};
+
+	template <typename Iterator, typename Context
+	          , typename Skipper, typename Attribute>
+	bool parse ( Iterator &first, Iterator const &last
+	             , Context &context, Skipper const &skipper, Attribute &attr ) const
+	{
+		bool result = subject.parse ( first, last, context, skipper, unused );
+		spirit::traits::assign_to ( result, attr );
+		return true;
+	}
+
+	template <typename Context>
+	info what ( Context &context ) const
+	{
+		return info ( "matches", subject.what ( context ) );
+	}
+
+	Subject subject;
+
+private:
+	// silence MSVC warning C4512: assignment operator could not be generated
+	matches_directive &operator= ( matches_directive const & );
+};
+
+///////////////////////////////////////////////////////////////////////////
+// Parser generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+template <typename Subject, typename Modifiers>
+struct make_directive<tag::matches, Subject, Modifiers>
+{
+	typedef matches_directive<Subject> result_type;
+	result_type operator() ( unused_type, Subject const &subject, unused_type ) const
+	{
+		return result_type ( subject );
+	}
+};
+}
+}
+}
+
+namespace boost
+{
+namespace spirit
+{
+namespace traits
+{
+template <typename Subject>
+struct has_semantic_action<qi::matches_directive<Subject> >
+		: unary_has_semantic_action<Subject> {};
+}
+}
+}
 
 #endif

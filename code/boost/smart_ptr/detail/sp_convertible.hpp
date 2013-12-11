@@ -39,13 +39,13 @@ namespace detail
 
 template< class Y, class T > struct sp_convertible
 {
-    typedef char (&yes) [1];
-    typedef char (&no)  [2];
+	typedef char ( &yes ) [1];
+	typedef char ( &no )  [2];
 
-    static yes f( T* );
-    static no  f( ... );
+	static yes f ( T * );
+	static no  f ( ... );
 
-    enum _vt { value = sizeof( f( static_cast<Y*>(0) ) ) == sizeof(yes) };
+	enum _vt { value = sizeof ( f ( static_cast<Y *> ( 0 ) ) ) == sizeof ( yes ) };
 };
 
 struct sp_empty
@@ -56,7 +56,7 @@ template< bool > struct sp_enable_if_convertible_impl;
 
 template<> struct sp_enable_if_convertible_impl<true>
 {
-    typedef sp_empty type;
+	typedef sp_empty type;
 };
 
 template<> struct sp_enable_if_convertible_impl<false>

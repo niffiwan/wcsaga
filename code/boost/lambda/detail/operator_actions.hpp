@@ -6,13 +6,15 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-// For more information, see http://lambda.cs.utu.fi 
+// For more information, see http://lambda.cs.utu.fi
 
 #ifndef BOOST_LAMBDA_OPERATOR_ACTIONS_HPP
 #define BOOST_LAMBDA_OPERATOR_ACTIONS_HPP
 
-namespace boost { 
-namespace lambda {
+namespace boost
+{
+namespace lambda
+{
 
 
 // -- artihmetic ----------------------
@@ -55,7 +57,7 @@ class decrement_action {};
 // -- other  ------------------------------
 
 class addressof_action {};
-  // class comma_action {}; // defined in actions.hpp
+// class comma_action {}; // defined in actions.hpp
 class contentsof_action {};
 // class member_pointer_action {}; (defined in member_ptr.hpp)
 
@@ -74,59 +76,72 @@ template <class Action> class post_increment_decrement_action;
 
 // ---------------------------------------------------------
 
-  // actions, for which the existence of protect is checked in return type 
-  // deduction.
+// actions, for which the existence of protect is checked in return type
+// deduction.
 
-template <class Act> struct is_protectable<arithmetic_action<Act> > {
-  BOOST_STATIC_CONSTANT(bool, value = true);
+template <class Act> struct is_protectable<arithmetic_action<Act> >
+{
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
-template <class Act> struct is_protectable<bitwise_action<Act> > {
-  BOOST_STATIC_CONSTANT(bool, value = true);
+template <class Act> struct is_protectable<bitwise_action<Act> >
+{
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
-template <class Act> struct is_protectable<logical_action<Act> > {
-  BOOST_STATIC_CONSTANT(bool, value = true);
+template <class Act> struct is_protectable<logical_action<Act> >
+{
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
-template <class Act> struct is_protectable<relational_action<Act> > {
-  BOOST_STATIC_CONSTANT(bool, value = true);
+template <class Act> struct is_protectable<relational_action<Act> >
+{
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
-template <class Act> 
-struct is_protectable<arithmetic_assignment_action<Act> > {
-  BOOST_STATIC_CONSTANT(bool, value = true);
+template <class Act>
+struct is_protectable<arithmetic_assignment_action<Act> >
+{
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
-template <class Act> struct is_protectable<bitwise_assignment_action<Act> > {
-  BOOST_STATIC_CONSTANT(bool, value = true);
+template <class Act> struct is_protectable<bitwise_assignment_action<Act> >
+{
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
-template <class Act> struct is_protectable<unary_arithmetic_action<Act> > {
-  BOOST_STATIC_CONSTANT(bool, value = true);
+template <class Act> struct is_protectable<unary_arithmetic_action<Act> >
+{
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
-template <class Act> 
-struct is_protectable<pre_increment_decrement_action<Act> > {
-  BOOST_STATIC_CONSTANT(bool, value = true);
+template <class Act>
+struct is_protectable<pre_increment_decrement_action<Act> >
+{
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
-template <class Act> struct 
-is_protectable<post_increment_decrement_action<Act> > {
-  BOOST_STATIC_CONSTANT(bool, value = true);
+template <class Act> struct
+		is_protectable<post_increment_decrement_action<Act> >
+{
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
 
-template <> struct is_protectable<other_action<addressof_action> > {
-  BOOST_STATIC_CONSTANT(bool, value = true);
+template <> struct is_protectable<other_action<addressof_action> >
+{
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
-template <> struct is_protectable<other_action<contentsof_action> > {
-  BOOST_STATIC_CONSTANT(bool, value = true);
+template <> struct is_protectable<other_action<contentsof_action> >
+{
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
 
-template<> struct is_protectable<other_action<subscript_action> > {
-  BOOST_STATIC_CONSTANT(bool, value = true);
+template<> struct is_protectable<other_action<subscript_action> >
+{
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
-template<> struct is_protectable<other_action<assignment_action> > {
-  BOOST_STATIC_CONSTANT(bool, value = true);
+template<> struct is_protectable<other_action<assignment_action> >
+{
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
 
 // NOTE: comma action is also protectable, but the specialization is
-  // in actions.hpp
+// in actions.hpp
 
 
-} // namespace lambda 
+} // namespace lambda
 } // namespace boost
 
 #endif

@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,16 +14,19 @@
 #include <boost/units/systems/si/base.hpp>
 #include <boost/units/physical_dimensions/luminous_flux.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace si {
+namespace si
+{
 
-typedef unit<luminous_flux_dimension,si::system>      luminous_flux;
-    
-BOOST_UNITS_STATIC_CONSTANT(lumen,luminous_flux); 
-BOOST_UNITS_STATIC_CONSTANT(lumens,luminous_flux);    
+typedef unit<luminous_flux_dimension, si::system>      luminous_flux;
+
+BOOST_UNITS_STATIC_CONSTANT ( lumen, luminous_flux );
+BOOST_UNITS_STATIC_CONSTANT ( lumens, luminous_flux );
 
 } // namespace si
 

@@ -13,7 +13,11 @@
 #include <vector>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace xpressive { namespace detail
+namespace boost
+{
+namespace xpressive
+{
+namespace detail
 {
 
 ///////////////////////////////////////////////////////////////////////////
@@ -30,26 +34,26 @@ namespace boost { namespace xpressive { namespace detail
 template<typename Char>
 struct range
 {
-    range(Char first, Char last);
+	range ( Char first, Char last );
 
-    bool is_valid() const;
-    bool includes(Char v) const;
-    bool includes(range const &r) const;
-    bool overlaps(range const &r) const;
-    void merge(range const &r);
+	bool is_valid() const;
+	bool includes ( Char v ) const;
+	bool includes ( range const &r ) const;
+	bool overlaps ( range const &r ) const;
+	void merge ( range const &r );
 
-    Char first_;
-    Char last_;
+	Char first_;
+	Char last_;
 };
 
 //////////////////////////////////
 template<typename Char>
 struct range_compare
 {
-    bool operator()(range<Char> const &x, range<Char> const &y) const
-    {
-        return x.first_ < y.first_;
-    }
+	bool operator() ( range<Char> const &x, range<Char> const &y ) const
+	{
+		return x.first_ < y.first_;
+	}
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -73,30 +77,32 @@ struct range_compare
 template<typename Char>
 struct range_run
 {
-    typedef range<Char> range_type;
-    typedef std::vector<range_type> run_type;
-    typedef typename run_type::iterator iterator;
-    typedef typename run_type::const_iterator const_iterator;
+	typedef range<Char> range_type;
+	typedef std::vector<range_type> run_type;
+	typedef typename run_type::iterator iterator;
+	typedef typename run_type::const_iterator const_iterator;
 
-    void swap(range_run& rr);
-    bool empty() const;
-    bool test(Char v) const;
-    template<typename Traits>
-    bool test(Char v, Traits const &tr) const;
-    void set(range_type const &r);
-    void clear(range_type const &r);
-    void clear();
+	void swap ( range_run &rr );
+	bool empty() const;
+	bool test ( Char v ) const;
+	template<typename Traits>
+	bool test ( Char v, Traits const &tr ) const;
+	void set ( range_type const &r );
+	void clear ( range_type const &r );
+	void clear();
 
-    const_iterator begin() const;
-    const_iterator end() const;
+	const_iterator begin() const;
+	const_iterator end() const;
 
 private:
-    void merge(iterator iter, range_type const &r);
+	void merge ( iterator iter, range_type const &r );
 
-    run_type run_;
+	run_type run_;
 };
 
-}}} // namespace boost::xpressive::detail
+}
+}
+} // namespace boost::xpressive::detail
 
 #endif
 

@@ -28,22 +28,29 @@
 #  endif
 #endif
 
-namespace boost { namespace iostreams { namespace detail {
+namespace boost
+{
+namespace iostreams
+{
+namespace detail
+{
 
 template<class Facet>
-inline std::locale add_facet(const std::locale &l, Facet * f)
+inline std::locale add_facet ( const std::locale &l, Facet *f )
 {
-    return
-        #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) || \
+	return
+#if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) || \
             defined(BOOST_IOSTREMS_STLPORT_WITH_OLD_DINKUMWARE) \
             /**/
-            std::locale(std::_Addfac(l, f));
-        #else
-            // standard compatible
-            std::locale(l, f);
-        #endif
+	    std::locale ( std::_Addfac ( l, f ) );
+#else
+	    // standard compatible
+	    std::locale ( l, f );
+#endif
 }
 
-} } } // End namespaces detail, iostreams, boost.
+}
+}
+} // End namespaces detail, iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_ADD_FACET_HPP_INCLUDED

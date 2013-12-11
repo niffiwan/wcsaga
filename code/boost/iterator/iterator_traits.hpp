@@ -8,7 +8,8 @@
 # include <boost/detail/iterator.hpp>
 # include <boost/detail/workaround.hpp>
 
-namespace boost { 
+namespace boost
+{
 
 // Unfortunately, g++ 2.95.x chokes when we define a class template
 // iterator_category which has the same name as its
@@ -27,63 +28,63 @@ namespace boost {
 template <class Iterator>
 struct iterator_value
 {
-    typedef typename boost::detail::iterator_traits<Iterator>::value_type type;
+	typedef typename boost::detail::iterator_traits<Iterator>::value_type type;
 };
-  
+
 template <class Iterator>
 struct iterator_reference
 {
-    typedef typename boost::detail::iterator_traits<Iterator>::reference type;
+	typedef typename boost::detail::iterator_traits<Iterator>::reference type;
 };
-  
-  
+
+
 template <class Iterator>
 struct iterator_pointer
 {
-    typedef typename boost::detail::iterator_traits<Iterator>::pointer type;
+	typedef typename boost::detail::iterator_traits<Iterator>::pointer type;
 };
-  
+
 template <class Iterator>
 struct iterator_difference
 {
-    typedef typename boost::detail::iterator_traits<Iterator>::difference_type type;
+	typedef typename boost::detail::iterator_traits<Iterator>::difference_type type;
 };
 
 template <class Iterator>
 struct BOOST_ITERATOR_CATEGORY
 {
-    typedef typename boost::detail::iterator_traits<Iterator>::iterator_category type;
+	typedef typename boost::detail::iterator_traits<Iterator>::iterator_category type;
 };
 
 # if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 template <>
 struct iterator_value<int>
 {
-    typedef void type;
+	typedef void type;
 };
-  
+
 template <>
 struct iterator_reference<int>
 {
-    typedef void type;
+	typedef void type;
 };
 
 template <>
 struct iterator_pointer<int>
 {
-    typedef void type;
+	typedef void type;
 };
-  
+
 template <>
 struct iterator_difference<int>
 {
-    typedef void type;
+	typedef void type;
 };
-  
+
 template <>
 struct BOOST_ITERATOR_CATEGORY<int>
 {
-    typedef void type;
+	typedef void type;
 };
 # endif
 

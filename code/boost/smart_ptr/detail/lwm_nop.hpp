@@ -27,7 +27,7 @@ class lightweight_mutex
 {
 public:
 
-    typedef lightweight_mutex scoped_lock;
+typedef lightweight_mutex scoped_lock;
 };
 
 } // namespace detail

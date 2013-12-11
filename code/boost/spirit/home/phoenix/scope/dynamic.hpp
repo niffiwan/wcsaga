@@ -29,98 +29,101 @@
     typedef actor<dynamic_member<n, self_type> >                                \
         BOOST_PP_CAT(member, BOOST_PP_INC(n));
 
-namespace boost { namespace phoenix
+namespace boost
 {
-    template <typename DynamicScope>
-    struct dynamic_frame : noncopyable
-    {
-        typedef typename DynamicScope::tuple_type tuple_type;
+namespace phoenix
+{
+template <typename DynamicScope>
+struct dynamic_frame : noncopyable
+{
+	typedef typename DynamicScope::tuple_type tuple_type;
 
-        dynamic_frame(DynamicScope const& scope)
-            : tuple()
-            , save(scope.frame)
-            , scope(scope)
-        {
-            scope.frame = this;
-        }
+	dynamic_frame ( DynamicScope const &scope )
+		: tuple()
+		, save ( scope.frame )
+		, scope ( scope )
+	{
+		scope.frame = this;
+	}
 
-        template <typename Tuple>
-        dynamic_frame(DynamicScope const& scope, Tuple const& init)
-            : tuple(init)
-            , save(scope.frame)
-            , scope(scope)
-        {
-            scope.frame = this;
-        }
+	template <typename Tuple>
+	dynamic_frame ( DynamicScope const &scope, Tuple const &init )
+		: tuple ( init )
+		, save ( scope.frame )
+		, scope ( scope )
+	{
+		scope.frame = this;
+	}
 
-        ~dynamic_frame()
-        {
-            scope.frame = save;
-        }
+	~dynamic_frame()
+	{
+		scope.frame = save;
+	}
 
-        tuple_type& data() { return tuple; }
-        tuple_type const& data() const { return tuple; }
+	tuple_type &data() { return tuple; }
+	tuple_type const &data() const { return tuple; }
 
-    private:
+private:
 
-        tuple_type tuple;
-        dynamic_frame* save;
-        DynamicScope const& scope;
-    };
+	tuple_type tuple;
+	dynamic_frame *save;
+	DynamicScope const &scope;
+};
 
-    template <int N, typename DynamicScope>
-    struct dynamic_member
-    {
-        typedef mpl::false_ no_nullary;
-        typedef typename DynamicScope::tuple_type tuple_type;
+template <int N, typename DynamicScope>
+struct dynamic_member
+{
+	typedef mpl::false_ no_nullary;
+	typedef typename DynamicScope::tuple_type tuple_type;
 
-        dynamic_member(DynamicScope const& scope)
-            : scope(scope) {}
+	dynamic_member ( DynamicScope const &scope )
+		: scope ( scope ) {}
 
-        template <typename Env>
-        struct result
-        {
-            typedef typename
-                fusion::result_of::at_c<tuple_type, N>::type
-            type;
-        };
+	template <typename Env>
+	struct result
+	{
+		typedef typename
+		fusion::result_of::at_c<tuple_type, N>::type
+		type;
+	};
 
-        template <typename Env>
-        typename result<Env>::type
-        eval(Env const& /*env*/) const
-        {
-            BOOST_ASSERT(scope.frame != 0);
-            return fusion::at_c<N>(scope.frame->data());
-        }
+	template <typename Env>
+	typename result<Env>::type
+	eval ( Env const & /*env*/ ) const
+	{
+		BOOST_ASSERT ( scope.frame != 0 );
+		return fusion::at_c<N> ( scope.frame->data() );
+	}
 
-    private:
+private:
 
-        DynamicScope const& scope;
-    };
+	DynamicScope const &scope;
+};
 
-    template <BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(PHOENIX_DYNAMIC_LIMIT, typename T, void_)>
-    struct dynamic : noncopyable
-    {
-        typedef fusion::vector<BOOST_PP_ENUM_PARAMS(PHOENIX_DYNAMIC_LIMIT, T)> tuple_type;
-        typedef dynamic<BOOST_PP_ENUM_PARAMS(PHOENIX_DYNAMIC_LIMIT, T)> self_type;
-        typedef dynamic_frame<self_type> dynamic_frame_type;
+template <BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT ( PHOENIX_DYNAMIC_LIMIT, typename T, void_ ) >
+struct dynamic : noncopyable
+{
+	typedef fusion::vector<BOOST_PP_ENUM_PARAMS ( PHOENIX_DYNAMIC_LIMIT, T ) > tuple_type;
+	typedef dynamic<BOOST_PP_ENUM_PARAMS ( PHOENIX_DYNAMIC_LIMIT, T ) > self_type;
+	typedef dynamic_frame<self_type> dynamic_frame_type;
 
-        dynamic()
-            : frame(0) {}
+	dynamic()
+		: frame ( 0 ) {}
 
-        BOOST_PP_REPEAT(PHOENIX_DYNAMIC_LIMIT, PHOENIX_DYNAMIC_MEMBER, _)
+	BOOST_PP_REPEAT ( PHOENIX_DYNAMIC_LIMIT, PHOENIX_DYNAMIC_MEMBER, _ )
 
-    private:
+private:
 
-        template <int N, typename DynamicScope>
-        friend struct dynamic_member;
+	template <int N, typename DynamicScope>
+	friend struct dynamic_member;
 
-        template <typename DynamicScope>
-        friend struct dynamic_frame;
+	template <typename DynamicScope>
+	friend struct dynamic_frame;
 
-        mutable dynamic_frame_type* frame;
-    };
-}}
+	mutable dynamic_frame_type *frame;
+};
+}
+}
 
 #if defined(BOOST_MSVC)
 # pragma warning(push)
@@ -158,7 +161,7 @@ namespace boost { namespace phoenix
 
 #define PHOENIX_DYNAMIC(name, bseq)                                             \
     PHOENIX_DYNAMIC_I(name, BOOST_PP_CAT(PHOENIX_DYNAMIC_X bseq, 0))            \
-
+ 
 #define PHOENIX_DYNAMIC_X(x, y) ((x, y)) PHOENIX_DYNAMIC_Y
 #define PHOENIX_DYNAMIC_Y(x, y) ((x, y)) PHOENIX_DYNAMIC_X
 #define PHOENIX_DYNAMIC_X0
@@ -174,16 +177,16 @@ namespace boost { namespace phoenix
         name() : BOOST_PP_SEQ_FOR_EACH_I(PHOENIX_DYNAMIC_B, ~, seq) {}          \
         BOOST_PP_SEQ_FOR_EACH_I(PHOENIX_DYNAMIC_C, ~, seq)                      \
     }                                                                           \
-
+ 
 #define PHOENIX_DYNAMIC_A(r, _, i, xy)                                          \
     BOOST_PP_COMMA_IF(i) BOOST_PP_TUPLE_ELEM(2, 0, xy)                          \
-
+ 
 #define PHOENIX_DYNAMIC_B(r, _, i, xy)                                          \
     BOOST_PP_COMMA_IF(i) BOOST_PP_TUPLE_ELEM(2, 1, xy)(*this)                   \
-
+ 
 #define PHOENIX_DYNAMIC_C(r, _, i, xy)                                          \
     BOOST_PP_CAT(member, BOOST_PP_INC(i)) BOOST_PP_TUPLE_ELEM(2, 1, xy);        \
-
+ 
 #undef PHOENIX_DYNAMIC_MEMBER
 
 #if defined(BOOST_MSVC)

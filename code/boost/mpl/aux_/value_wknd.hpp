@@ -4,8 +4,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -24,20 +24,27 @@
 
 #   include <boost/mpl/int.hpp>
 
-namespace boost { namespace mpl { namespace aux {
+namespace boost
+{
+namespace mpl
+{
+namespace aux
+{
 template< typename C_ > struct value_wknd
-    : C_
+		: C_
 {
 };
 
 #if defined(BOOST_MPL_CFG_MSVC_60_ETI_BUG)
 template<> struct value_wknd<int>
-    : int_<1>
+		: int_<1>
 {
-    using int_<1>::value;
+	using int_<1>::value;
 };
 #endif
-}}}
+}
+}
+}
 
 
 #if !defined(BOOST_MPL_CFG_MSVC_60_ETI_BUG)
@@ -70,20 +77,27 @@ template<> struct value_wknd<int>
 #endif
 
 
-namespace boost { namespace mpl { namespace aux {
+namespace boost
+{
+namespace mpl
+{
+namespace aux
+{
 
 template< typename T > struct value_type_wknd
 {
-    typedef typename T::value_type type;
+	typedef typename T::value_type type;
 };
 
 #if defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
 template<> struct value_type_wknd<int>
 {
-    typedef int type;
+	typedef int type;
 };
 #endif
 
-}}}
+}
+}
+}
 
 #endif // BOOST_MPL_AUX_VALUE_WKND_HPP_INCLUDED

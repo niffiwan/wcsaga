@@ -24,83 +24,85 @@
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/const_mod.hpp>
 
-namespace boost {
-namespace random {
+namespace boost
+{
+namespace random
+{
 
 // Eichenauer and Lehn 1986
 template<class IntType, IntType a, IntType b, IntType p, IntType val>
 class inversive_congruential
 {
 public:
-  typedef IntType result_type;
+	typedef IntType result_type;
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-  static const bool has_fixed_range = true;
-  static const result_type min_value = (b == 0 ? 1 : 0);
-  static const result_type max_value = p-1;
+	static const bool has_fixed_range = true;
+	static const result_type min_value = ( b == 0 ? 1 : 0 );
+	static const result_type max_value = p - 1;
 #else
-  BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
+	BOOST_STATIC_CONSTANT ( bool, has_fixed_range = false );
 #endif
-  BOOST_STATIC_CONSTANT(result_type, multiplier = a);
-  BOOST_STATIC_CONSTANT(result_type, increment = b);
-  BOOST_STATIC_CONSTANT(result_type, modulus = p);
+	BOOST_STATIC_CONSTANT ( result_type, multiplier = a );
+	BOOST_STATIC_CONSTANT ( result_type, increment = b );
+	BOOST_STATIC_CONSTANT ( result_type, modulus = p );
 
-  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return b == 0 ? 1 : 0; }
-  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return p-1; }
+	result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return b == 0 ? 1 : 0; }
+	result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return p - 1; }
 
-  explicit inversive_congruential(IntType y0 = 1) : value(y0)
-  {
-    BOOST_STATIC_ASSERT(b >= 0);
-    BOOST_STATIC_ASSERT(p > 1);
-    BOOST_STATIC_ASSERT(a >= 1);
-    if(b == 0) 
-      assert(y0 > 0); 
-  }
-  template<class It> inversive_congruential(It& first, It last)
-  { seed(first, last); }
+	explicit inversive_congruential ( IntType y0 = 1 ) : value ( y0 )
+	{
+		BOOST_STATIC_ASSERT ( b >= 0 );
+		BOOST_STATIC_ASSERT ( p > 1 );
+		BOOST_STATIC_ASSERT ( a >= 1 );
+		if ( b == 0 )
+			assert ( y0 > 0 );
+	}
+	template<class It> inversive_congruential ( It &first, It last )
+	{ seed ( first, last ); }
 
-  void seed(IntType y0 = 1) { value = y0; if(b == 0) assert(y0 > 0); }
-  template<class It> void seed(It& first, It last)
-  {
-    if(first == last)
-      throw std::invalid_argument("inversive_congruential::seed");
-    value = *first++;
-  }
-  IntType operator()()
-  {
-    typedef const_mod<IntType, p> do_mod;
-    value = do_mod::mult_add(a, do_mod::invert(value), b);
-    return value;
-  }
+	void seed ( IntType y0 = 1 ) { value = y0; if ( b == 0 ) assert ( y0 > 0 ); }
+	template<class It> void seed ( It &first, It last )
+	{
+		if ( first == last )
+			throw std::invalid_argument ( "inversive_congruential::seed" );
+		value = *first++;
+	}
+	IntType operator() ()
+	{
+		typedef const_mod<IntType, p> do_mod;
+		value = do_mod::mult_add ( a, do_mod::invert ( value ), b );
+		return value;
+	}
 
-  static bool validation(result_type x) { return val == x; }
+	static bool validation ( result_type x ) { return val == x; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
 
 #ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
-  template<class CharT, class Traits>
-  friend std::basic_ostream<CharT,Traits>&
-  operator<<(std::basic_ostream<CharT,Traits>& os, inversive_congruential x)
-  { os << x.value; return os; }
+	template<class CharT, class Traits>
+	friend std::basic_ostream<CharT, Traits> &
+	operator<< ( std::basic_ostream<CharT, Traits> &os, inversive_congruential x )
+	{ os << x.value; return os; }
 
-  template<class CharT, class Traits>
-  friend std::basic_istream<CharT,Traits>&
-  operator>>(std::basic_istream<CharT,Traits>& is, inversive_congruential& x)
-  { is >> x.value; return is; }
+	template<class CharT, class Traits>
+	friend std::basic_istream<CharT, Traits> &
+	operator>> ( std::basic_istream<CharT, Traits> &is, inversive_congruential &x )
+	{ is >> x.value; return is; }
 #endif
 
-  friend bool operator==(inversive_congruential x, inversive_congruential y)
-  { return x.value == y.value; }
-  friend bool operator!=(inversive_congruential x, inversive_congruential y)
-  { return !(x == y); }
+	friend bool operator== ( inversive_congruential x, inversive_congruential y )
+	{ return x.value == y.value; }
+	friend bool operator!= ( inversive_congruential x, inversive_congruential y )
+	{ return ! ( x == y ); }
 #else
-  // Use a member function; Streamable concept not supported.
-  bool operator==(inversive_congruential rhs) const
-  { return value == rhs.value; }
-  bool operator!=(inversive_congruential rhs) const
-  { return !(*this == rhs); }
+	// Use a member function; Streamable concept not supported.
+	bool operator== ( inversive_congruential rhs ) const
+	{ return value == rhs.value; }
+	bool operator!= ( inversive_congruential rhs ) const
+	{ return ! ( *this == rhs ); }
 #endif
 private:
-  IntType value;
+	IntType value;
 };
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
@@ -121,8 +123,8 @@ const typename inversive_congruential<IntType, a, b, p, val>::result_type invers
 
 } // namespace random
 
-typedef random::inversive_congruential<int32_t, 9102, 2147483647-36884165,
-  2147483647, 0> hellekalek1995;
+typedef random::inversive_congruential < int32_t, 9102, 2147483647 - 36884165,
+        2147483647, 0 > hellekalek1995;
 
 } // namespace boost
 

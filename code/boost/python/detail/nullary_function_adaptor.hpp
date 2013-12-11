@@ -11,7 +11,12 @@
 # include <boost/preprocessor/repetition/enum_params.hpp>
 # include <boost/preprocessor/repetition/enum_binary_params.hpp>
 
-namespace boost { namespace python { namespace detail { 
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
 // nullary_function_adaptor -- a class template which ignores its
 // arguments and calls a nullary function instead.  Used for building
@@ -19,11 +24,11 @@ namespace boost { namespace python { namespace detail {
 template <class NullaryFunction>
 struct nullary_function_adaptor
 {
-    nullary_function_adaptor(NullaryFunction fn)
-      : m_fn(fn)
-    {}
+	nullary_function_adaptor ( NullaryFunction fn )
+		: m_fn ( fn )
+	{}
 
-    void operator()() const { m_fn(); }
+	void operator() () const { m_fn(); }
 
 # define BOOST_PP_LOCAL_MACRO(i)                                            \
     template <BOOST_PP_ENUM_PARAMS_Z(1, i, class A)>                        \
@@ -36,11 +41,13 @@ struct nullary_function_adaptor
 
 # define BOOST_PP_LOCAL_LIMITS (1, BOOST_PYTHON_MAX_ARITY)
 # include BOOST_PP_LOCAL_ITERATE()
-    
- private:
-    NullaryFunction m_fn;
+
+private:
+	NullaryFunction m_fn;
 };
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 
 #endif // NULLARY_FUNCTION_ADAPTOR_DWA2003824_HPP

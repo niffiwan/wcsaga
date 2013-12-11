@@ -36,34 +36,36 @@
 #include <boost/asio/basic_streambuf.hpp>
 #include <boost/asio/error.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 namespace detail
 {
 #if BOOST_WORKAROUND(__CODEGEARC__, BOOST_TESTED_AT(0x610))
-  template <typename T>
-  struct has_result_type
-  {
-    template <typename U> struct inner
-    {
-        struct big { char a[100]; };
-        static big helper(U, ...);
-        static char helper(U, typename U::result_type* = 0);
-    };
-    static const T& ref();
-    enum { value = (sizeof((inner<const T&>::helper)((ref)())) == 1) };
-  };
+template <typename T>
+struct has_result_type
+{
+	template <typename U> struct inner
+	{
+		struct big { char a[100]; };
+		static big helper ( U, ... );
+		static char helper ( U, typename U::result_type * = 0 );
+	};
+	static const T &ref();
+	enum { value = ( sizeof ( ( inner<const T &>::helper ) ( ( ref ) () ) ) == 1 ) };
+};
 #else // BOOST_WORKAROUND(__CODEGEARC__, BOOST_TESTED_AT(0x610))
-  template <typename T>
-  struct has_result_type
-  {
-    struct big { char a[100]; };
-    template <typename U> static big helper(U, ...);
-    template <typename U> static char helper(U, typename U::result_type* = 0);
-    static const T& ref();
-    enum { value = (sizeof((helper)((ref)())) == 1) };
-  };
+template <typename T>
+struct has_result_type
+{
+	struct big { char a[100]; };
+	template <typename U> static big helper ( U, ... );
+	template <typename U> static char helper ( U, typename U::result_type * = 0 );
+	static const T &ref();
+	enum { value = ( sizeof ( ( helper ) ( ( ref ) () ) ) == 1 ) };
+};
 #endif // BOOST_WORKAROUND(__CODEGEARC__, BOOST_TESTED_AT(0x610))
 } // namespace detail
 
@@ -73,14 +75,14 @@ template <typename T>
 struct is_match_condition
 {
 #if defined(GENERATING_DOCUMENTATION)
-  /// The value member is true if the type may be used as a match condition.
-  static const bool value;
+	/// The value member is true if the type may be used as a match condition.
+	static const bool value;
 #else
-  enum
-  {
-    value = boost::is_function<typename boost::remove_pointer<T>::type>::value
-      || detail::has_result_type<T>::value
-  };
+	enum
+	{
+		value = boost::is_function<typename boost::remove_pointer<T>::type>::value
+		        || detail::has_result_type<T>::value
+	};
 #endif
 };
 
@@ -131,8 +133,8 @@ struct is_match_condition
  * std::getline(is, line); @endcode
  */
 template <typename SyncReadStream, typename Allocator>
-std::size_t read_until(SyncReadStream& s,
-    boost::asio::basic_streambuf<Allocator>& b, char delim);
+std::size_t read_until ( SyncReadStream &s,
+                         boost::asio::basic_streambuf<Allocator> &b, char delim );
 
 /// Read data into a streambuf until it contains a specified delimiter.
 /**
@@ -165,9 +167,9 @@ std::size_t read_until(SyncReadStream& s,
  * that data in the streambuf for a subsequent read_until operation to examine.
  */
 template <typename SyncReadStream, typename Allocator>
-std::size_t read_until(SyncReadStream& s,
-    boost::asio::basic_streambuf<Allocator>& b, char delim,
-    boost::system::error_code& ec);
+std::size_t read_until ( SyncReadStream &s,
+                         boost::asio::basic_streambuf<Allocator> &b, char delim,
+                         boost::system::error_code &ec );
 
 /// Read data into a streambuf until it contains a specified delimiter.
 /**
@@ -208,8 +210,8 @@ std::size_t read_until(SyncReadStream& s,
  * std::getline(is, line); @endcode
  */
 template <typename SyncReadStream, typename Allocator>
-std::size_t read_until(SyncReadStream& s,
-    boost::asio::basic_streambuf<Allocator>& b, const std::string& delim);
+std::size_t read_until ( SyncReadStream &s,
+                         boost::asio::basic_streambuf<Allocator> &b, const std::string &delim );
 
 /// Read data into a streambuf until it contains a specified delimiter.
 /**
@@ -242,9 +244,9 @@ std::size_t read_until(SyncReadStream& s,
  * that data in the streambuf for a subsequent read_until operation to examine.
  */
 template <typename SyncReadStream, typename Allocator>
-std::size_t read_until(SyncReadStream& s,
-    boost::asio::basic_streambuf<Allocator>& b, const std::string& delim,
-    boost::system::error_code& ec);
+std::size_t read_until ( SyncReadStream &s,
+                         boost::asio::basic_streambuf<Allocator> &b, const std::string &delim,
+                         boost::system::error_code &ec );
 
 /// Read data into a streambuf until some part of the data it contains matches
 /// a regular expression.
@@ -287,8 +289,8 @@ std::size_t read_until(SyncReadStream& s,
  * std::getline(is, line); @endcode
  */
 template <typename SyncReadStream, typename Allocator>
-std::size_t read_until(SyncReadStream& s,
-    boost::asio::basic_streambuf<Allocator>& b, const boost::regex& expr);
+std::size_t read_until ( SyncReadStream &s,
+                         boost::asio::basic_streambuf<Allocator> &b, const boost::regex &expr );
 
 /// Read data into a streambuf until some part of the data it contains matches
 /// a regular expression.
@@ -324,9 +326,9 @@ std::size_t read_until(SyncReadStream& s,
  * read_until operation to examine.
  */
 template <typename SyncReadStream, typename Allocator>
-std::size_t read_until(SyncReadStream& s,
-    boost::asio::basic_streambuf<Allocator>& b, const boost::regex& expr,
-    boost::system::error_code& ec);
+std::size_t read_until ( SyncReadStream &s,
+                         boost::asio::basic_streambuf<Allocator> &b, const boost::regex &expr,
+                         boost::system::error_code &ec );
 
 /// Read data into a streambuf until a function object indicates a match.
 /**
@@ -428,9 +430,9 @@ std::size_t read_until(SyncReadStream& s,
  * @endcode
  */
 template <typename SyncReadStream, typename Allocator, typename MatchCondition>
-std::size_t read_until(SyncReadStream& s,
-    boost::asio::basic_streambuf<Allocator>& b, MatchCondition match_condition,
-    typename boost::enable_if<is_match_condition<MatchCondition> >::type* = 0);
+std::size_t read_until ( SyncReadStream &s,
+                         boost::asio::basic_streambuf<Allocator> &b, MatchCondition match_condition,
+                         typename boost::enable_if<is_match_condition<MatchCondition> >::type * = 0 );
 
 /// Read data into a streambuf until a function object indicates a match.
 /**
@@ -483,10 +485,10 @@ std::size_t read_until(SyncReadStream& s,
  * function objects.
  */
 template <typename SyncReadStream, typename Allocator, typename MatchCondition>
-std::size_t read_until(SyncReadStream& s,
-    boost::asio::basic_streambuf<Allocator>& b,
-    MatchCondition match_condition, boost::system::error_code& ec,
-    typename boost::enable_if<is_match_condition<MatchCondition> >::type* = 0);
+std::size_t read_until ( SyncReadStream &s,
+                         boost::asio::basic_streambuf<Allocator> &b,
+                         MatchCondition match_condition, boost::system::error_code &ec,
+                         typename boost::enable_if<is_match_condition<MatchCondition> >::type * = 0 );
 
 /*@}*/
 /**
@@ -563,9 +565,9 @@ std::size_t read_until(SyncReadStream& s,
  * boost::asio::async_read_until(s, b, '\n', handler); @endcode
  */
 template <typename AsyncReadStream, typename Allocator, typename ReadHandler>
-void async_read_until(AsyncReadStream& s,
-    boost::asio::basic_streambuf<Allocator>& b,
-    char delim, ReadHandler handler);
+void async_read_until ( AsyncReadStream &s,
+                        boost::asio::basic_streambuf<Allocator> &b,
+                        char delim, ReadHandler handler );
 
 /// Start an asynchronous operation to read data into a streambuf until it
 /// contains a specified delimiter.
@@ -632,9 +634,9 @@ void async_read_until(AsyncReadStream& s,
  * boost::asio::async_read_until(s, b, "\r\n", handler); @endcode
  */
 template <typename AsyncReadStream, typename Allocator, typename ReadHandler>
-void async_read_until(AsyncReadStream& s,
-    boost::asio::basic_streambuf<Allocator>& b, const std::string& delim,
-    ReadHandler handler);
+void async_read_until ( AsyncReadStream &s,
+                        boost::asio::basic_streambuf<Allocator> &b, const std::string &delim,
+                        ReadHandler handler );
 
 /// Start an asynchronous operation to read data into a streambuf until some
 /// part of its data matches a regular expression.
@@ -704,9 +706,9 @@ void async_read_until(AsyncReadStream& s,
  * boost::asio::async_read_until(s, b, boost::regex("\r\n"), handler); @endcode
  */
 template <typename AsyncReadStream, typename Allocator, typename ReadHandler>
-void async_read_until(AsyncReadStream& s,
-    boost::asio::basic_streambuf<Allocator>& b, const boost::regex& expr,
-    ReadHandler handler);
+void async_read_until ( AsyncReadStream &s,
+                        boost::asio::basic_streambuf<Allocator> &b, const boost::regex &expr,
+                        ReadHandler handler );
 
 /// Start an asynchronous operation to read data into a streambuf until a
 /// function object indicates a match.
@@ -828,11 +830,11 @@ void async_read_until(AsyncReadStream& s,
  * @endcode
  */
 template <typename AsyncReadStream, typename Allocator,
-    typename MatchCondition, typename ReadHandler>
-void async_read_until(AsyncReadStream& s,
-    boost::asio::basic_streambuf<Allocator>& b,
-    MatchCondition match_condition, ReadHandler handler,
-    typename boost::enable_if<is_match_condition<MatchCondition> >::type* = 0);
+          typename MatchCondition, typename ReadHandler>
+void async_read_until ( AsyncReadStream &s,
+                        boost::asio::basic_streambuf<Allocator> &b,
+                        MatchCondition match_condition, ReadHandler handler,
+                        typename boost::enable_if<is_match_condition<MatchCondition> >::type * = 0 );
 
 /*@}*/
 

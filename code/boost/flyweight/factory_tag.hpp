@@ -17,9 +17,11 @@
 #include <boost/parameter/parameters.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 
-namespace boost{
+namespace boost
+{
 
-namespace flyweights{
+namespace flyweights
+{
 
 /* Three ways to indicate that a given class T is a factory specifier:
  *   1. Make it derived from factory_marker.
@@ -27,14 +29,14 @@ namespace flyweights{
  *   3. Pass it as factory<T> when defining a flyweight type.
  */
 
-struct factory_marker{};
+struct factory_marker {};
 
 template<typename T>
-struct is_factory:is_base_and_derived<factory_marker,T>
+struct is_factory: is_base_and_derived<factory_marker, T>
 {};
 
-template<typename T=parameter::void_>
-struct factory:parameter::template_keyword<factory<>,T>
+template<typename T = parameter::void_>
+struct factory: parameter::template_keyword<factory<>, T>
 {};
 
 } /* namespace flyweights */

@@ -20,37 +20,43 @@
 #include <boost/preprocessor/repeat.hpp>
 #include <boost/preprocessor/cat.hpp>
 
-namespace boost { namespace spirit { namespace qi
+namespace boost
 {
-    // qi's domain
-    struct domain {};
+namespace spirit
+{
+namespace qi
+{
+// qi's domain
+struct domain {};
 
-    // bring in some of spirit parts into spirit::qi
-    using spirit::unused;
-    using spirit::unused_type;
-    using spirit::compile;
-    using spirit::info;
+// bring in some of spirit parts into spirit::qi
+using spirit::unused;
+using spirit::unused_type;
+using spirit::compile;
+using spirit::info;
 
-    // You can bring these in with the using directive
-    // without worrying about bringing in too much.
-    namespace labels
-    {
-        BOOST_PP_REPEAT(SPIRIT_ARGUMENTS_LIMIT, SPIRIT_USING_ARGUMENT, _)
-        BOOST_PP_REPEAT(SPIRIT_ATTRIBUTES_LIMIT, SPIRIT_USING_ATTRIBUTE, _)
+// You can bring these in with the using directive
+// without worrying about bringing in too much.
+namespace labels
+{
+BOOST_PP_REPEAT ( SPIRIT_ARGUMENTS_LIMIT, SPIRIT_USING_ARGUMENT, _ )
+BOOST_PP_REPEAT ( SPIRIT_ATTRIBUTES_LIMIT, SPIRIT_USING_ATTRIBUTE, _ )
 
-        using spirit::_pass;
-        using spirit::_val;
-        using spirit::_a;
-        using spirit::_b;
-        using spirit::_c;
-        using spirit::_d;
-        using spirit::_e;
-        using spirit::_f;
-        using spirit::_g;
-        using spirit::_h;
-        using spirit::_i;
-        using spirit::_j;
-    }
-}}}
+using spirit::_pass;
+using spirit::_val;
+using spirit::_a;
+using spirit::_b;
+using spirit::_c;
+using spirit::_d;
+using spirit::_e;
+using spirit::_f;
+using spirit::_g;
+using spirit::_h;
+using spirit::_i;
+using spirit::_j;
+}
+}
+}
+}
 
 #endif

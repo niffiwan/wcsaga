@@ -26,35 +26,38 @@
 #include <boost/asio/detail/noncopyable.hpp>
 #include <boost/asio/detail/scoped_lock.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 class null_mutex
-  : private noncopyable
+	: private noncopyable
 {
 public:
-  typedef boost::asio::detail::scoped_lock<null_mutex> scoped_lock;
+	typedef boost::asio::detail::scoped_lock<null_mutex> scoped_lock;
 
-  // Constructor.
-  null_mutex()
-  {
-  }
+	// Constructor.
+	null_mutex()
+	{
+	}
 
-  // Destructor.
-  ~null_mutex()
-  {
-  }
+	// Destructor.
+	~null_mutex()
+	{
+	}
 
-  // Lock the mutex.
-  void lock()
-  {
-  }
+	// Lock the mutex.
+	void lock()
+	{
+	}
 
-  // Unlock the mutex.
-  void unlock()
-  {
-  }
+	// Unlock the mutex.
+	void unlock()
+	{
+	}
 };
 
 } // namespace detail

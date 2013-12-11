@@ -13,11 +13,14 @@
 #pragma once
 #endif
 
-namespace boost{
+namespace boost
+{
 
-namespace multi_index{
+namespace multi_index
+{
 
-namespace safe_mode{
+namespace safe_mode
+{
 
 /* Error codes for Boost.MultiIndex safe mode. These go in a separate
  * header so that the user can include it when redefining
@@ -27,16 +30,16 @@ namespace safe_mode{
 
 enum error_code
 {
-  invalid_iterator=0,
-  not_dereferenceable_iterator,
-  not_incrementable_iterator,
-  not_decrementable_iterator,
-  not_owner,
-  not_same_owner,
-  invalid_range,
-  inside_range,
-  out_of_bounds,
-  same_container
+	invalid_iterator = 0,
+	not_dereferenceable_iterator,
+	not_incrementable_iterator,
+	not_decrementable_iterator,
+	not_owner,
+	not_same_owner,
+	invalid_range,
+	inside_range,
+	out_of_bounds,
+	same_container
 };
 
 } /* namespace multi_index::safe_mode */

@@ -21,7 +21,7 @@
  * This material is provided "as is", with absolutely no warranty expressed
  * or implied. Any use is at your own risk.
  *
- * Permission to use or copy this software for any purpose is hereby granted 
+ * Permission to use or copy this software for any purpose is hereby granted
  * without fee, provided the above notices are retained on all copies.
  * Permission to modify the code and to distribute modified code is granted,
  * provided the above notices are retained, and a notice that the code was
@@ -35,7 +35,7 @@
 //
 // IMPORTANT: we must figure out the basics, such as how to
 // forward to the real std lib headers *without* including
-// boost/config.hpp or any of the std lib headers.  A classic 
+// boost/config.hpp or any of the std lib headers.  A classic
 // chicken and the egg problem....
 //
 // Including <cstddef> at least lets us detect STLport:
@@ -56,7 +56,7 @@
 
 #  if (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) && !defined(__BORLANDC__)
 #     ifdef __SUNPRO_CC
-         // can't use <../stlport/name> since some compilers put stlport in a different directory:
+// can't use <../stlport/name> since some compilers put stlport in a different directory:
 #        define BOOST_TR1_STD_HEADER(name) <../stlport4/name>
 #     elif defined(__PGI)
 #        define BOOST_TR1_STD_HEADER(name) <../CC/name>
@@ -65,7 +65,7 @@
 #     endif
 
 #  elif defined(__HP_aCC)
-      // HP aCC include path:
+// HP aCC include path:
 #     define BOOST_TR1_STD_HEADER(name) <../include_std/name>
 
 #  elif defined(__DECCXX)
@@ -83,12 +83,12 @@
 #      if ( ((__GNUC__ == 3 ) && (__GNUC_MINOR__ >= 3)) && (defined(__APPLE_CC__) || defined(__CYGWIN__)))
 #        define BOOST_TR1_STD_HEADER(name) <../c++/name>
 #      elif ((__GLIBCXX__ == 20050421) && defined(__APPLE_CC__))
-         // Some Darwin tools fix libstdc++ at 4.0.0 irrespective of the actual
-         // compiler version:
+// Some Darwin tools fix libstdc++ at 4.0.0 irrespective of the actual
+// compiler version:
 #        define BOOST_TR1_STD_HEADER(name) <../4.0.0/name>
-         /*
-          *  Before version 3.4.0 the 0 patch level was not part of the include path:
-          */
+/*
+ *  Before version 3.4.0 the 0 patch level was not part of the include path:
+ */
 #      elif defined (__GNUC_PATCHLEVEL__) && ((__GNUC_PATCHLEVEL__ > 0) || \
                                               (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || \
                                               (__GNUC__ > 3))
@@ -100,8 +100,8 @@
 
 #      if !defined(BOOST_TR1_DISABLE_INCLUDE_NEXT) && !defined(__ICC) \
             && (defined(linux) || defined(__linux) || defined(__linux__) || defined(__GNU__) || defined(__GLIBC__))
-         // Disable use of #include_next on Linux as typically we are installed in a directory that is searched
-         // *after* the std lib include path:
+// Disable use of #include_next on Linux as typically we are installed in a directory that is searched
+// *after* the std lib include path:
 #        define BOOST_TR1_DISABLE_INCLUDE_NEXT
 #      endif
 
@@ -130,7 +130,7 @@
 #if defined(BOOST_HAS_INCLUDE_NEXT) && !defined(BOOST_TR1_DISABLE_INCLUDE_NEXT)
 //
 // We don't take this branch if BOOST_TR1_DISABLE_INCLUDE_NEXT
-// is defined as we may be installed in 
+// is defined as we may be installed in
 // /usr/include, in which case #include_next won't work as our
 // include path will occur AFTER the regular std lib one :-(
 //

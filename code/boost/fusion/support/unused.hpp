@@ -15,68 +15,71 @@
 
 #define BOOST_FUSION_UNUSED_HAS_IO
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct unused_type
-    {
-        unused_type()
-        {
-        }
+namespace fusion
+{
+struct unused_type
+{
+	unused_type()
+	{
+	}
 
-        template <typename T>
-        unused_type(T const&)
-        {
-        }
+	template <typename T>
+	unused_type ( T const & )
+	{
+	}
 
-        template <typename T>
-        unused_type const&
-        operator=(T const&) const
-        {
-            return *this;
-        }
+	template <typename T>
+	unused_type const &
+	operator= ( T const & ) const
+	{
+		return *this;
+	}
 
-        template <typename T>
-        unused_type&
-        operator=(T const&)
-        {
-            return *this;
-        }
+	template <typename T>
+	unused_type &
+	operator= ( T const & )
+	{
+		return *this;
+	}
 
-        unused_type const&
-        operator=(unused_type const&) const
-        {
-            return *this;
-        }
+	unused_type const &
+	operator= ( unused_type const & ) const
+	{
+		return *this;
+	}
 
-        unused_type&
-        operator=(unused_type const&)
-        {
-            return *this;
-        }
-    };
+	unused_type &
+	operator= ( unused_type const & )
+	{
+		return *this;
+	}
+};
 
-    unused_type const unused = unused_type();
+unused_type const unused = unused_type();
 
-    namespace detail
-    {
-        struct unused_only
-        {
-            unused_only(unused_type const&) {}
-        };
-    }
+namespace detail
+{
+struct unused_only
+{
+	unused_only ( unused_type const & ) {}
+};
+}
 
-    template <typename Out>
-    inline Out& operator<<(Out& out, detail::unused_only const&)
-    {
-        return out;
-    }
+template <typename Out>
+inline Out &operator<< ( Out &out, detail::unused_only const & )
+{
+	return out;
+}
 
-    template <typename In>
-    inline In& operator>>(In& in, unused_type&)
-    {
-        return in;
-    }
-}}
+template <typename In>
+inline In &operator>> ( In &in, unused_type & )
+{
+	return in;
+}
+}
+}
 
 #if defined(BOOST_MSVC)
 # pragma warning(pop)

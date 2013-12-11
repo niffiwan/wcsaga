@@ -42,17 +42,22 @@
 #  include <boost/mpl/int.hpp>
 #  include <boost/mpl/next.hpp>
 
-namespace boost { namespace python { namespace detail { 
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
 template <int N>
-inline PyObject* get(mpl::int_<N>, PyObject* const& args_)
+inline PyObject *get ( mpl::int_<N>, PyObject *const &args_ )
 {
-    return PyTuple_GET_ITEM(args_,N);
+	return PyTuple_GET_ITEM ( args_, N );
 }
 
-inline unsigned arity(PyObject* const& args_)
+inline unsigned arity ( PyObject *const &args_ )
 {
-    return PyTuple_GET_SIZE(args_);
+	return PyTuple_GET_SIZE ( args_ );
 }
 
 // This "result converter" is really just used as
@@ -65,55 +70,55 @@ typedef int void_result_to_python;
 // converting the result to python.
 template <class Policies, class Result>
 struct select_result_converter
-  : mpl::eval_if<
-        is_same<Result,void>
-      , mpl::identity<void_result_to_python>
-      , mpl::apply1<typename Policies::result_converter,Result>
-    >
+		: mpl::eval_if <
+		is_same<Result, void>
+		, mpl::identity<void_result_to_python>
+		, mpl::apply1<typename Policies::result_converter, Result>
+		>
 {
 };
 
 template <class ArgPackage, class ResultConverter>
-inline ResultConverter create_result_converter(
-    ArgPackage const& args_
-  , ResultConverter*
-  , converter::context_result_converter*
+inline ResultConverter create_result_converter (
+    ArgPackage const &args_
+    , ResultConverter *
+    , converter::context_result_converter *
 )
 {
-    return ResultConverter(args_);
+	return ResultConverter ( args_ );
 }
-    
+
 template <class ArgPackage, class ResultConverter>
-inline ResultConverter create_result_converter(
-    ArgPackage const&
-  , ResultConverter*
-  , ...
+inline ResultConverter create_result_converter (
+    ArgPackage const &
+    , ResultConverter *
+    , ...
 )
 {
-    return ResultConverter();
+	return ResultConverter();
 }
 
 #ifndef BOOST_PYTHON_NO_PY_SIGNATURES
 template <class ResultConverter>
-struct converter_target_type 
+struct converter_target_type
 {
-    static PyTypeObject const *get_pytype()
-    {
-        return create_result_converter((PyObject*)0, (ResultConverter *)0, (ResultConverter *)0).get_pytype();
-    }
+	static PyTypeObject const *get_pytype()
+	{
+		return create_result_converter ( ( PyObject * ) 0, ( ResultConverter * ) 0, ( ResultConverter * ) 0 ).get_pytype();
+	}
 };
 
 template < >
 struct converter_target_type <void_result_to_python >
 {
-    static PyTypeObject const *get_pytype()
-    {
-        return 0;
-    }
+	static PyTypeObject const *get_pytype()
+	{
+		return 0;
+	}
 };
 #endif
 
-    
+
 template <unsigned> struct caller_arity;
 
 template <class F, class CallPolicies, class Sig>
@@ -141,8 +146,8 @@ struct caller;
 template <class F, class CallPolicies, class Sig>
 struct caller_base_select
 {
-    enum { arity = mpl::size<Sig>::value - 1 };
-    typedef typename caller_arity<arity>::template impl<F,CallPolicies,Sig> type;
+	enum { arity = mpl::size<Sig>::value - 1 };
+	typedef typename caller_arity<arity>::template impl<F, CallPolicies, Sig> type;
 };
 
 // A function object type which wraps C++ objects as Python callable
@@ -165,19 +170,21 @@ struct caller_base_select
 //      argument types.
 template <class F, class CallPolicies, class Sig>
 struct caller
-    : caller_base_select<F,CallPolicies,Sig>::type
+		: caller_base_select<F, CallPolicies, Sig>::type
 {
-    typedef typename caller_base_select<
-        F,CallPolicies,Sig
-        >::type base;
+	typedef typename caller_base_select <
+	F, CallPolicies, Sig
+	>::type base;
 
-    typedef PyObject* result_type;
-    
-    caller(F f, CallPolicies p) : base(f,p) {}
+	typedef PyObject *result_type;
+
+	caller ( F f, CallPolicies p ) : base ( f, p ) {}
 
 };
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 
 # endif // CALLER_DWA20021121_HPP
 
@@ -188,68 +195,69 @@ struct caller
 template <>
 struct caller_arity<N>
 {
-    template <class F, class Policies, class Sig>
-    struct impl
-    {
-        impl(F f, Policies p) : m_data(f,p) {}
+	template <class F, class Policies, class Sig>
+	struct impl
+	{
+		impl ( F f, Policies p ) : m_data ( f, p ) {}
 
-        PyObject* operator()(PyObject* args_, PyObject*) // eliminate
-                                                         // this
-                                                         // trailing
-                                                         // keyword dict
-        {
-            typedef typename mpl::begin<Sig>::type first;
-            typedef typename first::type result_t;
-            typedef typename select_result_converter<Policies, result_t>::type result_converter;
-            typedef typename Policies::argument_package argument_package;
-            
-            argument_package inner_args(args_);
+		PyObject *operator() ( PyObject *args_, PyObject * ) // eliminate
+		// this
+		// trailing
+		// keyword dict
+		{
+			typedef typename mpl::begin<Sig>::type first;
+			typedef typename first::type result_t;
+			typedef typename select_result_converter<Policies, result_t>::type result_converter;
+			typedef typename Policies::argument_package argument_package;
+
+			argument_package inner_args ( args_ );
 
 # if N
 #  define BOOST_PP_LOCAL_MACRO(i) BOOST_PYTHON_ARG_CONVERTER(i)
 #  define BOOST_PP_LOCAL_LIMITS (0, N-1)
 #  include BOOST_PP_LOCAL_ITERATE()
-# endif 
-            // all converters have been checked. Now we can do the
-            // precall part of the policy
-            if (!m_data.second().precall(inner_args))
-                return 0;
+# endif
+			// all converters have been checked. Now we can do the
+			// precall part of the policy
+			if ( !m_data.second().precall ( inner_args ) )
+				return 0;
 
-            PyObject* result = detail::invoke(
-                detail::invoke_tag<result_t,F>()
-              , create_result_converter(args_, (result_converter*)0, (result_converter*)0)
-              , m_data.first()
-                BOOST_PP_ENUM_TRAILING_PARAMS(N, c)
-            );
-            
-            return m_data.second().postcall(inner_args, result);
-        }
+			PyObject *result = detail::invoke (
+			                       detail::invoke_tag<result_t, F>()
+			                       , create_result_converter ( args_, ( result_converter * ) 0, ( result_converter * ) 0 )
+			                       , m_data.first()
+			                       BOOST_PP_ENUM_TRAILING_PARAMS ( N, c )
+			                   );
 
-        static unsigned min_arity() { return N; }
-        
-        static py_func_sig_info  signature()
-        {
-            const signature_element * sig = detail::signature<Sig>::elements();
+			return m_data.second().postcall ( inner_args, result );
+		}
+
+		static unsigned min_arity() { return N; }
+
+		static py_func_sig_info  signature()
+		{
+			const signature_element *sig = detail::signature<Sig>::elements();
 #ifndef BOOST_PYTHON_NO_PY_SIGNATURES
 
-            typedef BOOST_DEDUCED_TYPENAME Policies::template extract_return_type<Sig>::type rtype;
-            typedef typename select_result_converter<Policies, rtype>::type result_converter;
+			typedef BOOST_DEDUCED_TYPENAME Policies::template extract_return_type<Sig>::type rtype;
+			typedef typename select_result_converter<Policies, rtype>::type result_converter;
 
-            static const signature_element ret = {
-                (boost::is_void<rtype>::value ? "void" : type_id<rtype>().name())
-                , &detail::converter_target_type<result_converter>::get_pytype
-                , boost::detail::indirect_traits::is_reference_to_non_const<rtype>::value 
-            };
-            py_func_sig_info res = {sig, &ret };
+			static const signature_element ret =
+			{
+				( boost::is_void<rtype>::value ? "void" : type_id<rtype>().name() )
+				, &detail::converter_target_type<result_converter>::get_pytype
+				, boost::detail::indirect_traits::is_reference_to_non_const<rtype>::value
+			};
+			py_func_sig_info res = {sig, &ret };
 #else
-            py_func_sig_info res = {sig, sig };
+			py_func_sig_info res = {sig, sig };
 #endif
 
-            return  res;
-        }
-     private:
-        compressed_pair<F,Policies> m_data;
-    };
+			return  res;
+		}
+	private:
+		compressed_pair<F, Policies> m_data;
+	};
 };
 
 

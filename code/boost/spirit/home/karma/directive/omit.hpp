@@ -18,78 +18,93 @@
 #include <boost/spirit/home/support/common_terminals.hpp>
 #include <boost/spirit/home/support/attributes.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <>
-    struct use_directive<karma::domain, tag::omit> // enables omit
-      : mpl::true_ {};
-
-}}
-
-namespace boost { namespace spirit { namespace karma
+namespace spirit
 {
-    using spirit::omit;
-    using spirit::omit_type;
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
+template <>
+struct use_directive<karma::domain, tag::omit> // enables omit
+		: mpl::true_ {};
 
-    ///////////////////////////////////////////////////////////////////////////
-    // omit_directive consumes the attribute of subject generator without
-    // generating anything
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Subject>
-    struct omit_directive : unary_generator<omit_directive<Subject> >
-    {
-        typedef Subject subject_type;
+}
+}
 
-        omit_directive(Subject const& subject)
-          : subject(subject) {}
-
-        template <typename Context, typename Iterator>
-        struct attribute
-          : traits::attribute_of<subject_type, Context, Iterator>
-        {};
-
-        template <typename OutputIterator, typename Context, typename Delimiter
-          , typename Attribute>
-        bool generate(OutputIterator&, Context&, Delimiter const&
-          , Attribute const&) const
-        {
-            return true;
-        }
-
-        template <typename Context>
-        info what(Context& context) const
-        {
-            return info("omit", subject.what(context));
-        }
-
-        Subject subject;
-    };
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Generator generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Subject, typename Modifiers>
-    struct make_directive<tag::omit, Subject, Modifiers>
-    {
-        typedef omit_directive<Subject> result_type;
-        result_type operator()(unused_type, Subject const& subject
-          , unused_type) const
-        {
-            return result_type(subject);
-        }
-    };
-
-}}}
-
-namespace boost { namespace spirit { namespace traits
+namespace boost
 {
-    template <typename Subject>
-    struct has_semantic_action<karma::omit_directive<Subject> >
-      : unary_has_semantic_action<Subject> {};
+namespace spirit
+{
+namespace karma
+{
+using spirit::omit;
+using spirit::omit_type;
 
-}}}
+///////////////////////////////////////////////////////////////////////////
+// omit_directive consumes the attribute of subject generator without
+// generating anything
+///////////////////////////////////////////////////////////////////////////
+template <typename Subject>
+struct omit_directive : unary_generator<omit_directive<Subject> >
+{
+	typedef Subject subject_type;
+
+	omit_directive ( Subject const &subject )
+		: subject ( subject ) {}
+
+	template <typename Context, typename Iterator>
+	struct attribute
+			: traits::attribute_of<subject_type, Context, Iterator>
+	{};
+
+	template <typename OutputIterator, typename Context, typename Delimiter
+	          , typename Attribute>
+	bool generate ( OutputIterator &, Context &, Delimiter const &
+	                , Attribute const & ) const
+	{
+		return true;
+	}
+
+	template <typename Context>
+	info what ( Context &context ) const
+	{
+		return info ( "omit", subject.what ( context ) );
+	}
+
+	Subject subject;
+};
+
+///////////////////////////////////////////////////////////////////////////
+// Generator generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+template <typename Subject, typename Modifiers>
+struct make_directive<tag::omit, Subject, Modifiers>
+{
+	typedef omit_directive<Subject> result_type;
+	result_type operator() ( unused_type, Subject const &subject
+	                         , unused_type ) const
+	{
+		return result_type ( subject );
+	}
+};
+
+}
+}
+}
+
+namespace boost
+{
+namespace spirit
+{
+namespace traits
+{
+template <typename Subject>
+struct has_semantic_action<karma::omit_directive<Subject> >
+		: unary_has_semantic_action<Subject> {};
+
+}
+}
+}
 
 #endif

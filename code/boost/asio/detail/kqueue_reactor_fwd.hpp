@@ -26,9 +26,12 @@
 // Define this to indicate that kqueue is supported on the target platform.
 #define BOOST_ASIO_HAS_KQUEUE 1
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 template <bool Own_Thread>
 class kqueue_reactor;
@@ -38,7 +41,7 @@ class kqueue_reactor;
 } // namespace boost
 
 #endif // (defined(__MACH__) && defined(__APPLE__))
-       // || defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__)
+// || defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__)
 
 #endif // !defined(BOOST_ASIO_DISABLE_KQUEUE)
 

@@ -17,11 +17,18 @@
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/utility/enable_if.hpp>
 
-namespace boost {  namespace graph { namespace detail {
+namespace boost
+{
+namespace graph
+{
+namespace detail
+{
 
 struct no_parameter {};
 
-} } } // end namespace boost::graph::detail
+}
+}
+} // end namespace boost::graph::detail
 
 #ifndef BOOST_NO_SFINAE
 

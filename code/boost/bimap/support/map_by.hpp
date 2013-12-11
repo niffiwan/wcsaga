@@ -24,9 +24,12 @@
 
 #ifdef BOOST_BIMAP_ONLY_DOXYGEN_WILL_PROCESS_THE_FOLLOWING_LINES
 
-namespace boost {
-namespace bimaps {
-namespace support {
+namespace boost
+{
+namespace bimaps
+{
+namespace support
+{
 
 /** \brief Gets a map view of a bidirectional map
 
@@ -50,8 +53,8 @@ See also member_at, value_type_of.
                                                                         **/
 
 template< class Tag, class Bimap >
-BOOST_DEDUCED_TYPENAME result_of::map_by<Tag,Bimap>::type
-    map_by( Bimap & b );
+BOOST_DEDUCED_TYPENAME result_of::map_by<Tag, Bimap>::type
+map_by ( Bimap &b );
 
 } // namespace support
 } // namespace bimaps
@@ -63,9 +66,12 @@ BOOST_DEDUCED_TYPENAME result_of::map_by<Tag,Bimap>::type
 
 #ifndef BOOST_BIMAP_DOXIGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
 
-namespace boost {
-namespace bimaps {
-namespace support {
+namespace boost
+{
+namespace bimaps
+{
+namespace support
+{
 
 // Since it is very error-prone to directly write the hole bunch
 // of relation accesor. They are buil from litle macro blocks that

@@ -18,65 +18,80 @@
 #include <boost/spirit/home/support/info.hpp>
 #include <boost/fusion/include/at.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <>
-    struct use_operator<qi::domain, proto::tag::address_of> // enables &p
-      : mpl::true_ {};
-}}
-
-namespace boost { namespace spirit { namespace qi
+namespace spirit
 {
-    template <typename Subject>
-    struct and_predicate : unary_parser<and_predicate<Subject> >
-    {
-        typedef Subject subject_type;
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
+template <>
+struct use_operator<qi::domain, proto::tag::address_of> // enables &p
+		: mpl::true_ {};
+}
+}
 
-        template <typename Context, typename Iterator>
-        struct attribute
-        {
-            typedef unused_type type;
-        };
-
-        and_predicate(Subject const& subject)
-          : subject(subject) {}
-
-        template <typename Iterator, typename Context
-          , typename Skipper, typename Attribute>
-        bool parse(Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper
-          , Attribute& /*attr*/) const
-        {
-            Iterator i = first;
-            return subject.parse(i, last, context, skipper, unused);
-        }
-
-        template <typename Context>
-        info what(Context& context) const
-        {
-            return info("and-predicate", subject.what(context));
-        }
-
-        Subject subject;
-    };
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Elements, typename Modifiers>
-    struct make_composite<proto::tag::address_of, Elements, Modifiers>
-      : make_unary_composite<Elements, and_predicate>
-    {};
-}}}
-
-namespace boost { namespace spirit { namespace traits
+namespace boost
 {
-    template <typename Subject>
-    struct has_semantic_action<qi::and_predicate<Subject> >
-      : unary_has_semantic_action<Subject> {};
-}}}
+namespace spirit
+{
+namespace qi
+{
+template <typename Subject>
+struct and_predicate : unary_parser<and_predicate<Subject> >
+{
+	typedef Subject subject_type;
+
+	template <typename Context, typename Iterator>
+	struct attribute
+	{
+		typedef unused_type type;
+	};
+
+	and_predicate ( Subject const &subject )
+		: subject ( subject ) {}
+
+	template <typename Iterator, typename Context
+	          , typename Skipper, typename Attribute>
+	bool parse ( Iterator &first, Iterator const &last
+	             , Context &context, Skipper const &skipper
+	             , Attribute & /*attr*/ ) const
+	{
+		Iterator i = first;
+		return subject.parse ( i, last, context, skipper, unused );
+	}
+
+	template <typename Context>
+	info what ( Context &context ) const
+	{
+		return info ( "and-predicate", subject.what ( context ) );
+	}
+
+	Subject subject;
+};
+
+///////////////////////////////////////////////////////////////////////////
+// Parser generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+template <typename Elements, typename Modifiers>
+struct make_composite<proto::tag::address_of, Elements, Modifiers>
+		: make_unary_composite<Elements, and_predicate>
+{};
+}
+}
+}
+
+namespace boost
+{
+namespace spirit
+{
+namespace traits
+{
+template <typename Subject>
+struct has_semantic_action<qi::and_predicate<Subject> >
+		: unary_has_semantic_action<Subject> {};
+}
+}
+}
 
 #endif

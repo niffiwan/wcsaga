@@ -55,7 +55,7 @@
 // dispatcher table. If there is no entry for a platform but pthreads is
 // available on the platform, pthread is choosen as default. If nothing is
 // available the preprocessor will fail with a diagnostic message.
- 
+
 #if defined(BOOST_THREAD_POSIX)
 #  define BOOST_THREAD_PLATFORM_PTHREAD
 #else

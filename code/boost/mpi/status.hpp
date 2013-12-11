@@ -15,7 +15,10 @@
 #include <boost/mpi/config.hpp>
 #include <boost/optional.hpp>
 
-namespace boost { namespace mpi {
+namespace boost
+{
+namespace mpi
+{
 
 class request;
 class communicator;
@@ -32,76 +35,77 @@ class communicator;
  */
 class BOOST_MPI_DECL status
 {
- public:
-  status() : m_count(-1) { }
-  
-  status(MPI_Status const& s) : m_status(s), m_count(-1) {}
+public:
+status() : m_count ( -1 ) { }
 
-  /**
-   * Retrieve the source of the message.
-   */
-  int source() const { return m_status.MPI_SOURCE; }
+status ( MPI_Status const &s ) : m_status ( s ), m_count ( -1 ) {}
 
-  /**
-   * Retrieve the message tag.
-   */
-  int tag() const { return m_status.MPI_TAG; }
+/**
+ * Retrieve the source of the message.
+ */
+int source() const { return m_status.MPI_SOURCE; }
 
-  /**
-   * Retrieve the error code.
-   */
-  int error() const { return m_status.MPI_ERROR; }
+/**
+ * Retrieve the message tag.
+ */
+int tag() const { return m_status.MPI_TAG; }
 
-  /**
-   * Determine whether the communication associated with this object
-   * has been successfully cancelled.
-  */
-  bool cancelled() const;
+/**
+ * Retrieve the error code.
+ */
+int error() const { return m_status.MPI_ERROR; }
 
-  /**
-   * Determines the number of elements of type @c T contained in the
-   * message. The type @c T must have an associated data type, i.e.,
-   * @c is_mpi_datatype<T> must derive @c mpl::true_. In cases where
-   * the type @c T does not match the transmitted type, this routine
-   * will return an empty @c optional<int>.
-   *
-   * @returns the number of @c T elements in the message, if it can be
-   * determined.
-   */
-  template<typename T> optional<int> count() const;
+/**
+ * Determine whether the communication associated with this object
+ * has been successfully cancelled.
+*/
+bool cancelled() const;
 
-  /**
-   * References the underlying @c MPI_Status
-   */
-  operator       MPI_Status&()       { return m_status; }
+/**
+ * Determines the number of elements of type @c T contained in the
+ * message. The type @c T must have an associated data type, i.e.,
+ * @c is_mpi_datatype<T> must derive @c mpl::true_. In cases where
+ * the type @c T does not match the transmitted type, this routine
+ * will return an empty @c optional<int>.
+ *
+ * @returns the number of @c T elements in the message, if it can be
+ * determined.
+ */
+template<typename T> optional<int> count() const;
 
-  /**
-   * References the underlying @c MPI_Status
-   */
-  operator const MPI_Status&() const { return m_status; }
+/**
+ * References the underlying @c MPI_Status
+ */
+operator       MPI_Status &()       { return m_status; }
 
- private:
-  /**
-   * INTERNAL ONLY
-   */
-  template<typename T> optional<int> count_impl(mpl::true_) const;
+/**
+ * References the underlying @c MPI_Status
+ */
+operator const MPI_Status &() const { return m_status; }
 
-  /**
-   * INTERNAL ONLY
-   */
-  template<typename T> optional<int> count_impl(mpl::false_) const;
+private:
+/**
+ * INTERNAL ONLY
+ */
+template<typename T> optional<int> count_impl ( mpl::true_ ) const;
 
- public: // friend templates are not portable
+/**
+ * INTERNAL ONLY
+ */
+template<typename T> optional<int> count_impl ( mpl::false_ ) const;
 
-  /// INTERNAL ONLY
-  mutable MPI_Status m_status;
-  mutable int m_count;
+public: // friend templates are not portable
 
-  friend class communicator;
-  friend class request;
+/// INTERNAL ONLY
+mutable MPI_Status m_status;
+mutable int m_count;
+
+friend class communicator;
+friend class request;
 };
 
 
-} } // end namespace boost::mpi
+}
+} // end namespace boost::mpi
 
 #endif // BOOST_MPI_STATUS_HPP

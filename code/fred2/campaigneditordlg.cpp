@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -34,28 +34,28 @@ int Cur_campaign_link = -1;
 /////////////////////////////////////////////////////////////////////////////
 // campaign_editor dialog
 
-IMPLEMENT_DYNCREATE(campaign_editor, CFormView)
+IMPLEMENT_DYNCREATE ( campaign_editor, CFormView )
 
 campaign_editor *Campaign_tree_formp;
 
 campaign_editor::campaign_editor()
-	: CFormView(campaign_editor::IDD)
+	: CFormView ( campaign_editor::IDD )
 {
 	//{{AFX_DATA_INIT(campaign_editor)
-	m_name = _T("");
+	m_name = _T ( "" );
 	m_type = -1;
-	m_num_players = _T("");
-	m_desc = _T("");
-	m_intro_cutscene = _T("");
-	m_end_cutscene = _T("");
-	m_loop_desc = _T("");
-	m_loop_brief_anim = _T("");
-	m_loop_brief_sound = _T("");
+	m_num_players = _T ( "" );
+	m_desc = _T ( "" );
+	m_intro_cutscene = _T ( "" );
+	m_end_cutscene = _T ( "" );
+	m_loop_desc = _T ( "" );
+	m_loop_brief_anim = _T ( "" );
+	m_loop_brief_sound = _T ( "" );
 	m_custom_tech_db = FALSE;
 	m_reset_rank = FALSE;
 	m_tree.m_mode = MODE_CAMPAIGN;
 	m_num_links = 0;
-	m_tree.link_modified(&Campaign_modified);
+	m_tree.link_modified ( &Campaign_modified );
 	m_last_mission = -1;
 	//}}AFX_DATA_INIT
 }
@@ -64,52 +64,52 @@ campaign_editor::~campaign_editor()
 {
 }
 
-void campaign_editor::DoDataExchange(CDataExchange* pDX)
+void campaign_editor::DoDataExchange ( CDataExchange *pDX )
 {
-	CFormView::DoDataExchange(pDX);
+	CFormView::DoDataExchange ( pDX );
 	//{{AFX_DATA_MAP(campaign_editor)
-	DDX_Control(pDX, IDC_SEXP_TREE, m_tree);
-	DDX_Control(pDX, IDC_FILELIST, m_filelist);
-	DDX_Text(pDX, IDC_NAME, m_name);
-	DDX_CBIndex(pDX, IDC_CAMPAIGN_TYPE, m_type);
-	DDX_Text(pDX, IDC_NUM_PLAYERS, m_num_players);
-	DDX_Text(pDX, IDC_DESC2, m_desc);
-	DDX_Text(pDX, IDC_CAMPAIGN_INTRO_CUTSCENE, m_intro_cutscene);
-	DDX_Text(pDX, IDC_CAMPAIGN_END_CUTSCENE, m_end_cutscene);
-	DDX_Text(pDX, IDC_MISSISON_LOOP_DESC, m_loop_desc);
-	DDX_Text(pDX, IDC_LOOP_BRIEF_ANIM, m_loop_brief_anim);
-	DDX_Text(pDX, IDC_LOOP_BRIEF_SOUND, m_loop_brief_sound);
-	DDX_Check(pDX, IDC_CUSTOM_TECH_DB, m_custom_tech_db);
-	DDX_Check(pDX, IDC_RESET_RANK, m_reset_rank);
-	DDV_MaxChars(pDX, m_desc, MISSION_DESC_LENGTH - 1);
-	DDV_MaxChars(pDX, m_intro_cutscene, NAME_LENGTH - 1);
-	DDV_MaxChars(pDX, m_end_cutscene, NAME_LENGTH - 1);
-	DDV_MaxChars(pDX, m_loop_desc, MISSION_DESC_LENGTH - 1);	
+	DDX_Control ( pDX, IDC_SEXP_TREE, m_tree );
+	DDX_Control ( pDX, IDC_FILELIST, m_filelist );
+	DDX_Text ( pDX, IDC_NAME, m_name );
+	DDX_CBIndex ( pDX, IDC_CAMPAIGN_TYPE, m_type );
+	DDX_Text ( pDX, IDC_NUM_PLAYERS, m_num_players );
+	DDX_Text ( pDX, IDC_DESC2, m_desc );
+	DDX_Text ( pDX, IDC_CAMPAIGN_INTRO_CUTSCENE, m_intro_cutscene );
+	DDX_Text ( pDX, IDC_CAMPAIGN_END_CUTSCENE, m_end_cutscene );
+	DDX_Text ( pDX, IDC_MISSISON_LOOP_DESC, m_loop_desc );
+	DDX_Text ( pDX, IDC_LOOP_BRIEF_ANIM, m_loop_brief_anim );
+	DDX_Text ( pDX, IDC_LOOP_BRIEF_SOUND, m_loop_brief_sound );
+	DDX_Check ( pDX, IDC_CUSTOM_TECH_DB, m_custom_tech_db );
+	DDX_Check ( pDX, IDC_RESET_RANK, m_reset_rank );
+	DDV_MaxChars ( pDX, m_desc, MISSION_DESC_LENGTH - 1 );
+	DDV_MaxChars ( pDX, m_intro_cutscene, NAME_LENGTH - 1 );
+	DDV_MaxChars ( pDX, m_end_cutscene, NAME_LENGTH - 1 );
+	DDV_MaxChars ( pDX, m_loop_desc, MISSION_DESC_LENGTH - 1 );
 	//}}AFX_DATA_MAP
 }
 
-BEGIN_MESSAGE_MAP(campaign_editor, CFormView)
+BEGIN_MESSAGE_MAP ( campaign_editor, CFormView )
 	//{{AFX_MSG_MAP(campaign_editor)
-	ON_BN_CLICKED(ID_LOAD, OnLoad)
-	ON_BN_CLICKED(IDC_ALIGN, OnAlign)
-	ON_BN_CLICKED(ID_CPGN_CLOSE, OnCpgnClose)
-	ON_NOTIFY(NM_RCLICK, IDC_SEXP_TREE, OnRclickTree)
-	ON_NOTIFY(TVN_BEGINLABELEDIT, IDC_SEXP_TREE, OnBeginlabeleditSexpTree)
-	ON_NOTIFY(TVN_ENDLABELEDIT, IDC_SEXP_TREE, OnEndlabeleditSexpTree)
-	ON_NOTIFY(TVN_SELCHANGED, IDC_SEXP_TREE, OnSelchangedSexpTree)
-	ON_BN_CLICKED(IDC_MOVE_UP, OnMoveUp)
-	ON_BN_CLICKED(IDC_MOVE_DOWN, OnMoveDown)
-	ON_COMMAND(ID_END_EDIT, OnEndEdit)
-	ON_CBN_SELCHANGE(IDC_CAMPAIGN_TYPE, OnSelchangeType)
-	ON_BN_CLICKED(IDC_TOGGLE_LOOP, OnToggleLoop)
-	ON_BN_CLICKED(IDC_LOOP_BRIEF_BROWSE, OnBrowseLoopAni)
-	ON_BN_CLICKED(IDC_LOOP_BRIEF_SOUND_BROWSE, OnBrowseLoopSound)
-	ON_EN_CHANGE(IDC_MAIN_HALL, OnChangeMainHall)
-	ON_EN_CHANGE(IDC_DEBRIEFING_PERSONA, OnChangeDebriefingPersona)
-	ON_BN_CLICKED(IDC_CUSTOM_TECH_DB, OnCustomTechDB)
-	ON_EN_CHANGE(IDC_CAMPAIGN_INTRO_CUTSCENE, &campaign_editor::OnEnChangeCampaignIntroCutscene)
-	ON_EN_CHANGE(IDC_CAMPAIGN_END_CUTSCENE, &campaign_editor::OnEnChangeCampaignEndCutscene)
-	ON_BN_CLICKED(IDC_RESET_RANK, &campaign_editor::OnBnClickedResetRank)
+	ON_BN_CLICKED ( ID_LOAD, OnLoad )
+	ON_BN_CLICKED ( IDC_ALIGN, OnAlign )
+	ON_BN_CLICKED ( ID_CPGN_CLOSE, OnCpgnClose )
+	ON_NOTIFY ( NM_RCLICK, IDC_SEXP_TREE, OnRclickTree )
+	ON_NOTIFY ( TVN_BEGINLABELEDIT, IDC_SEXP_TREE, OnBeginlabeleditSexpTree )
+	ON_NOTIFY ( TVN_ENDLABELEDIT, IDC_SEXP_TREE, OnEndlabeleditSexpTree )
+	ON_NOTIFY ( TVN_SELCHANGED, IDC_SEXP_TREE, OnSelchangedSexpTree )
+	ON_BN_CLICKED ( IDC_MOVE_UP, OnMoveUp )
+	ON_BN_CLICKED ( IDC_MOVE_DOWN, OnMoveDown )
+	ON_COMMAND ( ID_END_EDIT, OnEndEdit )
+	ON_CBN_SELCHANGE ( IDC_CAMPAIGN_TYPE, OnSelchangeType )
+	ON_BN_CLICKED ( IDC_TOGGLE_LOOP, OnToggleLoop )
+	ON_BN_CLICKED ( IDC_LOOP_BRIEF_BROWSE, OnBrowseLoopAni )
+	ON_BN_CLICKED ( IDC_LOOP_BRIEF_SOUND_BROWSE, OnBrowseLoopSound )
+	ON_EN_CHANGE ( IDC_MAIN_HALL, OnChangeMainHall )
+	ON_EN_CHANGE ( IDC_DEBRIEFING_PERSONA, OnChangeDebriefingPersona )
+	ON_BN_CLICKED ( IDC_CUSTOM_TECH_DB, OnCustomTechDB )
+	ON_EN_CHANGE ( IDC_CAMPAIGN_INTRO_CUTSCENE, &campaign_editor::OnEnChangeCampaignIntroCutscene )
+	ON_EN_CHANGE ( IDC_CAMPAIGN_END_CUTSCENE, &campaign_editor::OnEnChangeCampaignEndCutscene )
+	ON_BN_CLICKED ( IDC_RESET_RANK, &campaign_editor::OnBnClickedResetRank )
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -122,61 +122,66 @@ void campaign_editor::AssertValid() const
 	CFormView::AssertValid();
 }
 
-void campaign_editor::Dump(CDumpContext& dc) const
+void campaign_editor::Dump ( CDumpContext &dc ) const
 {
-	CFormView::Dump(dc);
+	CFormView::Dump ( dc );
 }
 #endif //_DEBUG
 
 /////////////////////////////////////////////////////////////////////////////
 // campaign_editor message handlers
 
-void campaign_editor::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
+void campaign_editor::OnUpdate ( CView *pSender, LPARAM lHint, CObject *pHint )
 {
-	UpdateData(FALSE);
+	UpdateData ( FALSE );
 }
 
-void campaign_editor::OnLoad() 
+void campaign_editor::OnLoad()
 {
 	char buf[512];
 	int size, offset;
 
-	if (Cur_campaign_mission < 0){
+	if ( Cur_campaign_mission < 0 )
+	{
 		return;
 	}
 
-	if (Campaign_modified){
-		if (Campaign_wnd->save_modified()){
+	if ( Campaign_modified )
+	{
+		if ( Campaign_wnd->save_modified() )
+		{
 			return;
 		}
 	}
 
-	cf_find_file_location(Campaign.missions[Cur_campaign_mission].name, CF_TYPE_MISSIONS, 512, buf, &size, &offset, false);
+	cf_find_file_location ( Campaign.missions[Cur_campaign_mission].name, CF_TYPE_MISSIONS, 512, buf, &size, &offset, false );
 
-	FREDDoc_ptr->SetPathName(buf);
+	FREDDoc_ptr->SetPathName ( buf );
 	Campaign_wnd->DestroyWindow();
 
-//		if (FREDDoc_ptr->OnOpenDocument(Campaign.missions[Cur_campaign_mission].name)) {
-//			Bypass_clear_mission = 1;
-//			Campaign_wnd->DestroyWindow();
-//
-//		} else {
-//			MessageBox("Failed to load mission!", "Error");
-//		}
+	//      if (FREDDoc_ptr->OnOpenDocument(Campaign.missions[Cur_campaign_mission].name)) {
+	//          Bypass_clear_mission = 1;
+	//          Campaign_wnd->DestroyWindow();
+	//
+	//      } else {
+	//          MessageBox("Failed to load mission!", "Error");
+	//      }
 }
 
-BOOL campaign_editor::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext) 
+BOOL campaign_editor::Create ( LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT &rect, CWnd *pParentWnd, UINT nID, CCreateContext *pContext )
 {
 	int i;
 	BOOL r;
 	CComboBox *box;
 
-	r = CFormView::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
-	if (r) {
-		box = (CComboBox *) GetDlgItem(IDC_CAMPAIGN_TYPE);
+	r = CFormView::Create ( lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext );
+	if ( r )
+	{
+		box = ( CComboBox * ) GetDlgItem ( IDC_CAMPAIGN_TYPE );
 		box->ResetContent();
-		for (i=0; i<MAX_CAMPAIGN_TYPES; i++){
-			box->AddString(campaign_types[i]);
+		for ( i = 0; i < MAX_CAMPAIGN_TYPES; i++ )
+		{
+			box->AddString ( campaign_types[i] );
 		}
 	}
 
@@ -186,10 +191,11 @@ BOOL campaign_editor::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWOR
 void campaign_editor::load_campaign()
 {
 	Cur_campaign_mission = Cur_campaign_link = -1;
-	load_tree(0);
+	load_tree ( 0 );
 
-	if (mission_campaign_load(Campaign.pathname, NULL, 0)) {
-		MessageBox("Couldn't open Campaign file!", "Error");
+	if ( mission_campaign_load ( Campaign.pathname, NULL, 0 ) )
+	{
+		MessageBox ( "Couldn't open Campaign file!", "Error" );
 		Campaign_wnd->OnCpgnFileNew();
 		return;
 	}
@@ -199,86 +205,99 @@ void campaign_editor::load_campaign()
 	initialize();
 }
 
-void campaign_editor::OnAlign() 
+void campaign_editor::OnAlign()
 {
 	Campaign_tree_viewp->sort_elements();
 	Campaign_tree_viewp->realign_tree();
 	Campaign_tree_viewp->Invalidate();
 }
 
-void campaign_editor::initialize( int init_files )
+void campaign_editor::initialize ( int init_files )
 {
 	Cur_campaign_mission = Cur_campaign_link = -1;
-	m_tree.setup((CEdit *) GetDlgItem(IDC_HELP_BOX));
-	load_tree(0);
+	m_tree.setup ( ( CEdit * ) GetDlgItem ( IDC_HELP_BOX ) );
+	load_tree ( 0 );
 	Campaign_tree_viewp->initialize();
 
 	// only initialize the file dialog box when the parameter says to.  This should
 	// only happen when a campaign type changes
-	if ( init_files ){
+	if ( init_files )
+	{
 		m_filelist.initialize();
 	}
 
 	m_name = Campaign.name;
 	m_type = Campaign.type;
-	m_num_players.Format("%d", Campaign.num_players);
+	m_num_players.Format ( "%d", Campaign.num_players );
 
-	if (Campaign.desc) {
-		m_desc = convert_multiline_string(Campaign.desc);
-	} else {
-		m_desc = _T("");
+	if ( Campaign.desc )
+	{
+		m_desc = convert_multiline_string ( Campaign.desc );
+	}
+	else
+	{
+		m_desc = _T ( "" );
 	}
 
-	if (Campaign.intro_cutscene) {
+	if ( Campaign.intro_cutscene )
+	{
 		m_intro_cutscene = Campaign.intro_cutscene;
-	} else {
-		m_intro_cutscene = _T("");
+	}
+	else
+	{
+		m_intro_cutscene = _T ( "" );
 	}
 
-	if (Campaign.end_cutscene) {
+	if ( Campaign.end_cutscene )
+	{
 		m_end_cutscene = Campaign.end_cutscene;
-	} else {
-		m_end_cutscene = _T("");
-	}	
+	}
+	else
+	{
+		m_end_cutscene = _T ( "" );
+	}
 
-	m_loop_desc = _T("");
+	m_loop_desc = _T ( "" );
 
-	m_loop_brief_anim = _T("");	
-	m_loop_brief_sound = _T("");	
+	m_loop_brief_anim = _T ( "" );
+	m_loop_brief_sound = _T ( "" );
 
 	// single player should hide the two dialog items about number of players allowed
-	if ( m_type == CAMPAIGN_TYPE_SINGLE ) {
-		GetDlgItem(IDC_NUM_PLAYERS)->ShowWindow( SW_HIDE );
-		GetDlgItem(IDC_PLAYERS_LABEL)->ShowWindow( SW_HIDE );
-	} else {
-		GetDlgItem(IDC_NUM_PLAYERS)->ShowWindow( SW_SHOW );
-		GetDlgItem(IDC_PLAYERS_LABEL)->ShowWindow( SW_SHOW );
+	if ( m_type == CAMPAIGN_TYPE_SINGLE )
+	{
+		GetDlgItem ( IDC_NUM_PLAYERS )->ShowWindow ( SW_HIDE );
+		GetDlgItem ( IDC_PLAYERS_LABEL )->ShowWindow ( SW_HIDE );
+	}
+	else
+	{
+		GetDlgItem ( IDC_NUM_PLAYERS )->ShowWindow ( SW_SHOW );
+		GetDlgItem ( IDC_PLAYERS_LABEL )->ShowWindow ( SW_SHOW );
 	}
 
 	// set up the tech db checkbox
-	m_custom_tech_db = (BOOL)(Campaign.flags & CF_CUSTOM_TECH_DATABASE);
-	m_reset_rank = (BOOL)(Campaign.flags & CF_RESET_RANK);
+	m_custom_tech_db = ( BOOL ) ( Campaign.flags & CF_CUSTOM_TECH_DATABASE );
+	m_reset_rank = ( BOOL ) ( Campaign.flags & CF_RESET_RANK );
 
-	UpdateData(FALSE);
+	UpdateData ( FALSE );
 }
 
-void campaign_editor::mission_selected(int num)
+void campaign_editor::mission_selected ( int num )
 {
 	CEdit *bc_hall;
 	CEdit *bc_persona;
 	char mainhalltext[10];
 	char personatext[10];
 
-	bc_hall = (CEdit *) GetDlgItem(IDC_MAIN_HALL);
-	bc_persona = (CEdit *) GetDlgItem(IDC_DEBRIEFING_PERSONA);
+	bc_hall = ( CEdit * ) GetDlgItem ( IDC_MAIN_HALL );
+	bc_persona = ( CEdit * ) GetDlgItem ( IDC_DEBRIEFING_PERSONA );
 
 	// new main hall stuff
-	sprintf(mainhalltext, "%d", Campaign.missions[num].main_hall);
-	bc_hall->SetWindowText(CString(mainhalltext));
+	sprintf ( mainhalltext, "%d", Campaign.missions[num].main_hall );
+	bc_hall->SetWindowText ( CString ( mainhalltext ) );
 
 	// new debriefing persona stuff
-	sprintf(personatext, "%d", Campaign.missions[num].debrief_persona_index);
-	bc_persona->SetWindowText(CString(personatext));
+	sprintf ( personatext, "%d", Campaign.missions[num].debrief_persona_index );
+	bc_persona->SetWindowText ( CString ( personatext ) );
 }
 
 void campaign_editor::update()
@@ -286,160 +305,185 @@ void campaign_editor::update()
 	char buf[MISSION_DESC_LENGTH];
 
 	// get data from dlog box
-	UpdateData(TRUE);
+	UpdateData ( TRUE );
 
 	// update campaign name
-	string_copy(Campaign.name, m_name, NAME_LENGTH);
+	string_copy ( Campaign.name, m_name, NAME_LENGTH );
 	Campaign.type = m_type;
 
 	// update campaign desc
-	deconvert_multiline_string(buf, m_desc, MISSION_DESC_LENGTH);
-	if (Campaign.desc) {
-		free(Campaign.desc);
+	deconvert_multiline_string ( buf, m_desc, MISSION_DESC_LENGTH );
+	if ( Campaign.desc )
+	{
+		free ( Campaign.desc );
 	}
 
 	Campaign.desc = NULL;
-	if (strlen(buf)) {
-		Campaign.desc = strdup(buf);
+	if ( strlen ( buf ) )
+	{
+		Campaign.desc = strdup ( buf );
 	}
 
 	Campaign.intro_cutscene[0] = 0;
-	if (strlen(m_intro_cutscene)) {
-		strncpy(Campaign.intro_cutscene, m_intro_cutscene, NAME_LENGTH);
+	if ( strlen ( m_intro_cutscene ) )
+	{
+		strncpy ( Campaign.intro_cutscene, m_intro_cutscene, NAME_LENGTH );
 	}
 
 	Campaign.end_cutscene[0] = 0;
-	if (strlen(m_end_cutscene)) {
-		strncpy(Campaign.end_cutscene, m_end_cutscene, NAME_LENGTH);
+	if ( strlen ( m_end_cutscene ) )
+	{
+		strncpy ( Campaign.end_cutscene, m_end_cutscene, NAME_LENGTH );
 	}
 
 	// update flags
 	Campaign.flags = CF_DEFAULT_VALUE;
-	if (m_custom_tech_db)
+	if ( m_custom_tech_db )
 		Campaign.flags |= CF_CUSTOM_TECH_DATABASE;
 
-	if (m_reset_rank)
+	if ( m_reset_rank )
 		Campaign.flags |= CF_RESET_RANK;
 
 	// maybe update mission loop text
 	save_loop_desc_window();
 
 	// set the number of players in a multiplayer mission equal to the number of players in the first mission
-	if ( Campaign.type != CAMPAIGN_TYPE_SINGLE ) {
-		if ( Campaign.num_missions == 0 ) {
+	if ( Campaign.type != CAMPAIGN_TYPE_SINGLE )
+	{
+		if ( Campaign.num_missions == 0 )
+		{
 			Campaign.num_players = 0;
-		} else {
+		}
+		else
+		{
 			mission a_mission;
 
-			get_mission_info(Campaign.missions[0].name, &a_mission);
+			get_mission_info ( Campaign.missions[0].name, &a_mission );
 			Campaign.num_players = a_mission.num_players;
 		}
 	}
 }
 
-void campaign_editor::OnCpgnClose() 
+void campaign_editor::OnCpgnClose()
 {
 	Campaign_wnd->OnClose();
 }
 
-void campaign_editor::load_tree(int save_first)
+void campaign_editor::load_tree ( int save_first )
 {
 	char text[80];
 	int i;
 	HTREEITEM h;
 
-	if (save_first)
+	if ( save_first )
 		save_tree();
 
 	m_tree.clear_tree();
 	m_tree.DeleteAllItems();
 	m_num_links = 0;
-	UpdateData(TRUE);
+	UpdateData ( TRUE );
 	update_loop_desc_window();
 
 	m_last_mission = Cur_campaign_mission;
-	if (Cur_campaign_mission < 0) {
-		GetDlgItem(IDC_SEXP_TREE)->EnableWindow(FALSE);
+	if ( Cur_campaign_mission < 0 )
+	{
+		GetDlgItem ( IDC_SEXP_TREE )->EnableWindow ( FALSE );
 		return;
 	}
 
-	GetDlgItem(IDC_SEXP_TREE)->EnableWindow(TRUE);
+	GetDlgItem ( IDC_SEXP_TREE )->EnableWindow ( TRUE );
 
-	GetDlgItem(IDC_MISSISON_LOOP_DESC)->EnableWindow(FALSE);	
-	GetDlgItem(IDC_LOOP_BRIEF_ANIM)->EnableWindow(FALSE);
-	GetDlgItem(IDC_LOOP_BRIEF_SOUND)->EnableWindow(FALSE);
-	GetDlgItem(IDC_LOOP_BRIEF_BROWSE)->EnableWindow(FALSE);
-	GetDlgItem(IDC_LOOP_BRIEF_SOUND_BROWSE)->EnableWindow(FALSE);
+	GetDlgItem ( IDC_MISSISON_LOOP_DESC )->EnableWindow ( FALSE );
+	GetDlgItem ( IDC_LOOP_BRIEF_ANIM )->EnableWindow ( FALSE );
+	GetDlgItem ( IDC_LOOP_BRIEF_SOUND )->EnableWindow ( FALSE );
+	GetDlgItem ( IDC_LOOP_BRIEF_BROWSE )->EnableWindow ( FALSE );
+	GetDlgItem ( IDC_LOOP_BRIEF_SOUND_BROWSE )->EnableWindow ( FALSE );
 
-	for (i=0; i<Total_links; i++) {
-		if (Links[i].from == Cur_campaign_mission) {
-			Links[i].node = m_tree.load_sub_tree(Links[i].sexp, true, "do-nothing");
+	for ( i = 0; i < Total_links; i++ )
+	{
+		if ( Links[i].from == Cur_campaign_mission )
+		{
+			Links[i].node = m_tree.load_sub_tree ( Links[i].sexp, true, "do-nothing" );
 			m_num_links++;
 
-			if (Links[i].from == Links[i].to) {
-				strcpy_s(text, "Repeat mission");
-			} else if ( (Links[i].to == -1) && (Links[i].from != -1) ) {
-				strcpy_s(text, "End of Campaign");
-			} else {
-				sprintf(text, "Branch to %s", Campaign.missions[Links[i].to].name);
+			if ( Links[i].from == Links[i].to )
+			{
+				strcpy_s ( text, "Repeat mission" );
+			}
+			else if ( ( Links[i].to == -1 ) && ( Links[i].from != -1 ) )
+			{
+				strcpy_s ( text, "End of Campaign" );
+			}
+			else
+			{
+				sprintf ( text, "Branch to %s", Campaign.missions[Links[i].to].name );
 			}
 
 			// insert item into tree
 			int image, sel_image;
-			if (Links[i].mission_loop) {
+			if ( Links[i].mission_loop )
+			{
 				image = BITMAP_BLUE_DOT;
 				sel_image = BITMAP_GREEN_DOT;
-			} else {
+			}
+			else
+			{
 				image = BITMAP_BLACK_DOT;
 				sel_image = BITMAP_RED_DOT;
 			}
 
-			h = m_tree.insert(text, image, sel_image);
+			h = m_tree.insert ( text, image, sel_image );
 
-			m_tree.SetItemData(h, Links[i].node);
-			m_tree.add_sub_tree(Links[i].node, h);
+			m_tree.SetItemData ( h, Links[i].node );
+			m_tree.add_sub_tree ( Links[i].node, h );
 		}
 	}
 }
 
-void campaign_editor::OnRclickTree(NMHDR* pNMHDR, LRESULT* pResult) 
+void campaign_editor::OnRclickTree ( NMHDR *pNMHDR, LRESULT *pResult )
 {
-	m_tree.right_clicked(MODE_CAMPAIGN);
+	m_tree.right_clicked ( MODE_CAMPAIGN );
 	*pResult = 0;
 }
 
-void campaign_editor::OnBeginlabeleditSexpTree(NMHDR* pNMHDR, LRESULT* pResult) 
+void campaign_editor::OnBeginlabeleditSexpTree ( NMHDR *pNMHDR, LRESULT *pResult )
 {
-	TV_DISPINFO* pTVDispInfo = (TV_DISPINFO*)pNMHDR;
+	TV_DISPINFO *pTVDispInfo = ( TV_DISPINFO * ) pNMHDR;
 
-	if (m_tree.edit_label(pTVDispInfo->item.hItem) == 1)	{
+	if ( m_tree.edit_label ( pTVDispInfo->item.hItem ) == 1 )
+	{
 		*pResult = 0;
 		Campaign_modified = 1;
-	} else {
+	}
+	else
+	{
 		*pResult = 1;
 	}
 }
 
-void campaign_editor::OnEndlabeleditSexpTree(NMHDR* pNMHDR, LRESULT* pResult) 
+void campaign_editor::OnEndlabeleditSexpTree ( NMHDR *pNMHDR, LRESULT *pResult )
 {
-	TV_DISPINFO* pTVDispInfo = (TV_DISPINFO*)pNMHDR;
+	TV_DISPINFO *pTVDispInfo = ( TV_DISPINFO * ) pNMHDR;
 
-	*pResult = m_tree.end_label_edit(pTVDispInfo->item);
+	*pResult = m_tree.end_label_edit ( pTVDispInfo->item );
 }
 
-int campaign_editor::handler(int code, int node, char *str)
+int campaign_editor::handler ( int code, int node, char *str )
 {
 	int i;
 
-	switch (code) {
+	switch ( code )
+	{
 	case ROOT_DELETED:
-		for (i=0; i<Total_links; i++){
-			if ((Links[i].from == Cur_campaign_mission) && (Links[i].node == node)){
+		for ( i = 0; i < Total_links; i++ )
+		{
+			if ( ( Links[i].from == Cur_campaign_mission ) && ( Links[i].node == node ) )
+			{
 				break;
 			}
 		}
 
-		Campaign_tree_viewp->delete_link(i);
+		Campaign_tree_viewp->delete_link ( i );
 		m_num_links--;
 		return node;
 
@@ -450,61 +494,69 @@ int campaign_editor::handler(int code, int node, char *str)
 	return -1;
 }
 
-void campaign_editor::save_tree(int clear)
+void campaign_editor::save_tree ( int clear )
 {
 	int i;
 
-	if (m_last_mission < 0){
+	if ( m_last_mission < 0 )
+	{
 		return;  // nothing to save
 	}
 
-	for (i=0; i<Total_links; i++){
-		if (Links[i].from == m_last_mission) {
-			sexp_unmark_persistent(Links[i].sexp);
-			free_sexp2(Links[i].sexp);
-			Links[i].sexp = m_tree.save_tree(Links[i].node);
-			sexp_mark_persistent(Links[i].sexp);
+	for ( i = 0; i < Total_links; i++ )
+	{
+		if ( Links[i].from == m_last_mission )
+		{
+			sexp_unmark_persistent ( Links[i].sexp );
+			free_sexp2 ( Links[i].sexp );
+			Links[i].sexp = m_tree.save_tree ( Links[i].node );
+			sexp_mark_persistent ( Links[i].sexp );
 		}
 	}
 
-	if (clear){
+	if ( clear )
+	{
 		m_last_mission = -1;
 	}
 }
 
-void campaign_editor::OnSelchangedSexpTree(NMHDR* pNMHDR, LRESULT* pResult) 
+void campaign_editor::OnSelchangedSexpTree ( NMHDR *pNMHDR, LRESULT *pResult )
 {
 	int i, node;
 	HTREEITEM h, h2;
 
 	// get handle of selected item
-	NM_TREEVIEW* pNMTreeView = (NM_TREEVIEW*)pNMHDR;
+	NM_TREEVIEW *pNMTreeView = ( NM_TREEVIEW * ) pNMHDR;
 	h = pNMTreeView->itemNew.hItem;
-	Assert(h);
+	Assert ( h );
 
 	// update help on sexp
-	m_tree.update_help(h);
+	m_tree.update_help ( h );
 
 	// get handle of parent
-	while ((h2 = m_tree.GetParentItem(h))>0){
+	while ( ( h2 = m_tree.GetParentItem ( h ) ) > 0 )
+	{
 		h = h2;
 	}
 
 	// get identifier of parent
-	node = m_tree.GetItemData(h);
-	for (i=0; i<Total_links; i++){
-		if ((Links[i].from == Cur_campaign_mission) && (Links[i].node == node)){
+	node = m_tree.GetItemData ( h );
+	for ( i = 0; i < Total_links; i++ )
+	{
+		if ( ( Links[i].from == Cur_campaign_mission ) && ( Links[i].node == node ) )
+		{
 			break;
 		}
 	}
 
-	if (i == Total_links) {
+	if ( i == Total_links )
+	{
 		Cur_campaign_link = -1;
 		return;
 	}
 
 	// update mission loop text
-	UpdateData(TRUE);
+	UpdateData ( TRUE );
 	save_loop_desc_window();
 
 	Cur_campaign_link = i;
@@ -513,17 +565,21 @@ void campaign_editor::OnSelchangedSexpTree(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 }
 
-void campaign_editor::OnMoveUp() 
+void campaign_editor::OnMoveUp()
 {
 	int i, last = -1;
 	campaign_tree_link temp;
 	HTREEITEM h1, h2;
 
-	if (Cur_campaign_link >= 0) {
+	if ( Cur_campaign_link >= 0 )
+	{
 		save_tree();
-		for (i=0; i<Total_links; i++){
-			if (Links[i].from == Cur_campaign_mission) {
-				if (i == Cur_campaign_link){
+		for ( i = 0; i < Total_links; i++ )
+		{
+			if ( Links[i].from == Cur_campaign_mission )
+			{
+				if ( i == Cur_campaign_link )
+				{
 					break;
 				}
 
@@ -531,11 +587,12 @@ void campaign_editor::OnMoveUp()
 			}
 		}
 
-		if ((last != -1) && (i < Total_links)) {
-			h1 = m_tree.GetParentItem(m_tree.handle(Links[i].node));
-			h2 = m_tree.GetParentItem(m_tree.handle(Links[last].node));
-			m_tree.swap_roots(h1, h2);
-			m_tree.SelectItem(m_tree.GetParentItem(m_tree.handle(Links[i].node)));
+		if ( ( last != -1 ) && ( i < Total_links ) )
+		{
+			h1 = m_tree.GetParentItem ( m_tree.handle ( Links[i].node ) );
+			h2 = m_tree.GetParentItem ( m_tree.handle ( Links[last].node ) );
+			m_tree.swap_roots ( h1, h2 );
+			m_tree.SelectItem ( m_tree.GetParentItem ( m_tree.handle ( Links[i].node ) ) );
 
 			temp = Links[last];
 			Links[last] = Links[i];
@@ -544,31 +601,33 @@ void campaign_editor::OnMoveUp()
 		}
 	}
 
-	GetDlgItem(IDC_SEXP_TREE)->SetFocus();
+	GetDlgItem ( IDC_SEXP_TREE )->SetFocus();
 }
 
-void campaign_editor::OnMoveDown() 
+void campaign_editor::OnMoveDown()
 {
 	int i, j;
 	campaign_tree_link temp;
 	HTREEITEM h1, h2;
 
-	if (Cur_campaign_link >= 0) {
+	if ( Cur_campaign_link >= 0 )
+	{
 		save_tree();
-		for (i=0; i<Total_links; i++)
-			if (Links[i].from == Cur_campaign_mission)
-				if (i == Cur_campaign_link)
+		for ( i = 0; i < Total_links; i++ )
+			if ( Links[i].from == Cur_campaign_mission )
+				if ( i == Cur_campaign_link )
 					break;
 
-		for (j=i+1; j<Total_links; j++)
-			if (Links[j].from == Cur_campaign_mission)
+		for ( j = i + 1; j < Total_links; j++ )
+			if ( Links[j].from == Cur_campaign_mission )
 				break;
 
-		if (j < Total_links) {
-			h1 = m_tree.GetParentItem(m_tree.handle(Links[i].node));
-			h2 = m_tree.GetParentItem(m_tree.handle(Links[j].node));
-			m_tree.swap_roots(h1, h2);
-			m_tree.SelectItem(m_tree.GetParentItem(m_tree.handle(Links[i].node)));
+		if ( j < Total_links )
+		{
+			h1 = m_tree.GetParentItem ( m_tree.handle ( Links[i].node ) );
+			h2 = m_tree.GetParentItem ( m_tree.handle ( Links[j].node ) );
+			m_tree.swap_roots ( h1, h2 );
+			m_tree.SelectItem ( m_tree.GetParentItem ( m_tree.handle ( Links[i].node ) ) );
 
 			temp = Links[j];
 			Links[j] = Links[i];
@@ -577,36 +636,42 @@ void campaign_editor::OnMoveDown()
 		}
 	}
 
-	GetDlgItem(IDC_SEXP_TREE)->SetFocus();
+	GetDlgItem ( IDC_SEXP_TREE )->SetFocus();
 }
 
-void campaign_editor::swap_handler(int node1, int node2)
+void campaign_editor::swap_handler ( int node1, int node2 )
 {
 	int index1, index2;
 	campaign_tree_link temp;
 
-	for (index1=0; index1<Total_links; index1++){
-		if ((Links[index1].from == Cur_campaign_mission) && (Links[index1].node == node1)){
+	for ( index1 = 0; index1 < Total_links; index1++ )
+	{
+		if ( ( Links[index1].from == Cur_campaign_mission ) && ( Links[index1].node == node1 ) )
+		{
 			break;
 		}
 	}
 
-	Assert(index1 < Total_links);
-	for (index2=0; index2<Total_links; index2++){
-		if ((Links[index2].from == Cur_campaign_mission) && (Links[index2].node == node2)){
+	Assert ( index1 < Total_links );
+	for ( index2 = 0; index2 < Total_links; index2++ )
+	{
+		if ( ( Links[index2].from == Cur_campaign_mission ) && ( Links[index2].node == node2 ) )
+		{
 			break;
 		}
 	}
 
-	Assert(index2 < Total_links);
+	Assert ( index2 < Total_links );
 	temp = Links[index1];
-//	Links[index1] = Links[index2];
-	while (index1 < index2) {
+	//  Links[index1] = Links[index2];
+	while ( index1 < index2 )
+	{
 		Links[index1] = Links[index1 + 1];
 		index1++;
 	}
 
-	while (index1 > index2 + 1) {
+	while ( index1 > index2 + 1 )
+	{
 		Links[index1] = Links[index1 - 1];
 		index1--;
 	}
@@ -617,36 +682,39 @@ void campaign_editor::swap_handler(int node1, int node2)
 	Links[index1] = temp;
 }
 
-void campaign_editor::insert_handler(int old, int node)
+void campaign_editor::insert_handler ( int old, int node )
 {
 	int i;
 
-	for (i=0; i<Total_links; i++){
-		if ((Links[i].from == Cur_campaign_mission) && (Links[i].node == old)){
+	for ( i = 0; i < Total_links; i++ )
+	{
+		if ( ( Links[i].from == Cur_campaign_mission ) && ( Links[i].node == old ) )
+		{
 			break;
 		}
 	}
 
-	Assert(i < Total_links);
+	Assert ( i < Total_links );
 	Links[i].node = node;
 	return;
 }
 
-void campaign_editor::OnEndEdit() 
+void campaign_editor::OnEndEdit()
 {
 	HWND h;
 	CWnd *w;
 
 	w = GetFocus();
-	if (w) {
+	if ( w )
+	{
 		h = w->m_hWnd;
-		GetDlgItem(IDC_SEXP_TREE)->SetFocus();
-		::SetFocus(h);
+		GetDlgItem ( IDC_SEXP_TREE )->SetFocus();
+		::SetFocus ( h );
 	}
 }
 
 // what to do when changing campaign type
-void campaign_editor::OnSelchangeType() 
+void campaign_editor::OnSelchangeType()
 {
 	// if campaign type is single player, then disable the multiplayer items
 	update();
@@ -661,35 +729,48 @@ void campaign_editor::save_loop_desc_window()
 	char buffer[MISSION_DESC_LENGTH];
 
 	// update only if active link and there is a mission has mission loop
-	if ( (Cur_campaign_link >= 0) && Links[Cur_campaign_link].mission_loop ) {
-		deconvert_multiline_string(buffer, m_loop_desc, MISSION_DESC_LENGTH);
-		if (Links[Cur_campaign_link].mission_loop_txt) {
-			free(Links[Cur_campaign_link].mission_loop_txt);
+	if ( ( Cur_campaign_link >= 0 ) && Links[Cur_campaign_link].mission_loop )
+	{
+		deconvert_multiline_string ( buffer, m_loop_desc, MISSION_DESC_LENGTH );
+		if ( Links[Cur_campaign_link].mission_loop_txt )
+		{
+			free ( Links[Cur_campaign_link].mission_loop_txt );
 		}
-		if (Links[Cur_campaign_link].mission_loop_brief_anim) {
-			free(Links[Cur_campaign_link].mission_loop_brief_anim);
+		if ( Links[Cur_campaign_link].mission_loop_brief_anim )
+		{
+			free ( Links[Cur_campaign_link].mission_loop_brief_anim );
 		}
-		if (Links[Cur_campaign_link].mission_loop_brief_sound) {
-			free(Links[Cur_campaign_link].mission_loop_brief_sound);
+		if ( Links[Cur_campaign_link].mission_loop_brief_sound )
+		{
+			free ( Links[Cur_campaign_link].mission_loop_brief_sound );
 		}
 
-		if (strlen(buffer)) {
-			Links[Cur_campaign_link].mission_loop_txt = strdup(buffer);
-		} else {
+		if ( strlen ( buffer ) )
+		{
+			Links[Cur_campaign_link].mission_loop_txt = strdup ( buffer );
+		}
+		else
+		{
 			Links[Cur_campaign_link].mission_loop_txt = NULL;
 		}
 
-		deconvert_multiline_string(buffer, m_loop_brief_anim, MAX_FILENAME_LEN);
-		if(strlen(buffer)){
-			Links[Cur_campaign_link].mission_loop_brief_anim = strdup(buffer);
-		} else {
+		deconvert_multiline_string ( buffer, m_loop_brief_anim, MAX_FILENAME_LEN );
+		if ( strlen ( buffer ) )
+		{
+			Links[Cur_campaign_link].mission_loop_brief_anim = strdup ( buffer );
+		}
+		else
+		{
 			Links[Cur_campaign_link].mission_loop_brief_anim = NULL;
 		}
 
-		deconvert_multiline_string(buffer, m_loop_brief_sound, MAX_FILENAME_LEN);
-		if(strlen(buffer)){
-			Links[Cur_campaign_link].mission_loop_brief_sound = strdup(buffer);
-		} else {
+		deconvert_multiline_string ( buffer, m_loop_brief_sound, MAX_FILENAME_LEN );
+		if ( strlen ( buffer ) )
+		{
+			Links[Cur_campaign_link].mission_loop_brief_sound = strdup ( buffer );
+		}
+		else
+		{
 			Links[Cur_campaign_link].mission_loop_brief_sound = NULL;
 		}
 	}
@@ -700,85 +781,109 @@ void campaign_editor::update_loop_desc_window()
 	bool enable_loop_desc_window;
 
 	enable_loop_desc_window = false;
-	if ((Cur_campaign_link >= 0) && Links[Cur_campaign_link].mission_loop) {
+	if ( ( Cur_campaign_link >= 0 ) && Links[Cur_campaign_link].mission_loop )
+	{
 		enable_loop_desc_window = true;
 	}
 
 	// maybe enable description window
-	GetDlgItem(IDC_MISSISON_LOOP_DESC)->EnableWindow(enable_loop_desc_window);
-	GetDlgItem(IDC_LOOP_BRIEF_ANIM)->EnableWindow(enable_loop_desc_window);
-	GetDlgItem(IDC_LOOP_BRIEF_SOUND)->EnableWindow(enable_loop_desc_window);
-	GetDlgItem(IDC_LOOP_BRIEF_BROWSE)->EnableWindow(enable_loop_desc_window);
-	GetDlgItem(IDC_LOOP_BRIEF_SOUND_BROWSE)->EnableWindow(enable_loop_desc_window);
+	GetDlgItem ( IDC_MISSISON_LOOP_DESC )->EnableWindow ( enable_loop_desc_window );
+	GetDlgItem ( IDC_LOOP_BRIEF_ANIM )->EnableWindow ( enable_loop_desc_window );
+	GetDlgItem ( IDC_LOOP_BRIEF_SOUND )->EnableWindow ( enable_loop_desc_window );
+	GetDlgItem ( IDC_LOOP_BRIEF_BROWSE )->EnableWindow ( enable_loop_desc_window );
+	GetDlgItem ( IDC_LOOP_BRIEF_SOUND_BROWSE )->EnableWindow ( enable_loop_desc_window );
 
 	// set new text
-	if ((Cur_campaign_link >= 0) && Links[Cur_campaign_link].mission_loop_txt && enable_loop_desc_window) {
-		m_loop_desc = convert_multiline_string(Links[Cur_campaign_link].mission_loop_txt);		
-	} else {
-		m_loop_desc = _T("");
+	if ( ( Cur_campaign_link >= 0 ) && Links[Cur_campaign_link].mission_loop_txt && enable_loop_desc_window )
+	{
+		m_loop_desc = convert_multiline_string ( Links[Cur_campaign_link].mission_loop_txt );
+	}
+	else
+	{
+		m_loop_desc = _T ( "" );
 	}
 
 	// set new text
-	if ((Cur_campaign_link >= 0) && Links[Cur_campaign_link].mission_loop_brief_anim && enable_loop_desc_window) {
-		m_loop_brief_anim = convert_multiline_string(Links[Cur_campaign_link].mission_loop_brief_anim);		
-	} else {
-		m_loop_brief_anim = _T("");
+	if ( ( Cur_campaign_link >= 0 ) && Links[Cur_campaign_link].mission_loop_brief_anim && enable_loop_desc_window )
+	{
+		m_loop_brief_anim = convert_multiline_string ( Links[Cur_campaign_link].mission_loop_brief_anim );
+	}
+	else
+	{
+		m_loop_brief_anim = _T ( "" );
 	}
 
 	// set new text
-	if ((Cur_campaign_link >= 0) && Links[Cur_campaign_link].mission_loop_brief_sound && enable_loop_desc_window) {
-		m_loop_brief_sound = convert_multiline_string(Links[Cur_campaign_link].mission_loop_brief_sound);
-	} else {
-		m_loop_brief_sound = _T("");
+	if ( ( Cur_campaign_link >= 0 ) && Links[Cur_campaign_link].mission_loop_brief_sound && enable_loop_desc_window )
+	{
+		m_loop_brief_sound = convert_multiline_string ( Links[Cur_campaign_link].mission_loop_brief_sound );
+	}
+	else
+	{
+		m_loop_brief_sound = _T ( "" );
 	}
 
 	// reset text
-	UpdateData(FALSE);
+	UpdateData ( FALSE );
 }
 
-void campaign_editor::OnToggleLoop() 
+void campaign_editor::OnToggleLoop()
 {
 	// check if branch selected
-	if (Cur_campaign_link == -1) {
+	if ( Cur_campaign_link == -1 )
+	{
 		return;
 	}
 
 	// store mission looop text
-	UpdateData(TRUE);
+	UpdateData ( TRUE );
 
-	if ( (Cur_campaign_link >= 0) && Links[Cur_campaign_link].mission_loop ) {
-		if (Links[Cur_campaign_link].mission_loop_txt) {
-			free(Links[Cur_campaign_link].mission_loop_txt);
+	if ( ( Cur_campaign_link >= 0 ) && Links[Cur_campaign_link].mission_loop )
+	{
+		if ( Links[Cur_campaign_link].mission_loop_txt )
+		{
+			free ( Links[Cur_campaign_link].mission_loop_txt );
 		}
 
-		if (Links[Cur_campaign_link].mission_loop_brief_anim) {
-			free(Links[Cur_campaign_link].mission_loop_brief_anim);
+		if ( Links[Cur_campaign_link].mission_loop_brief_anim )
+		{
+			free ( Links[Cur_campaign_link].mission_loop_brief_anim );
 		}
 
-		if (Links[Cur_campaign_link].mission_loop_brief_sound) {
-			free(Links[Cur_campaign_link].mission_loop_brief_sound);
+		if ( Links[Cur_campaign_link].mission_loop_brief_sound )
+		{
+			free ( Links[Cur_campaign_link].mission_loop_brief_sound );
 		}
 
 		char buffer[MISSION_DESC_LENGTH];
-		
-		deconvert_multiline_string(buffer, m_loop_desc, MISSION_DESC_LENGTH);
-		if (m_loop_desc && strlen(buffer)) {
-			Links[Cur_campaign_link].mission_loop_txt = strdup(buffer);
-		} else {
+
+		deconvert_multiline_string ( buffer, m_loop_desc, MISSION_DESC_LENGTH );
+		if ( m_loop_desc && strlen ( buffer ) )
+		{
+			Links[Cur_campaign_link].mission_loop_txt = strdup ( buffer );
+		}
+		else
+		{
 			Links[Cur_campaign_link].mission_loop_txt = NULL;
 		}
 
-		deconvert_multiline_string(buffer, m_loop_brief_anim, MISSION_DESC_LENGTH);
-		if (m_loop_brief_anim && strlen(buffer)) {
-			Links[Cur_campaign_link].mission_loop_brief_anim = strdup(buffer);
-		} else {
+		deconvert_multiline_string ( buffer, m_loop_brief_anim, MISSION_DESC_LENGTH );
+		if ( m_loop_brief_anim && strlen ( buffer ) )
+		{
+			Links[Cur_campaign_link].mission_loop_brief_anim = strdup ( buffer );
+		}
+		else
+		{
 			Links[Cur_campaign_link].mission_loop_brief_anim = NULL;
 		}
 
-		deconvert_multiline_string(buffer, m_loop_brief_sound, MISSION_DESC_LENGTH);
-		if (m_loop_brief_sound && strlen(buffer)) {
-			Links[Cur_campaign_link].mission_loop_brief_sound = strdup(buffer);
-		} else {
+		deconvert_multiline_string ( buffer, m_loop_brief_sound, MISSION_DESC_LENGTH );
+		if ( m_loop_brief_sound && strlen ( buffer ) )
+		{
+			Links[Cur_campaign_link].mission_loop_brief_sound = strdup ( buffer );
+		}
+		else
+		{
 			Links[Cur_campaign_link].mission_loop_brief_sound = NULL;
 		}
 	}
@@ -791,23 +896,28 @@ void campaign_editor::OnToggleLoop()
 
 	// set root icon
 	int bitmap1, bitmap2;
-	if (Links[Cur_campaign_link].mission_loop) {
+	if ( Links[Cur_campaign_link].mission_loop )
+	{
 		bitmap2 = BITMAP_GREEN_DOT;
 		bitmap1 = BITMAP_BLUE_DOT;
-	} else {
+	}
+	else
+	{
 		bitmap1 = BITMAP_BLACK_DOT;
 		bitmap2 = BITMAP_RED_DOT;
 	}
 
 	// Search for item and update bitmap
 	HTREEITEM h = m_tree.GetRootItem();
-	while (h) {
-		if ((int) m_tree.GetItemData(h) == Links[Cur_campaign_link].node) {
-			m_tree.SetItemImage(h, bitmap1, bitmap2);
+	while ( h )
+	{
+		if ( ( int ) m_tree.GetItemData ( h ) == Links[Cur_campaign_link].node )
+		{
+			m_tree.SetItemImage ( h, bitmap1, bitmap2 );
 			break;
 		}
 
-		h = m_tree.GetNextSiblingItem(h);
+		h = m_tree.GetNextSiblingItem ( h );
 	}
 
 	// set to redraw
@@ -817,62 +927,66 @@ void campaign_editor::OnToggleLoop()
 void campaign_editor::OnBrowseLoopAni()
 {
 	int pushed_dir;
-	
-	UpdateData(TRUE);
+
+	UpdateData ( TRUE );
 
 	// switch directories
-	pushed_dir = cfile_push_chdir(CF_TYPE_INTERFACE);
-	CFileDialog dlg(TRUE, "ani", NULL, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR, "Ani Files (*.ani)|*.ani");
+	pushed_dir = cfile_push_chdir ( CF_TYPE_INTERFACE );
+	CFileDialog dlg ( TRUE, "ani", NULL, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR, "Ani Files (*.ani)|*.ani" );
 
-	if (dlg.DoModal() == IDOK) {
+	if ( dlg.DoModal() == IDOK )
+	{
 		m_loop_brief_anim = dlg.GetFileName();
-		UpdateData(FALSE);
+		UpdateData ( FALSE );
 	}
 
 	// move back to the proper directory
-	if (!pushed_dir){
-		cfile_pop_dir();	
+	if ( !pushed_dir )
+	{
+		cfile_pop_dir();
 	}
 }
 
 void campaign_editor::OnBrowseLoopSound()
 {
 	int pushed_dir;
-	
-	UpdateData(TRUE);
+
+	UpdateData ( TRUE );
 
 	// switch directories
-	pushed_dir = cfile_push_chdir(CF_TYPE_VOICE_CMD_BRIEF);
-	CFileDialog dlg(TRUE, "wav", NULL, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR, 
-		"Voice Files (*.ogg, *.wav)|*.ogg;*.wav|Ogg Vorbis Files (*.ogg)|*.ogg|Wave Files (*.wav)|*.wav||");
+	pushed_dir = cfile_push_chdir ( CF_TYPE_VOICE_CMD_BRIEF );
+	CFileDialog dlg ( TRUE, "wav", NULL, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR,
+	                  "Voice Files (*.ogg, *.wav)|*.ogg;*.wav|Ogg Vorbis Files (*.ogg)|*.ogg|Wave Files (*.wav)|*.wav||" );
 
-	if (dlg.DoModal() == IDOK) {
+	if ( dlg.DoModal() == IDOK )
+	{
 		m_loop_brief_sound = dlg.GetFileName();
-		UpdateData(FALSE);
+		UpdateData ( FALSE );
 	}
 
 	// move back to the proper directory
-	if (!pushed_dir){
-		cfile_pop_dir();	
+	if ( !pushed_dir )
+	{
+		cfile_pop_dir();
 	}
 }
 
-void campaign_editor::OnChangeMainHall() 
+void campaign_editor::OnChangeMainHall()
 {
 	CString str;
 	int hall;
 
-	UpdateData(TRUE);
+	UpdateData ( TRUE );
 
-	if (Cur_campaign_mission >= 0)
+	if ( Cur_campaign_mission >= 0 )
 	{
-		GetDlgItem(IDC_MAIN_HALL)->GetWindowText(str);
-		hall = atoi(str);
+		GetDlgItem ( IDC_MAIN_HALL )->GetWindowText ( str );
+		hall = atoi ( str );
 
-		if (hall > 255) hall = 255;
-		if (hall < 0) hall = 0;
+		if ( hall > 255 ) hall = 255;
+		if ( hall < 0 ) hall = 0;
 
-		Campaign.missions[Cur_campaign_mission].main_hall = (ubyte) hall;
+		Campaign.missions[Cur_campaign_mission].main_hall = ( ubyte ) hall;
 	}
 }
 
@@ -881,25 +995,25 @@ void campaign_editor::OnChangeDebriefingPersona()
 	CString str;
 	ubyte persona;
 
-	UpdateData(TRUE);
+	UpdateData ( TRUE );
 
-	if (Cur_campaign_mission >= 0)
+	if ( Cur_campaign_mission >= 0 )
 	{
-		GetDlgItem(IDC_DEBRIEFING_PERSONA)->GetWindowText(str);
-		persona = static_cast<ubyte>(atoi(str));
+		GetDlgItem ( IDC_DEBRIEFING_PERSONA )->GetWindowText ( str );
+		persona = static_cast<ubyte> ( atoi ( str ) );
 
-		if (persona < 0 || persona > 0xff)
+		if ( persona < 0 || persona > 0xff )
 			persona = 0;
 
 		Campaign.missions[Cur_campaign_mission].debrief_persona_index = persona;
 	}
 }
 
-void campaign_editor::OnCustomTechDB() 
+void campaign_editor::OnCustomTechDB()
 {
-	UpdateData(TRUE);
+	UpdateData ( TRUE );
 
-	if (m_custom_tech_db)
+	if ( m_custom_tech_db )
 		Campaign.flags |= CF_CUSTOM_TECH_DATABASE;
 	else
 		Campaign.flags &= ~CF_CUSTOM_TECH_DATABASE;
@@ -910,12 +1024,13 @@ void campaign_editor::OnEnChangeCampaignIntroCutscene()
 {
 	CEdit *bc_dialog;
 
-	bc_dialog = (CEdit *) GetDlgItem(IDC_CAMPAIGN_INTRO_CUTSCENE);
+	bc_dialog = ( CEdit * ) GetDlgItem ( IDC_CAMPAIGN_INTRO_CUTSCENE );
 
 	// see if the contents of the edit box have changed.  Luckily, this returns 0 when the edit box is
 	// cleared.
-	if ( bc_dialog->GetModify() ) {
-		bc_dialog->GetWindowText( Campaign.intro_cutscene, NAME_LENGTH );
+	if ( bc_dialog->GetModify() )
+	{
+		bc_dialog->GetWindowText ( Campaign.intro_cutscene, NAME_LENGTH );
 		Campaign_modified = 1;
 	}
 }
@@ -925,12 +1040,13 @@ void campaign_editor::OnEnChangeCampaignEndCutscene()
 {
 	CEdit *bc_dialog;
 
-	bc_dialog = (CEdit *) GetDlgItem(IDC_CAMPAIGN_END_CUTSCENE);
+	bc_dialog = ( CEdit * ) GetDlgItem ( IDC_CAMPAIGN_END_CUTSCENE );
 
 	// see if the contents of the edit box have changed.  Luckily, this returns 0 when the edit box is
 	// cleared.
-	if ( bc_dialog->GetModify() ) {
-		bc_dialog->GetWindowText( Campaign.end_cutscene, NAME_LENGTH );
+	if ( bc_dialog->GetModify() )
+	{
+		bc_dialog->GetWindowText ( Campaign.end_cutscene, NAME_LENGTH );
 		Campaign_modified = 1;
 	}
 }
@@ -938,9 +1054,9 @@ void campaign_editor::OnEnChangeCampaignEndCutscene()
 
 void campaign_editor::OnBnClickedResetRank()
 {
-	UpdateData(TRUE);
+	UpdateData ( TRUE );
 
-	if (m_reset_rank)
+	if ( m_reset_rank )
 		Campaign.flags |= CF_RESET_RANK;
 	else
 		Campaign.flags &= ~CF_RESET_RANK;

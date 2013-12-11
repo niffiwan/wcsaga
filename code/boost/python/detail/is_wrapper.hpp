@@ -7,23 +7,28 @@
 # include <boost/python/detail/prefix.hpp>
 # include <boost/mpl/bool.hpp>
 
-namespace boost { namespace python {
+namespace boost
+{
+namespace python
+{
 
 template <class T> class wrapper;
 
 namespace detail
 {
-  typedef char (&is_not_wrapper)[2];
-  is_not_wrapper is_wrapper_helper(...);
-  template <class T>
-  char is_wrapper_helper(wrapper<T> const volatile*);
+typedef char ( &is_not_wrapper ) [2];
+is_not_wrapper is_wrapper_helper ( ... );
+template <class T>
+char is_wrapper_helper ( wrapper<T> const volatile * );
 
-  // A metafunction returning true iff T is [derived from] wrapper<U> 
-  template <class T>
-  struct is_wrapper
-    : mpl::bool_<(sizeof(detail::is_wrapper_helper((T*)0)) == 1)>
-  {};
+// A metafunction returning true iff T is [derived from] wrapper<U>
+template <class T>
+struct is_wrapper
+: mpl::bool_< ( sizeof ( detail::is_wrapper_helper ( ( T * ) 0 ) ) == 1 ) >
+{};
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 
 #endif // IS_WRAPPER_DWA2004723_HPP

@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -18,17 +18,20 @@
 // Boost.Runtime.Parameter
 #include <boost/test/utils/runtime/config.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace BOOST_RT_PARAM_NAMESPACE {
+namespace BOOST_RT_PARAM_NAMESPACE
+{
 
 // ************************************************************************** //
 // **************              runtime::parameter              ************** //
 // ************************************************************************** //
 
-class parameter {
+class parameter
+{
 public:
-    virtual ~parameter() {}
+	virtual ~parameter() {}
 };
 
 } // namespace BOOST_RT_PARAM_NAMESPACE

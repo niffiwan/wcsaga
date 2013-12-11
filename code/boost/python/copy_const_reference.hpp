@@ -10,34 +10,38 @@
 # include <boost/mpl/if.hpp>
 # include <boost/python/to_python_value.hpp>
 
-namespace boost { namespace python { 
+namespace boost
+{
+namespace python
+{
 
 namespace detail
 {
-  template <class R>
-  struct copy_const_reference_expects_a_const_reference_return_type
+template <class R>
+struct copy_const_reference_expects_a_const_reference_return_type
 # if defined(__GNUC__) && __GNUC__ >= 3 || defined(__EDG__)
-  {}
+{}
 # endif
-  ;
+;
 }
 
 template <class T> struct to_python_value;
 
 struct copy_const_reference
 {
-    template <class T>
-    struct apply
-    {
-        typedef typename mpl::if_c<
-            indirect_traits::is_reference_to_const<T>::value
-          , to_python_value<T>
-          , detail::copy_const_reference_expects_a_const_reference_return_type<T>
-        >::type type;
-    };
+	template <class T>
+	struct apply
+	{
+		typedef typename mpl::if_c <
+		indirect_traits::is_reference_to_const<T>::value
+		, to_python_value<T>
+		, detail::copy_const_reference_expects_a_const_reference_return_type<T>
+		>::type type;
+	};
 };
 
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 #endif // COPY_CONST_REFERENCE_DWA2002131_HPP

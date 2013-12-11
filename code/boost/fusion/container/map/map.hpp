@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2005 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_MAP_07212005_1106)
@@ -22,50 +22,53 @@
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/bool.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct void_;
-    struct fusion_sequence_tag;
+namespace fusion
+{
+struct void_;
+struct fusion_sequence_tag;
 
-    template <BOOST_PP_ENUM_PARAMS(FUSION_MAX_MAP_SIZE, typename T)>
-    struct map : sequence_base<map<BOOST_PP_ENUM_PARAMS(FUSION_MAX_MAP_SIZE, T)> >
-    {
-        struct category : forward_traversal_tag, associative_tag {};
-        
-        typedef map_tag fusion_tag;
-        typedef fusion_sequence_tag tag; // this gets picked up by MPL
-        typedef mpl::false_ is_view;
+template <BOOST_PP_ENUM_PARAMS ( FUSION_MAX_MAP_SIZE, typename T ) >
+struct map : sequence_base<map<BOOST_PP_ENUM_PARAMS ( FUSION_MAX_MAP_SIZE, T ) > >
+{
+    struct category : forward_traversal_tag, associative_tag {};
 
-        typedef vector<
-            BOOST_PP_ENUM_PARAMS(FUSION_MAX_MAP_SIZE, T)> 
-        storage_type;
+    typedef map_tag fusion_tag;
+    typedef fusion_sequence_tag tag; // this gets picked up by MPL
+    typedef mpl::false_ is_view;
 
-        typedef typename storage_type::size size;
+    typedef vector <
+    BOOST_PP_ENUM_PARAMS ( FUSION_MAX_MAP_SIZE, T ) >
+    storage_type;
 
-        map()
-            : data() {}
-        
-        template <typename Sequence>
-        map(Sequence const& rhs)
-            : data(rhs) {}
+    typedef typename storage_type::size size;
 
-        #include <boost/fusion/container/map/detail/map_forward_ctor.hpp>
+    map()
+: data() {}
 
-        template <typename T>
-        map&
-        operator=(T const& rhs)
-        {
-            data = rhs;
-            return *this;
-        }
+template <typename Sequence>
+map ( Sequence const &rhs )
+: data ( rhs ) {}
 
-        storage_type& get_data() { return data; }
-        storage_type const& get_data() const { return data; }
+#include <boost/fusion/container/map/detail/map_forward_ctor.hpp>
 
-    private:
-        
-        storage_type data;
-    };
-}}
+template <typename T>
+map &
+operator= ( T const &rhs )
+{
+	data = rhs;
+	return *this;
+}
+
+storage_type &get_data() { return data; }
+storage_type const &get_data() const { return data; }
+
+private:
+
+storage_type data;
+         };
+}
+}
 
 #endif

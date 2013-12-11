@@ -21,9 +21,12 @@
 #include <boost/bimap/container_adaptor/unordered_set_adaptor.hpp>
 #include <boost/bimap/detail/set_view_base.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace views {
+namespace boost
+{
+namespace bimaps
+{
+namespace views
+{
 
 /// \brief View of a bimap that is signature compatible with std::unordered_set.
 /**
@@ -36,37 +39,37 @@ See also const_unordered_set_view.
 
 template< class CoreIndex >
 class unordered_set_view
-:
-    public BOOST_BIMAP_SET_VIEW_CONTAINER_ADAPTOR(
-        unordered_set_adaptor,
-        CoreIndex,
-        local_iterator,
-        const_local_iterator
-    ),
+	:
+	public BOOST_BIMAP_SET_VIEW_CONTAINER_ADAPTOR (
+	    unordered_set_adaptor,
+	    CoreIndex,
+	    local_iterator,
+	    const_local_iterator
+	),
 
-    public ::boost::bimaps::detail::
-        set_view_base< unordered_set_view< CoreIndex >, CoreIndex >
+	public ::boost::bimaps::detail::
+	set_view_base< unordered_set_view< CoreIndex >, CoreIndex >
 {
-    BOOST_BIMAP_SET_VIEW_BASE_FRIEND(unordered_set_view,CoreIndex)
+	BOOST_BIMAP_SET_VIEW_BASE_FRIEND ( unordered_set_view, CoreIndex )
 
-    typedef BOOST_BIMAP_SET_VIEW_CONTAINER_ADAPTOR(
-        unordered_set_adaptor,
-        CoreIndex,
-        local_iterator,
-        const_local_iterator
+	typedef BOOST_BIMAP_SET_VIEW_CONTAINER_ADAPTOR (
+	    unordered_set_adaptor,
+	    CoreIndex,
+	    local_iterator,
+	    const_local_iterator
 
-    ) base_;
+	) base_;
 
-    public:
+public:
 
-    unordered_set_view(BOOST_DEDUCED_TYPENAME base_::base_type & c)
-        : base_(c) {}
+	unordered_set_view ( BOOST_DEDUCED_TYPENAME base_::base_type &c )
+		: base_ ( c ) {}
 
-    unordered_set_view & operator=(const unordered_set_view & v) 
-    {
-        this->base() = v.base();
-        return *this;
-    }
+	unordered_set_view &operator= ( const unordered_set_view &v )
+	{
+		this->base() = v.base();
+		return *this;
+	}
 };
 
 

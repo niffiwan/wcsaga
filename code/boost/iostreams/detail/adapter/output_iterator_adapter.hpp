@@ -10,7 +10,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <algorithm>                      // copy.
 #include <iosfwd>                         // streamsize.
@@ -18,24 +18,32 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
-namespace boost { namespace iostreams { namespace detail {
+namespace boost
+{
+namespace iostreams
+{
+namespace detail
+{
 
 template<typename Mode, typename Ch, typename OutIt>
-class output_iterator_adapter {
+class output_iterator_adapter
+{
 public:
-    BOOST_STATIC_ASSERT((is_convertible<Mode, output>::value));
-    typedef Ch        char_type;
-    typedef sink_tag  category;
-    explicit output_iterator_adapter(OutIt out) : out_(out) { }
-    std::streamsize write(const char_type* s, std::streamsize n) 
-    { 
-        std::copy(s, s + n, out_); 
-        return n; 
-    }
+	BOOST_STATIC_ASSERT ( ( is_convertible<Mode, output>::value ) );
+	typedef Ch        char_type;
+	typedef sink_tag  category;
+	explicit output_iterator_adapter ( OutIt out ) : out_ ( out ) { }
+	std::streamsize write ( const char_type *s, std::streamsize n )
+	{
+		std::copy ( s, s + n, out_ );
+		return n;
+	}
 private:
-    OutIt out_;
+	OutIt out_;
 };
 
-} } } // End namespaces detail, iostreams, boost.
+}
+}
+} // End namespaces detail, iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_OUTPUT_ITERATOR_ADAPTER_HPP_INCLUDED //-----//

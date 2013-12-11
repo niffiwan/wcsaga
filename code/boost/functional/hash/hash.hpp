@@ -5,7 +5,7 @@
 
 //  Based on Peter Dimov's proposal
 //  http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1756.pdf
-//  issue 6.18. 
+//  issue 6.18.
 
 #if !defined(BOOST_FUNCTIONAL_HASH_HASH_HPP)
 #define BOOST_FUNCTIONAL_HASH_HASH_HPP
@@ -29,301 +29,301 @@
 
 namespace boost
 {
-    std::size_t hash_value(bool);
-    std::size_t hash_value(char);
-    std::size_t hash_value(unsigned char);
-    std::size_t hash_value(signed char);
-    std::size_t hash_value(short);
-    std::size_t hash_value(unsigned short);
-    std::size_t hash_value(int);
-    std::size_t hash_value(unsigned int);
-    std::size_t hash_value(long);
-    std::size_t hash_value(unsigned long);
+std::size_t hash_value ( bool );
+std::size_t hash_value ( char );
+std::size_t hash_value ( unsigned char );
+std::size_t hash_value ( signed char );
+std::size_t hash_value ( short );
+std::size_t hash_value ( unsigned short );
+std::size_t hash_value ( int );
+std::size_t hash_value ( unsigned int );
+std::size_t hash_value ( long );
+std::size_t hash_value ( unsigned long );
 
 #if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
-    std::size_t hash_value(wchar_t);
+std::size_t hash_value ( wchar_t );
 #endif
-    
+
 #if defined(BOOST_HAS_LONG_LONG)
-    std::size_t hash_value(boost::long_long_type);
-    std::size_t hash_value(boost::ulong_long_type);
+std::size_t hash_value ( boost::long_long_type );
+std::size_t hash_value ( boost::ulong_long_type );
 #endif
 
 #if !BOOST_WORKAROUND(__DMC__, <= 0x848)
-    template <class T> std::size_t hash_value(T* const&);
+template <class T> std::size_t hash_value ( T *const & );
 #else
-    template <class T> std::size_t hash_value(T*);
+template <class T> std::size_t hash_value ( T * );
 #endif
 
 #if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-    template< class T, unsigned N >
-    std::size_t hash_value(const T (&x)[N]);
+template< class T, unsigned N >
+std::size_t hash_value ( const T ( &x ) [N] );
 
-    template< class T, unsigned N >
-    std::size_t hash_value(T (&x)[N]);
+template< class T, unsigned N >
+std::size_t hash_value ( T ( &x ) [N] );
 #endif
 
-    std::size_t hash_value(float v);
-    std::size_t hash_value(double v);
-    std::size_t hash_value(long double v);
+std::size_t hash_value ( float v );
+std::size_t hash_value ( double v );
+std::size_t hash_value ( long double v );
 
-    template <class Ch, class A>
-    std::size_t hash_value(
-        std::basic_string<Ch, std::BOOST_HASH_CHAR_TRAITS<Ch>, A> const&);
+template <class Ch, class A>
+std::size_t hash_value (
+    std::basic_string<Ch, std::BOOST_HASH_CHAR_TRAITS<Ch>, A> const & );
 
-    // Implementation
+// Implementation
 
-    namespace hash_detail
-    {
-        template <class T>
-        inline std::size_t hash_value_signed(T val)
-        {
-             const int size_t_bits = std::numeric_limits<std::size_t>::digits;
-             // ceiling(std::numeric_limits<T>::digits / size_t_bits) - 1
-             const int length = (std::numeric_limits<T>::digits - 1)
-                 / size_t_bits;
+namespace hash_detail
+{
+template <class T>
+inline std::size_t hash_value_signed ( T val )
+{
+	const int size_t_bits = std::numeric_limits<std::size_t>::digits;
+	// ceiling(std::numeric_limits<T>::digits / size_t_bits) - 1
+	const int length = ( std::numeric_limits<T>::digits - 1 )
+	                   / size_t_bits;
 
-             std::size_t seed = 0;
-             T positive = val < 0 ? -1 - val : val;
+	std::size_t seed = 0;
+	T positive = val < 0 ? -1 - val : val;
 
-             // Hopefully, this loop can be unrolled.
-             for(unsigned int i = length * size_t_bits; i > 0; i -= size_t_bits)
-             {
-                 seed ^= (std::size_t) (positive >> i) + (seed<<6) + (seed>>2);
-             }
-             seed ^= (std::size_t) val + (seed<<6) + (seed>>2);
+	// Hopefully, this loop can be unrolled.
+	for ( unsigned int i = length * size_t_bits; i > 0; i -= size_t_bits )
+	{
+		seed ^= ( std::size_t ) ( positive >> i ) + ( seed << 6 ) + ( seed >> 2 );
+	}
+	seed ^= ( std::size_t ) val + ( seed << 6 ) + ( seed >> 2 );
 
-             return seed;
-        }
+	return seed;
+}
 
-        template <class T>
-        inline std::size_t hash_value_unsigned(T val)
-        {
-             const int size_t_bits = std::numeric_limits<std::size_t>::digits;
-             // ceiling(std::numeric_limits<T>::digits / size_t_bits) - 1
-             const int length = (std::numeric_limits<T>::digits - 1)
-                 / size_t_bits;
+template <class T>
+inline std::size_t hash_value_unsigned ( T val )
+{
+	const int size_t_bits = std::numeric_limits<std::size_t>::digits;
+	// ceiling(std::numeric_limits<T>::digits / size_t_bits) - 1
+	const int length = ( std::numeric_limits<T>::digits - 1 )
+	                   / size_t_bits;
 
-             std::size_t seed = 0;
+	std::size_t seed = 0;
 
-             // Hopefully, this loop can be unrolled.
-             for(unsigned int i = length * size_t_bits; i > 0; i -= size_t_bits)
-             {
-                 seed ^= (std::size_t) (val >> i) + (seed<<6) + (seed>>2);
-             }
-             seed ^= (std::size_t) val + (seed<<6) + (seed>>2);
+	// Hopefully, this loop can be unrolled.
+	for ( unsigned int i = length * size_t_bits; i > 0; i -= size_t_bits )
+	{
+		seed ^= ( std::size_t ) ( val >> i ) + ( seed << 6 ) + ( seed >> 2 );
+	}
+	seed ^= ( std::size_t ) val + ( seed << 6 ) + ( seed >> 2 );
 
-             return seed;
-        }
-    }
+	return seed;
+}
+}
 
-    inline std::size_t hash_value(bool v)
-    {
-        return static_cast<std::size_t>(v);
-    }
+inline std::size_t hash_value ( bool v )
+{
+	return static_cast<std::size_t> ( v );
+}
 
-    inline std::size_t hash_value(char v)
-    {
-        return static_cast<std::size_t>(v);
-    }
+inline std::size_t hash_value ( char v )
+{
+	return static_cast<std::size_t> ( v );
+}
 
-    inline std::size_t hash_value(unsigned char v)
-    {
-        return static_cast<std::size_t>(v);
-    }
+inline std::size_t hash_value ( unsigned char v )
+{
+	return static_cast<std::size_t> ( v );
+}
 
-    inline std::size_t hash_value(signed char v)
-    {
-        return static_cast<std::size_t>(v);
-    }
+inline std::size_t hash_value ( signed char v )
+{
+	return static_cast<std::size_t> ( v );
+}
 
-    inline std::size_t hash_value(short v)
-    {
-        return static_cast<std::size_t>(v);
-    }
+inline std::size_t hash_value ( short v )
+{
+	return static_cast<std::size_t> ( v );
+}
 
-    inline std::size_t hash_value(unsigned short v)
-    {
-        return static_cast<std::size_t>(v);
-    }
+inline std::size_t hash_value ( unsigned short v )
+{
+	return static_cast<std::size_t> ( v );
+}
 
-    inline std::size_t hash_value(int v)
-    {
-        return static_cast<std::size_t>(v);
-    }
+inline std::size_t hash_value ( int v )
+{
+	return static_cast<std::size_t> ( v );
+}
 
-    inline std::size_t hash_value(unsigned int v)
-    {
-        return static_cast<std::size_t>(v);
-    }
+inline std::size_t hash_value ( unsigned int v )
+{
+	return static_cast<std::size_t> ( v );
+}
 
-    inline std::size_t hash_value(long v)
-    {
-        return static_cast<std::size_t>(v);
-    }
+inline std::size_t hash_value ( long v )
+{
+	return static_cast<std::size_t> ( v );
+}
 
-    inline std::size_t hash_value(unsigned long v)
-    {
-        return static_cast<std::size_t>(v);
-    }
+inline std::size_t hash_value ( unsigned long v )
+{
+	return static_cast<std::size_t> ( v );
+}
 
 #if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
-    inline std::size_t hash_value(wchar_t v)
-    {
-        return static_cast<std::size_t>(v);
-    }
+inline std::size_t hash_value ( wchar_t v )
+{
+	return static_cast<std::size_t> ( v );
+}
 #endif
 
 #if defined(BOOST_HAS_LONG_LONG)
-    inline std::size_t hash_value(boost::long_long_type v)
-    {
-        return hash_detail::hash_value_signed(v);
-    }
+inline std::size_t hash_value ( boost::long_long_type v )
+{
+	return hash_detail::hash_value_signed ( v );
+}
 
-    inline std::size_t hash_value(boost::ulong_long_type v)
-    {
-        return hash_detail::hash_value_unsigned(v);
-    }
+inline std::size_t hash_value ( boost::ulong_long_type v )
+{
+	return hash_detail::hash_value_unsigned ( v );
+}
 #endif
 
-    // Implementation by Alberto Barbati and Dave Harris.
+// Implementation by Alberto Barbati and Dave Harris.
 #if !BOOST_WORKAROUND(__DMC__, <= 0x848)
-    template <class T> std::size_t hash_value(T* const& v)
+template <class T> std::size_t hash_value ( T *const &v )
 #else
-    template <class T> std::size_t hash_value(T* v)
+template <class T> std::size_t hash_value ( T *v )
 #endif
-    {
-        std::size_t x = static_cast<std::size_t>(
-           reinterpret_cast<std::ptrdiff_t>(v));
+{
+	std::size_t x = static_cast<std::size_t> (
+	                    reinterpret_cast<std::ptrdiff_t> ( v ) );
 
-        return x + (x >> 3);
-    }
+	return x + ( x >> 3 );
+}
 
 #if defined(BOOST_MSVC)
 #pragma warning(push)
 #if BOOST_MSVC <= 1400
 #pragma warning(disable:4267) // 'argument' : conversion from 'size_t' to
-                              // 'unsigned int', possible loss of data
-                              // A misguided attempt to detect 64-bit
-                              // incompatability.
+// 'unsigned int', possible loss of data
+// A misguided attempt to detect 64-bit
+// incompatability.
 #endif
 #endif
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    template <class T>
-    inline void hash_combine(std::size_t& seed, T& v)
+template <class T>
+inline void hash_combine ( std::size_t &seed, T &v )
 #else
-    template <class T>
-    inline void hash_combine(std::size_t& seed, T const& v)
+template <class T>
+inline void hash_combine ( std::size_t &seed, T const &v )
 #endif
-    {
-        boost::hash<T> hasher;
-        seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
-    }
+{
+	boost::hash<T> hasher;
+	seed ^= hasher ( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
+}
 
 #if defined(BOOST_MSVC)
 #pragma warning(pop)
 #endif
 
-    template <class It>
-    inline std::size_t hash_range(It first, It last)
-    {
-        std::size_t seed = 0;
+template <class It>
+inline std::size_t hash_range ( It first, It last )
+{
+	std::size_t seed = 0;
 
-        for(; first != last; ++first)
-        {
-            hash_combine(seed, *first);
-        }
+	for ( ; first != last; ++first )
+	{
+		hash_combine ( seed, *first );
+	}
 
-        return seed;
-    }
+	return seed;
+}
 
-    template <class It>
-    inline void hash_range(std::size_t& seed, It first, It last)
-    {
-        for(; first != last; ++first)
-        {
-            hash_combine(seed, *first);
-        }
-    }
+template <class It>
+inline void hash_range ( std::size_t &seed, It first, It last )
+{
+	for ( ; first != last; ++first )
+	{
+		hash_combine ( seed, *first );
+	}
+}
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
-    template <class T>
-    inline std::size_t hash_range(T* first, T* last)
-    {
-        std::size_t seed = 0;
+template <class T>
+inline std::size_t hash_range ( T *first, T *last )
+{
+	std::size_t seed = 0;
 
-        for(; first != last; ++first)
-        {
-            boost::hash<T> hasher;
-            seed ^= hasher(*first) + 0x9e3779b9 + (seed<<6) + (seed>>2);
-        }
+	for ( ; first != last; ++first )
+	{
+		boost::hash<T> hasher;
+		seed ^= hasher ( *first ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
+	}
 
-        return seed;
-    }
+	return seed;
+}
 
-    template <class T>
-    inline void hash_range(std::size_t& seed, T* first, T* last)
-    {
-        for(; first != last; ++first)
-        {
-            boost::hash<T> hasher;
-            seed ^= hasher(*first) + 0x9e3779b9 + (seed<<6) + (seed>>2);
-        }
-    }
+template <class T>
+inline void hash_range ( std::size_t &seed, T *first, T *last )
+{
+	for ( ; first != last; ++first )
+	{
+		boost::hash<T> hasher;
+		seed ^= hasher ( *first ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
+	}
+}
 #endif
 
 #if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-    template< class T, unsigned N >
-    inline std::size_t hash_value(const T (&x)[N])
-    {
-        return hash_range(x, x + N);
-    }
+template< class T, unsigned N >
+inline std::size_t hash_value ( const T ( &x ) [N] )
+{
+	return hash_range ( x, x + N );
+}
 
-    template< class T, unsigned N >
-    inline std::size_t hash_value(T (&x)[N])
-    {
-        return hash_range(x, x + N);
-    }
+template< class T, unsigned N >
+inline std::size_t hash_value ( T ( &x ) [N] )
+{
+	return hash_range ( x, x + N );
+}
 #endif
 
-    template <class Ch, class A>
-    inline std::size_t hash_value(
-        std::basic_string<Ch, std::BOOST_HASH_CHAR_TRAITS<Ch>, A> const& v)
-    {
-        return hash_range(v.begin(), v.end());
-    }
+template <class Ch, class A>
+inline std::size_t hash_value (
+    std::basic_string<Ch, std::BOOST_HASH_CHAR_TRAITS<Ch>, A> const &v )
+{
+	return hash_range ( v.begin(), v.end() );
+}
 
-    inline std::size_t hash_value(float v)
-    {
-        return boost::hash_detail::float_hash_value(v);
-    }
+inline std::size_t hash_value ( float v )
+{
+	return boost::hash_detail::float_hash_value ( v );
+}
 
-    inline std::size_t hash_value(double v)
-    {
-        return boost::hash_detail::float_hash_value(v);
-    }
+inline std::size_t hash_value ( double v )
+{
+	return boost::hash_detail::float_hash_value ( v );
+}
 
-    inline std::size_t hash_value(long double v)
-    {
-        return boost::hash_detail::float_hash_value(v);
-    }
+inline std::size_t hash_value ( long double v )
+{
+	return boost::hash_detail::float_hash_value ( v );
+}
 
-    //
-    // boost::hash
-    //
-    
-    // Define the specializations required by the standard. The general purpose
-    // boost::hash is defined later in extensions.hpp if
-    // BOOST_HASH_NO_EXTENSIONS is not defined.
-    
-    // BOOST_HASH_SPECIALIZE - define a specialization for a type which is
-    // passed by copy.
-    //
-    // BOOST_HASH_SPECIALIZE_REF - define a specialization for a type which is
-    // passed by copy.
-    //
-    // These are undefined later.
+//
+// boost::hash
+//
+
+// Define the specializations required by the standard. The general purpose
+// boost::hash is defined later in extensions.hpp if
+// BOOST_HASH_NO_EXTENSIONS is not defined.
+
+// BOOST_HASH_SPECIALIZE - define a specialization for a type which is
+// passed by copy.
+//
+// BOOST_HASH_SPECIALIZE_REF - define a specialization for a type which is
+// passed by copy.
+//
+// These are undefined later.
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 #define BOOST_HASH_SPECIALIZE(type) \
@@ -385,32 +385,32 @@ namespace boost
     };
 #endif
 
-    BOOST_HASH_SPECIALIZE(bool)
-    BOOST_HASH_SPECIALIZE(char)
-    BOOST_HASH_SPECIALIZE(signed char)
-    BOOST_HASH_SPECIALIZE(unsigned char)
+BOOST_HASH_SPECIALIZE ( bool )
+BOOST_HASH_SPECIALIZE ( char )
+BOOST_HASH_SPECIALIZE ( signed char )
+BOOST_HASH_SPECIALIZE ( unsigned char )
 #if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
-    BOOST_HASH_SPECIALIZE(wchar_t)
+BOOST_HASH_SPECIALIZE ( wchar_t )
 #endif
-    BOOST_HASH_SPECIALIZE(short)
-    BOOST_HASH_SPECIALIZE(unsigned short)
-    BOOST_HASH_SPECIALIZE(int)
-    BOOST_HASH_SPECIALIZE(unsigned int)
-    BOOST_HASH_SPECIALIZE(long)
-    BOOST_HASH_SPECIALIZE(unsigned long)
+BOOST_HASH_SPECIALIZE ( short )
+BOOST_HASH_SPECIALIZE ( unsigned short )
+BOOST_HASH_SPECIALIZE ( int )
+BOOST_HASH_SPECIALIZE ( unsigned int )
+BOOST_HASH_SPECIALIZE ( long )
+BOOST_HASH_SPECIALIZE ( unsigned long )
 
-    BOOST_HASH_SPECIALIZE(float)
-    BOOST_HASH_SPECIALIZE(double)
-    BOOST_HASH_SPECIALIZE(long double)
+BOOST_HASH_SPECIALIZE ( float )
+BOOST_HASH_SPECIALIZE ( double )
+BOOST_HASH_SPECIALIZE ( long double )
 
-    BOOST_HASH_SPECIALIZE_REF(std::string)
+BOOST_HASH_SPECIALIZE_REF ( std::string )
 #if !defined(BOOST_NO_STD_WSTRING)
-    BOOST_HASH_SPECIALIZE_REF(std::wstring)
+BOOST_HASH_SPECIALIZE_REF ( std::wstring )
 #endif
 
 #if defined(BOOST_HAS_LONG_LONG)
-    BOOST_HASH_SPECIALIZE(boost::long_long_type)
-    BOOST_HASH_SPECIALIZE(boost::ulong_long_type)
+BOOST_HASH_SPECIALIZE ( boost::long_long_type )
+BOOST_HASH_SPECIALIZE ( boost::ulong_long_type )
 #endif
 
 #undef BOOST_HASH_SPECIALIZE
@@ -420,63 +420,63 @@ namespace boost
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
-    template <class T>
-    struct hash<T*>
-        : public std::unary_function<T*, std::size_t>
-    {
-        std::size_t operator()(T* v) const
-        {
+template <class T>
+struct hash<T *>
+		: public std::unary_function<T *, std::size_t>
+{
+	std::size_t operator() ( T *v ) const
+	{
 #if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
-            return boost::hash_value(v);
+		return boost::hash_value ( v );
 #else
-            std::size_t x = static_cast<std::size_t>(
-                reinterpret_cast<std::ptrdiff_t>(v));
+		std::size_t x = static_cast<std::size_t> (
+		                    reinterpret_cast<std::ptrdiff_t> ( v ) );
 
-            return x + (x >> 3);
+		return x + ( x >> 3 );
 #endif
-        }
-    };
+	}
+};
 
 #else
 
-    // For compilers without partial specialization, we define a
-    // boost::hash for all remaining types. But hash_impl is only defined
-    // for pointers in 'extensions.hpp' - so when BOOST_HASH_NO_EXTENSIONS
-    // is defined there will still be a compile error for types not supported
-    // in the standard.
+// For compilers without partial specialization, we define a
+// boost::hash for all remaining types. But hash_impl is only defined
+// for pointers in 'extensions.hpp' - so when BOOST_HASH_NO_EXTENSIONS
+// is defined there will still be a compile error for types not supported
+// in the standard.
 
-    namespace hash_detail
-    {
-        template <bool IsPointer>
-        struct hash_impl;
+namespace hash_detail
+{
+template <bool IsPointer>
+struct hash_impl;
 
-        template <>
-        struct hash_impl<true>
-        {
-            template <class T>
-            struct inner
-                : public std::unary_function<T, std::size_t>
-            {
-                std::size_t operator()(T val) const
-                {
+template <>
+struct hash_impl<true>
+{
+	template <class T>
+	struct inner
+			: public std::unary_function<T, std::size_t>
+	{
+		std::size_t operator() ( T val ) const
+		{
 #if !BOOST_WORKAROUND(__SUNPRO_CC, <= 590)
-                    return boost::hash_value(val);
+			return boost::hash_value ( val );
 #else
-                    std::size_t x = static_cast<std::size_t>(
-                        reinterpret_cast<std::ptrdiff_t>(val));
+			std::size_t x = static_cast<std::size_t> (
+			                    reinterpret_cast<std::ptrdiff_t> ( val ) );
 
-                    return x + (x >> 3);
+			return x + ( x >> 3 );
 #endif
-                }
-            };
-        };
-    }
+		}
+	};
+};
+}
 
-    template <class T> struct hash
-        : public boost::hash_detail::hash_impl<boost::is_pointer<T>::value>
-            ::BOOST_NESTED_TEMPLATE inner<T>
-    {
-    };
+template <class T> struct hash
+		: public boost::hash_detail::hash_impl<boost::is_pointer<T>::value>
+		::BOOST_NESTED_TEMPLATE inner<T>
+{
+};
 
 #endif
 }

@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -20,19 +20,22 @@
 #include <boost/units/make_system.hpp>
 #include <boost/units/base_units/angle/gradian.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units {
+namespace units
+{
 
-namespace gradian {
+namespace gradian
+{
 
 typedef make_system<boost::units::angle::gradian_base_unit>::type system;
 
-typedef unit<dimensionless_type,system>         dimensionless;
-typedef unit<plane_angle_dimension,system>      plane_angle;          ///< angle gradian unit constant
+typedef unit<dimensionless_type, system>         dimensionless;
+typedef unit<plane_angle_dimension, system>      plane_angle;         ///< angle gradian unit constant
 
-BOOST_UNITS_STATIC_CONSTANT(gradian,plane_angle);
-BOOST_UNITS_STATIC_CONSTANT(gradians,plane_angle);
+BOOST_UNITS_STATIC_CONSTANT ( gradian, plane_angle );
+BOOST_UNITS_STATIC_CONSTANT ( gradians, plane_angle );
 
 } // namespace gradian
 

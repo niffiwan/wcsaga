@@ -10,46 +10,53 @@
 # include <boost/python/converter/constructor_function.hpp>
 # include <boost/python/converter/convertible_function.hpp>
 
-namespace boost { namespace python { namespace converter {
+namespace boost
+{
+namespace python
+{
+namespace converter
+{
 
 struct registration;
 
 // This namespace acts as a sort of singleton
 namespace registry
 {
-  // Get the registration corresponding to the type, creating it if necessary
-  BOOST_PYTHON_DECL registration const& lookup(type_info);
+// Get the registration corresponding to the type, creating it if necessary
+BOOST_PYTHON_DECL registration const &lookup ( type_info );
 
-  // Get the registration corresponding to the type, creating it if
-  // necessary.  Use this first when the type is a shared_ptr.
-  BOOST_PYTHON_DECL registration const& lookup_shared_ptr(type_info);
+// Get the registration corresponding to the type, creating it if
+// necessary.  Use this first when the type is a shared_ptr.
+BOOST_PYTHON_DECL registration const &lookup_shared_ptr ( type_info );
 
-  // Return a pointer to the corresponding registration, if one exists
-  BOOST_PYTHON_DECL registration const* query(type_info);
-  
-  BOOST_PYTHON_DECL void insert(to_python_function_t, type_info, PyTypeObject const* (*to_python_target_type)() = 0);
+// Return a pointer to the corresponding registration, if one exists
+BOOST_PYTHON_DECL registration const *query ( type_info );
 
-  // Insert an lvalue from_python converter
-  BOOST_PYTHON_DECL void insert(void* (*convert)(PyObject*), type_info, PyTypeObject const* (*expected_pytype)() = 0);
+BOOST_PYTHON_DECL void insert ( to_python_function_t, type_info, PyTypeObject const * ( *to_python_target_type ) () = 0 );
 
-  // Insert an rvalue from_python converter
-  BOOST_PYTHON_DECL void insert(
-      convertible_function
-      , constructor_function
-      , type_info
-      , PyTypeObject const* (*expected_pytype)()  = 0
-      );
-  
-  // Insert an rvalue from_python converter at the tail of the
-  // chain. Used for implicit conversions
-  BOOST_PYTHON_DECL void push_back(
-      convertible_function
-      , constructor_function
-      , type_info
-      , PyTypeObject const* (*expected_pytype)()  = 0
-      );
+// Insert an lvalue from_python converter
+BOOST_PYTHON_DECL void insert ( void * ( *convert ) ( PyObject * ), type_info, PyTypeObject const * ( *expected_pytype ) () = 0 );
+
+// Insert an rvalue from_python converter
+BOOST_PYTHON_DECL void insert (
+    convertible_function
+    , constructor_function
+    , type_info
+    , PyTypeObject const * ( *expected_pytype ) ()  = 0
+);
+
+// Insert an rvalue from_python converter at the tail of the
+// chain. Used for implicit conversions
+BOOST_PYTHON_DECL void push_back (
+    convertible_function
+    , constructor_function
+    , type_info
+    , PyTypeObject const * ( *expected_pytype ) ()  = 0
+);
 }
 
-}}} // namespace boost::python::converter
+}
+}
+} // namespace boost::python::converter
 
 #endif // REGISTRY_DWA20011127_HPP

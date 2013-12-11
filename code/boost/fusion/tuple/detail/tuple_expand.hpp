@@ -28,22 +28,22 @@
 #define N BOOST_PP_ITERATION()
 
 #if N == 1
-    explicit
+explicit
 #endif
-    tuple(BOOST_PP_ENUM_BINARY_PARAMS(
-        N, typename detail::call_param<T, >::type _))
-        : base_type(BOOST_PP_ENUM_PARAMS(N, _)) {}
+tuple ( BOOST_PP_ENUM_BINARY_PARAMS (
+            N, typename detail::call_param<T, >::type _ ) )
+	: base_type ( BOOST_PP_ENUM_PARAMS ( N, _ ) ) {}
 
-    template <BOOST_PP_ENUM_PARAMS(N, typename U)>
-    tuple(tuple<BOOST_PP_ENUM_PARAMS(N, U)> const& rhs)
-        : base_type(rhs) {}
+template <BOOST_PP_ENUM_PARAMS ( N, typename U ) >
+tuple ( tuple<BOOST_PP_ENUM_PARAMS ( N, U ) > const &rhs )
+	: base_type ( rhs ) {}
 
-    template <BOOST_PP_ENUM_PARAMS(N, typename U)>
-    tuple& operator=(tuple<BOOST_PP_ENUM_PARAMS(N, U)> const& rhs)
-    {
-        base_type::operator=(rhs);
-        return *this;
-    }
+template <BOOST_PP_ENUM_PARAMS ( N, typename U ) >
+tuple &operator= ( tuple<BOOST_PP_ENUM_PARAMS ( N, U ) > const &rhs )
+{
+	base_type::operator= ( rhs );
+	return *this;
+}
 
 #undef N
 #endif // defined(BOOST_PP_IS_ITERATING)

@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,14 +14,17 @@
 #include <boost/units/systems/cgs/base.hpp>
 #include <boost/units/physical_dimensions/frequency.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace cgs {
+namespace cgs
+{
 
-typedef unit<frequency_dimension,cgs::system>        frequency;
-    
+typedef unit<frequency_dimension, cgs::system>        frequency;
+
 } // namespace cgs
 
 } // namespace units

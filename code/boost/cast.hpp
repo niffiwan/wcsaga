@@ -68,35 +68,35 @@ namespace boost
 
 //  polymorphic_cast  --------------------------------------------------------//
 
-    //  Runtime checked polymorphic downcasts and crosscasts.
-    //  Suggested in The C++ Programming Language, 3rd Ed, Bjarne Stroustrup,
-    //  section 15.8 exercise 1, page 425.
+//  Runtime checked polymorphic downcasts and crosscasts.
+//  Suggested in The C++ Programming Language, 3rd Ed, Bjarne Stroustrup,
+//  section 15.8 exercise 1, page 425.
 
-    template <class Target, class Source>
-    inline Target polymorphic_cast(Source* x BOOST_EXPLICIT_DEFAULT_TARGET)
-    {
-        Target tmp = dynamic_cast<Target>(x);
-        if ( tmp == 0 ) throw std::bad_cast();
-        return tmp;
-    }
+template <class Target, class Source>
+inline Target polymorphic_cast ( Source *x BOOST_EXPLICIT_DEFAULT_TARGET )
+{
+	Target tmp = dynamic_cast<Target> ( x );
+	if ( tmp == 0 ) throw std::bad_cast();
+	return tmp;
+}
 
 //  polymorphic_downcast  ----------------------------------------------------//
 
-    //  BOOST_ASSERT() checked polymorphic downcast.  Crosscasts prohibited.
+//  BOOST_ASSERT() checked polymorphic downcast.  Crosscasts prohibited.
 
-    //  WARNING: Because this cast uses BOOST_ASSERT(), it violates
-    //  the One Definition Rule if used in multiple translation units
-    //  where BOOST_DISABLE_ASSERTS, BOOST_ENABLE_ASSERT_HANDLER
-    //  NDEBUG are defined inconsistently.
+//  WARNING: Because this cast uses BOOST_ASSERT(), it violates
+//  the One Definition Rule if used in multiple translation units
+//  where BOOST_DISABLE_ASSERTS, BOOST_ENABLE_ASSERT_HANDLER
+//  NDEBUG are defined inconsistently.
 
-    //  Contributed by Dave Abrahams
+//  Contributed by Dave Abrahams
 
-    template <class Target, class Source>
-    inline Target polymorphic_downcast(Source* x BOOST_EXPLICIT_DEFAULT_TARGET)
-    {
-        BOOST_ASSERT( dynamic_cast<Target>(x) == x );  // detect logic error
-        return static_cast<Target>(x);
-    }
+template <class Target, class Source>
+inline Target polymorphic_downcast ( Source *x BOOST_EXPLICIT_DEFAULT_TARGET )
+{
+	BOOST_ASSERT ( dynamic_cast<Target> ( x ) == x ); // detect logic error
+	return static_cast<Target> ( x );
+}
 
 #  undef BOOST_EXPLICIT_DEFAULT_TARGET
 

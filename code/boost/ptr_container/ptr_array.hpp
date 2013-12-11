@@ -23,212 +23,212 @@
 namespace boost
 {
 
-    namespace ptr_container_detail
-    {
-        template
-        <
-            class T,
-            size_t N,
-            class Allocator = int // dummy
-        >
-        class ptr_array_impl : public boost::array<T,N>
-        {
-        public:
-            typedef Allocator allocator_type;
-
-            ptr_array_impl( Allocator /*a*/ = Allocator() )
-            {
-                this->assign( 0 );
-            }
-
-            ptr_array_impl( size_t, T*, Allocator /*a*/ = Allocator() )
-            {
-                this->assign( 0 );
-            }
-        };
-    }
-
-    template
-    <
-        class T,
-        size_t N,
-        class CloneAllocator = heap_clone_allocator
+namespace ptr_container_detail
+{
+template
+<
+    class T,
+    size_t N,
+    class Allocator = int // dummy
     >
-    class ptr_array : public
-        ptr_sequence_adapter< T,
-                              ptr_container_detail::ptr_array_impl<void*,N>,
-                              CloneAllocator >
-    {
-    private:
-        typedef ptr_sequence_adapter< T,
-                                      ptr_container_detail::ptr_array_impl<void*,N>,
-                                      CloneAllocator >
-            base_class;
+class ptr_array_impl : public boost::array<T, N>
+{
+public:
+	typedef Allocator allocator_type;
 
-        typedef BOOST_DEDUCED_TYPENAME remove_nullable<T>::type U;
+	ptr_array_impl ( Allocator /*a*/ = Allocator() )
+	{
+		this->assign ( 0 );
+	}
 
-        typedef ptr_array<T,N,CloneAllocator>
-                          this_type;
+	ptr_array_impl ( size_t, T *, Allocator /*a*/ = Allocator() )
+	{
+		this->assign ( 0 );
+	}
+};
+}
 
-    public:
-        typedef std::size_t size_type;
-        typedef U*          value_type;
-        typedef U*          pointer;
-        typedef U&          reference;
-        typedef const U&    const_reference;
-        typedef BOOST_DEDUCED_TYPENAME base_class::auto_type
-                            auto_type;
+template
+<
+    class T,
+    size_t N,
+    class CloneAllocator = heap_clone_allocator
+    >
+class ptr_array : public
+	ptr_sequence_adapter< T,
+	ptr_container_detail::ptr_array_impl<void *, N>,
+	CloneAllocator >
+{
+private:
+	typedef ptr_sequence_adapter< T,
+	        ptr_container_detail::ptr_array_impl<void *, N>,
+	        CloneAllocator >
+	        base_class;
 
-    public: // constructors
-        ptr_array() : base_class()
-        { }
+	typedef BOOST_DEDUCED_TYPENAME remove_nullable<T>::type U;
 
-        ptr_array( const ptr_array& r )
-        {
-            size_t i = 0;
-            for( ; i != N; ++i )
-                this->base()[i] = this->null_policy_allocate_clone( 
-                                        static_cast<const T*>( &r[i] ) ); 
-        }
+	typedef ptr_array<T, N, CloneAllocator>
+	this_type;
 
-        template< class U >
-        ptr_array( const ptr_array<U,N>& r )
-        {
-            size_t i = 0;
-            for( ; i != N; ++i )
-                this->base()[i] = this->null_policy_allocate_clone( 
-                                        static_cast<const T*>( &r[i] ) ); 
-        }
+public:
+	typedef std::size_t size_type;
+	typedef U          *value_type;
+	typedef U          *pointer;
+	typedef U          &reference;
+	typedef const U    &const_reference;
+	typedef BOOST_DEDUCED_TYPENAME base_class::auto_type
+	auto_type;
 
-        explicit ptr_array( std::auto_ptr<this_type> r )
-        : base_class( r ) { }
+public: // constructors
+	ptr_array() : base_class()
+	{ }
 
-        ptr_array& operator=( ptr_array r )
-        {
-            this->swap( r );
-            return *this;            
-        }
+	ptr_array ( const ptr_array &r )
+	{
+		size_t i = 0;
+		for ( ; i != N; ++i )
+			this->base() [i] = this->null_policy_allocate_clone (
+			                       static_cast<const T *> ( &r[i] ) );
+	}
 
-        ptr_array& operator=( std::auto_ptr<this_type> r )
-        {
-            base_class::operator=(r);
-            return *this;
-        }
+	template< class U >
+	ptr_array ( const ptr_array<U, N> &r )
+	{
+		size_t i = 0;
+		for ( ; i != N; ++i )
+			this->base() [i] = this->null_policy_allocate_clone (
+			                       static_cast<const T *> ( &r[i] ) );
+	}
 
-        std::auto_ptr<this_type> release()
-        {
-            std::auto_ptr<this_type> ptr( new this_type );
-            this->swap( *ptr );
-            return ptr;
-        }
+	explicit ptr_array ( std::auto_ptr<this_type> r )
+		: base_class ( r ) { }
 
-        std::auto_ptr<this_type> clone() const
-        {
-            std::auto_ptr<this_type> pa( new this_type );
-            for( size_t i = 0; i != N; ++i )
-            {
-                if( ! is_null(i) )
-                    pa->replace( i, this->null_policy_allocate_clone( &(*this)[i] ) ); 
-            }
-            return pa;
-        }
+	ptr_array &operator= ( ptr_array r )
+	{
+		this->swap ( r );
+		return *this;
+	}
 
-    private: // hide some members
-        using base_class::insert;
-        using base_class::erase;
-        using base_class::push_back;
-        using base_class::push_front;
-        using base_class::pop_front;
-        using base_class::pop_back;
-        using base_class::transfer;
-        using base_class::get_allocator;
+	ptr_array &operator= ( std::auto_ptr<this_type> r )
+	{
+		base_class::operator= ( r );
+		return *this;
+	}
 
-    public: // compile-time interface
+	std::auto_ptr<this_type> release()
+	{
+		std::auto_ptr<this_type> ptr ( new this_type );
+		this->swap ( *ptr );
+		return ptr;
+	}
 
-        template< size_t idx >
-        auto_type replace( U* r ) // strong
-        {
-            BOOST_STATIC_ASSERT( idx < N );
+	std::auto_ptr<this_type> clone() const
+	{
+		std::auto_ptr<this_type> pa ( new this_type );
+		for ( size_t i = 0; i != N; ++i )
+		{
+			if ( ! is_null ( i ) )
+				pa->replace ( i, this->null_policy_allocate_clone ( & ( *this ) [i] ) );
+		}
+		return pa;
+	}
 
-            this->enforce_null_policy( r, "Null pointer in 'ptr_array::replace()'" );
+private: // hide some members
+	using base_class::insert;
+	using base_class::erase;
+	using base_class::push_back;
+	using base_class::push_front;
+	using base_class::pop_front;
+	using base_class::pop_back;
+	using base_class::transfer;
+	using base_class::get_allocator;
 
-            auto_type res( static_cast<U*>( this->base()[idx] ) ); // nothrow
-            this->base()[idx] = r;                                 // nothrow
-            return boost::ptr_container::move(res);                // nothrow 
-        }
+public: // compile-time interface
 
-        template< size_t idx, class V >
-        auto_type replace( std::auto_ptr<V> r )
-        {
-            return replace<idx>( r.release() );
-        }
+	template< size_t idx >
+	auto_type replace ( U *r ) // strong
+	{
+		BOOST_STATIC_ASSERT ( idx < N );
 
-        auto_type replace( size_t idx, U* r ) // strong
-        {
-            this->enforce_null_policy( r, "Null pointer in 'ptr_array::replace()'" );
+		this->enforce_null_policy ( r, "Null pointer in 'ptr_array::replace()'" );
 
-            auto_type ptr( r );
+		auto_type res ( static_cast<U *> ( this->base() [idx] ) ); // nothrow
+		this->base() [idx] = r;                                // nothrow
+		return boost::ptr_container::move ( res );             // nothrow
+	}
 
-            BOOST_PTR_CONTAINER_THROW_EXCEPTION( idx >= N, bad_index,
-                                                 "'replace()' aout of bounds" );
+	template< size_t idx, class V >
+	auto_type replace ( std::auto_ptr<V> r )
+	{
+		return replace<idx> ( r.release() );
+	}
 
-            auto_type res( static_cast<U*>( this->base()[idx] ) ); // nothrow
-            this->base()[idx] = ptr.release();                     // nothrow
-            return boost::ptr_container::move(res);                // nothrow 
-        }
+	auto_type replace ( size_t idx, U *r ) // strong
+	{
+		this->enforce_null_policy ( r, "Null pointer in 'ptr_array::replace()'" );
 
-        template< class V >
-        auto_type replace( size_t idx, std::auto_ptr<V> r )
-        {
-            return replace( idx, r.release() );
-        }
+		auto_type ptr ( r );
 
-        using base_class::at;
+		BOOST_PTR_CONTAINER_THROW_EXCEPTION ( idx >= N, bad_index,
+		                                      "'replace()' aout of bounds" );
 
-        template< size_t idx >
-        T& at()
-        {
-            BOOST_STATIC_ASSERT( idx < N );
-            return (*this)[idx];
-        }
+		auto_type res ( static_cast<U *> ( this->base() [idx] ) ); // nothrow
+		this->base() [idx] = ptr.release();                    // nothrow
+		return boost::ptr_container::move ( res );             // nothrow
+	}
 
-        template< size_t idx >
-        const T& at() const
-        {
-            BOOST_STATIC_ASSERT( idx < N );
-            return (*this)[idx];
-        }
+	template< class V >
+	auto_type replace ( size_t idx, std::auto_ptr<V> r )
+	{
+		return replace ( idx, r.release() );
+	}
 
-        bool is_null( size_t idx ) const
-        {
-            return base_class::is_null(idx);
-        }
+	using base_class::at;
 
-        template< size_t idx >
-        bool is_null() const
-        {
-            BOOST_STATIC_ASSERT( idx < N );
-            return this->base()[idx] == 0;
-        }
-    };
+	template< size_t idx >
+	T &at()
+	{
+		BOOST_STATIC_ASSERT ( idx < N );
+		return ( *this ) [idx];
+	}
 
-    //////////////////////////////////////////////////////////////////////////////
-    // clonability
+	template< size_t idx >
+	const T &at() const
+	{
+		BOOST_STATIC_ASSERT ( idx < N );
+		return ( *this ) [idx];
+	}
 
-    template< typename T, size_t size, typename CA >
-    inline ptr_array<T,size,CA>* new_clone( const ptr_array<T,size,CA>& r )
-    {
-        return r.clone().release();
-    }
+	bool is_null ( size_t idx ) const
+	{
+		return base_class::is_null ( idx );
+	}
 
-    /////////////////////////////////////////////////////////////////////////
-    // swap
+	template< size_t idx >
+	bool is_null() const
+	{
+		BOOST_STATIC_ASSERT ( idx < N );
+		return this->base() [idx] == 0;
+	}
+};
 
-    template< typename T, size_t size, typename CA >
-    inline void swap( ptr_array<T,size,CA>& l, ptr_array<T,size,CA>& r )
-    {
-        l.swap(r);
-    }
+//////////////////////////////////////////////////////////////////////////////
+// clonability
+
+template< typename T, size_t size, typename CA >
+inline ptr_array<T, size, CA> *new_clone ( const ptr_array<T, size, CA> &r )
+{
+	return r.clone().release();
+}
+
+/////////////////////////////////////////////////////////////////////////
+// swap
+
+template< typename T, size_t size, typename CA >
+inline void swap ( ptr_array<T, size, CA> &l, ptr_array<T, size, CA> &r )
+{
+	l.swap ( r );
+}
 }
 
 #endif

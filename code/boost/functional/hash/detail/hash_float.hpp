@@ -56,42 +56,43 @@
 
 namespace boost
 {
-    namespace hash_detail
-    {
-        template <class T>
-        inline std::size_t float_hash_value(T v)
-        {
-            using namespace std;
-            switch (fpclassify(v)) {
-            case FP_ZERO:
-                return 0;
-            case FP_INFINITE:
-                return (std::size_t)(v > 0 ? -1 : -2);
-            case FP_NAN:
-                return (std::size_t)(-3);
-            case FP_NORMAL:
-            case FP_SUBNORMAL:
-                return float_hash_impl(v);
-            default:
-                BOOST_ASSERT(0);
-                return 0;
-            }
-        }
-    }
+namespace hash_detail
+{
+template <class T>
+inline std::size_t float_hash_value ( T v )
+{
+	using namespace std;
+	switch ( fpclassify ( v ) )
+	{
+	case FP_ZERO:
+		return 0;
+	case FP_INFINITE:
+		return ( std::size_t ) ( v > 0 ? -1 : -2 );
+	case FP_NAN:
+		return ( std::size_t ) ( -3 );
+	case FP_NORMAL:
+	case FP_SUBNORMAL:
+		return float_hash_impl ( v );
+	default:
+		BOOST_ASSERT ( 0 );
+		return 0;
+	}
+}
+}
 }
 
 #else // !BOOST_HASH_USE_FPCLASSIFY
 
 namespace boost
 {
-    namespace hash_detail
-    {
-        template <class T>
-        inline std::size_t float_hash_value(T v)
-        {
-            return v == 0 ? 0 : float_hash_impl(v);
-        }
-    }
+namespace hash_detail
+{
+template <class T>
+inline std::size_t float_hash_value ( T v )
+{
+	return v == 0 ? 0 : float_hash_impl ( v );
+}
+}
 }
 
 #endif // BOOST_HASH_USE_FPCLASSIFY

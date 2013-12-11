@@ -24,8 +24,10 @@
 #include <boost/interprocess/detail/config_begin.hpp>
 #include <boost/interprocess/containers/container/container_fwd.hpp>
 
-namespace boost {
-namespace interprocess {
+namespace boost
+{
+namespace interprocess
+{
 
 using boost::container::ordered_range;
 using boost::container::ordered_unique_range;

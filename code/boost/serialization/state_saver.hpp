@@ -24,7 +24,7 @@
 
 #include <boost/config.hpp>
 #ifndef BOOST_NO_EXCEPTIONS
-    #include <exception>
+#include <exception>
 #endif
 
 #include <boost/call_traits.hpp>
@@ -35,8 +35,10 @@
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 
-namespace boost {
-namespace serialization {
+namespace boost
+{
+namespace serialization
+{
 
 template<class T>
 // T requirements:
@@ -46,47 +48,54 @@ template<class T>
 class state_saver : private boost::noncopyable
 {
 private:
-    const T previous_value;
-    T & previous_ref;
+const T previous_value;
+T &previous_ref;
 
-    struct restore {
-        static void invoke(T & previous_ref, const T & previous_value){
-            previous_ref = previous_value; // won't throw
-        }
-    };
+struct restore
+{
+	static void invoke ( T &previous_ref, const T &previous_value )
+	{
+		previous_ref = previous_value; // won't throw
+	}
+};
 
-    struct restore_with_exception {
-        static void invoke(T & previous_ref, const T & previous_value){
-            BOOST_TRY{
-                previous_ref = previous_value;
-            } 
-            BOOST_CATCH(::std::exception &) { 
-                // we must ignore it - we are in destructor
-            }
-            BOOST_CATCH_END
-        }
-    };
+struct restore_with_exception
+{
+	static void invoke ( T &previous_ref, const T &previous_value )
+	{
+		BOOST_TRY
+		{
+			previous_ref = previous_value;
+		}
+		BOOST_CATCH ( ::std::exception & )
+		{
+			// we must ignore it - we are in destructor
+		}
+		BOOST_CATCH_END
+	}
+};
 
 public:
-    state_saver(
-        T & object
-    ) : 
-        previous_value(object),
-        previous_ref(object) 
-    {}
-    
-    ~state_saver() {
-        #ifndef BOOST_NO_EXCEPTIONS
-            typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
-                has_nothrow_copy<T>,
-                mpl::identity<restore>,
-                mpl::identity<restore_with_exception>
-            >::type typex;
-            typex::invoke(previous_ref, previous_value);
-        #else
-            previous_ref = previous_value;
-        #endif
-    }
+state_saver (
+    T &object
+) :
+	previous_value ( object ),
+	previous_ref ( object )
+{}
+
+~state_saver()
+{
+#ifndef BOOST_NO_EXCEPTIONS
+	typedef BOOST_DEDUCED_TYPENAME mpl::eval_if <
+	has_nothrow_copy<T>,
+	                 mpl::identity<restore>,
+	                 mpl::identity<restore_with_exception>
+	                 >::type typex;
+	typex::invoke ( previous_ref, previous_value );
+#else
+	previous_ref = previous_value;
+#endif
+}
 
 }; // state_saver<>
 

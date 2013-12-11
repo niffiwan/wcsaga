@@ -14,7 +14,7 @@
 #if BOOST_VERSION >= 103100   // works beginning from Boost V1.31.0
 
 ///////////////////////////////////////////////////////////////////////////////
-// enable automatic library variant selection 
+// enable automatic library variant selection
 #if !defined(BOOST_PROGRAM_OPTIONS_SOURCE) && !defined(BOOST_ALL_NO_LIB) && \
     !defined(BOOST_PROGRAM_OPTIONS_NO_LIB)
 

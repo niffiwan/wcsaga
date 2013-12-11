@@ -31,12 +31,12 @@ namespace detail
 // has to look like.
 class delete_helper
 {
-  public:
-    template< class T >
-    static void delete_object( const T * pObject )
-    {
-      delete pObject;
-    }
+public:
+	template< class T >
+	static void delete_object ( const T *pObject )
+	{
+		delete pObject;
+	}
 };
 
 
@@ -46,29 +46,29 @@ class delete_helper
 
 
 //////////////////////////////////////////////////////////////////////////////
-class event_base : public detail::rtti_policy::rtti_base_type<
-  detail::counted_base<> >
+class event_base : public detail::rtti_policy::rtti_base_type <
+	detail::counted_base<> >
 {
-  typedef detail::rtti_policy::rtti_base_type<
-    detail::counted_base<> > base_type;
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    intrusive_ptr< const event_base > intrusive_from_this() const;
+	typedef detail::rtti_policy::rtti_base_type <
+	detail::counted_base<> > base_type;
+public:
+	//////////////////////////////////////////////////////////////////////////
+	intrusive_ptr< const event_base > intrusive_from_this() const;
 
-  protected:
-    //////////////////////////////////////////////////////////////////////////
-    event_base( detail::rtti_policy::id_provider_type idProvider ) :
-      base_type( idProvider )
-    {
-    }
+protected:
+	//////////////////////////////////////////////////////////////////////////
+	event_base ( detail::rtti_policy::id_provider_type idProvider ) :
+		base_type ( idProvider )
+	{
+	}
 
-    virtual ~event_base() {}
+	virtual ~event_base() {}
 
-  private:
-    //////////////////////////////////////////////////////////////////////////
-    virtual intrusive_ptr< const event_base > clone() const = 0;
+private:
+	//////////////////////////////////////////////////////////////////////////
+	virtual intrusive_ptr< const event_base > clone() const = 0;
 
-    friend class detail::delete_helper;
+	friend class detail::delete_helper;
 };
 
 
@@ -79,17 +79,17 @@ class event_base : public detail::rtti_policy::rtti_base_type<
 
 
 
-inline void intrusive_ptr_add_ref( const ::boost::statechart::event_base * pBase )
+inline void intrusive_ptr_add_ref ( const ::boost::statechart::event_base *pBase )
 {
-  pBase->add_ref();
+	pBase->add_ref();
 }
 
-inline void intrusive_ptr_release( const ::boost::statechart::event_base * pBase )
+inline void intrusive_ptr_release ( const ::boost::statechart::event_base *pBase )
 {
-  if ( pBase->release() )
-  {
-    ::boost::statechart::detail::delete_helper::delete_object( pBase );
-  }
+	if ( pBase->release() )
+	{
+		::boost::statechart::detail::delete_helper::delete_object ( pBase );
+	}
 }
 
 
@@ -107,14 +107,14 @@ namespace statechart
 // ctor.
 inline intrusive_ptr< const event_base > event_base::intrusive_from_this() const
 {
-  if ( base_type::ref_counted() )
-  {
-    return intrusive_ptr< const event_base >( this );
-  }
-  else
-  {
-    return clone();
-  }
+	if ( base_type::ref_counted() )
+	{
+		return intrusive_ptr< const event_base > ( this );
+	}
+	else
+	{
+		return clone();
+	}
 }
 
 

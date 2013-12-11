@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,16 +14,19 @@
 #include <boost/units/systems/si/base.hpp>
 #include <boost/units/physical_dimensions/surface_tension.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace si {
+namespace si
+{
 
-typedef unit<surface_tension_dimension,si::system>     surface_tension;
-    
-BOOST_UNITS_STATIC_CONSTANT(newton_per_meter,surface_tension);  
-BOOST_UNITS_STATIC_CONSTANT(newtons_per_meter,surface_tension); 
+typedef unit<surface_tension_dimension, si::system>     surface_tension;
+
+BOOST_UNITS_STATIC_CONSTANT ( newton_per_meter, surface_tension );
+BOOST_UNITS_STATIC_CONSTANT ( newtons_per_meter, surface_tension );
 
 } // namespace si
 

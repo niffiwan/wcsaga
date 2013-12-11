@@ -4,8 +4,8 @@
 
 // Copyright Aleksey Gurtovoy 2001-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -30,47 +30,51 @@ struct void_ { typedef void_ type; };
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
 
-namespace boost { namespace mpl {
+namespace boost
+{
+namespace mpl
+{
 
 template< typename T >
 struct is_void_
-    : false_
+		: false_
 {
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    using false_::value;
+	using false_::value;
 #endif
 };
 
 template<>
 struct is_void_<void_>
-    : true_
+		: true_
 {
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    using true_::value;
+	using true_::value;
 #endif
 };
 
 template< typename T >
 struct is_not_void_
-    : true_
+		: true_
 {
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    using true_::value;
+	using true_::value;
 #endif
 };
 
 template<>
 struct is_not_void_<void_>
-    : false_
+		: false_
 {
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    using false_::value;
+	using false_::value;
 #endif
 };
 
-BOOST_MPL_AUX_NA_SPEC(1, is_void_)
-BOOST_MPL_AUX_NA_SPEC(1, is_not_void_)
+BOOST_MPL_AUX_NA_SPEC ( 1, is_void_ )
+BOOST_MPL_AUX_NA_SPEC ( 1, is_not_void_ )
 
-}}
+}
+}
 
 #endif // BOOST_MPL_VOID_HPP_INCLUDED

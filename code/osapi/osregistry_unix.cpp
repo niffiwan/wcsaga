@@ -1,13 +1,13 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
 
-#ifndef WIN32	// Goober5000
+#ifndef WIN32   // Goober5000
 
 #include <string.h>
 #include "globalincs/pstypes.h"
@@ -23,31 +23,31 @@
 // REGISTRY DEFINES/VARS
 //
 
-char* Osreg_company_name = "Volition";
-char* Osreg_class_name = "WCSagaClass";
+char *Osreg_company_name = "Volition";
+char *Osreg_class_name = "WCSagaClass";
 
 #if defined(FS2_DEMO)
-	char *Osreg_app_name = "WingCommanderSagaDemo";
-	char *Osreg_title = "Wing Commander Saga Demo";
+char *Osreg_app_name = "WingCommanderSagaDemo";
+char *Osreg_title = "Wing Commander Saga Demo";
 #ifdef __APPLE__
-	char *Osreg_user_dir = "Library/Wing Commander Saga Demo";
+char *Osreg_user_dir = "Library/Wing Commander Saga Demo";
 #else
-	char *Osreg_user_dir = ".wcsaga_demo";
+char *Osreg_user_dir = ".wcsaga_demo";
 #endif // __APPLE__
-	#define PROFILE_NAME "WCSagaDemo.ini"
+#define PROFILE_NAME "WCSagaDemo.ini"
 
 #elif defined(OEM_BUILD)
-	char *Osreg_app_name = "WingCommanderSagaOEM";
-	char *Osreg_title = "Wing Commander Saga OEM";
-	#define PROFILE_NAME "WCSagaOEM.ini"
+char *Osreg_app_name = "WingCommanderSagaOEM";
+char *Osreg_title = "Wing Commander Saga OEM";
+#define PROFILE_NAME "WCSagaOEM.ini"
 
 #else
-	char* Osreg_app_name = "WingCommanderSaga";
-char* Osreg_title = "Wing Commander Saga";
+char *Osreg_app_name = "WingCommanderSaga";
+char *Osreg_title = "Wing Commander Saga";
 #ifdef __APPLE__
-	char *Osreg_user_dir = "Library/Wing Commander Saga";
+char *Osreg_user_dir = "Library/Wing Commander Saga";
 #else
-	char* Osreg_user_dir = ".wcsaga";
+char *Osreg_user_dir = ".wcsaga";
 #endif // __APPLE__
 #define PROFILE_NAME "fs2_open.ini"
 #endif
@@ -56,23 +56,23 @@ char* Osreg_title = "Wing Commander Saga";
 
 typedef struct KeyValue
 {
-	char* key;
-	char* value;
+	char *key;
+	char *value;
 
-	struct KeyValue* next;
+	struct KeyValue *next;
 } KeyValue;
 
 typedef struct Section
 {
-	char* name;
+	char *name;
 
-	struct KeyValue* pairs;
-	struct Section* next;
+	struct KeyValue *pairs;
+	struct Section *next;
 } Section;
 
 typedef struct Profile
 {
-	struct Section* sections;
+	struct Section *sections;
 } Profile;
 
 
@@ -80,28 +80,28 @@ typedef struct Profile
 // REGISTRY FUNCTIONS
 //
 
-static char* read_line_from_file(FILE* fp)
+static char *read_line_from_file ( FILE *fp )
 {
-	char* buf, *buf_start;
+	char *buf, *buf_start;
 	int buflen, len, eol;
 
 	buflen = 80;
-	buf = (char*)vm_malloc(buflen);
+	buf = ( char * ) vm_malloc ( buflen );
 	buf_start = buf;
 	eol = 0;
 
 	do
 	{
-		if (buf == NULL)
+		if ( buf == NULL )
 		{
 			return NULL;
 		}
 
-		if (fgets(buf_start, 80, fp) == NULL)
+		if ( fgets ( buf_start, 80, fp ) == NULL )
 		{
-			if (buf_start == buf)
+			if ( buf_start == buf )
 			{
-				vm_free(buf);
+				vm_free ( buf );
 				return NULL;
 			}
 			else
@@ -111,9 +111,9 @@ static char* read_line_from_file(FILE* fp)
 			}
 		}
 
-		len = strlen(buf_start);
+		len = strlen ( buf_start );
 
-		if (buf_start[len - 1] == '\n')
+		if ( buf_start[len - 1] == '\n' )
 		{
 			buf_start[len - 1] = 0;
 			eol = 1;
@@ -122,52 +122,53 @@ static char* read_line_from_file(FILE* fp)
 		{
 			buflen += 80;
 
-			buf = (char*)vm_realloc(buf, buflen);
+			buf = ( char * ) vm_realloc ( buf, buflen );
 
 			/* be sure to skip over the proper amount of nulls */
-			buf_start = buf + (buflen - 80) - (buflen / 80) + 1;
+			buf_start = buf + ( buflen - 80 ) - ( buflen / 80 ) + 1;
 		}
-	} while (!eol);
+	}
+	while ( !eol );
 
 	return buf;
 }
 
-static char* trim_string(char* str)
+static char *trim_string ( char *str )
 {
-	char* ptr;
+	char *ptr;
 	int len;
 
-	if (str == NULL)
+	if ( str == NULL )
 		return NULL;
 
 	/* kill any comment */
-	ptr = strchr(str, ';');
-	if (ptr)
+	ptr = strchr ( str, ';' );
+	if ( ptr )
 		*ptr = 0;
-	ptr = strchr(str, '#');
-	if (ptr)
+	ptr = strchr ( str, '#' );
+	if ( ptr )
 		*ptr = 0;
 
 	ptr = str;
-	len = strlen(str);
-	if (len > 0)
+	len = strlen ( str );
+	if ( len > 0 )
 	{
 		ptr += len - 1;
 	}
 
-	while ((ptr > str) && isspace(*ptr))
+	while ( ( ptr > str ) && isspace ( *ptr ) )
 	{
 		ptr--;
 	}
 
-	if (*ptr)
+	if ( *ptr )
 	{
 		ptr++;
 		*ptr = 0;
 	}
 
 	ptr = str;
-	while (*ptr && isspace(*ptr))
+	while ( *ptr && isspace ( *ptr ) )
 	{
 		ptr++;
 	}
@@ -175,68 +176,68 @@ static char* trim_string(char* str)
 	return ptr;
 }
 
-static Profile* profile_read(char* file)
+static Profile *profile_read ( char *file )
 {
 	char fullname[MAX_PATH_LEN];
-	FILE* fp = NULL;
-	char* str;
+	FILE *fp = NULL;
+	char *str;
 
-	memset(fullname, 0, sizeof(fullname));
-	snprintf(fullname, MAX_PATH_LEN - 1, "%s%s%s%s%s%s%s", detect_home(), DIR_SEPARATOR_STR, Osreg_company_name,
-		DIR_SEPARATOR_STR, Osreg_user_dir, DIR_SEPARATOR_STR, file);
+	memset ( fullname, 0, sizeof ( fullname ) );
+	snprintf ( fullname, MAX_PATH_LEN - 1, "%s%s%s%s%s%s%s", detect_home(), DIR_SEPARATOR_STR, Osreg_company_name,
+	           DIR_SEPARATOR_STR, Osreg_user_dir, DIR_SEPARATOR_STR, file );
 
-	fp = fopen(fullname, "rt");
+	fp = fopen ( fullname, "rt" );
 
-	if (fp == NULL)
+	if ( fp == NULL )
 		return NULL;
 
-	Profile* profile = (Profile*)vm_malloc(sizeof(Profile));
+	Profile *profile = ( Profile * ) vm_malloc ( sizeof ( Profile ) );
 	profile->sections = NULL;
 
-	Section** sp_ptr = &(profile->sections);
-	Section* sp = NULL;
+	Section **sp_ptr = & ( profile->sections );
+	Section *sp = NULL;
 
-	KeyValue** kvp_ptr = NULL;
+	KeyValue **kvp_ptr = NULL;
 
-	while ((str = read_line_from_file(fp)) != NULL)
+	while ( ( str = read_line_from_file ( fp ) ) != NULL )
 	{
-		char* ptr = trim_string(str);
+		char *ptr = trim_string ( str );
 
-		if (*ptr == '[')
+		if ( *ptr == '[' )
 		{
 			ptr++;
 
-			char* pend = strchr(ptr, ']');
-			if (pend != NULL)
+			char *pend = strchr ( ptr, ']' );
+			if ( pend != NULL )
 			{
 				// if (pend[1]) { /* trailing garbage! */ }
 
 				*pend = 0;
 
-				if (*ptr)
+				if ( *ptr )
 				{
-					sp = (Section*)vm_malloc(sizeof(Section));
+					sp = ( Section * ) vm_malloc ( sizeof ( Section ) );
 					sp->next = NULL;
 
-					sp->name = vm_strdup(ptr);
+					sp->name = vm_strdup ( ptr );
 					sp->pairs = NULL;
 
 					*sp_ptr = sp;
-					sp_ptr = &(sp->next);
+					sp_ptr = & ( sp->next );
 
-					kvp_ptr = &(sp->pairs);
+					kvp_ptr = & ( sp->pairs );
 				} // else { /* null name! */ }
 			} // else { /* incomplete section name! */ }
 		}
 		else
 		{
-			if (*ptr)
+			if ( *ptr )
 			{
-				char* key = ptr;
-				char* value = NULL;
+				char *key = ptr;
+				char *value = NULL;
 
-				ptr = strchr(ptr, '=');
-				if (ptr != NULL)
+				ptr = strchr ( ptr, '=' );
+				if ( ptr != NULL )
 				{
 					*ptr = 0;
 					ptr++;
@@ -244,117 +245,117 @@ static Profile* profile_read(char* file)
 					value = ptr;
 				} // else { /* random garbage! */ }
 
-				if (key && *key && value/* && *value */)
+				if ( key && *key && value/* && *value */ )
 				{
-					if (sp != NULL)
+					if ( sp != NULL )
 					{
-						KeyValue* kvp = (KeyValue*)vm_malloc(sizeof(KeyValue));
+						KeyValue *kvp = ( KeyValue * ) vm_malloc ( sizeof ( KeyValue ) );
 
-						kvp->key = vm_strdup(key);
-						kvp->value = vm_strdup(value);
+						kvp->key = vm_strdup ( key );
+						kvp->value = vm_strdup ( value );
 
 						kvp->next = NULL;
 
 						*kvp_ptr = kvp;
-						kvp_ptr = &(kvp->next);
+						kvp_ptr = & ( kvp->next );
 					} // else { /* key/value with no section! */
 				} // else { /* malformed key/value entry! */ }
 			} // else it's just a comment or empty string
 		}
 
-		vm_free(str);
+		vm_free ( str );
 	}
 
-	fclose(fp);
+	fclose ( fp );
 
 	return profile;
 }
 
-static void profile_free(Profile* profile)
+static void profile_free ( Profile *profile )
 {
-	if (profile == NULL)
+	if ( profile == NULL )
 		return;
 
-	Section* sp = profile->sections;
-	while (sp != NULL)
+	Section *sp = profile->sections;
+	while ( sp != NULL )
 	{
-		Section* st = sp;
-		KeyValue* kvp = sp->pairs;
+		Section *st = sp;
+		KeyValue *kvp = sp->pairs;
 
-		while (kvp != NULL)
+		while ( kvp != NULL )
 		{
-			KeyValue* kvt = kvp;
+			KeyValue *kvt = kvp;
 
-			vm_free(kvp->key);
-			vm_free(kvp->value);
+			vm_free ( kvp->key );
+			vm_free ( kvp->value );
 
 			kvp = kvp->next;
-			vm_free(kvt);
+			vm_free ( kvt );
 		}
 
-		vm_free(sp->name);
+		vm_free ( sp->name );
 
 		sp = sp->next;
-		vm_free(st);
+		vm_free ( st );
 	}
 
-	vm_free(profile);
+	vm_free ( profile );
 }
 
-static Profile* profile_update(Profile* profile, char* section, char* key, char* value)
+static Profile *profile_update ( Profile *profile, char *section, char *key, char *value )
 {
-	if (profile == NULL)
+	if ( profile == NULL )
 	{
-		profile = (Profile*)vm_malloc(sizeof(Profile));
+		profile = ( Profile * ) vm_malloc ( sizeof ( Profile ) );
 
 		profile->sections = NULL;
 	}
 
-	KeyValue* kvp;
+	KeyValue *kvp;
 
-	Section** sp_ptr = &(profile->sections);
-	Section* sp = profile->sections;
+	Section **sp_ptr = & ( profile->sections );
+	Section *sp = profile->sections;
 
-	while (sp != NULL)
+	while ( sp != NULL )
 	{
-		if (strcmp(section, sp->name) == 0)
+		if ( strcmp ( section, sp->name ) == 0 )
 		{
-			KeyValue** kvp_ptr = &(sp->pairs);
+			KeyValue **kvp_ptr = & ( sp->pairs );
 			kvp = sp->pairs;
 
-			while (kvp != NULL)
+			while ( kvp != NULL )
 			{
-				if (strcmp(key, kvp->key) == 0)
+				if ( strcmp ( key, kvp->key ) == 0 )
 				{
-					vm_free(kvp->value);
+					vm_free ( kvp->value );
 
-					if (value == NULL)
+					if ( value == NULL )
 					{
 						*kvp_ptr = kvp->next;
 
-						vm_free(kvp->key);
-						vm_free(kvp);
+						vm_free ( kvp->key );
+						vm_free ( kvp );
 					}
 					else
 					{
-						kvp->value = vm_strdup(value);
+						kvp->value = vm_strdup ( value );
 					}
 
 					/* all done */
 					return profile;
 				}
 
-				kvp_ptr = &(kvp->next);
+				kvp_ptr = & ( kvp->next );
 				kvp = kvp->next;
 			}
 
-			if (value != NULL)
+			if ( value != NULL )
 			{
 				/* key not found */
-				kvp = (KeyValue*)vm_malloc(sizeof(KeyValue));
+				kvp = ( KeyValue * ) vm_malloc ( sizeof ( KeyValue ) );
 				kvp->next = NULL;
-				kvp->key = vm_strdup(key);
-				kvp->value = vm_strdup(value);
+				kvp->key = vm_strdup ( key );
+				kvp->value = vm_strdup ( value );
 			}
 
 			*kvp_ptr = kvp;
@@ -363,19 +364,19 @@ static Profile* profile_update(Profile* profile, char* section, char* key, char*
 			return profile;
 		}
 
-		sp_ptr = &(sp->next);
+		sp_ptr = & ( sp->next );
 		sp = sp->next;
 	}
 
 	/* section not found */
-	sp = (Section*)vm_malloc(sizeof(Section));
+	sp = ( Section * ) vm_malloc ( sizeof ( Section ) );
 	sp->next = NULL;
-	sp->name = vm_strdup(section);
+	sp->name = vm_strdup ( section );
 
-	kvp = (KeyValue*)vm_malloc(sizeof(KeyValue));
+	kvp = ( KeyValue * ) vm_malloc ( sizeof ( KeyValue ) );
 	kvp->next = NULL;
-	kvp->key = vm_strdup(key);
-	kvp->value = vm_strdup(value);
+	kvp->key = vm_strdup ( key );
+	kvp->value = vm_strdup ( value );
 
 	sp->pairs = kvp;
 
@@ -384,22 +385,22 @@ static Profile* profile_update(Profile* profile, char* section, char* key, char*
 	return profile;
 }
 
-static char* profile_get_value(Profile* profile, char* section, char* key)
+static char *profile_get_value ( Profile *profile, char *section, char *key )
 {
-	if (profile == NULL)
+	if ( profile == NULL )
 		return NULL;
 
-	Section* sp = profile->sections;
+	Section *sp = profile->sections;
 
-	while (sp != NULL)
+	while ( sp != NULL )
 	{
-		if (strcmp(section, sp->name) == 0)
+		if ( strcmp ( section, sp->name ) == 0 )
 		{
-			KeyValue* kvp = sp->pairs;
+			KeyValue *kvp = sp->pairs;
 
-			while (kvp != NULL)
+			while ( kvp != NULL )
 			{
-				if (strcmp(key, kvp->key) == 0)
+				if ( strcmp ( key, kvp->key ) == 0 )
 				{
 					return kvp->value;
 				}
@@ -414,46 +415,46 @@ static char* profile_get_value(Profile* profile, char* section, char* key)
 	return NULL;
 }
 
-static void profile_save(Profile* profile, char* file)
+static void profile_save ( Profile *profile, char *file )
 {
-	FILE* fp = NULL;
+	FILE *fp = NULL;
 	char tmp[MAX_PATH] = "";
 	char tmp2[MAX_PATH] = "";
 	char fullname[MAX_PATH_LEN];
 
-	if (profile == NULL)
+	if ( profile == NULL )
 		return;
 
-	memset(fullname, 0, sizeof(fullname));
-	snprintf(fullname, MAX_PATH_LEN - 1, "%s%s%s%s%s%s%s", detect_home(), DIR_SEPARATOR_STR, Osreg_company_name,
-		DIR_SEPARATOR_STR, Osreg_user_dir, DIR_SEPARATOR_STR, file);
+	memset ( fullname, 0, sizeof ( fullname ) );
+	snprintf ( fullname, MAX_PATH_LEN - 1, "%s%s%s%s%s%s%s", detect_home(), DIR_SEPARATOR_STR, Osreg_company_name,
+	           DIR_SEPARATOR_STR, Osreg_user_dir, DIR_SEPARATOR_STR, file );
 
-	fp = fopen(fullname, "wt");
+	fp = fopen ( fullname, "wt" );
 
-	if (fp == NULL)
+	if ( fp == NULL )
 		return;
 
-	Section* sp = profile->sections;
+	Section *sp = profile->sections;
 
-	while (sp != NULL)
+	while ( sp != NULL )
 	{
-		sprintf(tmp, NOX("[%s]\n"), sp->name);
-		fputs(tmp, fp);
+		sprintf ( tmp, NOX ( "[%s]\n" ), sp->name );
+		fputs ( tmp, fp );
 
-		KeyValue* kvp = sp->pairs;
-		while (kvp != NULL)
+		KeyValue *kvp = sp->pairs;
+		while ( kvp != NULL )
 		{
-			sprintf(tmp2, NOX("%s=%s\n"), kvp->key, kvp->value);
-			fputs(tmp2, fp);
+			sprintf ( tmp2, NOX ( "%s=%s\n" ), kvp->key, kvp->value );
+			fputs ( tmp2, fp );
 			kvp = kvp->next;
 		}
 
-		fprintf(fp, "\n");
+		fprintf ( fp, "\n" );
 
 		sp = sp->next;
 	}
 
-	fclose(fp);
+	fclose ( fp );
 }
 
 // os registry functions -------------------------------------------------------------
@@ -465,33 +466,33 @@ static char szAppVersion[128];
 int Os_reg_inited = 0;
 
 // initialize the registry. setup default keys to use
-void os_init_registry_stuff(char* company, char* app, char* version)
+void os_init_registry_stuff ( char *company, char *app, char *version )
 {
-	if (company)
+	if ( company )
 	{
-		strcpy_s(szCompanyName, company);
+		strcpy_s ( szCompanyName, company );
 	}
 	else
 	{
-		strcpy_s(szCompanyName, Osreg_company_name);
+		strcpy_s ( szCompanyName, Osreg_company_name );
 	}
 
-	if (app)
+	if ( app )
 	{
-		strcpy_s(szAppName, app);
+		strcpy_s ( szAppName, app );
 	}
 	else
 	{
-		strcpy_s(szAppName, Osreg_app_name);
+		strcpy_s ( szAppName, Osreg_app_name );
 	}
 
-	if (version)
+	if ( version )
 	{
-		strcpy_s(szAppVersion, version);
+		strcpy_s ( szAppVersion, version );
 	}
 	else
 	{
-		strcpy_s(szAppVersion, "1.0");
+		strcpy_s ( szAppVersion, "1.0" );
 	}
 
 	Os_reg_inited = 1;
@@ -499,74 +500,74 @@ void os_init_registry_stuff(char* company, char* app, char* version)
 
 static char tmp_string_data[1024];
 
-char* os_config_read_string(char* section, char* name, char* default_value)
+char *os_config_read_string ( char *section, char *name, char *default_value )
 {
-	nprintf(("Registry", "os_config_read_string(): section = \"%s\", name = \"%s\", default value: \"%s\"\n",
-			 (section) ? section : DEFAULT_SECTION, name, (default_value) ? default_value : NOX("NULL")));
+	nprintf ( ( "Registry", "os_config_read_string(): section = \"%s\", name = \"%s\", default value: \"%s\"\n",
+	            ( section ) ? section : DEFAULT_SECTION, name, ( default_value ) ? default_value : NOX ( "NULL" ) ) );
 
-	Profile* p = profile_read(PROFILE_NAME);
+	Profile *p = profile_read ( PROFILE_NAME );
 
-	if (section == NULL)
+	if ( section == NULL )
 		section = DEFAULT_SECTION;
 
-	char* ptr = profile_get_value(p, section, name);
+	char *ptr = profile_get_value ( p, section, name );
 
-	if (ptr != NULL)
+	if ( ptr != NULL )
 	{
-		strncpy(tmp_string_data, ptr, 1023);
+		strncpy ( tmp_string_data, ptr, 1023 );
 		default_value = tmp_string_data;
 	}
 
-	profile_free(p);
+	profile_free ( p );
 
 	return default_value;
 }
 
-unsigned int os_config_read_uint(char* section, char* name, unsigned int default_value)
+unsigned int os_config_read_uint ( char *section, char *name, unsigned int default_value )
 {
-	Profile* p = profile_read(PROFILE_NAME);
+	Profile *p = profile_read ( PROFILE_NAME );
 
-	if (section == NULL)
+	if ( section == NULL )
 		section = DEFAULT_SECTION;
 
-	char* ptr = profile_get_value(p, section, name);
+	char *ptr = profile_get_value ( p, section, name );
 
-	if (ptr != NULL)
+	if ( ptr != NULL )
 	{
-		default_value = atoi(ptr);
+		default_value = atoi ( ptr );
 	}
 
-	profile_free(p);
+	profile_free ( p );
 
 	return default_value;
 }
 
-void os_config_write_string(char* section, char* name, char* value)
+void os_config_write_string ( char *section, char *name, char *value )
 {
-	Profile* p = profile_read(PROFILE_NAME);
+	Profile *p = profile_read ( PROFILE_NAME );
 
-	if (section == NULL)
+	if ( section == NULL )
 		section = DEFAULT_SECTION;
 
-	p = profile_update(p, section, name, value);
-	profile_save(p, PROFILE_NAME);
-	profile_free(p);
+	p = profile_update ( p, section, name, value );
+	profile_save ( p, PROFILE_NAME );
+	profile_free ( p );
 }
 
-void os_config_write_uint(char* section, char* name, unsigned int value)
+void os_config_write_uint ( char *section, char *name, unsigned int value )
 {
 	static char buf[21];
 
-	snprintf(buf, 20, "%u", value);
+	snprintf ( buf, 20, "%u", value );
 
-	Profile* p = profile_read(PROFILE_NAME);
+	Profile *p = profile_read ( PROFILE_NAME );
 
-	if (section == NULL)
+	if ( section == NULL )
 		section = DEFAULT_SECTION;
 
-	p = profile_update(p, section, name, buf);
-	profile_save(p, PROFILE_NAME);
-	profile_free(p);
+	p = profile_update ( p, section, name, buf );
+	profile_save ( p, PROFILE_NAME );
+	profile_free ( p );
 }
 
-#endif		// Goober5000 - #ifndef WIN32
+#endif      // Goober5000 - #ifndef WIN32

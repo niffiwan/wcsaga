@@ -15,55 +15,59 @@
 #   define BOOST_SPIRIT_CLOSURE_LIMIT PHOENIX_LIMIT
 #endif
 
-namespace boost { namespace spirit {
+namespace boost
+{
+namespace spirit
+{
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-    template<typename ClosureT>
-    class closure_context;
+template<typename ClosureT>
+class closure_context;
 
-    template <typename ClosureT>
-    class init_closure_context;
+template <typename ClosureT>
+class init_closure_context;
 
-    template <typename ParserT, typename ActorTupleT>
-    struct init_closure_parser;
+template <typename ParserT, typename ActorTupleT>
+struct init_closure_parser;
 
-    template <
-            typename DerivedT
-        ,   typename T0 = phoenix::nil_t
-        ,   typename T1 = phoenix::nil_t
-        ,   typename T2 = phoenix::nil_t
+template <
+    typename DerivedT
+    ,   typename T0 = phoenix::nil_t
+    ,   typename T1 = phoenix::nil_t
+    ,   typename T2 = phoenix::nil_t
 
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 3
-        ,   typename T3 = phoenix::nil_t
-        ,   typename T4 = phoenix::nil_t
-        ,   typename T5 = phoenix::nil_t
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 3
+    ,   typename T3 = phoenix::nil_t
+    ,   typename T4 = phoenix::nil_t
+    ,   typename T5 = phoenix::nil_t
 
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 6
-        ,   typename T6 = phoenix::nil_t
-        ,   typename T7 = phoenix::nil_t
-        ,   typename T8 = phoenix::nil_t
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 6
+    ,   typename T6 = phoenix::nil_t
+    ,   typename T7 = phoenix::nil_t
+    ,   typename T8 = phoenix::nil_t
 
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 9
-        ,   typename T9 = phoenix::nil_t
-        ,   typename T10 = phoenix::nil_t
-        ,   typename T11 = phoenix::nil_t
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 9
+    ,   typename T9 = phoenix::nil_t
+    ,   typename T10 = phoenix::nil_t
+    ,   typename T11 = phoenix::nil_t
 
-    #if BOOST_SPIRIT_CLOSURE_LIMIT > 12
-        ,   typename T12 = phoenix::nil_t
-        ,   typename T13 = phoenix::nil_t
-        ,   typename T14 = phoenix::nil_t
+#if BOOST_SPIRIT_CLOSURE_LIMIT > 12
+    ,   typename T12 = phoenix::nil_t
+    ,   typename T13 = phoenix::nil_t
+    ,   typename T14 = phoenix::nil_t
 
-    #endif
-    #endif
-    #endif
-    #endif
+#endif
+#endif
+#endif
+#endif
     >
-    struct closure;
+struct closure;
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}} // namespace BOOST_SPIRIT_CLASSIC_NS
+}
+} // namespace BOOST_SPIRIT_CLASSIC_NS
 
 #endif
 

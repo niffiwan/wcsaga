@@ -3,7 +3,7 @@
 //  Copyright (c) 2001-2003 John Maddock
 //  Copyright (c) 2001 Darin Adler
 //  Copyright (c) 2001 Peter Dimov
-//  Copyright (c) 2002 Bill Kempf 
+//  Copyright (c) 2002 Bill Kempf
 //  Copyright (c) 2002 Jens Maurer
 //  Copyright (c) 2002-2003 David Abrahams
 //  Copyright (c) 2003 Gennaro Prota
@@ -124,7 +124,7 @@
 #  endif
 
 //
-// Without partial specialization, partial 
+// Without partial specialization, partial
 // specialization with default args won't work either:
 //
 #  if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
@@ -336,7 +336,7 @@
 
 # ifdef BOOST_NO_STDC_NAMESPACE
 #   include <cstddef>
-    namespace std { using ::ptrdiff_t; using ::size_t; }
+namespace std { using ::ptrdiff_t; using ::size_t; }
 # endif
 
 //  Workaround for the unfortunate min/max macros defined by some platform headers
@@ -355,15 +355,18 @@
 
 #  ifdef BOOST_NO_STD_MIN_MAX
 
-namespace std {
-  template <class _Tp>
-  inline const _Tp& min BOOST_PREVENT_MACRO_SUBSTITUTION (const _Tp& __a, const _Tp& __b) {
-    return __b < __a ? __b : __a;
-  }
-  template <class _Tp>
-  inline const _Tp& max BOOST_PREVENT_MACRO_SUBSTITUTION (const _Tp& __a, const _Tp& __b) {
-    return  __a < __b ? __b : __a;
-  }
+namespace std
+{
+template <class _Tp>
+inline const _Tp &min BOOST_PREVENT_MACRO_SUBSTITUTION ( const _Tp &__a, const _Tp &__b )
+{
+	return __b < __a ? __b : __a;
+}
+template <class _Tp>
+inline const _Tp &max BOOST_PREVENT_MACRO_SUBSTITUTION ( const _Tp &__a, const _Tp &__b )
+{
+	return  __a < __b ? __b : __a;
+}
 }
 
 #  endif
@@ -465,13 +468,14 @@ namespace std {
 // (with -pedantic -ansi) unless it's use is prefixed by __extension__
 //
 #if defined(BOOST_HAS_LONG_LONG)
-namespace boost{
+namespace boost
+{
 #  ifdef __GNUC__
-   __extension__ typedef long long long_long_type;
-   __extension__ typedef unsigned long long ulong_long_type;
+__extension__ typedef long long long_long_type;
+__extension__ typedef unsigned long long ulong_long_type;
 #  else
-   typedef long long long_long_type;
-   typedef unsigned long long ulong_long_type;
+typedef long long long_long_type;
+typedef unsigned long long ulong_long_type;
 #  endif
 }
 #endif

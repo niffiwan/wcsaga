@@ -19,79 +19,94 @@
 #include <boost/spirit/home/support/common_terminals.hpp>
 #include <boost/spirit/home/support/has_semantic_action.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <>
-    struct use_directive<qi::domain, tag::omit> // enables omit
-      : mpl::true_ {};
-}}
-
-namespace boost { namespace spirit { namespace qi
+namespace spirit
 {
-    using spirit::omit;
-    using spirit::omit_type;
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
+template <>
+struct use_directive<qi::domain, tag::omit> // enables omit
+		: mpl::true_ {};
+}
+}
 
-    ///////////////////////////////////////////////////////////////////////////
-    // omit_directive forces the attribute of subject parser
-    // to be unused_type
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Subject>
-    struct omit_directive : unary_parser<omit_directive<Subject> >
-    {
-        typedef Subject subject_type;
-        omit_directive(Subject const& subject)
-          : subject(subject) {}
-
-        template <typename Context, typename Iterator>
-        struct attribute
-        {
-            typedef unused_type type;
-        };
-
-        template <typename Iterator, typename Context
-          , typename Skipper, typename Attribute>
-        bool parse(Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper, Attribute& attr) const
-        {
-            return subject.parse(first, last, context, skipper, attr);
-        }
-
-        template <typename Context>
-        info what(Context& context) const
-        {
-            return info("omit", subject.what(context));
-
-        }
-
-        Subject subject;
-
-    private:
-        // silence MSVC warning C4512: assignment operator could not be generated
-        omit_directive& operator= (omit_directive const&);
-    };
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Subject, typename Modifiers>
-    struct make_directive<tag::omit, Subject, Modifiers>
-    {
-        typedef omit_directive<Subject> result_type;
-        result_type operator()(unused_type, Subject const& subject, unused_type) const
-        {
-            return result_type(subject);
-        }
-    };
-}}}
-
-namespace boost { namespace spirit { namespace traits
+namespace boost
 {
-    template <typename Subject>
-    struct has_semantic_action<qi::omit_directive<Subject> >
-      : mpl::false_ {};
-}}}
+namespace spirit
+{
+namespace qi
+{
+using spirit::omit;
+using spirit::omit_type;
+
+///////////////////////////////////////////////////////////////////////////
+// omit_directive forces the attribute of subject parser
+// to be unused_type
+///////////////////////////////////////////////////////////////////////////
+template <typename Subject>
+struct omit_directive : unary_parser<omit_directive<Subject> >
+{
+	typedef Subject subject_type;
+	omit_directive ( Subject const &subject )
+		: subject ( subject ) {}
+
+	template <typename Context, typename Iterator>
+	struct attribute
+	{
+		typedef unused_type type;
+	};
+
+	template <typename Iterator, typename Context
+	          , typename Skipper, typename Attribute>
+	bool parse ( Iterator &first, Iterator const &last
+	             , Context &context, Skipper const &skipper, Attribute &attr ) const
+	{
+		return subject.parse ( first, last, context, skipper, attr );
+	}
+
+	template <typename Context>
+	info what ( Context &context ) const
+	{
+		return info ( "omit", subject.what ( context ) );
+
+	}
+
+	Subject subject;
+
+private:
+	// silence MSVC warning C4512: assignment operator could not be generated
+	omit_directive &operator= ( omit_directive const & );
+};
+
+///////////////////////////////////////////////////////////////////////////
+// Parser generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+template <typename Subject, typename Modifiers>
+struct make_directive<tag::omit, Subject, Modifiers>
+{
+	typedef omit_directive<Subject> result_type;
+	result_type operator() ( unused_type, Subject const &subject, unused_type ) const
+	{
+		return result_type ( subject );
+	}
+};
+}
+}
+}
+
+namespace boost
+{
+namespace spirit
+{
+namespace traits
+{
+template <typename Subject>
+struct has_semantic_action<qi::omit_directive<Subject> >
+		: mpl::false_ {};
+}
+}
+}
 
 #endif

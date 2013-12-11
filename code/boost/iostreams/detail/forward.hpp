@@ -6,12 +6,12 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 #ifndef BOOST_IOSTREAMS_DETAIL_FORWARD_HPP_INCLUDED
-#define BOOST_IOSTREAMS_DETAIL_FORWARD_HPP_INCLUDED   
+#define BOOST_IOSTREAMS_DETAIL_FORWARD_HPP_INCLUDED
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif                  
- 
+#endif
+
 #include <boost/config.hpp> // BOOST_MSVC, BOOST_NO_SFINAE
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/config/limits.hpp>
@@ -26,7 +26,7 @@
 #include <boost/type_traits/is_same.hpp>
 
 //------Macros for defining forwarding constructors and open overloads--------//
-    
+
 //
 // Macro: BOOST_IOSTREAMS_FORWARD(class, impl, device, params, args)
 // Description: Defines constructors and overloads of 'open' which construct
@@ -117,7 +117,7 @@
 # define BOOST_IOSTREAMS_DISABLE_IF_SAME(device, param) \
     , typename boost::disable_if< boost::is_same<device, param> >::type* = 0 \
     /**/
-#else 
+#else
 # define BOOST_IOSTREAMS_DISABLE_IF_SAME(device, param)
 #endif
 

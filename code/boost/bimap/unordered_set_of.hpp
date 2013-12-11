@@ -39,8 +39,10 @@
 #include <boost/bimap/views/unordered_map_view.hpp>
 #include <boost/bimap/views/unordered_set_view.hpp>
 
-namespace boost {
-namespace bimaps {
+namespace boost
+{
+namespace bimaps
+{
 
 /// \brief Set Type Specification
 /**
@@ -114,63 +116,63 @@ See also unordered_set_of_relation.
 template
 <
     class KeyType,
-    class HashFunctor   = hash< BOOST_DEDUCED_TYPENAME 
-        ::boost::bimaps::tags::support::value_type_of<KeyType>::type >,
-    class EqualKey      = std::equal_to< BOOST_DEDUCED_TYPENAME 
-        ::boost::bimaps::tags::support::value_type_of<KeyType>::type >
->
+    class HashFunctor   = hash< BOOST_DEDUCED_TYPENAME
+                                ::boost::bimaps::tags::support::value_type_of<KeyType>::type >,
+    class EqualKey      = std::equal_to< BOOST_DEDUCED_TYPENAME
+            ::boost::bimaps::tags::support::value_type_of<KeyType>::type >
+    >
 struct unordered_set_of : public ::boost::bimaps::detail::set_type_of_tag
 {
-    /// User type, can be tagged
-    typedef KeyType user_type;
+	/// User type, can be tagged
+	typedef KeyType user_type;
 
-    /// Type of the object that will be stored in the container
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::tags::support::
-        value_type_of<user_type>::type value_type;
+	/// Type of the object that will be stored in the container
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::tags::support::
+	value_type_of<user_type>::type value_type;
 
-    /// Hash Functor that takes value_type objects
-    typedef HashFunctor     hasher;
+	/// Hash Functor that takes value_type objects
+	typedef HashFunctor     hasher;
 
-    /// Functor that compare two value_type objects for equality
-    typedef EqualKey        key_equal;
+	/// Functor that compare two value_type objects for equality
+	typedef EqualKey        key_equal;
 
-    struct lazy_concept_checked
-    {
-        BOOST_CLASS_REQUIRE ( value_type,
-                              boost, AssignableConcept );
+	struct lazy_concept_checked
+	{
+		BOOST_CLASS_REQUIRE ( value_type,
+		                      boost, AssignableConcept );
 
-        BOOST_CLASS_REQUIRE3( hasher, std::size_t, value_type,
-                              boost, UnaryFunctionConcept );
+		BOOST_CLASS_REQUIRE3 ( hasher, std::size_t, value_type,
+		                       boost, UnaryFunctionConcept );
 
-        BOOST_CLASS_REQUIRE4( key_equal, bool, value_type, value_type,
-                              boost, BinaryFunctionConcept );
+		BOOST_CLASS_REQUIRE4 ( key_equal, bool, value_type, value_type,
+		                       boost, BinaryFunctionConcept );
 
-        typedef unordered_set_of type; 
-    };
+		typedef unordered_set_of type;
+	};
 
-    BOOST_BIMAP_GENERATE_INDEX_BINDER_2CP(
+	BOOST_BIMAP_GENERATE_INDEX_BINDER_2CP (
 
-        // binds to
-        multi_index::hashed_unique,
+	    // binds to
+	    multi_index::hashed_unique,
 
-        // with
-        hasher,
-        key_equal
-    )
+	    // with
+	    hasher,
+	    key_equal
+	)
 
-    BOOST_BIMAP_GENERATE_MAP_VIEW_BINDER(
+	BOOST_BIMAP_GENERATE_MAP_VIEW_BINDER (
 
-        // binds to
-        views::unordered_map_view
-    )
+	    // binds to
+	    views::unordered_map_view
+	)
 
-    BOOST_BIMAP_GENERATE_SET_VIEW_BINDER(
+	BOOST_BIMAP_GENERATE_SET_VIEW_BINDER (
 
-        // binds to
-        views::unordered_set_view
-    )
+	    // binds to
+	    views::unordered_set_view
+	)
 
-    typedef mpl::bool_<false> mutable_key;
+	typedef mpl::bool_<false> mutable_key;
 };
 
 
@@ -197,28 +199,28 @@ template
 <
     class HashFunctor   = hash< _relation >,
     class EqualKey      = std::equal_to< _relation >
->
+    >
 struct unordered_set_of_relation : public ::boost::bimaps::detail::set_type_of_relation_tag
 {
-    /// Hash Functor that takes value_type objects
-    typedef HashFunctor     hasher;
+	/// Hash Functor that takes value_type objects
+	typedef HashFunctor     hasher;
 
-    /// Functor that compare two value_type objects for equality
-    typedef EqualKey        key_equal;
+	/// Functor that compare two value_type objects for equality
+	typedef EqualKey        key_equal;
 
 
-    BOOST_BIMAP_GENERATE_RELATION_BINDER_2CP(
+	BOOST_BIMAP_GENERATE_RELATION_BINDER_2CP (
 
-        // binds to
-        unordered_set_of,
+	    // binds to
+	    unordered_set_of,
 
-        // with
-        hasher,
-        key_equal
-    )
+	    // with
+	    hasher,
+	    key_equal
+	)
 
-    typedef mpl::bool_<false>  left_mutable_key;
-    typedef mpl::bool_<false> right_mutable_key;
+	typedef mpl::bool_<false>  left_mutable_key;
+	typedef mpl::bool_<false> right_mutable_key;
 };
 
 

@@ -16,12 +16,14 @@
 #include <boost/mpl/empty_sequence.hpp>
 #include <boost/accumulators/framework/accumulator_concept.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 namespace detail
 {
-    typedef void void_;
+typedef void void_;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -29,10 +31,10 @@ namespace detail
 //
 struct dont_care
 {
-    template<typename Args>
-    dont_care(Args const &)
-    {
-    }
+	template<typename Args>
+	dont_care ( Args const & )
+	{
+	}
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,26 +42,27 @@ struct dont_care
 //
 struct accumulator_base
 {
-    // hidden if defined in derived classes
-    detail::void_ operator ()(dont_care)
-    {
-    }
+	// hidden if defined in derived classes
+	detail::void_ operator () ( dont_care )
+	{
+	}
 
-    typedef mpl::false_ is_droppable;
+	typedef mpl::false_ is_droppable;
 
-    detail::void_ add_ref(dont_care)
-    {
-    }
+	detail::void_ add_ref ( dont_care )
+	{
+	}
 
-    detail::void_ drop(dont_care)
-    {
-    }
+	detail::void_ drop ( dont_care )
+	{
+	}
 
-    detail::void_ on_drop(dont_care)
-    {
-    }
+	detail::void_ on_drop ( dont_care )
+	{
+	}
 };
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

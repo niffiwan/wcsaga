@@ -18,7 +18,7 @@
 #define BOOST_TYPEOF_DECODE_PARAMS(n)\
     BOOST_PP_REPEAT(n, BOOST_TYPEOF_DECODE_PARAM, ~)
 
-// The P0, P1, ... PN are encoded and added to V 
+// The P0, P1, ... PN are encoded and added to V
 
 #define BOOST_TYPEOF_ENCODE_PARAMS_BEGIN(z, n, text)\
     typename boost::type_of::encode_type<

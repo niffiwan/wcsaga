@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2001-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -41,11 +41,15 @@
 // **************                  unit_test_main              ************** //
 // ************************************************************************** //
 
-namespace boost { namespace unit_test {
+namespace boost
+{
+namespace unit_test
+{
 
-int BOOST_TEST_DECL unit_test_main( init_unit_test_func init_func, int argc, char* argv[] );
+int BOOST_TEST_DECL unit_test_main ( init_unit_test_func init_func, int argc, char *argv[] );
 
-}}
+}
+}
 
 #if defined(BOOST_TEST_DYN_LINK) && defined(BOOST_TEST_MAIN) && !defined(BOOST_TEST_NO_MAIN)
 
@@ -54,9 +58,9 @@ int BOOST_TEST_DECL unit_test_main( init_unit_test_func init_func, int argc, cha
 // ************************************************************************** //
 
 int BOOST_TEST_CALL_DECL
-main( int argc, char* argv[] )
+main ( int argc, char *argv[] )
 {
-    return ::boost::unit_test::unit_test_main( &init_unit_test, argc, argv );
+	return ::boost::unit_test::unit_test_main ( &init_unit_test, argc, argv );
 }
 
 //____________________________________________________________________________//

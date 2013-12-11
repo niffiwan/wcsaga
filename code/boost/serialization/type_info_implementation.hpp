@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // type_info_implementation.hpp: interface for portable version of type_info
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -26,35 +26,39 @@
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/serialization/traits.hpp>
 
-namespace boost {
-namespace serialization {
+namespace boost
+{
+namespace serialization
+{
 
 // note that T and const T are folded into const T so that
 // there is only one table entry per type
 template<class T>
-struct type_info_implementation {
-    template<class U>
-    struct traits_class_typeinfo_implementation {
-      typedef BOOST_DEDUCED_TYPENAME U::type_info_implementation::type type;
-    };
-    // note: at least one compiler complained w/o the full qualification
-    // on basic traits below
-    typedef 
-        BOOST_DEDUCED_TYPENAME mpl::eval_if<
-            is_base_and_derived<boost::serialization::basic_traits, T>,
-            traits_class_typeinfo_implementation<T>,
-        //else
-            mpl::identity<
-                BOOST_DEDUCED_TYPENAME extended_type_info_impl<T>::type
-            >
-        >::type type;
+struct type_info_implementation
+{
+template<class U>
+struct traits_class_typeinfo_implementation
+{
+	typedef BOOST_DEDUCED_TYPENAME U::type_info_implementation::type type;
+};
+// note: at least one compiler complained w/o the full qualification
+// on basic traits below
+typedef
+BOOST_DEDUCED_TYPENAME mpl::eval_if <
+is_base_and_derived<boost::serialization::basic_traits, T>,
+                    traits_class_typeinfo_implementation<T>,
+                    //else
+                    mpl::identity <
+                    BOOST_DEDUCED_TYPENAME extended_type_info_impl<T>::type
+                    >
+                    >::type type;
 };
 
 } // namespace serialization
 } // namespace boost
 
 // define a macro to assign a particular derivation of extended_type_info
-// to a specified a class. 
+// to a specified a class.
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x560))
 #define BOOST_CLASS_TYPE_INFO(T, ETI)              \
 namespace boost {                                  \

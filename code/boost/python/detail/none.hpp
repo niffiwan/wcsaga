@@ -11,10 +11,17 @@
 
 # include <boost/python/detail/prefix.hpp>
 
-namespace boost { namespace python { namespace detail {
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
-inline PyObject* none() { Py_INCREF(Py_None); return Py_None; }
-    
-}}} // namespace boost::python::detail
+inline PyObject *none() { Py_INCREF ( Py_None ); return Py_None; }
+
+}
+}
+} // namespace boost::python::detail
 
 #endif // NONE_DWA_052000_H_

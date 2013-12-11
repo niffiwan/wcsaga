@@ -21,85 +21,88 @@
 #include <boost/serialization/split_member.hpp>
 #endif
 
-namespace boost{
+namespace boost
+{
 
-namespace multi_index{
+namespace multi_index
+{
 
-namespace detail{
+namespace detail
+{
 
 /* Iterator class for hashed indices.
  */
 
-template<typename Node,typename BucketArray>
+template<typename Node, typename BucketArray>
 class hashed_index_iterator:
-  public forward_iterator_helper<
-    hashed_index_iterator<Node,BucketArray>,
-    typename Node::value_type,
-    std::ptrdiff_t,
-    const typename Node::value_type*,
-    const typename Node::value_type&>
+	public forward_iterator_helper <
+	hashed_index_iterator<Node, BucketArray>,
+	typename Node::value_type,
+	std::ptrdiff_t,
+	const typename Node::value_type *,
+	const typename Node::value_type & >
 {
 public:
-  hashed_index_iterator(){}
-  hashed_index_iterator(Node* node_,BucketArray* buckets_):
-    node(node_),buckets(buckets_)
-  {}
+	hashed_index_iterator() {}
+	hashed_index_iterator ( Node *node_, BucketArray *buckets_ ) :
+		node ( node_ ), buckets ( buckets_ )
+	{}
 
-  const typename Node::value_type& operator*()const
-  {
-    return node->value();
-  }
+	const typename Node::value_type &operator*() const
+	{
+		return node->value();
+	}
 
-  hashed_index_iterator& operator++()
-  {
-    Node::increment(node,buckets->begin(),buckets->end());
-    return *this;
-  }
+	hashed_index_iterator &operator++()
+	{
+		Node::increment ( node, buckets->begin(), buckets->end() );
+		return *this;
+	}
 
 #if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
-  /* Serialization. As for why the following is public,
-   * see explanation in safe_mode_iterator notes in safe_mode.hpp.
-   */
-  
-  BOOST_SERIALIZATION_SPLIT_MEMBER()
+	/* Serialization. As for why the following is public,
+	 * see explanation in safe_mode_iterator notes in safe_mode.hpp.
+	 */
 
-  typedef typename Node::base_type node_base_type;
+	BOOST_SERIALIZATION_SPLIT_MEMBER()
 
-  template<class Archive>
-  void save(Archive& ar,const unsigned int)const
-  {
-    node_base_type* bnode=node;
-    ar<<serialization::make_nvp("pointer",bnode);
-    ar<<serialization::make_nvp("pointer",buckets);
-  }
+	typedef typename Node::base_type node_base_type;
 
-  template<class Archive>
-  void load(Archive& ar,const unsigned int)
-  {
-    node_base_type* bnode;
-    ar>>serialization::make_nvp("pointer",bnode);
-    node=static_cast<Node*>(bnode);
-    ar>>serialization::make_nvp("pointer",buckets);
-  }
+	template<class Archive>
+	void save ( Archive &ar, const unsigned int ) const
+	{
+		node_base_type *bnode = node;
+		ar << serialization::make_nvp ( "pointer", bnode );
+		ar << serialization::make_nvp ( "pointer", buckets );
+	}
+
+	template<class Archive>
+	void load ( Archive &ar, const unsigned int )
+	{
+		node_base_type *bnode;
+		ar >> serialization::make_nvp ( "pointer", bnode );
+		node = static_cast<Node *> ( bnode );
+		ar >> serialization::make_nvp ( "pointer", buckets );
+	}
 #endif
 
-  /* get_node is not to be used by the user */
+	/* get_node is not to be used by the user */
 
-  typedef Node node_type;
+	typedef Node node_type;
 
-  Node* get_node()const{return node;}
+	Node *get_node() const {return node;}
 
 private:
-  Node*        node;
-  BucketArray* buckets;
+	Node        *node;
+	BucketArray *buckets;
 };
 
-template<typename Node,typename BucketArray>
-bool operator==(
-  const hashed_index_iterator<Node,BucketArray>& x,
-  const hashed_index_iterator<Node,BucketArray>& y)
+template<typename Node, typename BucketArray>
+bool operator== (
+    const hashed_index_iterator<Node, BucketArray> &x,
+    const hashed_index_iterator<Node, BucketArray> &y )
 {
-  return x.get_node()==y.get_node();
+	return x.get_node() == y.get_node();
 }
 
 } /* namespace multi_index::detail */

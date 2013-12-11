@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -18,10 +18,10 @@
 struct scoring_struct;
 struct player;
 
-#define MAX_BADGES	3
-#define MAX_ASSIGNABLE_MEDALS		12				// index into Medals array of the first medal which cannot be assigned
+#define MAX_BADGES  3
+#define MAX_ASSIGNABLE_MEDALS       12              // index into Medals array of the first medal which cannot be assigned
 
-extern scoring_struct* Player_score;
+extern scoring_struct *Player_score;
 
 // NUM_MEDALS stored in scoring.h since needed for player scoring structure
 
@@ -35,7 +35,7 @@ typedef struct medal_stuff
 
 	//If this is a badge (kills_needed > 1)
 	char voice_base[MAX_FILENAME_LEN];
-	char* promotion_text;
+	char *promotion_text;
 
 	medal_stuff()
 	{
@@ -50,46 +50,46 @@ typedef struct medal_stuff
 
 	~medal_stuff()
 	{
-		if (promotion_text)
+		if ( promotion_text )
 		{
-			vm_free(promotion_text);
+			vm_free ( promotion_text );
 			promotion_text = NULL;
 		}
 	}
 
-	medal_stuff(const medal_stuff& m)
+	medal_stuff ( const medal_stuff &m )
 	{
-		clone(m);
+		clone ( m );
 	}
-	const medal_stuff& operator=(const medal_stuff& m);
+	const medal_stuff &operator= ( const medal_stuff &m );
 
 private:
-	void clone(const medal_stuff& m);
+	void clone ( const medal_stuff &m );
 
 } medal_stuff;
 
 /*
 typedef struct badge_stuff {
-	char voice_base[MAX_FILENAME_LEN];
-	char *promotion_text;
+    char voice_base[MAX_FILENAME_LEN];
+    char *promotion_text;
 
-	badge_stuff(){voice_base[0]='\0';promotion_text=NULL;}
-	~badge_stuff(){if(promotion_text != NULL)vm_free(promotion_text);};
+    badge_stuff(){voice_base[0]='\0';promotion_text=NULL;}
+    ~badge_stuff(){if(promotion_text != NULL)vm_free(promotion_text);};
 } badge_stuff;
 */
 
 extern SCP_vector<medal_stuff> Medals;
 //extern badge_stuff Badge_info[MAX_BADGES];
-//extern int Badge_index[MAX_BADGES];				// array which contains indices into Medals to indicate which medals are badges
+//extern int Badge_index[MAX_BADGES];               // array which contains indices into Medals to indicate which medals are badges
 
 extern void parse_medal_tbl();
 
 // modes for this screen
-#define MM_NORMAL							0			// normal - run through the state code
-#define MM_POPUP							1			// called from within some other tight loop (don't use gameseq_ functions)
+#define MM_NORMAL                           0           // normal - run through the state code
+#define MM_POPUP                            1           // called from within some other tight loop (don't use gameseq_ functions)
 
 // main medals screen
-void medal_main_init(player* pl, int mode = MM_NORMAL);
+void medal_main_init ( player *pl, int mode = MM_NORMAL );
 
 // return 0 if the screen should close (used for MM_POPUP mode)
 int medal_main_do();
@@ -99,15 +99,15 @@ void medal_main_close();
 void init_medal_bitmaps();
 void init_snazzy_regions();
 void blit_medals();
-void blit_label(char* label, int* coords);
+void blit_label ( char *label, int *coords );
 void blit_callsign();
 
-// individual medals 
+// individual medals
 
 extern int Medal_ID;       // ID of the medal to display in this screen. Should be set by the caller
 
 void blit_text();
 
-void medals_translate_name(char* name, int max_len);
+void medals_translate_name ( char *name, int max_len );
 
 #endif

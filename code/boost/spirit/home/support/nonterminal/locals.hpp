@@ -26,29 +26,32 @@
 # endif
 #endif
 
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    template <
-        BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(
-            BOOST_SPIRIT_MAX_LOCALS_SIZE, typename T, mpl::na)
+namespace spirit
+{
+///////////////////////////////////////////////////////////////////////////
+template <
+    BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT (
+        BOOST_SPIRIT_MAX_LOCALS_SIZE, typename T, mpl::na )
     >
-    struct locals
-      : mpl::vector<BOOST_PP_ENUM_PARAMS(BOOST_SPIRIT_MAX_LOCALS_SIZE, T)> {};
+struct locals
+: mpl::vector<BOOST_PP_ENUM_PARAMS ( BOOST_SPIRIT_MAX_LOCALS_SIZE, T ) > {};
 
-    ///////////////////////////////////////////////////////////////////////////
-    namespace detail
-    {
-        template <typename T>
-        struct is_locals
-          : mpl::false_
-        {};
+///////////////////////////////////////////////////////////////////////////
+namespace detail
+{
+template <typename T>
+struct is_locals
+		: mpl::false_
+{};
 
-        template <BOOST_PP_ENUM_PARAMS(BOOST_SPIRIT_MAX_LOCALS_SIZE, typename T)>
-        struct is_locals<locals<BOOST_PP_ENUM_PARAMS(BOOST_SPIRIT_MAX_LOCALS_SIZE, T)> >
-          : mpl::true_
-        {};
-    }
-}}
+template <BOOST_PP_ENUM_PARAMS ( BOOST_SPIRIT_MAX_LOCALS_SIZE, typename T ) >
+struct is_locals<locals<BOOST_PP_ENUM_PARAMS ( BOOST_SPIRIT_MAX_LOCALS_SIZE, T ) > >
+: mpl::true_
+{};
+}
+}
+}
 
 #endif

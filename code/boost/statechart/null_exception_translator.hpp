@@ -22,16 +22,16 @@ namespace statechart
 //////////////////////////////////////////////////////////////////////////////
 class null_exception_translator
 {
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    // The following declarations should be private.
-    // They are only public because many compilers lack template friends.
-    //////////////////////////////////////////////////////////////////////////
-    template< class Action, class ExceptionEventHandler >
-    result operator()( Action action, ExceptionEventHandler )
-    {
-      return action();
-    }
+public:
+	//////////////////////////////////////////////////////////////////////////
+	// The following declarations should be private.
+	// They are only public because many compilers lack template friends.
+	//////////////////////////////////////////////////////////////////////////
+	template< class Action, class ExceptionEventHandler >
+	result operator() ( Action action, ExceptionEventHandler )
+	{
+		return action();
+	}
 };
 
 

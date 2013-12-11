@@ -34,193 +34,196 @@
 #include <process.h>
 #include <boost/asio/detail/pop_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
-unsigned int __stdcall win_thread_function(void* arg);
+unsigned int __stdcall win_thread_function ( void *arg );
 
 #if defined(WINVER) && (WINVER < 0x0500)
-void __stdcall apc_function(ULONG data);
+void __stdcall apc_function ( ULONG data );
 #else
-void __stdcall apc_function(ULONG_PTR data);
+void __stdcall apc_function ( ULONG_PTR data );
 #endif
 
 template <typename T>
 class win_thread_base
 {
 public:
-  static bool terminate_threads()
-  {
-    return ::InterlockedExchangeAdd(&terminate_threads_, 0) != 0;
-  }
+	static bool terminate_threads()
+	{
+		return ::InterlockedExchangeAdd ( &terminate_threads_, 0 ) != 0;
+	}
 
-  static void set_terminate_threads(bool b)
-  {
-    ::InterlockedExchange(&terminate_threads_, b ? 1 : 0);
-  }
+	static void set_terminate_threads ( bool b )
+	{
+		::InterlockedExchange ( &terminate_threads_, b ? 1 : 0 );
+	}
 
 private:
-  static long terminate_threads_;
+	static long terminate_threads_;
 };
 
 template <typename T>
 long win_thread_base<T>::terminate_threads_ = 0;
 
 class win_thread
-  : private noncopyable,
-    public win_thread_base<win_thread>
+	: private noncopyable,
+	  public win_thread_base<win_thread>
 {
 public:
-  // Constructor.
-  template <typename Function>
-  win_thread(Function f)
-    : exit_event_(0)
-  {
-    std::auto_ptr<func_base> arg(new func<Function>(f));
+	// Constructor.
+	template <typename Function>
+	win_thread ( Function f )
+		: exit_event_ ( 0 )
+	{
+		std::auto_ptr<func_base> arg ( new func<Function> ( f ) );
 
-    ::HANDLE entry_event = 0;
-    arg->entry_event_ = entry_event = ::CreateEvent(0, true, false, 0);
-    if (!entry_event)
-    {
-      DWORD last_error = ::GetLastError();
-      boost::system::system_error e(
-          boost::system::error_code(last_error,
-            boost::asio::error::get_system_category()),
-          "thread.entry_event");
-      boost::throw_exception(e);
-    }
+		::HANDLE entry_event = 0;
+		arg->entry_event_ = entry_event = ::CreateEvent ( 0, true, false, 0 );
+		if ( !entry_event )
+		{
+			DWORD last_error = ::GetLastError();
+			boost::system::system_error e (
+			    boost::system::error_code ( last_error,
+			                                boost::asio::error::get_system_category() ),
+			    "thread.entry_event" );
+			boost::throw_exception ( e );
+		}
 
-    arg->exit_event_ = exit_event_ = ::CreateEvent(0, true, false, 0);
-    if (!exit_event_)
-    {
-      DWORD last_error = ::GetLastError();
-      ::CloseHandle(entry_event);
-      boost::system::system_error e(
-          boost::system::error_code(last_error,
-            boost::asio::error::get_system_category()),
-          "thread.exit_event");
-      boost::throw_exception(e);
-    }
+		arg->exit_event_ = exit_event_ = ::CreateEvent ( 0, true, false, 0 );
+		if ( !exit_event_ )
+		{
+			DWORD last_error = ::GetLastError();
+			::CloseHandle ( entry_event );
+			boost::system::system_error e (
+			    boost::system::error_code ( last_error,
+			                                boost::asio::error::get_system_category() ),
+			    "thread.exit_event" );
+			boost::throw_exception ( e );
+		}
 
-    unsigned int thread_id = 0;
-    thread_ = reinterpret_cast<HANDLE>(::_beginthreadex(0, 0,
-          win_thread_function, arg.get(), 0, &thread_id));
-    if (!thread_)
-    {
-      DWORD last_error = ::GetLastError();
-      if (entry_event)
-        ::CloseHandle(entry_event);
-      if (exit_event_)
-        ::CloseHandle(exit_event_);
-      boost::system::system_error e(
-          boost::system::error_code(last_error,
-            boost::asio::error::get_system_category()),
-          "thread");
-      boost::throw_exception(e);
-    }
-    arg.release();
+		unsigned int thread_id = 0;
+		thread_ = reinterpret_cast<HANDLE> ( ::_beginthreadex ( 0, 0,
+		                                     win_thread_function, arg.get(), 0, &thread_id ) );
+		if ( !thread_ )
+		{
+			DWORD last_error = ::GetLastError();
+			if ( entry_event )
+				::CloseHandle ( entry_event );
+			if ( exit_event_ )
+				::CloseHandle ( exit_event_ );
+			boost::system::system_error e (
+			    boost::system::error_code ( last_error,
+			                                boost::asio::error::get_system_category() ),
+			    "thread" );
+			boost::throw_exception ( e );
+		}
+		arg.release();
 
-    if (entry_event)
-    {
-      ::WaitForSingleObject(entry_event, INFINITE);
-      ::CloseHandle(entry_event);
-    }
-  }
+		if ( entry_event )
+		{
+			::WaitForSingleObject ( entry_event, INFINITE );
+			::CloseHandle ( entry_event );
+		}
+	}
 
-  // Destructor.
-  ~win_thread()
-  {
-    ::CloseHandle(thread_);
+	// Destructor.
+	~win_thread()
+	{
+		::CloseHandle ( thread_ );
 
-    // The exit_event_ handle is deliberately allowed to leak here since it
-    // is an error for the owner of an internal thread not to join() it.
-  }
+		// The exit_event_ handle is deliberately allowed to leak here since it
+		// is an error for the owner of an internal thread not to join() it.
+	}
 
-  // Wait for the thread to exit.
-  void join()
-  {
-    ::WaitForSingleObject(exit_event_, INFINITE);
-    ::CloseHandle(exit_event_);
-    if (terminate_threads())
-    {
-      ::TerminateThread(thread_, 0);
-    }
-    else
-    {
-      ::QueueUserAPC(apc_function, thread_, 0);
-      ::WaitForSingleObject(thread_, INFINITE);
-    }
-  }
+	// Wait for the thread to exit.
+	void join()
+	{
+		::WaitForSingleObject ( exit_event_, INFINITE );
+		::CloseHandle ( exit_event_ );
+		if ( terminate_threads() )
+		{
+			::TerminateThread ( thread_, 0 );
+		}
+		else
+		{
+			::QueueUserAPC ( apc_function, thread_, 0 );
+			::WaitForSingleObject ( thread_, INFINITE );
+		}
+	}
 
 private:
-  friend unsigned int __stdcall win_thread_function(void* arg);
+	friend unsigned int __stdcall win_thread_function ( void *arg );
 
 #if defined(WINVER) && (WINVER < 0x0500)
-  friend void __stdcall apc_function(ULONG);
+	friend void __stdcall apc_function ( ULONG );
 #else
-  friend void __stdcall apc_function(ULONG_PTR);
+	friend void __stdcall apc_function ( ULONG_PTR );
 #endif
 
-  class func_base
-  {
-  public:
-    virtual ~func_base() {}
-    virtual void run() = 0;
-    ::HANDLE entry_event_;
-    ::HANDLE exit_event_;
-  };
+	class func_base
+	{
+	public:
+		virtual ~func_base() {}
+		virtual void run() = 0;
+		::HANDLE entry_event_;
+		::HANDLE exit_event_;
+	};
 
-  template <typename Function>
-  class func
-    : public func_base
-  {
-  public:
-    func(Function f)
-      : f_(f)
-    {
-    }
+	template <typename Function>
+	class func
+		: public func_base
+	{
+	public:
+		func ( Function f )
+			: f_ ( f )
+		{
+		}
 
-    virtual void run()
-    {
-      f_();
-    }
+		virtual void run()
+		{
+			f_();
+		}
 
-  private:
-    Function f_;
-  };
+	private:
+		Function f_;
+	};
 
-  ::HANDLE thread_;
-  ::HANDLE exit_event_;
+	::HANDLE thread_;
+	::HANDLE exit_event_;
 };
 
-inline unsigned int __stdcall win_thread_function(void* arg)
+inline unsigned int __stdcall win_thread_function ( void *arg )
 {
-  std::auto_ptr<win_thread::func_base> func(
-      static_cast<win_thread::func_base*>(arg));
+	std::auto_ptr<win_thread::func_base> func (
+	    static_cast<win_thread::func_base *> ( arg ) );
 
-  ::SetEvent(func->entry_event_);
+	::SetEvent ( func->entry_event_ );
 
-  func->run();
+	func->run();
 
-  // Signal that the thread has finished its work, but rather than returning go
-  // to sleep to put the thread into a well known state. If the thread is being
-  // joined during global object destruction then it may be killed using
-  // TerminateThread (to avoid a deadlock in DllMain). Otherwise, the SleepEx
-  // call will be interrupted using QueueUserAPC and the thread will shut down
-  // cleanly.
-  HANDLE exit_event = func->exit_event_;
-  func.reset();
-  ::SetEvent(exit_event);
-  ::SleepEx(INFINITE, TRUE);
+	// Signal that the thread has finished its work, but rather than returning go
+	// to sleep to put the thread into a well known state. If the thread is being
+	// joined during global object destruction then it may be killed using
+	// TerminateThread (to avoid a deadlock in DllMain). Otherwise, the SleepEx
+	// call will be interrupted using QueueUserAPC and the thread will shut down
+	// cleanly.
+	HANDLE exit_event = func->exit_event_;
+	func.reset();
+	::SetEvent ( exit_event );
+	::SleepEx ( INFINITE, TRUE );
 
-  return 0;
+	return 0;
 }
 
 #if defined(WINVER) && (WINVER < 0x0500)
-inline void __stdcall apc_function(ULONG) {}
+inline void __stdcall apc_function ( ULONG ) {}
 #else
-inline void __stdcall apc_function(ULONG_PTR) {}
+inline void __stdcall apc_function ( ULONG_PTR ) {}
 #endif
 
 } // namespace detail

@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -59,7 +59,7 @@ typedef struct _EXCEPTION_POINTERS EXCEPTION_POINTERS, *PEXCEPTION_POINTERS;
 //
 // --------------------
 
-int __cdecl RecordExceptionInfo(PEXCEPTION_POINTERS data, const char *Message);
+int __cdecl RecordExceptionInfo ( PEXCEPTION_POINTERS data, const char *Message );
 
 // --------------------
 //

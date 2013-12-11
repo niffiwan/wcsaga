@@ -24,47 +24,47 @@ namespace boost
 
 namespace assign
 {
-    template< class Function, class Obj > 
-    class ptr_list_inserter
-    {
-        typedef BOOST_DEDUCED_TYPENAME
-                remove_pointer< BOOST_DEDUCED_TYPENAME 
-                       remove_reference<Obj>::type >::type
-           obj_type;
-    public:
-        
-        ptr_list_inserter( Function fun ) : insert_( fun )
-        {}
-        
-        template< class Function2, class Obj2 >
-        ptr_list_inserter( const ptr_list_inserter<Function2,Obj2>& r ) 
-        : insert_( r.fun_private() ) 
-        {}
+template< class Function, class Obj >
+class ptr_list_inserter
+{
+	typedef BOOST_DEDUCED_TYPENAME
+	remove_pointer< BOOST_DEDUCED_TYPENAME
+	remove_reference<Obj>::type >::type
+	obj_type;
+public:
 
-        ptr_list_inserter( const ptr_list_inserter& r ) : insert_( r.insert_ )
-        {}
+	ptr_list_inserter ( Function fun ) : insert_ ( fun )
+	{}
 
-        ptr_list_inserter& operator()()
-        {
-            insert_( new obj_type() );
-            return *this;
-        }
-        
-        template< class T >
-        ptr_list_inserter& operator()( const T& t )
-        {
-            insert_( new obj_type(t) );
-            return *this;
-        }
+	template< class Function2, class Obj2 >
+	ptr_list_inserter ( const ptr_list_inserter<Function2, Obj2> &r )
+		: insert_ ( r.fun_private() )
+	{}
+
+	ptr_list_inserter ( const ptr_list_inserter &r ) : insert_ ( r.insert_ )
+	{}
+
+	ptr_list_inserter &operator() ()
+	{
+		insert_ ( new obj_type() );
+		return *this;
+	}
+
+	template< class T >
+	ptr_list_inserter &operator() ( const T &t )
+	{
+		insert_ ( new obj_type ( t ) );
+		return *this;
+	}
 
 #ifndef BOOST_ASSIGN_MAX_PARAMS // use user's value
-#define BOOST_ASSIGN_MAX_PARAMS 5        
+#define BOOST_ASSIGN_MAX_PARAMS 5
 #endif
 #define BOOST_ASSIGN_MAX_PARAMETERS (BOOST_ASSIGN_MAX_PARAMS - 1)
 #define BOOST_ASSIGN_PARAMS1(n) BOOST_PP_ENUM_PARAMS(n, class T)
 #define BOOST_ASSIGN_PARAMS2(n) BOOST_PP_ENUM_BINARY_PARAMS(n, T, const& t)
 #define BOOST_ASSIGN_PARAMS3(n) BOOST_PP_ENUM_PARAMS(n, t)
-        
+
 #define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
 #define BOOST_PP_LOCAL_MACRO(n) \
     template< class T, BOOST_ASSIGN_PARAMS1(n) > \
@@ -74,85 +74,85 @@ namespace assign
         return *this; \
     } \
     /**/
-        
+
 #include BOOST_PP_LOCAL_ITERATE()
 
-    private:
-        
-        ptr_list_inserter& operator=( const ptr_list_inserter& );
-        Function insert_;
-    };
-    
-    template< class Obj, class Function >
-    inline ptr_list_inserter< Function, Obj >
-    make_ptr_list_inserter( Function fun )
-    {
-        return ptr_list_inserter< Function, Obj >( fun );
-    }
-    
-    template< class C >
-    inline ptr_list_inserter< assign_detail::call_push_back<C>, 
-                              BOOST_DEDUCED_TYPENAME C::reference >
-    ptr_push_back( C& c )
-    {
-        return make_ptr_list_inserter<BOOST_DEDUCED_TYPENAME C::reference>
-                   ( assign_detail::call_push_back<C>( c ) ); 
-    }
+private:
+
+	ptr_list_inserter &operator= ( const ptr_list_inserter & );
+	Function insert_;
+};
+
+template< class Obj, class Function >
+inline ptr_list_inserter< Function, Obj >
+make_ptr_list_inserter ( Function fun )
+{
+	return ptr_list_inserter< Function, Obj > ( fun );
+}
+
+template< class C >
+inline ptr_list_inserter< assign_detail::call_push_back<C>,
+       BOOST_DEDUCED_TYPENAME C::reference >
+       ptr_push_back ( C &c )
+{
+	return make_ptr_list_inserter<BOOST_DEDUCED_TYPENAME C::reference>
+	       ( assign_detail::call_push_back<C> ( c ) );
+}
 
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
-    template< class T, class C >
-    inline ptr_list_inserter< assign_detail::call_push_back<C>, T >
-    ptr_push_back( C& c )
-    {
-        return make_ptr_list_inserter<T>( 
-                    assign_detail::call_push_back<C>( c ) );
-    }
+template< class T, class C >
+inline ptr_list_inserter< assign_detail::call_push_back<C>, T >
+ptr_push_back ( C &c )
+{
+	return make_ptr_list_inserter<T> (
+	           assign_detail::call_push_back<C> ( c ) );
+}
 
 #endif
-    
-    template< class C >
-    inline ptr_list_inserter< assign_detail::call_push_front<C>,
-                              BOOST_DEDUCED_TYPENAME C::reference >
-    ptr_push_front( C& c )
-    {
-        return make_ptr_list_inserter<BOOST_DEDUCED_TYPENAME C::reference>
-                 ( assign_detail::call_push_front<C>( c ) );
-    }
+
+template< class C >
+inline ptr_list_inserter< assign_detail::call_push_front<C>,
+       BOOST_DEDUCED_TYPENAME C::reference >
+       ptr_push_front ( C &c )
+{
+	return make_ptr_list_inserter<BOOST_DEDUCED_TYPENAME C::reference>
+	       ( assign_detail::call_push_front<C> ( c ) );
+}
 
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
-    template< class T, class C >
-    inline ptr_list_inserter< assign_detail::call_push_front<C>, T >
-    ptr_push_front( C& c )
-    {
-        return make_ptr_list_inserter<T>( 
-                    assign_detail::call_push_front<C>( c ) );
-    }
+template< class T, class C >
+inline ptr_list_inserter< assign_detail::call_push_front<C>, T >
+ptr_push_front ( C &c )
+{
+	return make_ptr_list_inserter<T> (
+	           assign_detail::call_push_front<C> ( c ) );
+}
 
 #endif
-    
-    template< class C >
-    inline ptr_list_inserter< assign_detail::call_insert<C>, 
-                          BOOST_DEDUCED_TYPENAME C::reference>
-    ptr_insert( C& c )
-    {
-        return make_ptr_list_inserter<BOOST_DEDUCED_TYPENAME C::reference>
-                    ( assign_detail::call_insert<C>( c ) );
-    }
+
+template< class C >
+inline ptr_list_inserter< assign_detail::call_insert<C>,
+       BOOST_DEDUCED_TYPENAME C::reference>
+       ptr_insert ( C &c )
+{
+	return make_ptr_list_inserter<BOOST_DEDUCED_TYPENAME C::reference>
+	       ( assign_detail::call_insert<C> ( c ) );
+}
 
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
-    template< class T, class C >
-    inline ptr_list_inserter< assign_detail::call_insert<C>, T >
-    ptr_insert( C& c )
-    {
-        return make_ptr_list_inserter<T>( assign_detail::call_insert<C>( c ) );
-    }
+template< class T, class C >
+inline ptr_list_inserter< assign_detail::call_insert<C>, T >
+ptr_insert ( C &c )
+{
+	return make_ptr_list_inserter<T> ( assign_detail::call_insert<C> ( c ) );
+}
 
 #endif
-    
-    
+
+
 } // namespace 'assign'
 } // namespace 'boost'
 

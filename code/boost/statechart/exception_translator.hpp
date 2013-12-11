@@ -29,23 +29,23 @@ class exception_thrown : public event< exception_thrown > {};
 template< class ExceptionEvent = exception_thrown >
 class exception_translator
 {
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    // The following declarations should be private.
-    // They are only public because many compilers lack template friends.
-    //////////////////////////////////////////////////////////////////////////
-    template< class Action, class ExceptionEventHandler >
-    result operator()( Action action, ExceptionEventHandler eventHandler )
-    {
-      try
-      {
-        return action();
-      }
-      catch ( ... )
-      {
-        return eventHandler( ExceptionEvent() );
-      }
-    }
+public:
+	//////////////////////////////////////////////////////////////////////////
+	// The following declarations should be private.
+	// They are only public because many compilers lack template friends.
+	//////////////////////////////////////////////////////////////////////////
+	template< class Action, class ExceptionEventHandler >
+	result operator() ( Action action, ExceptionEventHandler eventHandler )
+	{
+		try
+		{
+			return action();
+		}
+		catch ( ... )
+		{
+			return eventHandler ( ExceptionEvent() );
+		}
+	}
 };
 
 

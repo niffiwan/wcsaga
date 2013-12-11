@@ -11,22 +11,25 @@
 
 #include <boost/proto/proto_fwd.hpp>
 
-namespace boost { namespace proto
+namespace boost
 {
-    namespace detail
-    {
-        template<typename T>
-        T &as_lvalue(T &t)
-        {
-            return t;
-        }
+namespace proto
+{
+namespace detail
+{
+template<typename T>
+T &as_lvalue ( T &t )
+{
+	return t;
+}
 
-        template<typename T>
-        T const &as_lvalue(T const &t)
-        {
-            return t;
-        }
-    }
-}}
+template<typename T>
+T const &as_lvalue ( T const &t )
+{
+	return t;
+}
+}
+}
+}
 
 #endif

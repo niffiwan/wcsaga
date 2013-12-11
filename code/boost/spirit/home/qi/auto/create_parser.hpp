@@ -13,33 +13,51 @@
 #include <boost/spirit/home/qi/auto/meta_create.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit { namespace result_of
+namespace boost
 {
-    template <typename T>
-    struct create_parser
-      : spirit::traits::meta_create<qi::domain, T> {};
-}}}
+namespace spirit
+{
+namespace result_of
+{
+template <typename T>
+struct create_parser
+		: spirit::traits::meta_create<qi::domain, T> {};
+}
+}
+}
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit { namespace qi
+namespace boost
 {
-    // Main API function for parser creation from data type
-    template <typename T>
-    typename result_of::create_parser<T>::type
-    create_parser()
-    {
-        return spirit::traits::meta_create<qi::domain, T>::call();
-    }
-}}}
+namespace spirit
+{
+namespace qi
+{
+// Main API function for parser creation from data type
+template <typename T>
+typename result_of::create_parser<T>::type
+create_parser()
+{
+	return spirit::traits::meta_create<qi::domain, T>::call();
+}
+}
+}
+}
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit { namespace traits
+namespace boost
 {
-    // Meta function returning true if create_parser does return a valid
-    // parser for the given type T.
-    template <typename T>
-    struct create_parser_exists
-      : meta_create_exists<qi::domain, T> {};
-}}}
+namespace spirit
+{
+namespace traits
+{
+// Meta function returning true if create_parser does return a valid
+// parser for the given type T.
+template <typename T>
+struct create_parser_exists
+		: meta_create_exists<qi::domain, T> {};
+}
+}
+}
 
 #endif

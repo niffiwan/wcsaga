@@ -19,7 +19,8 @@
 
 #include "boost/utility/enable_if.hpp"
 
-namespace boost {
+namespace boost
+{
 
 //////////////////////////////////////////////////////////////////////////
 // function template apply_visitor(visitor, visitable)
@@ -50,10 +51,10 @@ namespace boost {
 
 template <typename Visitor, typename Visitable>
 inline
-    BOOST_VARIANT_AUX_APPLY_VISITOR_NON_CONST_RESULT_TYPE(Visitor)
-apply_visitor(Visitor& visitor, Visitable& visitable)
+BOOST_VARIANT_AUX_APPLY_VISITOR_NON_CONST_RESULT_TYPE ( Visitor )
+apply_visitor ( Visitor &visitor, Visitable &visitable )
 {
-    return visitable.apply_visitor(visitor);
+	return visitable.apply_visitor ( visitor );
 }
 
 #undef BOOST_VARIANT_AUX_APPLY_VISITOR_NON_CONST_RESULT_TYPE
@@ -66,10 +67,10 @@ apply_visitor(Visitor& visitor, Visitable& visitable)
 
 template <typename Visitor, typename Visitable>
 inline
-    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
-apply_visitor(const Visitor& visitor, Visitable& visitable)
+BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE ( typename Visitor::result_type )
+apply_visitor ( const Visitor &visitor, Visitable &visitable )
 {
-    return visitable.apply_visitor(visitor);
+	return visitable.apply_visitor ( visitor );
 }
 
 #endif // MSVC7 and below exclusion

@@ -11,25 +11,29 @@
 #include <boost/spirit/home/classic/namespace.hpp>
 #include <boost/spirit/home/classic/core/non_terminal/parser_context.hpp>
 
-namespace boost { namespace spirit  {
+namespace boost
+{
+namespace spirit
+{
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-    template <int ID, typename ContextT = parser_context<> >
-    struct subrule; 
+template <int ID, typename ContextT = parser_context<> >
+struct subrule;
 
-    template <int ID, typename DefT, typename ContextT = parser_context<> >
-    struct subrule_parser;
+template <int ID, typename DefT, typename ContextT = parser_context<> >
+struct subrule_parser;
 
-    template <typename ScannerT, typename ListT>
-    struct subrules_scanner;
+template <typename ScannerT, typename ListT>
+struct subrules_scanner;
 
-    template <typename FirstT, typename RestT>
-    struct subrule_list; 
+template <typename FirstT, typename RestT>
+struct subrule_list;
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}} // namespace BOOST_SPIRIT_CLASSIC_NS
+}
+} // namespace BOOST_SPIRIT_CLASSIC_NS
 
 #endif
 

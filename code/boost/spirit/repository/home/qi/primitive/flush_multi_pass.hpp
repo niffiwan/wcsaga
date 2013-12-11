@@ -1,6 +1,6 @@
 //  Copyright (c) 2001-2010 Hartmut Kaiser
-// 
-//  Distributed under the Boost Software License, Version 1.0. (See accompanying 
+//
+//  Distributed under the Boost Software License, Version 1.0. (See accompanying
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #if !defined(BOOST_SPIRIT_REPOSITORY_QI_FLUSH_MULTI_PASS_JUL_10_2009_0535PM)
@@ -21,72 +21,90 @@
 #include <boost/spirit/repository/home/support/flush_multi_pass.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit 
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
+namespace spirit
+{
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
 
-    // enables flush_multi_pass
-    template <>
-    struct use_terminal<qi::domain, repository::tag::flush_multi_pass>
-      : mpl::true_ {};
+// enables flush_multi_pass
+template <>
+struct use_terminal<qi::domain, repository::tag::flush_multi_pass>
+		: mpl::true_ {};
 
-}}
+}
+}
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit { namespace repository { namespace qi
+namespace boost
 {
-    using repository::flush_multi_pass_type;
-    using repository::flush_multi_pass;
+namespace spirit
+{
+namespace repository
+{
+namespace qi
+{
+using repository::flush_multi_pass_type;
+using repository::flush_multi_pass;
 
-    ///////////////////////////////////////////////////////////////////////////
-    // for a flush_multi_pass_parser generated parser
-    struct flush_multi_pass_parser
-      : spirit::qi::primitive_parser<flush_multi_pass_parser>
-    {
-        template <typename Context, typename Unused>
-        struct attribute
-        {
-            typedef unused_type type;
-        };
+///////////////////////////////////////////////////////////////////////////
+// for a flush_multi_pass_parser generated parser
+struct flush_multi_pass_parser
+		: spirit::qi::primitive_parser<flush_multi_pass_parser>
+{
+	template <typename Context, typename Unused>
+	struct attribute
+	{
+		typedef unused_type type;
+	};
 
-        template <typename Iterator, typename Context
-          , typename Skipper, typename Attribute>
-        bool parse(Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper
-          , Attribute& attr) const
-        {
-            spirit::traits::clear_queue(first, traits::clear_mode::clear_always);
-            return true;
-        }
+	template <typename Iterator, typename Context
+	          , typename Skipper, typename Attribute>
+	bool parse ( Iterator &first, Iterator const &last
+	             , Context &context, Skipper const &skipper
+	             , Attribute &attr ) const
+	{
+		spirit::traits::clear_queue ( first, traits::clear_mode::clear_always );
+		return true;
+	}
 
-        template <typename Context>
-        info what(Context const& ctx) const
-        {
-            return info("flush_multi_pass");
-        }
-    };
+	template <typename Context>
+	info what ( Context const &ctx ) const
+	{
+		return info ( "flush_multi_pass" );
+	}
+};
 
-}}}}
+}
+}
+}
+}
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit { namespace qi
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Modifiers>
-    struct make_primitive<repository::tag::flush_multi_pass, Modifiers>
-    {
-        typedef repository::qi::flush_multi_pass_parser result_type;
-        result_type operator()(unused_type, unused_type) const
-        {
-            return result_type();
-        }
-    };
+namespace spirit
+{
+namespace qi
+{
+///////////////////////////////////////////////////////////////////////////
+// Parser generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+template <typename Modifiers>
+struct make_primitive<repository::tag::flush_multi_pass, Modifiers>
+{
+	typedef repository::qi::flush_multi_pass_parser result_type;
+	result_type operator() ( unused_type, unused_type ) const
+	{
+		return result_type();
+	}
+};
 
-}}}
+}
+}
+}
 
 #endif
 

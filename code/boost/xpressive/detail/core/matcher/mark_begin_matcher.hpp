@@ -17,40 +17,46 @@
 #include <boost/xpressive/detail/core/quant_style.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+namespace boost
+{
+namespace xpressive
+{
+namespace detail
 {
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // mark_begin_matcher
-    //
-    struct mark_begin_matcher
-      : quant_style<quant_fixed_width, 0, false>
-    {
-        int mark_number_; // signed because it could be negative
+///////////////////////////////////////////////////////////////////////////////
+// mark_begin_matcher
+//
+struct mark_begin_matcher
+		: quant_style<quant_fixed_width, 0, false>
+{
+	int mark_number_; // signed because it could be negative
 
-        mark_begin_matcher(int mark_number)
-          : mark_number_(mark_number)
-        {
-        }
+	mark_begin_matcher ( int mark_number )
+		: mark_number_ ( mark_number )
+	{
+	}
 
-        template<typename BidiIter, typename Next>
-        bool match(match_state<BidiIter> &state, Next const &next) const
-        {
-            sub_match_impl<BidiIter> &br = state.sub_match(this->mark_number_);
+	template<typename BidiIter, typename Next>
+	bool match ( match_state<BidiIter> &state, Next const &next ) const
+	{
+		sub_match_impl<BidiIter> &br = state.sub_match ( this->mark_number_ );
 
-            BidiIter old_begin = br.begin_;
-            br.begin_ = state.cur_;
+		BidiIter old_begin = br.begin_;
+		br.begin_ = state.cur_;
 
-            if(next.match(state))
-            {
-                return true;
-            }
+		if ( next.match ( state ) )
+		{
+			return true;
+		}
 
-            br.begin_ = old_begin;
-            return false;
-        }
-    };
+		br.begin_ = old_begin;
+		return false;
+	}
+};
 
-}}}
+}
+}
+}
 
 #endif

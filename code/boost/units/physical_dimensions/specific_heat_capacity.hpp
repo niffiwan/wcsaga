@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -16,14 +16,16 @@
 #include <boost/units/physical_dimensions/time.hpp>
 #include <boost/units/physical_dimensions/temperature.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units {
+namespace units
+{
 
 /// derived dimension for specific heat capacity : L^2 T^-2 Theta^-1
-typedef derived_dimension<length_base_dimension,2,
-                          time_base_dimension,-2,
-                          temperature_base_dimension,-1>::type specific_heat_capacity_dimension;                    
+typedef derived_dimension < length_base_dimension, 2,
+        time_base_dimension, -2,
+        temperature_base_dimension, -1 >::type specific_heat_capacity_dimension;
 
 } // namespace units
 

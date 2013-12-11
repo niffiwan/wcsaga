@@ -45,13 +45,13 @@
 // BOOST_ALIGNMENT_OF(T) should evaluate to the alignment requirements of type T.
 
 #ifdef BOOST_HAS_SGI_TYPE_TRAITS
-    // Hook into SGI's __type_traits class, this will pick up user supplied
-    // specializations as well as SGI - compiler supplied specializations.
+// Hook into SGI's __type_traits class, this will pick up user supplied
+// specializations as well as SGI - compiler supplied specializations.
 #   include <boost/type_traits/is_same.hpp>
 #   ifdef __NetBSD__
-      // There are two different versions of type_traits.h on NetBSD on Spark
-      // use an implicit include via algorithm instead, to make sure we get
-      // the same version as the std lib:
+// There are two different versions of type_traits.h on NetBSD on Spark
+// use an implicit include via algorithm instead, to make sure we get
+// the same version as the std lib:
 #     include <algorithm>
 #   else
 #    include <type_traits.h>
@@ -68,10 +68,10 @@
 #endif
 
 #if defined(__MSL_CPP__) && (__MSL_CPP__ >= 0x8000)
-    // Metrowerks compiler is acquiring intrinsic type traits support
-    // post version 8.  We hook into the published interface to pick up
-    // user defined specializations as well as compiler intrinsics as 
-    // and when they become available:
+// Metrowerks compiler is acquiring intrinsic type traits support
+// post version 8.  We hook into the published interface to pick up
+// user defined specializations as well as compiler intrinsics as
+// and when they become available:
 #   include <msl_utility>
 #   define BOOST_IS_UNION(T) BOOST_STD_EXTENSION_NAMESPACE::is_union<T>::value
 #   define BOOST_IS_POD(T) BOOST_STD_EXTENSION_NAMESPACE::is_POD<T>::value
@@ -150,9 +150,9 @@
 #   define BOOST_IS_ENUM(T) __is_enum(T)
 #   define BOOST_IS_POLYMORPHIC(T) __is_polymorphic(T)
 #   if (!defined(unix) && !defined(__unix__)) || defined(__LP64__)
-      // GCC sometimes lies about alignment requirements
-      // of type double on 32-bit unix platforms, use the
-      // old implementation instead in that case:
+// GCC sometimes lies about alignment requirements
+// of type double on 32-bit unix platforms, use the
+// old implementation instead in that case:
 #     define BOOST_ALIGNMENT_OF(T) __alignof__(T)
 #   endif
 

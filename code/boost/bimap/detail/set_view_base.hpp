@@ -27,35 +27,38 @@
 #include <boost/bimap/relation/mutant_relation.hpp>
 #include <boost/bimap/container_adaptor/support/iterator_facade_converters.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace detail {
+namespace boost
+{
+namespace bimaps
+{
+namespace detail
+{
 
 template< class Key, class Value, class KeyToBase >
 class set_view_key_to_base
 {
-    public:
-    const Key operator()( const Value & v ) const
-    {
-        return keyToBase( v );
-    }
-    private:
-    KeyToBase keyToBase;
+public:
+	const Key operator() ( const Value &v ) const
+	{
+		return keyToBase ( v );
+	}
+private:
+	KeyToBase keyToBase;
 };
 
 template< class MutantRelationStorage, class KeyToBase >
-class set_view_key_to_base<MutantRelationStorage,MutantRelationStorage,KeyToBase>
+class set_view_key_to_base<MutantRelationStorage, MutantRelationStorage, KeyToBase>
 {
-    typedef BOOST_DEDUCED_TYPENAME MutantRelationStorage::non_mutable_storage non_mutable_storage;
-    public:
-    const MutantRelationStorage & operator()( const non_mutable_storage & k ) const
-    {
-        return ::boost::bimaps::relation::detail::mutate<MutantRelationStorage>(k);
-    }
-    const MutantRelationStorage & operator()( const MutantRelationStorage & k ) const
-    {
-        return k;
-    }
+	typedef BOOST_DEDUCED_TYPENAME MutantRelationStorage::non_mutable_storage non_mutable_storage;
+public:
+	const MutantRelationStorage &operator() ( const non_mutable_storage &k ) const
+	{
+		return ::boost::bimaps::relation::detail::mutate<MutantRelationStorage> ( k );
+	}
+	const MutantRelationStorage &operator() ( const MutantRelationStorage &k ) const
+	{
+		return k;
+	}
 };
 
 
@@ -164,162 +167,162 @@ class set_view_key_to_base<MutantRelationStorage,MutantRelationStorage,KeyToBase
 template< class Derived, class Index >
 class set_view_base
 {
-    typedef ::boost::bimaps::container_adaptor::support::
-    iterator_facade_to_base
-    <
-        ::boost::bimaps::detail::
-                  set_view_iterator<BOOST_DEDUCED_TYPENAME Index::      iterator>,
-        ::boost::bimaps::detail::
-            const_set_view_iterator<BOOST_DEDUCED_TYPENAME Index::const_iterator>
+	typedef ::boost::bimaps::container_adaptor::support::
+	iterator_facade_to_base
+	<
+	::boost::bimaps::detail::
+	set_view_iterator<BOOST_DEDUCED_TYPENAME Index::      iterator>,
+	                  ::boost::bimaps::detail::
+	                  const_set_view_iterator<BOOST_DEDUCED_TYPENAME Index::const_iterator>
 
-    > iterator_to_base_;
+	                  > iterator_to_base_;
 
-    typedef BOOST_DEDUCED_TYPENAME Index::value_type::left_value_type          left_type_;
+	typedef BOOST_DEDUCED_TYPENAME Index::value_type::left_value_type          left_type_;
 
-    typedef BOOST_DEDUCED_TYPENAME Index::value_type::right_value_type        right_type_;
+	typedef BOOST_DEDUCED_TYPENAME Index::value_type::right_value_type        right_type_;
 
-    typedef BOOST_DEDUCED_TYPENAME Index::value_type                          value_type_;
+	typedef BOOST_DEDUCED_TYPENAME Index::value_type                          value_type_;
 
-    typedef ::boost::bimaps::detail::
-                    set_view_iterator<BOOST_DEDUCED_TYPENAME Index::iterator>   iterator_;
+	typedef ::boost::bimaps::detail::
+	set_view_iterator<BOOST_DEDUCED_TYPENAME Index::iterator>   iterator_;
 
-    public:
+public:
 
-    bool replace(iterator_ position,
-                 const value_type_ & x)
-    {
-        return derived().base().replace(
-            derived().template functor<iterator_to_base_>()(position),x
-        );
-    }
+	bool replace ( iterator_ position,
+	               const value_type_ & x )
+	{
+		return derived().base().replace (
+		           derived().template functor<iterator_to_base_>() ( position ), x
+		       );
+	}
 
-    template< class CompatibleLeftType >
-    bool replace_left(iterator_ position,
-                      const CompatibleLeftType & l)
-    {
-        return derived().base().replace(
-            derived().template functor<iterator_to_base_>()(position),
-            value_type_(l,position->right)
-        );
-    }
+	template< class CompatibleLeftType >
+	bool replace_left ( iterator_ position,
+	                    const CompatibleLeftType &l )
+	{
+		return derived().base().replace (
+		           derived().template functor<iterator_to_base_>() ( position ),
+		           value_type_ ( l, position->right )
+		       );
+	}
 
-    template< class CompatibleRightType >
-    bool replace_right(iterator_ position,
-                       const CompatibleRightType & r)
-    {
-        return derived().base().replace(
-            derived().template functor<iterator_to_base_>()(position),
-            value_type_(position->left,r)
-        );
-    }
+	template< class CompatibleRightType >
+	bool replace_right ( iterator_ position,
+	                     const CompatibleRightType &r )
+	{
+		return derived().base().replace (
+		           derived().template functor<iterator_to_base_>() ( position ),
+		           value_type_ ( position->left, r )
+		       );
+	}
 
-    /* This function may be provided in the future
+	/* This function may be provided in the future
 
-    template< class Modifier >
-    bool modify(iterator_ position,
-                Modifier mod)
-    {
-        return derived().base().modify(
+	template< class Modifier >
+	bool modify(iterator_ position,
+	            Modifier mod)
+	{
+	    return derived().base().modify(
 
-            derived().template functor<iterator_to_base_>()(position),
+	        derived().template functor<iterator_to_base_>()(position),
 
-            ::boost::bimaps::detail::relation_modifier_adaptor
-            <
-                Modifier,
-                BOOST_DEDUCED_TYPENAME Index::value_type,
-                BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-                data_extractor
-                <
-                    ::boost::bimaps::relation::member_at::left,
-                    BOOST_DEDUCED_TYPENAME Index::value_type
+	        ::boost::bimaps::detail::relation_modifier_adaptor
+	        <
+	            Modifier,
+	            BOOST_DEDUCED_TYPENAME Index::value_type,
+	            BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
+	            data_extractor
+	            <
+	                ::boost::bimaps::relation::member_at::left,
+	                BOOST_DEDUCED_TYPENAME Index::value_type
 
-                >::type,
-                BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-                data_extractor
-                <
-                    ::boost::bimaps::relation::member_at::right,
-                    BOOST_DEDUCED_TYPENAME Index::value_type
+	            >::type,
+	            BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
+	            data_extractor
+	            <
+	                ::boost::bimaps::relation::member_at::right,
+	                BOOST_DEDUCED_TYPENAME Index::value_type
 
-                >::type
+	            >::type
 
-            >(mod)
-        );
-    }
-    */
-    /*
-    template< class Modifier >
-    bool modify_left(iterator_ position, Modifier mod)
-    {
-        typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-        data_extractor
-        <
-            BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::member_at::right,
-            BOOST_DEDUCED_TYPENAME Index::value_type
+	        >(mod)
+	    );
+	}
+	*/
+	/*
+	template< class Modifier >
+	bool modify_left(iterator_ position, Modifier mod)
+	{
+	    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
+	    data_extractor
+	    <
+	        BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::member_at::right,
+	        BOOST_DEDUCED_TYPENAME Index::value_type
 
-        >::type left_data_extractor_;
+	    >::type left_data_extractor_;
 
-        return derived().base().modify(
+	    return derived().base().modify(
 
-            derived().template functor<iterator_to_base_>()(position),
+	        derived().template functor<iterator_to_base_>()(position),
 
-            // this may be replaced later by
-            // ::boost::bind( mod, ::boost::bind(data_extractor_(),_1) )
+	        // this may be replaced later by
+	        // ::boost::bind( mod, ::boost::bind(data_extractor_(),_1) )
 
-            ::boost::bimaps::detail::unary_modifier_adaptor
-            <
-                Modifier,
-                BOOST_DEDUCED_TYPENAME Index::value_type,
-                left_data_extractor_
+	        ::boost::bimaps::detail::unary_modifier_adaptor
+	        <
+	            Modifier,
+	            BOOST_DEDUCED_TYPENAME Index::value_type,
+	            left_data_extractor_
 
-            >(mod)
-        );
-    }
+	        >(mod)
+	    );
+	}
 
-    template< class Modifier >
-    bool modify_right(iterator_ position, Modifier mod)
-    {
-        typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-        data_extractor
-        <
-            BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::member_at::right,
-            BOOST_DEDUCED_TYPENAME Index::value_type
+	template< class Modifier >
+	bool modify_right(iterator_ position, Modifier mod)
+	{
+	    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
+	    data_extractor
+	    <
+	        BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::member_at::right,
+	        BOOST_DEDUCED_TYPENAME Index::value_type
 
-        >::type right_data_extractor_;
+	    >::type right_data_extractor_;
 
-        return derived().base().modify(
+	    return derived().base().modify(
 
-            derived().template functor<iterator_to_base_>()(position),
+	        derived().template functor<iterator_to_base_>()(position),
 
-            // this may be replaced later by
-            // ::boost::bind( mod, ::boost::bind(data_extractor_(),_1) )
+	        // this may be replaced later by
+	        // ::boost::bind( mod, ::boost::bind(data_extractor_(),_1) )
 
-            ::boost::bimaps::detail::unary_modifier_adaptor
-            <
-                Modifier,
-                BOOST_DEDUCED_TYPENAME Index::value_type,
-                right_data_extractor_
+	        ::boost::bimaps::detail::unary_modifier_adaptor
+	        <
+	            Modifier,
+	            BOOST_DEDUCED_TYPENAME Index::value_type,
+	            right_data_extractor_
 
-            >(mod)
-        );
-    }
-    */
-    protected:
+	        >(mod)
+	    );
+	}
+	*/
+protected:
 
-    typedef set_view_base set_view_base_;
+	typedef set_view_base set_view_base_;
 
-    private:
+private:
 
-    // Curiously Recurring Template interface.
+	// Curiously Recurring Template interface.
 
-    Derived& derived()
-    {
-        return *static_cast<Derived*>(this);
-    }
+	Derived &derived()
+	{
+		return *static_cast<Derived *> ( this );
+	}
 
-    Derived const& derived() const
-    {
-        return *static_cast<Derived const*>(this);
-    }
+	Derived const &derived() const
+	{
+		return *static_cast<Derived const *> ( this );
+	}
 };
 
 

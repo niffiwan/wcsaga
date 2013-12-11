@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -13,16 +13,19 @@
 
 #include <boost/units/systems/si/base.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace si {
+namespace si
+{
 
-typedef unit<time_dimension,si::system>      time;
+typedef unit<time_dimension, si::system>      time;
 
-BOOST_UNITS_STATIC_CONSTANT(second,time);   
-BOOST_UNITS_STATIC_CONSTANT(seconds,time);  
+BOOST_UNITS_STATIC_CONSTANT ( second, time );
+BOOST_UNITS_STATIC_CONSTANT ( seconds, time );
 
 } // namespace si
 

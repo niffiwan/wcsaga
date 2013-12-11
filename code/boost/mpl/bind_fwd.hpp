@@ -8,8 +8,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -42,7 +42,10 @@
 #   include <boost/preprocessor/iterate.hpp>
 #   include <boost/preprocessor/cat.hpp>
 
-namespace boost { namespace mpl {
+namespace boost
+{
+namespace mpl
+{
 
 // local macros, #undef-ined at the end of the header
 
@@ -67,8 +70,8 @@ namespace boost { namespace mpl {
     /**/
 
 #if !defined(BOOST_MPL_CFG_NO_BIND_TEMPLATE)
-template<
-      typename F, AUX778076_BIND_DEFAULT_PARAMS(typename T, na)
+template <
+    typename F, AUX778076_BIND_DEFAULT_PARAMS ( typename T, na )
     >
 struct bind;
 #endif
@@ -80,7 +83,8 @@ struct bind;
 #   undef AUX778076_BIND_N_PARAMS
 #   undef AUX778076_BIND_DEFAULT_PARAMS
 #   undef AUX778076_DMC_PARAM
-}}
+}
+}
 
 #endif // BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
 #endif // BOOST_MPL_BIND_FWD_HPP_INCLUDED
@@ -90,10 +94,10 @@ struct bind;
 #else
 #define i_ BOOST_PP_FRAME_ITERATION(1)
 
-template<
-      typename F AUX778076_BIND_N_PARAMS(i_, typename T)
+template <
+    typename F AUX778076_BIND_N_PARAMS ( i_, typename T )
     >
-struct BOOST_PP_CAT(bind,i_);
+struct BOOST_PP_CAT ( bind, i_ );
 
 #undef i_
 #endif // BOOST_PP_IS_ITERATING

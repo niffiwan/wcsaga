@@ -1,6 +1,6 @@
 //  (C) Copyright John Maddock 2000.
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/static_assert for documentation.
@@ -42,7 +42,8 @@
 #  define BOOST_STATIC_ASSERT( B ) static_assert(B, #B)
 #else
 
-namespace boost{
+namespace boost
+{
 
 // HP aCC cannot deal with missing names for template value parameters
 template <bool x> struct STATIC_ASSERTION_FAILURE;
@@ -50,7 +51,7 @@ template <bool x> struct STATIC_ASSERTION_FAILURE;
 template <> struct STATIC_ASSERTION_FAILURE<true> { enum { value = 1 }; };
 
 // HP aCC cannot deal with missing names for template value parameters
-template<int x> struct static_assert_test{};
+template<int x> struct static_assert_test {};
 
 }
 
@@ -91,7 +92,7 @@ template<int x> struct static_assert_test{};
       sizeof(::boost::STATIC_ASSERTION_FAILURE< BOOST_STATIC_ASSERT_BOOL_CAST ( B ) >)>\
          BOOST_JOIN(boost_static_assert_typedef_, __COUNTER__)
 #elif defined(BOOST_INTEL_CXX_VERSION) || defined(BOOST_SA_GCC_WORKAROUND)
-// agurt 15/sep/02: a special care is needed to force Intel C++ issue an error 
+// agurt 15/sep/02: a special care is needed to force Intel C++ issue an error
 // instead of warning in case of failure
 # define BOOST_STATIC_ASSERT( B ) \
     typedef char BOOST_JOIN(boost_static_assert_typedef_, __LINE__) \

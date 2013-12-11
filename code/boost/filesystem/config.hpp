@@ -7,14 +7,14 @@
 
 //  See library home page at http://www.boost.org/libs/filesystem
 
-//----------------------------------------------------------------------------// 
+//----------------------------------------------------------------------------//
 
 #ifndef BOOST_FILESYSTEM_CONFIG_HPP
 #define BOOST_FILESYSTEM_CONFIG_HPP
 
 #define BOOST_FILESYSTEM_I18N  // aid users wishing to compile several versions
 
-//  ability to change namespace aids path_table.cpp  ------------------------// 
+//  ability to change namespace aids path_table.cpp  ------------------------//
 #ifndef BOOST_FILESYSTEM_NAMESPACE
 # define BOOST_FILESYSTEM_NAMESPACE filesystem
 #endif
@@ -23,7 +23,7 @@
 // http://www.boost.org/more/separate_compilation.html
 
 #include <boost/config.hpp>
-#include <boost/detail/workaround.hpp> 
+#include <boost/detail/workaround.hpp>
 
 //  determine platform  ------------------------------------------------------//
 
@@ -48,7 +48,7 @@
 #   if defined(_WIN32) || defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
 #     define BOOST_WINDOWS_API
 #   else
-#     define BOOST_POSIX_API 
+#     define BOOST_POSIX_API
 #   endif
 # endif
 
@@ -90,7 +90,7 @@
 #define BOOST_FILESYSTEM_DECL
 #endif
 
-//  enable automatic library variant selection  ------------------------------// 
+//  enable automatic library variant selection  ------------------------------//
 
 #if !defined(BOOST_FILESYSTEM_SOURCE) && !defined(BOOST_ALL_NO_LIB) && !defined(BOOST_FILESYSTEM_NO_LIB)
 //

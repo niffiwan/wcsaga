@@ -21,7 +21,8 @@
 
 #include "boost/utility/enable_if.hpp"
 
-namespace boost {
+namespace boost
+{
 
 //////////////////////////////////////////////////////////////////////////
 // function template apply_visitor(visitor, visitable1, visitable2)
@@ -31,37 +32,40 @@ namespace boost {
 // expression visitor(x, y).
 //
 
-namespace detail { namespace variant {
+namespace detail
+{
+namespace variant
+{
 
 template <typename Visitor, typename Value1>
 class apply_visitor_binary_invoke
 {
 public: // visitor typedefs
 
-    typedef typename Visitor::result_type
-        result_type;
+	typedef typename Visitor::result_type
+	result_type;
 
 private: // representation
 
-    Visitor& visitor_;
-    Value1& value1_;
+	Visitor &visitor_;
+	Value1 &value1_;
 
 public: // structors
 
-    apply_visitor_binary_invoke(Visitor& visitor, Value1& value1)
-        : visitor_(visitor)
-        , value1_(value1)
-    {
-    }
+	apply_visitor_binary_invoke ( Visitor &visitor, Value1 &value1 )
+		: visitor_ ( visitor )
+		, value1_ ( value1 )
+	{
+	}
 
 public: // visitor interfaces
 
-    template <typename Value2>
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(Value2& value2)
-    {
-        return visitor_(value1_, value2);
-    }
+	template <typename Value2>
+	BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE ( result_type )
+	operator() ( Value2 &value2 )
+	{
+		return visitor_ ( value1_, value2 );
+	}
 
 };
 
@@ -70,39 +74,40 @@ class apply_visitor_binary_unwrap
 {
 public: // visitor typedefs
 
-    typedef typename Visitor::result_type
-        result_type;
+	typedef typename Visitor::result_type
+	result_type;
 
 private: // representation
 
-    Visitor& visitor_;
-    Visitable2& visitable2_;
+	Visitor &visitor_;
+	Visitable2 &visitable2_;
 
 public: // structors
 
-    apply_visitor_binary_unwrap(Visitor& visitor, Visitable2& visitable2)
-        : visitor_(visitor)
-        , visitable2_(visitable2)
-    {
-    }
+	apply_visitor_binary_unwrap ( Visitor &visitor, Visitable2 &visitable2 )
+		: visitor_ ( visitor )
+		, visitable2_ ( visitable2 )
+	{
+	}
 
 public: // visitor interfaces
 
-    template <typename Value1>
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(Value1& value1)
-    {
-        apply_visitor_binary_invoke<
-              Visitor
-            , Value1
-            > invoker(visitor_, value1);
+	template <typename Value1>
+	BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE ( result_type )
+	operator() ( Value1 &value1 )
+	{
+		apply_visitor_binary_invoke <
+		Visitor
+		, Value1
+		> invoker ( visitor_, value1 );
 
-        return boost::apply_visitor(invoker, visitable2_);
-    }
+		return boost::apply_visitor ( invoker, visitable2_ );
+	}
 
 };
 
-}} // namespace detail::variant
+}
+} // namespace detail::variant
 
 //
 // nonconst-visitor version:
@@ -127,17 +132,17 @@ public: // visitor interfaces
 
 template <typename Visitor, typename Visitable1, typename Visitable2>
 inline
-    BOOST_VARIANT_AUX_APPLY_VISITOR_NON_CONST_RESULT_TYPE(Visitor)
-apply_visitor(
-      Visitor& visitor
-    , Visitable1& visitable1, Visitable2& visitable2
-    )
+BOOST_VARIANT_AUX_APPLY_VISITOR_NON_CONST_RESULT_TYPE ( Visitor )
+apply_visitor (
+    Visitor &visitor
+    , Visitable1 &visitable1, Visitable2 &visitable2
+)
 {
-    ::boost::detail::variant::apply_visitor_binary_unwrap<
-          Visitor, Visitable2
-        > unwrapper(visitor, visitable2);
+	::boost::detail::variant::apply_visitor_binary_unwrap <
+	Visitor, Visitable2
+	> unwrapper ( visitor, visitable2 );
 
-    return boost::apply_visitor(unwrapper, visitable1);
+	return boost::apply_visitor ( unwrapper, visitable1 );
 }
 
 #undef BOOST_VARIANT_AUX_APPLY_VISITOR_NON_CONST_RESULT_TYPE
@@ -150,19 +155,19 @@ apply_visitor(
 
 template <typename Visitor, typename Visitable1, typename Visitable2>
 inline
-    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
-          typename Visitor::result_type
-        )
-apply_visitor(
-      const Visitor& visitor
-    , Visitable1& visitable1, Visitable2& visitable2
-    )
+BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE (
+    typename Visitor::result_type
+)
+apply_visitor (
+    const Visitor &visitor
+    , Visitable1 &visitable1, Visitable2 &visitable2
+)
 {
-    ::boost::detail::variant::apply_visitor_binary_unwrap<
-          const Visitor, Visitable2
-        > unwrapper(visitor, visitable2);
+	::boost::detail::variant::apply_visitor_binary_unwrap <
+	const Visitor, Visitable2
+	> unwrapper ( visitor, visitable2 );
 
-    return boost::apply_visitor(unwrapper, visitable1);
+	return boost::apply_visitor ( unwrapper, visitable1 );
 }
 
 #endif // MSVC7 and below exclusion

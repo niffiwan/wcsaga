@@ -15,73 +15,82 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/spirit/home/support/has_semantic_action.hpp>
 
-namespace boost { namespace spirit { namespace qi { namespace detail
+namespace boost
 {
-    // parser_binder for plain rules
-    template <typename Parser, typename Auto>
-    struct parser_binder
-    {
-        parser_binder(Parser const& p)
-          : p(p) {}
+namespace spirit
+{
+namespace qi
+{
+namespace detail
+{
+// parser_binder for plain rules
+template <typename Parser, typename Auto>
+struct parser_binder
+{
+	parser_binder ( Parser const &p )
+		: p ( p ) {}
 
-        template <typename Iterator, typename Skipper, typename Context>
-        bool call(Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper, mpl::true_) const
-        {
-            // If DeducedAuto is false (semantic actions is present), the 
-            // component's attribute is unused.
-            return p.parse(first, last, context, skipper, unused);
-        }
+	template <typename Iterator, typename Skipper, typename Context>
+	bool call ( Iterator &first, Iterator const &last
+	            , Context &context, Skipper const &skipper, mpl::true_ ) const
+	{
+		// If DeducedAuto is false (semantic actions is present), the
+		// component's attribute is unused.
+		return p.parse ( first, last, context, skipper, unused );
+	}
 
-        template <typename Iterator, typename Skipper, typename Context>
-        bool call(Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper, mpl::false_) const
-        {
-            // If DeducedAuto is true (no semantic action), we pass the rule's 
-            // attribute on to the component.
-            return p.parse(first, last, context, skipper
-                , fusion::at_c<0>(context.attributes));
-        }
+	template <typename Iterator, typename Skipper, typename Context>
+	bool call ( Iterator &first, Iterator const &last
+	            , Context &context, Skipper const &skipper, mpl::false_ ) const
+	{
+		// If DeducedAuto is true (no semantic action), we pass the rule's
+		// attribute on to the component.
+		return p.parse ( first, last, context, skipper
+		                 , fusion::at_c<0> ( context.attributes ) );
+	}
 
-        template <typename Iterator, typename Skipper, typename Context>
-        bool operator()(
-            Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper) const
-        {
-            // If Auto is false, we need to deduce whether to apply auto rule
-            typedef typename traits::has_semantic_action<Parser>::type auto_rule;
-            return call(first, last, context, skipper, auto_rule());
-        }
+	template <typename Iterator, typename Skipper, typename Context>
+	bool operator() (
+	    Iterator &first, Iterator const &last
+	    , Context &context, Skipper const &skipper ) const
+	{
+		// If Auto is false, we need to deduce whether to apply auto rule
+		typedef typename traits::has_semantic_action<Parser>::type auto_rule;
+		return call ( first, last, context, skipper, auto_rule() );
+	}
 
-        Parser p;
-    };
+	Parser p;
+};
 
-    // parser_binder for auto rules
-    template <typename Parser>
-    struct parser_binder<Parser, mpl::true_>
-    {
-        parser_binder(Parser const& p)
-          : p(p) {}
+// parser_binder for auto rules
+template <typename Parser>
+struct parser_binder<Parser, mpl::true_>
+{
+	parser_binder ( Parser const &p )
+		: p ( p ) {}
 
-        template <typename Iterator, typename Skipper, typename Context>
-        bool operator()(
-            Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper) const
-        {
-            // If Auto is true, we pass the rule's attribute on to the component.
-            return p.parse(first, last, context, skipper
-                , fusion::at_c<0>(context.attributes));
-        }
+	template <typename Iterator, typename Skipper, typename Context>
+	bool operator() (
+	    Iterator &first, Iterator const &last
+	    , Context &context, Skipper const &skipper ) const
+	{
+		// If Auto is true, we pass the rule's attribute on to the component.
+		return p.parse ( first, last, context, skipper
+		                 , fusion::at_c<0> ( context.attributes ) );
+	}
 
-        Parser p;
-    };
+	Parser p;
+};
 
-    template <typename Auto, typename Parser>
-    inline parser_binder<Parser, Auto>
-    bind_parser(Parser const& p)
-    {
-        return parser_binder<Parser, Auto>(p);
-    }
-}}}}
+template <typename Auto, typename Parser>
+inline parser_binder<Parser, Auto>
+bind_parser ( Parser const &p )
+{
+	return parser_binder<Parser, Auto> ( p );
+}
+}
+}
+}
+}
 
 #endif

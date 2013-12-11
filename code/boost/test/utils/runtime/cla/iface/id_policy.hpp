@@ -24,11 +24,14 @@
 #include <boost/test/utils/class_properties.hpp>
 #include <boost/test/utils/rtti.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace BOOST_RT_PARAM_NAMESPACE {
+namespace BOOST_RT_PARAM_NAMESPACE
+{
 
-namespace cla {
+namespace cla
+{
 
 // ************************************************************************** //
 // **************             identification_policy            ************** //
@@ -39,25 +42,26 @@ namespace cla {
 #  pragma warning(disable:4244)
 #endif
 
-class identification_policy {
+class identification_policy
+{
 public:
-    // Public properties
-    unit_test::readwrite_property<rtti::id_t>    p_type_id;
+	// Public properties
+	unit_test::readwrite_property<rtti::id_t>    p_type_id;
 
-    // Policy interface
-    virtual bool    responds_to( cstring name ) const = 0;
-    virtual cstring id_2_report() const = 0;
-    virtual void    usage_info( format_stream& fs ) const = 0;
-    virtual bool    matching( parameter const& p, argv_traverser& tr, bool primary ) const = 0;
+	// Policy interface
+	virtual bool    responds_to ( cstring name ) const = 0;
+	virtual cstring id_2_report() const = 0;
+	virtual void    usage_info ( format_stream &fs ) const = 0;
+	virtual bool    matching ( parameter const &p, argv_traverser &tr, bool primary ) const = 0;
 
-    virtual bool    conflict_with( identification_policy const& ) const = 0;
+	virtual bool    conflict_with ( identification_policy const & ) const = 0;
 
 protected:
-    // Constructor
-    explicit        identification_policy( rtti::id_t dyn_type )
-    : p_type_id( dyn_type )
-    {}
-    BOOST_TEST_PROTECTED_VIRTUAL ~identification_policy() {}
+	// Constructor
+	explicit        identification_policy ( rtti::id_t dyn_type )
+		: p_type_id ( dyn_type )
+	{}
+	BOOST_TEST_PROTECTED_VIRTUAL ~identification_policy() {}
 };
 
 #ifdef BOOST_MSVC

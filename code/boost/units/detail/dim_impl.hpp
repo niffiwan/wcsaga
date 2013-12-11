@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -16,14 +16,17 @@
 
 #include <boost/units/units_fwd.hpp>
 
-/// \file 
+/// \file
 /// \brief Class encapsulating a dimension tag/value pair
 
-namespace boost {
+namespace boost
+{
 
-namespace units {
+namespace units
+{
 
-namespace detail {
+namespace detail
+{
 
 struct dim_tag;
 
@@ -31,19 +34,21 @@ struct dim_tag;
 
 }
 
-namespace mpl {
+namespace mpl
+{
 
 /// Less than comparison for sorting @c dim.
 template<>
 struct less_impl<boost::units::detail::dim_tag, boost::units::detail::dim_tag>
 {
-    template<class T0, class T1>
-    struct apply : mpl::less<typename T0::tag_type, typename T1::tag_type> {};
+	template<class T0, class T1>
+	struct apply : mpl::less<typename T0::tag_type, typename T1::tag_type> {};
 };
 
 }
 
-namespace units {
+namespace units
+{
 
 template<class Tag, class Exponent>
 struct dim;
@@ -51,20 +56,21 @@ struct dim;
 template<long N, long D>
 class static_rational;
 
-namespace detail {
+namespace detail
+{
 
 /// Extract @c tag_type from a @c dim.
 template<typename T>
 struct get_tag
 {
-    typedef typename T::tag_type    type;
+	typedef typename T::tag_type    type;
 };
 
 /// Extract @c value_type from a @c dim.
 template<typename T>
 struct get_value
 {
-    typedef typename T::value_type    type;
+	typedef typename T::value_type    type;
 };
 
 /// Determine if a @c dim is empty (has a zero exponent).
@@ -73,12 +79,12 @@ struct is_empty_dim;
 
 template<typename T>
 struct is_empty_dim< dim<T, static_rational<0, 1> > > :
-    mpl::true_ 
+		mpl::true_
 { };
 
 template<typename T, typename V>
 struct is_empty_dim< dim<T, V> > :
-    mpl::false_ 
+		mpl::false_
 { };
 
 } // namespace detail

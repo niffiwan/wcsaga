@@ -26,12 +26,16 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/facilities/intercept.hpp>
 
-namespace boost { namespace parameter { 
+namespace boost
+{
+namespace parameter
+{
 
 // Forward declaration for aux::arg_list, below.
 template<class T> struct keyword;
 
-namespace aux {
+namespace aux
+{
 
 // Tag type passed to MPL lambda.
 struct lambda_tag;
@@ -46,7 +50,7 @@ struct lambda_tag;
 // declarations to build member function overload sets that can
 // match against keywords.
 //
-  
+
 // MPL sequence support
 struct arg_list_tag;
 
@@ -56,103 +60,103 @@ struct arg_list_tag;
 
 struct empty_arg_list
 {
-    empty_arg_list() {}
+	empty_arg_list() {}
 
-    // Constructor taking BOOST_PARAMETER_MAX_ARITY empty_arg_list
-    // arguments; this makes initialization
-    empty_arg_list(
-        BOOST_PP_ENUM_PARAMS(
-            BOOST_PARAMETER_MAX_ARITY, void_ BOOST_PP_INTERCEPT
-        ))
-    {}
+	// Constructor taking BOOST_PARAMETER_MAX_ARITY empty_arg_list
+	// arguments; this makes initialization
+	empty_arg_list (
+	    BOOST_PP_ENUM_PARAMS (
+	        BOOST_PARAMETER_MAX_ARITY, void_ BOOST_PP_INTERCEPT
+	    ) )
+	{}
 
-    // A metafunction class that, given a keyword and a default
-    // type, returns the appropriate result type for a keyword
-    // lookup given that default
-    struct binding
-    {
-        template<class KW, class Default, class Reference>
-        struct apply
-        {
-            typedef Default type;
-        };
-    };
+	// A metafunction class that, given a keyword and a default
+	// type, returns the appropriate result type for a keyword
+	// lookup given that default
+	struct binding
+	{
+		template<class KW, class Default, class Reference>
+		struct apply
+		{
+			typedef Default type;
+		};
+	};
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-    // Terminator for has_key, indicating that the keyword is unique
-    template <class KW>
-    static no_tag has_key(KW*);
+	// Terminator for has_key, indicating that the keyword is unique
+	template <class KW>
+	static no_tag has_key ( KW * );
 #endif
-    
+
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
     || (BOOST_WORKAROUND(__GNUC__, < 3)) \
     || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    
-    // The overload set technique doesn't work with these older
-    // compilers, so they need some explicit handholding.
-      
-    // A metafunction class that, given a keyword, returns the type
-    // of the base sublist whose get() function can produce the
-    // value for that key
-    struct key_owner
-    {
-        template<class KW>
-        struct apply
-        {
-            typedef empty_arg_list type;
-        };
-    };
 
-    template <class K, class T>
-    T& get(default_<K,T> x) const
-    {
-        return x.value;
-    }
+	// The overload set technique doesn't work with these older
+	// compilers, so they need some explicit handholding.
 
-    template <class K, class F>
-    typename result_of0<F>::type
-    get(lazy_default<K,F> x) const
-    {
-        return x.compute_default();
-    }
+	// A metafunction class that, given a keyword, returns the type
+	// of the base sublist whose get() function can produce the
+	// value for that key
+	struct key_owner
+	{
+		template<class KW>
+		struct apply
+		{
+			typedef empty_arg_list type;
+		};
+	};
+
+	template <class K, class T>
+	T &get ( default_<K, T> x ) const
+	{
+		return x.value;
+	}
+
+	template <class K, class F>
+	typename result_of0<F>::type
+	get ( lazy_default<K, F> x ) const
+	{
+		return x.compute_default();
+	}
 #endif
 
-    // If this function is called, it means there is no argument
-    // in the list that matches the supplied keyword. Just return
-    // the default value.
-    template <class K, class Default>
-    Default& operator[](default_<K, Default> x) const
-    {
-        return x.value;
-    }
+	// If this function is called, it means there is no argument
+	// in the list that matches the supplied keyword. Just return
+	// the default value.
+	template <class K, class Default>
+	Default &operator[] ( default_<K, Default> x ) const
+	{
+		return x.value;
+	}
 
-    // If this function is called, it means there is no argument
-    // in the list that matches the supplied keyword. Just evaluate
-    // and return the default value.
-    template <class K, class F>
-    typename result_of0<F>::type
-    operator[](
-        BOOST_PARAMETER_lazy_default_fallback<K,F> x) const
-    {
-        return x.compute_default();
-    }
+	// If this function is called, it means there is no argument
+	// in the list that matches the supplied keyword. Just evaluate
+	// and return the default value.
+	template <class K, class F>
+	typename result_of0<F>::type
+	operator[] (
+	    BOOST_PARAMETER_lazy_default_fallback<K, F> x ) const
+	{
+		return x.compute_default();
+	}
 
-    // No argument corresponding to ParameterRequirements::key_type
-    // was found if we match this overload, so unless that parameter
-    // has a default, we indicate that the actual arguments don't
-    // match the function's requirements.
-    template <class ParameterRequirements, class ArgPack>
-    static typename ParameterRequirements::has_default
-    satisfies(ParameterRequirements*, ArgPack*);
+	// No argument corresponding to ParameterRequirements::key_type
+	// was found if we match this overload, so unless that parameter
+	// has a default, we indicate that the actual arguments don't
+	// match the function's requirements.
+	template <class ParameterRequirements, class ArgPack>
+	static typename ParameterRequirements::has_default
+	satisfies ( ParameterRequirements *, ArgPack * );
 
-    // MPL sequence support
-    typedef empty_arg_list type;   // convenience
-    typedef arg_list_tag tag; // For dispatching to sequence intrinsics
+	// MPL sequence support
+	typedef empty_arg_list type;   // convenience
+	typedef arg_list_tag tag; // For dispatching to sequence intrinsics
 };
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 template<class KW>
-no_tag operator*(empty_arg_list, KW*);
+no_tag operator* ( empty_arg_list, KW * );
 #endif
 
 // Forward declaration for arg_list::operator,
@@ -161,13 +165,13 @@ struct tagged_argument;
 
 template <class T>
 struct is_maybe
-  : is_base_and_derived<maybe_base, T>
+		: is_base_and_derived<maybe_base, T>
 {};
 
 template <class T>
 struct get_reference
 {
-    typedef typename T::reference type;
+	typedef typename T::reference type;
 };
 
 // A tuple of tagged arguments, terminated with empty_arg_list.
@@ -175,287 +179,288 @@ struct get_reference
 template <class TaggedArg, class Next = empty_arg_list>
 struct arg_list : Next
 {
-    typedef arg_list<TaggedArg,Next> self;
-    typedef typename TaggedArg::key_type key_type;
+	typedef arg_list<TaggedArg, Next> self;
+	typedef typename TaggedArg::key_type key_type;
 
-    typedef typename is_maybe<typename TaggedArg::value_type>::type holds_maybe;
+	typedef typename is_maybe<typename TaggedArg::value_type>::type holds_maybe;
 
-    typedef typename mpl::eval_if<
-        holds_maybe
-      , get_reference<typename TaggedArg::value_type>
-      , get_reference<TaggedArg>
-    >::type reference;
+	typedef typename mpl::eval_if <
+	holds_maybe
+	, get_reference<typename TaggedArg::value_type>
+	, get_reference<TaggedArg>
+	>::type reference;
 
-    typedef typename mpl::if_<
-        holds_maybe
-      , reference
-      , typename TaggedArg::value_type
-    >::type value_type;
+	typedef typename mpl::if_ <
+	holds_maybe
+	, reference
+	, typename TaggedArg::value_type
+	>::type value_type;
 
-    TaggedArg arg;      // Stores the argument
+	TaggedArg arg;      // Stores the argument
 
-    // Store the arguments in successive nodes of this list
-    template< // class A0, class A1, ...
-        BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, class A)
-    >
-    arg_list( // A0& a0, A1& a1, ...
-        BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PARAMETER_MAX_ARITY, A, & a)
-    )
-      : Next( // a1, a2, ...
-            BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PARAMETER_MAX_ARITY, a)
-          , void_reference()
-        )
-      , arg(a0)
-    {}
+	// Store the arguments in successive nodes of this list
+	template< // class A0, class A1, ...
+	    BOOST_PP_ENUM_PARAMS ( BOOST_PARAMETER_MAX_ARITY, class A )
+	    >
+	arg_list ( // A0& a0, A1& a1, ...
+	    BOOST_PP_ENUM_BINARY_PARAMS ( BOOST_PARAMETER_MAX_ARITY, A, & a )
+	)
+		: Next ( // a1, a2, ...
+		    BOOST_PP_ENUM_SHIFTED_PARAMS ( BOOST_PARAMETER_MAX_ARITY, a )
+		    , void_reference()
+		)
+		, arg ( a0 )
+	{}
 
-    // Create a new list by prepending arg to a copy of tail.  Used
-    // when incrementally building this structure with the comma
-    // operator.
-    arg_list(TaggedArg arg, Next const& tail)
-      : Next(tail)
-      , arg(arg)
-    {}
+	// Create a new list by prepending arg to a copy of tail.  Used
+	// when incrementally building this structure with the comma
+	// operator.
+	arg_list ( TaggedArg arg, Next const &tail )
+		: Next ( tail )
+		, arg ( arg )
+	{}
 
-    // A metafunction class that, given a keyword and a default
-    // type, returns the appropriate result type for a keyword
-    // lookup given that default
-    struct binding
-    {
-        template <class KW, class Default, class Reference>
-        struct apply
-        {
-          typedef typename mpl::eval_if<
-                boost::is_same<KW, key_type>
-              , mpl::if_<Reference, reference, value_type>
-              , mpl::apply_wrap3<typename Next::binding, KW, Default, Reference>
-          >::type type;
-        };
-    };
+	// A metafunction class that, given a keyword and a default
+	// type, returns the appropriate result type for a keyword
+	// lookup given that default
+	struct binding
+	{
+		template <class KW, class Default, class Reference>
+		struct apply
+		{
+			typedef typename mpl::eval_if <
+			boost::is_same<KW, key_type>
+			, mpl::if_<Reference, reference, value_type>
+			, mpl::apply_wrap3<typename Next::binding, KW, Default, Reference>
+			>::type type;
+		};
+	};
 
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) && !BOOST_WORKAROUND(__GNUC__, == 2)
 # if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-    friend yes_tag operator*(arg_list, key_type*);
+	friend yes_tag operator* ( arg_list, key_type * );
 #  define BOOST_PARAMETER_CALL_HAS_KEY(next, key) (*(next*)0 * (key*)0)
 # else
-    // Overload for key_type, so the assert below will fire if the
-    // same keyword is used again
-    static yes_tag has_key(key_type*);
-    using Next::has_key;
-    
-#  define BOOST_PARAMETER_CALL_HAS_KEY(next, key) next::has_key((key*)0)  
+	// Overload for key_type, so the assert below will fire if the
+	// same keyword is used again
+	static yes_tag has_key ( key_type * );
+	using Next::has_key;
+
+#  define BOOST_PARAMETER_CALL_HAS_KEY(next, key) next::has_key((key*)0)
 # endif
 
-    BOOST_MPL_ASSERT_MSG(
-        sizeof(BOOST_PARAMETER_CALL_HAS_KEY(Next,key_type)) == sizeof(no_tag)
-      , duplicate_keyword, (key_type)
-    );
+	BOOST_MPL_ASSERT_MSG (
+	    sizeof ( BOOST_PARAMETER_CALL_HAS_KEY ( Next, key_type ) ) == sizeof ( no_tag )
+	    , duplicate_keyword, ( key_type )
+	);
 
 # undef BOOST_PARAMETER_CALL_HAS_KEY
 #endif
-    //
-    // Begin implementation of indexing operators for looking up
-    // specific arguments by name
-    //
+	//
+	// Begin implementation of indexing operators for looking up
+	// specific arguments by name
+	//
 
-    // Helpers that handle the case when TaggedArg is 
-    // empty<T>.
-    template <class D>
-    reference get_default(D const&, mpl::false_) const
-    {
-        return arg.value;
-    }
+	// Helpers that handle the case when TaggedArg is
+	// empty<T>.
+	template <class D>
+	reference get_default ( D const &, mpl::false_ ) const
+	{
+		return arg.value;
+	}
 
-    template <class D>
-    reference get_default(D const& d, mpl::true_) const
-    {
-        return arg.value ? arg.value.get() : arg.value.construct(d.value);
-    }
+	template <class D>
+	reference get_default ( D const &d, mpl::true_ ) const
+	{
+		return arg.value ? arg.value.get() : arg.value.construct ( d.value );
+	}
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
     || BOOST_WORKAROUND(__GNUC__, < 3) \
     || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    // These older compilers don't support the overload set creation
-    // idiom well, so we need to do all the return type calculation
-    // for the compiler and dispatch through an outer function template
+	// These older compilers don't support the overload set creation
+	// idiom well, so we need to do all the return type calculation
+	// for the compiler and dispatch through an outer function template
 
-    // A metafunction class that, given a keyword, returns the base
-    // sublist whose get() function can produce the value for that
-    // key.
-    struct key_owner
-    {
-        template<class KW>
-        struct apply
-        {
-          typedef typename mpl::eval_if<
-                boost::is_same<KW, key_type>
-              , mpl::identity<arg_list<TaggedArg,Next> >
-              , mpl::apply_wrap1<typename Next::key_owner,KW>
-          >::type type;
-        };
-    };
+	// A metafunction class that, given a keyword, returns the base
+	// sublist whose get() function can produce the value for that
+	// key.
+	struct key_owner
+	{
+		template<class KW>
+		struct apply
+		{
+			typedef typename mpl::eval_if <
+			boost::is_same<KW, key_type>
+			, mpl::identity<arg_list<TaggedArg, Next> >
+			, mpl::apply_wrap1<typename Next::key_owner, KW>
+			>::type type;
+		};
+	};
 
-    // Outer indexing operators that dispatch to the right node's
-    // get() function.
-    template <class KW>
-    typename mpl::apply_wrap3<binding, KW, void_, mpl::true_>::type
-    operator[](keyword<KW> const& x) const
-    {
-        typename mpl::apply_wrap1<key_owner, KW>::type const& sublist = *this;
-        return sublist.get(x);
-    }
+	// Outer indexing operators that dispatch to the right node's
+	// get() function.
+	template <class KW>
+	typename mpl::apply_wrap3<binding, KW, void_, mpl::true_>::type
+	operator[] ( keyword<KW> const &x ) const
+	{
+		typename mpl::apply_wrap1<key_owner, KW>::type const &sublist = *this;
+		return sublist.get ( x );
+	}
 
-    template <class KW, class Default>
-    typename mpl::apply_wrap3<binding, KW, Default&, mpl::true_>::type
-    operator[](default_<KW, Default> x) const
-    {
-        typename mpl::apply_wrap1<key_owner, KW>::type const& sublist = *this;
-        return sublist.get(x);
-    }
+	template <class KW, class Default>
+	typename mpl::apply_wrap3<binding, KW, Default &, mpl::true_>::type
+	operator[] ( default_<KW, Default> x ) const
+	{
+		typename mpl::apply_wrap1<key_owner, KW>::type const &sublist = *this;
+		return sublist.get ( x );
+	}
 
-    template <class KW, class F>
-    typename mpl::apply_wrap3<
-        binding,KW
-      , typename result_of0<F>::type
-      , mpl::true_
-    >::type
-    operator[](lazy_default<KW,F> x) const
-    {
-        typename mpl::apply_wrap1<key_owner, KW>::type const& sublist = *this;
-        return sublist.get(x);
-    }
+	template <class KW, class F>
+	typename mpl::apply_wrap3 <
+	binding, KW
+	, typename result_of0<F>::type
+	, mpl::true_
+	>::type
+	operator[] ( lazy_default<KW, F> x ) const
+	{
+		typename mpl::apply_wrap1<key_owner, KW>::type const &sublist = *this;
+		return sublist.get ( x );
+	}
 
-    // These just return the stored value; when empty_arg_list is
-    // reached, indicating no matching argument was passed, the
-    // default is returned, or if no default_ or lazy_default was
-    // passed, compilation fails.
-    reference get(keyword<key_type> const&) const
-    {
-        BOOST_MPL_ASSERT_NOT((holds_maybe));
-        return arg.value;
-    }
+	// These just return the stored value; when empty_arg_list is
+	// reached, indicating no matching argument was passed, the
+	// default is returned, or if no default_ or lazy_default was
+	// passed, compilation fails.
+	reference get ( keyword<key_type> const & ) const
+	{
+		BOOST_MPL_ASSERT_NOT ( ( holds_maybe ) );
+		return arg.value;
+	}
 
-    template <class Default>
-    reference get(default_<key_type,Default> const& d) const
-    {
-        return get_default(d, holds_maybe());        
-    }
+	template <class Default>
+	reference get ( default_<key_type, Default> const &d ) const
+	{
+		return get_default ( d, holds_maybe() );
+	}
 
-    template <class Default>
-    reference get(lazy_default<key_type, Default>) const
-    {
-        return arg.value;
-    }
-    
+	template <class Default>
+	reference get ( lazy_default<key_type, Default> ) const
+	{
+		return arg.value;
+	}
+
 #else
 
-    reference operator[](keyword<key_type> const&) const
-    {
-        BOOST_MPL_ASSERT_NOT((holds_maybe));
-        return arg.value;
-    }
+	reference operator[] ( keyword<key_type> const & ) const
+	{
+		BOOST_MPL_ASSERT_NOT ( ( holds_maybe ) );
+		return arg.value;
+	}
 
-    template <class Default>
-    reference operator[](default_<key_type, Default> const& d) const
-    {
-        return get_default(d, holds_maybe());
-    }
+	template <class Default>
+	reference operator[] ( default_<key_type, Default> const &d ) const
+	{
+		return get_default ( d, holds_maybe() );
+	}
 
-    template <class Default>
-    reference operator[](lazy_default<key_type, Default>) const
-    {
-        return arg.value;
-    }
+	template <class Default>
+	reference operator[] ( lazy_default<key_type, Default> ) const
+	{
+		return arg.value;
+	}
 
-    // Builds an overload set including operator[]s defined in base
-    // classes.
-    using Next::operator[];
+	// Builds an overload set including operator[]s defined in base
+	// classes.
+	using Next::operator[];
 
-    //
-    // End of indexing support
-    //
+	//
+	// End of indexing support
+	//
 
 
-    //
-    // For parameter_requirements matching this node's key_type,
-    // return a bool constant wrapper indicating whether the
-    // requirements are satisfied by TaggedArg.  Used only for
-    // compile-time computation and never really called, so a
-    // declaration is enough.
-    //
-    template <class HasDefault, class Predicate, class ArgPack>
-    static typename mpl::apply_wrap2<
-        typename mpl::lambda<Predicate, lambda_tag>::type
-      , value_type, ArgPack
-    >::type
-    satisfies(
-        parameter_requirements<key_type,Predicate,HasDefault>*
-      , ArgPack*
-    );
+	//
+	// For parameter_requirements matching this node's key_type,
+	// return a bool constant wrapper indicating whether the
+	// requirements are satisfied by TaggedArg.  Used only for
+	// compile-time computation and never really called, so a
+	// declaration is enough.
+	//
+	template <class HasDefault, class Predicate, class ArgPack>
+	static typename mpl::apply_wrap2 <
+	typename mpl::lambda<Predicate, lambda_tag>::type
+	, value_type, ArgPack
+	>::type
+	satisfies (
+	    parameter_requirements<key_type, Predicate, HasDefault> *
+	    , ArgPack *
+	);
 
-    // Builds an overload set including satisfies functions defined
-    // in base classes.
-    using Next::satisfies;
+	// Builds an overload set including satisfies functions defined
+	// in base classes.
+	using Next::satisfies;
 #endif
 
-    // Comma operator to compose argument list without using parameters<>.
-    // Useful for argument lists with undetermined length.
-    template <class KW, class T2>
-    arg_list<tagged_argument<KW, T2>, self> 
-    operator,(tagged_argument<KW,T2> x) const
-    {
-        return arg_list<tagged_argument<KW,T2>, self>(x, *this);
-    }
+	// Comma operator to compose argument list without using parameters<>.
+	// Useful for argument lists with undetermined length.
+	template <class KW, class T2>
+	arg_list<tagged_argument<KW, T2>, self>
+	operator, ( tagged_argument<KW, T2> x ) const
+	{
+		return arg_list<tagged_argument<KW, T2>, self> ( x, *this );
+	}
 
-    // MPL sequence support
-    typedef self type;             // Convenience for users
-    typedef Next tail_type;        // For the benefit of iterators
-    typedef arg_list_tag tag; // For dispatching to sequence intrinsics
+	// MPL sequence support
+	typedef self type;             // Convenience for users
+	typedef Next tail_type;        // For the benefit of iterators
+	typedef arg_list_tag tag; // For dispatching to sequence intrinsics
 };
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)  // ETI workaround
-template <> struct arg_list<int,int> {};
-#endif 
+template <> struct arg_list<int, int> {};
+#endif
 
 // MPL sequence support
 template <class ArgumentPack>
 struct arg_list_iterator
 {
-    typedef mpl::forward_iterator_tag category;
+	typedef mpl::forward_iterator_tag category;
 
-    // The incremented iterator
-    typedef arg_list_iterator<typename ArgumentPack::tail_type> next;
-    
-    // dereferencing yields the key type
-    typedef typename ArgumentPack::key_type type;
+	// The incremented iterator
+	typedef arg_list_iterator<typename ArgumentPack::tail_type> next;
+
+	// dereferencing yields the key type
+	typedef typename ArgumentPack::key_type type;
 };
 
 template <>
 struct arg_list_iterator<empty_arg_list> {};
 
-}} // namespace parameter::aux
+}
+} // namespace parameter::aux
 
 // MPL sequence support
 namespace mpl
 {
-  template <>
-  struct begin_impl<parameter::aux::arg_list_tag>
-  {
-      template <class S>
-      struct apply
-      {
-          typedef parameter::aux::arg_list_iterator<S> type;
-      };
-  };
+template <>
+struct begin_impl<parameter::aux::arg_list_tag>
+{
+	template <class S>
+	struct apply
+	{
+		typedef parameter::aux::arg_list_iterator<S> type;
+	};
+};
 
-  template <>
-  struct end_impl<parameter::aux::arg_list_tag>
-  {
-      template <class>
-      struct apply
-      {
-          typedef parameter::aux::arg_list_iterator<parameter::aux::empty_arg_list> type;
-      };
-  };
+template <>
+struct end_impl<parameter::aux::arg_list_tag>
+{
+	template <class>
+	struct apply
+	{
+		typedef parameter::aux::arg_list_iterator<parameter::aux::empty_arg_list> type;
+	};
+};
 }
 
 } // namespace boost

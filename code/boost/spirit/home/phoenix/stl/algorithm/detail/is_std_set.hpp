@@ -24,33 +24,33 @@
 
 namespace boost
 {
-    template<class T>
-    struct is_std_set
-        : boost::mpl::false_
-    {};
+template<class T>
+struct is_std_set
+		: boost::mpl::false_
+{};
 
-    template<
-        class Kty
-      , class Pr
-      , class Alloc
+template <
+    class Kty
+    , class Pr
+    , class Alloc
     >
-    struct is_std_set< ::std::set<Kty,Pr,Alloc> >
-        : boost::mpl::true_
-    {};
+struct is_std_set< ::std::set<Kty, Pr, Alloc> >
+		: boost::mpl::true_
+{};
 
-    template<class T>
-    struct is_std_multiset
-        : boost::mpl::false_
-    {};
+template<class T>
+struct is_std_multiset
+		: boost::mpl::false_
+{};
 
-    template<
-        class Kty
-      , class Pr
-      , class Alloc
+template <
+    class Kty
+    , class Pr
+    , class Alloc
     >
-    struct is_std_multiset< ::std::multiset<Kty,Pr,Alloc> >
-        : boost::mpl::true_
-    {};
+struct is_std_multiset< ::std::multiset<Kty, Pr, Alloc> >
+		: boost::mpl::true_
+{};
 }
 
 #endif

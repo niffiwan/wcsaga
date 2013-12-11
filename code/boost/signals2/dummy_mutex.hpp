@@ -13,16 +13,18 @@
 #ifndef BOOST_SIGNALS2_DUMMY_MUTEX_HPP
 #define BOOST_SIGNALS2_DUMMY_MUTEX_HPP
 
-namespace boost {
-  namespace signals2 {
-    class dummy_mutex
-    {
-    public:
-      void lock() {}
-      bool try_lock() {return true;}
-      void unlock() {}
-    };
-  } // end namespace signals2
+namespace boost
+{
+namespace signals2
+{
+class dummy_mutex
+{
+public:
+void lock() {}
+bool try_lock() {return true;}
+void unlock() {}
+};
+} // end namespace signals2
 } // end namespace boost
 
 #endif // BOOST_SIGNALS2_DUMMY_MUTEX_HPP

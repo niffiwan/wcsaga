@@ -40,10 +40,14 @@ See also tagged, default_tagged.
 
 #ifndef BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
 
-namespace boost {
-namespace bimaps {
-namespace tags {
-namespace support {
+namespace boost
+{
+namespace bimaps
+{
+namespace tags
+{
+namespace support
+{
 
 
 // Change the tag
@@ -51,13 +55,13 @@ namespace support {
 template< class Type, class NewTag >
 struct overwrite_tagged
 {
-    typedef tagged<Type,NewTag> type;
+	typedef tagged<Type, NewTag> type;
 };
 
 template< class Type, class OldTag, class NewTag >
 struct overwrite_tagged< tagged< Type, OldTag >, NewTag >
 {
-    typedef tagged<Type,NewTag> type;
+	typedef tagged<Type, NewTag> type;
 };
 
 

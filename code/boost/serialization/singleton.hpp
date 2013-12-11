@@ -32,7 +32,7 @@
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif 
+#endif
 
 #include <cassert>
 #include <boost/config.hpp>
@@ -44,8 +44,10 @@
 #  pragma warning(disable : 4511 4512)
 #endif
 
-namespace boost { 
-namespace serialization { 
+namespace boost
+{
+namespace serialization
+{
 
 //////////////////////////////////////////////////////////////////////
 // Provides a dynamically-initialized (singleton) instance of T in a
@@ -77,39 +79,45 @@ namespace serialization {
 // attempt to retieve a mutable instances while locked will
 // generate a assertion if compiled for debug.
 
-class singleton_module : 
-    public boost::noncopyable
+class singleton_module :
+public boost::noncopyable
 {
 private:
-    static bool & get_lock(){
-        static bool lock = false;
-        return lock;
-    }
+static bool &get_lock()
+{
+	static bool lock = false;
+	return lock;
+}
 public:
 //    static const void * get_module_handle(){
 //        return static_cast<const void *>(get_module_handle);
 //    }
-    static void lock(){
-        get_lock() = true;
-    }
-    static void unlock(){
-        get_lock() = false;
-    }
-    static bool is_locked() {
-        return get_lock();
-    }
+static void lock()
+{
+	get_lock() = true;
+}
+static void unlock()
+{
+	get_lock() = false;
+}
+static bool is_locked()
+{
+	return get_lock();
+}
 };
 
-namespace detail {
+namespace detail
+{
 
 template<class T>
 class singleton_wrapper : public T
 {
 public:
-    static bool m_is_destroyed;
-    ~singleton_wrapper(){
-        m_is_destroyed = true;
-    }
+static bool m_is_destroyed;
+~singleton_wrapper()
+{
+	m_is_destroyed = true;
+}
 };
 
 template<class T>
@@ -121,32 +129,36 @@ template <class T>
 class singleton : public singleton_module
 {
 private:
-    BOOST_DLLEXPORT static T & instance;
-    // include this to provoke instantiation at pre-execution time
-    static void use(T const &) {}
-    BOOST_DLLEXPORT static T & get_instance() {
-        static detail::singleton_wrapper<T> t;
-        // refer to instance, causing it to be instantiated (and
-        // initialized at startup on working compilers)
-        assert(! detail::singleton_wrapper<T>::m_is_destroyed);
-        use(instance);
-        return static_cast<T &>(t);
-    }
+BOOST_DLLEXPORT static T &instance;
+// include this to provoke instantiation at pre-execution time
+static void use ( T const & ) {}
+BOOST_DLLEXPORT static T &get_instance()
+{
+	static detail::singleton_wrapper<T> t;
+	// refer to instance, causing it to be instantiated (and
+	// initialized at startup on working compilers)
+	assert ( ! detail::singleton_wrapper<T>::m_is_destroyed );
+	use ( instance );
+	return static_cast<T &> ( t );
+}
 public:
-    BOOST_DLLEXPORT static T & get_mutable_instance(){
-        assert(! is_locked());
-        return get_instance();
-    }
-    BOOST_DLLEXPORT static const T & get_const_instance(){
-        return get_instance();
-    }
-    BOOST_DLLEXPORT static bool is_destroyed(){
-        return detail::singleton_wrapper<T>::m_is_destroyed;
-    }
+BOOST_DLLEXPORT static T &get_mutable_instance()
+{
+	assert ( ! is_locked() );
+	return get_instance();
+}
+BOOST_DLLEXPORT static const T &get_const_instance()
+{
+	return get_instance();
+}
+BOOST_DLLEXPORT static bool is_destroyed()
+{
+	return detail::singleton_wrapper<T>::m_is_destroyed;
+}
 };
 
 template<class T>
-BOOST_DLLEXPORT T & singleton<T>::instance = singleton<T>::get_instance();
+BOOST_DLLEXPORT T &singleton<T>::instance = singleton<T>::get_instance();
 
 } // namespace serialization
 } // namespace boost

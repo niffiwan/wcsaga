@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,6 +14,6 @@
 #include <boost/units/conversion.hpp>
 #include <boost/units/systems/si/area.hpp>
 
-BOOST_UNITS_DEFINE_BASE_UNIT_WITH_CONVERSIONS(metric, hectare, "hectare", "ha", 1.0e4, si::area, 12);
+BOOST_UNITS_DEFINE_BASE_UNIT_WITH_CONVERSIONS ( metric, hectare, "hectare", "ha", 1.0e4, si::area, 12 );
 
 #endif // BOOST_UNIT_SYSTEMS_METRIC_HECTARE_HPP_INCLUDED

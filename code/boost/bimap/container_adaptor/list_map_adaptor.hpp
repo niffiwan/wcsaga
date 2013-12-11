@@ -1,4 +1,4 @@
- // Boost.Bimap
+// Boost.Bimap
 //
 // Copyright (c) 2006-2007 Matias Capeletto
 //
@@ -29,9 +29,12 @@
 #include <boost/mpl/aux_/na.hpp>
 #include <boost/mpl/if.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace container_adaptor {
+namespace boost
+{
+namespace bimaps
+{
+namespace container_adaptor
+{
 
 #ifndef BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
 
@@ -44,42 +47,42 @@ template
     class ValueToBaseConverter, class ValueFromBaseConverter,
     class KeyFromBaseValueConverter,
     class FunctorsFromDerivedClasses
->
+    >
 struct list_map_adaptor_base
 {
-    typedef list_adaptor
-    <
-        Base,
+	typedef list_adaptor
+	<
+	Base,
 
-        Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
+	Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
 
-        IteratorToBaseConverter, IteratorFromBaseConverter,
+	IteratorToBaseConverter, IteratorFromBaseConverter,
 
-        ReverseIteratorFromBaseConverter,
+	ReverseIteratorFromBaseConverter,
 
-        ValueToBaseConverter, ValueFromBaseConverter,
+	ValueToBaseConverter, ValueFromBaseConverter,
 
-        BOOST_DEDUCED_TYPENAME mpl::push_front<
+	BOOST_DEDUCED_TYPENAME mpl::push_front <
 
-            FunctorsFromDerivedClasses,
+	FunctorsFromDerivedClasses,
 
-            BOOST_DEDUCED_TYPENAME mpl::if_< ::boost::mpl::is_na<KeyFromBaseValueConverter>,
-            // {
-                    detail::key_from_pair_extractor
-                    <
-                        BOOST_DEDUCED_TYPENAME Iterator::value_type 
-                    >,
-            // }
-            // else
-            // {
-                    KeyFromBaseValueConverter
-            // }
+	BOOST_DEDUCED_TYPENAME mpl::if_< ::boost::mpl::is_na<KeyFromBaseValueConverter>,
+	// {
+	detail::key_from_pair_extractor
+	<
+	BOOST_DEDUCED_TYPENAME Iterator::value_type
+	>,
+	// }
+	// else
+	// {
+	KeyFromBaseValueConverter
+	// }
 
-            >::type
+	>::type
 
-        >::type
+	>::type
 
-    > type;
+	> type;
 };
 
 #endif // BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
@@ -103,172 +106,172 @@ template
     class KeyFromBaseValueConverter        = ::boost::mpl::na,
 
     class FunctorsFromDerivedClasses = mpl::vector<>
->
+    >
 class list_map_adaptor :
 
-    public list_map_adaptor_base
-    <
-        Base, Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        ReverseIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        KeyFromBaseValueConverter,
-        FunctorsFromDerivedClasses
+	public list_map_adaptor_base
+	<
+	Base, Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
+	IteratorToBaseConverter, IteratorFromBaseConverter,
+	ReverseIteratorFromBaseConverter,
+	ValueToBaseConverter, ValueFromBaseConverter,
+	KeyFromBaseValueConverter,
+	FunctorsFromDerivedClasses
 
-    >::type
+	>::type
 {
-    typedef BOOST_DEDUCED_TYPENAME list_map_adaptor_base
-    <
-        Base, Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        ReverseIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        KeyFromBaseValueConverter,
-        FunctorsFromDerivedClasses
+	typedef BOOST_DEDUCED_TYPENAME list_map_adaptor_base
+	<
+	Base, Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
+	      IteratorToBaseConverter, IteratorFromBaseConverter,
+	      ReverseIteratorFromBaseConverter,
+	      ValueToBaseConverter, ValueFromBaseConverter,
+	      KeyFromBaseValueConverter,
+	      FunctorsFromDerivedClasses
 
-    >::type base_;
+	      >::type base_;
 
-    // MetaData -------------------------------------------------------------
+	// MetaData -------------------------------------------------------------
 
-    public:
+public:
 
-    typedef BOOST_DEDUCED_TYPENAME Iterator::value_type::first_type  key_type;
-    typedef BOOST_DEDUCED_TYPENAME Iterator::value_type::second_type data_type;
+	typedef BOOST_DEDUCED_TYPENAME Iterator::value_type::first_type  key_type;
+	typedef BOOST_DEDUCED_TYPENAME Iterator::value_type::second_type data_type;
 
-    protected:
+protected:
 
-    typedef BOOST_DEDUCED_TYPENAME mpl::if_< ::boost::mpl::is_na<KeyFromBaseValueConverter>,
-    // {
-            detail::key_from_pair_extractor< BOOST_DEDUCED_TYPENAME Iterator::value_type >,
-    // }
-    // else
-    // {
-            KeyFromBaseValueConverter
-    // }
+	typedef BOOST_DEDUCED_TYPENAME mpl::if_< ::boost::mpl::is_na<KeyFromBaseValueConverter>,
+	        // {
+	        detail::key_from_pair_extractor< BOOST_DEDUCED_TYPENAME Iterator::value_type >,
+	        // }
+	        // else
+	        // {
+	        KeyFromBaseValueConverter
+	        // }
 
-    >::type key_from_base_value;
+	        >::type key_from_base_value;
 
-    // Access -----------------------------------------------------------------
+	// Access -----------------------------------------------------------------
 
-    public:
+public:
 
-    explicit list_map_adaptor(Base & c) :
-        base_(c) {}
+	explicit list_map_adaptor ( Base &c ) :
+		base_ ( c ) {}
 
-    protected:
+protected:
 
-    typedef list_map_adaptor list_map_adaptor_;
+	typedef list_map_adaptor list_map_adaptor_;
 
-    // Functions -------------------------------------------------------------
+	// Functions -------------------------------------------------------------
 
-    public:
+public:
 
-    // The following functions are overwritten in order to work 
-    // with key_type instead of value_type
+	// The following functions are overwritten in order to work
+	// with key_type instead of value_type
 
-    template< class Predicate >
-    void remove_if(Predicate pred)
-    {
-        this->base().remove_if(
-            ::boost::bimaps::container_adaptor::detail::unary_check_adaptor
-            <
-                Predicate,
-                BOOST_DEDUCED_TYPENAME Base::value_type,
-                key_from_base_value
+	template< class Predicate >
+	void remove_if ( Predicate pred )
+	{
+		this->base().remove_if (
+		    ::boost::bimaps::container_adaptor::detail::unary_check_adaptor
+		    <
+		    Predicate,
+		    BOOST_DEDUCED_TYPENAME Base::value_type,
+		    key_from_base_value
 
-            >( pred, this->template functor<key_from_base_value>() )
-        );
-    }
+		    > ( pred, this->template functor<key_from_base_value>() )
+		      );
+	}
 
-    void unique()
-    {
-        this->base().unique(
-            ::boost::bimaps::container_adaptor::detail::comparison_adaptor
-            <
-                std::equal_to<key_type>,
-                BOOST_DEDUCED_TYPENAME Base::value_type,
-                key_from_base_value
+	void unique()
+	{
+		this->base().unique (
+		    ::boost::bimaps::container_adaptor::detail::comparison_adaptor
+		    <
+		    std::equal_to<key_type>,
+		    BOOST_DEDUCED_TYPENAME Base::value_type,
+		    key_from_base_value
 
-            >(
-                std::equal_to<key_type>(),
-                this->template functor<key_from_base_value>()
-            )
-        );
-    }
+		    > (
+		        std::equal_to<key_type>(),
+		        this->template functor<key_from_base_value>()
+		                              )
+		    );
+	}
 
-    template< class BinaryPredicate >
-    void unique(BinaryPredicate binary_pred)
-    {
-        this->base().unique(
-            ::boost::bimaps::container_adaptor::detail::comparison_adaptor
-            <
-                BinaryPredicate,
-                BOOST_DEDUCED_TYPENAME Base::value_type,
-                key_from_base_value
+	template< class BinaryPredicate >
+	void unique ( BinaryPredicate binary_pred )
+	{
+		this->base().unique (
+		    ::boost::bimaps::container_adaptor::detail::comparison_adaptor
+		    <
+		    BinaryPredicate,
+		    BOOST_DEDUCED_TYPENAME Base::value_type,
+		    key_from_base_value
 
-            >( binary_pred, this->template functor<key_from_base_value>() )
-        );
-    }
+		    > ( binary_pred, this->template functor<key_from_base_value>() )
+		      );
+	}
 
-    void merge(list_map_adaptor & x)
-    {
-        this->base().merge(x.base(),
-            ::boost::bimaps::container_adaptor::detail::comparison_adaptor
-            <
-                std::less<key_type>,
-                BOOST_DEDUCED_TYPENAME Base::value_type,
-                key_from_base_value
+	void merge ( list_map_adaptor &x )
+	{
+		this->base().merge ( x.base(),
+		                     ::boost::bimaps::container_adaptor::detail::comparison_adaptor
+		                     <
+		                     std::less<key_type>,
+		                     BOOST_DEDUCED_TYPENAME Base::value_type,
+		                     key_from_base_value
 
-            >(
-                std::less<key_type>(),
-                this->template functor<key_from_base_value>()
-            )
-        );
-    }
+		                     > (
+		                         std::less<key_type>(),
+		                         this->template functor<key_from_base_value>()
+		                                               )
+		                     );
+	}
 
-    template< class Compare >
-    void merge(list_map_adaptor & x, Compare comp)
-    {
-        this->base().merge(x.base(),
-            ::boost::bimaps::container_adaptor::detail::comparison_adaptor
-            <
-                Compare,
-                BOOST_DEDUCED_TYPENAME Base::value_type,
-                key_from_base_value
+	template< class Compare >
+	void merge ( list_map_adaptor &x, Compare comp )
+	{
+		this->base().merge ( x.base(),
+		                     ::boost::bimaps::container_adaptor::detail::comparison_adaptor
+		                     <
+		                     Compare,
+		                     BOOST_DEDUCED_TYPENAME Base::value_type,
+		                     key_from_base_value
 
-            >( comp, this->template functor<key_from_base_value>() )
-        );
-    }
+		                     > ( comp, this->template functor<key_from_base_value>() )
+		                       );
+	}
 
-    void sort()
-    {
-        this->base().sort(
-            ::boost::bimaps::container_adaptor::detail::comparison_adaptor
-            <
-                std::less<key_type>,
-                BOOST_DEDUCED_TYPENAME Base::value_type,
-                key_from_base_value
+	void sort()
+	{
+		this->base().sort (
+		    ::boost::bimaps::container_adaptor::detail::comparison_adaptor
+		    <
+		    std::less<key_type>,
+		    BOOST_DEDUCED_TYPENAME Base::value_type,
+		    key_from_base_value
 
-            >(
-                std::less<key_type>(),
-                this->template functor<key_from_base_value>()
-            )
-        );
-    }
+		    > (
+		        std::less<key_type>(),
+		        this->template functor<key_from_base_value>()
+		                              )
+		    );
+	}
 
-    template< class Compare >
-    void sort(Compare comp)
-    {
-        this->base().sort(
-            ::boost::bimaps::container_adaptor::detail::comparison_adaptor
-            <
-                Compare,
-                BOOST_DEDUCED_TYPENAME Base::value_type,
-                key_from_base_value
+	template< class Compare >
+	void sort ( Compare comp )
+	{
+		this->base().sort (
+		    ::boost::bimaps::container_adaptor::detail::comparison_adaptor
+		    <
+		    Compare,
+		    BOOST_DEDUCED_TYPENAME Base::value_type,
+		    key_from_base_value
 
-            >( comp, this->template functor<key_from_base_value>() )
-        );
-    }
+		    > ( comp, this->template functor<key_from_base_value>() )
+		      );
+	}
 
 };
 

@@ -16,88 +16,94 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 
-namespace boost { namespace wave { namespace util
+namespace boost
+{
+namespace wave
+{
+namespace util
 {
 ///////////////////////////////////////////////////////////////////////////////
 // filesystem wrappers allowing to handle different Boost versions
 #if !defined(BOOST_FILESYSTEM_NO_DEPRECATED)
 // interface wrappers for older Boost versions
-    inline boost::filesystem::path initial_path()
-    {
-        return boost::filesystem::initial_path(); 
-    }
+inline boost::filesystem::path initial_path()
+{
+	return boost::filesystem::initial_path();
+}
 
-    inline boost::filesystem::path current_path()
-    {
-        return boost::filesystem::current_path(); 
-    }
+inline boost::filesystem::path current_path()
+{
+	return boost::filesystem::current_path();
+}
 
-    template <typename String>
-    inline boost::filesystem::path create_path(String const& p)
-    {
-        return boost::filesystem::path(p, boost::filesystem::native);
-    }
+template <typename String>
+inline boost::filesystem::path create_path ( String const &p )
+{
+	return boost::filesystem::path ( p, boost::filesystem::native );
+}
 
-    inline std::string leaf(boost::filesystem::path const& p) 
-    { 
-        return p.leaf(); 
-    }
+inline std::string leaf ( boost::filesystem::path const &p )
+{
+	return p.leaf();
+}
 
-    inline boost::filesystem::path branch_path(boost::filesystem::path const& p) 
-    { 
-        return p.branch_path(); 
-    }
+inline boost::filesystem::path branch_path ( boost::filesystem::path const &p )
+{
+	return p.branch_path();
+}
 
-    inline boost::filesystem::path normalize(boost::filesystem::path& p)
-    {
-        return p.normalize();
-    }
+inline boost::filesystem::path normalize ( boost::filesystem::path &p )
+{
+	return p.normalize();
+}
 
-    inline std::string native_file_string(boost::filesystem::path const& p) 
-    { 
-        return p.native_file_string(); 
-    }
+inline std::string native_file_string ( boost::filesystem::path const &p )
+{
+	return p.native_file_string();
+}
 
 #else
 // interface wrappers if deprecated functions do not exist
-    inline boost::filesystem::path initial_path()
-    { 
-        return boost::filesystem::initial_path<boost::filesystem::path>();
-    }
+inline boost::filesystem::path initial_path()
+{
+	return boost::filesystem::initial_path<boost::filesystem::path>();
+}
 
-    inline boost::filesystem::path current_path()
-    { 
-        return boost::filesystem::current_path<boost::filesystem::path>();
-    }
+inline boost::filesystem::path current_path()
+{
+	return boost::filesystem::current_path<boost::filesystem::path>();
+}
 
-    template <typename String>
-    inline boost::filesystem::path create_path(String const& p)
-    {
-        return boost::filesystem::path(p);
-    }
+template <typename String>
+inline boost::filesystem::path create_path ( String const &p )
+{
+	return boost::filesystem::path ( p );
+}
 
-    inline std::string leaf(boost::filesystem::path const& p) 
-    { 
-        return p.filename(); 
-    }
+inline std::string leaf ( boost::filesystem::path const &p )
+{
+	return p.filename();
+}
 
-    inline boost::filesystem::path branch_path(boost::filesystem::path const& p) 
-    { 
-        return p.parent_path(); 
-    }
+inline boost::filesystem::path branch_path ( boost::filesystem::path const &p )
+{
+	return p.parent_path();
+}
 
-    inline boost::filesystem::path normalize(boost::filesystem::path& p)
-    {
-        return p; // function doesn't exist anymore
-    }
+inline boost::filesystem::path normalize ( boost::filesystem::path &p )
+{
+	return p; // function doesn't exist anymore
+}
 
-    inline std::string native_file_string(boost::filesystem::path const& p) 
-    { 
-        return p.file_string(); 
-    }
+inline std::string native_file_string ( boost::filesystem::path const &p )
+{
+	return p.file_string();
+}
 
 #endif
 
-}}}
+}
+}
+}
 
 #endif

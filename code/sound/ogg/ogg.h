@@ -12,6 +12,6 @@ extern ov_callbacks mmio_callbacks;
 int OGG_init();
 
 //Similar to the stuff in mmreg.h
-#define  OGG_FORMAT_VORBIS		0x3000	/* OGG Files */
+#define  OGG_FORMAT_VORBIS      0x3000  /* OGG Files */
 
 #endif // _OGG_H_

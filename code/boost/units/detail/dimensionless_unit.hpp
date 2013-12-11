@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,8 +14,10 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/units/units_fwd.hpp>
 
-namespace boost {
-namespace units {
+namespace boost
+{
+namespace units
+{
 
 template<class T>
 struct heterogeneous_system;
@@ -26,42 +28,48 @@ struct homogeneous_system;
 template<class T1, class T2, class Scale>
 struct heterogeneous_system_impl;
 
-namespace detail {
+namespace detail
+{
 
 template<class System>
-struct void_if_dimensionless {
-    typedef int type;
+struct void_if_dimensionless
+{
+	typedef int type;
 };
 
 template<class T>
-struct void_if_dimensionless<boost::units::homogeneous_system<T> > {
-    typedef void type;
+struct void_if_dimensionless<boost::units::homogeneous_system<T> >
+{
+	typedef void type;
 };
 
 template<>
-struct void_if_dimensionless<
-   boost::units::heterogeneous_system<
-       boost::units::heterogeneous_system_impl<
-           boost::units::dimensionless_type,
-           boost::units::dimensionless_type,
-           boost::units::dimensionless_type
-       >
-   >
-> {
-    typedef void type;
+struct void_if_dimensionless <
+		boost::units::heterogeneous_system <
+		boost::units::heterogeneous_system_impl <
+		boost::units::dimensionless_type,
+		boost::units::dimensionless_type,
+		boost::units::dimensionless_type
+		>
+		>
+		>
+{
+	typedef void type;
 };
 
 template<class System, class Test = void>
-struct void_if_heterogeneous {
-    typedef void type;
+struct void_if_heterogeneous
+{
+	typedef void type;
 };
 
 template<class System>
-struct void_if_heterogeneous<System, typename void_if_dimensionless<System>::type> {
-    typedef int type;
+struct void_if_heterogeneous<System, typename void_if_dimensionless<System>::type>
+{
+	typedef int type;
 };
 
-template<class System, class Enable=void>
+template<class System, class Enable = void>
 struct is_dimensionless_system : mpl::false_ {};
 
 template<class System>

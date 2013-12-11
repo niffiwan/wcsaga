@@ -15,64 +15,68 @@
 #include <boost/throw_exception.hpp>
 #include <stdexcept>
 
-namespace boost {
-  namespace signals2 {
-    class expired_slot;
+namespace boost
+{
+namespace signals2
+{
+class expired_slot;
 
-    // no_slots_error is thrown when we are unable to generate a return value
-    // due to no slots being connected to the signal.
-    class no_slots_error: public std::exception
-    {
-    public:
-      virtual const char* what() const throw() {return "boost::signals2::no_slots_error";}
-    };
+// no_slots_error is thrown when we are unable to generate a return value
+// due to no slots being connected to the signal.
+class no_slots_error: public std::exception
+{
+public:
+virtual const char *what() const throw() {return "boost::signals2::no_slots_error";}
+};
 
-    template<typename T>
-    class last_value {
-    public:
-      typedef T result_type;
+template<typename T>
+class last_value
+{
+public:
+typedef T result_type;
 
-      template<typename InputIterator>
-      T operator()(InputIterator first, InputIterator last) const
-      {
-        if(first == last)
-        {
-          boost::throw_exception(no_slots_error());
-        }
-        optional<T> value;
-        while (first != last)
-        {
-          try
-          {
-            value = *first;
-          }
-          catch(const expired_slot &) {}
-          ++first;
-        }
-        if(value) return value.get();
-        boost::throw_exception(no_slots_error());
-      }
-    };
+template<typename InputIterator>
+T operator() ( InputIterator first, InputIterator last ) const
+{
+	if ( first == last )
+	{
+		boost::throw_exception ( no_slots_error() );
+	}
+	optional<T> value;
+	while ( first != last )
+	{
+		try
+		{
+			value = *first;
+		}
+		catch ( const expired_slot & ) {}
+		++first;
+	}
+	if ( value ) return value.get();
+	boost::throw_exception ( no_slots_error() );
+}
+};
 
-    template<>
-    class last_value<void> {
-    public:
-      typedef void result_type;
-      template<typename InputIterator>
-        result_type operator()(InputIterator first, InputIterator last) const
-      {
-        while (first != last)
-        {
-          try
-          {
-            *first;
-          }
-          catch(const expired_slot &) {}
-          ++first;
-        }
-        return;
-      }
-    };
-  } // namespace signals2
+template<>
+class last_value<void>
+{
+public:
+typedef void result_type;
+template<typename InputIterator>
+result_type operator() ( InputIterator first, InputIterator last ) const
+{
+	while ( first != last )
+	{
+		try
+		{
+			*first;
+		}
+		catch ( const expired_slot & ) {}
+		++first;
+	}
+	return;
+}
+};
+} // namespace signals2
 } // namespace boost
 #endif // BOOST_SIGNALS2_LAST_VALUE_HPP

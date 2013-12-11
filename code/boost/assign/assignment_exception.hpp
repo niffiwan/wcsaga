@@ -6,8 +6,8 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
 // For more information, see http://www.boost.org/libs/assign/
-//  
- 
+//
+
 
 #ifndef BOOST_ASSIGN_ASSIGNMENT_EXCEPTION_HPP
 #define BOOST_ASSIGN_ASSIGNMENT_EXCEPTION_HPP
@@ -19,25 +19,25 @@
 #include <exception>
 
 namespace boost
-{    
-    namespace assign
-    {
-        class assignment_exception : public std::exception
-        {
-        public:
-            assignment_exception( const char* _what ) 
-            : what_( _what )
-            { }
-        
-            virtual const char* what() const throw()
-            {
-                return what_;
-            }
-        
-        private:
-                const char* what_;
-        };
-    }
+{
+namespace assign
+{
+class assignment_exception : public std::exception
+{
+public:
+	assignment_exception ( const char *_what )
+		: what_ ( _what )
+	{ }
+
+	virtual const char *what() const throw()
+	{
+		return what_;
+	}
+
+private:
+	const char *what_;
+};
+}
 }
 
 #endif

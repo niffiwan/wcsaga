@@ -13,38 +13,41 @@
 #include <boost/smart_ptr/shared_array.hpp>
 #include <boost/property_map/property_map.hpp>
 
-namespace boost {
+namespace boost
+{
 
 template <class T, class IndexMap>
 class shared_array_property_map
-  : public boost::put_get_helper<T&, shared_array_property_map<T, IndexMap> >
+	: public boost::put_get_helper<T &, shared_array_property_map<T, IndexMap> >
 {
-  public:
-  typedef typename property_traits<IndexMap>::key_type key_type;
-  typedef T value_type;
-  typedef T& reference;
-  typedef boost::lvalue_property_map_tag category;
+public:
+	typedef typename property_traits<IndexMap>::key_type key_type;
+	typedef T value_type;
+	typedef T &reference;
+	typedef boost::lvalue_property_map_tag category;
 
-  inline shared_array_property_map(): data(), index() {}
+	inline shared_array_property_map() : data(), index() {}
 
-  explicit inline shared_array_property_map(
-    size_t n,
-    const IndexMap& _id = IndexMap())
-  : data(new T[n]), index(_id) {}
+	explicit inline shared_array_property_map (
+	    size_t n,
+	    const IndexMap &_id = IndexMap() )
+		: data ( new T[n] ), index ( _id ) {}
 
-  inline T& operator[](key_type v) const {
-    return data[get(index, v)];
-  }
+	inline T &operator[] ( key_type v ) const
+	{
+		return data[get ( index, v )];
+	}
 
-  private:
-  boost::shared_array<T> data;
-  IndexMap index;
+private:
+	boost::shared_array<T> data;
+	IndexMap index;
 };
 
 template <class T, class IndexMap>
 shared_array_property_map<T, IndexMap>
-make_shared_array_property_map(size_t n, const T&, const IndexMap& index) {
-  return shared_array_property_map<T, IndexMap>(n, index);
+make_shared_array_property_map ( size_t n, const T &, const IndexMap &index )
+{
+	return shared_array_property_map<T, IndexMap> ( n, index );
 }
 
 } // end namespace boost

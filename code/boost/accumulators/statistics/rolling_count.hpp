@@ -17,30 +17,32 @@
 #include <boost/accumulators/statistics_fwd.hpp>
 #include <boost/accumulators/statistics/rolling_window.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 namespace impl
 {
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // rolling_count_impl
-    //    returns the count of elements in the rolling window
-    template<typename Sample>
-    struct rolling_count_impl
-      : accumulator_base
-    {
-        typedef std::size_t result_type;
+///////////////////////////////////////////////////////////////////////////////
+// rolling_count_impl
+//    returns the count of elements in the rolling window
+template<typename Sample>
+struct rolling_count_impl
+		: accumulator_base
+{
+	typedef std::size_t result_type;
 
-        rolling_count_impl(dont_care)
-        {}
+	rolling_count_impl ( dont_care )
+	{}
 
-        template<typename Args>
-        result_type result(Args const &args) const
-        {
-            return static_cast<std::size_t>(rolling_window_plus1(args).size()) - is_rolling_window_plus1_full(args);
-        }
-    };
+	template<typename Args>
+	result_type result ( Args const &args ) const
+	{
+		return static_cast<std::size_t> ( rolling_window_plus1 ( args ).size() ) - is_rolling_window_plus1_full ( args );
+	}
+};
 
 } // namespace impl
 
@@ -49,18 +51,18 @@ namespace impl
 //
 namespace tag
 {
-    struct rolling_count
-      : depends_on< rolling_window_plus1 >
-    {
-        /// INTERNAL ONLY
-        ///
-        typedef accumulators::impl::rolling_count_impl< mpl::_1 > impl;
+struct rolling_count
+		: depends_on< rolling_window_plus1 >
+{
+	/// INTERNAL ONLY
+	///
+	typedef accumulators::impl::rolling_count_impl< mpl::_1 > impl;
 
-        #ifdef BOOST_ACCUMULATORS_DOXYGEN_INVOKED
-        /// tag::rolling_window::window_size named parameter
-        static boost::parameter::keyword<tag::rolling_window_size> const window_size;
-        #endif
-    };
+#ifdef BOOST_ACCUMULATORS_DOXYGEN_INVOKED
+	/// tag::rolling_window::window_size named parameter
+	static boost::parameter::keyword<tag::rolling_window_size> const window_size;
+#endif
+};
 } // namespace tag
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -68,13 +70,14 @@ namespace tag
 //
 namespace extract
 {
-    extractor<tag::rolling_count> const rolling_count = {};
+extractor<tag::rolling_count> const rolling_count = {};
 
-    BOOST_ACCUMULATORS_IGNORE_GLOBAL(rolling_count)
+BOOST_ACCUMULATORS_IGNORE_GLOBAL ( rolling_count )
 }
 
 using extract::rolling_count;
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

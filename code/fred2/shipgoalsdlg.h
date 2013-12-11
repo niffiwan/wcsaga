@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -15,21 +15,21 @@
 #define _SHIPGOALSDLG_H
 
 #define ED_MAX_GOALS 10
-#define MAX_EDITOR_GOAL_PRIORITY	200
+#define MAX_EDITOR_GOAL_PRIORITY    200
 
 /////////////////////////////////////////////////////////////////////////////
 // ShipGoalsDlg dialog
 
 class ShipGoalsDlg : public CDialog
 {
-// Construction
+	// Construction
 public:
-	int verify_orders(int ship = -1);
+	int verify_orders ( int ship = -1 );
 	void initialize_multi();
 	void OnOK();
 	void update();
-	void initialize(ai_goal *goals, int ship = cur_ship);
-	ShipGoalsDlg(CWnd* pParent = NULL);   // standard constructor
+	void initialize ( ai_goal *goals, int ship = cur_ship );
+	ShipGoalsDlg ( CWnd *pParent = NULL ); // standard constructor
 
 	int self_ship, self_wing;
 	int m_behavior[ED_MAX_GOALS];
@@ -45,21 +45,21 @@ public:
 	CComboBox *m_dock2_box[ED_MAX_GOALS];
 	CComboBox *m_priority_box[ED_MAX_GOALS];
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(ShipGoalsDlg)
 	enum { IDD = IDD_SHIP_GOALS_EDITOR };
 	//}}AFX_DATA
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(ShipGoalsDlg)
-	public:
-	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+public:
+	virtual BOOL Create ( LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT &rect, CWnd *pParentWnd, UINT nID, CCreateContext *pContext = NULL );
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions
@@ -89,9 +89,9 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
-	void set_item(int item, int init = 0);
-	void update_item(int item, int multi = 0);
-	void set_object(int item);
+	void set_item ( int item, int init = 0 );
+	void update_item ( int item, int multi = 0 );
+	void set_object ( int item );
 
 	ai_goal *goalp;
 };

@@ -23,10 +23,14 @@
 
 #ifdef BOOST_BIMAP_ONLY_DOXYGEN_WILL_PROCESS_THE_FOLLOWING_LINES
 
-namespace boost {
-namespace bimaps {
-namespace relation {
-namespace support {
+namespace boost
+{
+namespace bimaps
+{
+namespace relation
+{
+namespace support
+{
 
 /** \brief Gets a pair view of the relation.
 
@@ -34,8 +38,8 @@ namespace support {
                                                                         **/
 
 template< class Tag, class Relation >
-BOOST_DEDUCED_TYPENAME result_of::pair_by<Tag,Relation>::type
-    pair_by( Relation & rel );
+BOOST_DEDUCED_TYPENAME result_of::pair_by<Tag, Relation>::type
+pair_by ( Relation &rel );
 
 } // namespace support
 } // namespace relation
@@ -47,10 +51,14 @@ BOOST_DEDUCED_TYPENAME result_of::pair_by<Tag,Relation>::type
 
 #ifndef BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
 
-namespace boost {
-namespace bimaps {
-namespace relation {
-namespace support {
+namespace boost
+{
+namespace bimaps
+{
+namespace relation
+{
+namespace support
+{
 
 
 // Since it is very error-prone to directly write the hole bunch

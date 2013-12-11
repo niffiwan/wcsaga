@@ -1,6 +1,6 @@
 
 //  (C) Copyright Dave Abrahams, Steve Cleary, Beman Dawes, Howard
-//  Hinnant & John Maddock 2000.  
+//  Hinnant & John Maddock 2000.
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -25,32 +25,34 @@
 // should be the last #include
 #include <boost/type_traits/detail/type_trait_def.hpp>
 
-namespace boost {
+namespace boost
+{
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 //  convert a type T to a non-cv-qualified type - remove_cv<T>
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_cv,T,typename boost::detail::cv_traits_imp<T*>::unqualified_type)
-BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(typename T,remove_cv,T&,T&)
+BOOST_TT_AUX_TYPE_TRAIT_DEF1 ( remove_cv, T, typename boost::detail::cv_traits_imp<T *>::unqualified_type )
+BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1 ( typename T, remove_cv, T &, T & )
 #if !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
-BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_cv,T const[N],T type[N])
-BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_cv,T volatile[N],T type[N])
-BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_cv,T const volatile[N],T type[N])
+BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2 ( typename T, std::size_t N, remove_cv, T const[N], T type[N] )
+BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2 ( typename T, std::size_t N, remove_cv, T volatile[N], T type[N] )
+BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2 ( typename T, std::size_t N, remove_cv, T const volatile[N], T type[N] )
 #endif
 
 #elif !BOOST_WORKAROUND(BOOST_MSVC,<=1300)
 
-namespace detail {
+namespace detail
+{
 template <typename T>
 struct remove_cv_impl
 {
-    typedef typename remove_volatile_impl< 
-          typename remove_const_impl<T>::type
-        >::type type;
+	typedef typename remove_volatile_impl <
+	typename remove_const_impl<T>::type
+	>::type type;
 };
 }
 
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_cv,T,typename boost::detail::remove_cv_impl<T>::type)
+BOOST_TT_AUX_TYPE_TRAIT_DEF1 ( remove_cv, T, typename boost::detail::remove_cv_impl<T>::type )
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 

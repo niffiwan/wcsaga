@@ -19,34 +19,36 @@
 // should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace detail {
+namespace detail
+{
 
 template <typename T>
 struct is_scalar_impl
-{ 
-   BOOST_STATIC_CONSTANT(bool, value =
-      (::boost::type_traits::ice_or<
-         ::boost::is_arithmetic<T>::value,
-         ::boost::is_enum<T>::value,
-         ::boost::is_pointer<T>::value,
-         ::boost::is_member_pointer<T>::value
-      >::value));
+{
+	BOOST_STATIC_CONSTANT ( bool, value =
+	                            ( ::boost::type_traits::ice_or <
+	                              ::boost::is_arithmetic<T>::value,
+	                              ::boost::is_enum<T>::value,
+	                              ::boost::is_pointer<T>::value,
+	                              ::boost::is_member_pointer<T>::value
+	                              >::value ) );
 };
 
-// these specializations are only really needed for compilers 
+// these specializations are only really needed for compilers
 // without partial specialization support:
-template <> struct is_scalar_impl<void>{ BOOST_STATIC_CONSTANT(bool, value = false ); };
+template <> struct is_scalar_impl<void> { BOOST_STATIC_CONSTANT ( bool, value = false ); };
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-template <> struct is_scalar_impl<void const>{ BOOST_STATIC_CONSTANT(bool, value = false ); };
-template <> struct is_scalar_impl<void volatile>{ BOOST_STATIC_CONSTANT(bool, value = false ); };
-template <> struct is_scalar_impl<void const volatile>{ BOOST_STATIC_CONSTANT(bool, value = false ); };
+template <> struct is_scalar_impl<void const> { BOOST_STATIC_CONSTANT ( bool, value = false ); };
+template <> struct is_scalar_impl<void volatile> { BOOST_STATIC_CONSTANT ( bool, value = false ); };
+template <> struct is_scalar_impl<void const volatile> { BOOST_STATIC_CONSTANT ( bool, value = false ); };
 #endif
 
 } // namespace detail
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_scalar,T,::boost::detail::is_scalar_impl<T>::value)
+BOOST_TT_AUX_BOOL_TRAIT_DEF1 ( is_scalar, T, ::boost::detail::is_scalar_impl<T>::value )
 
 } // namespace boost
 

@@ -34,87 +34,95 @@
 #include <sys/sem.h>
 #include <errno.h>
 
-namespace boost {
-namespace interprocess {
-namespace xsi {
+namespace boost
+{
+namespace interprocess
+{
+namespace xsi
+{
 
 // Create a semaphore with a specified initial value.
 // If the semaphore already exists, we don't initialize it (of course).
 // We return the semaphore ID if all OK, else -1.
 
-inline bool advanced_sem_open_or_create(::key_t key, int initval, int &semid, int perm)
+inline bool advanced_sem_open_or_create ( ::key_t key, int initval, int &semid, int perm )
 {
-   semid = -1;
-   int id, semval;
-   union semun {
-      int         val;
-      ::semid_ds *buf;
-      ushort     *array;
-   } semctl_arg;
+	semid = -1;
+	int id, semval;
+	union semun
+	{
+		int         val;
+		::semid_ds *buf;
+		ushort     *array;
+	} semctl_arg;
 
-   if (key == IPC_PRIVATE)
-      return false; //not intended for private semaphores
+	if ( key == IPC_PRIVATE )
+		return false; //not intended for private semaphores
 
-   else if (key == (::key_t) -1)
-      return false; //probably an ftok() error by caller
+	else if ( key == ( ::key_t ) - 1 )
+		return false; //probably an ftok() error by caller
 
-   again:
-   if ((id = ::semget(key, 3, (perm & 0x01FF) | IPC_CREAT)) < 0)
-      return false;   //permission problem or tables full
+again:
+	if ( ( id = ::semget ( key, 3, ( perm & 0x01FF ) | IPC_CREAT ) ) < 0 )
+		return false;   //permission problem or tables full
 
-   // When the semaphore is created, we know that the value of all
-   // 3 members is 0.
-   // Get a lock on the semaphore by waiting for [2] to equal 0,
-   // then increment it.
-   //
-   // There is a race condition here.  There is a possibility that
-   // between the semget() above and the ::semop() below, another
-   // process can call our sem_close() function which can remove
-   // the semaphore if that process is the last one using it.
-   // Therefore, we handle the error condition of an invalid
-   // semaphore ID specially below, and if it does happen, we just
-   // go back and create it again.
-   struct sembuf op_lock[2] = {
-      {2, 0, 0},        // wait for [2] (lock) to equal 0
-      {2, 1, SEM_UNDO}  // then increment [2] to 1 - this locks it
-                        // UNDO to release the lock if processes exits
-                        // before explicitly unlocking
-   };
+	// When the semaphore is created, we know that the value of all
+	// 3 members is 0.
+	// Get a lock on the semaphore by waiting for [2] to equal 0,
+	// then increment it.
+	//
+	// There is a race condition here.  There is a possibility that
+	// between the semget() above and the ::semop() below, another
+	// process can call our sem_close() function which can remove
+	// the semaphore if that process is the last one using it.
+	// Therefore, we handle the error condition of an invalid
+	// semaphore ID specially below, and if it does happen, we just
+	// go back and create it again.
+	struct sembuf op_lock[2] =
+	{
+		{2, 0, 0},        // wait for [2] (lock) to equal 0
+		{2, 1, SEM_UNDO}  // then increment [2] to 1 - this locks it
+		// UNDO to release the lock if processes exits
+		// before explicitly unlocking
+	};
 
-   if (::semop(id, &op_lock[0], 2) < 0) {
-      if (errno == EINVAL)
-         goto again;
-   }
+	if ( ::semop ( id, &op_lock[0], 2 ) < 0 )
+	{
+		if ( errno == EINVAL )
+			goto again;
+	}
 
-   // Get the value of the process counter.  If it equals 0,
-   // then no one has initialized the semaphore yet.
-   if ((semval = ::semctl(id, 1, GETVAL, 0)) < 0)
-      return false;
+	// Get the value of the process counter.  If it equals 0,
+	// then no one has initialized the semaphore yet.
+	if ( ( semval = ::semctl ( id, 1, GETVAL, 0 ) ) < 0 )
+		return false;
 
-   if (semval == 0) {
-      // We could initialize by doing a SETALL, but that
-      // would clear the adjust value that we set when we
-      // locked the semaphore above.  Instead, we'll do 2
-      // system calls to initialize [0] and [1].
-      semctl_arg.val = initval;
-      if (::semctl(id, 0, SETVAL, semctl_arg) < 0)
-         return false;
+	if ( semval == 0 )
+	{
+		// We could initialize by doing a SETALL, but that
+		// would clear the adjust value that we set when we
+		// locked the semaphore above.  Instead, we'll do 2
+		// system calls to initialize [0] and [1].
+		semctl_arg.val = initval;
+		if ( ::semctl ( id, 0, SETVAL, semctl_arg ) < 0 )
+			return false;
 
-      semctl_arg.val = 1;
-      if (::semctl(id, 1, SETVAL, semctl_arg) < 0)
-         return false;
-   }
+		semctl_arg.val = 1;
+		if ( ::semctl ( id, 1, SETVAL, semctl_arg ) < 0 )
+			return false;
+	}
 
-   // Decrement the process counter and then release the lock.
-   struct sembuf op_unlock[1] = {
-      2, -1, 0/*SEM_UNDO*/ // decrement [2] (lock) back to 0
-   };
+	// Decrement the process counter and then release the lock.
+	struct sembuf op_unlock[1] =
+	{
+		2, -1, 0/*SEM_UNDO*/ // decrement [2] (lock) back to 0
+	};
 
-   if (::semop(id, &op_unlock[0], 1) < 0)
-      return false;
+	if ( ::semop ( id, &op_unlock[0], 1 ) < 0 )
+		return false;
 
-   semid = id;
-   return true;
+	semid = id;
+	return true;
 }
 
 // Open a semaphore that must already exist.
@@ -155,11 +163,11 @@ inline bool advanced_sem_open(key_t key, int &semid)
  * Most other processes should use sem_close() below.
  */
 
-inline bool advanced_sem_rm(int id)
+inline bool advanced_sem_rm ( int id )
 {
-   if (::semctl(id, 0, IPC_RMID, 0) < 0)
-      return false;
-   return true;
+	if ( ::semctl ( id, 0, IPC_RMID, 0 ) < 0 )
+		return false;
+	return true;
 }
 
 
@@ -168,22 +176,24 @@ inline bool advanced_sem_rm(int id)
  * amount (positive or negative; amount can't be zero).
  */
 
-inline bool advanced_sem_op(int id, int value, bool undo = true)
+inline bool advanced_sem_op ( int id, int value, bool undo = true )
 {
-   ::sembuf op_op[1] = {
-      0, 99, 0 // decrement or increment [0] with undo on exit
-               // the 99 is set to the actual amount to add
-               // or subtract (positive or negative)
-   };
-   if(undo){
-      op_op[0].sem_flg = SEM_UNDO;
-   }
-   if ((op_op[0].sem_op = value) == 0)
-      return false;
+	::sembuf op_op[1] =
+	{
+		0, 99, 0 // decrement or increment [0] with undo on exit
+		// the 99 is set to the actual amount to add
+		// or subtract (positive or negative)
+	};
+	if ( undo )
+	{
+		op_op[0].sem_flg = SEM_UNDO;
+	}
+	if ( ( op_op[0].sem_op = value ) == 0 )
+		return false;
 
-   if (::semop(id, &op_op[0], 1) < 0)
-      return false;
-   return true;
+	if ( ::semop ( id, &op_op[0], 1 ) < 0 )
+		return false;
+	return true;
 }
 
 }  //namespace xsi {

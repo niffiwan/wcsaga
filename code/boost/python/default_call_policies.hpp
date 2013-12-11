@@ -15,77 +15,81 @@
 # include <boost/mpl/or.hpp>
 # include <boost/mpl/front.hpp>
 
-namespace boost { namespace python { 
+namespace boost
+{
+namespace python
+{
 
 template <class T> struct to_python_value;
 
 namespace detail
 {
 // for "readable" error messages
-  template <class T> struct specify_a_return_value_policy_to_wrap_functions_returning
+template <class T> struct specify_a_return_value_policy_to_wrap_functions_returning
 # if defined(__GNUC__) && __GNUC__ >= 3 || defined(__EDG__)
-  {}
-# endif 
-  ;
+{}
+# endif
+;
 }
 
 struct default_result_converter;
 
 struct default_call_policies
 {
-    // Ownership of this argument tuple will ultimately be adopted by
-    // the caller.
-    template <class ArgumentPackage>
-    static bool precall(ArgumentPackage const&)
-    {
-        return true;
-    }
+	// Ownership of this argument tuple will ultimately be adopted by
+	// the caller.
+	template <class ArgumentPackage>
+	static bool precall ( ArgumentPackage const & )
+	{
+		return true;
+	}
 
-    // Pass the result through
-    template <class ArgumentPackage>
-    static PyObject* postcall(ArgumentPackage const&, PyObject* result)
-    {
-        return result;
-    }
+	// Pass the result through
+	template <class ArgumentPackage>
+	static PyObject *postcall ( ArgumentPackage const &, PyObject *result )
+	{
+		return result;
+	}
 
-    typedef default_result_converter result_converter;
-    typedef PyObject* argument_package;
+	typedef default_result_converter result_converter;
+	typedef PyObject *argument_package;
 
-    template <class Sig> 
-    struct extract_return_type : mpl::front<Sig>
-    {
-    };
+	template <class Sig>
+	struct extract_return_type : mpl::front<Sig>
+	{
+	};
 
 };
 
 struct default_result_converter
 {
-    template <class R>
-    struct apply
-    {
-        typedef typename mpl::if_<
-            mpl::or_<is_pointer<R>, is_reference<R> >
-          , detail::specify_a_return_value_policy_to_wrap_functions_returning<R>
-          , boost::python::to_python_value<
-                typename detail::value_arg<R>::type
-            >
-        >::type type;
-    };
+	template <class R>
+	struct apply
+	{
+		typedef typename mpl::if_ <
+		mpl::or_<is_pointer<R>, is_reference<R> >
+		, detail::specify_a_return_value_policy_to_wrap_functions_returning<R>
+		, boost::python::to_python_value <
+		typename detail::value_arg<R>::type
+		>
+		>::type type;
+	};
 };
 
 // Exceptions for c strings an PyObject*s
 template <>
-struct default_result_converter::apply<char const*>
+struct default_result_converter::apply<char const *>
 {
-    typedef boost::python::to_python_value<char const*const&> type;
+	typedef boost::python::to_python_value<char const *const &> type;
 };
 
 template <>
-struct default_result_converter::apply<PyObject*>
+struct default_result_converter::apply<PyObject *>
 {
-    typedef boost::python::to_python_value<PyObject*const&> type;
+	typedef boost::python::to_python_value<PyObject *const &> type;
 };
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 #endif // DEFAULT_CALL_POLICIES_DWA2002131_HPP

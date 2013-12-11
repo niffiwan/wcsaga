@@ -25,40 +25,43 @@
 
 #include <boost/asio/detail/noncopyable.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 template <typename T>
 class null_tss_ptr
-  : private noncopyable
+	: private noncopyable
 {
 public:
-  // Constructor.
-  null_tss_ptr()
-    : value_(0)
-  {
-  }
+	// Constructor.
+	null_tss_ptr()
+		: value_ ( 0 )
+	{
+	}
 
-  // Destructor.
-  ~null_tss_ptr()
-  {
-  }
+	// Destructor.
+	~null_tss_ptr()
+	{
+	}
 
-  // Get the value.
-  operator T*() const
-  {
-    return value_;
-  }
+	// Get the value.
+	operator T *() const
+	{
+		return value_;
+	}
 
-  // Set the value.
-  void operator=(T* value)
-  {
-    value_ = value;
-  }
+	// Set the value.
+	void operator= ( T *value )
+	{
+		value_ = value;
+	}
 
 private:
-  T* value_;
+	T *value_;
 };
 
 } // namespace detail

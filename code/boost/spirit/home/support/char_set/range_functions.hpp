@@ -13,86 +13,95 @@
 
 #include <boost/integer_traits.hpp>
 
-namespace boost { namespace spirit { namespace support { namespace detail
+namespace boost
 {
-    template <typename Range>
-    inline bool
-    is_valid(Range const& range)
-    {
-        // test for valid ranges
-        return range.first <= range.last;
-    }
+namespace spirit
+{
+namespace support
+{
+namespace detail
+{
+template <typename Range>
+inline bool
+is_valid ( Range const &range )
+{
+	// test for valid ranges
+	return range.first <= range.last;
+}
 
-    template <typename Range>
-    inline bool
-    includes(Range const& range, Range const& other)
-    {
-        // see if two ranges intersect
-        return (range.first <= other.first) && (range.last >= other.last);
-    }
+template <typename Range>
+inline bool
+includes ( Range const &range, Range const &other )
+{
+	// see if two ranges intersect
+	return ( range.first <= other.first ) && ( range.last >= other.last );
+}
 
-    template <typename Range>
-    inline bool
-    includes(Range const& range, typename Range::value_type val)
-    {
-        // see if val is in range
-        return (range.first <= val) && (range.last >= val);
-    }
+template <typename Range>
+inline bool
+includes ( Range const &range, typename Range::value_type val )
+{
+	// see if val is in range
+	return ( range.first <= val ) && ( range.last >= val );
+}
 
-    template <typename Range>
-    inline bool
-    can_merge(Range const& range, Range const& other)
-    {
-        // see if a 'range' overlaps, or is adjacent to
-        // another range 'other', so we can merge them
+template <typename Range>
+inline bool
+can_merge ( Range const &range, Range const &other )
+{
+	// see if a 'range' overlaps, or is adjacent to
+	// another range 'other', so we can merge them
 
-        typedef typename Range::value_type value_type;
-        typedef integer_traits<value_type> integer_traits;
+	typedef typename Range::value_type value_type;
+	typedef integer_traits<value_type> integer_traits;
 
-        value_type decr_first =
-            range.first == integer_traits::const_min
-            ? range.first : range.first-1;
+	value_type decr_first =
+	    range.first == integer_traits::const_min
+	    ? range.first : range.first - 1;
 
-        value_type incr_last =
-            range.last == integer_traits::const_max
-            ? range.last : range.last+1;
+	value_type incr_last =
+	    range.last == integer_traits::const_max
+	    ? range.last : range.last + 1;
 
-        return (decr_first <= other.last) && (incr_last >= other.first);
-    }
+	return ( decr_first <= other.last ) && ( incr_last >= other.first );
+}
 
-    template <typename Range>
-    inline void
-    merge(Range& result, Range const& other)
-    {
-        // merge two ranges
-        if (result.first > other.first)
-            result.first = other.first;
-        if (result.last < other.last)
-            result.last = other.last;
-    }
+template <typename Range>
+inline void
+merge ( Range &result, Range const &other )
+{
+	// merge two ranges
+	if ( result.first > other.first )
+		result.first = other.first;
+	if ( result.last < other.last )
+		result.last = other.last;
+}
 
-    template <typename Range>
-    struct range_compare
-    {
-        // compare functor with a value or another range
+template <typename Range>
+struct range_compare
+{
+	// compare functor with a value or another range
 
-        typedef typename Range::value_type value_type;
+	typedef typename Range::value_type value_type;
 
-        bool operator()(Range const& x, const value_type y) const
-        {
-            return x.first < y;
-        }
+	bool operator() ( Range const &x, const value_type y ) const
+	{
+		return x.first < y;
+	}
 
-        bool operator()(value_type const x, Range const& y) const
-        {
-            return x < y.first;
-        }
+	bool operator() ( value_type const x, Range const &y ) const
+	{
+		return x < y.first;
+	}
 
-        bool operator()(Range const& x, Range const& y) const
-        {
-            return x.first < y.first;
-        }
-    };
-}}}}
+	bool operator() ( Range const &x, Range const &y ) const
+	{
+		return x.first < y.first;
+	}
+};
+}
+}
+}
+}
 
 #endif

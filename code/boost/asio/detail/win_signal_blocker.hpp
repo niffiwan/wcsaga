@@ -25,37 +25,40 @@
 
 #include <boost/asio/detail/noncopyable.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 class win_signal_blocker
-  : private noncopyable
+	: private noncopyable
 {
 public:
-  // Constructor blocks all signals for the calling thread.
-  win_signal_blocker()
-  {
-    // No-op.
-  }
+	// Constructor blocks all signals for the calling thread.
+	win_signal_blocker()
+	{
+		// No-op.
+	}
 
-  // Destructor restores the previous signal mask.
-  ~win_signal_blocker()
-  {
-    // No-op.
-  }
+	// Destructor restores the previous signal mask.
+	~win_signal_blocker()
+	{
+		// No-op.
+	}
 
-  // Block all signals for the calling thread.
-  void block()
-  {
-    // No-op.
-  }
+	// Block all signals for the calling thread.
+	void block()
+	{
+		// No-op.
+	}
 
-  // Restore the previous signal mask.
-  void unblock()
-  {
-    // No-op.
-  }
+	// Restore the previous signal mask.
+	void unblock()
+	{
+		// No-op.
+	}
 };
 
 } // namespace detail

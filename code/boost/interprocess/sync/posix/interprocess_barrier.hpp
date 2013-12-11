@@ -11,33 +11,36 @@
 #include<boost/interprocess/exceptions.hpp>
 #include <boost/interprocess/detail/posix_time_types_wrk.hpp>
 
-namespace boost {
-namespace interprocess {
-
-inline barrier::barrier(unsigned int count)
+namespace boost
 {
-   if (count == 0)
-      throw std::invalid_argument("count cannot be zero.");
-   detail::barrierattr_wrapper barrier_attr;
-   detail::barrier_initializer barrier
-      (m_barrier, barrier_attr, static_cast<int>(count));
-   barrier.release();
+namespace interprocess
+{
+
+inline barrier::barrier ( unsigned int count )
+{
+	if ( count == 0 )
+		throw std::invalid_argument ( "count cannot be zero." );
+	detail::barrierattr_wrapper barrier_attr;
+	detail::barrier_initializer barrier
+	( m_barrier, barrier_attr, static_cast<int> ( count ) );
+	barrier.release();
 }
 
 inline barrier::~barrier()
 {
-   int res = pthread_barrier_destroy(&m_barrier);
-   assert(res  == 0);(void)res;
+	int res = pthread_barrier_destroy ( &m_barrier );
+	assert ( res  == 0 ); ( void ) res;
 }
 
 inline bool barrier::wait()
 {
-   int res = pthread_barrier_wait(&m_barrier);
+	int res = pthread_barrier_wait ( &m_barrier );
 
-   if (res != PTHREAD_BARRIER_SERIAL_THREAD && res != 0){
-      throw interprocess_exception(res);
-   }
-   return res == PTHREAD_BARRIER_SERIAL_THREAD;
+	if ( res != PTHREAD_BARRIER_SERIAL_THREAD && res != 0 )
+	{
+		throw interprocess_exception ( res );
+	}
+	return res == PTHREAD_BARRIER_SERIAL_THREAD;
 }
 
 }  //namespace interprocess {

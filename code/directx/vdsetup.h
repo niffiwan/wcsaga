@@ -24,7 +24,7 @@ extern "C"
 {
 #endif
 
-	// DSETUP Error Codes, must remain compatible with previous setup.
+// DSETUP Error Codes, must remain compatible with previous setup.
 #define DSETUPERR_SUCCESS_RESTART        1
 #define DSETUPERR_SUCCESS                0
 #define DSETUPERR_BADWINDOWSVERSION     -1
@@ -41,16 +41,16 @@ extern "C"
 #define DSETUPERR_USERHITCANCEL         -12
 #define DSETUPERR_NOTPREINSTALLEDONNT   -13
 
-	// DSETUP flags. DirectX 5.0 apps should use these flags only.
+// DSETUP flags. DirectX 5.0 apps should use these flags only.
 #define DSETUP_DDRAWDRV         0x00000008      /* install DirectDraw Drivers           */
 #define DSETUP_DSOUNDDRV        0x00000010      /* install DirectSound Drivers          */
-#define DSETUP_DXCORE           0x00010000	/* install DirectX runtime              */
+#define DSETUP_DXCORE           0x00010000  /* install DirectX runtime              */
 #define DSETUP_DIRECTX  (DSETUP_DXCORE|DSETUP_DDRAWDRV|DSETUP_DSOUNDDRV)
 #define DSETUP_TESTINSTALL      0x00020000      /* just test install, don't do anything */
 
-	// These OBSOLETE flags are here for compatibility with pre-DX5 apps only.
-	// They are present to allow DX3 apps to be recompiled with DX5 and still work.
-	// DO NOT USE THEM for DX5. They will go away in future DX releases.
+// These OBSOLETE flags are here for compatibility with pre-DX5 apps only.
+// They are present to allow DX3 apps to be recompiled with DX5 and still work.
+// DO NOT USE THEM for DX5. They will go away in future DX releases.
 #define DSETUP_DDRAW            0x00000001      /* OBSOLETE. install DirectDraw           */
 #define DSETUP_DSOUND           0x00000002      /* OBSOLETE. install DirectSound          */
 #define DSETUP_DPLAY            0x00000004      /* OBSOLETE. install DirectPlay           */
@@ -65,11 +65,11 @@ extern "C"
 
 
 
-	//******************************************************************
-	// DirectX Setup Callback mechanism
-	//******************************************************************
+//******************************************************************
+// DirectX Setup Callback mechanism
+//******************************************************************
 
-	// DSETUP Message Info Codes, passed to callback as Reason parameter.
+// DSETUP Message Info Codes, passed to callback as Reason parameter.
 #define DSETUP_CB_MSG_NOMESSAGE                     0
 #define DSETUP_CB_MSG_CANTINSTALL_UNKNOWNOS         1
 #define DSETUP_CB_MSG_CANTINSTALL_NT                2
@@ -105,43 +105,45 @@ extern "C"
 #define DSETUP_CB_UPGRADE_DEVICE_MEDIA          0x2000
 
 
-	typedef struct _DSETUP_CB_UPGRADEINFO
-	{
-		DWORD UpgradeFlags;
-	} DSETUP_CB_UPGRADEINFO;
+typedef struct _DSETUP_CB_UPGRADEINFO
+{
+	DWORD UpgradeFlags;
+} DSETUP_CB_UPGRADEINFO;
 
-	typedef struct _DSETUP_CB_FILECOPYERROR
-	{
-		DWORD dwError;
-	} DSETUP_CB_FILECOPYERROR;
+typedef struct _DSETUP_CB_FILECOPYERROR
+{
+	DWORD dwError;
+} DSETUP_CB_FILECOPYERROR;
 
 
 #ifdef _WIN32
 //
-	// Data Structures
-	//
+// Data Structures
+//
 #ifndef UNICODE_ONLY
-typedef struct _DIRECTXREGISTERAPPA {
-    DWORD    dwSize;
-    DWORD    dwFlags;
-    LPSTR    lpszApplicationName;
-    LPGUID   lpGUID;
-    LPSTR    lpszFilename;
-    LPSTR    lpszCommandLine;
-    LPSTR    lpszPath;
-    LPSTR    lpszCurrentDirectory;
+typedef struct _DIRECTXREGISTERAPPA
+{
+	DWORD    dwSize;
+	DWORD    dwFlags;
+	LPSTR    lpszApplicationName;
+	LPGUID   lpGUID;
+	LPSTR    lpszFilename;
+	LPSTR    lpszCommandLine;
+	LPSTR    lpszPath;
+	LPSTR    lpszCurrentDirectory;
 } DIRECTXREGISTERAPPA, *PDIRECTXREGISTERAPPA, *LPDIRECTXREGISTERAPPA;
 #endif //!UNICODE_ONLY
 #ifndef ANSI_ONLY
-typedef struct _DIRECTXREGISTERAPPW {
-    DWORD    dwSize;
-    DWORD    dwFlags;
-    LPWSTR   lpszApplicationName;
-    LPGUID   lpGUID;
-    LPWSTR   lpszFilename;
-    LPWSTR   lpszCommandLine;
-    LPWSTR   lpszPath;
-    LPWSTR   lpszCurrentDirectory;
+typedef struct _DIRECTXREGISTERAPPW
+{
+	DWORD    dwSize;
+	DWORD    dwFlags;
+	LPWSTR   lpszApplicationName;
+	LPGUID   lpGUID;
+	LPWSTR   lpszFilename;
+	LPWSTR   lpszCommandLine;
+	LPWSTR   lpszPath;
+	LPWSTR   lpszCurrentDirectory;
 } DIRECTXREGISTERAPPW, *PDIRECTXREGISTERAPPW, *LPDIRECTXREGISTERAPPW;
 #endif //!ANSI_ONLY
 #ifdef UNICODE
@@ -156,25 +158,25 @@ typedef LPDIRECTXREGISTERAPPA LPDIRECTXREGISTERAPP;
 
 
 //
-	// API
-	//
+// API
+//
 #ifndef UNICODE_ONLY
 INT
 WINAPI
-DirectXSetupA(
+DirectXSetupA (
     HWND  hWnd,
     LPSTR lpszRootPath,
     DWORD dwFlags
-    );
+);
 #endif //!UNICODE_ONLY
 #ifndef ANSI_ONLY
 INT
 WINAPI
-DirectXSetupW(
+DirectXSetupW (
     HWND   hWnd,
     LPWSTR lpszRootPath,
     DWORD  dwFlags
-    );
+);
 #endif //!ANSI_ONLY
 #ifdef UNICODE
 #define DirectXSetup  DirectXSetupW
@@ -185,22 +187,22 @@ DirectXSetupW(
 #ifndef UNICODE_ONLY
 INT
 WINAPI
-DirectXDeviceDriverSetupA(
+DirectXDeviceDriverSetupA (
     HWND  hWnd,
     LPSTR lpszDriverClass,
     LPSTR lpszDriverPath,
     DWORD dwFlags
-    );
+);
 #endif //!UNICODE_ONLY
 #ifndef ANSI_ONLY
 INT
 WINAPI
-DirectXDeviceDriverSetupW(
+DirectXDeviceDriverSetupW (
     HWND   hWnd,
     LPWSTR lpszDriverClass,
     LPWSTR lpszDriverPath,
     DWORD  dwFlags
-    );
+);
 #endif //!ANSI_ONLY
 #ifdef UNICODE
 #define DirectXDeviceDriverSetup  DirectXDeviceDriverSetupW
@@ -211,18 +213,18 @@ DirectXDeviceDriverSetupW(
 #ifndef UNICODE_ONLY
 INT
 WINAPI
-DirectXRegisterApplicationA(
+DirectXRegisterApplicationA (
     HWND                  hWnd,
     LPDIRECTXREGISTERAPPA lpDXRegApp
-    );
+);
 #endif //!UNICODE_ONLY
 #ifndef ANSI_ONLY
 INT
 WINAPI
-DirectXRegisterApplicationW(
+DirectXRegisterApplicationW (
     HWND                  hWnd,
     LPDIRECTXREGISTERAPPW lpDXRegApp
-    );
+);
 #endif //!ANSI_ONLY
 #ifdef UNICODE
 #define DirectXRegisterApplication  DirectXRegisterApplicationW
@@ -232,32 +234,32 @@ DirectXRegisterApplicationW(
 
 INT
 WINAPI
-DirectXUnRegisterApplication(
+DirectXUnRegisterApplication (
     HWND     hWnd,
     LPGUID   lpGUID
-    );
+);
 
 //
-	// Function Pointers
-	//
+// Function Pointers
+//
 #ifdef UNICODE
-typedef INT (WINAPI * LPDIRECTXSETUP)(HWND, LPWSTR, DWORD);
-typedef INT (WINAPI * LPDIRECTXDEVICEDRIVERSETUP)(HWND, LPWSTR, LPSTR, DWORD);
-typedef INT (WINAPI * LPDIRECTXREGISTERAPPLICATION)(HWND, LPDIRECTXREGISTERAPPW);
+typedef INT ( WINAPI *LPDIRECTXSETUP ) ( HWND, LPWSTR, DWORD );
+typedef INT ( WINAPI *LPDIRECTXDEVICEDRIVERSETUP ) ( HWND, LPWSTR, LPSTR, DWORD );
+typedef INT ( WINAPI *LPDIRECTXREGISTERAPPLICATION ) ( HWND, LPDIRECTXREGISTERAPPW );
 #else
-typedef INT (WINAPI * LPDIRECTXSETUP)(HWND, LPSTR, DWORD);
-typedef INT (WINAPI * LPDIRECTXDEVICEDRIVERSETUP)(HWND, LPSTR, LPSTR, DWORD);
-typedef INT (WINAPI * LPDIRECTXREGISTERAPPLICATION)(HWND, LPDIRECTXREGISTERAPPA);
+typedef INT ( WINAPI *LPDIRECTXSETUP ) ( HWND, LPSTR, DWORD );
+typedef INT ( WINAPI *LPDIRECTXDEVICEDRIVERSETUP ) ( HWND, LPSTR, LPSTR, DWORD );
+typedef INT ( WINAPI *LPDIRECTXREGISTERAPPLICATION ) ( HWND, LPDIRECTXREGISTERAPPA );
 #endif // UNICODE
 
-typedef DWORD (FAR PASCAL * DSETUP_CALLBACK)(DWORD Reason,
-                                  DWORD MsgType,       /* Same as flags to MessageBox */
-                                  LPSTR szMessage,
-                                  LPSTR szName,
-                                  void *pInfo);
+typedef DWORD ( FAR PASCAL *DSETUP_CALLBACK ) ( DWORD Reason,
+        DWORD MsgType,       /* Same as flags to MessageBox */
+        LPSTR szMessage,
+        LPSTR szName,
+        void *pInfo );
 
-INT WINAPI DirectXSetupSetCallback(DSETUP_CALLBACK Callback);
-INT WINAPI DirectXSetupGetVersion(DWORD *lpdwVersion, DWORD *lpdwMinorVersion);
+INT WINAPI DirectXSetupSetCallback ( DSETUP_CALLBACK Callback );
+INT WINAPI DirectXSetupGetVersion ( DWORD *lpdwVersion, DWORD *lpdwMinorVersion );
 
 #endif // WIN32
 

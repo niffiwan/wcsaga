@@ -25,148 +25,163 @@
 #include <boost/fusion/include/at.hpp>
 #include <boost/fusion/include/vector.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <>
-    struct use_directive<qi::domain, tag::skip>     // enables skip[p]
-      : mpl::true_ {};
-
-    template <typename T>
-    struct use_directive<qi::domain
-      , terminal_ex<tag::skip                       // enables skip(s)[p]
-        , fusion::vector1<T> >
-    > : boost::spirit::traits::matches<qi::domain, T> {};
-
-    template <>                                     // enables *lazy* skip(s)[p]
-    struct use_lazy_directive<
-        qi::domain
-      , tag::skip
-      , 1 // arity
-    > : mpl::true_ {};
-}}
-
-namespace boost { namespace spirit { namespace qi
+namespace spirit
 {
-    using spirit::skip;
-    using spirit::skip_type;
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
+template <>
+struct use_directive<qi::domain, tag::skip>     // enables skip[p]
+		: mpl::true_ {};
 
-    template <typename Subject>
-    struct reskip_parser : unary_parser<reskip_parser<Subject> >
-    {
-        typedef Subject subject_type;
+template <typename T>
+struct use_directive<qi::domain
+		, terminal_ex<tag::skip                       // enables skip(s)[p]
+		, fusion::vector1<T> >
+		> : boost::spirit::traits::matches<qi::domain, T> {};
 
-        template <typename Context, typename Iterator>
-        struct attribute
-        {
-            typedef typename
-                traits::attribute_of<Subject, Context, Iterator>::type
-            type;
-        };
+template <>                                     // enables *lazy* skip(s)[p]
+struct use_lazy_directive <
+		qi::domain
+		, tag::skip
+		, 1 // arity
+		> : mpl::true_ {};
+}
+}
 
-        reskip_parser(Subject const& subject)
-          : subject(subject) {}
-
-        template <typename Iterator, typename Context
-          , typename Skipper, typename Attribute>
-        bool parse(Iterator& first, Iterator const& last
-          , Context& context, Skipper const& u // --> The skipper is reintroduced
-          , Attribute& attr) const
-        {
-            return subject.parse(first, last, context
-              , detail::get_skipper(u), attr);
-        }
-
-        template <typename Context>
-        info what(Context& context) const
-        {
-            return info("skip", subject.what(context));
-        }
-
-        Subject subject;
-    };
-
-    template <typename Subject, typename Skipper>
-    struct skip_parser : unary_parser<skip_parser<Subject, Skipper> >
-    {
-        typedef Subject subject_type;
-        typedef Skipper skipper_type;
-
-        template <typename Context, typename Iterator>
-        struct attribute
-        {
-            typedef typename
-                traits::attribute_of<Subject, Context, Iterator>::type
-            type;
-        };
-
-        skip_parser(Subject const& subject, Skipper const& skipper)
-          : subject(subject), skipper(skipper) {}
-
-        template <typename Iterator, typename Context
-          , typename Skipper_, typename Attribute>
-        bool parse(Iterator& first, Iterator const& last
-          , Context& context, Skipper_ const& //skipper --> bypass the supplied skipper
-          , Attribute& attr) const
-        {
-            return subject.parse(first, last, context, skipper, attr);
-        }
-
-        template <typename Context>
-        info what(Context& context) const
-        {
-            return info("skip", subject.what(context));
-        }
-
-        Subject subject;
-        Skipper skipper;
-    };
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Subject, typename Modifiers>
-    struct make_directive<tag::skip, Subject, Modifiers>
-    {
-        typedef reskip_parser<Subject> result_type;
-        result_type operator()(unused_type, Subject const& subject, unused_type) const
-        {
-            return result_type(subject);
-        }
-    };
-
-    template <typename Skipper, typename Subject, typename Modifiers>
-    struct make_directive<
-        terminal_ex<tag::skip, fusion::vector1<Skipper> >, Subject, Modifiers>
-    {
-        typedef typename
-            result_of::compile<qi::domain, Skipper, Modifiers>::type
-        skipper_type;
-
-        typedef skip_parser<Subject, skipper_type> result_type;
-
-        template <typename Terminal>
-        result_type operator()(
-            Terminal const& term, Subject const& subject, unused_type) const
-        {
-            return result_type(subject
-              , compile<qi::domain>(fusion::at_c<0>(term.args)));
-        }
-    };
-
-}}}
-
-namespace boost { namespace spirit { namespace traits
+namespace boost
 {
-    template <typename Subject>
-    struct has_semantic_action<qi::reskip_parser<Subject> >
-      : unary_has_semantic_action<Subject> {};
+namespace spirit
+{
+namespace qi
+{
+using spirit::skip;
+using spirit::skip_type;
 
-    template <typename Subject, typename Skipper>
-    struct has_semantic_action<qi::skip_parser<Subject, Skipper> >
-      : unary_has_semantic_action<Subject> {};
-}}}
+template <typename Subject>
+struct reskip_parser : unary_parser<reskip_parser<Subject> >
+{
+	typedef Subject subject_type;
+
+	template <typename Context, typename Iterator>
+	struct attribute
+	{
+		typedef typename
+		traits::attribute_of<Subject, Context, Iterator>::type
+		type;
+	};
+
+	reskip_parser ( Subject const &subject )
+		: subject ( subject ) {}
+
+	template <typename Iterator, typename Context
+	          , typename Skipper, typename Attribute>
+	bool parse ( Iterator &first, Iterator const &last
+	             , Context &context, Skipper const &u // --> The skipper is reintroduced
+	             , Attribute &attr ) const
+	{
+		return subject.parse ( first, last, context
+		                       , detail::get_skipper ( u ), attr );
+	}
+
+	template <typename Context>
+	info what ( Context &context ) const
+	{
+		return info ( "skip", subject.what ( context ) );
+	}
+
+	Subject subject;
+};
+
+template <typename Subject, typename Skipper>
+struct skip_parser : unary_parser<skip_parser<Subject, Skipper> >
+{
+	typedef Subject subject_type;
+	typedef Skipper skipper_type;
+
+	template <typename Context, typename Iterator>
+	struct attribute
+	{
+		typedef typename
+		traits::attribute_of<Subject, Context, Iterator>::type
+		type;
+	};
+
+	skip_parser ( Subject const &subject, Skipper const &skipper )
+		: subject ( subject ), skipper ( skipper ) {}
+
+	template <typename Iterator, typename Context
+	          , typename Skipper_, typename Attribute>
+	bool parse ( Iterator &first, Iterator const &last
+	             , Context &context, Skipper_ const & //skipper --> bypass the supplied skipper
+	             , Attribute &attr ) const
+	{
+		return subject.parse ( first, last, context, skipper, attr );
+	}
+
+	template <typename Context>
+	info what ( Context &context ) const
+	{
+		return info ( "skip", subject.what ( context ) );
+	}
+
+	Subject subject;
+	Skipper skipper;
+};
+
+///////////////////////////////////////////////////////////////////////////
+// Parser generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+template <typename Subject, typename Modifiers>
+struct make_directive<tag::skip, Subject, Modifiers>
+{
+	typedef reskip_parser<Subject> result_type;
+	result_type operator() ( unused_type, Subject const &subject, unused_type ) const
+	{
+		return result_type ( subject );
+	}
+};
+
+template <typename Skipper, typename Subject, typename Modifiers>
+struct make_directive <
+		terminal_ex<tag::skip, fusion::vector1<Skipper> >, Subject, Modifiers >
+{
+	typedef typename
+	result_of::compile<qi::domain, Skipper, Modifiers>::type
+	skipper_type;
+
+	typedef skip_parser<Subject, skipper_type> result_type;
+
+	template <typename Terminal>
+	result_type operator() (
+	    Terminal const &term, Subject const &subject, unused_type ) const
+	{
+		return result_type ( subject
+		                     , compile<qi::domain> ( fusion::at_c<0> ( term.args ) ) );
+	}
+};
+
+}
+}
+}
+
+namespace boost
+{
+namespace spirit
+{
+namespace traits
+{
+template <typename Subject>
+struct has_semantic_action<qi::reskip_parser<Subject> >
+		: unary_has_semantic_action<Subject> {};
+
+template <typename Subject, typename Skipper>
+struct has_semantic_action<qi::skip_parser<Subject, Skipper> >
+		: unary_has_semantic_action<Subject> {};
+}
+}
+}
 
 #endif

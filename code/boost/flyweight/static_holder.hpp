@@ -21,32 +21,34 @@
 /* Simplest holder storing the T object as a local static variable.
  */
 
-namespace boost{
+namespace boost
+{
 
-namespace flyweights{
+namespace flyweights
+{
 
 template<typename C>
-struct static_holder_class:holder_marker
+struct static_holder_class: holder_marker
 {
-  static C& get()
-  {
-    static C c;
-    return c;
-  }
+	static C &get()
+	{
+		static C c;
+		return c;
+	}
 
-  typedef static_holder_class type;
-  BOOST_MPL_AUX_LAMBDA_SUPPORT(1,static_holder_class,(C))
+	typedef static_holder_class type;
+	BOOST_MPL_AUX_LAMBDA_SUPPORT ( 1, static_holder_class, ( C ) )
 };
 
 /* static_holder_class specifier */
 
-struct static_holder:holder_marker
+struct static_holder: holder_marker
 {
-  template<typename C>
-  struct apply
-  {
-    typedef static_holder_class<C> type;
-  };
+	template<typename C>
+	struct apply
+	{
+		typedef static_holder_class<C> type;
+	};
 };
 
 } /* namespace flyweights */

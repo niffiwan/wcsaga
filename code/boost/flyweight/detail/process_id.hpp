@@ -20,29 +20,35 @@
 #if defined(BOOST_USE_WINDOWS_H)
 #include <windows.h>
 #else
-namespace boost{
-namespace flyweights{
-namespace detail{
+namespace boost
+{
+namespace flyweights
+{
+namespace detail
+{
 
-extern "C" __declspec(dllimport)
-unsigned long __stdcall GetCurrentProcessId(void);
+extern "C" __declspec ( dllimport )
+unsigned long __stdcall GetCurrentProcessId ( void );
 
 } /* namespace flyweights::detail */
 } /* namespace flyweights */
 } /* namespace boost */
 #endif
 
-namespace boost{
+namespace boost
+{
 
-namespace flyweights{
+namespace flyweights
+{
 
-namespace detail{
+namespace detail
+{
 
 typedef unsigned long process_id_t;
 
 inline process_id_t process_id()
 {
-  return GetCurrentProcessId();
+	return GetCurrentProcessId();
 }
 
 } /* namespace flyweights::detail */
@@ -55,17 +61,20 @@ inline process_id_t process_id()
 
 #include <unistd.h>
 
-namespace boost{
+namespace boost
+{
 
-namespace flyweights{
+namespace flyweights
+{
 
-namespace detail{
+namespace detail
+{
 
 typedef pid_t process_id_t;
 
 inline process_id_t process_id()
 {
-  return ::getpid();
+	return ::getpid();
 }
 
 } /* namespace flyweights::detail */

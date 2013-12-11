@@ -1,8 +1,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -33,7 +33,10 @@
 #include <boost/preprocessor/inc.hpp>
 #include <boost/preprocessor/cat.hpp>
 
-namespace boost { namespace mpl {
+namespace boost
+{
+namespace mpl
+{
 
 #   define AUX778076_PARAMS(param, sub) \
     BOOST_MPL_PP_PARAMS( \
@@ -56,67 +59,68 @@ namespace boost { namespace mpl {
         ) \
     /**/
 
-namespace aux {
+namespace aux
+{
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
-template< bool C_, AUX778076_PARAMS(typename T, 1) >
-struct BOOST_PP_CAT(AUX778076_OP_NAME,impl)
-    : BOOST_PP_CAT(AUX778076_OP_VALUE1,_)
+template< bool C_, AUX778076_PARAMS ( typename T, 1 ) >
+struct BOOST_PP_CAT ( AUX778076_OP_NAME, impl )
+	: BOOST_PP_CAT ( AUX778076_OP_VALUE1, _ )
 {
 };
 
-template< AUX778076_PARAMS(typename T, 1) >
-struct BOOST_PP_CAT(AUX778076_OP_NAME,impl)< AUX778076_OP_VALUE2,AUX778076_PARAMS(T, 1) >
-    : BOOST_PP_CAT(AUX778076_OP_NAME,impl)<
-          BOOST_MPL_AUX_NESTED_TYPE_WKND(T1)::value
-        , AUX778076_SHIFTED_PARAMS(T, 1)
-        , BOOST_PP_CAT(AUX778076_OP_VALUE2,_)
-        >
+template< AUX778076_PARAMS ( typename T, 1 ) >
+struct BOOST_PP_CAT ( AUX778076_OP_NAME, impl ) < AUX778076_OP_VALUE2, AUX778076_PARAMS ( T, 1 ) >
+: BOOST_PP_CAT ( AUX778076_OP_NAME, impl ) <
+BOOST_MPL_AUX_NESTED_TYPE_WKND ( T1 ) ::value
+, AUX778076_SHIFTED_PARAMS ( T, 1 )
+, BOOST_PP_CAT ( AUX778076_OP_VALUE2, _ )
+>
 {
 };
 
 template<>
-struct BOOST_PP_CAT(AUX778076_OP_NAME,impl)<
-          AUX778076_OP_VALUE2
-        , AUX778076_SPEC_PARAMS(BOOST_PP_CAT(AUX778076_OP_VALUE2,_))
-        >
-    : BOOST_PP_CAT(AUX778076_OP_VALUE2,_)
+struct BOOST_PP_CAT ( AUX778076_OP_NAME, impl ) <
+AUX778076_OP_VALUE2
+, AUX778076_SPEC_PARAMS ( BOOST_PP_CAT ( AUX778076_OP_VALUE2, _ ) )
+>
+: BOOST_PP_CAT ( AUX778076_OP_VALUE2, _ )
 {
 };
 
 #else
 
-template< bool C_ > struct BOOST_PP_CAT(AUX778076_OP_NAME,impl)
+template< bool C_ > struct BOOST_PP_CAT ( AUX778076_OP_NAME, impl )
 {
-    template< AUX778076_PARAMS(typename T, 1) > struct result_
-        : BOOST_PP_CAT(AUX778076_OP_VALUE1,_)
-    {
-    };
+	template< AUX778076_PARAMS ( typename T, 1 ) > struct result_
+	: BOOST_PP_CAT ( AUX778076_OP_VALUE1, _ )
+	{
+	};
 };
 
-template<> struct BOOST_PP_CAT(AUX778076_OP_NAME,impl)<AUX778076_OP_VALUE2>
+template<> struct BOOST_PP_CAT ( AUX778076_OP_NAME, impl ) <AUX778076_OP_VALUE2>
 {
-    template< AUX778076_PARAMS(typename T, 1) > struct result_
-        : BOOST_PP_CAT(AUX778076_OP_NAME,impl)< 
-              BOOST_MPL_AUX_NESTED_TYPE_WKND(T1)::value
-            >::template result_< AUX778076_SHIFTED_PARAMS(T,1),BOOST_PP_CAT(AUX778076_OP_VALUE2,_) >
+    template< AUX778076_PARAMS ( typename T, 1 ) > struct result_
+    : BOOST_PP_CAT ( AUX778076_OP_NAME, impl ) <
+    BOOST_MPL_AUX_NESTED_TYPE_WKND ( T1 ) ::value
+    >::template result_< AUX778076_SHIFTED_PARAMS ( T, 1 ), BOOST_PP_CAT ( AUX778076_OP_VALUE2, _ ) >
     {
     };
 
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
-    template<> struct result_<AUX778076_SPEC_PARAMS(BOOST_PP_CAT(AUX778076_OP_VALUE2,_))>
-        : BOOST_PP_CAT(AUX778076_OP_VALUE2,_)
-    {
-    };
+    template<> struct result_<AUX778076_SPEC_PARAMS ( BOOST_PP_CAT ( AUX778076_OP_VALUE2, _ ) ) >
+    : BOOST_PP_CAT ( AUX778076_OP_VALUE2, _ )
+{
 };
+            };
 #else
-};
+                       };
 
 template<>
-struct BOOST_PP_CAT(AUX778076_OP_NAME,impl)<AUX778076_OP_VALUE2>
-    ::result_< AUX778076_SPEC_PARAMS(BOOST_PP_CAT(AUX778076_OP_VALUE2,_)) >
-        : BOOST_PP_CAT(AUX778076_OP_VALUE2,_)
+struct BOOST_PP_CAT ( AUX778076_OP_NAME, impl ) <AUX778076_OP_VALUE2>
+::result_< AUX778076_SPEC_PARAMS ( BOOST_PP_CAT ( AUX778076_OP_VALUE2, _ ) ) >
+: BOOST_PP_CAT ( AUX778076_OP_VALUE2, _ )
 {
 };
 #endif // BOOST_MSVC == 1300
@@ -125,37 +129,38 @@ struct BOOST_PP_CAT(AUX778076_OP_NAME,impl)<AUX778076_OP_VALUE2>
 
 } // namespace aux
 
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(T1)
-    , typename BOOST_MPL_AUX_NA_PARAM(T2)
-    BOOST_MPL_PP_DEF_PARAMS_TAIL(2, typename T, BOOST_PP_CAT(AUX778076_OP_VALUE2,_))
+template <
+    typename BOOST_MPL_AUX_NA_PARAM ( T1 )
+    , typename BOOST_MPL_AUX_NA_PARAM ( T2 )
+    BOOST_MPL_PP_DEF_PARAMS_TAIL ( 2, typename T, BOOST_PP_CAT ( AUX778076_OP_VALUE2, _ ) )
     >
 struct AUX778076_OP_NAME
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-    : aux::BOOST_PP_CAT(AUX778076_OP_NAME,impl)<
-          BOOST_MPL_AUX_NESTED_TYPE_WKND(T1)::value
-        , AUX778076_SHIFTED_PARAMS(T,0)
-        >
+: aux::BOOST_PP_CAT ( AUX778076_OP_NAME, impl ) <
+BOOST_MPL_AUX_NESTED_TYPE_WKND ( T1 ) ::value
+, AUX778076_SHIFTED_PARAMS ( T, 0 )
+>
 #else
-    : aux::BOOST_PP_CAT(AUX778076_OP_NAME,impl)< 
-          BOOST_MPL_AUX_NESTED_TYPE_WKND(T1)::value
-        >::template result_< AUX778076_SHIFTED_PARAMS(T,0) >
+: aux::BOOST_PP_CAT ( AUX778076_OP_NAME, impl ) <
+BOOST_MPL_AUX_NESTED_TYPE_WKND ( T1 ) ::value
+>::template result_< AUX778076_SHIFTED_PARAMS ( T, 0 ) >
 #endif
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(
-          BOOST_MPL_LIMIT_METAFUNCTION_ARITY
+    BOOST_MPL_AUX_LAMBDA_SUPPORT (
+        BOOST_MPL_LIMIT_METAFUNCTION_ARITY
         , AUX778076_OP_NAME
-        , (AUX778076_PARAMS(T, 0))
-        )
+        , ( AUX778076_PARAMS ( T, 0 ) )
+    )
 };
 
-BOOST_MPL_AUX_NA_SPEC2(
-      2
+BOOST_MPL_AUX_NA_SPEC2 (
+    2
     , BOOST_MPL_LIMIT_METAFUNCTION_ARITY
     , AUX778076_OP_NAME
-    )
+)
 
-}}
+}
+}
 
 #undef AUX778076_SPEC_PARAMS
 #undef AUX778076_SHIFTED_PARAMS

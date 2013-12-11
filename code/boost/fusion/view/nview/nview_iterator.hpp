@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2009 Hartmut Kaiser
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(BOOST_FUSION_NVIEW_ITERATOR_SEP_23_2009_0948PM)
@@ -26,32 +26,35 @@
 #include <boost/fusion/view/nview/detail/distance_impl.hpp>
 #include <boost/fusion/view/nview/detail/equal_to_impl.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct nview_iterator_tag;
-    struct random_access_traversal_tag;
+namespace fusion
+{
+struct nview_iterator_tag;
+struct random_access_traversal_tag;
 
-    template<typename Sequence, typename Pos>
-    struct nview_iterator
-      : iterator_base<nview_iterator<Sequence, Pos> >
-    {
-        typedef nview_iterator_tag fusion_tag;
-        typedef random_access_traversal_tag category;
+template<typename Sequence, typename Pos>
+struct nview_iterator
+		: iterator_base<nview_iterator<Sequence, Pos> >
+{
+	typedef nview_iterator_tag fusion_tag;
+	typedef random_access_traversal_tag category;
 
-        typedef Sequence sequence_type;
-        typedef mpl_iterator<Pos> first_type;
+	typedef Sequence sequence_type;
+	typedef mpl_iterator<Pos> first_type;
 
-        explicit nview_iterator(Sequence& seq)
-          : seq(seq) {}
+	explicit nview_iterator ( Sequence &seq )
+		: seq ( seq ) {}
 
-        Sequence& seq;
+	Sequence &seq;
 
-    private:
-        // silence MSVC warning C4512: assignment operator could not be generated
-        nview_iterator& operator= (nview_iterator const&);
-    };
+private:
+	// silence MSVC warning C4512: assignment operator could not be generated
+	nview_iterator &operator= ( nview_iterator const & );
+};
 
-}}
+}
+}
 
 #endif
 

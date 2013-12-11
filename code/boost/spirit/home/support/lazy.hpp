@@ -15,23 +15,26 @@
 #include <boost/spirit/home/phoenix/core/actor.hpp>
 #include <boost/spirit/home/support/modify.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    template <typename Eval>
-    typename proto::terminal<phoenix::actor<Eval> >::type
-    lazy(phoenix::actor<Eval> const& f)
-    {
-        return proto::terminal<phoenix::actor<Eval> >::type::make(f);
-    }
+namespace spirit
+{
+template <typename Eval>
+typename proto::terminal<phoenix::actor<Eval> >::type
+lazy ( phoenix::actor<Eval> const &f )
+{
+	return proto::terminal<phoenix::actor<Eval> >::type::make ( f );
+}
 
-    namespace tag
-    {
-        struct lazy_eval {};
-    }
+namespace tag
+{
+struct lazy_eval {};
+}
 
-    template <typename Domain>
-    struct is_modifier_directive<Domain, tag::lazy_eval>
-      : mpl::true_ {};
-}}
+template <typename Domain>
+struct is_modifier_directive<Domain, tag::lazy_eval>
+		: mpl::true_ {};
+}
+}
 
 #endif

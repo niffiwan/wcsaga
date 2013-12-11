@@ -12,25 +12,39 @@
 #ifndef BOOST_NO_RESULT_OF
 
 # include <boost/utility/result_of.hpp>
-namespace boost { namespace parameter { namespace aux { 
+namespace boost
+{
+namespace parameter
+{
+namespace aux
+{
 template <class F>
-struct result_of0 : result_of<F()>
+struct result_of0 : result_of<F() >
 {};
 
-}}} // namespace boost::parameter::aux_
+}
+}
+} // namespace boost::parameter::aux_
 
 #else
 
-namespace boost { namespace parameter { namespace aux { 
+namespace boost
+{
+namespace parameter
+{
+namespace aux
+{
 template <class F>
 struct result_of0
 {
-    typedef typename F::result_type type;
+	typedef typename F::result_type type;
 };
 
-}}} // namespace boost::parameter::aux_
+}
+}
+} // namespace boost::parameter::aux_
 
-#endif 
+#endif
 
 
 #endif // BOOST_PARAMETER_AUX_RESULT_OF0_DWA2005511_HPP

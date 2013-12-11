@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2007 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #ifndef BOOST_PP_IS_ITERATING
@@ -31,15 +31,15 @@
 
 #define N BOOST_PP_ITERATION()
 
-    template <typename EvalPolicy, BOOST_PP_ENUM_PARAMS(N, typename T)>
-    inline actor<
-        typename as_composite<EvalPolicy, BOOST_PP_ENUM_PARAMS(N, T)>::type>
-    compose(BOOST_PP_ENUM_BINARY_PARAMS(N, T, const& _))
-    {
-        return actor<
-            typename as_composite<EvalPolicy, BOOST_PP_ENUM_PARAMS(N, T)>::type>(
-                BOOST_PP_ENUM(N, PHOENIX_AS_ACTOR_CONVERT, _));
-    }
+template <typename EvalPolicy, BOOST_PP_ENUM_PARAMS ( N, typename T ) >
+inline actor <
+typename as_composite<EvalPolicy, BOOST_PP_ENUM_PARAMS ( N, T ) >::type >
+compose ( BOOST_PP_ENUM_BINARY_PARAMS ( N, T, const &_ ) )
+{
+	return actor <
+	       typename as_composite<EvalPolicy, BOOST_PP_ENUM_PARAMS ( N, T ) >::type > (
+	           BOOST_PP_ENUM ( N, PHOENIX_AS_ACTOR_CONVERT, _ ) );
+}
 
 #undef N
 #endif // defined(BOOST_PP_IS_ITERATING)

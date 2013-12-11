@@ -16,30 +16,34 @@
 #include <boost/date_time/gregorian/greg_ymd.hpp>
 #include <boost/date_time/int_adapter.hpp>
 
-namespace boost {
-namespace gregorian {
+namespace boost
+{
+namespace gregorian
+{
 
-  //!An internal date representation that includes infinities, not a date
-  typedef date_time::int_adapter<uint32_t> fancy_date_rep;
+//!An internal date representation that includes infinities, not a date
+typedef date_time::int_adapter<uint32_t> fancy_date_rep;
 
-  //! Gregorian calendar for this implementation, hard work in the base
-  class gregorian_calendar :
-    public date_time::gregorian_calendar_base<greg_year_month_day, fancy_date_rep::int_type> {
-  public:
-    //! Type to hold a weekday (eg: Sunday, Monday,...)
-    typedef greg_weekday         day_of_week_type;
-    //! Counter type from 1 to 366 for gregorian dates.
-    typedef greg_day_of_year_rep day_of_year_type;
-    //! Internal date representation that handles infinity, not a date
-    typedef fancy_date_rep       date_rep_type;
-    //! Date rep implements the traits stuff as well
-    typedef fancy_date_rep       date_traits_type;
+//! Gregorian calendar for this implementation, hard work in the base
+class gregorian_calendar :
+public date_time::gregorian_calendar_base<greg_year_month_day, fancy_date_rep::int_type>
+{
+public:
+//! Type to hold a weekday (eg: Sunday, Monday,...)
+typedef greg_weekday         day_of_week_type;
+//! Counter type from 1 to 366 for gregorian dates.
+typedef greg_day_of_year_rep day_of_year_type;
+//! Internal date representation that handles infinity, not a date
+typedef fancy_date_rep       date_rep_type;
+//! Date rep implements the traits stuff as well
+typedef fancy_date_rep       date_traits_type;
 
 
-  private:
-  };
+private:
+};
 
-} } //namespace gregorian
+}
+} //namespace gregorian
 
 
 

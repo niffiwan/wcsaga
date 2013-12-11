@@ -4,17 +4,21 @@
 #ifndef BOOST_DETAIL_POD_SINGLETON_DWA200655_HPP
 # define BOOST_DETAIL_POD_SINGLETON_DWA200655_HPP
 
-namespace boost { namespace detail {
+namespace boost
+{
+namespace detail
+{
 
 template<typename T>
 struct pod_singleton
 {
-    static T instance;
+	static T instance;
 };
 
 template<typename T>
 T pod_singleton<T>::instance;
 
-}} // namespace boost::detail
+}
+} // namespace boost::detail
 
 #endif // BOOST_DETAIL_POD_SINGLETON_DWA200655_HPP

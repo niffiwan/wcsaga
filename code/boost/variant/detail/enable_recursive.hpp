@@ -33,8 +33,12 @@
 
 #include "boost/variant/recursive_wrapper.hpp"
 
-namespace boost {
-namespace detail { namespace variant {
+namespace boost
+{
+namespace detail
+{
+namespace variant
+{
 
 #if !defined(BOOST_VARIANT_DETAIL_NO_SUBSTITUTE)
 
@@ -54,16 +58,16 @@ template <typename T, typename U1>
 struct rebind1
 {
 private:
-    typedef typename mpl::lambda<
-          mpl::identity<T>
-        >::type le_;
+	typedef typename mpl::lambda <
+	mpl::identity<T>
+	>::type le_;
 
 public:
-    typedef typename mpl::eval_if<
-          is_same< le_, mpl::identity<T> >
-        , le_ // identity<T>
-        , mpl::apply1<le_, U1>
-        >::type type;
+	typedef typename mpl::eval_if <
+	is_same< le_, mpl::identity<T> >
+	, le_ // identity<T>
+	, mpl::apply1<le_, U1>
+	>::type type;
 };
 
 #   define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL(T,Dest,Source) \
@@ -82,33 +86,33 @@ public:
 
 template <typename T, typename RecursiveVariant, typename NoWrapper>
 struct enable_recursive
-    : BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL(
-          T, RecursiveVariant, ::boost::recursive_variant_
-        )
+: BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL (
+    T, RecursiveVariant, ::boost::recursive_variant_
+)
 {
 };
 
 template <typename T, typename RecursiveVariant>
-struct enable_recursive< T,RecursiveVariant,mpl::false_ >
+struct enable_recursive< T, RecursiveVariant, mpl::false_ >
 {
 private: // helpers, for metafunction result (below)
 
-    typedef typename BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL(
-          T, RecursiveVariant, ::boost::recursive_variant_
-        )::type t_;
+	typedef typename BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL (
+	    T, RecursiveVariant, ::boost::recursive_variant_
+	) ::type t_;
 
 public: // metafunction result
 
-    // [Wrap with recursive_wrapper only if rebind really changed something:]
-    typedef typename mpl::if_<
-          mpl::or_<
-              is_same< t_,T >
-            , is_reference<t_>
-            , is_pointer<t_>
-            >
-        , t_
-        , boost::recursive_wrapper<t_>
-        >::type type;
+	// [Wrap with recursive_wrapper only if rebind really changed something:]
+	typedef typename mpl::if_ <
+	mpl::or_ <
+	is_same< t_, T >
+	, is_reference<t_>
+	, is_pointer<t_>
+	>
+	, t_
+	, boost::recursive_wrapper<t_>
+	>::type type;
 
 };
 
@@ -119,23 +123,23 @@ struct enable_recursive
 {
 private: // helpers, for metafunction result (below)
 
-    typedef typename BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL(
-          T, RecursiveVariant, ::boost::recursive_variant_
-        )::type t_;
+	typedef typename BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL (
+	    T, RecursiveVariant, ::boost::recursive_variant_
+	) ::type t_;
 
 public: // metafunction result
 
-    // [Wrap with recursive_wrapper only if rebind really changed something:]
-    typedef typename mpl::if_<
-          mpl::or_<
-              NoWrapper
-            , is_same< t_,T >
-            , is_reference<t_>
-            , is_pointer<t_>
-            >
-        , t_
-        , boost::recursive_wrapper<t_>
-        >::type type;
+	// [Wrap with recursive_wrapper only if rebind really changed something:]
+	typedef typename mpl::if_ <
+	mpl::or_ <
+	NoWrapper
+	, is_same< t_, T >
+	, is_reference<t_>
+	, is_pointer<t_>
+	>
+	, t_
+	, boost::recursive_wrapper<t_>
+	>::type type;
 
 };
 
@@ -149,14 +153,15 @@ public: // metafunction result
 template <typename RecursiveVariant, typename NoWrapper>
 struct quoted_enable_recursive
 {
-    template <typename T>
-    struct apply
-        : enable_recursive<T, RecursiveVariant, NoWrapper>
-    {
-    };
+	template <typename T>
+	struct apply
+			: enable_recursive<T, RecursiveVariant, NoWrapper>
+	{
+	};
 };
 
-}} // namespace detail::variant
+}
+} // namespace detail::variant
 } // namespace boost
 
 #endif // BOOST_VARIANT_DETAIL_ENABLE_RECURSIVE_HPP

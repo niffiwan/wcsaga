@@ -22,9 +22,12 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost {
-namespace wave {
-namespace cpplexer {
+namespace boost
+{
+namespace wave
+{
+namespace cpplexer
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -32,35 +35,35 @@ namespace cpplexer {
 //  keywords, operators and other constant language elements.
 //
 //  This avoids repeated construction of these tokens, which is especially
-//  effective when used in conjunction with a copy on write string 
+//  effective when used in conjunction with a copy on write string
 //  implementation (COW string).
 //
 ///////////////////////////////////////////////////////////////////////////////
 template <typename StringT>
-class token_cache 
+class token_cache
 {
 public:
-    token_cache()
-    :   cache(T_LAST_TOKEN - T_FIRST_TOKEN)
-    {
-        typename std::vector<StringT>::iterator it = cache.begin();
-        for (unsigned int i = T_FIRST_TOKEN; i < T_LAST_TOKEN;  ++i, ++it)
-        {
-            *it = StringT(boost::wave::get_token_value(token_id(i)));
-        }
-    }
+	token_cache()
+		:   cache ( T_LAST_TOKEN - T_FIRST_TOKEN )
+	{
+		typename std::vector<StringT>::iterator it = cache.begin();
+		for ( unsigned int i = T_FIRST_TOKEN; i < T_LAST_TOKEN;  ++i, ++it )
+		{
+			*it = StringT ( boost::wave::get_token_value ( token_id ( i ) ) );
+		}
+	}
 
-    StringT const &get_token_value(token_id id) const
-    {
-        return cache[BASEID_FROM_TOKEN(id) - T_FIRST_TOKEN];
-    }
+	StringT const &get_token_value ( token_id id ) const
+	{
+		return cache[BASEID_FROM_TOKEN ( id ) - T_FIRST_TOKEN];
+	}
 
 private:
-    std::vector<StringT> cache;
+	std::vector<StringT> cache;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-}   // namespace cpplexer 
+}   // namespace cpplexer
 }   // namespace wave
 }   // namespace boost
 

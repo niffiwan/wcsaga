@@ -27,18 +27,19 @@
 // Calls to asio_handler_invoke must be made from a namespace that does not
 // contain overloads of this function. The boost_asio_handler_invoke_helpers
 // namespace is defined here for that purpose.
-namespace boost_asio_handler_invoke_helpers {
+namespace boost_asio_handler_invoke_helpers
+{
 
 template <typename Function, typename Context>
-inline void invoke(const Function& function, Context& context)
+inline void invoke ( const Function &function, Context &context )
 {
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) \
   || BOOST_WORKAROUND(__GNUC__, < 3)
-  Function tmp(function);
-  tmp();
+	Function tmp ( function );
+	tmp();
 #else
-  using namespace boost::asio;
-  asio_handler_invoke(function, boost::addressof(context));
+	using namespace boost::asio;
+	asio_handler_invoke ( function, boost::addressof ( context ) );
 #endif
 }
 

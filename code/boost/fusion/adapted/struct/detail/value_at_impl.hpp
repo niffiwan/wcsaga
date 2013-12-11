@@ -11,37 +11,40 @@
 #include <boost/mpl/if.hpp>
 #include <boost/static_assert.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct struct_tag;
+namespace fusion
+{
+struct struct_tag;
 
-    namespace extension
-    {
-        template<typename T>
-        struct value_at_impl;
+namespace extension
+{
+template<typename T>
+struct value_at_impl;
 
-        template <typename Struct, int N>
-        struct struct_member;
+template <typename Struct, int N>
+struct struct_member;
 
-        template <typename Struct>
-        struct struct_size;
+template <typename Struct>
+struct struct_size;
 
-        template <>
-        struct value_at_impl<struct_tag>
-        {
-            template <typename Sequence, typename N>
-            struct apply
-            {
-                static int const n_value = N::value;
-                BOOST_MPL_ASSERT_RELATION(
-                    n_value, <=, extension::struct_size<Sequence>::value);
+template <>
+struct value_at_impl<struct_tag>
+{
+	template <typename Sequence, typename N>
+	struct apply
+	{
+		static int const n_value = N::value;
+		BOOST_MPL_ASSERT_RELATION (
+		    n_value, <=, extension::struct_size<Sequence>::value );
 
-                typedef typename
-                    extension::struct_member<Sequence, N::value>::type
-                type;
-            };
-        };
-    }
-}}
+		typedef typename
+		extension::struct_member<Sequence, N::value>::type
+		type;
+	};
+};
+}
+}
+}
 
 #endif

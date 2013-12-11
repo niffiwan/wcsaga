@@ -20,13 +20,17 @@
 
 #include <boost/unordered_set.hpp>
 
-namespace std{ namespace tr1{
+namespace std
+{
+namespace tr1
+{
 
-   using ::boost::unordered_set;
-   using ::boost::unordered_multiset;
-   using ::boost::swap;
+using ::boost::unordered_set;
+using ::boost::unordered_multiset;
+using ::boost::swap;
 
-} } // namespaces
+}
+} // namespaces
 
 #endif
 

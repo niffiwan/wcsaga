@@ -57,37 +57,37 @@
 
 namespace std
 {
-    template <class T> class allocator;
-    template <class charT, class traits, class Allocator> class basic_string;
+template <class T> class allocator;
+template <class charT, class traits, class Allocator> class basic_string;
 
 #if BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
-    template <class charT> struct string_char_traits;
+template <class charT> struct string_char_traits;
 #else
-    template <class charT> struct char_traits;
+template <class charT> struct char_traits;
 #endif
 
-    template <class T> class complex;
+template <class T> class complex;
 }
 
 // gcc 3.4 and greater
 namespace std
 {
 #if !defined(BOOST_CONTAINER_FWD_BAD_DEQUE)
-    template <class T, class Allocator> class deque;
+template <class T, class Allocator> class deque;
 #endif
 
-    template <class T, class Allocator> class list;
-    template <class T, class Allocator> class vector;
-    template <class Key, class T, class Compare, class Allocator> class map;
-    template <class Key, class T, class Compare, class Allocator>
-    class multimap;
-    template <class Key, class Compare, class Allocator> class set;
-    template <class Key, class Compare, class Allocator> class multiset;
+template <class T, class Allocator> class list;
+template <class T, class Allocator> class vector;
+template <class Key, class T, class Compare, class Allocator> class map;
+template <class Key, class T, class Compare, class Allocator>
+class multimap;
+template <class Key, class Compare, class Allocator> class set;
+template <class Key, class Compare, class Allocator> class multiset;
 
 #if !defined(BOOST_CONTAINER_FWD_BAD_BITSET)
-    template <size_t N> class bitset;
+template <size_t N> class bitset;
 #endif
-    template <class T1, class T2> struct pair;
+template <class T1, class T2> struct pair;
 }
 
 #if defined(BOOST_MSVC)

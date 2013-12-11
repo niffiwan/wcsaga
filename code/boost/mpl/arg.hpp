@@ -9,8 +9,8 @@
 // Copyright Peter Dimov 2001-2002
 // Copyright Aleksey Gurtovoy 2001-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -76,7 +76,7 @@ BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 
 #   undef AUX778076_ARG_N_DEFAULT_PARAMS
 
-BOOST_MPL_AUX_NONTYPE_ARITY_SPEC(1,int,arg)
+BOOST_MPL_AUX_NONTYPE_ARITY_SPEC ( 1, int, arg )
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
 
@@ -92,37 +92,37 @@ BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
 
 template<> struct arg<i_>
 {
-    BOOST_STATIC_CONSTANT(int, value = i_);
-    typedef arg<BOOST_PP_INC(i_)> next;
-    BOOST_MPL_AUX_ARG_TYPEDEF(na, tag)
-    BOOST_MPL_AUX_ARG_TYPEDEF(na, type)
+	BOOST_STATIC_CONSTANT ( int, value = i_ );
+	typedef arg<BOOST_PP_INC ( i_ ) > next;
+	BOOST_MPL_AUX_ARG_TYPEDEF ( na, tag )
+	BOOST_MPL_AUX_ARG_TYPEDEF ( na, type )
 
-    template<
-          AUX778076_ARG_N_DEFAULT_PARAMS(typename U, na)
-        >
-    struct apply
-    {
-        typedef BOOST_PP_CAT(U,i_) type;
-        BOOST_MPL_AUX_ASSERT_NOT_NA(type);
-    };
+	template <
+	    AUX778076_ARG_N_DEFAULT_PARAMS ( typename U, na )
+	    >
+	struct apply
+	{
+		typedef BOOST_PP_CAT ( U, i_ ) type;
+		BOOST_MPL_AUX_ASSERT_NOT_NA ( type );
+	};
 };
 
 #else
 
-template<> struct arg<-1>
+template<> struct arg < -1 >
 {
-    BOOST_STATIC_CONSTANT(int, value = -1);
-    BOOST_MPL_AUX_ARG_TYPEDEF(na, tag)
-    BOOST_MPL_AUX_ARG_TYPEDEF(na, type)
+	BOOST_STATIC_CONSTANT ( int, value = -1 );
+	BOOST_MPL_AUX_ARG_TYPEDEF ( na, tag )
+	BOOST_MPL_AUX_ARG_TYPEDEF ( na, type )
 
-    template<
-          AUX778076_ARG_N_DEFAULT_PARAMS(typename U, na)
-        >
-    struct apply
-    {
-        typedef U1 type;
-        BOOST_MPL_AUX_ASSERT_NOT_NA(type);
-    };
+	template <
+	    AUX778076_ARG_N_DEFAULT_PARAMS ( typename U, na )
+	    >
+	struct apply
+	{
+		typedef U1 type;
+		BOOST_MPL_AUX_ASSERT_NOT_NA ( type );
+	};
 };
 
 #endif // i_ > 0

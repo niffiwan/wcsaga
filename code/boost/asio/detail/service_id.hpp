@@ -19,14 +19,17 @@
 
 #include <boost/asio/io_service.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 // Special derived service id type to keep classes header-file only.
 template <typename Type>
 class service_id
-  : public boost::asio::io_service::id
+	: public boost::asio::io_service::id
 {
 };
 

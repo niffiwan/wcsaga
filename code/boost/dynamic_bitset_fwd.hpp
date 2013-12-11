@@ -14,7 +14,8 @@
 
 #include <memory>
 
-namespace boost {
+namespace boost
+{
 
 template <typename Block = unsigned long,
           typename Allocator = std::allocator<Block> >

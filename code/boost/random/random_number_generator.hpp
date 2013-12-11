@@ -22,33 +22,34 @@
 #include <boost/random/uniform_int.hpp>
 #include <boost/random/variate_generator.hpp>
 
-namespace boost {
+namespace boost
+{
 
 // a model for RandomNumberGenerator std:25.2.11 [lib.alg.random.shuffle]
 template<class UniformRandomNumberGenerator, class IntType = long>
 class random_number_generator
 {
 public:
-  typedef UniformRandomNumberGenerator base_type;
-  typedef IntType argument_type;
-  typedef IntType result_type;
-  random_number_generator(base_type& rng) : _rng(rng)
-  { 
+	typedef UniformRandomNumberGenerator base_type;
+	typedef IntType argument_type;
+	typedef IntType result_type;
+	random_number_generator ( base_type &rng ) : _rng ( rng )
+	{
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-    BOOST_STATIC_ASSERT(std::numeric_limits<result_type>::is_integer);
+		BOOST_STATIC_ASSERT ( std::numeric_limits<result_type>::is_integer );
 #endif
-  }
-  // compiler-generated copy ctor is fine
-  // assignment is disallowed because there is a reference member
+	}
+	// compiler-generated copy ctor is fine
+	// assignment is disallowed because there is a reference member
 
-  result_type operator()(argument_type n)
-  {
-    typedef uniform_int<IntType> dist_type;
-    return variate_generator<base_type&, dist_type>(_rng, dist_type(0, n-1))();
-  }
+	result_type operator() ( argument_type n )
+	{
+		typedef uniform_int<IntType> dist_type;
+		return variate_generator<base_type &, dist_type> ( _rng, dist_type ( 0, n - 1 ) ) ();
+	}
 
 private:
-  base_type& _rng;
+	base_type &_rng;
 };
 
 } // namespace boost

@@ -24,54 +24,60 @@
 #include <boost/xpressive/detail/core/regex_impl.hpp>
 #include <boost/xpressive/detail/core/adaptor.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    // regex_byref_matcher
-    //
-    template<typename BidiIter>
-    struct regex_byref_matcher
-      : quant_style<quant_variable_width, unknown_width::value, false>
-    {
-        // avoid cyclic references by holding a weak_ptr to the
-        // regex_impl struct
-        weak_ptr<regex_impl<BidiIter> > wimpl_;
+namespace xpressive
+{
+namespace detail
+{
+///////////////////////////////////////////////////////////////////////////////
+// regex_byref_matcher
+//
+template<typename BidiIter>
+struct regex_byref_matcher
+		: quant_style<quant_variable_width, unknown_width::value, false>
+{
+	// avoid cyclic references by holding a weak_ptr to the
+	// regex_impl struct
+	weak_ptr<regex_impl<BidiIter> > wimpl_;
 
-        // the basic_regex object holds a ref-count to this regex_impl, so
-        // we don't have to worry about it going away.
-        regex_impl<BidiIter> const *pimpl_;
+	// the basic_regex object holds a ref-count to this regex_impl, so
+	// we don't have to worry about it going away.
+	regex_impl<BidiIter> const *pimpl_;
 
-        regex_byref_matcher(shared_ptr<regex_impl<BidiIter> > const &impl)
-          : wimpl_(impl)
-          , pimpl_(impl.get())
-        {
-            BOOST_ASSERT(this->pimpl_);
-        }
+	regex_byref_matcher ( shared_ptr<regex_impl<BidiIter> > const &impl )
+		: wimpl_ ( impl )
+		, pimpl_ ( impl.get() )
+	{
+		BOOST_ASSERT ( this->pimpl_ );
+	}
 
-        template<typename Next>
-        bool match(match_state<BidiIter> &state, Next const &next) const
-        {
-            BOOST_ASSERT(this->pimpl_ == this->wimpl_.lock().get());
-            BOOST_XPR_ENSURE_(this->pimpl_->xpr_, regex_constants::error_badref, "bad regex reference");
+	template<typename Next>
+	bool match ( match_state<BidiIter> &state, Next const &next ) const
+	{
+		BOOST_ASSERT ( this->pimpl_ == this->wimpl_.lock().get() );
+		BOOST_XPR_ENSURE_ ( this->pimpl_->xpr_, regex_constants::error_badref, "bad regex reference" );
 
-            return push_context_match(*this->pimpl_, state, this->wrap_(next, is_static_xpression<Next>()));
-        }
+		return push_context_match ( *this->pimpl_, state, this->wrap_ ( next, is_static_xpression<Next>() ) );
+	}
 
-    private:
-        template<typename Next>
-        static xpression_adaptor<reference_wrapper<Next const>, matchable<BidiIter> > wrap_(Next const &next, mpl::true_)
-        {
-            // wrap the static xpression in a matchable interface
-            return xpression_adaptor<reference_wrapper<Next const>, matchable<BidiIter> >(boost::cref(next));
-        }
+private:
+	template<typename Next>
+	static xpression_adaptor<reference_wrapper<Next const>, matchable<BidiIter> > wrap_ ( Next const &next, mpl::true_ )
+	{
+		// wrap the static xpression in a matchable interface
+		return xpression_adaptor<reference_wrapper<Next const>, matchable<BidiIter> > ( boost::cref ( next ) );
+	}
 
-        template<typename Next>
-        static Next const &wrap_(Next const &next, mpl::false_)
-        {
-            return next;
-        }
-    };
+	template<typename Next>
+	static Next const &wrap_ ( Next const &next, mpl::false_ )
+	{
+		return next;
+	}
+};
 
-}}}
+}
+}
+}
 
 #endif

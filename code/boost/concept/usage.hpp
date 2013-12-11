@@ -7,18 +7,21 @@
 # include <boost/concept/assert.hpp>
 # include <boost/detail/workaround.hpp>
 
-namespace boost { namespace concept { 
+namespace boost
+{
+namespace concept
+{
 
 # if BOOST_WORKAROUND(__GNUC__, == 2)
 
 #  define BOOST_CONCEPT_USAGE(model) ~model()
 
-# else 
+# else
 
 template <class Model>
 struct usage_requirements
 {
-    ~usage_requirements() { ((Model*)0)->~Model(); }
+	~usage_requirements() { ( ( Model * ) 0 )->~Model(); }
 };
 
 #  if BOOST_WORKAROUND(__GNUC__, <= 3)
@@ -36,8 +39,9 @@ struct usage_requirements
 
 #  endif
 
-# endif 
+# endif
 
-}} // namespace boost::concept
+}
+} // namespace boost::concept
 
 #endif // BOOST_CONCEPT_USAGE_DWA2006919_HPP

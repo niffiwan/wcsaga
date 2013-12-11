@@ -61,13 +61,13 @@
 //    Given:
 //
 //    - a mutable shared object OBJ;
-//    - two threads THREAD1 and THREAD2 each holding 
+//    - two threads THREAD1 and THREAD2 each holding
 //      a private smart_ptr object pointing to that OBJ.
 //
 //    t1: THREAD1 updates OBJ (thread-safe via some synchronization)
 //      and a few cycles later (after "unlock") destroys smart_ptr;
 //
-//    t2: THREAD2 destroys smart_ptr WITHOUT doing any synchronization 
+//    t2: THREAD2 destroys smart_ptr WITHOUT doing any synchronization
 //      with respect to shared mutable object OBJ; OBJ destructors
 //      are called driven by smart_ptr interface...
 //

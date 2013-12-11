@@ -15,43 +15,49 @@
 #include <boost/spirit/home/support/context.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit { namespace repository
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // subrule_context: special context used with subrules, to pass around
-    // the current set of subrule definitions (subrule_group)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Group, typename Attributes, typename Locals>
-    struct subrule_context
-      : context<Attributes, Locals>
-    {
-        typedef context<Attributes, Locals> base_type;
-        typedef Group group_type;
+namespace spirit
+{
+namespace repository
+{
+///////////////////////////////////////////////////////////////////////////
+// subrule_context: special context used with subrules, to pass around
+// the current set of subrule definitions (subrule_group)
+///////////////////////////////////////////////////////////////////////////
+template <typename Group, typename Attributes, typename Locals>
+struct subrule_context
+		: context<Attributes, Locals>
+{
+	typedef context<Attributes, Locals> base_type;
+	typedef Group group_type;
 
-        subrule_context(
-            Group const& group
-          , typename Attributes::car_type attribute
-        ) : base_type(attribute), group(group)
-        {
-        }
+	subrule_context (
+	    Group const &group
+	    , typename Attributes::car_type attribute
+	) : base_type ( attribute ), group ( group )
+	{
+	}
 
-        template <typename Args, typename Context>
-        subrule_context(
-            Group const& group
-          , typename Attributes::car_type attribute
-          , Args const& args
-          , Context& caller_context
-        ) : base_type(attribute, args, caller_context), group(group)
-        {
-        }
+	template <typename Args, typename Context>
+	subrule_context (
+	    Group const &group
+	    , typename Attributes::car_type attribute
+	    , Args const &args
+	    , Context &caller_context
+	) : base_type ( attribute, args, caller_context ), group ( group )
+	{
+	}
 
-        subrule_context(Group const& group, Attributes const& attributes)
-          : base_type(attributes), group(group)
-        {
-        }
+	subrule_context ( Group const &group, Attributes const &attributes )
+		: base_type ( attributes ), group ( group )
+	{
+	}
 
-        Group const& group;
-    };
-}}}
+	Group const &group;
+};
+}
+}
+}
 
 #endif

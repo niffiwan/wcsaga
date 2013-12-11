@@ -23,12 +23,12 @@
 
 namespace boost
 {
-    // Specialize this for user-defined types
-    template<typename T>
-    struct has_reverse
-        : is_std_list<T>
-    {
-    };
+// Specialize this for user-defined types
+template<typename T>
+struct has_reverse
+		: is_std_list<T>
+{
+};
 }
 
 #endif

@@ -14,22 +14,25 @@
 // should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace detail{
+namespace detail
+{
 
 template <class T>
-struct has_nothrow_assign_imp{
-   BOOST_STATIC_CONSTANT(bool, value = 
-      (::boost::type_traits::ice_or<
-         ::boost::has_trivial_assign<T>::value,
-         BOOST_HAS_NOTHROW_ASSIGN(T)
-      >::value));
+struct has_nothrow_assign_imp
+{
+	BOOST_STATIC_CONSTANT ( bool, value =
+	                            ( ::boost::type_traits::ice_or <
+	                              ::boost::has_trivial_assign<T>::value,
+	                              BOOST_HAS_NOTHROW_ASSIGN ( T )
+	                              >::value ) );
 };
 
 }
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(has_nothrow_assign,T,::boost::detail::has_nothrow_assign_imp<T>::value)
+BOOST_TT_AUX_BOOL_TRAIT_DEF1 ( has_nothrow_assign, T, ::boost::detail::has_nothrow_assign_imp<T>::value )
 
 } // namespace boost
 

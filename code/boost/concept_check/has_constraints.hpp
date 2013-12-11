@@ -4,28 +4,32 @@
 #ifndef BOOST_CONCEPT_CHECK_HAS_CONSTRAINTS_DWA2006429_HPP
 # define BOOST_CONCEPT_CHECK_HAS_CONSTRAINTS_DWA2006429_HPP
 
-namespace boost { namespace concept_checking { 
+namespace boost
+{
+namespace concept_checking
+{
 
 // Here we implement the "metafunction" that detects whether a
 // constraints metafunction exists
 typedef char yes;
-typedef char (&no)[2];
+typedef char ( &no ) [2];
 
-template <class Model, void (Model::*)()>
+template <class Model, void ( Model::* ) () >
 struct wrap_constraints {};
-    
+
 template <class Model>
-inline yes has_constraints_(Model*, wrap_constraints<Model,&Model::constraints>* = 0);
-inline no has_constraints_(...);
+inline yes has_constraints_ ( Model *, wrap_constraints<Model, &Model::constraints> * = 0 );
+inline no has_constraints_ ( ... );
 
 template <class Model>
 struct has_constraints
 {
-    BOOST_STATIC_CONSTANT(
-        bool
-      , value = sizeof( concept_checking::has_constraints_((Model*)0) ) == 1 );
+	BOOST_STATIC_CONSTANT (
+	    bool
+	    , value = sizeof ( concept_checking::has_constraints_ ( ( Model * ) 0 ) ) == 1 );
 };
 
-}} // namespace boost::concept_checking
+}
+} // namespace boost::concept_checking
 
 #endif // BOOST_CONCEPT_CHECK_HAS_CONSTRAINTS_DWA2006429_HPP

@@ -36,34 +36,37 @@
 // a recent (i.e. Vista or later) SDK, as the SDK does not provide IPv6 support
 // in that case.
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 enum
 {
-  sockaddr_storage_maxsize = 128, // Maximum size.
-  sockaddr_storage_alignsize = (sizeof(__int64)), // Desired alignment.
-  sockaddr_storage_pad1size = (sockaddr_storage_alignsize - sizeof(short)),
-  sockaddr_storage_pad2size = (sockaddr_storage_maxsize -
-      (sizeof(short) + sockaddr_storage_pad1size + sockaddr_storage_alignsize))
+	sockaddr_storage_maxsize = 128, // Maximum size.
+	sockaddr_storage_alignsize = ( sizeof ( __int64 ) ), // Desired alignment.
+	sockaddr_storage_pad1size = ( sockaddr_storage_alignsize - sizeof ( short ) ),
+	sockaddr_storage_pad2size = ( sockaddr_storage_maxsize -
+	                              ( sizeof ( short ) + sockaddr_storage_pad1size + sockaddr_storage_alignsize ) )
 };
 
 struct sockaddr_storage_emulation
 {
-  short ss_family;
-  char __ss_pad1[sockaddr_storage_pad1size];
-  __int64 __ss_align;
-  char __ss_pad2[sockaddr_storage_pad2size];
+	short ss_family;
+	char __ss_pad1[sockaddr_storage_pad1size];
+	__int64 __ss_align;
+	char __ss_pad2[sockaddr_storage_pad2size];
 };
 
 struct in6_addr_emulation
 {
-  union
-  {
-    u_char Byte[16];
-    u_short Word[8];
-  } u;
+	union
+	{
+		u_char Byte[16];
+		u_short Word[8];
+	} u;
 };
 
 #if !defined(s6_addr)
@@ -74,17 +77,17 @@ struct in6_addr_emulation
 
 struct sockaddr_in6_emulation
 {
-  short sin6_family;
-  u_short sin6_port;
-  u_long sin6_flowinfo;
-  in6_addr_emulation sin6_addr;
-  u_long sin6_scope_id;
+	short sin6_family;
+	u_short sin6_port;
+	u_long sin6_flowinfo;
+	in6_addr_emulation sin6_addr;
+	u_long sin6_scope_id;
 };
 
 struct ipv6_mreq_emulation
 {
-  in6_addr_emulation ipv6mr_multiaddr;
-  unsigned int ipv6mr_interface;
+	in6_addr_emulation ipv6mr_multiaddr;
+	unsigned int ipv6mr_interface;
 };
 
 #if !defined(IN6ADDR_ANY_INIT)
@@ -97,14 +100,14 @@ struct ipv6_mreq_emulation
 
 struct addrinfo_emulation
 {
-  int ai_flags;
-  int ai_family;
-  int ai_socktype;
-  int ai_protocol;
-  size_t ai_addrlen;
-  char* ai_canonname;
-  sockaddr* ai_addr;
-  addrinfo_emulation* ai_next;
+	int ai_flags;
+	int ai_family;
+	int ai_socktype;
+	int ai_protocol;
+	size_t ai_addrlen;
+	char *ai_canonname;
+	sockaddr *ai_addr;
+	addrinfo_emulation *ai_next;
 };
 
 #if !defined(AI_PASSIVE)
@@ -203,120 +206,120 @@ struct addrinfo_emulation
 # define IPV6_LEAVE_GROUP 13
 #endif
 
-inline int IN6_IS_ADDR_UNSPECIFIED(const in6_addr_emulation* a)
+inline int IN6_IS_ADDR_UNSPECIFIED ( const in6_addr_emulation *a )
 {
-  return ((a->s6_addr[0] == 0)
-      && (a->s6_addr[1] == 0)
-      && (a->s6_addr[2] == 0)
-      && (a->s6_addr[3] == 0)
-      && (a->s6_addr[4] == 0)
-      && (a->s6_addr[5] == 0)
-      && (a->s6_addr[6] == 0)
-      && (a->s6_addr[7] == 0)
-      && (a->s6_addr[8] == 0)
-      && (a->s6_addr[9] == 0)
-      && (a->s6_addr[10] == 0)
-      && (a->s6_addr[11] == 0)
-      && (a->s6_addr[12] == 0)
-      && (a->s6_addr[13] == 0)
-      && (a->s6_addr[14] == 0)
-      && (a->s6_addr[15] == 0));
+	return ( ( a->s6_addr[0] == 0 )
+	         && ( a->s6_addr[1] == 0 )
+	         && ( a->s6_addr[2] == 0 )
+	         && ( a->s6_addr[3] == 0 )
+	         && ( a->s6_addr[4] == 0 )
+	         && ( a->s6_addr[5] == 0 )
+	         && ( a->s6_addr[6] == 0 )
+	         && ( a->s6_addr[7] == 0 )
+	         && ( a->s6_addr[8] == 0 )
+	         && ( a->s6_addr[9] == 0 )
+	         && ( a->s6_addr[10] == 0 )
+	         && ( a->s6_addr[11] == 0 )
+	         && ( a->s6_addr[12] == 0 )
+	         && ( a->s6_addr[13] == 0 )
+	         && ( a->s6_addr[14] == 0 )
+	         && ( a->s6_addr[15] == 0 ) );
 }
 
-inline int IN6_IS_ADDR_LOOPBACK(const in6_addr_emulation* a)
+inline int IN6_IS_ADDR_LOOPBACK ( const in6_addr_emulation *a )
 {
-  return ((a->s6_addr[0] == 0)
-      && (a->s6_addr[1] == 0)
-      && (a->s6_addr[2] == 0)
-      && (a->s6_addr[3] == 0)
-      && (a->s6_addr[4] == 0)
-      && (a->s6_addr[5] == 0)
-      && (a->s6_addr[6] == 0)
-      && (a->s6_addr[7] == 0)
-      && (a->s6_addr[8] == 0)
-      && (a->s6_addr[9] == 0)
-      && (a->s6_addr[10] == 0)
-      && (a->s6_addr[11] == 0)
-      && (a->s6_addr[12] == 0)
-      && (a->s6_addr[13] == 0)
-      && (a->s6_addr[14] == 0)
-      && (a->s6_addr[15] == 1));
+	return ( ( a->s6_addr[0] == 0 )
+	         && ( a->s6_addr[1] == 0 )
+	         && ( a->s6_addr[2] == 0 )
+	         && ( a->s6_addr[3] == 0 )
+	         && ( a->s6_addr[4] == 0 )
+	         && ( a->s6_addr[5] == 0 )
+	         && ( a->s6_addr[6] == 0 )
+	         && ( a->s6_addr[7] == 0 )
+	         && ( a->s6_addr[8] == 0 )
+	         && ( a->s6_addr[9] == 0 )
+	         && ( a->s6_addr[10] == 0 )
+	         && ( a->s6_addr[11] == 0 )
+	         && ( a->s6_addr[12] == 0 )
+	         && ( a->s6_addr[13] == 0 )
+	         && ( a->s6_addr[14] == 0 )
+	         && ( a->s6_addr[15] == 1 ) );
 }
 
-inline int IN6_IS_ADDR_MULTICAST(const in6_addr_emulation* a)
+inline int IN6_IS_ADDR_MULTICAST ( const in6_addr_emulation *a )
 {
-  return (a->s6_addr[0] == 0xff);
+	return ( a->s6_addr[0] == 0xff );
 }
 
-inline int IN6_IS_ADDR_LINKLOCAL(const in6_addr_emulation* a)
+inline int IN6_IS_ADDR_LINKLOCAL ( const in6_addr_emulation *a )
 {
-  return ((a->s6_addr[0] == 0xfe) && ((a->s6_addr[1] & 0xc0) == 0x80));
+	return ( ( a->s6_addr[0] == 0xfe ) && ( ( a->s6_addr[1] & 0xc0 ) == 0x80 ) );
 }
 
-inline int IN6_IS_ADDR_SITELOCAL(const in6_addr_emulation* a)
+inline int IN6_IS_ADDR_SITELOCAL ( const in6_addr_emulation *a )
 {
-  return ((a->s6_addr[0] == 0xfe) && ((a->s6_addr[1] & 0xc0) == 0xc0));
+	return ( ( a->s6_addr[0] == 0xfe ) && ( ( a->s6_addr[1] & 0xc0 ) == 0xc0 ) );
 }
 
-inline int IN6_IS_ADDR_V4MAPPED(const in6_addr_emulation* a)
+inline int IN6_IS_ADDR_V4MAPPED ( const in6_addr_emulation *a )
 {
-  return ((a->s6_addr[0] == 0)
-      && (a->s6_addr[1] == 0)
-      && (a->s6_addr[2] == 0)
-      && (a->s6_addr[3] == 0)
-      && (a->s6_addr[4] == 0)
-      && (a->s6_addr[5] == 0)
-      && (a->s6_addr[6] == 0)
-      && (a->s6_addr[7] == 0)
-      && (a->s6_addr[8] == 0)
-      && (a->s6_addr[9] == 0)
-      && (a->s6_addr[10] == 0xff)
-      && (a->s6_addr[11] == 0xff));
+	return ( ( a->s6_addr[0] == 0 )
+	         && ( a->s6_addr[1] == 0 )
+	         && ( a->s6_addr[2] == 0 )
+	         && ( a->s6_addr[3] == 0 )
+	         && ( a->s6_addr[4] == 0 )
+	         && ( a->s6_addr[5] == 0 )
+	         && ( a->s6_addr[6] == 0 )
+	         && ( a->s6_addr[7] == 0 )
+	         && ( a->s6_addr[8] == 0 )
+	         && ( a->s6_addr[9] == 0 )
+	         && ( a->s6_addr[10] == 0xff )
+	         && ( a->s6_addr[11] == 0xff ) );
 }
 
-inline int IN6_IS_ADDR_V4COMPAT(const in6_addr_emulation* a)
+inline int IN6_IS_ADDR_V4COMPAT ( const in6_addr_emulation *a )
 {
-  return ((a->s6_addr[0] == 0)
-      && (a->s6_addr[1] == 0)
-      && (a->s6_addr[2] == 0)
-      && (a->s6_addr[3] == 0)
-      && (a->s6_addr[4] == 0)
-      && (a->s6_addr[5] == 0)
-      && (a->s6_addr[6] == 0)
-      && (a->s6_addr[7] == 0)
-      && (a->s6_addr[8] == 0)
-      && (a->s6_addr[9] == 0)
-      && (a->s6_addr[10] == 0xff)
-      && (a->s6_addr[11] == 0xff)
-      && !((a->s6_addr[12] == 0)
-        && (a->s6_addr[13] == 0)
-        && (a->s6_addr[14] == 0)
-        && ((a->s6_addr[15] == 0) || (a->s6_addr[15] == 1))));
+	return ( ( a->s6_addr[0] == 0 )
+	         && ( a->s6_addr[1] == 0 )
+	         && ( a->s6_addr[2] == 0 )
+	         && ( a->s6_addr[3] == 0 )
+	         && ( a->s6_addr[4] == 0 )
+	         && ( a->s6_addr[5] == 0 )
+	         && ( a->s6_addr[6] == 0 )
+	         && ( a->s6_addr[7] == 0 )
+	         && ( a->s6_addr[8] == 0 )
+	         && ( a->s6_addr[9] == 0 )
+	         && ( a->s6_addr[10] == 0xff )
+	         && ( a->s6_addr[11] == 0xff )
+	         && ! ( ( a->s6_addr[12] == 0 )
+	                && ( a->s6_addr[13] == 0 )
+	                && ( a->s6_addr[14] == 0 )
+	                && ( ( a->s6_addr[15] == 0 ) || ( a->s6_addr[15] == 1 ) ) ) );
 }
 
-inline int IN6_IS_ADDR_MC_NODELOCAL(const in6_addr_emulation* a)
+inline int IN6_IS_ADDR_MC_NODELOCAL ( const in6_addr_emulation *a )
 {
-  return IN6_IS_ADDR_MULTICAST(a) && ((a->s6_addr[1] & 0xf) == 1);
+	return IN6_IS_ADDR_MULTICAST ( a ) && ( ( a->s6_addr[1] & 0xf ) == 1 );
 }
 
-inline int IN6_IS_ADDR_MC_LINKLOCAL(const in6_addr_emulation* a)
+inline int IN6_IS_ADDR_MC_LINKLOCAL ( const in6_addr_emulation *a )
 {
-  return IN6_IS_ADDR_MULTICAST(a) && ((a->s6_addr[1] & 0xf) == 2);
+	return IN6_IS_ADDR_MULTICAST ( a ) && ( ( a->s6_addr[1] & 0xf ) == 2 );
 }
 
-inline int IN6_IS_ADDR_MC_SITELOCAL(const in6_addr_emulation* a)
+inline int IN6_IS_ADDR_MC_SITELOCAL ( const in6_addr_emulation *a )
 {
-  return IN6_IS_ADDR_MULTICAST(a) && ((a->s6_addr[1] & 0xf) == 5);
+	return IN6_IS_ADDR_MULTICAST ( a ) && ( ( a->s6_addr[1] & 0xf ) == 5 );
 }
 
-inline int IN6_IS_ADDR_MC_ORGLOCAL(const in6_addr_emulation* a)
+inline int IN6_IS_ADDR_MC_ORGLOCAL ( const in6_addr_emulation *a )
 {
-  return IN6_IS_ADDR_MULTICAST(a) && ((a->s6_addr[1] & 0xf) == 8);
+	return IN6_IS_ADDR_MULTICAST ( a ) && ( ( a->s6_addr[1] & 0xf ) == 8 );
 }
 
-inline int IN6_IS_ADDR_MC_GLOBAL(const in6_addr_emulation* a)
+inline int IN6_IS_ADDR_MC_GLOBAL ( const in6_addr_emulation *a )
 {
-  return IN6_IS_ADDR_MULTICAST(a) && ((a->s6_addr[1] & 0xf) == 0xe);
+	return IN6_IS_ADDR_MULTICAST ( a ) && ( ( a->s6_addr[1] & 0xf ) == 0xe );
 }
 
 } // namespace detail

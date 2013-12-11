@@ -24,19 +24,22 @@
 #include <boost/asio/buffered_stream_fwd.hpp>
 #include <boost/asio/buffered_write_stream_fwd.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
-namespace detail {
+namespace detail
+{
 
 template <typename Stream>
-char is_write_buffered_helper(buffered_stream<Stream>* s);
+char is_write_buffered_helper ( buffered_stream<Stream> *s );
 
 template <typename Stream>
-char is_write_buffered_helper(buffered_write_stream<Stream>* s);
+char is_write_buffered_helper ( buffered_write_stream<Stream> *s );
 
 struct is_write_buffered_big_type { char data[10]; };
-is_write_buffered_big_type is_write_buffered_helper(...);
+is_write_buffered_big_type is_write_buffered_helper ( ... );
 
 } // namespace detail
 
@@ -47,12 +50,12 @@ class is_write_buffered
 {
 public:
 #if defined(GENERATING_DOCUMENTATION)
-  /// The value member is true only if the Stream type supports buffering of
-  /// written data.
-  static const bool value;
+	/// The value member is true only if the Stream type supports buffering of
+	/// written data.
+	static const bool value;
 #else
-  BOOST_STATIC_CONSTANT(bool,
-      value = sizeof(detail::is_write_buffered_helper((Stream*)0)) == 1);
+	BOOST_STATIC_CONSTANT ( bool,
+	                        value = sizeof ( detail::is_write_buffered_helper ( ( Stream * ) 0 ) ) == 1 );
 #endif
 };
 

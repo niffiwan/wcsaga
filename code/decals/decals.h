@@ -20,14 +20,14 @@
 #define QUICKFIND_SEGMENT_LENGTH (MAX_GLOBAL_DECAL_POLYS/QUICKFIND_SUBDIVISION)
 #define MAX_GLOBAL_DECALS 5000
 
-#define DP_EOF 			0
-#define DP_DEFPOINTS 	1
-#define DP_FLATPOLY		2
-#define DP_TMAPPOLY		3
-#define DP_SORTNORM		4
-#define DP_BOUNDBOX		5
+#define DP_EOF          0
+#define DP_DEFPOINTS    1
+#define DP_FLATPOLY     2
+#define DP_TMAPPOLY     3
+#define DP_SORTNORM     4
+#define DP_BOUNDBOX     5
 
-#endif	// ENABLE_DECALS
+#endif  // ENABLE_DECALS
 
 struct decal;
 struct decal_list;
@@ -37,28 +37,28 @@ struct decal_poly
 {
 	vec3d norm[3];
 	vertex point[3];
-	decal_poly* next;
-	decal* parent;
+	decal_poly *next;
+	decal *parent;
 	int idx;
 };
 
 struct decal
 {
 	int n_poly;
-	int timestamp;	//when this decal was created
-	int burn_time;	//how long it takes for the glow texture to fade
-	int vertex_buffer_start;	//were is the start of this decal's polys in the vertex buffer
-	decal_poly* poly;
-	decal_poly* add_poly();
-	decal_poly* get_last_poly();
+	int timestamp;  //when this decal was created
+	int burn_time;  //how long it takes for the glow texture to fade
+	int vertex_buffer_start;    //were is the start of this decal's polys in the vertex buffer
+	decal_poly *poly;
+	decal_poly *add_poly();
+	decal_poly *get_last_poly();
 	void remove_last_poly();
-	decal_list_controle* parent;
+	decal_list_controle *parent;
 };
 
 struct decal_list
 {
 	decal dec;
-	decal_list* next;
+	decal_list *next;
 };
 
 struct decal_item
@@ -76,9 +76,9 @@ struct decal_list_controle
 	int burn_texture;
 	int glow_texture;
 	bool modifyed;
-	decal_list* d_list;
-	decal_list* end;
-	decal_list* add_new();
+	decal_list *d_list;
+	decal_list *end;
+	decal_list *add_new();
 	void trim();
 	void clear();
 	~decal_list_controle();
@@ -87,14 +87,14 @@ struct decal_list_controle
 
 struct decal_system
 {
-	decal_list_controle* decals;
+	decal_list_controle *decals;
 	int n_decal_textures;
 	bool decals_modified;
 	int max_decals;
 	decal_system()
-		: decals(NULL),
-		  n_decal_textures(0),
-		  decals_modified(false) {};
+		: decals ( NULL ),
+		  n_decal_textures ( 0 ),
+		  decals_modified ( false ) {};
 };
 
 
@@ -109,22 +109,22 @@ struct decal_point
 
 #ifdef ENABLE_DECALS
 
-int decal_create(object * obj, decal_point *point, int subobject, int texture, int backfaced_texture = -1, int glow_texture = -1, int burn_texture = -1, int burn_time = 1000);//makes the decal
+int decal_create ( object *obj, decal_point *point, int subobject, int texture, int backfaced_texture = -1, int glow_texture = -1, int burn_texture = -1, int burn_time = 1000 ); //makes the decal
 
-int decal_create_simple(object * obj, decal_point *point, int texture);//makes a simple non-clipped decal
+int decal_create_simple ( object *obj, decal_point *point, int texture ); //makes a simple non-clipped decal
 
-void decal_render_all(object * obj);	//renders all decals
+void decal_render_all ( object *obj );  //renders all decals
 
-int decal_create_sub(void *model_ptr);
+int decal_create_sub ( void *model_ptr );
 
-void clear_decals(decal_system	*system);
+void clear_decals ( decal_system  *system );
 
 void init_decals();
 
 #else // ENABLE_DECALS
 
-inline int decal_create(object* obj, decal_point* point, int subobject, int texture, int backfaced_texture = -1,
-						int glow_texture = -1, int burn_texture = -1, int burn_time = 1000)
+inline int decal_create ( object *obj, decal_point *point, int subobject, int texture, int backfaced_texture = -1,
+                          int glow_texture = -1, int burn_texture = -1, int burn_time = 1000 )
 {
 	return 0;
 }

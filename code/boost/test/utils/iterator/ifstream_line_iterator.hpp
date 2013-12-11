@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2004-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -9,7 +9,7 @@
 //
 //  Version     : $Revision: 49312 $
 //
-//  Description : 
+//  Description :
 // ***************************************************************************
 
 #ifndef BOOST_IFSTREAM_LINE_ITERATOR_HPP_071894GER
@@ -25,42 +25,46 @@
 
 //____________________________________________________________________________//
 
-namespace boost {
+namespace boost
+{
 
-namespace unit_test {
+namespace unit_test
+{
 
-namespace ut_detail {
+namespace ut_detail
+{
 
 // ************************************************************************** //
 // **************                ifstream_holder               ************** //
 // ************************************************************************** //
 
 template<typename CharT>
-class ifstream_holder {
+class ifstream_holder
+{
 public:
-    // Constructor
-    explicit    ifstream_holder( basic_cstring<CharT const> file_name )
-    {
-        if( file_name.is_empty() )
-            return;
+	// Constructor
+	explicit    ifstream_holder ( basic_cstring<CharT const> file_name )
+	{
+		if ( file_name.is_empty() )
+			return;
 
-        m_stream.open( file_name.begin(), std::ios::in );
-    }
+		m_stream.open ( file_name.begin(), std::ios::in );
+	}
 
-    bool is_valid()
-    {
-        return m_stream.is_open();
-    }
+	bool is_valid()
+	{
+		return m_stream.is_open();
+	}
 
 protected:
 #ifdef BOOST_CLASSIC_IOSTREAMS
-    typedef std::ifstream                                       stream_t;
+	typedef std::ifstream                                       stream_t;
 #else
-    typedef std::basic_ifstream<CharT,std::char_traits<CharT> > stream_t;
+	typedef std::basic_ifstream<CharT, std::char_traits<CharT> > stream_t;
 #endif
 
-    // Data members
-    stream_t    m_stream;
+	// Data members
+	stream_t    m_stream;
 };
 
 } // namespace ut_detail
@@ -78,11 +82,11 @@ template<typename CharT>
 class basic_ifstream_line_iterator : ut_detail::ifstream_holder<CharT>, public basic_istream_line_iterator<CharT>
 {
 public:
-    basic_ifstream_line_iterator( basic_cstring<CharT const> file_name, CharT delimeter )
-    : ut_detail::ifstream_holder<CharT>( file_name ), basic_istream_line_iterator<CharT>( this->m_stream, delimeter ) {}
+	basic_ifstream_line_iterator ( basic_cstring<CharT const> file_name, CharT delimeter )
+		: ut_detail::ifstream_holder<CharT> ( file_name ), basic_istream_line_iterator<CharT> ( this->m_stream, delimeter ) {}
 
-    explicit basic_ifstream_line_iterator( basic_cstring<CharT const> file_name = basic_cstring<CharT const>() )
-    : ut_detail::ifstream_holder<CharT>( file_name ), basic_istream_line_iterator<CharT>( this->m_stream ) {}
+	explicit basic_ifstream_line_iterator ( basic_cstring<CharT const> file_name = basic_cstring<CharT const>() )
+		: ut_detail::ifstream_holder<CharT> ( file_name ), basic_istream_line_iterator<CharT> ( this->m_stream ) {}
 };
 
 #ifdef BOOST_MSVC

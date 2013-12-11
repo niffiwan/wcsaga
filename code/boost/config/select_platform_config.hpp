@@ -1,9 +1,9 @@
 //  Boost compiler configuration selection header file
 
-//  (C) Copyright John Maddock 2001 - 2002. 
-//  (C) Copyright Jens Maurer 2001. 
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  (C) Copyright John Maddock 2001 - 2002.
+//  (C) Copyright Jens Maurer 2001.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
@@ -13,7 +13,7 @@
 // <header_name> in order to prevent macro expansion within the header
 // name (for example "linux" is a macro on linux systems).
 
-#if defined(linux) || defined(__linux) || defined(__linux__) || defined(__GNU__) || defined(__GLIBC__) 
+#if defined(linux) || defined(__linux) || defined(__linux__) || defined(__GNU__) || defined(__GLIBC__)
 // linux, also other platforms (Hurd etc) that use GLIBC, should these really have their own config headers though?
 #  define BOOST_PLATFORM_CONFIG "boost/config/platform/linux.hpp"
 
@@ -72,7 +72,7 @@
       || defined(_XOPEN_SOURCE) \
       || defined(_POSIX_SOURCE)
 
-   // generic unix platform:
+// generic unix platform:
 
 #  ifndef BOOST_HAS_UNISTD_H
 #     define BOOST_HAS_UNISTD_H
@@ -83,8 +83,8 @@
 #  endif
 
 #  if defined (BOOST_ASSERT_CONFIG)
-      // this must come last - generate an error if we don't
-      // recognise the platform:
+// this must come last - generate an error if we don't
+// recognise the platform:
 #     error "Unknown platform - please configure and report the results to boost.org"
 #  endif
 

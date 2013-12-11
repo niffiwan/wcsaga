@@ -11,7 +11,12 @@
 # include <boost/python/converter/pyobject_type.hpp>
 # include <boost/python/errors.hpp>
 
-namespace boost { namespace python { namespace converter { 
+namespace boost
+{
+namespace python
+{
+namespace converter
+{
 
 // Provide a forward declaration as a convenience for clients, who all
 // need it.
@@ -20,23 +25,25 @@ template <class T> struct object_manager_traits;
 // Derive specializations of object_manager_traits from this class
 // when T is an object manager for a particular Python type hierarchy.
 //
-template <PyTypeObject* pytype, class T>
+template <PyTypeObject *pytype, class T>
 struct pytype_object_manager_traits
-    : pyobject_type<T, pytype> // provides check()
+		: pyobject_type<T, pytype> // provides check()
 {
-    BOOST_STATIC_CONSTANT(bool, is_specialized = true);
-    static inline python::detail::new_reference adopt(PyObject*);
+	BOOST_STATIC_CONSTANT ( bool, is_specialized = true );
+	static inline python::detail::new_reference adopt ( PyObject * );
 };
 
 //
 // implementations
 //
-template <PyTypeObject* pytype, class T>
-inline python::detail::new_reference pytype_object_manager_traits<pytype,T>::adopt(PyObject* x)
+template <PyTypeObject *pytype, class T>
+inline python::detail::new_reference pytype_object_manager_traits<pytype, T>::adopt ( PyObject *x )
 {
-    return python::detail::new_reference(python::pytype_check(pytype, x));
+	return python::detail::new_reference ( python::pytype_check ( pytype, x ) );
 }
 
-}}} // namespace boost::python::converter
+}
+}
+} // namespace boost::python::converter
 
 #endif // PYTYPE_OBJECT_MANAGER_TRAITS_DWA2002716_HPP

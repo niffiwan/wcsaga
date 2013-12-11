@@ -27,30 +27,30 @@ namespace boost
 
 template< int I > struct arg
 {
-    arg()
-    {
-    }
+	arg()
+	{
+	}
 
-    template< class T > arg( T const & /* t */ )
-    {
-        // static assert I == is_placeholder<T>::value
-        typedef char T_must_be_placeholder[ I == is_placeholder<T>::value? 1: -1 ];
-    }
+	template< class T > arg ( T const & /* t */ )
+	{
+		// static assert I == is_placeholder<T>::value
+		typedef char T_must_be_placeholder[ I == is_placeholder<T>::value ? 1 : -1 ];
+	}
 };
 
-template< int I > bool operator==( arg<I> const &, arg<I> const & )
+template< int I > bool operator== ( arg<I> const &, arg<I> const & )
 {
-    return true;
+	return true;
 }
 
 #if !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
 
 template< int I > struct is_placeholder< arg<I> >
 {
-    enum _vt { value = I };
+	enum _vt { value = I };
 };
 
-template< int I > struct is_placeholder< arg<I> (*) () >
+template< int I > struct is_placeholder< arg<I> ( * ) () >
 {
     enum _vt { value = I };
 };

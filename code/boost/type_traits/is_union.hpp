@@ -1,6 +1,6 @@
 
 //  (C) Copyright Dave Abrahams, Steve Cleary, Beman Dawes, Howard
-//  Hinnant & John Maddock 2000.  
+//  Hinnant & John Maddock 2000.
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -18,14 +18,16 @@
 // should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace detail {
+namespace detail
+{
 #ifndef __GNUC__
 template <typename T> struct is_union_impl
 {
-   typedef typename remove_cv<T>::type cvt;
-   BOOST_STATIC_CONSTANT(bool, value = BOOST_IS_UNION(cvt));
+	typedef typename remove_cv<T>::type cvt;
+	BOOST_STATIC_CONSTANT ( bool, value = BOOST_IS_UNION ( cvt ) );
 };
 #else
 //
@@ -35,12 +37,12 @@ template <typename T> struct is_union_impl
 //
 template <typename T> struct is_union_impl
 {
-   BOOST_STATIC_CONSTANT(bool, value = BOOST_IS_UNION(T));
+	BOOST_STATIC_CONSTANT ( bool, value = BOOST_IS_UNION ( T ) );
 };
 #endif
 } // namespace detail
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_union,T,::boost::detail::is_union_impl<T>::value)
+BOOST_TT_AUX_BOOL_TRAIT_DEF1 ( is_union, T, ::boost::detail::is_union_impl<T>::value )
 
 } // namespace boost
 

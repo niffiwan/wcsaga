@@ -28,57 +28,60 @@
 #include <boost/interprocess/detail/atomic.hpp>
 #include <typeinfo>
 
-namespace boost {
+namespace boost
+{
 
-namespace interprocess {
+namespace interprocess
+{
 
-namespace detail {
+namespace detail
+{
 
 class sp_counted_base
 {
 private:
 
-    sp_counted_base( sp_counted_base const & );
-    sp_counted_base & operator= ( sp_counted_base const & );
+	sp_counted_base ( sp_counted_base const & );
+	sp_counted_base &operator= ( sp_counted_base const & );
 
-    boost::uint32_t use_count_;        // #shared
-    boost::uint32_t weak_count_;       // #weak + (#shared != 0)
+	boost::uint32_t use_count_;        // #shared
+	boost::uint32_t weak_count_;       // #weak + (#shared != 0)
 
 public:
 
-    sp_counted_base(): use_count_( 1 ), weak_count_( 1 )
-    {}
+	sp_counted_base() : use_count_ ( 1 ), weak_count_ ( 1 )
+	{}
 
-    ~sp_counted_base() // nothrow
-    {}
+	~sp_counted_base() // nothrow
+	{}
 
-    void add_ref_copy()
-    {
-        detail::atomic_inc32( &use_count_ );
-    }
+	void add_ref_copy()
+	{
+		detail::atomic_inc32 ( &use_count_ );
+	}
 
-    bool add_ref_lock() // true on success
-    {
-        for( ;; )
-        {
-            boost::uint32_t tmp = static_cast< boost::uint32_t const volatile& >( use_count_ );
-            if( tmp == 0 ) return false;
-            if( detail::atomic_cas32( &use_count_, tmp + 1, tmp ) == tmp )
-               return true;
-        }
-    }
+	bool add_ref_lock() // true on success
+	{
+		for ( ;; )
+		{
+			boost::uint32_t tmp = static_cast< boost::uint32_t const volatile & > ( use_count_ );
+			if ( tmp == 0 ) return false;
+			if ( detail::atomic_cas32 ( &use_count_, tmp + 1, tmp ) == tmp )
+				return true;
+		}
+	}
 
-   bool ref_release() // nothrow
-   { return 1 == detail::atomic_dec32( &use_count_ );  }
+	bool ref_release() // nothrow
+	{ return 1 == detail::atomic_dec32 ( &use_count_ );  }
 
-   void weak_add_ref() // nothrow
-   { detail::atomic_inc32( &weak_count_ ); }
+	void weak_add_ref() // nothrow
+	{ detail::atomic_inc32 ( &weak_count_ ); }
 
-   bool weak_release() // nothrow
-   { return 1 == detail::atomic_dec32( &weak_count_ ); }
+	bool weak_release() // nothrow
+	{ return 1 == detail::atomic_dec32 ( &weak_count_ ); }
 
-   long use_count() const // nothrow
-   { return (long)static_cast<boost::uint32_t const volatile &>( use_count_ ); }
+	long use_count() const // nothrow
+	{ return ( long ) static_cast<boost::uint32_t const volatile &> ( use_count_ ); }
 };
 
 } // namespace detail

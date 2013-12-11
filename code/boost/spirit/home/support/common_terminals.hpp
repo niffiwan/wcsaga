@@ -19,79 +19,82 @@
 #include <boost/spirit/home/support/char_encoding/iso8859_1.hpp>
 #include <boost/spirit/home/support/char_class.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    // Our basic terminals
-    BOOST_SPIRIT_DEFINE_TERMINALS(
-        ( verbatim )
-        ( lexeme )
-        ( omit )
-        ( raw )
-        ( inf )
-        ( eol )
-        ( eoi )
-        ( buffer )
-        ( true_ )
-        ( false_ )
-        ( matches )
-    )
+namespace spirit
+{
+// Our basic terminals
+BOOST_SPIRIT_DEFINE_TERMINALS (
+    ( verbatim )
+    ( lexeme )
+    ( omit )
+    ( raw )
+    ( inf )
+    ( eol )
+    ( eoi )
+    ( buffer )
+    ( true_ )
+    ( false_ )
+    ( matches )
+)
 
-    // Here we are reusing proto::lit
-    using proto::lit;
+// Here we are reusing proto::lit
+using proto::lit;
 
-    // Our extended terminals
-    BOOST_SPIRIT_DEFINE_TERMINALS_EX(
-        ( bin )
-        ( oct )
-        ( hex )
-        ( bool_ )
-        ( ushort_ )
-        ( ulong_ )
-        ( uint_ )
-        ( short_ )
-        ( long_ )
-        ( int_ )
-        ( ulong_long )
-        ( long_long )
-        ( float_ )
-        ( double_ )
-        ( long_double )
-        ( repeat )
-        ( eps )
-        ( pad )
-        ( byte_ )
-        ( word )
-        ( big_word )
-        ( little_word )
-        ( dword )
-        ( big_dword )
-        ( little_dword )
-        ( qword )
-        ( big_qword )
-        ( little_qword )
-        ( skip )
-        ( delimit )
-        ( stream )
-        ( wstream )
-        ( left_align )
-        ( right_align )
-        ( center )
-        ( maxwidth )
-        ( set_state )
-        ( in_state )
-        ( token )
-        ( attr )
-        ( columns )
-        ( auto_ )
-    )
+// Our extended terminals
+BOOST_SPIRIT_DEFINE_TERMINALS_EX (
+    ( bin )
+    ( oct )
+    ( hex )
+    ( bool_ )
+    ( ushort_ )
+    ( ulong_ )
+    ( uint_ )
+    ( short_ )
+    ( long_ )
+    ( int_ )
+    ( ulong_long )
+    ( long_long )
+    ( float_ )
+    ( double_ )
+    ( long_double )
+    ( repeat )
+    ( eps )
+    ( pad )
+    ( byte_ )
+    ( word )
+    ( big_word )
+    ( little_word )
+    ( dword )
+    ( big_dword )
+    ( little_dword )
+    ( qword )
+    ( big_qword )
+    ( little_qword )
+    ( skip )
+    ( delimit )
+    ( stream )
+    ( wstream )
+    ( left_align )
+    ( right_align )
+    ( center )
+    ( maxwidth )
+    ( set_state )
+    ( in_state )
+    ( token )
+    ( attr )
+    ( columns )
+    ( auto_ )
+)
 
-    // special tags (used mainly for stateful tag types)
-    namespace tag 
-    { 
-        struct attr_cast {}; 
-    }
+// special tags (used mainly for stateful tag types)
+namespace tag
+{
+struct attr_cast {};
+}
 
-}}
+}
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Here we place the character-set sensitive placeholders. We have one set
@@ -152,9 +155,9 @@ namespace boost { namespace spirit
     }}}                                                                         \
     /***/
 
-BOOST_SPIRIT_DEFINE_CHAR_CODES(ascii)
-BOOST_SPIRIT_DEFINE_CHAR_CODES(iso8859_1)
-BOOST_SPIRIT_DEFINE_CHAR_CODES(standard)
-BOOST_SPIRIT_DEFINE_CHAR_CODES(standard_wide)
+BOOST_SPIRIT_DEFINE_CHAR_CODES ( ascii )
+BOOST_SPIRIT_DEFINE_CHAR_CODES ( iso8859_1 )
+BOOST_SPIRIT_DEFINE_CHAR_CODES ( standard )
+BOOST_SPIRIT_DEFINE_CHAR_CODES ( standard_wide )
 
 #endif

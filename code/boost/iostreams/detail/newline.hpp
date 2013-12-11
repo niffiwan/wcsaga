@@ -12,21 +12,30 @@
 # pragma once
 #endif
 
-namespace boost { namespace iostreams { namespace detail {
+namespace boost
+{
+namespace iostreams
+{
+namespace detail
+{
 
 template<typename Ch>
 struct newline;
 
 template<>
-struct newline<char> {
-    BOOST_STATIC_CONSTANT(char, value = '\n');
+struct newline<char>
+{
+	BOOST_STATIC_CONSTANT ( char, value = '\n' );
 };
 
 template<>
-struct newline<wchar_t> {
-    BOOST_STATIC_CONSTANT(wchar_t, value = L'\n');
+struct newline<wchar_t>
+{
+	BOOST_STATIC_CONSTANT ( wchar_t, value = L'\n' );
 };
 
-} } } // End namespaces detaill, iostreams, boost.
+}
+}
+} // End namespaces detaill, iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_NEWLINE_HPP_INCLUDED

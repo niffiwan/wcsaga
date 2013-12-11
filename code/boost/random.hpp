@@ -14,10 +14,10 @@
  *  2000-02-21  shuffle_output, inversive_congruential_schrage,
  *              generator_iterator, uniform_smallint
  *  2000-02-23  generic modulus arithmetic helper, removed *_schrage classes,
- *              implemented Streamable and EqualityComparable concepts for 
+ *              implemented Streamable and EqualityComparable concepts for
  *              generators, added Bernoulli distribution and Box-Muller
  *              transform
- *  2000-03-01  cauchy, lognormal, triangle distributions; fixed 
+ *  2000-03-01  cauchy, lognormal, triangle distributions; fixed
  *              uniform_smallint; renamed gaussian to normal distribution
  *  2000-03-05  implemented iterator syntax for distribution functions
  *  2000-04-21  removed some optimizations for better BCC/MSVC compatibility
@@ -46,10 +46,11 @@
 #include <boost/random/subtract_with_carry.hpp>
 #include <boost/random/variate_generator.hpp>
 
-namespace boost {
-  typedef random::xor_combine<random::xor_combine<random::linear_feedback_shift<uint32_t, 32, 31, 13, 12, 0>, 0,
-    random::linear_feedback_shift<uint32_t, 32, 29, 2, 4, 0>, 0, 0>, 0,
-                      random::linear_feedback_shift<uint32_t, 32, 28, 3, 17, 0>, 0, 0> taus88;
+namespace boost
+{
+typedef random::xor_combine<random::xor_combine<random::linear_feedback_shift<uint32_t, 32, 31, 13, 12, 0>, 0,
+        random::linear_feedback_shift<uint32_t, 32, 29, 2, 4, 0>, 0, 0>, 0,
+        random::linear_feedback_shift<uint32_t, 32, 28, 3, 17, 0>, 0, 0> taus88;
 } // namespace  boost
 
 // misc

@@ -29,200 +29,204 @@
 #ifndef BOOST_MATH_STD_REAL_CONCEPT_HPP
 #define BOOST_MATH_STD_REAL_CONCEPT_HPP
 
-namespace boost{ namespace math{
+namespace boost
+{
+namespace math
+{
 
 namespace concepts
 {
 
 #ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   typedef double std_real_concept_base_type;
+typedef double std_real_concept_base_type;
 #else
-   typedef long double std_real_concept_base_type;
+typedef long double std_real_concept_base_type;
 #endif
 
 class std_real_concept
 {
 public:
-   // Constructors:
-   std_real_concept() : m_value(0){}
-   std_real_concept(char c) : m_value(c){}
+	// Constructors:
+	std_real_concept() : m_value ( 0 ) {}
+	std_real_concept ( char c ) : m_value ( c ) {}
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-   std_real_concept(wchar_t c) : m_value(c){}
+	std_real_concept ( wchar_t c ) : m_value ( c ) {}
 #endif
-   std_real_concept(unsigned char c) : m_value(c){}
-   std_real_concept(signed char c) : m_value(c){}
-   std_real_concept(unsigned short c) : m_value(c){}
-   std_real_concept(short c) : m_value(c){}
-   std_real_concept(unsigned int c) : m_value(c){}
-   std_real_concept(int c) : m_value(c){}
-   std_real_concept(unsigned long c) : m_value(c){}
-   std_real_concept(long c) : m_value(c){}
+	std_real_concept ( unsigned char c ) : m_value ( c ) {}
+	std_real_concept ( signed char c ) : m_value ( c ) {}
+	std_real_concept ( unsigned short c ) : m_value ( c ) {}
+	std_real_concept ( short c ) : m_value ( c ) {}
+	std_real_concept ( unsigned int c ) : m_value ( c ) {}
+	std_real_concept ( int c ) : m_value ( c ) {}
+	std_real_concept ( unsigned long c ) : m_value ( c ) {}
+	std_real_concept ( long c ) : m_value ( c ) {}
 #if defined(__DECCXX) || defined(__SUNPRO_CC)
-   std_real_concept(unsigned long long c) : m_value(static_cast<std_real_concept_base_type>(c)){}
-   std_real_concept(long long c) : m_value(static_cast<std_real_concept_base_type>(c)){}
+	std_real_concept ( unsigned long long c ) : m_value ( static_cast<std_real_concept_base_type> ( c ) ) {}
+	std_real_concept ( long long c ) : m_value ( static_cast<std_real_concept_base_type> ( c ) ) {}
 #elif defined(BOOST_HAS_LONG_LONG)
-   std_real_concept(boost::ulong_long_type c) : m_value(static_cast<std_real_concept_base_type>(c)){}
-   std_real_concept(boost::long_long_type c) : m_value(static_cast<std_real_concept_base_type>(c)){}
+	std_real_concept ( boost::ulong_long_type c ) : m_value ( static_cast<std_real_concept_base_type> ( c ) ) {}
+	std_real_concept ( boost::long_long_type c ) : m_value ( static_cast<std_real_concept_base_type> ( c ) ) {}
 #endif
-   std_real_concept(float c) : m_value(c){}
-   std_real_concept(double c) : m_value(c){}
-   std_real_concept(long double c) : m_value(c){}
+	std_real_concept ( float c ) : m_value ( c ) {}
+	std_real_concept ( double c ) : m_value ( c ) {}
+	std_real_concept ( long double c ) : m_value ( c ) {}
 
-   // Assignment:
-   std_real_concept& operator=(char c) { m_value = c; return *this; }
-   std_real_concept& operator=(unsigned char c) { m_value = c; return *this; }
-   std_real_concept& operator=(signed char c) { m_value = c; return *this; }
+	// Assignment:
+	std_real_concept &operator= ( char c ) { m_value = c; return *this; }
+	std_real_concept &operator= ( unsigned char c ) { m_value = c; return *this; }
+	std_real_concept &operator= ( signed char c ) { m_value = c; return *this; }
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-   std_real_concept& operator=(wchar_t c) { m_value = c; return *this; }
+	std_real_concept &operator= ( wchar_t c ) { m_value = c; return *this; }
 #endif
-   std_real_concept& operator=(short c) { m_value = c; return *this; }
-   std_real_concept& operator=(unsigned short c) { m_value = c; return *this; }
-   std_real_concept& operator=(int c) { m_value = c; return *this; }
-   std_real_concept& operator=(unsigned int c) { m_value = c; return *this; }
-   std_real_concept& operator=(long c) { m_value = c; return *this; }
-   std_real_concept& operator=(unsigned long c) { m_value = c; return *this; }
+	std_real_concept &operator= ( short c ) { m_value = c; return *this; }
+	std_real_concept &operator= ( unsigned short c ) { m_value = c; return *this; }
+	std_real_concept &operator= ( int c ) { m_value = c; return *this; }
+	std_real_concept &operator= ( unsigned int c ) { m_value = c; return *this; }
+	std_real_concept &operator= ( long c ) { m_value = c; return *this; }
+	std_real_concept &operator= ( unsigned long c ) { m_value = c; return *this; }
 #if defined(__DECCXX) || defined(__SUNPRO_CC)
-   std_real_concept& operator=(unsigned long long c) { m_value = static_cast<std_real_concept_base_type>(c); return *this; }
-   std_real_concept& operator=(long long c) { m_value = static_cast<std_real_concept_base_type>(c); return *this; }
+	std_real_concept &operator= ( unsigned long long c ) { m_value = static_cast<std_real_concept_base_type> ( c ); return *this; }
+	std_real_concept &operator= ( long long c ) { m_value = static_cast<std_real_concept_base_type> ( c ); return *this; }
 #elif defined(BOOST_HAS_LONG_LONG)
-   std_real_concept& operator=(boost::long_long_type c) { m_value = static_cast<std_real_concept_base_type>(c); return *this; }
-   std_real_concept& operator=(boost::ulong_long_type c) { m_value = static_cast<std_real_concept_base_type>(c); return *this; }
+	std_real_concept &operator= ( boost::long_long_type c ) { m_value = static_cast<std_real_concept_base_type> ( c ); return *this; }
+	std_real_concept &operator= ( boost::ulong_long_type c ) { m_value = static_cast<std_real_concept_base_type> ( c ); return *this; }
 #endif
-   std_real_concept& operator=(float c) { m_value = c; return *this; }
-   std_real_concept& operator=(double c) { m_value = c; return *this; }
-   std_real_concept& operator=(long double c) { m_value = c; return *this; }
+	std_real_concept &operator= ( float c ) { m_value = c; return *this; }
+	std_real_concept &operator= ( double c ) { m_value = c; return *this; }
+	std_real_concept &operator= ( long double c ) { m_value = c; return *this; }
 
-   // Access:
-   std_real_concept_base_type value()const{ return m_value; }
+	// Access:
+	std_real_concept_base_type value() const { return m_value; }
 
-   // Member arithmetic:
-   std_real_concept& operator+=(const std_real_concept& other)
-   { m_value += other.value(); return *this; }
-   std_real_concept& operator-=(const std_real_concept& other)
-   { m_value -= other.value(); return *this; }
-   std_real_concept& operator*=(const std_real_concept& other)
-   { m_value *= other.value(); return *this; }
-   std_real_concept& operator/=(const std_real_concept& other)
-   { m_value /= other.value(); return *this; }
-   std_real_concept operator-()const
-   { return -m_value; }
-   std_real_concept const& operator+()const
-   { return *this; }
+	// Member arithmetic:
+	std_real_concept &operator+= ( const std_real_concept &other )
+	{ m_value += other.value(); return *this; }
+	std_real_concept &operator-= ( const std_real_concept &other )
+	{ m_value -= other.value(); return *this; }
+	std_real_concept &operator*= ( const std_real_concept &other )
+	{ m_value *= other.value(); return *this; }
+	std_real_concept &operator/= ( const std_real_concept &other )
+	{ m_value /= other.value(); return *this; }
+	std_real_concept operator-() const
+	{ return -m_value; }
+	std_real_concept const &operator+() const
+	{ return *this; }
 
 private:
-   std_real_concept_base_type m_value;
+	std_real_concept_base_type m_value;
 };
 
 // Non-member arithmetic:
-inline std_real_concept operator+(const std_real_concept& a, const std_real_concept& b)
+inline std_real_concept operator+ ( const std_real_concept &a, const std_real_concept &b )
 {
-   std_real_concept result(a);
-   result += b;
-   return result;
+	std_real_concept result ( a );
+	result += b;
+	return result;
 }
-inline std_real_concept operator-(const std_real_concept& a, const std_real_concept& b)
+inline std_real_concept operator- ( const std_real_concept &a, const std_real_concept &b )
 {
-   std_real_concept result(a);
-   result -= b;
-   return result;
+	std_real_concept result ( a );
+	result -= b;
+	return result;
 }
-inline std_real_concept operator*(const std_real_concept& a, const std_real_concept& b)
+inline std_real_concept operator* ( const std_real_concept &a, const std_real_concept &b )
 {
-   std_real_concept result(a);
-   result *= b;
-   return result;
+	std_real_concept result ( a );
+	result *= b;
+	return result;
 }
-inline std_real_concept operator/(const std_real_concept& a, const std_real_concept& b)
+inline std_real_concept operator/ ( const std_real_concept &a, const std_real_concept &b )
 {
-   std_real_concept result(a);
-   result /= b;
-   return result;
+	std_real_concept result ( a );
+	result /= b;
+	return result;
 }
 
 // Comparison:
-inline bool operator == (const std_real_concept& a, const std_real_concept& b)
+inline bool operator == ( const std_real_concept &a, const std_real_concept &b )
 { return a.value() == b.value(); }
-inline bool operator != (const std_real_concept& a, const std_real_concept& b)
+inline bool operator != ( const std_real_concept &a, const std_real_concept &b )
 { return a.value() != b.value();}
-inline bool operator < (const std_real_concept& a, const std_real_concept& b)
+inline bool operator < ( const std_real_concept &a, const std_real_concept &b )
 { return a.value() < b.value(); }
-inline bool operator <= (const std_real_concept& a, const std_real_concept& b)
+inline bool operator <= ( const std_real_concept &a, const std_real_concept &b )
 { return a.value() <= b.value(); }
-inline bool operator > (const std_real_concept& a, const std_real_concept& b)
+inline bool operator > ( const std_real_concept &a, const std_real_concept &b )
 { return a.value() > b.value(); }
-inline bool operator >= (const std_real_concept& a, const std_real_concept& b)
+inline bool operator >= ( const std_real_concept &a, const std_real_concept &b )
 { return a.value() >= b.value(); }
 
 } // namespace concepts
 } // namespace math
 } // namespace boost
 
-namespace std{
+namespace std
+{
 
 // Non-member functions:
-inline boost::math::concepts::std_real_concept acos(boost::math::concepts::std_real_concept a)
-{ return std::acos(a.value()); }
-inline boost::math::concepts::std_real_concept cos(boost::math::concepts::std_real_concept a)
-{ return std::cos(a.value()); }
-inline boost::math::concepts::std_real_concept asin(boost::math::concepts::std_real_concept a)
-{ return std::asin(a.value()); }
-inline boost::math::concepts::std_real_concept atan(boost::math::concepts::std_real_concept a)
-{ return std::atan(a.value()); }
-inline boost::math::concepts::std_real_concept atan2(boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b)
-{ return std::atan2(a.value(), b.value()); }
-inline boost::math::concepts::std_real_concept ceil(boost::math::concepts::std_real_concept a)
-{ return std::ceil(a.value()); }
+inline boost::math::concepts::std_real_concept acos ( boost::math::concepts::std_real_concept a )
+{ return std::acos ( a.value() ); }
+inline boost::math::concepts::std_real_concept cos ( boost::math::concepts::std_real_concept a )
+{ return std::cos ( a.value() ); }
+inline boost::math::concepts::std_real_concept asin ( boost::math::concepts::std_real_concept a )
+{ return std::asin ( a.value() ); }
+inline boost::math::concepts::std_real_concept atan ( boost::math::concepts::std_real_concept a )
+{ return std::atan ( a.value() ); }
+inline boost::math::concepts::std_real_concept atan2 ( boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b )
+{ return std::atan2 ( a.value(), b.value() ); }
+inline boost::math::concepts::std_real_concept ceil ( boost::math::concepts::std_real_concept a )
+{ return std::ceil ( a.value() ); }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-inline boost::math::concepts::std_real_concept fmod(boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b)
-{ return fmodl(a.value(), b.value()); }
+inline boost::math::concepts::std_real_concept fmod ( boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b )
+{ return fmodl ( a.value(), b.value() ); }
 #else
-inline boost::math::concepts::std_real_concept fmod(boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b)
-{ return std::fmod(a.value(), b.value()); }
+inline boost::math::concepts::std_real_concept fmod ( boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b )
+{ return std::fmod ( a.value(), b.value() ); }
 #endif
-inline boost::math::concepts::std_real_concept cosh(boost::math::concepts::std_real_concept a)
-{ return std::cosh(a.value()); }
-inline boost::math::concepts::std_real_concept exp(boost::math::concepts::std_real_concept a)
-{ return std::exp(a.value()); }
-inline boost::math::concepts::std_real_concept fabs(boost::math::concepts::std_real_concept a)
-{ return std::fabs(a.value()); }
-inline boost::math::concepts::std_real_concept abs(boost::math::concepts::std_real_concept a)
-{ return std::abs(a.value()); }
-inline boost::math::concepts::std_real_concept floor(boost::math::concepts::std_real_concept a)
-{ return std::floor(a.value()); }
-inline boost::math::concepts::std_real_concept modf(boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept* ipart)
+inline boost::math::concepts::std_real_concept cosh ( boost::math::concepts::std_real_concept a )
+{ return std::cosh ( a.value() ); }
+inline boost::math::concepts::std_real_concept exp ( boost::math::concepts::std_real_concept a )
+{ return std::exp ( a.value() ); }
+inline boost::math::concepts::std_real_concept fabs ( boost::math::concepts::std_real_concept a )
+{ return std::fabs ( a.value() ); }
+inline boost::math::concepts::std_real_concept abs ( boost::math::concepts::std_real_concept a )
+{ return std::abs ( a.value() ); }
+inline boost::math::concepts::std_real_concept floor ( boost::math::concepts::std_real_concept a )
+{ return std::floor ( a.value() ); }
+inline boost::math::concepts::std_real_concept modf ( boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept *ipart )
 {
-   boost::math::concepts::std_real_concept_base_type ip;
-   boost::math::concepts::std_real_concept_base_type result = std::modf(a.value(), &ip);
-   *ipart = ip;
-   return result;
+	boost::math::concepts::std_real_concept_base_type ip;
+	boost::math::concepts::std_real_concept_base_type result = std::modf ( a.value(), &ip );
+	*ipart = ip;
+	return result;
 }
-inline boost::math::concepts::std_real_concept frexp(boost::math::concepts::std_real_concept a, int* expon)
-{ return std::frexp(a.value(), expon); }
-inline boost::math::concepts::std_real_concept ldexp(boost::math::concepts::std_real_concept a, int expon)
-{ return std::ldexp(a.value(), expon); }
-inline boost::math::concepts::std_real_concept log(boost::math::concepts::std_real_concept a)
-{ return std::log(a.value()); }
-inline boost::math::concepts::std_real_concept log10(boost::math::concepts::std_real_concept a)
-{ return std::log10(a.value()); }
-inline boost::math::concepts::std_real_concept tan(boost::math::concepts::std_real_concept a)
-{ return std::tan(a.value()); }
-inline boost::math::concepts::std_real_concept pow(boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b)
-{ return std::pow(a.value(), b.value()); }
+inline boost::math::concepts::std_real_concept frexp ( boost::math::concepts::std_real_concept a, int *expon )
+{ return std::frexp ( a.value(), expon ); }
+inline boost::math::concepts::std_real_concept ldexp ( boost::math::concepts::std_real_concept a, int expon )
+{ return std::ldexp ( a.value(), expon ); }
+inline boost::math::concepts::std_real_concept log ( boost::math::concepts::std_real_concept a )
+{ return std::log ( a.value() ); }
+inline boost::math::concepts::std_real_concept log10 ( boost::math::concepts::std_real_concept a )
+{ return std::log10 ( a.value() ); }
+inline boost::math::concepts::std_real_concept tan ( boost::math::concepts::std_real_concept a )
+{ return std::tan ( a.value() ); }
+inline boost::math::concepts::std_real_concept pow ( boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b )
+{ return std::pow ( a.value(), b.value() ); }
 #if !defined(__SUNPRO_CC)
-inline boost::math::concepts::std_real_concept pow(boost::math::concepts::std_real_concept a, int b)
-{ return std::pow(a.value(), b); }
+inline boost::math::concepts::std_real_concept pow ( boost::math::concepts::std_real_concept a, int b )
+{ return std::pow ( a.value(), b ); }
 #else
-inline boost::math::concepts::std_real_concept pow(boost::math::concepts::std_real_concept a, int b)
-{ return std::pow(a.value(), static_cast<long double>(b)); }
+inline boost::math::concepts::std_real_concept pow ( boost::math::concepts::std_real_concept a, int b )
+{ return std::pow ( a.value(), static_cast<long double> ( b ) ); }
 #endif
-inline boost::math::concepts::std_real_concept sin(boost::math::concepts::std_real_concept a)
-{ return std::sin(a.value()); }
-inline boost::math::concepts::std_real_concept sinh(boost::math::concepts::std_real_concept a)
-{ return std::sinh(a.value()); }
-inline boost::math::concepts::std_real_concept sqrt(boost::math::concepts::std_real_concept a)
-{ return std::sqrt(a.value()); }
-inline boost::math::concepts::std_real_concept tanh(boost::math::concepts::std_real_concept a)
-{ return std::tanh(a.value()); }
+inline boost::math::concepts::std_real_concept sin ( boost::math::concepts::std_real_concept a )
+{ return std::sin ( a.value() ); }
+inline boost::math::concepts::std_real_concept sinh ( boost::math::concepts::std_real_concept a )
+{ return std::sinh ( a.value() ); }
+inline boost::math::concepts::std_real_concept sqrt ( boost::math::concepts::std_real_concept a )
+{ return std::sqrt ( a.value() ); }
+inline boost::math::concepts::std_real_concept tanh ( boost::math::concepts::std_real_concept a )
+{ return std::tanh ( a.value() ); }
 
 } // namespace std
 
@@ -231,138 +235,148 @@ inline boost::math::concepts::std_real_concept tanh(boost::math::concepts::std_r
 #include <boost/math/special_functions/modf.hpp>
 #include <boost/math/tools/precision.hpp>
 
-namespace boost{ namespace math{ namespace concepts{
+namespace boost
+{
+namespace math
+{
+namespace concepts
+{
 
 //
 // Conversion and truncation routines:
 //
 template <class Policy>
-inline int iround(const concepts::std_real_concept& v, const Policy& pol)
+inline int iround ( const concepts::std_real_concept &v, const Policy &pol )
 {
-   return boost::math::iround(v.value(), pol);
+	return boost::math::iround ( v.value(), pol );
 }
-inline int iround(const concepts::std_real_concept& v)
+inline int iround ( const concepts::std_real_concept &v )
 {
-   return boost::math::iround(v.value(), policies::policy<>());
+	return boost::math::iround ( v.value(), policies::policy<>() );
 }
 
 template <class Policy>
-inline long lround(const concepts::std_real_concept& v, const Policy& pol)
+inline long lround ( const concepts::std_real_concept &v, const Policy &pol )
 {
-   return boost::math::lround(v.value(), pol);
+	return boost::math::lround ( v.value(), pol );
 }
-inline long lround(const concepts::std_real_concept& v)
+inline long lround ( const concepts::std_real_concept &v )
 {
-   return boost::math::lround(v.value(), policies::policy<>());
+	return boost::math::lround ( v.value(), policies::policy<>() );
 }
 
 #ifdef BOOST_HAS_LONG_LONG
 
 template <class Policy>
-inline boost::long_long_type llround(const concepts::std_real_concept& v, const Policy& pol)
+inline boost::long_long_type llround ( const concepts::std_real_concept &v, const Policy &pol )
 {
-   return boost::math::llround(v.value(), pol);
+	return boost::math::llround ( v.value(), pol );
 }
-inline boost::long_long_type llround(const concepts::std_real_concept& v)
+inline boost::long_long_type llround ( const concepts::std_real_concept &v )
 {
-   return boost::math::llround(v.value(), policies::policy<>());
+	return boost::math::llround ( v.value(), policies::policy<>() );
 }
 
 #endif
 
 template <class Policy>
-inline int itrunc(const concepts::std_real_concept& v, const Policy& pol)
+inline int itrunc ( const concepts::std_real_concept &v, const Policy &pol )
 {
-   return boost::math::itrunc(v.value(), pol);
+	return boost::math::itrunc ( v.value(), pol );
 }
-inline int itrunc(const concepts::std_real_concept& v)
+inline int itrunc ( const concepts::std_real_concept &v )
 {
-   return boost::math::itrunc(v.value(), policies::policy<>());
+	return boost::math::itrunc ( v.value(), policies::policy<>() );
 }
 
 template <class Policy>
-inline long ltrunc(const concepts::std_real_concept& v, const Policy& pol)
+inline long ltrunc ( const concepts::std_real_concept &v, const Policy &pol )
 {
-   return boost::math::ltrunc(v.value(), pol);
+	return boost::math::ltrunc ( v.value(), pol );
 }
-inline long ltrunc(const concepts::std_real_concept& v)
+inline long ltrunc ( const concepts::std_real_concept &v )
 {
-   return boost::math::ltrunc(v.value(), policies::policy<>());
+	return boost::math::ltrunc ( v.value(), policies::policy<>() );
 }
 
 #ifdef BOOST_HAS_LONG_LONG
 
 template <class Policy>
-inline boost::long_long_type lltrunc(const concepts::std_real_concept& v, const Policy& pol)
+inline boost::long_long_type lltrunc ( const concepts::std_real_concept &v, const Policy &pol )
 {
-   return boost::math::lltrunc(v.value(), pol);
+	return boost::math::lltrunc ( v.value(), pol );
 }
-inline boost::long_long_type lltrunc(const concepts::std_real_concept& v)
+inline boost::long_long_type lltrunc ( const concepts::std_real_concept &v )
 {
-   return boost::math::lltrunc(v.value(), policies::policy<>());
+	return boost::math::lltrunc ( v.value(), policies::policy<>() );
 }
 
 #endif
 
 // Streaming:
 template <class charT, class traits>
-inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& os, const std_real_concept& a)
+inline std::basic_ostream<charT, traits> &operator<< ( std::basic_ostream<charT, traits> &os, const std_real_concept &a )
 {
-   return os << a.value();
+	return os << a.value();
 }
 template <class charT, class traits>
-inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, traits>& is, std_real_concept& a)
+inline std::basic_istream<charT, traits> &operator>> ( std::basic_istream<charT, traits> &is, std_real_concept &a )
 {
-   std_real_concept_base_type v;
-   is >> v;
-   a = v;
-   return is;
+	std_real_concept_base_type v;
+	is >> v;
+	a = v;
+	return is;
 }
 
 } // namespace concepts
-}}
+}
+}
 
 #include <boost/math/tools/precision.hpp>
 
-namespace boost{ namespace math{
+namespace boost
+{
+namespace math
+{
 namespace tools
 {
 
 template <>
-inline concepts::std_real_concept max_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept max_value<concepts::std_real_concept> ( BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC ( concepts::std_real_concept ) )
 {
-   return max_value<concepts::std_real_concept_base_type>();
+	return max_value<concepts::std_real_concept_base_type>();
 }
 
 template <>
-inline concepts::std_real_concept min_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept min_value<concepts::std_real_concept> ( BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC ( concepts::std_real_concept ) )
 {
-   return min_value<concepts::std_real_concept_base_type>();
+	return min_value<concepts::std_real_concept_base_type>();
 }
 
 template <>
-inline concepts::std_real_concept log_max_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept log_max_value<concepts::std_real_concept> ( BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC ( concepts::std_real_concept ) )
 {
-   return log_max_value<concepts::std_real_concept_base_type>();
+	return log_max_value<concepts::std_real_concept_base_type>();
 }
 
 template <>
-inline concepts::std_real_concept log_min_value<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept log_min_value<concepts::std_real_concept> ( BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC ( concepts::std_real_concept ) )
 {
-   return log_min_value<concepts::std_real_concept_base_type>();
+	return log_min_value<concepts::std_real_concept_base_type>();
 }
 
 template <>
-inline concepts::std_real_concept epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
+inline concepts::std_real_concept epsilon ( BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC ( concepts::std_real_concept ) )
 {
-   return tools::epsilon<concepts::std_real_concept_base_type>();
+	return tools::epsilon<concepts::std_real_concept_base_type>();
 }
 
 template <>
-inline int digits<concepts::std_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::std_real_concept))
-{ // Assume number of significand bits is same as std_real_concept_base_type,
-  // unless std::numeric_limits<T>::is_specialized to provide digits.
-   return digits<concepts::std_real_concept_base_type>();
+inline int digits<concepts::std_real_concept> ( BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC ( concepts::std_real_concept ) )
+{
+	// Assume number of significand bits is same as std_real_concept_base_type,
+	// unless std::numeric_limits<T>::is_specialized to provide digits.
+	return digits<concepts::std_real_concept_base_type>();
 }
 
 } // namespace tools

@@ -19,14 +19,14 @@ namespace math
 //  From <boost/math/quaternion.hpp>  ----------------------------------------//
 
 template < typename T >
-    class quaternion;
+class quaternion;
 
 template < >
-    class quaternion< float >;
+class quaternion< float >;
 template < >
-    class quaternion< double >;
+class quaternion< double >;
 template < >
-    class quaternion< long double >;
+class quaternion< long double >;
 
 // Also has many function templates (including operators)
 
@@ -34,14 +34,14 @@ template < >
 //  From <boost/math/octonion.hpp>  ------------------------------------------//
 
 template < typename T >
-    class octonion;
+class octonion;
 
 template < >
-    class octonion< float >;
+class octonion< float >;
 template < >
-    class octonion< double >;
+class octonion< double >;
 template < >
-    class octonion< long double >;
+class octonion< long double >;
 
 // Also has many function templates (including operators)
 
@@ -79,17 +79,17 @@ template < >
 //  From <boost/math/common_factor_ct.hpp>  ----------------------------------//
 
 template < unsigned long Value1, unsigned long Value2 >
-    struct static_gcd;
+struct static_gcd;
 template < unsigned long Value1, unsigned long Value2 >
-    struct static_lcm;
+struct static_lcm;
 
 
 //  From <boost/math/common_factor_rt.hpp>  ----------------------------------//
 
 template < typename IntegerType >
-    class gcd_evaluator;
+class gcd_evaluator;
 template < typename IntegerType >
-    class lcm_evaluator;
+class lcm_evaluator;
 
 // Also has a couple of function templates
 

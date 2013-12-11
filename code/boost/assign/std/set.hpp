@@ -24,20 +24,20 @@ namespace boost
 {
 namespace assign
 {
-    template< class K, class C, class A, class K2 >
-    inline list_inserter< assign_detail::call_insert< std::set<K,C,A> >, K > 
-    operator+=( std::set<K,C,A>& c, K2 k )
-    {
-        return insert( c )( k );
-    }
-    
-    template< class K, class C, class A, class K2 >
-    inline list_inserter< assign_detail::call_insert< std::multiset<K,C,A> >, K > 
-    operator+=( std::multiset<K,C,A>& c, K2 k )
-    {
-        return insert( c )( k );
-    }
-    
+template< class K, class C, class A, class K2 >
+inline list_inserter< assign_detail::call_insert< std::set<K, C, A> >, K >
+operator+= ( std::set<K, C, A> &c, K2 k )
+{
+	return insert ( c ) ( k );
+}
+
+template< class K, class C, class A, class K2 >
+inline list_inserter< assign_detail::call_insert< std::multiset<K, C, A> >, K >
+operator+= ( std::multiset<K, C, A> &c, K2 k )
+{
+	return insert ( c ) ( k );
+}
+
 }
 }
 

@@ -23,58 +23,59 @@
 #include <boost/static_assert.hpp>
 #include <boost/random/detail/config.hpp>
 
-namespace boost {
+namespace boost
+{
 
 // exponential distribution: p(x) = lambda * exp(-lambda * x)
 template<class RealType = double>
 class exponential_distribution
 {
 public:
-  typedef RealType input_type;
-  typedef RealType result_type;
+	typedef RealType input_type;
+	typedef RealType result_type;
 
 #if !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) && !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
-  BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
+	BOOST_STATIC_ASSERT ( !std::numeric_limits<RealType>::is_integer );
 #endif
 
-  explicit exponential_distribution(result_type lambda_arg = result_type(1))
-    : _lambda(lambda_arg) { assert(_lambda > result_type(0)); }
+	explicit exponential_distribution ( result_type lambda_arg = result_type ( 1 ) )
+		: _lambda ( lambda_arg ) { assert ( _lambda > result_type ( 0 ) ); }
 
-  // compiler-generated copy ctor and assignment operator are fine
+	// compiler-generated copy ctor and assignment operator are fine
 
-  result_type lambda() const { return _lambda; }
+	result_type lambda() const { return _lambda; }
 
-  void reset() { }
+	void reset() { }
 
-  template<class Engine>
-  result_type operator()(Engine& eng)
-  { 
+	template<class Engine>
+	result_type operator() ( Engine &eng )
+	{
 #ifndef BOOST_NO_STDC_NAMESPACE
-    using std::log;
+		using std::log;
 #endif
-    return -result_type(1) / _lambda * log(result_type(1)-eng());
-  }
+		return -result_type ( 1 ) / _lambda * log ( result_type ( 1 ) - eng() );
+	}
 
 #ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
-  template<class CharT, class Traits>
-  friend std::basic_ostream<CharT,Traits>&
-  operator<<(std::basic_ostream<CharT,Traits>& os, const exponential_distribution& ed)
-  {
-    os << ed._lambda;
-    return os;
-  }
+	template<class CharT, class Traits>
+	friend std::basic_ostream<CharT, Traits> &
+	operator<< ( std::basic_ostream<CharT, Traits> &os, const exponential_distribution &ed )
+	{
+		os << ed._lambda;
+		return os;
+	}
 
-  template<class CharT, class Traits>
-  friend std::basic_istream<CharT,Traits>&
-  operator>>(std::basic_istream<CharT,Traits>& is, exponential_distribution& ed)
-  {
-    is >> std::ws >> ed._lambda;
-    return is;
-  }
+	template<class CharT, class Traits>
+	friend std::basic_istream<CharT, Traits> &
+	operator>> ( std::basic_istream<CharT, Traits> &is, exponential_distribution &ed )
+	{
+		is >> std::ws >> ed._lambda;
+		return is;
+	}
 #endif
 
 private:
-  result_type _lambda;
+	result_type _lambda;
 };
 
 } // namespace boost

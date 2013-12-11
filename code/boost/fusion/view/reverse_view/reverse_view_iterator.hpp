@@ -23,30 +23,33 @@
 #include <boost/type_traits/is_base_of.hpp>
 #include <boost/static_assert.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct reverse_view_iterator_tag;
+namespace fusion
+{
+struct reverse_view_iterator_tag;
 
-    template <typename First>
-    struct reverse_view_iterator
-        : iterator_base<reverse_view_iterator<First> >
-    {
-        typedef convert_iterator<First> converter;
-        typedef typename converter::type first_type;
-        typedef reverse_view_iterator_tag fusion_tag;
-        typedef typename traits::category_of<first_type>::type category;
+template <typename First>
+struct reverse_view_iterator
+		: iterator_base<reverse_view_iterator<First> >
+{
+	typedef convert_iterator<First> converter;
+	typedef typename converter::type first_type;
+	typedef reverse_view_iterator_tag fusion_tag;
+	typedef typename traits::category_of<first_type>::type category;
 
-        BOOST_STATIC_ASSERT((
-            is_base_of<
-                bidirectional_traversal_tag
-              , category>::value));
+	BOOST_STATIC_ASSERT ( (
+	                          is_base_of <
+	                          bidirectional_traversal_tag
+	                          , category >::value ) );
 
-        reverse_view_iterator(First const& first)
-            : first(converter::call(first)) {}
+	reverse_view_iterator ( First const &first )
+		: first ( converter::call ( first ) ) {}
 
-        first_type first;
-    };
-}}
+	first_type first;
+};
+}
+}
 
 #endif
 

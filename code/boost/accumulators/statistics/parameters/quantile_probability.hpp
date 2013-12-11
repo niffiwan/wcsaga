@@ -10,11 +10,14 @@
 
 #include <boost/parameter/keyword.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
-BOOST_PARAMETER_KEYWORD(tag, quantile_probability)
+BOOST_PARAMETER_KEYWORD ( tag, quantile_probability )
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

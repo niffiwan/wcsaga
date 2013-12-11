@@ -6,7 +6,7 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 // Contains the definition of the class template access_control, which
-// allows the type of inheritance from a provided base class to be specified 
+// allows the type of inheritance from a provided base class to be specified
 // using a template parameter.
 
 
@@ -15,50 +15,56 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <boost/iostreams/detail/select.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-namespace boost { namespace iostreams {
+namespace boost
+{
+namespace iostreams
+{
 
 struct protected_ { };  // Represents protected inheritance.
 struct public_ { };     // Represents public inheritance.
 
 
-namespace detail {
+namespace detail
+{
 
-    // Implements protected inheritance.
-    template<typename U>
-    struct prot_ : protected U 
-    { 
-        prot_() { }
-        template<typename V> prot_(V v) : U(v) { }
-    };
+// Implements protected inheritance.
+template<typename U>
+struct prot_ : protected U
+{
+	prot_() { }
+	template<typename V> prot_ ( V v ) : U ( v ) { }
+};
 
-    // Implements public inheritance.
-    template<typename U> struct pub_ : public U { 
-        pub_() { }
-        template<typename V> pub_(V v) : U(v) { }
-    };
+// Implements public inheritance.
+template<typename U> struct pub_ : public U
+{
+	pub_() { }
+	template<typename V> pub_ ( V v ) : U ( v ) { }
+};
 
 //
 // Used to deduce the base type for the template access_control.
 //
 template<typename T, typename Access>
-struct access_control_base {
-    typedef int                                 bad_access_specifier;
-    typedef typename 
-            iostreams::select<  // Disambiguation for Tru64
-                ::boost::is_same<
-                    Access, protected_
-                >,                              prot_<T>,
-                ::boost::is_same<
-                    Access, public_
-                >,                              pub_<T>,
-                else_,                          bad_access_specifier
-            >::type                             type;
+struct access_control_base
+{
+	typedef int                                 bad_access_specifier;
+	typedef typename
+	iostreams::select<  // Disambiguation for Tru64
+	::boost::is_same<
+	Access, protected_
+	>,                              prot_<T>,
+	::boost::is_same<
+	Access, public_
+	>,                              pub_<T>,
+	else_,                          bad_access_specifier
+	>::type                             type;
 };
 
 } // End namespace detail.
@@ -69,19 +75,21 @@ struct access_control_base {
 //      to be specified using an int template parameter.
 // Template parameters:
 //      Base - The class from which to inherit (indirectly.)
-//      Access - The type of access desired. Must be one of the 
+//      Access - The type of access desired. Must be one of the
 //          values access_base::prot or access_base::pub.
 //
 template< typename T, typename Access,
           typename Base = // VC6 workaraound (Compiler Error C2516)
-              typename detail::access_control_base<T, Access>::type >
-struct access_control : public Base { 
-    access_control() { }
-    template<typename U> explicit access_control(U u) : Base(u) { }
+          typename detail::access_control_base<T, Access>::type >
+struct access_control : public Base
+{
+	access_control() { }
+	template<typename U> explicit access_control ( U u ) : Base ( u ) { }
 };
 
 //----------------------------------------------------------------------------//
 
-} } // End namespaces iostreams, boost.
+}
+} // End namespaces iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_ACCESS_CONTROL_HPP_INCLUDED

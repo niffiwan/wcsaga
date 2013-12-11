@@ -27,10 +27,14 @@
 
 //------------------------------------------------------------------------------
 
-namespace boost {
-namespace spirit {
-namespace math {
-namespace detail {
+namespace boost
+{
+namespace spirit
+{
+namespace math
+{
+namespace detail
+{
 
 //------------------------------------------------------------------------------
 
@@ -55,7 +59,7 @@ template<class T, class U> struct fp_traits_impl;
   This is traits class that describes the binary structure of floating
   point numbers of C++ type T and precision U
 
-Requirements: 
+Requirements:
 
   T = float, double or long double
   U = single_precision_tag, double_precision_tag
@@ -97,54 +101,54 @@ struct not_all_bits {};
 
 template<class T> struct uint32_t_coverage
 {
-    typedef not_all_bits type;
+	typedef not_all_bits type;
 };
 
 template<> struct uint32_t_coverage<single_precision_tag>
 {
-    typedef all_bits type;
+	typedef all_bits type;
 };
 
 template<class T, class U> struct fp_traits_impl
 {
-    typedef uint32_t bits;
-    typedef BOOST_DEDUCED_TYPENAME uint32_t_coverage<U>::type coverage;
+	typedef uint32_t bits;
+	typedef BOOST_DEDUCED_TYPENAME uint32_t_coverage<U>::type coverage;
 
-    BOOST_STATIC_CONSTANT(uint32_t, sign = 0x80000000);
-    static uint32_t exponent;
-    static uint32_t flag;
-    static uint32_t mantissa;
+	BOOST_STATIC_CONSTANT ( uint32_t, sign = 0x80000000 );
+	static uint32_t exponent;
+	static uint32_t flag;
+	static uint32_t mantissa;
 
-    static void init()
-    {
-        if(is_init_) return;
-        do_init_();
-        is_init_ = true;
-    }
+	static void init()
+	{
+		if ( is_init_ ) return;
+		do_init_();
+		is_init_ = true;
+	}
 
-    static void get_bits(T x, uint32_t& a)
-    {
-        memcpy(&a, reinterpret_cast<const unsigned char*>(&x) + offset_, 4);
-    }
+	static void get_bits ( T x, uint32_t &a )
+	{
+		memcpy ( &a, reinterpret_cast<const unsigned char *> ( &x ) + offset_, 4 );
+	}
 
-    static void set_bits(T& x, uint32_t a)
-    {
-        memcpy(reinterpret_cast<unsigned char*>(&x) + offset_, &a, 4);
-    }
+	static void set_bits ( T &x, uint32_t a )
+	{
+		memcpy ( reinterpret_cast<unsigned char *> ( &x ) + offset_, &a, 4 );
+	}
 
 private:
-    static size_t offset_;
-    static bool is_init_;
-    static void do_init_();
+	static size_t offset_;
+	static bool is_init_;
+	static void do_init_();
 };
 
 //..............................................................................
 
-template<class T, class U> uint32_t fp_traits_impl<T,U>::exponent;
-template<class T, class U> uint32_t fp_traits_impl<T,U>::flag;
-template<class T, class U> uint32_t fp_traits_impl<T,U>::mantissa;
-template<class T, class U> size_t   fp_traits_impl<T,U>::offset_;
-template<class T, class U> bool     fp_traits_impl<T,U>::is_init_;
+template<class T, class U> uint32_t fp_traits_impl<T, U>::exponent;
+template<class T, class U> uint32_t fp_traits_impl<T, U>::flag;
+template<class T, class U> uint32_t fp_traits_impl<T, U>::mantissa;
+template<class T, class U> size_t   fp_traits_impl<T, U>::offset_;
+template<class T, class U> bool     fp_traits_impl<T, U>::is_init_;
 
 // In a single-threaded program, do_init will be called exactly once.
 // In a multi-threaded program, do_init may be called simultaneously
@@ -152,74 +156,76 @@ template<class T, class U> bool     fp_traits_impl<T,U>::is_init_;
 
 //..............................................................................
 
-template<class T, class U> void fp_traits_impl<T,U>::do_init_()
+template<class T, class U> void fp_traits_impl<T, U>::do_init_()
 {
-    T x = static_cast<T>(3) / static_cast<T>(4);
-    // sign bit = 0
-    // exponent: first and last bit = 0, all other bits  = 1
-    // flag bit (if present) = 1
-    // mantissa: first bit = 1, all other bits = 0
+	T x = static_cast<T> ( 3 ) / static_cast<T> ( 4 );
+	// sign bit = 0
+	// exponent: first and last bit = 0, all other bits  = 1
+	// flag bit (if present) = 1
+	// mantissa: first bit = 1, all other bits = 0
 
-    uint32_t a;
+	uint32_t a;
 
-    for(size_t k = 0; k <= sizeof(T) - 4; ++k) {
+	for ( size_t k = 0; k <= sizeof ( T ) - 4; ++k )
+	{
 
-        memcpy(&a, reinterpret_cast<unsigned char*>(&x) + k, 4);
+		memcpy ( &a, reinterpret_cast<unsigned char *> ( &x ) + k, 4 );
 
-        switch(a) {
+		switch ( a )
+		{
 
-        case 0x3f400000:      // IEEE single precision format
+		case 0x3f400000:      // IEEE single precision format
 
-            offset_  = k;      
-            exponent = 0x7f800000;
-            flag     = 0x00000000;
-            mantissa = 0x007fffff;
-            return;
+			offset_  = k;
+			exponent = 0x7f800000;
+			flag     = 0x00000000;
+			mantissa = 0x007fffff;
+			return;
 
-        case 0x3fe80000:      // IEEE double precision format 
-                              // and PowerPC extended double precision format
-            offset_  = k;      
-            exponent = 0x7ff00000;
-            flag     = 0x00000000;
-            mantissa = 0x000fffff;
-            return;
+		case 0x3fe80000:      // IEEE double precision format
+			// and PowerPC extended double precision format
+			offset_  = k;
+			exponent = 0x7ff00000;
+			flag     = 0x00000000;
+			mantissa = 0x000fffff;
+			return;
 
-        case 0x3ffe0000:      // Motorola extended double precision format
+		case 0x3ffe0000:      // Motorola extended double precision format
 
-            // Must not get here. Must be handled by specialization.
-            // To get accurate cutoff between normals and subnormals
-            // we must use the flag bit that is in the 5th byte.
-            // Otherwise this cutoff will be off by a factor 2.
-            // If we do get here, then we have failed to detect the Motorola
-            // processor at compile time.
+			// Must not get here. Must be handled by specialization.
+			// To get accurate cutoff between normals and subnormals
+			// we must use the flag bit that is in the 5th byte.
+			// Otherwise this cutoff will be off by a factor 2.
+			// If we do get here, then we have failed to detect the Motorola
+			// processor at compile time.
 
-            BOOST_ASSERT(false);        
-            return;
+			BOOST_ASSERT ( false );
+			return;
 
-        case 0x3ffe8000:      // IEEE extended double precision format
-                              // with 15 exponent bits
-            offset_  = k;      
-            exponent = 0x7fff0000;
-            flag     = 0x00000000;
-            mantissa = 0x0000ffff;
-            return;
+		case 0x3ffe8000:      // IEEE extended double precision format
+			// with 15 exponent bits
+			offset_  = k;
+			exponent = 0x7fff0000;
+			flag     = 0x00000000;
+			mantissa = 0x0000ffff;
+			return;
 
-        case 0x3ffec000:      // Intel extended double precision format
+		case 0x3ffec000:      // Intel extended double precision format
 
-            offset_  = k;
-            exponent = 0x7fff0000;
-            flag     = 0x00008000;
-            mantissa = 0x00007fff;
-            return;
+			offset_  = k;
+			exponent = 0x7fff0000;
+			flag     = 0x00008000;
+			mantissa = 0x00007fff;
+			return;
 
-        default:
-            continue;
-        }
-    }
+		default:
+			continue;
+		}
+	}
 
-    BOOST_ASSERT(false); 
+	BOOST_ASSERT ( false );
 
-    // Unknown format.
+	// Unknown format.
 }
 
 
@@ -227,17 +233,17 @@ template<class T, class U> void fp_traits_impl<T,U>::do_init_()
 
 template<> struct fp_traits_impl<float, single_precision_tag>
 {
-    typedef uint32_t bits;
-    typedef all_bits coverage;
+	typedef uint32_t bits;
+	typedef all_bits coverage;
 
-    BOOST_STATIC_CONSTANT(uint32_t, sign     = 0x80000000);
-    BOOST_STATIC_CONSTANT(uint32_t, exponent = 0x7f800000);
-    BOOST_STATIC_CONSTANT(uint32_t, flag     = 0x00000000);
-    BOOST_STATIC_CONSTANT(uint32_t, mantissa = 0x007fffff);
+	BOOST_STATIC_CONSTANT ( uint32_t, sign     = 0x80000000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, exponent = 0x7f800000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, flag     = 0x00000000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, mantissa = 0x007fffff );
 
-    static void init() {}
-    static void get_bits(float x, uint32_t& a) { memcpy(&a, &x, 4); }
-    static void set_bits(float& x, uint32_t a) { memcpy(&x, &a, 4); }
+	static void init() {}
+	static void get_bits ( float x, uint32_t &a ) { memcpy ( &a, &x, 4 ); }
+	static void set_bits ( float &x, uint32_t a ) { memcpy ( &x, &a, 4 ); }
 };
 
 
@@ -247,34 +253,34 @@ template<> struct fp_traits_impl<float, single_precision_tag>
 
 template<> struct fp_traits_impl<double, double_precision_tag>
 {
-    typedef uint32_t bits;
-    typedef not_all_bits coverage;
+	typedef uint32_t bits;
+	typedef not_all_bits coverage;
 
-    BOOST_STATIC_CONSTANT(uint32_t, sign     = 0x80000000);
-    BOOST_STATIC_CONSTANT(uint32_t, exponent = 0x7ff00000);
-    BOOST_STATIC_CONSTANT(uint32_t, flag     = 0);
-    BOOST_STATIC_CONSTANT(uint32_t, mantissa = 0x000fffff);
+	BOOST_STATIC_CONSTANT ( uint32_t, sign     = 0x80000000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, exponent = 0x7ff00000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, flag     = 0 );
+	BOOST_STATIC_CONSTANT ( uint32_t, mantissa = 0x000fffff );
 
-    static void init() {}
+	static void init() {}
 
-    static void get_bits(double x, uint32_t& a)
-    {
-        memcpy(&a, reinterpret_cast<const unsigned char*>(&x) + offset_, 4);
-    }
+	static void get_bits ( double x, uint32_t &a )
+	{
+		memcpy ( &a, reinterpret_cast<const unsigned char *> ( &x ) + offset_, 4 );
+	}
 
-    static void set_bits(double& x, uint32_t a)
-    {
-        memcpy(reinterpret_cast<unsigned char*>(&x) + offset_, &a, 4);
-    }
+	static void set_bits ( double &x, uint32_t a )
+	{
+		memcpy ( reinterpret_cast<unsigned char *> ( &x ) + offset_, &a, 4 );
+	}
 
 private:
 
 #if defined(BOOST_BIG_ENDIAN)
-    BOOST_STATIC_CONSTANT(int, offset_ = 0);
+	BOOST_STATIC_CONSTANT ( int, offset_ = 0 );
 #elif defined(BOOST_LITTLE_ENDIAN)
-    BOOST_STATIC_CONSTANT(int, offset_ = 4);
+	BOOST_STATIC_CONSTANT ( int, offset_ = 4 );
 #else
-    BOOST_STATIC_ASSERT(false);
+	BOOST_STATIC_ASSERT ( false );
 #endif
 };
 
@@ -284,18 +290,18 @@ private:
 
 template<> struct fp_traits_impl<double, double_precision_tag>
 {
-    typedef uint64_t bits;
-    typedef all_bits coverage;
+	typedef uint64_t bits;
+	typedef all_bits coverage;
 
-    static const uint64_t sign     = (uint64_t)0x80000000 << 32;
-    static const uint64_t exponent = (uint64_t)0x7ff00000 << 32;
-    static const uint64_t flag     = 0;
-    static const uint64_t mantissa
-        = ((uint64_t)0x000fffff << 32) + (uint64_t)0xffffffff;
+	static const uint64_t sign     = ( uint64_t ) 0x80000000 << 32;
+	static const uint64_t exponent = ( uint64_t ) 0x7ff00000 << 32;
+	static const uint64_t flag     = 0;
+	static const uint64_t mantissa
+	    = ( ( uint64_t ) 0x000fffff << 32 ) + ( uint64_t ) 0xffffffff;
 
-    static void init() {}
-    static void get_bits(double x, uint64_t& a) { memcpy(&a, &x, 8); }
-    static void set_bits(double& x, uint64_t a) { memcpy(&x, &a, 8); }
+	static void init() {}
+	static void get_bits ( double x, uint64_t &a ) { memcpy ( &a, &x, 8 ); }
+	static void set_bits ( double &x, uint64_t a ) { memcpy ( &x, &a, 8 ); }
 };
 
 #endif
@@ -307,34 +313,34 @@ template<> struct fp_traits_impl<double, double_precision_tag>
 
 template<> struct fp_traits_impl<long double, double_precision_tag>
 {
-    typedef uint32_t bits;
-    typedef not_all_bits coverage;
+	typedef uint32_t bits;
+	typedef not_all_bits coverage;
 
-    BOOST_STATIC_CONSTANT(uint32_t, sign     = 0x80000000);
-    BOOST_STATIC_CONSTANT(uint32_t, exponent = 0x7ff00000);
-    BOOST_STATIC_CONSTANT(uint32_t, flag     = 0);
-    BOOST_STATIC_CONSTANT(uint32_t, mantissa = 0x000fffff);
+	BOOST_STATIC_CONSTANT ( uint32_t, sign     = 0x80000000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, exponent = 0x7ff00000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, flag     = 0 );
+	BOOST_STATIC_CONSTANT ( uint32_t, mantissa = 0x000fffff );
 
-    static void init() {}
+	static void init() {}
 
-    static void get_bits(long double x, uint32_t& a)
-    {
-        memcpy(&a, reinterpret_cast<const unsigned char*>(&x) + offset_, 4);
-    }
+	static void get_bits ( long double x, uint32_t &a )
+	{
+		memcpy ( &a, reinterpret_cast<const unsigned char *> ( &x ) + offset_, 4 );
+	}
 
-    static void set_bits(long double& x, uint32_t a)
-    {
-        memcpy(reinterpret_cast<unsigned char*>(&x) + offset_, &a, 4);
-    }
+	static void set_bits ( long double &x, uint32_t a )
+	{
+		memcpy ( reinterpret_cast<unsigned char *> ( &x ) + offset_, &a, 4 );
+	}
 
 private:
 
 #if defined(BOOST_BIG_ENDIAN)
-    BOOST_STATIC_CONSTANT(int, offset_ = 0);
+	BOOST_STATIC_CONSTANT ( int, offset_ = 0 );
 #elif defined(BOOST_LITTLE_ENDIAN)
-    BOOST_STATIC_CONSTANT(int, offset_ = 4);
+	BOOST_STATIC_CONSTANT ( int, offset_ = 4 );
 #else
-    BOOST_STATIC_ASSERT(false);
+	BOOST_STATIC_ASSERT ( false );
 #endif
 };
 
@@ -344,18 +350,18 @@ private:
 
 template<> struct fp_traits_impl<long double, double_precision_tag>
 {
-    typedef uint64_t bits;
-    typedef all_bits coverage;
+	typedef uint64_t bits;
+	typedef all_bits coverage;
 
-    static const uint64_t sign     = (uint64_t)0x80000000 << 32;
-    static const uint64_t exponent = (uint64_t)0x7ff00000 << 32;
-    static const uint64_t flag     = 0;
-    static const uint64_t mantissa
-        = ((uint64_t)0x000fffff << 32) + (uint64_t)0xffffffff;
+	static const uint64_t sign     = ( uint64_t ) 0x80000000 << 32;
+	static const uint64_t exponent = ( uint64_t ) 0x7ff00000 << 32;
+	static const uint64_t flag     = 0;
+	static const uint64_t mantissa
+	    = ( ( uint64_t ) 0x000fffff << 32 ) + ( uint64_t ) 0xffffffff;
 
-    static void init() {}
-    static void get_bits(long double x, uint64_t& a) { memcpy(&a, &x, 8); }
-    static void set_bits(long double& x, uint64_t a) { memcpy(&x, &a, 8); }
+	static void init() {}
+	static void get_bits ( long double x, uint64_t &a ) { memcpy ( &a, &x, 8 ); }
+	static void set_bits ( long double &x, uint64_t a ) { memcpy ( &x, &a, 8 ); }
 };
 
 #endif
@@ -371,25 +377,25 @@ template<> struct fp_traits_impl<long double, double_precision_tag>
 
 template<> struct fp_traits_impl<long double, extended_double_precision_tag>
 {
-    typedef uint32_t bits;
-    typedef not_all_bits coverage;
+	typedef uint32_t bits;
+	typedef not_all_bits coverage;
 
-    BOOST_STATIC_CONSTANT(uint32_t, sign     = 0x80000000);
-    BOOST_STATIC_CONSTANT(uint32_t, exponent = 0x7fff0000);
-    BOOST_STATIC_CONSTANT(uint32_t, flag     = 0x00008000);
-    BOOST_STATIC_CONSTANT(uint32_t, mantissa = 0x00007fff);
+	BOOST_STATIC_CONSTANT ( uint32_t, sign     = 0x80000000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, exponent = 0x7fff0000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, flag     = 0x00008000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, mantissa = 0x00007fff );
 
-    static void init() {}
+	static void init() {}
 
-    static void get_bits(long double x, uint32_t& a)
-    {
-        memcpy(&a, reinterpret_cast<const unsigned char*>(&x) + 6, 4);
-    }
+	static void get_bits ( long double x, uint32_t &a )
+	{
+		memcpy ( &a, reinterpret_cast<const unsigned char *> ( &x ) + 6, 4 );
+	}
 
-    static void set_bits(long double& x, uint32_t a)
-    {
-        memcpy(reinterpret_cast<unsigned char*>(&x) + 6, &a, 4);
-    }
+	static void set_bits ( long double &x, uint32_t a )
+	{
+		memcpy ( reinterpret_cast<unsigned char *> ( &x ) + 6, &a, 4 );
+	}
 };
 
 
@@ -415,34 +421,34 @@ template<> struct fp_traits_impl<long double, extended_double_precision_tag>
 
 template<> struct fp_traits_impl<long double, extended_double_precision_tag>
 {
-    typedef uint32_t bits;
-    typedef not_all_bits coverage;
+	typedef uint32_t bits;
+	typedef not_all_bits coverage;
 
-    BOOST_STATIC_CONSTANT(uint32_t, sign     = 0x80000000);
-    BOOST_STATIC_CONSTANT(uint32_t, exponent = 0x7ff00000);
-    BOOST_STATIC_CONSTANT(uint32_t, flag     = 0x00000000);
-    BOOST_STATIC_CONSTANT(uint32_t, mantissa = 0x000fffff);
+	BOOST_STATIC_CONSTANT ( uint32_t, sign     = 0x80000000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, exponent = 0x7ff00000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, flag     = 0x00000000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, mantissa = 0x000fffff );
 
-    static void init() {}
+	static void init() {}
 
-    static void get_bits(long double x, uint32_t& a)
-    {
-        memcpy(&a, reinterpret_cast<const unsigned char*>(&x) + offset_, 4);
-    }
+	static void get_bits ( long double x, uint32_t &a )
+	{
+		memcpy ( &a, reinterpret_cast<const unsigned char *> ( &x ) + offset_, 4 );
+	}
 
-    static void set_bits(long double& x, uint32_t a)
-    {
-        memcpy(reinterpret_cast<unsigned char*>(&x) + offset_, &a, 4);
-    }
+	static void set_bits ( long double &x, uint32_t a )
+	{
+		memcpy ( reinterpret_cast<unsigned char *> ( &x ) + offset_, &a, 4 );
+	}
 
 private:
 
 #if defined(BOOST_BIG_ENDIAN)
-    BOOST_STATIC_CONSTANT(int, offset_ = 0);
+	BOOST_STATIC_CONSTANT ( int, offset_ = 0 );
 #elif defined(BOOST_LITTLE_ENDIAN)
-    BOOST_STATIC_CONSTANT(int, offset_ = 12);
+	BOOST_STATIC_CONSTANT ( int, offset_ = 12 );
 #else
-    BOOST_STATIC_ASSERT(false);
+	BOOST_STATIC_ASSERT ( false );
 #endif
 };
 
@@ -451,7 +457,7 @@ private:
 
 #elif defined(__m68k) || defined(__m68k__) \
     || defined(__mc68000) || defined(__mc68000__) \
-
+ 
 // Motorola extended double precision format (96 bits)
 
 // It is the same format as the Intel extended double precision format,
@@ -460,31 +466,31 @@ private:
 
 template<> struct fp_traits_impl<long double, extended_double_precision_tag>
 {
-    typedef uint32_t bits;
-    typedef not_all_bits coverage;
+	typedef uint32_t bits;
+	typedef not_all_bits coverage;
 
-    BOOST_STATIC_CONSTANT(uint32_t, sign     = 0x80000000);
-    BOOST_STATIC_CONSTANT(uint32_t, exponent = 0x7fff0000);
-    BOOST_STATIC_CONSTANT(uint32_t, flag     = 0x00008000);
-    BOOST_STATIC_CONSTANT(uint32_t, mantissa = 0x00007fff);
+	BOOST_STATIC_CONSTANT ( uint32_t, sign     = 0x80000000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, exponent = 0x7fff0000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, flag     = 0x00008000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, mantissa = 0x00007fff );
 
-    static void init() {}
+	static void init() {}
 
-    // copy 1st, 2nd, 5th and 6th byte. 3rd and 4th byte are padding.
+	// copy 1st, 2nd, 5th and 6th byte. 3rd and 4th byte are padding.
 
-    static void get_bits(long double x, uint32_t& a)
-    {
-        memcpy(&a, &x, 2);
-        memcpy(reinterpret_cast<unsigned char*>(&a) + 2,
-               reinterpret_cast<const unsigned char*>(&x) + 4, 2);
-    }
+	static void get_bits ( long double x, uint32_t &a )
+	{
+		memcpy ( &a, &x, 2 );
+		memcpy ( reinterpret_cast<unsigned char *> ( &a ) + 2,
+		         reinterpret_cast<const unsigned char *> ( &x ) + 4, 2 );
+	}
 
-    static void set_bits(long double& x, uint32_t a)
-    {
-        memcpy(&x, &a, 2);
-        memcpy(reinterpret_cast<unsigned char*>(&x) + 4,
-               reinterpret_cast<const unsigned char*>(&a) + 2, 2);
-    }
+	static void set_bits ( long double &x, uint32_t a )
+	{
+		memcpy ( &x, &a, 2 );
+		memcpy ( reinterpret_cast<unsigned char *> ( &x ) + 4,
+		         reinterpret_cast<const unsigned char *> ( &a ) + 2, 2 );
+	}
 };
 
 
@@ -496,34 +502,34 @@ template<> struct fp_traits_impl<long double, extended_double_precision_tag>
 
 template<> struct fp_traits_impl<long double, extended_double_precision_tag>
 {
-    typedef uint32_t bits;
-    typedef not_all_bits coverage;
+	typedef uint32_t bits;
+	typedef not_all_bits coverage;
 
-    BOOST_STATIC_CONSTANT(uint32_t, sign     = 0x80000000);
-    BOOST_STATIC_CONSTANT(uint32_t, exponent = 0x7fff0000);
-    BOOST_STATIC_CONSTANT(uint32_t, flag     = 0x00000000);
-    BOOST_STATIC_CONSTANT(uint32_t, mantissa = 0x0000ffff);
+	BOOST_STATIC_CONSTANT ( uint32_t, sign     = 0x80000000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, exponent = 0x7fff0000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, flag     = 0x00000000 );
+	BOOST_STATIC_CONSTANT ( uint32_t, mantissa = 0x0000ffff );
 
-    static void init() {}
+	static void init() {}
 
-    static void get_bits(long double x, uint32_t& a)
-    {
-        memcpy(&a, reinterpret_cast<const unsigned char*>(&x) + offset_, 4);
-    }
+	static void get_bits ( long double x, uint32_t &a )
+	{
+		memcpy ( &a, reinterpret_cast<const unsigned char *> ( &x ) + offset_, 4 );
+	}
 
-    static void set_bits(long double& x, uint32_t a)
-    {
-        memcpy(reinterpret_cast<unsigned char*>(&x) + offset_, &a, 4);
-    }
+	static void set_bits ( long double &x, uint32_t a )
+	{
+		memcpy ( reinterpret_cast<unsigned char *> ( &x ) + offset_, &a, 4 );
+	}
 
 private:
 
 #if defined(BOOST_BIG_ENDIAN)
-    BOOST_STATIC_CONSTANT(int, offset_ = 0);
+	BOOST_STATIC_CONSTANT ( int, offset_ = 0 );
 #elif defined(BOOST_LITTLE_ENDIAN)
-    BOOST_STATIC_CONSTANT(int, offset_ = 12);
+	BOOST_STATIC_CONSTANT ( int, offset_ = 12 );
 #else
-    BOOST_STATIC_ASSERT(false);
+	BOOST_STATIC_ASSERT ( false );
 #endif
 };
 
@@ -539,36 +545,36 @@ template<int n> struct size_to_precision;
 
 template<> struct size_to_precision<4>
 {
-    typedef single_precision_tag type;
+	typedef single_precision_tag type;
 };
 
 template<> struct size_to_precision<8>
 {
-    typedef double_precision_tag type;
+	typedef double_precision_tag type;
 };
 
 template<> struct size_to_precision<10>
 {
-    typedef extended_double_precision_tag type;
+	typedef extended_double_precision_tag type;
 };
 
 template<> struct size_to_precision<12>
 {
-    typedef extended_double_precision_tag type;
+	typedef extended_double_precision_tag type;
 };
 
 template<> struct size_to_precision<16>
 {
-    typedef extended_double_precision_tag type;
+	typedef extended_double_precision_tag type;
 };
 
 // fp_traits is a type switch that selects the right fp_traits_impl
 
 template<class T> struct fp_traits
 {
-    BOOST_STATIC_ASSERT(boost::is_floating_point<T>::value);
-    typedef BOOST_DEDUCED_TYPENAME size_to_precision<sizeof(T)>::type precision;
-    typedef fp_traits_impl<T, precision> type;
+	BOOST_STATIC_ASSERT ( boost::is_floating_point<T>::value );
+	typedef BOOST_DEDUCED_TYPENAME size_to_precision<sizeof ( T ) >::type precision;
+	typedef fp_traits_impl<T, precision> type;
 };
 
 

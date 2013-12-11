@@ -53,56 +53,56 @@ class spinlock
 {
 public:
 
-    long v_;
+	long v_;
 
 public:
 
-    bool try_lock()
-    {
-        long r = BOOST_INTERLOCKED_EXCHANGE( &v_, 1 );
+	bool try_lock()
+	{
+		long r = BOOST_INTERLOCKED_EXCHANGE ( &v_, 1 );
 
-        BOOST_COMPILER_FENCE
+		BOOST_COMPILER_FENCE
 
-        return r == 0;
-    }
+		return r == 0;
+	}
 
-    void lock()
-    {
-        for( unsigned k = 0; !try_lock(); ++k )
-        {
-            boost::detail::yield( k );
-        }
-    }
+	void lock()
+	{
+		for ( unsigned k = 0; !try_lock(); ++k )
+		{
+			boost::detail::yield ( k );
+		}
+	}
 
-    void unlock()
-    {
-        BOOST_COMPILER_FENCE
-        *const_cast< long volatile* >( &v_ ) = 0;
-    }
+	void unlock()
+	{
+		BOOST_COMPILER_FENCE
+		*const_cast< long volatile * > ( &v_ ) = 0;
+	}
 
 public:
 
-    class scoped_lock
-    {
-    private:
+	class scoped_lock
+	{
+	private:
 
-        spinlock & sp_;
+		spinlock &sp_;
 
-        scoped_lock( scoped_lock const & );
-        scoped_lock & operator=( scoped_lock const & );
+		scoped_lock ( scoped_lock const & );
+		scoped_lock &operator= ( scoped_lock const & );
 
-    public:
+	public:
 
-        explicit scoped_lock( spinlock & sp ): sp_( sp )
-        {
-            sp.lock();
-        }
+		explicit scoped_lock ( spinlock &sp ) : sp_ ( sp )
+		{
+			sp.lock();
+		}
 
-        ~scoped_lock()
-        {
-            sp_.unlock();
-        }
-    };
+		~scoped_lock()
+		{
+			sp_.unlock();
+		}
+	};
 };
 
 } // namespace detail

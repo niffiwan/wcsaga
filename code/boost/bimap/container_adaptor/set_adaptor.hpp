@@ -22,9 +22,12 @@
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/aux_/na.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace container_adaptor {
+namespace boost
+{
+namespace bimaps
+{
+namespace container_adaptor
+{
 
 /// \brief Container adaptor to easily build a std::set signature compatible container.
 
@@ -45,47 +48,47 @@ template
     class KeyToBaseConverter               = ::boost::mpl::na,
 
     class FunctorsFromDerivedClasses = mpl::vector<>
->
+    >
 class set_adaptor :
 
-    public ::boost::bimaps::container_adaptor::
-                ordered_associative_container_adaptor
-    <
-        Base,
-        Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
-        BOOST_DEDUCED_TYPENAME Iterator::value_type,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        ReverseIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        KeyToBaseConverter,
-        FunctorsFromDerivedClasses
-    >
+	public ::boost::bimaps::container_adaptor::
+	ordered_associative_container_adaptor
+	<
+	Base,
+	Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
+	BOOST_DEDUCED_TYPENAME Iterator::value_type,
+	IteratorToBaseConverter, IteratorFromBaseConverter,
+	ReverseIteratorFromBaseConverter,
+	ValueToBaseConverter, ValueFromBaseConverter,
+	KeyToBaseConverter,
+	FunctorsFromDerivedClasses
+	>
 {
 
-    typedef ::boost::bimaps::container_adaptor::
-                ordered_associative_container_adaptor
-    <
-        Base,
-        Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
-        BOOST_DEDUCED_TYPENAME Iterator::value_type,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        ReverseIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        KeyToBaseConverter,
-        FunctorsFromDerivedClasses
+	typedef ::boost::bimaps::container_adaptor::
+	ordered_associative_container_adaptor
+	<
+	Base,
+	Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
+	BOOST_DEDUCED_TYPENAME Iterator::value_type,
+	IteratorToBaseConverter, IteratorFromBaseConverter,
+	ReverseIteratorFromBaseConverter,
+	ValueToBaseConverter, ValueFromBaseConverter,
+	KeyToBaseConverter,
+	FunctorsFromDerivedClasses
 
-    > base_;
+	> base_;
 
-    // Access -----------------------------------------------------------------
+	// Access -----------------------------------------------------------------
 
-    public:
+public:
 
-    explicit set_adaptor(Base & c) :
-        base_(c) {}
+	explicit set_adaptor ( Base &c ) :
+		base_ ( c ) {}
 
-    protected:
+protected:
 
-    typedef set_adaptor set_adaptor_;
+	typedef set_adaptor set_adaptor_;
 
 };
 

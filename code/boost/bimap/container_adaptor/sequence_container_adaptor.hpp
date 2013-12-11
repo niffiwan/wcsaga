@@ -28,9 +28,12 @@
 #include <boost/call_traits.hpp>
 #include <boost/operators.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace container_adaptor {
+namespace boost
+{
+namespace bimaps
+{
+namespace container_adaptor
+{
 
 #ifndef BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
 
@@ -42,40 +45,40 @@ template
     class ReverseIteratorFromBaseConverter,
     class ValueToBaseConverter, class ValueFromBaseConverter,
     class FunctorsFromDerivedClasses
->
+    >
 struct sequence_container_adaptor_base
 {
-    typedef container_adaptor
-    <
-        Base, Iterator, ConstIterator,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
+	typedef container_adaptor
+	<
+	Base, Iterator, ConstIterator,
+	      IteratorToBaseConverter, IteratorFromBaseConverter,
+	      ValueToBaseConverter, ValueFromBaseConverter,
 
-        BOOST_DEDUCED_TYPENAME mpl::push_front<
+	      BOOST_DEDUCED_TYPENAME mpl::push_front <
 
-            FunctorsFromDerivedClasses,
+	      FunctorsFromDerivedClasses,
 
-            BOOST_DEDUCED_TYPENAME mpl::if_<
-                ::boost::mpl::is_na<ReverseIteratorFromBaseConverter>,
-            // {
-                    detail::iterator_from_base_identity
-                    <
-                        BOOST_DEDUCED_TYPENAME Base::reverse_iterator, 
-                        ReverseIterator,
-                        BOOST_DEDUCED_TYPENAME Base::const_reverse_iterator,
-                        ConstReverseIterator
-                    >,
-            // }
-            // else
-            // {
-                    ReverseIteratorFromBaseConverter
-            // }
+	      BOOST_DEDUCED_TYPENAME mpl::if_ <
+	      ::boost::mpl::is_na<ReverseIteratorFromBaseConverter>,
+	      // {
+	      detail::iterator_from_base_identity
+	      <
+	      BOOST_DEDUCED_TYPENAME Base::reverse_iterator,
+	      ReverseIterator,
+	      BOOST_DEDUCED_TYPENAME Base::const_reverse_iterator,
+	      ConstReverseIterator
+	      >,
+	      // }
+	      // else
+	      // {
+	      ReverseIteratorFromBaseConverter
+	      // }
 
-            >::type
+	      >::type
 
-        >::type
+	      >::type
 
-    > type;
+	      > type;
 };
 
 #endif // BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
@@ -99,253 +102,253 @@ template
     class ValueFromBaseConverter            = ::boost::mpl::na,
 
     class FunctorsFromDerivedClasses = mpl::vector<>
->
+    >
 class sequence_container_adaptor :
 
-    public sequence_container_adaptor_base
-    <
-        Base, Iterator, ConstIterator,
-        ReverseIterator, ConstReverseIterator,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        ReverseIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        FunctorsFromDerivedClasses
+	public sequence_container_adaptor_base
+	<
+	Base, Iterator, ConstIterator,
+	ReverseIterator, ConstReverseIterator,
+	IteratorToBaseConverter, IteratorFromBaseConverter,
+	ReverseIteratorFromBaseConverter,
+	ValueToBaseConverter, ValueFromBaseConverter,
+	FunctorsFromDerivedClasses
 
-    >::type,
+	>::type,
 
-    ::boost::totally_ordered
-    <
-        sequence_container_adaptor
-        <
-            Base, Iterator, ConstIterator,
-            ReverseIterator, ConstReverseIterator,
-            IteratorToBaseConverter, IteratorFromBaseConverter,
-            ReverseIteratorFromBaseConverter,
-            ValueToBaseConverter, ValueFromBaseConverter,
-            FunctorsFromDerivedClasses
-        >
-    >
+	::boost::totally_ordered
+	<
+	sequence_container_adaptor
+	<
+	Base, Iterator, ConstIterator,
+	ReverseIterator, ConstReverseIterator,
+	IteratorToBaseConverter, IteratorFromBaseConverter,
+	ReverseIteratorFromBaseConverter,
+	ValueToBaseConverter, ValueFromBaseConverter,
+	FunctorsFromDerivedClasses
+	>
+	>
 {
-    typedef BOOST_DEDUCED_TYPENAME sequence_container_adaptor_base
-    <
-        Base, Iterator, ConstIterator,
-        ReverseIterator, ConstReverseIterator,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        ReverseIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        FunctorsFromDerivedClasses
+	typedef BOOST_DEDUCED_TYPENAME sequence_container_adaptor_base
+	<
+	Base, Iterator, ConstIterator,
+	      ReverseIterator, ConstReverseIterator,
+	      IteratorToBaseConverter, IteratorFromBaseConverter,
+	      ReverseIteratorFromBaseConverter,
+	      ValueToBaseConverter, ValueFromBaseConverter,
+	      FunctorsFromDerivedClasses
 
-    >::type base_;
+	      >::type base_;
 
-    // MetaData -------------------------------------------------------------
+	// MetaData -------------------------------------------------------------
 
-    public:
+public:
 
-    typedef ReverseIterator      reverse_iterator;
-    typedef ConstReverseIterator const_reverse_iterator;
+	typedef ReverseIterator      reverse_iterator;
+	typedef ConstReverseIterator const_reverse_iterator;
 
-    protected:
+protected:
 
-    typedef BOOST_DEDUCED_TYPENAME mpl::if_<
-        ::boost::mpl::is_na<ReverseIteratorFromBaseConverter>,
-        // {
-                detail::iterator_from_base_identity
-                <
-                    BOOST_DEDUCED_TYPENAME Base::reverse_iterator,
-                    reverse_iterator,
-                    BOOST_DEDUCED_TYPENAME Base::const_reverse_iterator,
-                    const_reverse_iterator
-                >,
-        // }
-        // else
-        // {
-                ReverseIteratorFromBaseConverter
-        // }
+	typedef BOOST_DEDUCED_TYPENAME mpl::if_ <
+	::boost::mpl::is_na<ReverseIteratorFromBaseConverter>,
+	// {
+	detail::iterator_from_base_identity
+	<
+	BOOST_DEDUCED_TYPENAME Base::reverse_iterator,
+	reverse_iterator,
+	BOOST_DEDUCED_TYPENAME Base::const_reverse_iterator,
+	const_reverse_iterator
+	>,
+	// }
+	// else
+	// {
+	ReverseIteratorFromBaseConverter
+	// }
 
-        >::type reverse_iterator_from_base;
-
-
-    // Access -----------------------------------------------------------------
-
-    public:
-
-    explicit sequence_container_adaptor(Base & c)
-        : base_(c) {}
-
-    protected:
+	>::type reverse_iterator_from_base;
 
 
-    typedef sequence_container_adaptor sequence_container_adaptor_;
+	// Access -----------------------------------------------------------------
 
-    // Interface --------------------------------------------------------------
+public:
 
-    public:
+	explicit sequence_container_adaptor ( Base &c )
+		: base_ ( c ) {}
 
-    reverse_iterator rbegin()
-    {
-        return this->template functor<
-            reverse_iterator_from_base
-        >()                            ( this->base().rbegin() );
+protected:
 
-    }
 
-    reverse_iterator rend()
-    {
-        return this->template functor<
-            reverse_iterator_from_base
-        >()                            ( this->base().rend() );
-    }
+	typedef sequence_container_adaptor sequence_container_adaptor_;
 
-    const_reverse_iterator rbegin() const
-    {
-        return this->template functor<
-            reverse_iterator_from_base
-        >()                            ( this->base().rbegin() );
-    }
+	// Interface --------------------------------------------------------------
 
-    const_reverse_iterator rend() const
-    {
-        return this->template functor<
-            reverse_iterator_from_base
-        >()                            ( this->base().rend() );
-    }
+public:
 
-    void resize(BOOST_DEDUCED_TYPENAME base_::size_type n,
-                BOOST_DEDUCED_TYPENAME ::boost::call_traits<
-                    BOOST_DEDUCED_TYPENAME base_::value_type >::param_type x =
-                        BOOST_DEDUCED_TYPENAME base_::value_type())
-    {
-        this->base().resize(n,
-            this->template functor<BOOST_DEDUCED_TYPENAME base_::value_to_base>()(x)
-        );
-    }
+	reverse_iterator rbegin()
+	{
+		return this->template functor <
+		           reverse_iterator_from_base
+		           > ()                            ( this->base().rbegin() );
 
-    BOOST_DEDUCED_TYPENAME base_::reference front()
-    {
-        return this->template functor<
-            BOOST_DEDUCED_TYPENAME base_::value_from_base>()
-        (
-            this->base().front()
-        );
-    }
+	}
 
-    BOOST_DEDUCED_TYPENAME base_::reference back()
-    {
-        return this->template functor<
-            BOOST_DEDUCED_TYPENAME base_::value_from_base>()
-        (
-            this->base().back()
-        );
-    }
+	reverse_iterator rend()
+	{
+		return this->template functor <
+		           reverse_iterator_from_base
+		           > ()                            ( this->base().rend() );
+	}
 
-    BOOST_DEDUCED_TYPENAME base_::const_reference front() const
-    {
-        return this->template functor<
-            BOOST_DEDUCED_TYPENAME base_::value_from_base>()
-        (
-            this->base().front()
-        );
-    }
+	const_reverse_iterator rbegin() const
+	{
+		return this->template functor <
+		           reverse_iterator_from_base
+		           > ()                            ( this->base().rbegin() );
+	}
 
-    BOOST_DEDUCED_TYPENAME base_::const_reference back() const
-    {
-        return this->template functor<
-            BOOST_DEDUCED_TYPENAME base_::value_from_base>()
-        (
-            this->base().back()
-        );
-    }
+	const_reverse_iterator rend() const
+	{
+		return this->template functor <
+		           reverse_iterator_from_base
+		           > ()                            ( this->base().rend() );
+	}
 
-    void push_front(
-        BOOST_DEDUCED_TYPENAME ::boost::call_traits<
-            BOOST_DEDUCED_TYPENAME base_::value_type >::param_type x)
-    {
-        this->base().push_front(
-            this->template functor<BOOST_DEDUCED_TYPENAME base_::value_to_base>()(x));
-    }
+	void resize ( BOOST_DEDUCED_TYPENAME base_::size_type n,
+	              BOOST_DEDUCED_TYPENAME ::boost::call_traits <
+	              BOOST_DEDUCED_TYPENAME base_::value_type >::param_type x =
+	                  BOOST_DEDUCED_TYPENAME base_::value_type() )
+	{
+		this->base().resize ( n,
+		                      this->template functor<BOOST_DEDUCED_TYPENAME base_::value_to_base>() ( x )
+		                                            );
+	}
 
-    void pop_front()
-    {
-        this->base().pop_front();
-    }
+	BOOST_DEDUCED_TYPENAME base_::reference front()
+	{
+		return this->template functor <
+		           BOOST_DEDUCED_TYPENAME base_::value_from_base > ()
+		(
+		    this->base().front()
+		);
+	}
 
-    void push_back(
-        BOOST_DEDUCED_TYPENAME ::boost::call_traits< 
-            BOOST_DEDUCED_TYPENAME base_::value_type >::param_type x)
-    {
-        this->base().push_back(
-            this->template functor<BOOST_DEDUCED_TYPENAME base_::value_to_base>()(x));
-    }
+	BOOST_DEDUCED_TYPENAME base_::reference back()
+	{
+		return this->template functor <
+		           BOOST_DEDUCED_TYPENAME base_::value_from_base > ()
+		(
+		    this->base().back()
+		);
+	}
 
-    void pop_back()
-    {
-        this->base().pop_back();
-    }
+	BOOST_DEDUCED_TYPENAME base_::const_reference front() const
+	{
+		return this->template functor <
+		           BOOST_DEDUCED_TYPENAME base_::value_from_base > ()
+		(
+		    this->base().front()
+		);
+	}
 
-    std::pair<BOOST_DEDUCED_TYPENAME base_::iterator,bool>
-    insert(BOOST_DEDUCED_TYPENAME base_::iterator position,
-           BOOST_DEDUCED_TYPENAME ::boost::call_traits< 
-                BOOST_DEDUCED_TYPENAME base_::value_type >::param_type x)
-    {
-        std::pair< BOOST_DEDUCED_TYPENAME Base::iterator, bool > r(
-            this->base().insert(
-                this->template functor<
-                    BOOST_DEDUCED_TYPENAME base_::iterator_to_base>()(position),
-                this->template functor<
-                    BOOST_DEDUCED_TYPENAME base_::value_to_base   >()(x)
-            )
-        );
+	BOOST_DEDUCED_TYPENAME base_::const_reference back() const
+	{
+		return this->template functor <
+		           BOOST_DEDUCED_TYPENAME base_::value_from_base > ()
+		(
+		    this->base().back()
+		);
+	}
 
-        return std::pair<BOOST_DEDUCED_TYPENAME base_::iterator, bool>(
-            this->template functor<
-                BOOST_DEDUCED_TYPENAME base_::iterator_from_base>()(r.first),
-            r.second
-        );
-    }
+	void push_front (
+	    BOOST_DEDUCED_TYPENAME ::boost::call_traits <
+	    BOOST_DEDUCED_TYPENAME base_::value_type >::param_type x )
+	{
+		this->base().push_front (
+		    this->template functor<BOOST_DEDUCED_TYPENAME base_::value_to_base>() ( x ) );
+	}
 
-    void insert(BOOST_DEDUCED_TYPENAME base_::iterator position,
-                BOOST_DEDUCED_TYPENAME base_::size_type m,
-                BOOST_DEDUCED_TYPENAME ::boost::call_traits<
-                    BOOST_DEDUCED_TYPENAME base_::value_type >::param_type x)
-    {
-        this->base().insert(
-            this->template functor<
-                BOOST_DEDUCED_TYPENAME base_::iterator_to_base>()(position),
-            m,
-            this->template functor<BOOST_DEDUCED_TYPENAME base_::value_to_base   >()(x)
-        );
-    }
+	void pop_front()
+	{
+		this->base().pop_front();
+	}
 
-    template< class InputIterator >
-    void insert(BOOST_DEDUCED_TYPENAME base_::iterator position,
-                InputIterator first, InputIterator last)
-    {
-        // This is the same problem found in the insert function 
-        // of container_adaptor
-        // For now, do the simple thing. This can be optimized
+	void push_back (
+	    BOOST_DEDUCED_TYPENAME ::boost::call_traits <
+	    BOOST_DEDUCED_TYPENAME base_::value_type >::param_type x )
+	{
+		this->base().push_back (
+		    this->template functor<BOOST_DEDUCED_TYPENAME base_::value_to_base>() ( x ) );
+	}
 
-        for( ; first != last ; ++first )
-        {
-            this->base().insert(
-                this->template functor<
-                    BOOST_DEDUCED_TYPENAME base_::iterator_to_base>()( position ),
-                this->template functor<
-                    BOOST_DEDUCED_TYPENAME base_::value_to_base   >()( *first )
-            );
-        }
-    }
+	void pop_back()
+	{
+		this->base().pop_back();
+	}
 
-    // Totally ordered implementation
+	std::pair<BOOST_DEDUCED_TYPENAME base_::iterator, bool>
+	insert ( BOOST_DEDUCED_TYPENAME base_::iterator position,
+	         BOOST_DEDUCED_TYPENAME ::boost::call_traits <
+	         BOOST_DEDUCED_TYPENAME base_::value_type >::param_type x )
+	{
+		std::pair< BOOST_DEDUCED_TYPENAME Base::iterator, bool > r (
+		    this->base().insert (
+		        this->template functor <
+		            BOOST_DEDUCED_TYPENAME base_::iterator_to_base > () ( position ),
+		        this->template functor <
+		            BOOST_DEDUCED_TYPENAME base_::value_to_base   > () ( x )
+		        )
+		        );
 
-    bool operator==(const sequence_container_adaptor & c) const
-    {
-        return ( this->base() == c.base() );
-    }
+		return std::pair<BOOST_DEDUCED_TYPENAME base_::iterator, bool> (
+		           this->template functor <
+		               BOOST_DEDUCED_TYPENAME base_::iterator_from_base > () ( r.first ),
+		           r.second
+		           );
+	}
 
-    bool operator<(const sequence_container_adaptor & c) const
-    {
-        return ( this->base() < c.base() );
-    }
+	void insert ( BOOST_DEDUCED_TYPENAME base_::iterator position,
+	              BOOST_DEDUCED_TYPENAME base_::size_type m,
+	              BOOST_DEDUCED_TYPENAME ::boost::call_traits <
+	              BOOST_DEDUCED_TYPENAME base_::value_type >::param_type x )
+	{
+		this->base().insert (
+		    this->template functor <
+		        BOOST_DEDUCED_TYPENAME base_::iterator_to_base > () ( position ),
+		    m,
+		    this->template functor<BOOST_DEDUCED_TYPENAME base_::value_to_base   >() ( x )
+		                          );
+	}
+
+	template< class InputIterator >
+	void insert ( BOOST_DEDUCED_TYPENAME base_::iterator position,
+	              InputIterator first, InputIterator last )
+	{
+		// This is the same problem found in the insert function
+		// of container_adaptor
+		// For now, do the simple thing. This can be optimized
+
+		for ( ; first != last ; ++first )
+		{
+			this->base().insert (
+			    this->template functor <
+			        BOOST_DEDUCED_TYPENAME base_::iterator_to_base > () ( position ),
+			    this->template functor <
+			        BOOST_DEDUCED_TYPENAME base_::value_to_base   > () ( *first )
+			    );
+		}
+	}
+
+	// Totally ordered implementation
+
+	bool operator== ( const sequence_container_adaptor &c ) const
+	{
+		return ( this->base() == c.base() );
+	}
+
+	bool operator< ( const sequence_container_adaptor &c ) const
+	{
+		return ( this->base() < c.base() );
+	}
 };
 
 } // namespace container_adaptor

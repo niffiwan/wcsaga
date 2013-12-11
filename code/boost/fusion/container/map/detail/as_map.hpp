@@ -20,27 +20,31 @@
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/iterator/next.hpp>
 
-namespace boost { namespace fusion { namespace detail
+namespace boost
 {
-    template <int size>
-    struct as_map;
+namespace fusion
+{
+namespace detail
+{
+template <int size>
+struct as_map;
 
-    template <>
-    struct as_map<0>
-    {
-        template <typename Iterator>
-        struct apply
-        {
-            typedef map<> type;
-        };
+template <>
+struct as_map<0>
+{
+	template <typename Iterator>
+	struct apply
+	{
+		typedef map<> type;
+	};
 
-        template <typename Iterator>
-        static typename apply<Iterator>::type
-        call(Iterator)
-        {
-            return map<>();
-        }
-    };
+	template <typename Iterator>
+	static typename apply<Iterator>::type
+	call ( Iterator )
+	{
+		return map<>();
+	}
+};
 
 #define BOOST_FUSION_NEXT_ITERATOR(z, n, data)                                  \
     typedef typename fusion::result_of::next<BOOST_PP_CAT(I, n)>::type          \
@@ -62,7 +66,9 @@ namespace boost { namespace fusion { namespace detail
 #undef BOOST_FUSION_NEXT_CALL_ITERATOR
 #undef BOOST_FUSION_VALUE_OF_ITERATOR
 
-}}}
+}
+}
+}
 
 #endif
 #else // defined(BOOST_PP_IS_ITERATING)
@@ -74,27 +80,27 @@ namespace boost { namespace fusion { namespace detail
 
 #define N BOOST_PP_ITERATION()
 
-    template <>
-    struct as_map<N>
-    {
-        template <typename I0>
-        struct apply
-        {
-            BOOST_PP_REPEAT(N, BOOST_FUSION_NEXT_ITERATOR, _)
-            BOOST_PP_REPEAT(N, BOOST_FUSION_VALUE_OF_ITERATOR, _)
-            typedef map<BOOST_PP_ENUM_PARAMS(N, T)> type;
-        };
+template <>
+struct as_map<N>
+{
+	template <typename I0>
+	struct apply
+	{
+		BOOST_PP_REPEAT ( N, BOOST_FUSION_NEXT_ITERATOR, _ )
+		BOOST_PP_REPEAT ( N, BOOST_FUSION_VALUE_OF_ITERATOR, _ )
+		typedef map<BOOST_PP_ENUM_PARAMS ( N, T ) > type;
+	};
 
-        template <typename Iterator>
-        static typename apply<Iterator>::type
-        call(Iterator const& i0)
-        {
-            typedef apply<Iterator> gen;
-            typedef typename gen::type result;
-            BOOST_PP_REPEAT(BOOST_PP_DEC(N), BOOST_FUSION_NEXT_CALL_ITERATOR, _)
-            return result(BOOST_PP_ENUM_PARAMS(N, *i));
-        }
-    };
+	template <typename Iterator>
+	static typename apply<Iterator>::type
+	call ( Iterator const &i0 )
+	{
+		typedef apply<Iterator> gen;
+		typedef typename gen::type result;
+		BOOST_PP_REPEAT ( BOOST_PP_DEC ( N ), BOOST_FUSION_NEXT_CALL_ITERATOR, _ )
+		return result ( BOOST_PP_ENUM_PARAMS ( N, *i ) );
+	}
+};
 
 #undef N
 #endif // defined(BOOST_PP_IS_ITERATING)

@@ -14,55 +14,55 @@
 namespace boost
 {
 
-  //
-  //
-  //
-  template <class Iterator>
-  class reverse_iterator
-      : public iterator_adaptor< reverse_iterator<Iterator>, Iterator >
-  {
-      typedef iterator_adaptor< reverse_iterator<Iterator>, Iterator > super_t;
+//
+//
+//
+template <class Iterator>
+class reverse_iterator
+	: public iterator_adaptor< reverse_iterator<Iterator>, Iterator >
+{
+	typedef iterator_adaptor< reverse_iterator<Iterator>, Iterator > super_t;
 
-      friend class iterator_core_access;
+	friend class iterator_core_access;
 
-   public:
-      reverse_iterator() {}
+public:
+	reverse_iterator() {}
 
-      explicit reverse_iterator(Iterator x) 
-          : super_t(x) {}
+	explicit reverse_iterator ( Iterator x )
+		: super_t ( x ) {}
 
-      template<class OtherIterator>
-      reverse_iterator(
-          reverse_iterator<OtherIterator> const& r
-          , typename enable_if_convertible<OtherIterator, Iterator>::type* = 0
-          )
-          : super_t(r.base())
-      {}
+	template<class OtherIterator>
+	reverse_iterator (
+	    reverse_iterator<OtherIterator> const &r
+	    , typename enable_if_convertible<OtherIterator, Iterator>::type * = 0
+	)
+		: super_t ( r.base() )
+	{}
 
-   private:
-      typename super_t::reference dereference() const { return *boost::prior(this->base()); }
-    
-      void increment() { --this->base_reference(); }
-      void decrement() { ++this->base_reference(); }
+private:
+	typename super_t::reference dereference() const { return *boost::prior ( this->base() ); }
 
-      void advance(typename super_t::difference_type n)
-      {
-          this->base_reference() += -n;
-      }
+	void increment() { --this->base_reference(); }
+	void decrement() { ++this->base_reference(); }
 
-      template <class OtherIterator>
-      typename super_t::difference_type
-      distance_to(reverse_iterator<OtherIterator> const& y) const
-      {
-          return this->base_reference() - y.base();
-      }
-  };
+	void advance ( typename super_t::difference_type n )
+	{
+		this->base_reference() += -n;
+	}
 
-  template <class BidirectionalIterator>
-  reverse_iterator<BidirectionalIterator> make_reverse_iterator(BidirectionalIterator x)
-  {
-      return reverse_iterator<BidirectionalIterator>(x);
-  }
+	template <class OtherIterator>
+	typename super_t::difference_type
+	distance_to ( reverse_iterator<OtherIterator> const &y ) const
+	{
+		return this->base_reference() - y.base();
+	}
+};
+
+template <class BidirectionalIterator>
+reverse_iterator<BidirectionalIterator> make_reverse_iterator ( BidirectionalIterator x )
+{
+	return reverse_iterator<BidirectionalIterator> ( x );
+}
 
 } // namespace boost
 

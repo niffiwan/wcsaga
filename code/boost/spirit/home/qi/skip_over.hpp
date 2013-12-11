@@ -14,31 +14,37 @@
 #include <boost/spirit/home/support/unused.hpp>
 #include <boost/spirit/home/qi/detail/unused_skipper.hpp>
 
-namespace boost { namespace spirit { namespace qi
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Move the /first/ iterator to the first non-matching position
-    // given a skip-parser. The function is a no-op if unused_type is
-    // passed as the skip-parser.
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Iterator, typename T>
-    inline void skip_over(Iterator& first, Iterator const& last, T const& skipper)
-    {
-        while (first != last && skipper.parse(first, last, unused, unused, unused))
-            /***/;
-    }
+namespace spirit
+{
+namespace qi
+{
+///////////////////////////////////////////////////////////////////////////
+// Move the /first/ iterator to the first non-matching position
+// given a skip-parser. The function is a no-op if unused_type is
+// passed as the skip-parser.
+///////////////////////////////////////////////////////////////////////////
+template <typename Iterator, typename T>
+inline void skip_over ( Iterator &first, Iterator const &last, T const &skipper )
+{
+	while ( first != last && skipper.parse ( first, last, unused, unused, unused ) )
+		/***/;
+}
 
-    template <typename Iterator>
-    inline void skip_over(Iterator&, Iterator const&, unused_type)
-    {
-    }
+template <typename Iterator>
+inline void skip_over ( Iterator &, Iterator const &, unused_type )
+{
+}
 
-    template <typename Iterator, typename Skipper>
-    inline void skip_over(Iterator&, Iterator const&
-      , detail::unused_skipper<Skipper> const&)
-    {
-    }
+template <typename Iterator, typename Skipper>
+inline void skip_over ( Iterator &, Iterator const &
+                        , detail::unused_skipper<Skipper> const & )
+{
+}
 
-}}}
+}
+}
+}
 
 #endif

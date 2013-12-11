@@ -22,37 +22,42 @@
 #include <boost/interprocess/detail/workaround.hpp>
 #include <boost/interprocess/detail/type_traits.hpp>
 
-namespace boost {
-namespace interprocess {
-namespace detail {
+namespace boost
+{
+namespace interprocess
+{
+namespace detail
+{
 
 struct two {char _[2];};
 
-namespace pointer_type_imp {
+namespace pointer_type_imp
+{
 
-template <class U> static two  test(...);
-template <class U> static char test(typename U::pointer* = 0);
+template <class U> static two  test ( ... );
+template <class U> static char test ( typename U::pointer * = 0 );
 
 }  //namespace pointer_type_imp {
 
 template <class T>
 struct has_pointer_type
 {
-    static const bool value = sizeof(pointer_type_imp::test<T>(0)) == 1;
+	static const bool value = sizeof ( pointer_type_imp::test<T> ( 0 ) ) == 1;
 };
 
-namespace pointer_type_imp {
+namespace pointer_type_imp
+{
 
 template <class T, class D, bool = has_pointer_type<D>::value>
 struct pointer_type
 {
-    typedef typename D::pointer type;
+	typedef typename D::pointer type;
 };
 
 template <class T, class D>
 struct pointer_type<T, D, false>
 {
-    typedef T* type;
+	typedef T *type;
 };
 
 }  //namespace pointer_type_imp {
@@ -60,12 +65,12 @@ struct pointer_type<T, D, false>
 template <class T, class D>
 struct pointer_type
 {
-    typedef typename pointer_type_imp::pointer_type<T,
-        typename detail::remove_reference<D>::type>::type type;
+	typedef typename pointer_type_imp::pointer_type<T,
+	        typename detail::remove_reference<D>::type>::type type;
 };
 
 }  //namespace detail {
-}  //namespace interprocess { 
+}  //namespace interprocess {
 }  //namespace boost {
 
 #include <boost/interprocess/detail/config_end.hpp>

@@ -13,37 +13,40 @@
 #include <boost/spirit/home/phoenix/core/compose.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
-namespace boost { namespace phoenix
+namespace boost
 {
-    template <int N>
-    struct at_eval
-    {
-        template <typename Env, typename Tuple>
-        struct result
-        {
-            typedef typename Tuple::template result<Env>::type tuple;
-            typedef typename
-                fusion::result_of::at_c<
-                    typename remove_reference<tuple>::type, N
-                >::type
-            type;
-        };
+namespace phoenix
+{
+template <int N>
+struct at_eval
+{
+	template <typename Env, typename Tuple>
+	struct result
+	{
+		typedef typename Tuple::template result<Env>::type tuple;
+		typedef typename
+		fusion::result_of::at_c <
+		typename remove_reference<tuple>::type, N
+		>::type
+		type;
+	};
 
-        template <typename RT, typename Env, typename Tuple>
-        static RT
-        eval(Env const& env, Tuple const& t)
-        {
-            return fusion::at_c<N>(t.eval(env));
-        }
-    };
+	template <typename RT, typename Env, typename Tuple>
+	static RT
+	eval ( Env const &env, Tuple const &t )
+	{
+		return fusion::at_c<N> ( t.eval ( env ) );
+	}
+};
 
-    template <int N, typename Tuple>
-    inline actor<typename as_composite<at_eval<N>, Tuple>::type>
-    at_c(Tuple const& tup)
-    {
-        return compose<at_eval<N> >(tup);
-    }
+template <int N, typename Tuple>
+inline actor<typename as_composite<at_eval<N>, Tuple>::type>
+at_c ( Tuple const &tup )
+{
+	return compose<at_eval<N> > ( tup );
+}
 
-}}
+}
+}
 
 #endif

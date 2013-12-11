@@ -19,8 +19,10 @@
 #include <boost/interprocess/containers/container/flat_map.hpp>
 #include <boost/interprocess/containers/containers_fwd.hpp>
 
-namespace boost {
-namespace interprocess {
+namespace boost
+{
+namespace interprocess
+{
 
 using boost::container::flat_map;
 using boost::container::flat_multimap;

@@ -5,8 +5,8 @@
 // Copyright Aleksey Gurtovoy 2003-2004
 // Copyright David Abrahams 2003-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -25,7 +25,10 @@
 
 #include <boost/preprocessor/cat.hpp>
 
-namespace boost { namespace mpl {
+namespace boost
+{
+namespace mpl
+{
 
 #if defined(BOOST_MPL_CFG_USE_OPERATORS_OVERLOADING)
 
@@ -53,22 +56,23 @@ namespace boost { namespace mpl {
 
 template< typename Dummy = na > struct map0
 {
-    typedef map0            type;
-    typedef aux::map_tag    tag;
-    typedef void_           key_;
-    typedef long_<1>        order;
-    typedef long_<0>        size;
+	typedef map0            type;
+	typedef aux::map_tag    tag;
+	typedef void_           key_;
+	typedef long_<1>        order;
+	typedef long_<0>        size;
 
 #if defined(BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES)
-    BOOST_MPL_AUX_MAP0_OVERLOAD( aux::type_wrapper<void_>, VALUE_BY_KEY, map0<>, void const volatile* );
-    BOOST_MPL_AUX_MAP0_OVERLOAD( aux::type_wrapper<void_>, ITEM_BY_ORDER, map0<>, long_<1>* );
-    BOOST_MPL_AUX_MAP0_OVERLOAD( aux::no_tag, ORDER_BY_KEY, map0<>, void const volatile* );
+	BOOST_MPL_AUX_MAP0_OVERLOAD ( aux::type_wrapper<void_>, VALUE_BY_KEY, map0<>, void const volatile * );
+	BOOST_MPL_AUX_MAP0_OVERLOAD ( aux::type_wrapper<void_>, ITEM_BY_ORDER, map0<>, long_<1> * );
+	BOOST_MPL_AUX_MAP0_OVERLOAD ( aux::no_tag, ORDER_BY_KEY, map0<>, void const volatile * );
 #else
-    BOOST_MPL_AUX_MAP0_OVERLOAD( aux::no_tag, ORDER_BY_KEY, map0<>, void const volatile* );
-    BOOST_MPL_AUX_MAP0_OVERLOAD( aux::no_tag, IS_MASKED, map0<>, void const volatile* );
+	BOOST_MPL_AUX_MAP0_OVERLOAD ( aux::no_tag, ORDER_BY_KEY, map0<>, void const volatile * );
+	BOOST_MPL_AUX_MAP0_OVERLOAD ( aux::no_tag, IS_MASKED, map0<>, void const volatile * );
 #endif
 };
 
-}}
+}
+}
 
 #endif // BOOST_MPL_MAP_AUX_MAP0_HPP_INCLUDED

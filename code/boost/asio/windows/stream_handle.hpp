@@ -22,9 +22,12 @@
 #if defined(BOOST_ASIO_HAS_WINDOWS_STREAM_HANDLE) \
   || defined(GENERATING_DOCUMENTATION)
 
-namespace boost {
-namespace asio {
-namespace windows {
+namespace boost
+{
+namespace asio
+{
+namespace windows
+{
 
 /// Typedef for the typical usage of a stream-oriented handle.
 typedef basic_stream_handle<> stream_handle;
@@ -34,7 +37,7 @@ typedef basic_stream_handle<> stream_handle;
 } // namespace boost
 
 #endif // defined(BOOST_ASIO_HAS_WINDOWS_STREAM_HANDLE)
-       //   || defined(GENERATING_DOCUMENTATION)
+//   || defined(GENERATING_DOCUMENTATION)
 
 #include <boost/asio/detail/pop_options.hpp>
 

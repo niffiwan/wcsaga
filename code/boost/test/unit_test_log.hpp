@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2001-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -38,24 +38,28 @@
 
 //____________________________________________________________________________//
 
-namespace boost {
+namespace boost
+{
 
-namespace unit_test {
+namespace unit_test
+{
 
 // ************************************************************************** //
 // **************                log manipulators              ************** //
 // ************************************************************************** //
 
-namespace log {
+namespace log
+{
 
-struct BOOST_TEST_DECL begin {
-    begin( const_string fn, std::size_t ln )
-    : m_file_name( fn )
-    , m_line_num( ln )
-    {}
+struct BOOST_TEST_DECL begin
+{
+	begin ( const_string fn, std::size_t ln )
+		: m_file_name ( fn )
+		, m_line_num ( ln )
+	{}
 
-    const_string m_file_name;
-    std::size_t m_line_num;
+	const_string m_file_name;
+	std::size_t m_line_num;
 };
 
 struct end {};
@@ -66,22 +70,24 @@ struct end {};
 // **************             entry_value_collector            ************** //
 // ************************************************************************** //
 
-namespace ut_detail {
+namespace ut_detail
+{
 
-class BOOST_TEST_DECL entry_value_collector {
+class BOOST_TEST_DECL entry_value_collector
+{
 public:
-    // Constructors
-    entry_value_collector() : m_last( true ) {}
-    entry_value_collector( entry_value_collector const& rhs ) : m_last( true ) { rhs.m_last = false; }
-    ~entry_value_collector();
+	// Constructors
+	entry_value_collector() : m_last ( true ) {}
+	entry_value_collector ( entry_value_collector const &rhs ) : m_last ( true ) { rhs.m_last = false; }
+	~entry_value_collector();
 
-    // collection interface
-    entry_value_collector const& operator<<( lazy_ostream const& ) const;
-    entry_value_collector const& operator<<( const_string ) const;
+	// collection interface
+	entry_value_collector const &operator<< ( lazy_ostream const & ) const;
+	entry_value_collector const &operator<< ( const_string ) const;
 
 private:
-    // Data members
-    mutable bool    m_last;
+	// Data members
+	mutable bool    m_last;
 };
 
 } // namespace ut_detail
@@ -90,48 +96,49 @@ private:
 // **************                 unit_test_log                ************** //
 // ************************************************************************** //
 
-class BOOST_TEST_DECL unit_test_log_t : public test_observer, public singleton<unit_test_log_t> {
+class BOOST_TEST_DECL unit_test_log_t : public test_observer, public singleton<unit_test_log_t>
+{
 public:
-    // test_observer interface implementation
-    void                test_start( counter_t test_cases_amount );
-    void                test_finish();
-    void                test_aborted();
+	// test_observer interface implementation
+	void                test_start ( counter_t test_cases_amount );
+	void                test_finish();
+	void                test_aborted();
 
-    void                test_unit_start( test_unit const& );
-    void                test_unit_finish( test_unit const&, unsigned long elapsed );
-    void                test_unit_skipped( test_unit const& );
-    void                test_unit_aborted( test_unit const& );
+	void                test_unit_start ( test_unit const & );
+	void                test_unit_finish ( test_unit const &, unsigned long elapsed );
+	void                test_unit_skipped ( test_unit const & );
+	void                test_unit_aborted ( test_unit const & );
 
-    void                assertion_result( bool passed );
-    void                exception_caught( execution_exception const& );
+	void                assertion_result ( bool passed );
+	void                exception_caught ( execution_exception const & );
 
-    virtual int         priority() { return 1; }
+	virtual int         priority() { return 1; }
 
-    // log configuration methods
-    void                set_stream( std::ostream& );
-    void                set_threshold_level( log_level );
-    void                set_format( output_format );
-    void                set_formatter( unit_test_log_formatter* );
+	// log configuration methods
+	void                set_stream ( std::ostream & );
+	void                set_threshold_level ( log_level );
+	void                set_format ( output_format );
+	void                set_formatter ( unit_test_log_formatter * );
 
-    // test progress logging
-    void                set_checkpoint( const_string file, std::size_t line_num, const_string msg = const_string() );
+	// test progress logging
+	void                set_checkpoint ( const_string file, std::size_t line_num, const_string msg = const_string() );
 
-    // entry logging
-    unit_test_log_t&    operator<<( log::begin const& );        // begin entry 
-    unit_test_log_t&    operator<<( log::end const& );          // end entry
-    unit_test_log_t&    operator<<( log_level );                // set entry level
-    unit_test_log_t&    operator<<( const_string );             // log entry value
-    unit_test_log_t&    operator<<( lazy_ostream const& );      // log entry value
+	// entry logging
+	unit_test_log_t    &operator<< ( log::begin const & );      // begin entry
+	unit_test_log_t    &operator<< ( log::end const & );        // end entry
+	unit_test_log_t    &operator<< ( log_level );               // set entry level
+	unit_test_log_t    &operator<< ( const_string );            // log entry value
+	unit_test_log_t    &operator<< ( lazy_ostream const & );    // log entry value
 
-    ut_detail::entry_value_collector operator()( log_level );   // initiate entry collection
+	ut_detail::entry_value_collector operator() ( log_level );  // initiate entry collection
 
 private:
-    bool            log_entry_start();
+	bool            log_entry_start();
 
-    BOOST_TEST_SINGLETON_CONS( unit_test_log_t );
+	BOOST_TEST_SINGLETON_CONS ( unit_test_log_t );
 }; // unit_test_log_t
 
-BOOST_TEST_SINGLETON_INST( unit_test_log )
+BOOST_TEST_SINGLETON_INST ( unit_test_log )
 
 // helper macros
 #define BOOST_TEST_LOG_ENTRY( ll )                                                  \

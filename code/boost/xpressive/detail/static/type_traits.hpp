@@ -18,7 +18,11 @@
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+namespace boost
+{
+namespace xpressive
+{
+namespace detail
 {
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,19 +30,19 @@ namespace boost { namespace xpressive { namespace detail
 //
 template<typename T>
 struct is_static_xpression
-  : mpl::false_
+		: mpl::false_
 {
 };
 
 template<typename Matcher, typename Next>
 struct is_static_xpression<static_xpression<Matcher, Next> >
-  : mpl::true_
+		: mpl::true_
 {
 };
 
 template<typename Top, typename Next>
 struct is_static_xpression<stacked_xpression<Top, Next> >
-  : mpl::true_
+		: mpl::true_
 {
 };
 
@@ -47,14 +51,16 @@ struct is_static_xpression<stacked_xpression<Top, Next> >
 //
 template<typename BidiIter>
 struct is_random
-  : is_convertible
-    <
-        typename iterator_category<BidiIter>::type
-      , std::random_access_iterator_tag
-    >
+		: is_convertible
+		<
+		typename iterator_category<BidiIter>::type
+		, std::random_access_iterator_tag
+		>
 {
 };
 
-}}} // namespace boost::xpressive::detail
+}
+}
+} // namespace boost::xpressive::detail
 
 #endif

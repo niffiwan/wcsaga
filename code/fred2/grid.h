@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -15,33 +15,33 @@
 class CGrid : public CDialog
 {
 private:
-	CView*	m_pGView;
+	CView  *m_pGView;
 
-// Construction
+	// Construction
 public:
-	CGrid(CWnd* pParent = NULL);   // standard constructor
-	CGrid(CView* pView);
+	CGrid ( CWnd *pParent = NULL ); // standard constructor
+	CGrid ( CView *pView );
 
 	BOOL Create();
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(CGrid)
 	enum { IDD = IDD_GRID };
-	UINT	m_GridSize;
+	UINT    m_GridSize;
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CGrid)
-	public:
-	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
+public:
+	virtual BOOL Create ( LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT &rect, CWnd *pParentWnd, UINT nID, CCreateContext *pContext = NULL );
 	virtual BOOL DestroyWindow();
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions
@@ -51,9 +51,9 @@ protected:
 	afx_msg void OnGridYzPlane();
 	afx_msg void OnClose();
 	afx_msg void OnDestroy();
-	afx_msg void OnKillFocus(CWnd* pNewWnd);
+	afx_msg void OnKillFocus ( CWnd *pNewWnd );
 	virtual BOOL OnInitDialog();
-	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnVScroll ( UINT nSBCode, UINT nPos, CScrollBar *pScrollBar );
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

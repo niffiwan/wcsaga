@@ -14,7 +14,12 @@
 
 # include <boost/function/function0.hpp>
 
-namespace boost { namespace python { namespace detail { 
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
 // A ternary function object used to translate C++ exceptions of type
 // ExceptionType into Python exceptions by invoking an object of type
@@ -23,47 +28,49 @@ namespace boost { namespace python { namespace detail {
 template <class ExceptionType, class Translate>
 struct translate_exception
 {
-// workaround for broken gcc that ships with SuSE 9.0 and SuSE 9.1
+	// workaround for broken gcc that ships with SuSE 9.0 and SuSE 9.1
 # if defined(__linux__) && defined(__GNUC__) \
     && BOOST_WORKAROUND(__GNUC__, == 3) \
     && BOOST_WORKAROUND(__GNUC_MINOR__, == 3) \
     && (BOOST_WORKAROUND(__GNUC_PATCHLEVEL__, == 1) \
         || BOOST_WORKAROUND(__GNUC_PATCHLEVEL__, == 3))
-    typedef typename remove_reference<
-        typename add_const<ExceptionType>::type
-    >::type exception_non_ref;
+	typedef typename remove_reference <
+	typename add_const<ExceptionType>::type
+	>::type exception_non_ref;
 # else
-    typedef typename add_reference<
-        typename add_const<ExceptionType>::type
-    >::type exception_cref;
+	typedef typename add_reference <
+	typename add_const<ExceptionType>::type
+	>::type exception_cref;
 # endif
-    
-    inline bool operator()(
-        exception_handler const& handler
-      , function0<void> const& f
-      , typename call_traits<Translate>::param_type translate) const
-    {
-        try
-        {
-            return handler(f);
-        }
-// workaround for broken gcc that ships with SuSE 9.0 and SuSE 9.1
+
+	inline bool operator() (
+	    exception_handler const &handler
+	    , function0<void> const &f
+	    , typename call_traits<Translate>::param_type translate ) const
+	{
+		try
+		{
+			return handler ( f );
+		}
+		// workaround for broken gcc that ships with SuSE 9.0 and SuSE 9.1
 # if defined(__linux__) && defined(__GNUC__) \
     && BOOST_WORKAROUND(__GNUC__, == 3) \
     && BOOST_WORKAROUND(__GNUC_MINOR__, == 3) \
     && (BOOST_WORKAROUND(__GNUC_PATCHLEVEL__, == 1) \
         || BOOST_WORKAROUND(__GNUC_PATCHLEVEL__, == 3))
-        catch(exception_non_ref& e)
+		catch ( exception_non_ref &e )
 # else
-        catch(exception_cref e)
+		catch ( exception_cref e )
 # endif
-        {
-            translate(e);
-            return true;
-        }
-    }
+		{
+			translate ( e );
+			return true;
+		}
+	}
 };
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 
 #endif // TRANSLATE_EXCEPTION_DWA2002810_HPP

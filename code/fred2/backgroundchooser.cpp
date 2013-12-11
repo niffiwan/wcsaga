@@ -16,8 +16,8 @@ static char THIS_FILE[] = __FILE__;
 // BackgroundChooser dialog
 
 
-BackgroundChooser::BackgroundChooser(int numBackgrounds)
-	: CDialog(BackgroundChooser::IDD)
+BackgroundChooser::BackgroundChooser ( int numBackgrounds )
+	: CDialog ( BackgroundChooser::IDD )
 {
 	//{{AFX_DATA_INIT(BackgroundChooser)
 	//}}AFX_DATA_INIT
@@ -27,15 +27,15 @@ BackgroundChooser::BackgroundChooser(int numBackgrounds)
 }
 
 
-void BackgroundChooser::DoDataExchange(CDataExchange* pDX)
+void BackgroundChooser::DoDataExchange ( CDataExchange *pDX )
 {
-	CDialog::DoDataExchange(pDX);
+	CDialog::DoDataExchange ( pDX );
 	//{{AFX_DATA_MAP(BackgroundChooser)
 	//}}AFX_DATA_MAP
 }
 
 
-BEGIN_MESSAGE_MAP(BackgroundChooser, CDialog)
+BEGIN_MESSAGE_MAP ( BackgroundChooser, CDialog )
 	//{{AFX_MSG_MAP(BackgroundChooser)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -47,33 +47,33 @@ BOOL BackgroundChooser::OnInitDialog()
 {
 	int i;
 
-	for (i = 0; i < m_numBackgrounds; i++) 
+	for ( i = 0; i < m_numBackgrounds; i++ )
 	{
 		char temp[NAME_LENGTH];
-		sprintf(temp, "Background %d", i + 1);
+		sprintf ( temp, "Background %d", i + 1 );
 
-		((CComboBox*) GetDlgItem(IDC_BACKGROUND))->AddString(temp);
+		( ( CComboBox * ) GetDlgItem ( IDC_BACKGROUND ) )->AddString ( temp );
 	}
-	((CComboBox*) GetDlgItem(IDC_BACKGROUND))->SetCurSel(0);
+	( ( CComboBox * ) GetDlgItem ( IDC_BACKGROUND ) )->SetCurSel ( 0 );
 
 	CDialog::OnInitDialog();
-	UpdateData(FALSE);
+	UpdateData ( FALSE );
 	return TRUE;
 }
 
-void BackgroundChooser::OnOK() 
+void BackgroundChooser::OnOK()
 {
-	UpdateData(TRUE);
+	UpdateData ( TRUE );
 
-	m_chosenBackground = ((CComboBox*) GetDlgItem(IDC_BACKGROUND))->GetCurSel();
+	m_chosenBackground = ( ( CComboBox * ) GetDlgItem ( IDC_BACKGROUND ) )->GetCurSel();
 
 	CDialog::OnOK();
 }
 
-void BackgroundChooser::OnCancel() 
+void BackgroundChooser::OnCancel()
 {
 	// TODO: Add extra cleanup here
-	
+
 	CDialog::OnCancel();
 }
 

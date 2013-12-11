@@ -27,143 +27,147 @@
 
 #if !defined(BOOST_WINDOWS) && !defined(__CYGWIN__)
 
-namespace boost {
-namespace asio {
-namespace detail {
-namespace descriptor_ops {
-
-inline void clear_error(boost::system::error_code& ec)
+namespace boost
 {
-  errno = 0;
-  ec = boost::system::error_code();
+namespace asio
+{
+namespace detail
+{
+namespace descriptor_ops
+{
+
+inline void clear_error ( boost::system::error_code &ec )
+{
+	errno = 0;
+	ec = boost::system::error_code();
 }
 
 template <typename ReturnType>
-inline ReturnType error_wrapper(ReturnType return_value,
-    boost::system::error_code& ec)
+inline ReturnType error_wrapper ( ReturnType return_value,
+                                  boost::system::error_code &ec )
 {
-  ec = boost::system::error_code(errno,
-      boost::asio::error::get_system_category());
-  return return_value;
+	ec = boost::system::error_code ( errno,
+	                                 boost::asio::error::get_system_category() );
+	return return_value;
 }
 
-inline int open(const char* path, int flags, boost::system::error_code& ec)
+inline int open ( const char *path, int flags, boost::system::error_code &ec )
 {
-  clear_error(ec);
-  int result = error_wrapper(::open(path, flags), ec);
-  if (result >= 0)
-    clear_error(ec);
-  return result;
+	clear_error ( ec );
+	int result = error_wrapper ( ::open ( path, flags ), ec );
+	if ( result >= 0 )
+		clear_error ( ec );
+	return result;
 }
 
-inline int close(int d, boost::system::error_code& ec)
+inline int close ( int d, boost::system::error_code &ec )
 {
-  clear_error(ec);
-  int result = error_wrapper(::close(d), ec);
-  if (result == 0)
-    clear_error(ec);
-  return result;
+	clear_error ( ec );
+	int result = error_wrapper ( ::close ( d ), ec );
+	if ( result == 0 )
+		clear_error ( ec );
+	return result;
 }
 
-inline void init_buf_iov_base(void*& base, void* addr)
+inline void init_buf_iov_base ( void *&base, void *addr )
 {
-  base = addr;
+	base = addr;
 }
 
 template <typename T>
-inline void init_buf_iov_base(T& base, void* addr)
+inline void init_buf_iov_base ( T &base, void *addr )
 {
-  base = static_cast<T>(addr);
+	base = static_cast<T> ( addr );
 }
 
 typedef iovec buf;
 
-inline void init_buf(buf& b, void* data, size_t size)
+inline void init_buf ( buf &b, void *data, size_t size )
 {
-  init_buf_iov_base(b.iov_base, data);
-  b.iov_len = size;
+	init_buf_iov_base ( b.iov_base, data );
+	b.iov_len = size;
 }
 
-inline void init_buf(buf& b, const void* data, size_t size)
+inline void init_buf ( buf &b, const void *data, size_t size )
 {
-  init_buf_iov_base(b.iov_base, const_cast<void*>(data));
-  b.iov_len = size;
+	init_buf_iov_base ( b.iov_base, const_cast<void *> ( data ) );
+	b.iov_len = size;
 }
 
-inline int scatter_read(int d, buf* bufs, size_t count,
-    boost::system::error_code& ec)
+inline int scatter_read ( int d, buf *bufs, size_t count,
+                          boost::system::error_code &ec )
 {
-  clear_error(ec);
-  int result = error_wrapper(::readv(d, bufs, static_cast<int>(count)), ec);
-  if (result >= 0)
-    clear_error(ec);
-  return result;
+	clear_error ( ec );
+	int result = error_wrapper ( ::readv ( d, bufs, static_cast<int> ( count ) ), ec );
+	if ( result >= 0 )
+		clear_error ( ec );
+	return result;
 }
 
-inline int gather_write(int d, const buf* bufs, size_t count,
-    boost::system::error_code& ec)
+inline int gather_write ( int d, const buf *bufs, size_t count,
+                          boost::system::error_code &ec )
 {
-  clear_error(ec);
-  int result = error_wrapper(::writev(d, bufs, static_cast<int>(count)), ec);
-  if (result >= 0)
-    clear_error(ec);
-  return result;
+	clear_error ( ec );
+	int result = error_wrapper ( ::writev ( d, bufs, static_cast<int> ( count ) ), ec );
+	if ( result >= 0 )
+		clear_error ( ec );
+	return result;
 }
 
-inline int ioctl(int d, long cmd, ioctl_arg_type* arg,
-    boost::system::error_code& ec)
+inline int ioctl ( int d, long cmd, ioctl_arg_type *arg,
+                   boost::system::error_code &ec )
 {
-  clear_error(ec);
-  int result = error_wrapper(::ioctl(d, cmd, arg), ec);
-  if (result >= 0)
-    clear_error(ec);
-  return result;
+	clear_error ( ec );
+	int result = error_wrapper ( ::ioctl ( d, cmd, arg ), ec );
+	if ( result >= 0 )
+		clear_error ( ec );
+	return result;
 }
 
-inline int fcntl(int d, long cmd, boost::system::error_code& ec)
+inline int fcntl ( int d, long cmd, boost::system::error_code &ec )
 {
-  clear_error(ec);
-  int result = error_wrapper(::fcntl(d, cmd), ec);
-  if (result != -1)
-    clear_error(ec);
-  return result;
+	clear_error ( ec );
+	int result = error_wrapper ( ::fcntl ( d, cmd ), ec );
+	if ( result != -1 )
+		clear_error ( ec );
+	return result;
 }
 
-inline int fcntl(int d, long cmd, long arg, boost::system::error_code& ec)
+inline int fcntl ( int d, long cmd, long arg, boost::system::error_code &ec )
 {
-  clear_error(ec);
-  int result = error_wrapper(::fcntl(d, cmd, arg), ec);
-  if (result != -1)
-    clear_error(ec);
-  return result;
+	clear_error ( ec );
+	int result = error_wrapper ( ::fcntl ( d, cmd, arg ), ec );
+	if ( result != -1 )
+		clear_error ( ec );
+	return result;
 }
 
-inline int poll_read(int d, boost::system::error_code& ec)
+inline int poll_read ( int d, boost::system::error_code &ec )
 {
-  clear_error(ec);
-  pollfd fds;
-  fds.fd = d;
-  fds.events = POLLIN;
-  fds.revents = 0;
-  clear_error(ec);
-  int result = error_wrapper(::poll(&fds, 1, -1), ec);
-  if (result >= 0)
-    clear_error(ec);
-  return result;
+	clear_error ( ec );
+	pollfd fds;
+	fds.fd = d;
+	fds.events = POLLIN;
+	fds.revents = 0;
+	clear_error ( ec );
+	int result = error_wrapper ( ::poll ( &fds, 1, -1 ), ec );
+	if ( result >= 0 )
+		clear_error ( ec );
+	return result;
 }
 
-inline int poll_write(int d, boost::system::error_code& ec)
+inline int poll_write ( int d, boost::system::error_code &ec )
 {
-  clear_error(ec);
-  pollfd fds;
-  fds.fd = d;
-  fds.events = POLLOUT;
-  fds.revents = 0;
-  clear_error(ec);
-  int result = error_wrapper(::poll(&fds, 1, -1), ec);
-  if (result >= 0)
-    clear_error(ec);
-  return result;
+	clear_error ( ec );
+	pollfd fds;
+	fds.fd = d;
+	fds.events = POLLOUT;
+	fds.revents = 0;
+	clear_error ( ec );
+	int result = error_wrapper ( ::poll ( &fds, 1, -1 ), ec );
+	if ( result >= 0 )
+		clear_error ( ec );
+	return result;
 }
 
 } // namespace descriptor_ops

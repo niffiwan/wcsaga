@@ -14,38 +14,40 @@
 #include <boost/accumulators/framework/depends_on.hpp>
 #include <boost/accumulators/statistics_fwd.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 namespace impl
 {
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // count_impl
-    struct count_impl
-      : accumulator_base
-    {
-        // for boost::result_of
-        typedef std::size_t result_type;
+///////////////////////////////////////////////////////////////////////////////
+// count_impl
+struct count_impl
+		: accumulator_base
+{
+	// for boost::result_of
+	typedef std::size_t result_type;
 
-        count_impl(dont_care)
-          : cnt(0)
-        {
-        }
+	count_impl ( dont_care )
+		: cnt ( 0 )
+	{
+	}
 
-        void operator ()(dont_care)
-        {
-            ++this->cnt;
-        }
+	void operator () ( dont_care )
+	{
+		++this->cnt;
+	}
 
-        result_type result(dont_care) const
-        {
-            return this->cnt;
-        }
+	result_type result ( dont_care ) const
+	{
+		return this->cnt;
+	}
 
-    private:
-        std::size_t cnt;
-    };
+private:
+	std::size_t cnt;
+};
 
 } // namespace impl
 
@@ -54,13 +56,13 @@ namespace impl
 //
 namespace tag
 {
-    struct count
-      : depends_on<>
-    {
-        /// INTERNAL ONLY
-        ///
-        typedef mpl::always<accumulators::impl::count_impl> impl;
-    };
+struct count
+		: depends_on<>
+{
+	/// INTERNAL ONLY
+	///
+	typedef mpl::always<accumulators::impl::count_impl> impl;
+};
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -68,13 +70,14 @@ namespace tag
 //
 namespace extract
 {
-    extractor<tag::count> const count = {};
+extractor<tag::count> const count = {};
 
-    BOOST_ACCUMULATORS_IGNORE_GLOBAL(count)
+BOOST_ACCUMULATORS_IGNORE_GLOBAL ( count )
 }
 
 using extract::count;
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

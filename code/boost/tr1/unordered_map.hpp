@@ -20,13 +20,17 @@
 
 #include <boost/unordered_map.hpp>
 
-namespace std{ namespace tr1{
+namespace std
+{
+namespace tr1
+{
 
-   using ::boost::unordered_map;
-   using ::boost::unordered_multimap;
-   using ::boost::swap;
+using ::boost::unordered_map;
+using ::boost::unordered_multimap;
+using ::boost::swap;
 
-} } // namespaces
+}
+} // namespaces
 
 #endif
 

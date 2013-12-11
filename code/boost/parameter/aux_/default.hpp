@@ -8,22 +8,27 @@
 
 # include <boost/detail/workaround.hpp>
 
-namespace boost { namespace parameter { namespace aux {
+namespace boost
+{
+namespace parameter
+{
+namespace aux
+{
 
 // A wrapper for the default value passed by the user when resolving
 // the value of the parameter with the given Keyword
 template <class Keyword, class Value>
 struct default_
 {
-    default_(Value& x)
-      : value(x)
-    {}
+	default_ ( Value &x )
+		: value ( x )
+	{}
 
-    Value& value;
+	Value &value;
 };
 
 //
-// lazy_default -- 
+// lazy_default --
 //
 //    A wrapper for the default value computation function passed by
 //    the user when resolving the value of the parameter with the
@@ -36,34 +41,36 @@ struct default_
 template <class KW, class DefaultComputer>
 struct lazy_default_base
 {
-    lazy_default_base(DefaultComputer const& x)
-      : compute_default(x)
-    {}
-    DefaultComputer const& compute_default;
+	lazy_default_base ( DefaultComputer const &x )
+		: compute_default ( x )
+	{}
+	DefaultComputer const &compute_default;
 };
 
 template <class KW, class DefaultComputer>
 struct lazy_default
-  : lazy_default_base<KW,DefaultComputer>
-  {
-      lazy_default(DefaultComputer const & x)
-        : lazy_default_base<KW,DefaultComputer>(x)
-      {}
-  };
+		: lazy_default_base<KW, DefaultComputer>
+{
+	lazy_default ( DefaultComputer const &x )
+		: lazy_default_base<KW, DefaultComputer> ( x )
+	{}
+};
 #  define BOOST_PARAMETER_lazy_default_fallback lazy_default_base
-# else 
+# else
 template <class KW, class DefaultComputer>
 struct lazy_default
 {
-    lazy_default(const DefaultComputer& x)
-      : compute_default(x)
-    {}
-    DefaultComputer const& compute_default;
+	lazy_default ( const DefaultComputer &x )
+		: compute_default ( x )
+	{}
+	DefaultComputer const &compute_default;
 };
 #  define BOOST_PARAMETER_lazy_default_fallback lazy_default
-# endif 
+# endif
 
-}}} // namespace boost::parameter::aux
+}
+}
+} // namespace boost::parameter::aux
 
 #endif // DEFAULT_050329_HPP
 

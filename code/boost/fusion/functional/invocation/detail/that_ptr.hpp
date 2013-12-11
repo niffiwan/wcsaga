@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2006-2007 Tobias Schwinger
-  
-    Use modification and distribution are subject to the Boost Software 
+
+    Use modification and distribution are subject to the Boost Software
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt).
 ==============================================================================*/
@@ -14,74 +14,80 @@
 #include <boost/type_traits/config.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
-namespace boost { namespace fusion { namespace detail
+namespace boost
 {
-    template <typename Wanted>
-    struct that_ptr
-    {
-      private:
+namespace fusion
+{
+namespace detail
+{
+template <typename Wanted>
+struct that_ptr
+{
+private:
 
-        typedef typename remove_reference<Wanted>::type pointee;
+	typedef typename remove_reference<Wanted>::type pointee;
 
-        template <typename T> 
-        static inline pointee * do_get_pointer(T &, pointee * x) 
-        {
-            return x;
-        }
-        template <typename T> 
-        static inline pointee * do_get_pointer(T & x, void const *) 
-        {
-            return get_pointer(x); 
-        }
+	template <typename T>
+	static inline pointee *do_get_pointer ( T &, pointee *x )
+	{
+		return x;
+	}
+	template <typename T>
+	static inline pointee *do_get_pointer ( T &x, void const * )
+	{
+		return get_pointer ( x );
+	}
 
-      public:
+public:
 
-        static inline pointee * get(pointee * x)
-        {
-            return x; 
-        }
+	static inline pointee *get ( pointee *x )
+	{
+		return x;
+	}
 
-        static inline pointee * get(pointee & x)
-        {
-            return boost::addressof(x); 
-        }
+	static inline pointee *get ( pointee &x )
+	{
+		return boost::addressof ( x );
+	}
 
-        template <typename T> static inline pointee * get(T & x)
-        {
-            return do_get_pointer(x, boost::addressof(x)); 
-        }
-    };
+	template <typename T> static inline pointee *get ( T &x )
+	{
+		return do_get_pointer ( x, boost::addressof ( x ) );
+	}
+};
 
-    template <typename PtrOrSmartPtr> struct non_const_pointee;
+template <typename PtrOrSmartPtr> struct non_const_pointee;
 
-    namespace adl_barrier
-    {
-        using boost::get_pointer;
-        void const * BOOST_TT_DECL get_pointer(...); // fallback
-  
-        template< typename T> char const_tester(T *);
-        template< typename T> long const_tester(T const *);
+namespace adl_barrier
+{
+using boost::get_pointer;
+void const *BOOST_TT_DECL get_pointer ( ... ); // fallback
 
-        template <typename Ptr>
-        struct non_const_pointee_impl
-        {
-            static Ptr & what;
+template< typename T> char const_tester ( T * );
+template< typename T> long const_tester ( T const * );
 
-            static bool const value =
-                sizeof(const_tester(get_pointer(what))) == 1;
-        };
-    }
+template <typename Ptr>
+struct non_const_pointee_impl
+{
+	static Ptr &what;
 
-    template <typename PtrOrSmartPtr> struct non_const_pointee
-        : adl_barrier::non_const_pointee_impl< 
-              typename remove_cv<
-                  typename remove_reference<PtrOrSmartPtr>::type >::type >
-    {
-        typedef non_const_pointee type;
-        typedef bool value_type;
-    };
+	static bool const value =
+	    sizeof ( const_tester ( get_pointer ( what ) ) ) == 1;
+};
+}
 
-}}}
+template <typename PtrOrSmartPtr> struct non_const_pointee
+		: adl_barrier::non_const_pointee_impl <
+		typename remove_cv <
+		typename remove_reference<PtrOrSmartPtr>::type >::type >
+{
+	typedef non_const_pointee type;
+	typedef bool value_type;
+};
+
+}
+}
+}
 
 #endif
 

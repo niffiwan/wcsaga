@@ -21,19 +21,21 @@
 //!\file
 //!Describes the lock options with associated with interprocess_mutex lock constructors.
 
-namespace boost {
+namespace boost
+{
 
 namespace posix_time
 {  class ptime;   }
 
-namespace interprocess {
+namespace interprocess
+{
 
 //!Type to indicate to a mutex lock constructor that must not lock the mutex.
-struct defer_lock_type{};
+struct defer_lock_type {};
 //!Type to indicate to a mutex lock constructor that must try to lock the mutex.
 struct try_to_lock_type {};
 //!Type to indicate to a mutex lock constructor that the mutex is already locked.
-struct accept_ownership_type{};
+struct accept_ownership_type {};
 
 //!An object indicating that the locking
 //!must be deferred.

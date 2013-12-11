@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005-2008.
-//  Use, modification, and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  Use, modification, and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -21,11 +21,14 @@
 // Boost
 #include <boost/shared_ptr.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace BOOST_RT_PARAM_NAMESPACE {
+namespace BOOST_RT_PARAM_NAMESPACE
+{
 
-namespace cla {
+namespace cla
+{
 
 class parser;
 class parameter;
@@ -34,7 +37,8 @@ class naming_policy;
 typedef shared_ptr<naming_policy> naming_policy_ptr;
 class argv_traverser;
 
-namespace rt_cla_detail {
+namespace rt_cla_detail
+{
 
 template<typename T> class const_generator;
 template<typename T> class ref_generator;

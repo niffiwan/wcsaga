@@ -79,34 +79,45 @@
 
 // Define swap for index_pair and triple.
 #if (BOOST_INTEL <= 800)
-namespace boost { namespace numeric { namespace ublas {
-    template<class C, class IC>
-    class indexed_iterator;
+namespace boost
+{
+namespace numeric
+{
+namespace ublas
+{
+template<class C, class IC>
+class indexed_iterator;
 
-    template<class V>
-    class index_pair;
-    template<class M>
-    class index_triple;
-}}}
+template<class V>
+class index_pair;
+template<class M>
+class index_triple;
+}
+}
+}
 
-namespace std {
-    template<class V>
-    inline
-    void swap (boost::numeric::ublas::index_pair<V> i1, boost::numeric::ublas::index_pair<V> i2) {
-        i1.swap (i2);
-    }
-    template<class M>
-    inline
-    void swap (boost::numeric::ublas::index_triple<M> i1, boost::numeric::ublas::index_triple<M> i2) {
-        i1.swap (i2);
-    }
-    // iter_swap also needed for ICC on Itanium?
-    template<class C, class IC>
-    inline
-    void iter_swap (boost::numeric::ublas::indexed_iterator<C, IC> it1,
-                    boost::numeric::ublas::indexed_iterator<C, IC> it2) {
-        swap (*it1, *it2);
-    }
+namespace std
+{
+template<class V>
+inline
+void swap ( boost::numeric::ublas::index_pair<V> i1, boost::numeric::ublas::index_pair<V> i2 )
+{
+	i1.swap ( i2 );
+}
+template<class M>
+inline
+void swap ( boost::numeric::ublas::index_triple<M> i1, boost::numeric::ublas::index_triple<M> i2 )
+{
+	i1.swap ( i2 );
+}
+// iter_swap also needed for ICC on Itanium?
+template<class C, class IC>
+inline
+void iter_swap ( boost::numeric::ublas::indexed_iterator<C, IC> it1,
+                 boost::numeric::ublas::indexed_iterator<C, IC> it2 )
+{
+	swap ( *it1, *it2 );
+}
 }
 #endif
 
@@ -222,7 +233,7 @@ namespace std {
 template <class Dummy>
 struct disable_type_check
 {
-    static bool value;
+	static bool value;
 };
 template <class Dummy>
 bool disable_type_check<Dummy>::value = false;

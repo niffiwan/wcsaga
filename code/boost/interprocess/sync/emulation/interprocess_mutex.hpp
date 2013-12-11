@@ -10,71 +10,81 @@
 
 #include <boost/interprocess/detail/posix_time_types_wrk.hpp>
 
-namespace boost {
-
-namespace interprocess {
-
-inline interprocess_mutex::interprocess_mutex() 
-   : m_s(0) 
+namespace boost
 {
-   //Note that this class is initialized to zero.
-   //So zeroed memory can be interpreted as an
-   //initialized mutex
+
+namespace interprocess
+{
+
+inline interprocess_mutex::interprocess_mutex()
+	: m_s ( 0 )
+{
+	//Note that this class is initialized to zero.
+	//So zeroed memory can be interpreted as an
+	//initialized mutex
 }
 
-inline interprocess_mutex::~interprocess_mutex() 
+inline interprocess_mutex::~interprocess_mutex()
 {
-   //Trivial destructor
+	//Trivial destructor
 }
 
-inline void interprocess_mutex::lock(void)
+inline void interprocess_mutex::lock ( void )
 {
-   do{
-      boost::uint32_t prev_s = detail::atomic_cas32(const_cast<boost::uint32_t*>(&m_s), 1, 0);
+	do
+	{
+		boost::uint32_t prev_s = detail::atomic_cas32 ( const_cast<boost::uint32_t *> ( &m_s ), 1, 0 );
 
-      if (m_s == 1 && prev_s == 0){
-            break;
-      }
-      // relinquish current timeslice
-      detail::thread_yield();
-   }while (true);
+		if ( m_s == 1 && prev_s == 0 )
+		{
+			break;
+		}
+		// relinquish current timeslice
+		detail::thread_yield();
+	}
+	while ( true );
 }
 
-inline bool interprocess_mutex::try_lock(void)
+inline bool interprocess_mutex::try_lock ( void )
 {
-   boost::uint32_t prev_s = detail::atomic_cas32(const_cast<boost::uint32_t*>(&m_s), 1, 0);   
-   return m_s == 1 && prev_s == 0;
+	boost::uint32_t prev_s = detail::atomic_cas32 ( const_cast<boost::uint32_t *> ( &m_s ), 1, 0 );
+	return m_s == 1 && prev_s == 0;
 }
 
-inline bool interprocess_mutex::timed_lock(const boost::posix_time::ptime &abs_time)
+inline bool interprocess_mutex::timed_lock ( const boost::posix_time::ptime &abs_time )
 {
-   if(abs_time == boost::posix_time::pos_infin){
-      this->lock();
-      return true;
-   }
-   //Obtain current count and target time
-   boost::posix_time::ptime now = microsec_clock::universal_time();
+	if ( abs_time == boost::posix_time::pos_infin )
+	{
+		this->lock();
+		return true;
+	}
+	//Obtain current count and target time
+	boost::posix_time::ptime now = microsec_clock::universal_time();
 
-   if(now >= abs_time) return false;
+	if ( now >= abs_time ) return false;
 
-   do{
-      if(this->try_lock()){
-         break;
-      }
-      now = microsec_clock::universal_time();
+	do
+	{
+		if ( this->try_lock() )
+		{
+			break;
+		}
+		now = microsec_clock::universal_time();
 
-      if(now >= abs_time){
-         return false;
-      }
-      // relinquish current time slice
-     detail::thread_yield();
-   }while (true);
+		if ( now >= abs_time )
+		{
+			return false;
+		}
+		// relinquish current time slice
+		detail::thread_yield();
+	}
+	while ( true );
 
-   return true;
+	return true;
 }
 
-inline void interprocess_mutex::unlock(void)
-{  detail::atomic_cas32(const_cast<boost::uint32_t*>(&m_s), 0, 1);   }
+inline void interprocess_mutex::unlock ( void )
+{  detail::atomic_cas32 ( const_cast<boost::uint32_t *> ( &m_s ), 0, 1 );   }
 
 }  //namespace interprocess {
 

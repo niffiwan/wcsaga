@@ -10,30 +10,33 @@
 
 #include <boost/mpl/if.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct struct_tag;
+namespace fusion
+{
+struct struct_tag;
 
-    namespace extension
-    {
-        template<typename T>
-        struct value_at_key_impl;
+namespace extension
+{
+template<typename T>
+struct value_at_key_impl;
 
-        template <typename Struct, typename Key>
-        struct struct_assoc_member;
+template <typename Struct, typename Key>
+struct struct_assoc_member;
 
-        template <>
-        struct value_at_key_impl<struct_tag>
-        {
-            template <typename Sequence, typename Key>
-            struct apply
-            {
-                typedef typename
-                    extension::struct_assoc_member<Sequence, Key>::type
-                type;
-            };
-        };
-    }
-}}
+template <>
+struct value_at_key_impl<struct_tag>
+{
+	template <typename Sequence, typename Key>
+	struct apply
+	{
+		typedef typename
+		extension::struct_assoc_member<Sequence, Key>::type
+		type;
+	};
+};
+}
+}
+}
 
 #endif

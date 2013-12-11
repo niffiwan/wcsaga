@@ -5,7 +5,7 @@
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org for updates, documentation, and revision history. 
+//  See http://www.boost.org for updates, documentation, and revision history.
 
 #ifndef BOOST_INTEGER_STATIC_MIN_MAX_HPP
 #define BOOST_INTEGER_STATIC_MIN_MAX_HPP
@@ -21,27 +21,27 @@ namespace boost
 template <static_min_max_signed_type Value1, static_min_max_signed_type Value2>
 struct static_signed_min
 {
-    BOOST_STATIC_CONSTANT(static_min_max_signed_type, value = (Value1 > Value2) ? Value2 : Value1 );
+	BOOST_STATIC_CONSTANT ( static_min_max_signed_type, value = ( Value1 > Value2 ) ? Value2 : Value1 );
 };
 
 template <static_min_max_signed_type Value1, static_min_max_signed_type Value2>
 struct static_signed_max
 {
-    BOOST_STATIC_CONSTANT(static_min_max_signed_type, value = (Value1 < Value2) ? Value2 : Value1 );
+	BOOST_STATIC_CONSTANT ( static_min_max_signed_type, value = ( Value1 < Value2 ) ? Value2 : Value1 );
 };
 
 template <static_min_max_unsigned_type Value1, static_min_max_unsigned_type Value2>
 struct static_unsigned_min
 {
-    BOOST_STATIC_CONSTANT(static_min_max_unsigned_type, value
-     = (Value1 > Value2) ? Value2 : Value1 );
+	BOOST_STATIC_CONSTANT ( static_min_max_unsigned_type, value
+	                        = ( Value1 > Value2 ) ? Value2 : Value1 );
 };
 
 template <static_min_max_unsigned_type Value1, static_min_max_unsigned_type Value2>
 struct static_unsigned_max
 {
-    BOOST_STATIC_CONSTANT(static_min_max_unsigned_type, value
-     = (Value1 < Value2) ? Value2 : Value1 );
+	BOOST_STATIC_CONSTANT ( static_min_max_unsigned_type, value
+	                        = ( Value1 < Value2 ) ? Value2 : Value1 );
 };
 
 

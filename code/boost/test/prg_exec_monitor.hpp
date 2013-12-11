@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2001-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -23,7 +23,7 @@
 // **************                 Auto Linking                 ************** //
 // ************************************************************************** //
 
-// Automatically link to the correct build variant where possible. 
+// Automatically link to the correct build variant where possible.
 #if !defined(BOOST_ALL_NO_LIB) && !defined(BOOST_TEST_NO_LIB) && \
     !defined(BOOST_TEST_SOURCE) && !defined(BOOST_TEST_INCLUDED)
 #  define BOOST_LIB_NAME boost_prg_exec_monitor
@@ -41,9 +41,10 @@
 // **************               prg_exec_monitor_main          ************** //
 // ************************************************************************** //
 
-namespace boost { 
+namespace boost
+{
 
-int BOOST_TEST_DECL prg_exec_monitor_main( int (*cpp_main)( int argc, char* argv[] ), int argc, char* argv[] );
+int BOOST_TEST_DECL prg_exec_monitor_main ( int ( *cpp_main ) ( int argc, char *argv[] ), int argc, char *argv[] );
 
 }
 
@@ -53,12 +54,12 @@ int BOOST_TEST_DECL prg_exec_monitor_main( int (*cpp_main)( int argc, char* argv
 // **************        main function for tests using dll     ************** //
 // ************************************************************************** //
 
-int cpp_main( int argc, char* argv[] );  // prototype for user's cpp_main()
+int cpp_main ( int argc, char *argv[] ); // prototype for user's cpp_main()
 
 int BOOST_TEST_CALL_DECL
-main( int argc, char* argv[] )
+main ( int argc, char *argv[] )
 {
-    return ::boost::prg_exec_monitor_main( &cpp_main, argc, argv );
+	return ::boost::prg_exec_monitor_main ( &cpp_main, argc, argv );
 }
 
 //____________________________________________________________________________//

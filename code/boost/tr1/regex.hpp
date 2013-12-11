@@ -20,10 +20,14 @@
 
 #include <boost/regex.hpp>
 
-namespace std{ namespace tr1{
+namespace std
+{
+namespace tr1
+{
 
 // [7.5] Regex constants
-namespace regex_constants {
+namespace regex_constants
+{
 
 using ::boost::regex_constants::syntax_option_type;
 using ::boost::regex_constants::icase;
@@ -140,7 +144,8 @@ using ::boost::sregex_token_iterator;
 using ::boost::wsregex_token_iterator;
 #endif
 
-} } // namespaces
+}
+} // namespaces
 
 #endif
 

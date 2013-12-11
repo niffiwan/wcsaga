@@ -22,7 +22,7 @@
 #error "This file is not needed when perfect forwarding is available"
 #endif
 
-#include <boost/preprocessor/iteration/local.hpp> 
+#include <boost/preprocessor/iteration/local.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/repetition/enum.hpp>
@@ -37,21 +37,21 @@
 //is achieved in C++0x. Meanwhile, if we want to be able to
 //bind rvalues with non-const references, we have to be ugly
 #ifdef BOOST_HAS_RVALUE_REFS
-   #define BOOST_CONTAINERS_PP_PARAM_LIST(z, n, data) \
+#define BOOST_CONTAINERS_PP_PARAM_LIST(z, n, data) \
    BOOST_PP_CAT(P, n) && BOOST_PP_CAT(p, n) \
    //!
 #else
-   #define BOOST_CONTAINERS_PP_PARAM_LIST(z, n, data) \
+#define BOOST_CONTAINERS_PP_PARAM_LIST(z, n, data) \
    const BOOST_PP_CAT(P, n) & BOOST_PP_CAT(p, n) \
    //!
 #endif
 
 #ifdef BOOST_HAS_RVALUE_REFS
-   #define BOOST_CONTAINERS_PARAM(U, u) \
+#define BOOST_CONTAINERS_PARAM(U, u) \
    U && u \
    //!
 #else
-   #define BOOST_CONTAINERS_PARAM(U, u) \
+#define BOOST_CONTAINERS_PARAM(U, u) \
    const U & u \
    //!
 #endif

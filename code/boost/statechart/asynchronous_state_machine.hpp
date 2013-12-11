@@ -33,50 +33,50 @@ template< class MostDerived,
           class Scheduler = fifo_scheduler<>,
           class Allocator = std::allocator< void >,
           class ExceptionTranslator = null_exception_translator >
-class asynchronous_state_machine : public state_machine<
-  MostDerived, InitialState, Allocator, ExceptionTranslator >,
-  public event_processor< Scheduler >
+class asynchronous_state_machine : public state_machine <
+	MostDerived, InitialState, Allocator, ExceptionTranslator >,
+	public event_processor< Scheduler >
 {
-  typedef state_machine< MostDerived,
-    InitialState, Allocator, ExceptionTranslator > machine_base;
-  typedef event_processor< Scheduler > processor_base;
-  protected:
-    //////////////////////////////////////////////////////////////////////////
-    typedef asynchronous_state_machine my_base;
+	typedef state_machine< MostDerived,
+	        InitialState, Allocator, ExceptionTranslator > machine_base;
+	typedef event_processor< Scheduler > processor_base;
+protected:
+	//////////////////////////////////////////////////////////////////////////
+	typedef asynchronous_state_machine my_base;
 
-    asynchronous_state_machine( typename processor_base::my_context ctx ) :
-      processor_base( ctx )
-    {
-    }
+	asynchronous_state_machine ( typename processor_base::my_context ctx ) :
+		processor_base ( ctx )
+	{
+	}
 
-    virtual ~asynchronous_state_machine() {}
+	virtual ~asynchronous_state_machine() {}
 
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    // The following declarations should be private.
-    // They are only public because many compilers lack template friends.
-    //////////////////////////////////////////////////////////////////////////
-    void terminate()
-    {
-      processor_base::terminate();
-    }
+public:
+	//////////////////////////////////////////////////////////////////////////
+	// The following declarations should be private.
+	// They are only public because many compilers lack template friends.
+	//////////////////////////////////////////////////////////////////////////
+	void terminate()
+	{
+		processor_base::terminate();
+	}
 
-  private:
-    //////////////////////////////////////////////////////////////////////////
-    virtual void initiate_impl()
-    {
-      machine_base::initiate();
-    }
+private:
+	//////////////////////////////////////////////////////////////////////////
+	virtual void initiate_impl()
+	{
+		machine_base::initiate();
+	}
 
-    virtual void process_event_impl( const event_base & evt )
-    {
-      machine_base::process_event( evt );
-    }
+	virtual void process_event_impl ( const event_base &evt )
+	{
+		machine_base::process_event ( evt );
+	}
 
-    virtual void terminate_impl()
-    {
-      machine_base::terminate();
-    }
+	virtual void terminate_impl()
+	{
+		machine_base::terminate();
+	}
 };
 
 

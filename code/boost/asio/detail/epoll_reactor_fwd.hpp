@@ -29,9 +29,12 @@
 // Define this to indicate that epoll is supported on the target platform.
 #define BOOST_ASIO_HAS_EPOLL 1
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 template <bool Own_Thread>
 class epoll_reactor;

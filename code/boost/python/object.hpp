@@ -13,15 +13,19 @@
 # include <boost/python/object_operators.hpp>
 # include <boost/python/converter/arg_to_python.hpp>
 
-namespace boost { namespace python {
+namespace boost
+{
+namespace python
+{
 
-    inline ssize_t len(object const& obj)
-    {
-        ssize_t result = PyObject_Length(obj.ptr());
-        if (PyErr_Occurred()) throw_error_already_set();
-        return result;
-    }
+inline ssize_t len ( object const &obj )
+{
+	ssize_t result = PyObject_Length ( obj.ptr() );
+	if ( PyErr_Occurred() ) throw_error_already_set();
+	return result;
+}
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 #endif // OBJECT_DWA2002612_HPP

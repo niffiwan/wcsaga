@@ -38,10 +38,13 @@
 #include <boost/bimap/detail/modifier_adaptor.hpp>
 #include <boost/bimap/detail/debug/static_error.hpp>
 
-namespace boost {
-namespace bimaps {
+namespace boost
+{
+namespace bimaps
+{
 
-namespace detail {
+namespace detail
+{
 
 
 // The next macro can be converted in a metafunctor to gain code robustness.
@@ -100,153 +103,153 @@ namespace detail {
 template< class Derived, class Tag, class BimapType>
 class map_view_base
 {
-    typedef ::boost::bimaps::container_adaptor::support::
-        iterator_facade_to_base<
+	typedef ::boost::bimaps::container_adaptor::support::
+	iterator_facade_to_base <
 
-            BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
-                iterator_type_by<Tag,BimapType>::type,
+	BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
+	iterator_type_by<Tag, BimapType>::type,
 
-            BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
-                const_iterator_type_by<Tag,BimapType>::type
+	                 BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
+	                 const_iterator_type_by<Tag, BimapType>::type
 
-        > iterator_to_base_;
+	                 > iterator_to_base_;
 
-    typedef ::boost::bimaps::relation::detail::
-        pair_to_relation_functor<Tag,
-            BOOST_DEDUCED_TYPENAME BimapType::relation>      value_to_base_;
+	typedef ::boost::bimaps::relation::detail::
+	pair_to_relation_functor<Tag,
+	                         BOOST_DEDUCED_TYPENAME BimapType::relation>      value_to_base_;
 
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
-                           key_type_by<Tag,BimapType>::type       key_type_;
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
+	key_type_by<Tag, BimapType>::type       key_type_;
 
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
-                          data_type_by<Tag,BimapType>::type      data_type_;
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
+	data_type_by<Tag, BimapType>::type      data_type_;
 
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-           pair_type_by<Tag,
-              BOOST_DEDUCED_TYPENAME BimapType::relation>::type value_type_;
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
+	pair_type_by<Tag,
+	             BOOST_DEDUCED_TYPENAME BimapType::relation>::type value_type_;
 
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
-                    iterator_type_by<Tag,BimapType>::type         iterator_;
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
+	iterator_type_by<Tag, BimapType>::type         iterator_;
 
-    public:
+public:
 
-    bool replace(iterator_ position, const value_type_ & x)
-    {
-        return derived().base().replace(
-            derived().template functor<iterator_to_base_>()(position),
-            derived().template functor<value_to_base_>()(x)
-        );
-    }
+	bool replace ( iterator_ position, const value_type_ & x )
+	{
+		return derived().base().replace (
+		           derived().template functor<iterator_to_base_>() ( position ),
+		           derived().template functor<value_to_base_>() ( x )
+		       );
+	}
 
-    template< class CompatibleKey >
-    bool replace_key(iterator_ position, const CompatibleKey & k)
-    {
-        return derived().base().replace(
-            derived().template functor<iterator_to_base_>()(position),
-            derived().template functor<value_to_base_>()(
-                value_type_(k,position->second)
-            )
-        );
-    }
+	template< class CompatibleKey >
+	bool replace_key ( iterator_ position, const CompatibleKey &k )
+	{
+		return derived().base().replace (
+		           derived().template functor<iterator_to_base_>() ( position ),
+		           derived().template functor<value_to_base_>() (
+		               value_type_ ( k, position->second )
+		           )
+		       );
+	}
 
-    template< class CompatibleData >
-    bool replace_data(iterator_ position, const CompatibleData & d)
-    {
-        return derived().base().replace(
-            derived().template functor<iterator_to_base_>()(position),
-            derived().template functor<value_to_base_>()(
-                value_type_(position->first,d)
-            )
-        );
-    }
+	template< class CompatibleData >
+	bool replace_data ( iterator_ position, const CompatibleData &d )
+	{
+		return derived().base().replace (
+		           derived().template functor<iterator_to_base_>() ( position ),
+		           derived().template functor<value_to_base_>() (
+		               value_type_ ( position->first, d )
+		           )
+		       );
+	}
 
-    /* This function may be provided in the future
+	/* This function may be provided in the future
 
-    template< class Modifier >
-    bool modify(iterator_ position, Modifier mod)
-    {
-        return derived().base().modify(
+	template< class Modifier >
+	bool modify(iterator_ position, Modifier mod)
+	{
+	    return derived().base().modify(
 
-            derived().template functor<iterator_to_base_>()(position),
+	        derived().template functor<iterator_to_base_>()(position),
 
-            ::boost::bimaps::detail::relation_modifier_adaptor
-            <
-                Modifier,
-                BOOST_DEDUCED_TYPENAME BimapType::relation,
-                BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-                data_extractor
-                <
-                    Tag, BOOST_DEDUCED_TYPENAME BimapType::relation
+	        ::boost::bimaps::detail::relation_modifier_adaptor
+	        <
+	            Modifier,
+	            BOOST_DEDUCED_TYPENAME BimapType::relation,
+	            BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
+	            data_extractor
+	            <
+	                Tag, BOOST_DEDUCED_TYPENAME BimapType::relation
 
-                >::type,
-                BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-                data_extractor
-                <
-                    BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-                        opossite_tag<Tag,BimapType>::type,
-                    BOOST_DEDUCED_TYPENAME BimapType::relation
+	            >::type,
+	            BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
+	            data_extractor
+	            <
+	                BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
+	                    opossite_tag<Tag,BimapType>::type,
+	                BOOST_DEDUCED_TYPENAME BimapType::relation
 
-                >::type
+	            >::type
 
-            >(mod)
-        );
-    }
-    */
+	        >(mod)
+	    );
+	}
+	*/
 
-    template< class Modifier >
-    bool modify_key(iterator_ position, Modifier mod)
-    {
-        return derived().base().modify_key(
-            derived().template functor<iterator_to_base_>()(position), mod
-        );
-    }
+	template< class Modifier >
+	bool modify_key ( iterator_ position, Modifier mod )
+	{
+		return derived().base().modify_key (
+		           derived().template functor<iterator_to_base_>() ( position ), mod
+		       );
+	}
 
-    template< class Modifier >
-    bool modify_data(iterator_ position, Modifier mod)
-    {
-        typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-        data_extractor
-        <
-            BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-                        opossite_tag<Tag,BimapType>::type,
-            BOOST_DEDUCED_TYPENAME BimapType::relation
+	template< class Modifier >
+	bool modify_data ( iterator_ position, Modifier mod )
+	{
+		typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
+		data_extractor
+		<
+		BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
+		opossite_tag<Tag, BimapType>::type,
+		             BOOST_DEDUCED_TYPENAME BimapType::relation
 
-        >::type data_extractor_;
+		             >::type data_extractor_;
 
-        return derived().base().modify(
+		return derived().base().modify (
 
-            derived().template functor<iterator_to_base_>()(position),
+		           derived().template functor<iterator_to_base_>() ( position ),
 
-            // this may be replaced later by
-            // ::boost::bind( mod, ::boost::bind(data_extractor_(),_1) )
+		           // this may be replaced later by
+		           // ::boost::bind( mod, ::boost::bind(data_extractor_(),_1) )
 
-            ::boost::bimaps::detail::unary_modifier_adaptor
-            <
-                Modifier,
-                BOOST_DEDUCED_TYPENAME BimapType::relation,
-                data_extractor_
+		           ::boost::bimaps::detail::unary_modifier_adaptor
+		           <
+		           Modifier,
+		           BOOST_DEDUCED_TYPENAME BimapType::relation,
+		           data_extractor_
 
-            >(mod)
-        );
-    }
+		           > ( mod )
+		       );
+	}
 
-    protected:
+protected:
 
-    typedef map_view_base map_view_base_;
+	typedef map_view_base map_view_base_;
 
-    private:
+private:
 
-    // Curiously Recurring Template interface.
+	// Curiously Recurring Template interface.
 
-    Derived& derived()
-    {
-        return *static_cast<Derived*>(this);
-    }
+	Derived &derived()
+	{
+		return *static_cast<Derived *> ( this );
+	}
 
-    Derived const& derived() const
-    {
-        return *static_cast<Derived const*>(this);
-    }
+	Derived const &derived() const
+	{
+		return *static_cast<Derived const *> ( this );
+	}
 };
 
 
@@ -255,153 +258,153 @@ class map_view_base
 template< class Derived, class Tag, class BimapType>
 class mutable_data_unique_map_view_access
 {
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
-                          data_type_by<Tag,BimapType>::type      data_type_;
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
+	data_type_by<Tag, BimapType>::type      data_type_;
 
-    public:
+public:
 
-    template< class CompatibleKey >
-    data_type_ & at(const CompatibleKey& k)
-    {
-        typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
-                            iterator_type_by<Tag,BimapType>::type iterator;
+	template< class CompatibleKey >
+	data_type_ &at ( const CompatibleKey &k )
+	{
+		typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
+		iterator_type_by<Tag, BimapType>::type iterator;
 
-        iterator iter = derived().find(k);
-        if( iter == derived().end() )
-        {
-            ::boost::throw_exception(
-                std::out_of_range("bimap<>: invalid key")
-            );
-        }
-        return iter->second;
-    }
+		iterator iter = derived().find ( k );
+		if ( iter == derived().end() )
+		{
+			::boost::throw_exception (
+			    std::out_of_range ( "bimap<>: invalid key" )
+			);
+		}
+		return iter->second;
+	}
 
-    template< class CompatibleKey >
-    const data_type_ & at(const CompatibleKey& k) const
-    {
-        typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
-                const_iterator_type_by<Tag,BimapType>::type const_iterator;
+	template< class CompatibleKey >
+	const data_type_ &at ( const CompatibleKey &k ) const
+	{
+		typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
+		const_iterator_type_by<Tag, BimapType>::type const_iterator;
 
-        const_iterator iter = derived().find(k);
-        if( iter == derived().end() )
-        {
-            ::boost::throw_exception(
-                std::out_of_range("bimap<>: invalid key")
-            );
-        }
-        return iter->second;
-    }
+		const_iterator iter = derived().find ( k );
+		if ( iter == derived().end() )
+		{
+			::boost::throw_exception (
+			    std::out_of_range ( "bimap<>: invalid key" )
+			);
+		}
+		return iter->second;
+	}
 
-    template< class CompatibleKey >
-    data_type_ & operator[](const CompatibleKey& k)
-    {
-        typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
-                      iterator_type_by<Tag,BimapType>::type       iterator;
+	template< class CompatibleKey >
+	data_type_ &operator[] ( const CompatibleKey &k )
+	{
+		typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
+		iterator_type_by<Tag, BimapType>::type       iterator;
 
-        typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
-                         value_type_by<Tag,BimapType>::type     value_type;
+		typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
+		value_type_by<Tag, BimapType>::type     value_type;
 
-        iterator iter = derived().find(k);
-        if( iter == derived().end() )
-        {
-            iter = derived().insert( value_type(k,data_type_()) ).first;
-        }
-        return iter->second;
-    }
+		iterator iter = derived().find ( k );
+		if ( iter == derived().end() )
+		{
+			iter = derived().insert ( value_type ( k, data_type_() ) ).first;
+		}
+		return iter->second;
+	}
 
-    protected:
+protected:
 
-    typedef mutable_data_unique_map_view_access
-                mutable_data_unique_map_view_access_;
+	typedef mutable_data_unique_map_view_access
+	mutable_data_unique_map_view_access_;
 
-    private:
+private:
 
-    // Curiously Recurring Template interface.
+	// Curiously Recurring Template interface.
 
-    Derived& derived()
-    {
-        return *static_cast<Derived*>(this);
-    }
+	Derived &derived()
+	{
+		return *static_cast<Derived *> ( this );
+	}
 
-    Derived const& derived() const
-    {
-        return *static_cast<Derived const*>(this);
-    }
+	Derived const &derived() const
+	{
+		return *static_cast<Derived const *> ( this );
+	}
 };
 
 
 template< class Derived, class Tag, class BimapType>
 class non_mutable_data_unique_map_view_access
 {
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
-                          data_type_by<Tag,BimapType>::type      data_type_;
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
+	data_type_by<Tag, BimapType>::type      data_type_;
 
-    public:
+public:
 
-    template< class CompatibleKey >
-    const data_type_ & at(const CompatibleKey& k) const
-    {
-        typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
-                const_iterator_type_by<Tag,BimapType>::type const_iterator;
+	template< class CompatibleKey >
+	const data_type_ &at ( const CompatibleKey &k ) const
+	{
+		typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
+		const_iterator_type_by<Tag, BimapType>::type const_iterator;
 
-        const_iterator iter = derived().find(k);
-        if( iter == derived().end() )
-        {
-            ::boost::throw_exception(
-                std::out_of_range("bimap<>: invalid key")
-            );
-        }
-        return iter->second;
-    }
+		const_iterator iter = derived().find ( k );
+		if ( iter == derived().end() )
+		{
+			::boost::throw_exception (
+			    std::out_of_range ( "bimap<>: invalid key" )
+			);
+		}
+		return iter->second;
+	}
 
-    template< class CompatibleKey >
-    data_type_ & operator[](const CompatibleKey& k)
-    {
-        BOOST_BIMAP_STATIC_ERROR( OPERATOR_BRACKET_IS_NOT_SUPPORTED, (Derived));
-    }
+	template< class CompatibleKey >
+	data_type_ &operator[] ( const CompatibleKey &k )
+	{
+		BOOST_BIMAP_STATIC_ERROR ( OPERATOR_BRACKET_IS_NOT_SUPPORTED, ( Derived ) );
+	}
 
-    protected:
+protected:
 
-    typedef non_mutable_data_unique_map_view_access
-                non_mutable_data_unique_map_view_access_;
+	typedef non_mutable_data_unique_map_view_access
+	non_mutable_data_unique_map_view_access_;
 
-    private:
+private:
 
-    // Curiously Recurring Template interface.
+	// Curiously Recurring Template interface.
 
-    Derived& derived()
-    {
-        return *static_cast<Derived*>(this);
-    }
+	Derived &derived()
+	{
+		return *static_cast<Derived *> ( this );
+	}
 
-    Derived const& derived() const
-    {
-        return *static_cast<Derived const*>(this);
-    }
+	Derived const &derived() const
+	{
+		return *static_cast<Derived const *> ( this );
+	}
 };
 
 
 template< class Derived, class Tag, class BimapType>
 struct unique_map_view_access
 {
-    private:
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
-        value_type_by<Tag,BimapType>::type value_type;
+private:
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
+	value_type_by<Tag, BimapType>::type value_type;
 
-    public:
-    typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_
-    <
-        typename ::boost::is_const<
-            BOOST_DEDUCED_TYPENAME value_type::second_type >::type,
+public:
+	typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_
+	<
+	typename ::boost::is_const <
+	BOOST_DEDUCED_TYPENAME value_type::second_type >::type,
 
-        non_mutable_data_unique_map_view_access<Derived,Tag,BimapType>,
-        mutable_data_unique_map_view_access<Derived,Tag,BimapType>
+	                       non_mutable_data_unique_map_view_access<Derived, Tag, BimapType>,
+	                       mutable_data_unique_map_view_access<Derived, Tag, BimapType>
 
-    >::type type;
+	                       >::type type;
 };
 
 // Map views specialize the following structs to provide to the bimap class
-// the extra side typedefs (i.e. left_local_iterator for unordered_maps, 
+// the extra side typedefs (i.e. left_local_iterator for unordered_maps,
 // right_range_type for maps)
 
 template< class MapView >
@@ -415,7 +418,7 @@ struct right_map_view_extra_typedefs {};
 // This function is already part of Boost.Lambda.
 // They may be moved to Boost.Utility.
 
-template <class T> inline const T&  make_const(const T& t) { return t; }
+template <class T> inline const T  &make_const ( const T &t ) { return t; }
 
 } // namespace bimaps
 } // namespace boost

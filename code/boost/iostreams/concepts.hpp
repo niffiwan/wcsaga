@@ -21,37 +21,41 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
-namespace boost { namespace iostreams {
+namespace boost
+{
+namespace iostreams
+{
 
 //--------------Definitions of helper templates for device concepts-----------//
 
-template<typename Mode, typename Ch = BOOST_IOSTREAMS_DEFAULT_ARG(char)>
-struct device {
-    typedef Ch char_type;
-    struct category
-        : Mode,
-          device_tag,
-          closable_tag,
-          localizable_tag
-        { };
+template<typename Mode, typename Ch = BOOST_IOSTREAMS_DEFAULT_ARG ( char ) >
+struct device
+{
+	typedef Ch char_type;
+	struct category
+			: Mode,
+			  device_tag,
+			  closable_tag,
+			  localizable_tag
+	{ };
 
-    void close()
-    {
-        using namespace detail;
-        BOOST_STATIC_ASSERT((!is_convertible<Mode, two_sequence>::value));
-    }
+	void close()
+	{
+		using namespace detail;
+		BOOST_STATIC_ASSERT ( ( !is_convertible<Mode, two_sequence>::value ) );
+	}
 
-    void close(BOOST_IOS::openmode)
-    {
-        using namespace detail;
-        BOOST_STATIC_ASSERT((is_convertible<Mode, two_sequence>::value));
-    }
+	void close ( BOOST_IOS::openmode )
+	{
+		using namespace detail;
+		BOOST_STATIC_ASSERT ( ( is_convertible<Mode, two_sequence>::value ) );
+	}
 
-    template<typename Locale>
-    void imbue(const Locale&) { }
+	template<typename Locale>
+	void imbue ( const Locale & ) { }
 };
 
-template<typename Mode, typename Ch = BOOST_IOSTREAMS_DEFAULT_ARG(wchar_t)>
+template<typename Mode, typename Ch = BOOST_IOSTREAMS_DEFAULT_ARG ( wchar_t ) >
 struct wdevice : device<Mode, Ch> { };
 
 typedef device<input>    source;
@@ -61,39 +65,40 @@ typedef wdevice<output>  wsink;
 
 //--------------Definitions of helper templates for simple filter concepts----//
 
-template<typename Mode, typename Ch = BOOST_IOSTREAMS_DEFAULT_ARG(char)>
-struct filter {
-    typedef Ch char_type;
-    struct category
-        : Mode,
-          filter_tag,
-          closable_tag,
-          localizable_tag
-        { };
+template<typename Mode, typename Ch = BOOST_IOSTREAMS_DEFAULT_ARG ( char ) >
+struct filter
+{
+	typedef Ch char_type;
+	struct category
+			: Mode,
+			  filter_tag,
+			  closable_tag,
+			  localizable_tag
+	{ };
 
-    template<typename Device>
-    void close(Device&)
-    {
-        using namespace detail;
-        BOOST_STATIC_ASSERT((!is_convertible<Mode, two_sequence>::value));
-        BOOST_STATIC_ASSERT((!is_convertible<Mode, dual_use>::value));
-    }
+	template<typename Device>
+	void close ( Device & )
+	{
+		using namespace detail;
+		BOOST_STATIC_ASSERT ( ( !is_convertible<Mode, two_sequence>::value ) );
+		BOOST_STATIC_ASSERT ( ( !is_convertible<Mode, dual_use>::value ) );
+	}
 
-    template<typename Device>
-    void close(Device&, BOOST_IOS::openmode)
-    {
-        using namespace detail;
-        BOOST_STATIC_ASSERT(
-            (is_convertible<Mode, two_sequence>::value) ||
-            (is_convertible<Mode, dual_use>::value)
-        );
-    }
+	template<typename Device>
+	void close ( Device &, BOOST_IOS::openmode )
+	{
+		using namespace detail;
+		BOOST_STATIC_ASSERT (
+		    ( is_convertible<Mode, two_sequence>::value ) ||
+		    ( is_convertible<Mode, dual_use>::value )
+		);
+	}
 
-    template<typename Locale>
-    void imbue(const Locale&) { }
+	template<typename Locale>
+	void imbue ( const Locale & ) { }
 };
 
-template<typename Mode, typename Ch = BOOST_IOSTREAMS_DEFAULT_ARG(wchar_t)>
+template<typename Mode, typename Ch = BOOST_IOSTREAMS_DEFAULT_ARG ( wchar_t ) >
 struct wfilter : filter<Mode, Ch> { };
 
 typedef filter<input>      input_filter;
@@ -104,12 +109,13 @@ typedef filter<seekable>   seekable_filter;
 typedef wfilter<seekable>  seekable_wfilter;
 typedef filter<dual_use>   dual_use_filter;
 typedef wfilter<dual_use>  dual_use_wfilter;
-        
+
 //------Definitions of helper templates for multi-character filter cncepts----//
 
 template<typename Mode, typename Ch = char>
-struct multichar_filter : filter<Mode, Ch> {
-    struct category : filter<Mode, Ch>::category, multichar_tag { };
+struct multichar_filter : filter<Mode, Ch>
+{
+	struct category : filter<Mode, Ch>::category, multichar_tag { };
 };
 
 template<typename Mode, typename Ch = wchar_t>
@@ -124,6 +130,7 @@ typedef multichar_wfilter<dual_use>  multichar_dual_use_wfilter;
 
 //----------------------------------------------------------------------------//
 
-} } // End namespaces iostreams, boost.
+}
+} // End namespaces iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_CONCEPTS_HPP_INCLUDED

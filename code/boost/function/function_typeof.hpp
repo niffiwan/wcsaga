@@ -13,33 +13,33 @@
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 
-BOOST_TYPEOF_REGISTER_TYPE(boost::bad_function_call)
+BOOST_TYPEOF_REGISTER_TYPE ( boost::bad_function_call )
 
 #if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE ( boost::function, ( typename ) )
 #endif
 
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function0, (typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function1, (typename)(typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function2, (typename)(typename)(typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function3, 
-  (typename)(typename)(typename)(typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function4, 
-  (typename)(typename)(typename)(typename)(typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function5, 
-  (typename)(typename)(typename)(typename)(typename)(typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function6, 
-  (typename)(typename)(typename)(typename)(typename)(typename)(typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function7, 
-  (typename)(typename)(typename)(typename)(typename)(typename)(typename)
-  (typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function8, 
-  (typename)(typename)(typename)(typename)(typename)(typename)(typename)
-  (typename)(typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function9, 
-  (typename)(typename)(typename)(typename)(typename)(typename)(typename)
-  (typename)(typename)(typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function10, 
-  (typename)(typename)(typename)(typename)(typename)(typename)(typename)
-  (typename)(typename)(typename)(typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE ( boost::function0, ( typename ) )
+BOOST_TYPEOF_REGISTER_TEMPLATE ( boost::function1, ( typename ) ( typename ) )
+BOOST_TYPEOF_REGISTER_TEMPLATE ( boost::function2, ( typename ) ( typename ) ( typename ) )
+BOOST_TYPEOF_REGISTER_TEMPLATE ( boost::function3,
+                                 ( typename ) ( typename ) ( typename ) ( typename ) )
+BOOST_TYPEOF_REGISTER_TEMPLATE ( boost::function4,
+                                 ( typename ) ( typename ) ( typename ) ( typename ) ( typename ) )
+BOOST_TYPEOF_REGISTER_TEMPLATE ( boost::function5,
+                                 ( typename ) ( typename ) ( typename ) ( typename ) ( typename ) ( typename ) )
+BOOST_TYPEOF_REGISTER_TEMPLATE ( boost::function6,
+                                 ( typename ) ( typename ) ( typename ) ( typename ) ( typename ) ( typename ) ( typename ) )
+BOOST_TYPEOF_REGISTER_TEMPLATE ( boost::function7,
+                                 ( typename ) ( typename ) ( typename ) ( typename ) ( typename ) ( typename ) ( typename )
+                                 ( typename ) )
+BOOST_TYPEOF_REGISTER_TEMPLATE ( boost::function8,
+                                 ( typename ) ( typename ) ( typename ) ( typename ) ( typename ) ( typename ) ( typename )
+                                 ( typename ) ( typename ) )
+BOOST_TYPEOF_REGISTER_TEMPLATE ( boost::function9,
+                                 ( typename ) ( typename ) ( typename ) ( typename ) ( typename ) ( typename ) ( typename )
+                                 ( typename ) ( typename ) ( typename ) )
+BOOST_TYPEOF_REGISTER_TEMPLATE ( boost::function10,
+                                 ( typename ) ( typename ) ( typename ) ( typename ) ( typename ) ( typename ) ( typename )
+                                 ( typename ) ( typename ) ( typename ) ( typename ) )
 #endif

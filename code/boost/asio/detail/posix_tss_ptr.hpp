@@ -32,51 +32,54 @@
 #include <boost/asio/error.hpp>
 #include <boost/asio/detail/noncopyable.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 template <typename T>
 class posix_tss_ptr
-  : private noncopyable
+	: private noncopyable
 {
 public:
-  // Constructor.
-  posix_tss_ptr()
-  {
-    int error = ::pthread_key_create(&tss_key_, 0);
-    if (error != 0)
-    {
-      boost::system::system_error e(
-          boost::system::error_code(error,
-            boost::asio::error::get_system_category()),
-          "tss");
-      boost::throw_exception(e);
-    }
-  }
+	// Constructor.
+	posix_tss_ptr()
+	{
+		int error = ::pthread_key_create ( &tss_key_, 0 );
+		if ( error != 0 )
+		{
+			boost::system::system_error e (
+			    boost::system::error_code ( error,
+			                                boost::asio::error::get_system_category() ),
+			    "tss" );
+			boost::throw_exception ( e );
+		}
+	}
 
-  // Destructor.
-  ~posix_tss_ptr()
-  {
-    ::pthread_key_delete(tss_key_);
-  }
+	// Destructor.
+	~posix_tss_ptr()
+	{
+		::pthread_key_delete ( tss_key_ );
+	}
 
-  // Get the value.
-  operator T*() const
-  {
-    return static_cast<T*>(::pthread_getspecific(tss_key_));
-  }
+	// Get the value.
+	operator T *() const
+	{
+		return static_cast<T *> ( ::pthread_getspecific ( tss_key_ ) );
+	}
 
-  // Set the value.
-  void operator=(T* value)
-  {
-    ::pthread_setspecific(tss_key_, value);
-  }
+	// Set the value.
+	void operator= ( T *value )
+	{
+		::pthread_setspecific ( tss_key_, value );
+	}
 
 private:
-  // Thread-specific storage to allow unlocked access to determine whether a
-  // thread is a member of the pool.
-  pthread_key_t tss_key_;
+	// Thread-specific storage to allow unlocked access to determine whether a
+	// thread is a member of the pool.
+	pthread_key_t tss_key_;
 };
 
 } // namespace detail

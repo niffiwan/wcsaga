@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -14,30 +14,30 @@
 
 class adjust_grid_dlg : public CDialog
 {
-// Construction
+	// Construction
 public:
 	void OnOK();
-	adjust_grid_dlg(CWnd* pParent = NULL);   // standard constructor
+	adjust_grid_dlg ( CWnd *pParent = NULL ); // standard constructor
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(adjust_grid_dlg)
 	enum { IDD = IDD_ADJUST_GRID };
-	CSpinButtonCtrl	m_spinz;
-	CSpinButtonCtrl	m_spiny;
-	CSpinButtonCtrl	m_spinx;
-	int		m_x;
-	int		m_y;
-	int		m_z;
+	CSpinButtonCtrl m_spinz;
+	CSpinButtonCtrl m_spiny;
+	CSpinButtonCtrl m_spinx;
+	int     m_x;
+	int     m_y;
+	int     m_z;
 	//}}AFX_DATA
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(adjust_grid_dlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions

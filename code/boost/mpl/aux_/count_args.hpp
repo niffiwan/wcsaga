@@ -3,8 +3,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -70,26 +70,26 @@
 template< AUX778076_COUNT_ARGS_TEMPLATE_PARAM >
 struct AUX778076_IS_ARG_TEMPLATE_NAME
 {
-    BOOST_STATIC_CONSTANT(bool, value = true);
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
 
 template<>
 struct AUX778076_IS_ARG_TEMPLATE_NAME<AUX778076_COUNT_ARGS_DEFAULT>
 {
-    BOOST_STATIC_CONSTANT(bool, value = false);
+	BOOST_STATIC_CONSTANT ( bool, value = false );
 };
 
 // <xxx>_count_args
-template<
-      AUX778076_COUNT_ARGS_PARAMS(AUX778076_COUNT_ARGS_TEMPLATE_PARAM)
+template <
+    AUX778076_COUNT_ARGS_PARAMS ( AUX778076_COUNT_ARGS_TEMPLATE_PARAM )
     >
-struct BOOST_PP_CAT(AUX778076_COUNT_ARGS_PREFIX,_count_args)
+struct BOOST_PP_CAT ( AUX778076_COUNT_ARGS_PREFIX, _count_args )
 {
-    BOOST_STATIC_CONSTANT(int, value = AUX778076_COUNT_ARGS_REPEAT(
-          AUX778076_COUNT_ARGS_ARITY
-        , AUX778076_COUNT_ARGS_FUNC
-        , AUX778076_COUNT_ARGS_PARAM_NAME
-        ));
+	BOOST_STATIC_CONSTANT ( int, value = AUX778076_COUNT_ARGS_REPEAT (
+	        AUX778076_COUNT_ARGS_ARITY
+	        , AUX778076_COUNT_ARGS_FUNC
+	        , AUX778076_COUNT_ARGS_PARAM_NAME
+	                                     ) );
 };
 
 #undef AUX778076_COUNT_ARGS_FUNC

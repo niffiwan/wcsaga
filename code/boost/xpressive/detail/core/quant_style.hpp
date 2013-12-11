@@ -18,17 +18,21 @@
 #include <boost/xpressive/detail/utility/width.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+namespace boost
+{
+namespace xpressive
+{
+namespace detail
 {
 
-BOOST_MPL_HAS_XXX_TRAIT_DEF(is_boost_xpressive_xpression_)
+BOOST_MPL_HAS_XXX_TRAIT_DEF ( is_boost_xpressive_xpression_ )
 
 ///////////////////////////////////////////////////////////////////////////////
 // is_xpr
 //
 template<typename Xpr>
 struct is_xpr
-  : has_is_boost_xpressive_xpression_<Xpr>
+		: has_is_boost_xpressive_xpression_<Xpr>
 {};
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -36,9 +40,9 @@ struct is_xpr
 //
 enum quant_enum
 {
-    quant_none,
-    quant_fixed_width,
-    quant_variable_width
+	quant_none,
+	quant_fixed_width,
+	quant_variable_width
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,21 +51,21 @@ enum quant_enum
 template<quant_enum QuantStyle, std::size_t Width = unknown_width::value, bool Pure = true>
 struct quant_style
 {
-    typedef void is_boost_xpressive_xpression_;
+	typedef void is_boost_xpressive_xpression_;
 
-    // Which quantification strategy to use?
-    BOOST_STATIC_CONSTANT(int, quant = QuantStyle);
+	// Which quantification strategy to use?
+	BOOST_STATIC_CONSTANT ( int, quant = QuantStyle );
 
-    // how many characters this matcher consumes
-    BOOST_STATIC_CONSTANT(std::size_t, width = Width);
+	// how many characters this matcher consumes
+	BOOST_STATIC_CONSTANT ( std::size_t, width = Width );
 
-    // whether this matcher has observable side-effects
-    BOOST_STATIC_CONSTANT(bool, pure = Pure);
+	// whether this matcher has observable side-effects
+	BOOST_STATIC_CONSTANT ( bool, pure = Pure );
 
-    static detail::width get_width()
-    {
-        return width;
-    }
+	static detail::width get_width()
+	{
+		return width;
+	}
 };
 
 #define BOOST_XPR_QUANT_STYLE(Style, Width, Pure)                               \
@@ -103,7 +107,7 @@ typedef quant_style<quant_variable_width> quant_style_variable_width;
 //  for when the sub-expression has a fixed width that is known at compile time
 template<std::size_t Width>
 struct quant_style_fixed_width
-  : quant_style<quant_fixed_width, Width>
+		: quant_style<quant_fixed_width, Width>
 {
 };
 
@@ -111,7 +115,7 @@ struct quant_style_fixed_width
 // quant_style_assertion
 //  a zero-width assertion.
 struct quant_style_assertion
-  : quant_style<quant_none, 0>
+		: quant_style<quant_none, 0>
 {
 };
 
@@ -120,10 +124,12 @@ struct quant_style_assertion
 //
 template<typename Matcher>
 struct quant_type
-  : mpl::int_<Matcher::quant>
+		: mpl::int_<Matcher::quant>
 {
 };
 
-}}} // namespace boost::xpressive::detail
+}
+}
+} // namespace boost::xpressive::detail
 
 #endif

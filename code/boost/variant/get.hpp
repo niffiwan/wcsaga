@@ -29,7 +29,8 @@
 #   include "boost/type_traits/is_same.hpp"
 #endif
 
-namespace boost {
+namespace boost
+{
 
 //////////////////////////////////////////////////////////////////////////
 // class bad_get
@@ -37,15 +38,15 @@ namespace boost {
 // The exception thrown in the event of a failed get of a value.
 //
 class bad_get
-    : public std::exception
+	: public std::exception
 {
 public: // std::exception implementation
 
-    virtual const char * what() const throw()
-    {
-        return "boost::bad_get: "
-               "failed value get using boost::get";
-    }
+	virtual const char *what() const throw()
+	{
+		return "boost::bad_get: "
+		       "failed value get using boost::get";
+	}
 
 };
 
@@ -56,7 +57,10 @@ public: // std::exception implementation
 // Otherwise: pointer ver. returns 0; reference ver. throws bad_get.
 //
 
-namespace detail { namespace variant {
+namespace detail
+{
+namespace variant
+{
 
 // (detail) class template get_visitor
 //
@@ -68,64 +72,65 @@ struct get_visitor
 {
 private: // private typedefs
 
-    typedef typename add_pointer<T>::type pointer;
-    typedef typename add_reference<T>::type reference;
+	typedef typename add_pointer<T>::type pointer;
+	typedef typename add_reference<T>::type reference;
 
 public: // visitor typedefs
 
-    typedef pointer result_type;
+	typedef pointer result_type;
 
 public: // visitor interfaces
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 
-    pointer operator()(reference operand) const
-    {
-        return boost::addressof(operand);
-    }
+	pointer operator() ( reference operand ) const
+	{
+		return boost::addressof ( operand );
+	}
 
-    template <typename U>
-    pointer operator()(const U&) const
-    {
-        return static_cast<pointer>(0);
-    }
+	template <typename U>
+	pointer operator() ( const U & ) const
+	{
+		return static_cast<pointer> ( 0 );
+	}
 
 #else // MSVC6
 
 private: // helpers, for visitor interfaces (below)
 
-    pointer execute_impl(reference operand, mpl::true_) const
-    {
-        return boost::addressof(operand);
-    }
+	pointer execute_impl ( reference operand, mpl::true_ ) const
+	{
+		return boost::addressof ( operand );
+	}
 
-    template <typename U>
-    pointer execute_impl(const U& operand, mpl::false_) const
-    {
-        return static_cast<pointer>(0);
-    }
+	template <typename U>
+	pointer execute_impl ( const U &operand, mpl::false_ ) const
+	{
+		return static_cast<pointer> ( 0 );
+	}
 
 public: // visitor interfaces
 
-    template <typename U>
-    pointer operator()(U& operand) const
-    {
-        // MSVC6 finds normal implementation (above) ambiguous,
-        // so we must explicitly disambiguate
+	template <typename U>
+	pointer operator() ( U &operand ) const
+	{
+		// MSVC6 finds normal implementation (above) ambiguous,
+		// so we must explicitly disambiguate
 
-        typedef typename mpl::or_<
-              is_same<U, T>
-            , is_same<const U, T>
-            >::type U_is_T;
+		typedef typename mpl::or_ <
+		is_same<U, T>
+		, is_same<const U, T>
+		>::type U_is_T;
 
-        return execute_impl(operand, U_is_T());
-    }
+		return execute_impl ( operand, U_is_T() );
+	}
 
 #endif // MSVC6 workaround
 
 };
 
-}} // namespace detail::variant
+}
+} // namespace detail::variant
 
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551))
 #   define BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(t)  \
@@ -135,66 +140,66 @@ public: // visitor interfaces
     , t* = 0
 #endif
 
-template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
+template <typename U, BOOST_VARIANT_ENUM_PARAMS ( typename T ) >
 inline
-    typename add_pointer<U>::type
-get(
-      boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >* operand
-      BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
-    )
+typename add_pointer<U>::type
+get (
+    boost::variant< BOOST_VARIANT_ENUM_PARAMS ( T ) > *operand
+    BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE ( U )
+)
 {
-    typedef typename add_pointer<U>::type U_ptr;
-    if (!operand) return static_cast<U_ptr>(0);
+	typedef typename add_pointer<U>::type U_ptr;
+	if ( !operand ) return static_cast<U_ptr> ( 0 );
 
-    detail::variant::get_visitor<U> v;
-    return operand->apply_visitor(v);
+	detail::variant::get_visitor<U> v;
+	return operand->apply_visitor ( v );
 }
 
-template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
+template <typename U, BOOST_VARIANT_ENUM_PARAMS ( typename T ) >
 inline
-    typename add_pointer<const U>::type
-get(
-      const boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >* operand
-      BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
-    )
+typename add_pointer<const U>::type
+get (
+    const boost::variant< BOOST_VARIANT_ENUM_PARAMS ( T ) > *operand
+    BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE ( U )
+)
 {
-    typedef typename add_pointer<const U>::type U_ptr;
-    if (!operand) return static_cast<U_ptr>(0);
+	typedef typename add_pointer<const U>::type U_ptr;
+	if ( !operand ) return static_cast<U_ptr> ( 0 );
 
-    detail::variant::get_visitor<const U> v;
-    return operand->apply_visitor(v);
+	detail::variant::get_visitor<const U> v;
+	return operand->apply_visitor ( v );
 }
 
-template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
+template <typename U, BOOST_VARIANT_ENUM_PARAMS ( typename T ) >
 inline
-    typename add_reference<U>::type
-get(
-      boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >& operand
-      BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
-    )
+typename add_reference<U>::type
+get (
+    boost::variant< BOOST_VARIANT_ENUM_PARAMS ( T ) > &operand
+    BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE ( U )
+)
 {
-    typedef typename add_pointer<U>::type U_ptr;
-    U_ptr result = get<U>(&operand);
+	typedef typename add_pointer<U>::type U_ptr;
+	U_ptr result = get<U> ( &operand );
 
-    if (!result)
-        throw bad_get();
-    return *result;
+	if ( !result )
+		throw bad_get();
+	return *result;
 }
 
-template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
+template <typename U, BOOST_VARIANT_ENUM_PARAMS ( typename T ) >
 inline
-    typename add_reference<const U>::type
-get(
-      const boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >& operand
-      BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
-    )
+typename add_reference<const U>::type
+get (
+    const boost::variant< BOOST_VARIANT_ENUM_PARAMS ( T ) > &operand
+    BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE ( U )
+)
 {
-    typedef typename add_pointer<const U>::type U_ptr;
-    U_ptr result = get<const U>(&operand);
+	typedef typename add_pointer<const U>::type U_ptr;
+	U_ptr result = get<const U> ( &operand );
 
-    if (!result)
-        throw bad_get();
-    return *result;
+	if ( !result )
+		throw bad_get();
+	return *result;
 }
 
 } // namespace boost

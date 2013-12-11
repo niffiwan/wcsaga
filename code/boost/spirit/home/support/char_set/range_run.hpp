@@ -14,43 +14,52 @@
 #include <boost/spirit/home/support/char_set/range.hpp>
 #include <vector>
 
-namespace boost { namespace spirit { namespace support { namespace detail
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    //  range_run
-    //
-    //      An implementation of a sparse bit (boolean) set. The set uses
-    //      a sorted vector of disjoint ranges. This class implements the
-    //      bare minimum essentials from which the full range of set
-    //      operators can be implemented. The set is constructed from
-    //      ranges. Internally, adjacent or overlapping ranges are
-    //      coalesced.
-    //
-    //      range_runs are very space-economical in situations where there
-    //      are lots of ranges and a few individual disjoint values.
-    //      Searching is O(log n) where n is the number of ranges.
-    //
-    //      { Low level interface }
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Char>
-    class range_run
-    {
-    public:
+namespace spirit
+{
+namespace support
+{
+namespace detail
+{
+///////////////////////////////////////////////////////////////////////////
+//  range_run
+//
+//      An implementation of a sparse bit (boolean) set. The set uses
+//      a sorted vector of disjoint ranges. This class implements the
+//      bare minimum essentials from which the full range of set
+//      operators can be implemented. The set is constructed from
+//      ranges. Internally, adjacent or overlapping ranges are
+//      coalesced.
+//
+//      range_runs are very space-economical in situations where there
+//      are lots of ranges and a few individual disjoint values.
+//      Searching is O(log n) where n is the number of ranges.
+//
+//      { Low level interface }
+///////////////////////////////////////////////////////////////////////////
+template <typename Char>
+class range_run
+{
+public:
 
-        typedef range<Char> range_type;
-        typedef std::vector<range_type> storage_type;
+	typedef range<Char> range_type;
+	typedef std::vector<range_type> storage_type;
 
-        void swap(range_run& other);
-        bool test(Char v) const;
-        void set(range_type const& range);
-        void clear(range_type const& range);
-        void clear();
+	void swap ( range_run &other );
+	bool test ( Char v ) const;
+	void set ( range_type const &range );
+	void clear ( range_type const &range );
+	void clear();
 
-    private:
+private:
 
-        storage_type run;
-    };
-}}}}
+	storage_type run;
+};
+}
+}
+}
+}
 
 #include <boost/spirit/home/support/char_set/range_run_impl.hpp>
 #endif

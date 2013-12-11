@@ -6,7 +6,7 @@
 
 /** @file config.hpp
  *
- *  This header provides auto-linking and configuration support for the 
+ *  This header provides auto-linking and configuration support for the
  *  Boost.MPI python bindings.
  */
 #ifndef BOOST_MPI_PYTHON_CONFIG_HPP
@@ -16,7 +16,7 @@
 
 /*****************************************************************************
  *                                                                           *
- *  DLL import/export options                                                *  
+ *  DLL import/export options                                                *
  *                                                                           *
  *****************************************************************************/
 

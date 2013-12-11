@@ -7,37 +7,41 @@
 
 # include <boost/python/detail/prefix.hpp>
 
-namespace boost { namespace python { 
+namespace boost
+{
+namespace python
+{
 
 namespace detail
 {
-  struct unspecialized {};
+struct unspecialized {};
 }
 
 // Derive from unspecialized so we can detect whether traits are
 // specialized
 template <class T> struct base_type_traits
-  : detail::unspecialized
+		: detail::unspecialized
 {};
 
 template <>
 struct base_type_traits<PyObject>
 {
-    typedef PyObject type;
+	typedef PyObject type;
 };
 
 template <>
 struct base_type_traits<PyTypeObject>
 {
-    typedef PyObject type;
+	typedef PyObject type;
 };
 
 template <>
 struct base_type_traits<PyMethodObject>
 {
-    typedef PyObject type;
+	typedef PyObject type;
 };
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 #endif // BASE_TYPE_TRAITS_DWA2002614_HPP

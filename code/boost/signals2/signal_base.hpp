@@ -14,20 +14,22 @@
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
-namespace boost {
-  namespace signals2 {
-    class slot_base;
+namespace boost
+{
+namespace signals2
+{
+class slot_base;
 
-    class signal_base : public noncopyable
-    {
-    public:
-      friend class slot_base;
+class signal_base : public noncopyable
+{
+public:
+friend class slot_base;
 
-      virtual ~signal_base() {}
-    protected:
-      virtual shared_ptr<void> lock_pimpl() const = 0;
-    };
-  } // end namespace signals2
+virtual ~signal_base() {}
+protected:
+virtual shared_ptr<void> lock_pimpl() const = 0;
+};
+} // end namespace signals2
 } // end namespace boost
 
 #endif // BOOST_SIGNALS2_SIGNAL_BASE_HPP

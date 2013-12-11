@@ -13,7 +13,12 @@
 # include <boost/mpl/size.hpp>
 
 
-namespace boost { namespace python { namespace detail { 
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
 // Think of this as a version of make_function without a compile-time
 // check that the size of kw is no greater than the expected arity of
@@ -23,24 +28,24 @@ namespace boost { namespace python { namespace detail {
 //
 // @group make_keyword_range_function {
 template <class F, class Policies>
-object make_keyword_range_function(
+object make_keyword_range_function (
     F f
-  , Policies const& policies
-  , keyword_range const& kw)
+    , Policies const &policies
+    , keyword_range const &kw )
 {
-    return detail::make_function_aux(
-        f, policies, detail::get_signature(f), kw, mpl::int_<0>());
+	return detail::make_function_aux (
+	           f, policies, detail::get_signature ( f ), kw, mpl::int_<0>() );
 }
 
 template <class F, class Policies, class Signature>
-object make_keyword_range_function(
+object make_keyword_range_function (
     F f
-  , Policies const& policies
-  , keyword_range const& kw
-  , Signature const& sig)
+    , Policies const &policies
+    , keyword_range const &kw
+    , Signature const &sig )
 {
-    return detail::make_function_aux(
-        f, policies, sig, kw, mpl::int_<0>());
+	return detail::make_function_aux (
+	           f, policies, sig, kw, mpl::int_<0>() );
 }
 // }
 
@@ -49,24 +54,26 @@ object make_keyword_range_function(
 // describing the C++ argument types to be passed to Holder's
 // constructor.
 //
-// Holder and ArgList are intended to be explicitly specified. 
+// Holder and ArgList are intended to be explicitly specified.
 template <class ArgList, class Arity, class Holder, class CallPolicies>
-object make_keyword_range_constructor(
-    CallPolicies const& policies        // The CallPolicies with which to invoke the Holder's constructor
-    , detail::keyword_range const& kw   // The (possibly empty) set of associated argument keywords
-    , Holder* = 0                       
-    , ArgList* = 0, Arity* = 0)
+object make_keyword_range_constructor (
+    CallPolicies const &policies        // The CallPolicies with which to invoke the Holder's constructor
+    , detail::keyword_range const &kw   // The (possibly empty) set of associated argument keywords
+    , Holder * = 0
+                 , ArgList * = 0, Arity * = 0 )
 {
 #if !defined( BOOST_PYTHON_NO_PY_SIGNATURES) && defined( BOOST_PYTHON_PY_SYGNATURES_PROPER_INIT_SELF_TYPE)
-    python_class<BOOST_DEDUCED_TYPENAME Holder::value_type>::register_();
+	python_class<BOOST_DEDUCED_TYPENAME Holder::value_type>::register_();
 #endif
-    return detail::make_keyword_range_function(
-        objects::make_holder<Arity::value>
-            ::template apply<Holder,ArgList>::execute
-        , policies
-        , kw);
+	return detail::make_keyword_range_function (
+	           objects::make_holder<Arity::value>
+	           ::template apply<Holder, ArgList>::execute
+	           , policies
+	           , kw );
 }
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 
 #endif // MAKE_KEYWORD_RANGE_FN_DWA2002927_HPP

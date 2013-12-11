@@ -24,7 +24,10 @@
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
-namespace boost { namespace detail {
+namespace boost
+{
+namespace detail
+{
 
 # define BOOST_DETAIL_default_arg(z, n, _)                                      \
     typedef mpl::void_ BOOST_PP_CAT(arg, n);
@@ -53,14 +56,14 @@ namespace boost { namespace detail {
 template<typename F>
 struct function_name
 {
-    BOOST_PP_REPEAT(
-        BOOST_MPL_LIMIT_METAFUNCTION_ARITY
-      , BOOST_DETAIL_default_arg
-      , ~
-    )
+	BOOST_PP_REPEAT (
+	    BOOST_MPL_LIMIT_METAFUNCTION_ARITY
+	    , BOOST_DETAIL_default_arg
+	    , ~
+	)
 
-    template<typename Signature>
-    struct result {};
+	template<typename Signature>
+	struct result {};
 
 #define BOOST_DETAIL_function_result(r, _, n)                                   \
     template<typename This BOOST_PP_ENUM_TRAILING_PARAMS(n, typename A)>        \
@@ -80,7 +83,7 @@ struct function_name
     };                                                                          \
     /**/
 
-    BOOST_PP_SEQ_FOR_EACH(BOOST_DETAIL_function_result, _, args)
+	BOOST_PP_SEQ_FOR_EACH ( BOOST_DETAIL_function_result, _, args )
 
 # define arg_type(r, _, i, is_const)                                            \
     BOOST_PP_COMMA_IF(i) BOOST_PP_CAT(A, i) BOOST_PP_CAT(const_if, is_const) &
@@ -122,11 +125,11 @@ struct function_name
     )                                                                           \
     /**/
 
-    BOOST_PP_SEQ_FOR_EACH(
-        gen_operator
-      , ~
-      , args
-    )
+	BOOST_PP_SEQ_FOR_EACH (
+	    gen_operator
+	    , ~
+	    , args
+	)
 
 # undef bits
 # undef const_if1
@@ -143,6 +146,7 @@ struct function_name
 # undef args
 };
 
-}} // namespace boost::detail
+}
+} // namespace boost::detail
 
 //#endif // BOOST_DETAIL_FUNCTION_N_DWA2006514_HPP

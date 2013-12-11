@@ -2,7 +2,7 @@
     Boost.Wave: A Standard compliant C++ preprocessor library
 
     Definition of the abstract lexer interface
-    
+
     http://www.boost.org/
 
     Copyright (c) 2001-2010 Hartmut Kaiser. Distributed under the Boost
@@ -29,37 +29,40 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost {
-namespace wave {
-namespace cpplexer {
+namespace boost
+{
+namespace wave
+{
+namespace cpplexer
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  The lex_input_interface decouples the lex_iterator_shim from the actual 
+//  The lex_input_interface decouples the lex_iterator_shim from the actual
 //  lexer. This is done to allow compile time reduction.
 //  Thanks to JCAB for having this idea.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 template <typename TokenT>
-struct lex_input_interface 
+struct lex_input_interface
 {
-    typedef typename TokenT::position_type position_type;
+	typedef typename TokenT::position_type position_type;
 
-    lex_input_interface() {}
-    virtual ~lex_input_interface() {}
+	lex_input_interface() {}
+	virtual ~lex_input_interface() {}
 
-    virtual TokenT& get(TokenT&) = 0;
-    virtual void set_position(position_type const &pos) = 0;
+	virtual TokenT &get ( TokenT & ) = 0;
+	virtual void set_position ( position_type const &pos ) = 0;
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-    virtual bool has_include_guards(std::string& guard_name) const = 0;
+	virtual bool has_include_guards ( std::string &guard_name ) const = 0;
 #endif
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace cpplexer
 }   // namespace wave
-}   // namespace boost 
+}   // namespace boost
 
 #ifdef BOOST_MSVC
 #pragma warning(pop)

@@ -6,7 +6,12 @@
 #ifndef PARAMETER_REQUIREMENTS_050331_HPP
 #define PARAMETER_REQUIREMENTS_050331_HPP
 
-namespace boost { namespace parameter { namespace aux {
+namespace boost
+{
+namespace parameter
+{
+namespace aux
+{
 
 // Used to pass static information about parameter requirements
 // through the satisfies() overload set (below).  The
@@ -15,11 +20,13 @@ namespace boost { namespace parameter { namespace aux {
 template <class Keyword, class Predicate, class HasDefault>
 struct parameter_requirements
 {
-    typedef Keyword keyword;
-    typedef Predicate predicate;
-    typedef HasDefault has_default;
+	typedef Keyword keyword;
+	typedef Predicate predicate;
+	typedef HasDefault has_default;
 };
 
-}}} // namespace boost::parameter::aux
+}
+}
+} // namespace boost::parameter::aux
 
 #endif // PARAMETER_REQUIREMENTS_050331_HPP

@@ -30,54 +30,54 @@ class lightweight_mutex
 {
 private:
 
-    pthread_mutex_t m_;
+pthread_mutex_t m_;
 
-    lightweight_mutex(lightweight_mutex const &);
-    lightweight_mutex & operator=(lightweight_mutex const &);
+lightweight_mutex ( lightweight_mutex const & );
+lightweight_mutex &operator= ( lightweight_mutex const & );
 
 public:
 
-    lightweight_mutex()
-    {
+lightweight_mutex()
+{
 
-// HPUX 10.20 / DCE has a nonstandard pthread_mutex_init
+	// HPUX 10.20 / DCE has a nonstandard pthread_mutex_init
 
 #if defined(__hpux) && defined(_DECTHREADS_)
-        BOOST_VERIFY( pthread_mutex_init( &m_, pthread_mutexattr_default ) == 0 );
+	BOOST_VERIFY ( pthread_mutex_init ( &m_, pthread_mutexattr_default ) == 0 );
 #else
-        BOOST_VERIFY( pthread_mutex_init( &m_, 0 ) == 0 );
+	BOOST_VERIFY ( pthread_mutex_init ( &m_, 0 ) == 0 );
 #endif
-    }
+}
 
-    ~lightweight_mutex()
-    {
-        BOOST_VERIFY( pthread_mutex_destroy( &m_ ) == 0 );
-    }
+~lightweight_mutex()
+{
+	BOOST_VERIFY ( pthread_mutex_destroy ( &m_ ) == 0 );
+}
 
-    class scoped_lock;
-    friend class scoped_lock;
+class scoped_lock;
+friend class scoped_lock;
 
-    class scoped_lock
-    {
-    private:
+class scoped_lock
+{
+private:
 
-        pthread_mutex_t & m_;
+	pthread_mutex_t &m_;
 
-        scoped_lock(scoped_lock const &);
-        scoped_lock & operator=(scoped_lock const &);
+	scoped_lock ( scoped_lock const & );
+	scoped_lock &operator= ( scoped_lock const & );
 
-    public:
+public:
 
-        scoped_lock(lightweight_mutex & m): m_(m.m_)
-        {
-            BOOST_VERIFY( pthread_mutex_lock( &m_ ) == 0 );
-        }
+	scoped_lock ( lightweight_mutex &m ) : m_ ( m.m_ )
+	{
+		BOOST_VERIFY ( pthread_mutex_lock ( &m_ ) == 0 );
+	}
 
-        ~scoped_lock()
-        {
-            BOOST_VERIFY( pthread_mutex_unlock( &m_ ) == 0 );
-        }
-    };
+	~scoped_lock()
+	{
+		BOOST_VERIFY ( pthread_mutex_unlock ( &m_ ) == 0 );
+	}
+};
 };
 
 } // namespace detail

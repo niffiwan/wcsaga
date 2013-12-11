@@ -17,44 +17,46 @@
 #include <boost/accumulators/statistics_fwd.hpp>
 #include <boost/accumulators/statistics/rolling_window.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 namespace impl
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    // rolling_sum_impl
-    //    returns the sum of the samples in the rolling window
-    template<typename Sample>
-    struct rolling_sum_impl
-      : accumulator_base
-    {
-        typedef Sample result_type;
+///////////////////////////////////////////////////////////////////////////////
+// rolling_sum_impl
+//    returns the sum of the samples in the rolling window
+template<typename Sample>
+struct rolling_sum_impl
+		: accumulator_base
+{
+	typedef Sample result_type;
 
-        template<typename Args>
-        rolling_sum_impl(Args const &args)
-          : sum_(args[sample | Sample()])
-        {}
+	template<typename Args>
+	rolling_sum_impl ( Args const &args )
+		: sum_ ( args[sample | Sample()] )
+	{}
 
-        template<typename Args>
-        void operator ()(Args const &args)
-        {
-            if(is_rolling_window_plus1_full(args))
-            {
-                this->sum_ -= rolling_window_plus1(args).front();
-            }
-            this->sum_ += args[sample];
-        }
+	template<typename Args>
+	void operator () ( Args const &args )
+	{
+		if ( is_rolling_window_plus1_full ( args ) )
+		{
+			this->sum_ -= rolling_window_plus1 ( args ).front();
+		}
+		this->sum_ += args[sample];
+	}
 
-        template<typename Args>
-        result_type result(Args const &args) const
-        {
-            return this->sum_;
-        }
+	template<typename Args>
+	result_type result ( Args const &args ) const
+	{
+		return this->sum_;
+	}
 
-    private:
-        Sample sum_;
-    };
+private:
+	Sample sum_;
+};
 } // namespace impl
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -62,18 +64,18 @@ namespace impl
 //
 namespace tag
 {
-    struct rolling_sum
-      : depends_on< rolling_window_plus1 >
-    {
-        /// INTERNAL ONLY
-        ///
-        typedef accumulators::impl::rolling_sum_impl< mpl::_1 > impl;
+struct rolling_sum
+		: depends_on< rolling_window_plus1 >
+{
+	/// INTERNAL ONLY
+	///
+	typedef accumulators::impl::rolling_sum_impl< mpl::_1 > impl;
 
-        #ifdef BOOST_ACCUMULATORS_DOXYGEN_INVOKED
-        /// tag::rolling_window::window_size named parameter
-        static boost::parameter::keyword<tag::rolling_window_size> const window_size;
-        #endif
-    };
+#ifdef BOOST_ACCUMULATORS_DOXYGEN_INVOKED
+	/// tag::rolling_window::window_size named parameter
+	static boost::parameter::keyword<tag::rolling_window_size> const window_size;
+#endif
+};
 } // namespace tag
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -81,13 +83,14 @@ namespace tag
 //
 namespace extract
 {
-    extractor<tag::rolling_sum> const rolling_sum = {};
+extractor<tag::rolling_sum> const rolling_sum = {};
 
-    BOOST_ACCUMULATORS_IGNORE_GLOBAL(rolling_sum)
+BOOST_ACCUMULATORS_IGNORE_GLOBAL ( rolling_sum )
 }
 
 using extract::rolling_sum;
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

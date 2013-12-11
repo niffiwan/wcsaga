@@ -13,9 +13,11 @@
 #pragma once
 #endif
 
-namespace boost{
+namespace boost
+{
 
-namespace flyweights{
+namespace flyweights
+{
 
 template<typename C>
 struct static_holder_class;

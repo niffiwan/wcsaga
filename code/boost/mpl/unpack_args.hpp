@@ -8,8 +8,8 @@
 
 // Copyright Aleksey Gurtovoy 2002-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -44,7 +44,10 @@
 #   include <boost/preprocessor/cat.hpp>
 
 
-namespace boost { namespace mpl {
+namespace boost
+{
+namespace mpl
+{
 
 // local macros, #undef-ined at the end of the header
 
@@ -56,15 +59,16 @@ namespace boost { namespace mpl {
     BOOST_MPL_PP_REPEAT(n, AUX778076_UNPACK, Args) \
     /**/
 
-namespace aux {
+namespace aux
+{
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 template< int size, typename F, typename Args >
 struct unpack_args_impl;
 #else
-template< BOOST_MPL_AUX_NTTP_DECL(int, size) > struct unpack_args_impl
+template< BOOST_MPL_AUX_NTTP_DECL ( int, size ) > struct unpack_args_impl
 {
-    template< typename F, typename Args > struct apply;
+	template< typename F, typename Args > struct apply;
 };
 #endif
 
@@ -74,37 +78,38 @@ template< BOOST_MPL_AUX_NTTP_DECL(int, size) > struct unpack_args_impl
 
 }
 
-template<
-      typename F
+template <
+    typename F
     >
 struct unpack_args
 {
-    template< typename Args > struct apply
+	template< typename Args > struct apply
 #if !defined(BOOST_MPL_CFG_NO_NESTED_FORWARDING)
 #   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-        : aux::unpack_args_impl< size<Args>::value,F,Args >
+			: aux::unpack_args_impl< size<Args>::value, F, Args >
 #   else
-        : aux::unpack_args_impl< size<Args>::value >
-            ::template apply< F,Args >
+			: aux::unpack_args_impl< size<Args>::value >
+			::template apply< F, Args >
 #   endif
-    {
+	{
 #else // BOOST_MPL_CFG_NO_NESTED_FORWARDING
-    {
-        typedef typename aux::unpack_args_impl< 
-              size<Args>::value
-            , F
-            , Args
-            >::type type;
+	{
+		typedef typename aux::unpack_args_impl <
+		size<Args>::value
+		, F
+		, Args
+		>::type type;
 #endif
-    };
+	};
 };
 
-BOOST_MPL_AUX_PASS_THROUGH_LAMBDA_SPEC(1, unpack_args)
+BOOST_MPL_AUX_PASS_THROUGH_LAMBDA_SPEC ( 1, unpack_args )
 
 #   undef AUX778076_UNPACK
 #   undef AUX778076_UNPACKED_ARGS
 
-}}
+}
+}
 
 #endif // BOOST_MPL_CFG_USE_PREPROCESSED_HEADERS
 #endif // BOOST_MPL_UNPACK_ARGS_HPP_INCLUDED
@@ -121,11 +126,11 @@ BOOST_MPL_AUX_PASS_THROUGH_LAMBDA_SPEC(1, unpack_args)
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< typename F, typename Args >
-struct unpack_args_impl<i_,F,Args>
-    : BOOST_PP_CAT(apply,i_)<
-          F
-        AUX778076_UNPACKED_ARGS(i_, Args)
-        >
+struct unpack_args_impl<i_, F, Args>
+: BOOST_PP_CAT ( apply, i_ ) <
+F
+AUX778076_UNPACKED_ARGS ( i_, Args )
+>
 {
 };
 
@@ -133,13 +138,13 @@ struct unpack_args_impl<i_,F,Args>
 
 template<> struct unpack_args_impl<i_>
 {
-    template< typename F, typename Args > struct apply
-        : BOOST_PP_CAT(apply,i_)<
-              F
-            AUX778076_UNPACKED_ARGS(i_, Args)
-            >
-    {
-    };
+	template< typename F, typename Args > struct apply
+	: BOOST_PP_CAT ( apply, i_ ) <
+	F
+	AUX778076_UNPACKED_ARGS ( i_, Args )
+	>
+	{
+	};
 };
 
 #endif

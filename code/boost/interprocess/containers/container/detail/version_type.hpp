@@ -20,65 +20,69 @@
 #include <boost/interprocess/containers/container/detail/type_traits.hpp>
 
 
-namespace boost{
-namespace container {
-namespace containers_detail {
+namespace boost
+{
+namespace container
+{
+namespace containers_detail
+{
 
 //using namespace boost;
 
 template <class T, unsigned V>
 struct version_type
-    : public containers_detail::integral_constant<unsigned, V>
+		: public containers_detail::integral_constant<unsigned, V>
 {
-    typedef T type;
+	typedef T type;
 
-    version_type(const version_type<T, 0>&);
+	version_type ( const version_type<T, 0> & );
 };
 
-namespace impl{
+namespace impl
+{
 
-template <class T, 
+template <class T,
           bool = containers_detail::is_convertible<version_type<T, 0>, typename T::version>::value>
 struct extract_version
 {
-   static const unsigned value = 1;
+	static const unsigned value = 1;
 };
 
 template <class T>
 struct extract_version<T, true>
 {
-   static const unsigned value = T::version::value;
+	static const unsigned value = T::version::value;
 };
 
 template <class T>
 struct has_version
 {
-   private:
-   struct two {char _[2];};
-   template <class U> static two test(...);
-   template <class U> static char test(const typename U::version*);
-   public:
-   static const bool value = sizeof(test<T>(0)) == 1;
-   void dummy(){}
+private:
+	struct two {char _[2];};
+	template <class U> static two test ( ... );
+	template <class U> static char test ( const typename U::version * );
+public:
+	static const bool value = sizeof ( test<T> ( 0 ) ) == 1;
+	void dummy() {}
 };
 
 template <class T, bool = has_version<T>::value>
 struct version
 {
-   static const unsigned value = 1;
+	static const unsigned value = 1;
 };
 
 template <class T>
 struct version<T, true>
 {
-   static const unsigned value = extract_version<T>::value;
+	static const unsigned value = extract_version<T>::value;
 };
 
 }  //namespace impl
 
 template <class T>
 struct version
-   : public containers_detail::integral_constant<unsigned, impl::version<T>::value>
+		: public containers_detail::integral_constant<unsigned, impl::version<T>::value>
 {
 };
 

@@ -21,50 +21,50 @@ namespace detail
 template<typename CharT>
 struct basic_char_state_machine
 {
-    struct state
-    {
-        typedef basic_string_token<CharT> string_token;
-        typedef std::map<std::size_t, string_token> size_t_string_token_map;
-        typedef std::pair<std::size_t, string_token> size_t_string_token_pair;
+	struct state
+	{
+		typedef basic_string_token<CharT> string_token;
+		typedef std::map<std::size_t, string_token> size_t_string_token_map;
+		typedef std::pair<std::size_t, string_token> size_t_string_token_pair;
 
-        bool _end_state;
-        std::size_t _id;
-        std::size_t _unique_id;
-        std::size_t _state;
-        std::size_t _bol_index;
-        std::size_t _eol_index;
-        size_t_string_token_map _transitions;
+		bool _end_state;
+		std::size_t _id;
+		std::size_t _unique_id;
+		std::size_t _state;
+		std::size_t _bol_index;
+		std::size_t _eol_index;
+		size_t_string_token_map _transitions;
 
-        state () :
-            _end_state (false),
-            _id (0),
-            _unique_id (npos),
-            _state (0),
-            _bol_index (npos),
-            _eol_index (npos)
-        {
-        }
-    };
+		state () :
+			_end_state ( false ),
+			_id ( 0 ),
+			_unique_id ( npos ),
+			_state ( 0 ),
+			_bol_index ( npos ),
+			_eol_index ( npos )
+		{
+		}
+	};
 
-    typedef std::vector<state> state_vector;
-    typedef std::vector<state_vector> state_vector_vector;
+	typedef std::vector<state> state_vector;
+	typedef std::vector<state_vector> state_vector_vector;
 
-    state_vector_vector _sm_vector;
+	state_vector_vector _sm_vector;
 
-    bool empty () const
-    {
-        return _sm_vector.empty ();
-    }
+	bool empty () const
+	{
+		return _sm_vector.empty ();
+	}
 
-    void clear ()
-    {
-        _sm_vector.clear ();
-    }
+	void clear ()
+	{
+		_sm_vector.clear ();
+	}
 
-    void swap (basic_char_state_machine &csm_)
-    {
-        _sm_vector.swap (csm_._sm_vector);
-    }
+	void swap ( basic_char_state_machine &csm_ )
+	{
+		_sm_vector.swap ( csm_._sm_vector );
+	}
 };
 
 typedef basic_char_state_machine<char> char_state_machine;

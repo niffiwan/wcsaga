@@ -12,30 +12,30 @@
 
 class FictionViewerDlg : public CDialog
 {
-// Construction
+	// Construction
 public:
-	FictionViewerDlg(CWnd* pParent = NULL);   // standard constructor
+	FictionViewerDlg ( CWnd *pParent = NULL ); // standard constructor
 	int query_modified();
 	void OnOK();
 	void OnCancel();
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(FictionViewerDlg)
 	enum { IDD = IDD_FICTION_VIEWER };
-	CString	m_story_file;
-	CString	m_font_file;
-	int		m_fiction_music;
+	CString m_story_file;
+	CString m_font_file;
+	int     m_fiction_music;
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(FictionViewerDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions

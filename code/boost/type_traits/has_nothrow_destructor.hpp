@@ -14,9 +14,10 @@
 // should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
 
-namespace boost {
+namespace boost
+{
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(has_nothrow_destructor,T,::boost::has_trivial_destructor<T>::value)
+BOOST_TT_AUX_BOOL_TRAIT_DEF1 ( has_nothrow_destructor, T, ::boost::has_trivial_destructor<T>::value )
 
 } // namespace boost
 

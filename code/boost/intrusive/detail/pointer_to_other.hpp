@@ -19,35 +19,36 @@
 #ifndef BOOST_POINTER_TO_OTHER_HPP_INCLUDED
 #define BOOST_POINTER_TO_OTHER_HPP_INCLUDED
 
-namespace boost {
+namespace boost
+{
 
 template<class T, class U>
-   struct pointer_to_other;
+struct pointer_to_other;
 
 template<class T, class U, template <class> class Sp>
-   struct pointer_to_other< Sp<T>, U >
+struct pointer_to_other< Sp<T>, U >
 {
-   typedef Sp<U> type;
+	typedef Sp<U> type;
 };
 
 template<class T, class T2, class U,
-        template <class, class> class Sp>
-   struct pointer_to_other< Sp<T, T2>, U >
+         template <class, class> class Sp>
+struct pointer_to_other< Sp<T, T2>, U >
 {
-   typedef Sp<U, T2> type;
+	typedef Sp<U, T2> type;
 };
 
 template<class T, class T2, class T3, class U,
-        template <class, class, class> class Sp>
+         template <class, class, class> class Sp>
 struct pointer_to_other< Sp<T, T2, T3>, U >
 {
-   typedef Sp<U, T2, T3> type;
+	typedef Sp<U, T2, T3> type;
 };
 
 template<class T, class U>
-struct pointer_to_other< T*, U > 
+struct pointer_to_other< T *, U >
 {
-   typedef U* type;
+	typedef U *type;
 };
 
 } // namespace boost

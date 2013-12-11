@@ -17,15 +17,19 @@
 #ifndef BOOST_MPI_SKELETON_AND_CONTENT_FWD_HPP
 #define BOOST_MPI_SKELETON_AND_CONTENT_FWD_HPP
 
-namespace boost { namespace mpi {
+namespace boost
+{
+namespace mpi
+{
 
 template <class T> struct skeleton_proxy;
-template <class T> const skeleton_proxy<T> skeleton(T& x);
+template <class T> const skeleton_proxy<T> skeleton ( T &x );
 class content;
-template <class T> const content get_content(const T& x);
+template <class T> const content get_content ( const T &x );
 class packed_skeleton_iarchive;
 class packed_skeleton_oarchive;
 
-} } // end namespace boost::mpi
+}
+} // end namespace boost::mpi
 
 #endif // BOOST_MPI_SKELETON_AND_CONTENT_FWD_HPP

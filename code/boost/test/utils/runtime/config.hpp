@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -45,12 +45,14 @@
 #endif
 
 #ifdef __SUNPRO_CC
-extern int putenv(char*);
+extern int putenv ( char * );
 #endif
 
-namespace boost {
+namespace boost
+{
 
-namespace BOOST_RT_PARAM_NAMESPACE {
+namespace BOOST_RT_PARAM_NAMESPACE
+{
 
 #ifndef BOOST_RT_PARAM_CUSTOM_STRING
 #  ifndef BOOST_RT_PARAM_WIDE_STRING
@@ -75,31 +77,31 @@ typedef std::basic_ostream<char_type>                           out_stream;
 #ifndef UNDER_CE
 #if defined(__COMO__) && 0
 inline void
-putenv_impl( cstring name, cstring value )
+putenv_impl ( cstring name, cstring value )
 {
-    using namespace std;
-    // !! this may actually fail. What should we do?
-    setenv( name.begin(), value.begin(), 1 );
+	using namespace std;
+	// !! this may actually fail. What should we do?
+	setenv ( name.begin(), value.begin(), 1 );
 }
 #else
 inline void
-putenv_impl( cstring name, cstring value )
+putenv_impl ( cstring name, cstring value )
 {
-    format_stream fs;
+	format_stream fs;
 
-    fs << name << '=' << value;
+	fs << name << '=' << value;
 
-    // !! this may actually fail. What should we do?
-    // const_cast is used to satisfy putenv interface
-    using namespace std;
-    putenv( const_cast<char*>( fs.str().c_str() ) );
+	// !! this may actually fail. What should we do?
+	// const_cast is used to satisfy putenv interface
+	using namespace std;
+	putenv ( const_cast<char *> ( fs.str().c_str() ) );
 }
 #endif
 #endif
 
-#ifdef BOOST_MSVC 
-#pragma warning(pop) 
-#endif 
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 #define BOOST_RT_PARAM_LITERAL( l ) l
 #define BOOST_RT_PARAM_CSTRING_LITERAL( l ) cstring( l, sizeof( l ) - 1 )
@@ -120,16 +122,16 @@ typedef std::wostream                                           out_stream;
 
 #ifndef UNDER_CE
 inline void
-putenv_impl( cstring name, cstring value )
+putenv_impl ( cstring name, cstring value )
 {
-    format_stream fs;
+	format_stream fs;
 
-    fs << name << '=' << value;
+	fs << name << '=' << value;
 
-    // !! this may actually fail. What should we do?
-    // const_cast is used to satisfy putenv interface
-    using namespace std;
-    wputenv( const_cast<wchar_t*>( fs.str().c_str() ) );
+	// !! this may actually fail. What should we do?
+	// const_cast is used to satisfy putenv interface
+	using namespace std;
+	wputenv ( const_cast<wchar_t *> ( fs.str().c_str() ) );
 }
 #endif
 

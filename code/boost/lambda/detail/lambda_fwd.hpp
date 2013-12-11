@@ -13,28 +13,31 @@
 #ifndef BOOST_LAMBDA_FWD_HPP
 #define BOOST_LAMBDA_FWD_HPP
 
-namespace boost { 
-namespace lambda { 
+namespace boost
+{
+namespace lambda
+{
 
-namespace detail {
+namespace detail
+{
 
 template<class T> struct generate_error;
 
-}   
+}
 // -- placeholders --------------------------------------------
 
 template <int I> struct placeholder;
 
 // function_adaptors
-template <class Func> 
+template <class Func>
 struct function_adaptor;
 
 template <int I, class Act> class action;
 
-template <class Base> 
+template <class Base>
 class lambda_functor;
 
-template <class Act, class Args> 
+template <class Act, class Args>
 class lambda_functor_base;
 
 } // namespace lambda
@@ -54,12 +57,15 @@ class lambda_functor_base;
 #define CALL_REFERENCE_TYPES A&, B&, C&, Env&
 #define CALL_PLAIN_TYPES A, B, C, Env
 
-namespace boost {
-namespace lambda {
-namespace detail {
+namespace boost
+{
+namespace lambda
+{
+namespace detail
+{
 
 template<class A1, class A2, class A3, class A4>
-void do_nothing(A1&, A2&, A3&, A4&) {}
+void do_nothing ( A1 &, A2 &, A3 &, A4 & ) {}
 
 } // detail
 } // lambda

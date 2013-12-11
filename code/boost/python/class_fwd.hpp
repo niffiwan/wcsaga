@@ -8,7 +8,10 @@
 # include <boost/python/detail/prefix.hpp>
 # include <boost/python/detail/not_specified.hpp>
 
-namespace boost { namespace python { 
+namespace boost
+{
+namespace python
+{
 
 template <
     class T // class being wrapped
@@ -19,6 +22,7 @@ template <
     >
 class class_;
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 #endif // CLASS_FWD_DWA200222_HPP

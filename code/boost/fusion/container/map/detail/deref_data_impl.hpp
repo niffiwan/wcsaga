@@ -15,34 +15,40 @@
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 
-namespace boost { namespace fusion { namespace extension
+namespace boost
 {
-    template <typename>
-    struct deref_data_impl;
+namespace fusion
+{
+namespace extension
+{
+template <typename>
+struct deref_data_impl;
 
-    template <>
-    struct deref_data_impl<map_iterator_tag>
-    {
-        template <typename It>
-        struct apply
-        {
-            typedef typename result_of::value_of<It>::type::second_type data;
+template <>
+struct deref_data_impl<map_iterator_tag>
+{
+	template <typename It>
+	struct apply
+	{
+		typedef typename result_of::value_of<It>::type::second_type data;
 
-            typedef typename
-                mpl::eval_if<
-                    is_const<typename It::seq_type>
-                  , detail::cref_result<mpl::identity<data> >
-                  , detail::ref_result<mpl::identity<data> >
-                >::type
-            type;
+		typedef typename
+		mpl::eval_if <
+		is_const<typename It::seq_type>
+		, detail::cref_result<mpl::identity<data> >
+		, detail::ref_result<mpl::identity<data> >
+		>::type
+		type;
 
-            static type
-            call(It const& it)
-            {
-                return deref(it).second;
-            }
-        };
-    };
-}}}
+		static type
+		call ( It const &it )
+		{
+			return deref ( it ).second;
+		}
+	};
+};
+}
+}
+}
 
 #endif

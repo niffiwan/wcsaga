@@ -8,7 +8,10 @@
 
 # include <boost/python/detail/prefix.hpp>
 
-namespace boost { namespace python {
+namespace boost
+{
+namespace python
+{
 
 #if PY_VERSION_HEX >= 0x02050000
 
@@ -24,6 +27,7 @@ ssize_t const ssize_t_min = INT_MIN;
 
 #endif
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 #endif // BOOST_PYTHON_SSIZE_T_RWGK20060924_HPP

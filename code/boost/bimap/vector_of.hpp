@@ -37,8 +37,10 @@
 #include <boost/bimap/views/vector_map_view.hpp>
 #include <boost/bimap/views/vector_set_view.hpp>
 
-namespace boost {
-namespace bimaps {
+namespace boost
+{
+namespace bimaps
+{
 
 
 /// \brief Set Type Specification
@@ -108,41 +110,41 @@ See also vector_of_relation.
 template< class Type >
 struct vector_of : public ::boost::bimaps::detail::set_type_of_tag
 {
-    /// User type, can be tagged
-    typedef Type user_type;
+	/// User type, can be tagged
+	typedef Type user_type;
 
-    /// Type of the object that will be stored in the vector
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::tags::support::
-        value_type_of<user_type>::type value_type;
+	/// Type of the object that will be stored in the vector
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::tags::support::
+	value_type_of<user_type>::type value_type;
 
 
-    struct lazy_concept_checked
-    {
-        BOOST_CLASS_REQUIRE ( value_type,
-                              boost, AssignableConcept );
+	struct lazy_concept_checked
+	{
+		BOOST_CLASS_REQUIRE ( value_type,
+		                      boost, AssignableConcept );
 
-        typedef vector_of type;
-    };
+		typedef vector_of type;
+	};
 
-    BOOST_BIMAP_GENERATE_INDEX_BINDER_0CP_NO_EXTRACTOR(
+	BOOST_BIMAP_GENERATE_INDEX_BINDER_0CP_NO_EXTRACTOR (
 
-        // binds to
-        multi_index::random_access
-    )
+	    // binds to
+	    multi_index::random_access
+	)
 
-    BOOST_BIMAP_GENERATE_MAP_VIEW_BINDER(
+	BOOST_BIMAP_GENERATE_MAP_VIEW_BINDER (
 
-        // binds to
-        views::vector_map_view
-    )
+	    // binds to
+	    views::vector_map_view
+	)
 
-    BOOST_BIMAP_GENERATE_SET_VIEW_BINDER(
+	BOOST_BIMAP_GENERATE_SET_VIEW_BINDER (
 
-        // binds to
-        views::vector_set_view
-    )
+	    // binds to
+	    views::vector_set_view
+	)
 
-    typedef mpl::bool_<true> mutable_key;
+	typedef mpl::bool_<true> mutable_key;
 };
 
 
@@ -167,14 +169,14 @@ See also vector_of, is_set_type_of_relation.
 
 struct vector_of_relation : public ::boost::bimaps::detail::set_type_of_relation_tag
 {
-    BOOST_BIMAP_GENERATE_RELATION_BINDER_0CP(
+	BOOST_BIMAP_GENERATE_RELATION_BINDER_0CP (
 
-        // binds to
-        vector_of
-    )
+	    // binds to
+	    vector_of
+	)
 
-    typedef mpl::bool_<true>  left_mutable_key;
-    typedef mpl::bool_<true> right_mutable_key;
+	typedef mpl::bool_<true>  left_mutable_key;
+	typedef mpl::bool_<true> right_mutable_key;
 };
 
 

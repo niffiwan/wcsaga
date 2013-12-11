@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -22,24 +22,28 @@
 // Boost.Runtime.Parameter
 #include <boost/test/utils/runtime/config.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace BOOST_RT_PARAM_NAMESPACE {
+namespace BOOST_RT_PARAM_NAMESPACE
+{
 
-namespace environment {
+namespace environment
+{
 
 class variable_base;
-variable_base var( cstring var_name );
+variable_base var ( cstring var_name );
 
-namespace rt_env_detail {
+namespace rt_env_detail
+{
 
 struct variable_data;
 
-variable_data&  new_var_record( cstring var_name );
-variable_data*  find_var_record( cstring var_name );
+variable_data  &new_var_record ( cstring var_name );
+variable_data  *find_var_record ( cstring var_name );
 
-cstring         sys_read_var( cstring var_name );
-void            sys_write_var( cstring var_name, format_stream& var_value );
+cstring         sys_read_var ( cstring var_name );
+void            sys_write_var ( cstring var_name, format_stream &var_value );
 
 }
 

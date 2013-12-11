@@ -14,7 +14,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Copyright 2007 Alexandre Courpron
 //
-// Permission to use, copy, modify, redistribute and sell this software, 
+// Permission to use, copy, modify, redistribute and sell this software,
 // provided that this copyright notice appears on all copies of the software.
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -23,19 +23,23 @@
 
 #include <boost/intrusive/detail/config_begin.hpp>
 
-namespace boost {
-namespace intrusive {
-namespace function_detector {
+namespace boost
+{
+namespace intrusive
+{
+namespace function_detector
+{
 
-    typedef char NotFoundType;
-    struct StaticFunctionType { NotFoundType x [2]; };
-    struct NonStaticFunctionType { NotFoundType x [3]; };
+typedef char NotFoundType;
+struct StaticFunctionType { NotFoundType x [2]; };
+struct NonStaticFunctionType { NotFoundType x [3]; };
 
-    enum
-         { NotFound          = 0,
-           StaticFunction    = sizeof( StaticFunctionType )    - sizeof( NotFoundType ),
-           NonStaticFunction = sizeof( NonStaticFunctionType ) - sizeof( NotFoundType )
-         };
+enum
+{
+	NotFound          = 0,
+	StaticFunction    = sizeof ( StaticFunctionType )    - sizeof ( NotFoundType ),
+	NonStaticFunction = sizeof ( NonStaticFunctionType ) - sizeof ( NotFoundType )
+};
 
 }  //namespace boost {
 }  //namespace intrusive {

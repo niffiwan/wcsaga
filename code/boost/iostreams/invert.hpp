@@ -10,7 +10,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <algorithm>                             // copy, min.  
 #include <cassert>
@@ -32,7 +32,10 @@
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
-namespace boost { namespace iostreams {
+namespace boost
+{
+namespace iostreams
+{
 
 //
 // Template name: inverse.
@@ -42,111 +45,117 @@ namespace boost { namespace iostreams {
 //      vice versa.
 //
 template<typename Filter>
-class inverse {
+class inverse
+{
 private:
-    BOOST_STATIC_ASSERT(is_filter<Filter>::value);
-    typedef typename category_of<Filter>::type   base_category;
-    typedef reference_wrapper<Filter>            filter_ref;
+	BOOST_STATIC_ASSERT ( is_filter<Filter>::value );
+	typedef typename category_of<Filter>::type   base_category;
+	typedef reference_wrapper<Filter>            filter_ref;
 public:
-    typedef typename char_type_of<Filter>::type  char_type;
-    typedef typename int_type_of<Filter>::type   int_type;
-    typedef char_traits<char_type>               traits_type;
-    typedef typename 
-            mpl::if_<
-                is_convertible<
-                    base_category,
-                    input
-                >,
-                output,
-                input
-            >::type                              mode;
-    struct category 
-        : mode, 
-          filter_tag, 
-          multichar_tag, 
-          closable_tag 
-        { };
-    explicit inverse( const Filter& filter, 
-                      std::streamsize buffer_size = 
-                          default_filter_buffer_size) 
-        : pimpl_(new impl(filter, buffer_size))
-        { }
+	typedef typename char_type_of<Filter>::type  char_type;
+	typedef typename int_type_of<Filter>::type   int_type;
+	typedef char_traits<char_type>               traits_type;
+	typedef typename
+	mpl::if_ <
+	is_convertible <
+	base_category,
+	input
+	>,
+	output,
+	input
+	>::type                              mode;
+	struct category
+			: mode,
+			  filter_tag,
+			  multichar_tag,
+			  closable_tag
+	{ };
+	explicit inverse ( const Filter &filter,
+	                   std::streamsize buffer_size =
+	                       default_filter_buffer_size )
+		: pimpl_ ( new impl ( filter, buffer_size ) )
+	{ }
 
-    template<typename Source>
-    std::streamsize read(Source& src, char* s, std::streamsize n)
-    {
-        typedef detail::counted_array_sink<char_type>  array_sink;
-        typedef composite<filter_ref, array_sink>      filtered_array_sink;
+	template<typename Source>
+	std::streamsize read ( Source &src, char *s, std::streamsize n )
+	{
+		typedef detail::counted_array_sink<char_type>  array_sink;
+		typedef composite<filter_ref, array_sink>      filtered_array_sink;
 
-        assert((flags() & f_write) == 0);
-        if (flags() == 0) {
-            flags() = f_read;
-            buf().set(0, 0);
-        }
+		assert ( ( flags() & f_write ) == 0 );
+		if ( flags() == 0 )
+		{
+			flags() = f_read;
+			buf().set ( 0, 0 );
+		}
 
-        filtered_array_sink snk(filter(), array_sink(s, n));
-        int_type status;
-        for ( status = traits_type::good();
-              snk.second().count() < n && status == traits_type::good(); )
-        {
-            status = buf().fill(src);
-            buf().flush(snk);
-        }
-        return snk.second().count() == 0 &&
-               status == traits_type::eof() 
-                   ? 
-               -1
-                   : 
-               snk.second().count();
-    }
+		filtered_array_sink snk ( filter(), array_sink ( s, n ) );
+		int_type status;
+		for ( status = traits_type::good();
+		        snk.second().count() < n && status == traits_type::good(); )
+		{
+			status = buf().fill ( src );
+			buf().flush ( snk );
+		}
+		return snk.second().count() == 0 &&
+		       status == traits_type::eof()
+		       ?
+		       -1
+		       :
+		       snk.second().count();
+	}
 
-    template<typename Sink>
-    std::streamsize write(Sink& dest, const char* s, std::streamsize n)
-    {
-        typedef detail::counted_array_source<char_type>  array_source;
-        typedef composite<filter_ref, array_source>      filtered_array_source;
+	template<typename Sink>
+	std::streamsize write ( Sink &dest, const char *s, std::streamsize n )
+	{
+		typedef detail::counted_array_source<char_type>  array_source;
+		typedef composite<filter_ref, array_source>      filtered_array_source;
 
-        assert((flags() & f_read) == 0);
-        if (flags() == 0) {
-            flags() = f_write;
-            buf().set(0, 0);
-        }
-        
-        filtered_array_source src(filter(), array_source(s, n));
-        for (bool good = true; src.second().count() < n && good; ) {
-            buf().fill(src);
-            good = buf().flush(dest);
-        }
-        return src.second().count();
-    }
+		assert ( ( flags() & f_read ) == 0 );
+		if ( flags() == 0 )
+		{
+			flags() = f_write;
+			buf().set ( 0, 0 );
+		}
 
-    template<typename Device>
-    void close(Device& dev)
-    {
-        detail::execute_all(
-            detail::flush_buffer(buf(), dev, (flags() & f_write) != 0),
-            detail::call_close_all(pimpl_->filter_, dev),
-            detail::clear_flags(flags())
-        );
-    }
+		filtered_array_source src ( filter(), array_source ( s, n ) );
+		for ( bool good = true; src.second().count() < n && good; )
+		{
+			buf().fill ( src );
+			good = buf().flush ( dest );
+		}
+		return src.second().count();
+	}
+
+	template<typename Device>
+	void close ( Device &dev )
+	{
+		detail::execute_all (
+		    detail::flush_buffer ( buf(), dev, ( flags() & f_write ) != 0 ),
+		    detail::call_close_all ( pimpl_->filter_, dev ),
+		    detail::clear_flags ( flags() )
+		);
+	}
 private:
-    filter_ref filter() { return boost::ref(pimpl_->filter_); }
-    detail::buffer<char_type>& buf() { return pimpl_->buf_; }
-    int& flags() { return pimpl_->flags_; }
-    
-    enum flags_ {
-        f_read = 1, f_write = 2
-    };
+	filter_ref filter() { return boost::ref ( pimpl_->filter_ ); }
+	detail::buffer<char_type> &buf() { return pimpl_->buf_; }
+	int &flags() { return pimpl_->flags_; }
 
-    struct impl {
-        impl(const Filter& filter, std::streamsize n) 
-            : filter_(filter), buf_(n), flags_(0)
-        { buf_.set(0, 0); }
-        Filter                     filter_;
-        detail::buffer<char_type>  buf_;
-        int                        flags_;
-    };
-    shared_ptr<impl> pimpl_;
+	enum flags_
+	{
+		f_read = 1, f_write = 2
+	};
+
+	struct impl
+	{
+		impl ( const Filter &filter, std::streamsize n )
+			: filter_ ( filter ), buf_ ( n ), flags_ ( 0 )
+		{ buf_.set ( 0, 0 ); }
+		Filter                     filter_;
+		detail::buffer<char_type>  buf_;
+		int                        flags_;
+	};
+	shared_ptr<impl> pimpl_;
 };
 
 //
@@ -156,11 +165,12 @@ private:
 // Description: Returns an instance of an appropriate specialization of inverse.
 //
 template<typename Filter>
-inverse<Filter> invert(const Filter& f) { return inverse<Filter>(f); }
-                    
+inverse<Filter> invert ( const Filter &f ) { return inverse<Filter> ( f ); }
+
 //----------------------------------------------------------------------------//
 
-} } // End namespaces iostreams, boost.
+}
+} // End namespaces iostreams, boost.
 
 #include <boost/iostreams/detail/config/enable_warnings.hpp>  // MSVC.
 

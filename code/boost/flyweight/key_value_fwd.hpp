@@ -13,13 +13,15 @@
 #pragma once
 #endif
 
-namespace boost{
+namespace boost
+{
 
-namespace flyweights{
+namespace flyweights
+{
 
 struct no_key_from_value;
 
-template<typename Key,typename Value,typename KeyFromValue=no_key_from_value>
+template<typename Key, typename Value, typename KeyFromValue = no_key_from_value>
 struct key_value;
 
 } /* namespace flyweights */

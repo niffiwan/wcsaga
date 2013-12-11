@@ -29,31 +29,31 @@ class atomic_count
 {
 public:
 
-    explicit atomic_count( long v ): value_( v )
-    {
-    }
+explicit atomic_count ( long v ) : value_ ( v )
+{
+}
 
-    long operator++()
-    {
-        return BOOST_INTERLOCKED_INCREMENT( &value_ );
-    }
+long operator++()
+{
+	return BOOST_INTERLOCKED_INCREMENT ( &value_ );
+}
 
-    long operator--()
-    {
-        return BOOST_INTERLOCKED_DECREMENT( &value_ );
-    }
+long operator--()
+{
+	return BOOST_INTERLOCKED_DECREMENT ( &value_ );
+}
 
-    operator long() const
-    {
-        return static_cast<long const volatile &>( value_ );
-    }
+operator long() const
+{
+	return static_cast<long const volatile &> ( value_ );
+}
 
 private:
 
-    atomic_count( atomic_count const & );
-    atomic_count & operator=( atomic_count const & );
+atomic_count ( atomic_count const & );
+atomic_count &operator= ( atomic_count const & );
 
-    long value_;
+long value_;
 };
 
 } // namespace detail

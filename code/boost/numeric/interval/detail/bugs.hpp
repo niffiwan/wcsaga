@@ -49,23 +49,25 @@
 // cf PR c++/1981 for a description of the bug
 #include <algorithm>
 #include <boost/config/no_tr1/cmath.hpp>
-namespace boost {
-namespace numeric {
-  using std::min;
-  using std::max;
-  using std::sqrt;
-  using std::exp;
-  using std::log;
-  using std::cos;
-  using std::tan;
-  using std::asin;
-  using std::acos;
-  using std::atan;
-  using std::ceil;
-  using std::floor;
-  using std::sinh;
-  using std::cosh;
-  using std::tanh;
+namespace boost
+{
+namespace numeric
+{
+using std::min;
+using std::max;
+using std::sqrt;
+using std::exp;
+using std::log;
+using std::cos;
+using std::tan;
+using std::asin;
+using std::acos;
+using std::atan;
+using std::ceil;
+using std::floor;
+using std::sinh;
+using std::cosh;
+using std::tanh;
 # undef BOOST_NUMERIC_INTERVAL_using_max
 # undef BOOST_NUMERIC_INTERVAL_using_math
 # define BOOST_NUMERIC_INTERVAL_using_max(a)

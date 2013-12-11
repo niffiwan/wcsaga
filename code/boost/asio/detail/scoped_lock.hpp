@@ -19,69 +19,72 @@
 
 #include <boost/asio/detail/noncopyable.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 // Helper class to lock and unlock a mutex automatically.
 template <typename Mutex>
 class scoped_lock
-  : private noncopyable
+	: private noncopyable
 {
 public:
-  // Constructor acquires the lock.
-  scoped_lock(Mutex& m)
-    : mutex_(m)
-  {
-    mutex_.lock();
-    locked_ = true;
-  }
+	// Constructor acquires the lock.
+	scoped_lock ( Mutex &m )
+		: mutex_ ( m )
+	{
+		mutex_.lock();
+		locked_ = true;
+	}
 
-  // Destructor releases the lock.
-  ~scoped_lock()
-  {
-    if (locked_)
-      mutex_.unlock();
-  }
+	// Destructor releases the lock.
+	~scoped_lock()
+	{
+		if ( locked_ )
+			mutex_.unlock();
+	}
 
-  // Explicitly acquire the lock.
-  void lock()
-  {
-    if (!locked_)
-    {
-      mutex_.lock();
-      locked_ = true;
-    }
-  }
+	// Explicitly acquire the lock.
+	void lock()
+	{
+		if ( !locked_ )
+		{
+			mutex_.lock();
+			locked_ = true;
+		}
+	}
 
-  // Explicitly release the lock.
-  void unlock()
-  {
-    if (locked_)
-    {
-      mutex_.unlock();
-      locked_ = false;
-    }
-  }
+	// Explicitly release the lock.
+	void unlock()
+	{
+		if ( locked_ )
+		{
+			mutex_.unlock();
+			locked_ = false;
+		}
+	}
 
-  // Test whether the lock is held.
-  bool locked() const
-  {
-    return locked_;
-  }
+	// Test whether the lock is held.
+	bool locked() const
+	{
+		return locked_;
+	}
 
-  // Get the underlying mutex.
-  Mutex& mutex()
-  {
-    return mutex_;
-  }
+	// Get the underlying mutex.
+	Mutex &mutex()
+	{
+		return mutex_;
+	}
 
 private:
-  // The underlying mutex.
-  Mutex& mutex_;
+	// The underlying mutex.
+	Mutex &mutex_;
 
-  // Whether the mutex is currently locked or unlocked.
-  bool locked_;
+	// Whether the mutex is currently locked or unlocked.
+	bool locked_;
 };
 
 } // namespace detail

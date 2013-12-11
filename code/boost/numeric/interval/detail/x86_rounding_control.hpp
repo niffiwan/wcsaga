@@ -24,11 +24,15 @@
 #  error Unsupported C++ compiler.
 #endif
 
-namespace boost {
-namespace numeric {
-namespace interval_lib {
+namespace boost
+{
+namespace numeric
+{
+namespace interval_lib
+{
 
-namespace detail {
+namespace detail
+{
 
 #ifdef BOOST_NUMERIC_INTERVAL_USE_C99_SUBSYSTEM
 typedef c99_rounding x86_rounding_control;
@@ -36,10 +40,10 @@ typedef c99_rounding x86_rounding_control;
 #else
 struct fpu_rounding_modes
 {
-  unsigned short to_nearest;
-  unsigned short downward;
-  unsigned short upward;
-  unsigned short toward_zero;
+	unsigned short to_nearest;
+	unsigned short downward;
+	unsigned short upward;
+	unsigned short toward_zero;
 };
 
 // exceptions masked, extended precision
@@ -48,10 +52,10 @@ static const fpu_rounding_modes rnd_mode = { 0x137f, 0x177f, 0x1b7f, 0x1f7f };
 
 struct x86_rounding_control: x86_rounding
 {
-  static void to_nearest()  { set_rounding_mode(rnd_mode.to_nearest);  }
-  static void downward()    { set_rounding_mode(rnd_mode.downward);    }
-  static void upward()      { set_rounding_mode(rnd_mode.upward);      }
-  static void toward_zero() { set_rounding_mode(rnd_mode.toward_zero); }
+	static void to_nearest()  { set_rounding_mode ( rnd_mode.to_nearest );  }
+	static void downward()    { set_rounding_mode ( rnd_mode.downward );    }
+	static void upward()      { set_rounding_mode ( rnd_mode.upward );      }
+	static void toward_zero() { set_rounding_mode ( rnd_mode.toward_zero ); }
 };
 #endif // BOOST_NUMERIC_INTERVAL_USE_C99_SUBSYSTEM
 
@@ -60,20 +64,21 @@ struct x86_rounding_control: x86_rounding
 template<>
 struct rounding_control<float>: detail::x86_rounding_control
 {
-  static float force_rounding(const float& r) 
-  { volatile float r_ = r; return r_; }
+	static float force_rounding ( const float &r )
+	{ volatile float r_ = r; return r_; }
 };
 
 template<>
 struct rounding_control<double>: detail::x86_rounding_control
 {
-  /*static double force_rounding(double r) 
-  { asm volatile ("" : "+m"(r) : ); return r; }*/
-  static double force_rounding(const double& r) 
-  { volatile double r_ = r; return r_; }
+	/*static double force_rounding(double r)
+	{ asm volatile ("" : "+m"(r) : ); return r; }*/
+	static double force_rounding ( const double &r )
+	{ volatile double r_ = r; return r_; }
 };
 
-namespace detail {
+namespace detail
+{
 
 template<bool>
 struct x86_rounding_control_long_double;
@@ -81,22 +86,22 @@ struct x86_rounding_control_long_double;
 template<>
 struct x86_rounding_control_long_double<false>: x86_rounding_control
 {
-  static long double force_rounding(long double const &r)
-  { volatile long double r_ = r; return r_; }
+	static long double force_rounding ( long double const &r )
+	{ volatile long double r_ = r; return r_; }
 };
 
 template<>
 struct x86_rounding_control_long_double<true>: x86_rounding_control
 {
-  static long double const &force_rounding(long double const &r)
-  { return r; }
+	static long double const &force_rounding ( long double const &r )
+	{ return r; }
 };
 
 } // namespace detail
 
 template<>
 struct rounding_control<long double>:
-  detail::x86_rounding_control_long_double< (sizeof(long double) >= 10) >
+detail::x86_rounding_control_long_double < ( sizeof ( long double ) >= 10 ) >
 {};
 
 } // namespace interval_lib

@@ -19,23 +19,31 @@
 
 #include <boost/numeric/ublas/traits/c_array.hpp>
 
-namespace boost { namespace numeric { namespace ublas {
+namespace boost
+{
+namespace numeric
+{
+namespace ublas
+{
 
-    namespace detail {
-
-    
-    
-    } // namespace boost::numeric::ublas::detail
-
-
-    template <typename T>
-    BOOST_UBLAS_INLINE
-    typename ExprT::const_iterator begin(vector_expression<ExprT> const& e)
-    {
-        return detail::begin_impl<typename ExprT::type_category>::apply(e());
-    }
+namespace detail
+{
 
 
-}}} // Namespace boost::numeric::ublas
+
+} // namespace boost::numeric::ublas::detail
+
+
+template <typename T>
+BOOST_UBLAS_INLINE
+typename ExprT::const_iterator begin ( vector_expression<ExprT> const &e )
+{
+	return detail::begin_impl<typename ExprT::type_category>::apply ( e() );
+}
+
+
+}
+}
+} // Namespace boost::numeric::ublas
 
 #endif

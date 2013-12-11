@@ -20,127 +20,142 @@
 #include <boost/spirit/home/support/container.hpp>
 #include <boost/spirit/home/support/attributes.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <>
-    struct use_operator<karma::domain, proto::tag::modulus> // enables g % d
-      : mpl::true_ {};
+namespace spirit
+{
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
+template <>
+struct use_operator<karma::domain, proto::tag::modulus> // enables g % d
+		: mpl::true_ {};
 
-}}
+}
+}
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit { namespace karma
+namespace boost
 {
-    template <typename Left, typename Right>
-    struct list : binary_generator<list<Left, Right> >
-    {
-    private:
-        // iterate over the given container until its exhausted or the embedded
-        // (left) generator succeeds
-        template <
-            typename OutputIterator, typename Context, typename Delimiter
-          , typename Iterator>
-        bool generate_left(OutputIterator& sink, Context& ctx
-          , Delimiter const& d, Iterator& it, Iterator& end) const
-        {
-            while (!traits::compare(it, end))
-            {
-                if (left.generate(sink, ctx, d, traits::deref(it)))
-                    return true;
-                traits::next(it);
-            }
-            return false;
-        }
-
-    public:
-        typedef Left left_type;
-        typedef Right right_type;
-
-        typedef mpl::int_<
-            left_type::properties::value 
-          | right_type::properties::value 
-          | generator_properties::buffering 
-          | generator_properties::counting
-        > properties;
-
-        // Build a std::vector from the LHS's attribute. Note
-        // that build_std_vector may return unused_type if the
-        // subject's attribute is an unused_type.
-        template <typename Context, typename Iterator>
-        struct attribute
-          : traits::build_std_vector<
-                typename traits::attribute_of<Left, Context, Iterator>::type>
-        {};
-
-        list(Left const& left, Right const& right)
-          : left(left), right(right) 
-        {}
-
-        template <
-            typename OutputIterator, typename Context, typename Delimiter
-          , typename Attribute>
-        bool generate(OutputIterator& sink, Context& ctx
-          , Delimiter const& d, Attribute const& attr) const
-        {
-            typedef typename traits::container_iterator<
-                typename add_const<Attribute>::type
-            >::type iterator_type;
-
-            iterator_type it = traits::begin(attr);
-            iterator_type end = traits::end(attr);
-
-            if (generate_left(sink, ctx, d, it, end))
-            {
-                for (traits::next(it); !traits::compare(it, end); traits::next(it))
-                {
-                    // wrap the given output iterator as generate_left might fail
-                    detail::enable_buffering<OutputIterator> buffering(sink);
-                    {
-                        detail::disable_counting<OutputIterator> nocounting(sink);
-
-                        if (!right.generate(sink, ctx, d, unused))
-                            return false;     // shouldn't happen
-
-                        if (!generate_left(sink, ctx, d, it, end))
-                            break;            // return true as one item succeeded
-                    }
-                    buffering.buffer_copy();
-                }
-                return true;
-            }
-            return false;
-        }
-
-        template <typename Context>
-        info what(Context& context) const
-        {
-            return info("list",
-                std::make_pair(left.what(context), right.what(context)));
-        }
-
-        Left left;
-        Right right;
-    };
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Generator generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Elements, typename Modifiers>
-    struct make_composite<proto::tag::modulus, Elements, Modifiers>
-      : make_binary_composite<Elements, list>
-    {};
-
-}}}
-
-namespace boost { namespace spirit { namespace traits
+namespace spirit
 {
-    template <typename Left, typename Right>
-    struct has_semantic_action<karma::list<Left, Right> >
-      : binary_has_semantic_action<Left, Right> {};
+namespace karma
+{
+template <typename Left, typename Right>
+struct list : binary_generator<list<Left, Right> >
+{
+private:
+	// iterate over the given container until its exhausted or the embedded
+	// (left) generator succeeds
+	template <
+	    typename OutputIterator, typename Context, typename Delimiter
+	    , typename Iterator >
+	bool generate_left ( OutputIterator &sink, Context &ctx
+	                     , Delimiter const &d, Iterator &it, Iterator &end ) const
+	{
+		while ( !traits::compare ( it, end ) )
+		{
+			if ( left.generate ( sink, ctx, d, traits::deref ( it ) ) )
+				return true;
+			traits::next ( it );
+		}
+		return false;
+	}
 
-}}}
+public:
+	typedef Left left_type;
+	typedef Right right_type;
+
+	typedef mpl::int_ <
+	left_type::properties::value
+	| right_type::properties::value
+	| generator_properties::buffering
+	| generator_properties::counting
+	> properties;
+
+	// Build a std::vector from the LHS's attribute. Note
+	// that build_std_vector may return unused_type if the
+	// subject's attribute is an unused_type.
+	template <typename Context, typename Iterator>
+	struct attribute
+			: traits::build_std_vector <
+			typename traits::attribute_of<Left, Context, Iterator>::type >
+	{};
+
+	list ( Left const &left, Right const &right )
+		: left ( left ), right ( right )
+	{}
+
+	template <
+	    typename OutputIterator, typename Context, typename Delimiter
+	    , typename Attribute >
+	bool generate ( OutputIterator &sink, Context &ctx
+	                , Delimiter const &d, Attribute const &attr ) const
+	{
+		typedef typename traits::container_iterator <
+		typename add_const<Attribute>::type
+		>::type iterator_type;
+
+		iterator_type it = traits::begin ( attr );
+		iterator_type end = traits::end ( attr );
+
+		if ( generate_left ( sink, ctx, d, it, end ) )
+		{
+			for ( traits::next ( it ); !traits::compare ( it, end ); traits::next ( it ) )
+			{
+				// wrap the given output iterator as generate_left might fail
+				detail::enable_buffering<OutputIterator> buffering ( sink );
+				{
+					detail::disable_counting<OutputIterator> nocounting ( sink );
+
+					if ( !right.generate ( sink, ctx, d, unused ) )
+						return false;     // shouldn't happen
+
+					if ( !generate_left ( sink, ctx, d, it, end ) )
+						break;            // return true as one item succeeded
+				}
+				buffering.buffer_copy();
+			}
+			return true;
+		}
+		return false;
+	}
+
+	template <typename Context>
+	info what ( Context &context ) const
+	{
+		return info ( "list",
+		              std::make_pair ( left.what ( context ), right.what ( context ) ) );
+	}
+
+	Left left;
+	Right right;
+};
+
+///////////////////////////////////////////////////////////////////////////
+// Generator generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+template <typename Elements, typename Modifiers>
+struct make_composite<proto::tag::modulus, Elements, Modifiers>
+		: make_binary_composite<Elements, list>
+{};
+
+}
+}
+}
+
+namespace boost
+{
+namespace spirit
+{
+namespace traits
+{
+template <typename Left, typename Right>
+struct has_semantic_action<karma::list<Left, Right> >
+		: binary_has_semantic_action<Left, Right> {};
+
+}
+}
+}
 
 #endif

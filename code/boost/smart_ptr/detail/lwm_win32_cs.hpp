@@ -31,22 +31,22 @@ namespace detail
 
 struct critical_section
 {
-    struct critical_section_debug * DebugInfo;
-    long LockCount;
-    long RecursionCount;
-    void * OwningThread;
-    void * LockSemaphore;
+struct critical_section_debug *DebugInfo;
+long LockCount;
+long RecursionCount;
+void *OwningThread;
+void *LockSemaphore;
 #if defined(_WIN64)
-    unsigned __int64 SpinCount;
+unsigned __int64 SpinCount;
 #else
-    unsigned long SpinCount;
+unsigned long SpinCount;
 #endif
 };
 
-extern "C" __declspec(dllimport) void __stdcall InitializeCriticalSection(critical_section *);
-extern "C" __declspec(dllimport) void __stdcall EnterCriticalSection(critical_section *);
-extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(critical_section *);
-extern "C" __declspec(dllimport) void __stdcall DeleteCriticalSection(critical_section *);
+extern "C" __declspec ( dllimport ) void __stdcall InitializeCriticalSection ( critical_section * );
+extern "C" __declspec ( dllimport ) void __stdcall EnterCriticalSection ( critical_section * );
+extern "C" __declspec ( dllimport ) void __stdcall LeaveCriticalSection ( critical_section * );
+extern "C" __declspec ( dllimport ) void __stdcall DeleteCriticalSection ( critical_section * );
 
 #else
 
@@ -58,47 +58,47 @@ class lightweight_mutex
 {
 private:
 
-    critical_section cs_;
+critical_section cs_;
 
-    lightweight_mutex(lightweight_mutex const &);
-    lightweight_mutex & operator=(lightweight_mutex const &);
+lightweight_mutex ( lightweight_mutex const & );
+lightweight_mutex &operator= ( lightweight_mutex const & );
 
 public:
 
-    lightweight_mutex()
-    {
-        InitializeCriticalSection(&cs_);
-    }
+lightweight_mutex()
+{
+	InitializeCriticalSection ( &cs_ );
+}
 
-    ~lightweight_mutex()
-    {
-        DeleteCriticalSection(&cs_);
-    }
+~lightweight_mutex()
+{
+	DeleteCriticalSection ( &cs_ );
+}
 
-    class scoped_lock;
-    friend class scoped_lock;
+class scoped_lock;
+friend class scoped_lock;
 
-    class scoped_lock
-    {
-    private:
+class scoped_lock
+{
+private:
 
-        lightweight_mutex & m_;
+	lightweight_mutex &m_;
 
-        scoped_lock(scoped_lock const &);
-        scoped_lock & operator=(scoped_lock const &);
+	scoped_lock ( scoped_lock const & );
+	scoped_lock &operator= ( scoped_lock const & );
 
-    public:
+public:
 
-        explicit scoped_lock(lightweight_mutex & m): m_(m)
-        {
-            EnterCriticalSection(&m_.cs_);
-        }
+	explicit scoped_lock ( lightweight_mutex &m ) : m_ ( m )
+	{
+		EnterCriticalSection ( &m_.cs_ );
+	}
 
-        ~scoped_lock()
-        {
-            LeaveCriticalSection(&m_.cs_);
-        }
-    };
+	~scoped_lock()
+	{
+		LeaveCriticalSection ( &m_.cs_ );
+	}
+};
 };
 
 } // namespace detail

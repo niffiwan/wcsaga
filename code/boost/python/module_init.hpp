@@ -9,11 +9,18 @@
 
 # ifndef BOOST_PYTHON_MODULE_INIT
 
-namespace boost { namespace python { namespace detail {
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
-BOOST_PYTHON_DECL PyObject* init_module(char const* name, void(*)());
+BOOST_PYTHON_DECL PyObject *init_module ( char const *name, void ( * ) () );
 
-}}}
+}
+}
+}
 
 #  if PY_VERSION_HEX >= 0x03000000
 
@@ -57,6 +64,6 @@ extern "C" _BOOST_PYTHON_MODULE_INIT(name)
 
 #  endif
 
-# endif 
+# endif
 
 #endif // MODULE_INIT_DWA20020722_HPP

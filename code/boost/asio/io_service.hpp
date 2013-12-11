@@ -38,13 +38,15 @@
 #include <boost/asio/detail/winsock_init.hpp>
 #include <boost/asio/detail/wrapped_handler.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 class io_service;
-template <typename Service> Service& use_service(io_service& ios);
-template <typename Service> void add_service(io_service& ios, Service* svc);
-template <typename Service> bool has_service(io_service& ios);
+template <typename Service> Service &use_service ( io_service &ios );
+template <typename Service> void add_service ( io_service &ios, Service *svc );
+template <typename Service> bool has_service ( io_service &ios );
 
 /// Provides core I/O functionality.
 /**
@@ -175,347 +177,347 @@ template <typename Service> bool has_service(io_service& ios);
  * then added to an io_service using the facilities described above.
  */
 class io_service
-  : private noncopyable
+	: private noncopyable
 {
 private:
-  // The type of the platform-specific implementation.
+	// The type of the platform-specific implementation.
 #if defined(BOOST_ASIO_HAS_IOCP)
-  typedef detail::win_iocp_io_service impl_type;
-  friend class detail::win_iocp_overlapped_ptr;
+	typedef detail::win_iocp_io_service impl_type;
+	friend class detail::win_iocp_overlapped_ptr;
 #elif defined(BOOST_ASIO_HAS_EPOLL)
-  typedef detail::task_io_service<detail::epoll_reactor<false> > impl_type;
+	typedef detail::task_io_service<detail::epoll_reactor<false> > impl_type;
 #elif defined(BOOST_ASIO_HAS_KQUEUE)
-  typedef detail::task_io_service<detail::kqueue_reactor<false> > impl_type;
+	typedef detail::task_io_service<detail::kqueue_reactor<false> > impl_type;
 #elif defined(BOOST_ASIO_HAS_DEV_POLL)
-  typedef detail::task_io_service<detail::dev_poll_reactor<false> > impl_type;
+	typedef detail::task_io_service<detail::dev_poll_reactor<false> > impl_type;
 #else
-  typedef detail::task_io_service<detail::select_reactor<false> > impl_type;
+	typedef detail::task_io_service<detail::select_reactor<false> > impl_type;
 #endif
 
 public:
-  class work;
-  friend class work;
+	class work;
+	friend class work;
 
-  class id;
+	class id;
 
-  class service;
+	class service;
 
-  class strand;
+	class strand;
 
-  /// Constructor.
-  io_service();
+	/// Constructor.
+	io_service();
 
-  /// Constructor.
-  /**
-   * Construct with a hint about the required level of concurrency.
-   *
-   * @param concurrency_hint A suggestion to the implementation on how many
-   * threads it should allow to run simultaneously.
-   */
-  explicit io_service(std::size_t concurrency_hint);
+	/// Constructor.
+	/**
+	 * Construct with a hint about the required level of concurrency.
+	 *
+	 * @param concurrency_hint A suggestion to the implementation on how many
+	 * threads it should allow to run simultaneously.
+	 */
+	explicit io_service ( std::size_t concurrency_hint );
 
-  /// Destructor.
-  /**
-   * On destruction, the io_service performs the following sequence of
-   * operations:
-   *
-   * @li For each service object @c svc in the io_service set, in reverse order
-   * of the beginning of service object lifetime, performs
-   * @c svc->shutdown_service().
-   *
-   * @li Uninvoked handler objects that were scheduled for deferred invocation
-   * on the io_service, or any associated strand, are destroyed.
-   *
-   * @li For each service object @c svc in the io_service set, in reverse order
-   * of the beginning of service object lifetime, performs
-   * <tt>delete static_cast<io_service::service*>(svc)</tt>.
-   *
-   * @note The destruction sequence described above permits programs to
-   * simplify their resource management by using @c shared_ptr<>. Where an
-   * object's lifetime is tied to the lifetime of a connection (or some other
-   * sequence of asynchronous operations), a @c shared_ptr to the object would
-   * be bound into the handlers for all asynchronous operations associated with
-   * it. This works as follows:
-   *
-   * @li When a single connection ends, all associated asynchronous operations
-   * complete. The corresponding handler objects are destroyed, and all
-   * @c shared_ptr references to the objects are destroyed.
-   *
-   * @li To shut down the whole program, the io_service function stop() is
-   * called to terminate any run() calls as soon as possible. The io_service
-   * destructor defined above destroys all handlers, causing all @c shared_ptr
-   * references to all connection objects to be destroyed.
-   */
-  ~io_service();
+	/// Destructor.
+	/**
+	 * On destruction, the io_service performs the following sequence of
+	 * operations:
+	 *
+	 * @li For each service object @c svc in the io_service set, in reverse order
+	 * of the beginning of service object lifetime, performs
+	 * @c svc->shutdown_service().
+	 *
+	 * @li Uninvoked handler objects that were scheduled for deferred invocation
+	 * on the io_service, or any associated strand, are destroyed.
+	 *
+	 * @li For each service object @c svc in the io_service set, in reverse order
+	 * of the beginning of service object lifetime, performs
+	 * <tt>delete static_cast<io_service::service*>(svc)</tt>.
+	 *
+	 * @note The destruction sequence described above permits programs to
+	 * simplify their resource management by using @c shared_ptr<>. Where an
+	 * object's lifetime is tied to the lifetime of a connection (or some other
+	 * sequence of asynchronous operations), a @c shared_ptr to the object would
+	 * be bound into the handlers for all asynchronous operations associated with
+	 * it. This works as follows:
+	 *
+	 * @li When a single connection ends, all associated asynchronous operations
+	 * complete. The corresponding handler objects are destroyed, and all
+	 * @c shared_ptr references to the objects are destroyed.
+	 *
+	 * @li To shut down the whole program, the io_service function stop() is
+	 * called to terminate any run() calls as soon as possible. The io_service
+	 * destructor defined above destroys all handlers, causing all @c shared_ptr
+	 * references to all connection objects to be destroyed.
+	 */
+	~io_service();
 
-  /// Run the io_service object's event processing loop.
-  /**
-   * The run() function blocks until all work has finished and there are no
-   * more handlers to be dispatched, or until the io_service has been stopped.
-   *
-   * Multiple threads may call the run() function to set up a pool of threads
-   * from which the io_service may execute handlers. All threads that are
-   * waiting in the pool are equivalent and the io_service may choose any one
-   * of them to invoke a handler.
-   *
-   * The run() function may be safely called again once it has completed only
-   * after a call to reset().
-   *
-   * @return The number of handlers that were executed.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   *
-   * @note The run() function must not be called from a thread that is currently
-   * calling one of run(), run_one(), poll() or poll_one() on the same
-   * io_service object.
-   *
-   * The poll() function may also be used to dispatch ready handlers, but
-   * without blocking.
-   */
-  std::size_t run();
+	/// Run the io_service object's event processing loop.
+	/**
+	 * The run() function blocks until all work has finished and there are no
+	 * more handlers to be dispatched, or until the io_service has been stopped.
+	 *
+	 * Multiple threads may call the run() function to set up a pool of threads
+	 * from which the io_service may execute handlers. All threads that are
+	 * waiting in the pool are equivalent and the io_service may choose any one
+	 * of them to invoke a handler.
+	 *
+	 * The run() function may be safely called again once it has completed only
+	 * after a call to reset().
+	 *
+	 * @return The number of handlers that were executed.
+	 *
+	 * @throws boost::system::system_error Thrown on failure.
+	 *
+	 * @note The run() function must not be called from a thread that is currently
+	 * calling one of run(), run_one(), poll() or poll_one() on the same
+	 * io_service object.
+	 *
+	 * The poll() function may also be used to dispatch ready handlers, but
+	 * without blocking.
+	 */
+	std::size_t run();
 
-  /// Run the io_service object's event processing loop.
-  /**
-   * The run() function blocks until all work has finished and there are no
-   * more handlers to be dispatched, or until the io_service has been stopped.
-   *
-   * Multiple threads may call the run() function to set up a pool of threads
-   * from which the io_service may execute handlers. All threads that are
-   * waiting in the pool are equivalent and the io_service may choose any one
-   * of them to invoke a handler.
-   *
-   * The run() function may be safely called again once it has completed only
-   * after a call to reset().
-   *
-   * @param ec Set to indicate what error occurred, if any.
-   *
-   * @return The number of handlers that were executed.
-   *
-   * @note The run() function must not be called from a thread that is currently
-   * calling one of run(), run_one(), poll() or poll_one() on the same
-   * io_service object.
-   *
-   * The poll() function may also be used to dispatch ready handlers, but
-   * without blocking.
-   */
-  std::size_t run(boost::system::error_code& ec);
+	/// Run the io_service object's event processing loop.
+	/**
+	 * The run() function blocks until all work has finished and there are no
+	 * more handlers to be dispatched, or until the io_service has been stopped.
+	 *
+	 * Multiple threads may call the run() function to set up a pool of threads
+	 * from which the io_service may execute handlers. All threads that are
+	 * waiting in the pool are equivalent and the io_service may choose any one
+	 * of them to invoke a handler.
+	 *
+	 * The run() function may be safely called again once it has completed only
+	 * after a call to reset().
+	 *
+	 * @param ec Set to indicate what error occurred, if any.
+	 *
+	 * @return The number of handlers that were executed.
+	 *
+	 * @note The run() function must not be called from a thread that is currently
+	 * calling one of run(), run_one(), poll() or poll_one() on the same
+	 * io_service object.
+	 *
+	 * The poll() function may also be used to dispatch ready handlers, but
+	 * without blocking.
+	 */
+	std::size_t run ( boost::system::error_code &ec );
 
-  /// Run the io_service object's event processing loop to execute at most one
-  /// handler.
-  /**
-   * The run_one() function blocks until one handler has been dispatched, or
-   * until the io_service has been stopped.
-   *
-   * @return The number of handlers that were executed.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   */
-  std::size_t run_one();
+	/// Run the io_service object's event processing loop to execute at most one
+	/// handler.
+	/**
+	 * The run_one() function blocks until one handler has been dispatched, or
+	 * until the io_service has been stopped.
+	 *
+	 * @return The number of handlers that were executed.
+	 *
+	 * @throws boost::system::system_error Thrown on failure.
+	 */
+	std::size_t run_one();
 
-  /// Run the io_service object's event processing loop to execute at most one
-  /// handler.
-  /**
-   * The run_one() function blocks until one handler has been dispatched, or
-   * until the io_service has been stopped.
-   *
-   * @param ec Set to indicate what error occurred, if any.
-   *
-   * @return The number of handlers that were executed.
-   */
-  std::size_t run_one(boost::system::error_code& ec);
+	/// Run the io_service object's event processing loop to execute at most one
+	/// handler.
+	/**
+	 * The run_one() function blocks until one handler has been dispatched, or
+	 * until the io_service has been stopped.
+	 *
+	 * @param ec Set to indicate what error occurred, if any.
+	 *
+	 * @return The number of handlers that were executed.
+	 */
+	std::size_t run_one ( boost::system::error_code &ec );
 
-  /// Run the io_service object's event processing loop to execute ready
-  /// handlers.
-  /**
-   * The poll() function runs handlers that are ready to run, without blocking,
-   * until the io_service has been stopped or there are no more ready handlers.
-   *
-   * @return The number of handlers that were executed.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   */
-  std::size_t poll();
+	/// Run the io_service object's event processing loop to execute ready
+	/// handlers.
+	/**
+	 * The poll() function runs handlers that are ready to run, without blocking,
+	 * until the io_service has been stopped or there are no more ready handlers.
+	 *
+	 * @return The number of handlers that were executed.
+	 *
+	 * @throws boost::system::system_error Thrown on failure.
+	 */
+	std::size_t poll();
 
-  /// Run the io_service object's event processing loop to execute ready
-  /// handlers.
-  /**
-   * The poll() function runs handlers that are ready to run, without blocking,
-   * until the io_service has been stopped or there are no more ready handlers.
-   *
-   * @param ec Set to indicate what error occurred, if any.
-   *
-   * @return The number of handlers that were executed.
-   */
-  std::size_t poll(boost::system::error_code& ec);
+	/// Run the io_service object's event processing loop to execute ready
+	/// handlers.
+	/**
+	 * The poll() function runs handlers that are ready to run, without blocking,
+	 * until the io_service has been stopped or there are no more ready handlers.
+	 *
+	 * @param ec Set to indicate what error occurred, if any.
+	 *
+	 * @return The number of handlers that were executed.
+	 */
+	std::size_t poll ( boost::system::error_code &ec );
 
-  /// Run the io_service object's event processing loop to execute one ready
-  /// handler.
-  /**
-   * The poll_one() function runs at most one handler that is ready to run,
-   * without blocking.
-   *
-   * @return The number of handlers that were executed.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   */
-  std::size_t poll_one();
+	/// Run the io_service object's event processing loop to execute one ready
+	/// handler.
+	/**
+	 * The poll_one() function runs at most one handler that is ready to run,
+	 * without blocking.
+	 *
+	 * @return The number of handlers that were executed.
+	 *
+	 * @throws boost::system::system_error Thrown on failure.
+	 */
+	std::size_t poll_one();
 
-  /// Run the io_service object's event processing loop to execute one ready
-  /// handler.
-  /**
-   * The poll_one() function runs at most one handler that is ready to run,
-   * without blocking.
-   *
-   * @param ec Set to indicate what error occurred, if any.
-   *
-   * @return The number of handlers that were executed.
-   */
-  std::size_t poll_one(boost::system::error_code& ec);
+	/// Run the io_service object's event processing loop to execute one ready
+	/// handler.
+	/**
+	 * The poll_one() function runs at most one handler that is ready to run,
+	 * without blocking.
+	 *
+	 * @param ec Set to indicate what error occurred, if any.
+	 *
+	 * @return The number of handlers that were executed.
+	 */
+	std::size_t poll_one ( boost::system::error_code &ec );
 
-  /// Stop the io_service object's event processing loop.
-  /**
-   * This function does not block, but instead simply signals the io_service to
-   * stop. All invocations of its run() or run_one() member functions should
-   * return as soon as possible. Subsequent calls to run(), run_one(), poll()
-   * or poll_one() will return immediately until reset() is called.
-   */
-  void stop();
+	/// Stop the io_service object's event processing loop.
+	/**
+	 * This function does not block, but instead simply signals the io_service to
+	 * stop. All invocations of its run() or run_one() member functions should
+	 * return as soon as possible. Subsequent calls to run(), run_one(), poll()
+	 * or poll_one() will return immediately until reset() is called.
+	 */
+	void stop();
 
-  /// Reset the io_service in preparation for a subsequent run() invocation.
-  /**
-   * This function must be called prior to any second or later set of
-   * invocations of the run(), run_one(), poll() or poll_one() functions when a
-   * previous invocation of these functions returned due to the io_service
-   * being stopped or running out of work. This function allows the io_service
-   * to reset any internal state, such as a "stopped" flag.
-   *
-   * This function must not be called while there are any unfinished calls to
-   * the run(), run_one(), poll() or poll_one() functions.
-   */
-  void reset();
+	/// Reset the io_service in preparation for a subsequent run() invocation.
+	/**
+	 * This function must be called prior to any second or later set of
+	 * invocations of the run(), run_one(), poll() or poll_one() functions when a
+	 * previous invocation of these functions returned due to the io_service
+	 * being stopped or running out of work. This function allows the io_service
+	 * to reset any internal state, such as a "stopped" flag.
+	 *
+	 * This function must not be called while there are any unfinished calls to
+	 * the run(), run_one(), poll() or poll_one() functions.
+	 */
+	void reset();
 
-  /// Request the io_service to invoke the given handler.
-  /**
-   * This function is used to ask the io_service to execute the given handler.
-   *
-   * The io_service guarantees that the handler will only be called in a thread
-   * in which the run(), run_one(), poll() or poll_one() member functions is
-   * currently being invoked. The handler may be executed inside this function
-   * if the guarantee can be met.
-   *
-   * @param handler The handler to be called. The io_service will make
-   * a copy of the handler object as required. The function signature of the
-   * handler must be: @code void handler(); @endcode
-   */
-  template <typename CompletionHandler>
-  void dispatch(CompletionHandler handler);
+	/// Request the io_service to invoke the given handler.
+	/**
+	 * This function is used to ask the io_service to execute the given handler.
+	 *
+	 * The io_service guarantees that the handler will only be called in a thread
+	 * in which the run(), run_one(), poll() or poll_one() member functions is
+	 * currently being invoked. The handler may be executed inside this function
+	 * if the guarantee can be met.
+	 *
+	 * @param handler The handler to be called. The io_service will make
+	 * a copy of the handler object as required. The function signature of the
+	 * handler must be: @code void handler(); @endcode
+	 */
+	template <typename CompletionHandler>
+	void dispatch ( CompletionHandler handler );
 
-  /// Request the io_service to invoke the given handler and return immediately.
-  /**
-   * This function is used to ask the io_service to execute the given handler,
-   * but without allowing the io_service to call the handler from inside this
-   * function.
-   *
-   * The io_service guarantees that the handler will only be called in a thread
-   * in which the run(), run_one(), poll() or poll_one() member functions is
-   * currently being invoked.
-   *
-   * @param handler The handler to be called. The io_service will make
-   * a copy of the handler object as required. The function signature of the
-   * handler must be: @code void handler(); @endcode
-   */
-  template <typename CompletionHandler>
-  void post(CompletionHandler handler);
+	/// Request the io_service to invoke the given handler and return immediately.
+	/**
+	 * This function is used to ask the io_service to execute the given handler,
+	 * but without allowing the io_service to call the handler from inside this
+	 * function.
+	 *
+	 * The io_service guarantees that the handler will only be called in a thread
+	 * in which the run(), run_one(), poll() or poll_one() member functions is
+	 * currently being invoked.
+	 *
+	 * @param handler The handler to be called. The io_service will make
+	 * a copy of the handler object as required. The function signature of the
+	 * handler must be: @code void handler(); @endcode
+	 */
+	template <typename CompletionHandler>
+	void post ( CompletionHandler handler );
 
-  /// Create a new handler that automatically dispatches the wrapped handler
-  /// on the io_service.
-  /**
-   * This function is used to create a new handler function object that, when
-   * invoked, will automatically pass the wrapped handler to the io_service
-   * object's dispatch function.
-   *
-   * @param handler The handler to be wrapped. The io_service will make a copy
-   * of the handler object as required. The function signature of the handler
-   * must be: @code void handler(A1 a1, ... An an); @endcode
-   *
-   * @return A function object that, when invoked, passes the wrapped handler to
-   * the io_service object's dispatch function. Given a function object with the
-   * signature:
-   * @code R f(A1 a1, ... An an); @endcode
-   * If this function object is passed to the wrap function like so:
-   * @code io_service.wrap(f); @endcode
-   * then the return value is a function object with the signature
-   * @code void g(A1 a1, ... An an); @endcode
-   * that, when invoked, executes code equivalent to:
-   * @code io_service.dispatch(boost::bind(f, a1, ... an)); @endcode
-   */
-  template <typename Handler>
+	/// Create a new handler that automatically dispatches the wrapped handler
+	/// on the io_service.
+	/**
+	 * This function is used to create a new handler function object that, when
+	 * invoked, will automatically pass the wrapped handler to the io_service
+	 * object's dispatch function.
+	 *
+	 * @param handler The handler to be wrapped. The io_service will make a copy
+	 * of the handler object as required. The function signature of the handler
+	 * must be: @code void handler(A1 a1, ... An an); @endcode
+	 *
+	 * @return A function object that, when invoked, passes the wrapped handler to
+	 * the io_service object's dispatch function. Given a function object with the
+	 * signature:
+	 * @code R f(A1 a1, ... An an); @endcode
+	 * If this function object is passed to the wrap function like so:
+	 * @code io_service.wrap(f); @endcode
+	 * then the return value is a function object with the signature
+	 * @code void g(A1 a1, ... An an); @endcode
+	 * that, when invoked, executes code equivalent to:
+	 * @code io_service.dispatch(boost::bind(f, a1, ... an)); @endcode
+	 */
+	template <typename Handler>
 #if defined(GENERATING_DOCUMENTATION)
-  unspecified
+	unspecified
 #else
-  detail::wrapped_handler<io_service&, Handler>
+	detail::wrapped_handler<io_service &, Handler>
 #endif
-  wrap(Handler handler);
+	wrap ( Handler handler );
 
-  /// Obtain the service object corresponding to the given type.
-  /**
-   * This function is used to locate a service object that corresponds to
-   * the given service type. If there is no existing implementation of the
-   * service, then the io_service will create a new instance of the service.
-   *
-   * @param ios The io_service object that owns the service.
-   *
-   * @return The service interface implementing the specified service type.
-   * Ownership of the service interface is not transferred to the caller.
-   */
-  template <typename Service>
-  friend Service& use_service(io_service& ios);
+	/// Obtain the service object corresponding to the given type.
+	/**
+	 * This function is used to locate a service object that corresponds to
+	 * the given service type. If there is no existing implementation of the
+	 * service, then the io_service will create a new instance of the service.
+	 *
+	 * @param ios The io_service object that owns the service.
+	 *
+	 * @return The service interface implementing the specified service type.
+	 * Ownership of the service interface is not transferred to the caller.
+	 */
+	template <typename Service>
+	friend Service &use_service ( io_service &ios );
 
-  /// Add a service object to the io_service.
-  /**
-   * This function is used to add a service to the io_service.
-   *
-   * @param ios The io_service object that owns the service.
-   *
-   * @param svc The service object. On success, ownership of the service object
-   * is transferred to the io_service. When the io_service object is destroyed,
-   * it will destroy the service object by performing:
-   * @code delete static_cast<io_service::service*>(svc) @endcode
-   *
-   * @throws boost::asio::service_already_exists Thrown if a service of the
-   * given type is already present in the io_service.
-   *
-   * @throws boost::asio::invalid_service_owner Thrown if the service's owning
-   * io_service is not the io_service object specified by the ios parameter.
-   */
-  template <typename Service>
-  friend void add_service(io_service& ios, Service* svc);
+	/// Add a service object to the io_service.
+	/**
+	 * This function is used to add a service to the io_service.
+	 *
+	 * @param ios The io_service object that owns the service.
+	 *
+	 * @param svc The service object. On success, ownership of the service object
+	 * is transferred to the io_service. When the io_service object is destroyed,
+	 * it will destroy the service object by performing:
+	 * @code delete static_cast<io_service::service*>(svc) @endcode
+	 *
+	 * @throws boost::asio::service_already_exists Thrown if a service of the
+	 * given type is already present in the io_service.
+	 *
+	 * @throws boost::asio::invalid_service_owner Thrown if the service's owning
+	 * io_service is not the io_service object specified by the ios parameter.
+	 */
+	template <typename Service>
+	friend void add_service ( io_service &ios, Service *svc );
 
-  /// Determine if an io_service contains a specified service type.
-  /**
-   * This function is used to determine whether the io_service contains a
-   * service object corresponding to the given service type.
-   *
-   * @param ios The io_service object that owns the service.
-   *
-   * @return A boolean indicating whether the io_service contains the service.
-   */
-  template <typename Service>
-  friend bool has_service(io_service& ios);
+	/// Determine if an io_service contains a specified service type.
+	/**
+	 * This function is used to determine whether the io_service contains a
+	 * service object corresponding to the given service type.
+	 *
+	 * @param ios The io_service object that owns the service.
+	 *
+	 * @return A boolean indicating whether the io_service contains the service.
+	 */
+	template <typename Service>
+	friend bool has_service ( io_service &ios );
 
 private:
 #if defined(BOOST_WINDOWS) || defined(__CYGWIN__)
-  detail::winsock_init<> init_;
+	detail::winsock_init<> init_;
 #elif defined(__sun) || defined(__QNX__) || defined(__hpux) || defined(_AIX) \
   || defined(__osf__)
-  detail::signal_init<> init_;
+	detail::signal_init<> init_;
 #endif
 
-  // The service registry.
-  boost::asio::detail::service_registry* service_registry_;
+	// The service registry.
+	boost::asio::detail::service_registry *service_registry_;
 
-  // The implementation.
-  impl_type& impl_;
+	// The implementation.
+	impl_type &impl_;
 };
 
 /// Class to inform the io_service when it has work to do.
@@ -531,108 +533,108 @@ private:
 class io_service::work
 {
 public:
-  /// Constructor notifies the io_service that work is starting.
-  /**
-   * The constructor is used to inform the io_service that some work has begun.
-   * This ensures that the io_service object's run() function will not exit
-   * while the work is underway.
-   */
-  explicit work(boost::asio::io_service& io_service);
+	/// Constructor notifies the io_service that work is starting.
+	/**
+	 * The constructor is used to inform the io_service that some work has begun.
+	 * This ensures that the io_service object's run() function will not exit
+	 * while the work is underway.
+	 */
+	explicit work ( boost::asio::io_service &io_service );
 
-  /// Copy constructor notifies the io_service that work is starting.
-  /**
-   * The constructor is used to inform the io_service that some work has begun.
-   * This ensures that the io_service object's run() function will not exit
-   * while the work is underway.
-   */
-  work(const work& other);
+	/// Copy constructor notifies the io_service that work is starting.
+	/**
+	 * The constructor is used to inform the io_service that some work has begun.
+	 * This ensures that the io_service object's run() function will not exit
+	 * while the work is underway.
+	 */
+	work ( const work &other );
 
-  /// Destructor notifies the io_service that the work is complete.
-  /**
-   * The destructor is used to inform the io_service that some work has
-   * finished. Once the count of unfinished work reaches zero, the io_service
-   * object's run() function is permitted to exit.
-   */
-  ~work();
+	/// Destructor notifies the io_service that the work is complete.
+	/**
+	 * The destructor is used to inform the io_service that some work has
+	 * finished. Once the count of unfinished work reaches zero, the io_service
+	 * object's run() function is permitted to exit.
+	 */
+	~work();
 
-  /// (Deprecated: use get_io_service().) Get the io_service associated with the
-  /// work.
-  boost::asio::io_service& io_service();
+	/// (Deprecated: use get_io_service().) Get the io_service associated with the
+	/// work.
+	boost::asio::io_service &io_service();
 
-  /// Get the io_service associated with the work.
-  boost::asio::io_service& get_io_service();
+	/// Get the io_service associated with the work.
+	boost::asio::io_service &get_io_service();
 
 private:
-  // Prevent assignment.
-  void operator=(const work& other);
+	// Prevent assignment.
+	void operator= ( const work &other );
 
-  // The io_service.
-  boost::asio::io_service& io_service_;
+	// The io_service.
+	boost::asio::io_service &io_service_;
 };
 
 /// Class used to uniquely identify a service.
 class io_service::id
-  : private noncopyable
+	: private noncopyable
 {
 public:
-  /// Constructor.
-  id() {}
+	/// Constructor.
+	id() {}
 };
 
 /// Base class for all io_service services.
 class io_service::service
-  : private noncopyable
+	: private noncopyable
 {
 public:
-  /// (Deprecated: use get_io_service().) Get the io_service object that owns
-  /// the service.
-  boost::asio::io_service& io_service();
+	/// (Deprecated: use get_io_service().) Get the io_service object that owns
+	/// the service.
+	boost::asio::io_service &io_service();
 
-  /// Get the io_service object that owns the service.
-  boost::asio::io_service& get_io_service();
+	/// Get the io_service object that owns the service.
+	boost::asio::io_service &get_io_service();
 
 protected:
-  /// Constructor.
-  /**
-   * @param owner The io_service object that owns the service.
-   */
-  service(boost::asio::io_service& owner);
+	/// Constructor.
+	/**
+	 * @param owner The io_service object that owns the service.
+	 */
+	service ( boost::asio::io_service &owner );
 
-  /// Destructor.
-  virtual ~service();
+	/// Destructor.
+	virtual ~service();
 
 private:
-  /// Destroy all user-defined handler objects owned by the service.
-  virtual void shutdown_service() = 0;
+	/// Destroy all user-defined handler objects owned by the service.
+	virtual void shutdown_service() = 0;
 
-  friend class boost::asio::detail::service_registry;
-  boost::asio::io_service& owner_;
-  const std::type_info* type_info_;
-  const boost::asio::io_service::id* id_;
-  service* next_;
+	friend class boost::asio::detail::service_registry;
+	boost::asio::io_service &owner_;
+	const std::type_info *type_info_;
+	const boost::asio::io_service::id *id_;
+	service *next_;
 };
 
 /// Exception thrown when trying to add a duplicate service to an io_service.
 class service_already_exists
-  : public std::logic_error
+	: public std::logic_error
 {
 public:
-  service_already_exists()
-    : std::logic_error("Service already exists.")
-  {
-  }
+	service_already_exists()
+		: std::logic_error ( "Service already exists." )
+	{
+	}
 };
 
 /// Exception thrown when trying to add a service object to an io_service where
 /// the service has a different owner.
 class invalid_service_owner
-  : public std::logic_error
+	: public std::logic_error
 {
 public:
-  invalid_service_owner()
-    : std::logic_error("Invalid service owner.")
-  {
-  }
+	invalid_service_owner()
+		: std::logic_error ( "Invalid service owner." )
+	{
+	}
 };
 
 } // namespace asio

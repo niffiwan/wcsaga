@@ -21,7 +21,10 @@
 #include <boost/spirit/home/classic/utility/impl/escape_char.ipp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit {
+namespace boost
+{
+namespace spirit
+{
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
@@ -48,38 +51,38 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 template <
     typename ParserT, typename ActionT,
     unsigned long Flags, typename CharT
->
+    >
 struct escape_char_action
-:   public unary<ParserT,
-        parser<escape_char_action<ParserT, ActionT, Flags, CharT> > >
+		:   public unary<ParserT,
+		    parser<escape_char_action<ParserT, ActionT, Flags, CharT> > >
 {
-    typedef escape_char_action
-        <ParserT, ActionT, Flags, CharT>        self_t;
-    typedef action_parser_category              parser_category_t;
-    typedef unary<ParserT, parser<self_t> >     base_t;
+	typedef escape_char_action
+	<ParserT, ActionT, Flags, CharT>        self_t;
+	typedef action_parser_category              parser_category_t;
+	typedef unary<ParserT, parser<self_t> >     base_t;
 
-    template <typename ScannerT>
-    struct result
-    {
-        typedef typename match_result<ScannerT, CharT>::type type;
-    };
+	template <typename ScannerT>
+	struct result
+	{
+		typedef typename match_result<ScannerT, CharT>::type type;
+	};
 
-    escape_char_action(ParserT const& p, ActionT const& a)
-    : base_t(p), actor(a) {}
+	escape_char_action ( ParserT const &p, ActionT const &a )
+		: base_t ( p ), actor ( a ) {}
 
-    template <typename ScannerT>
-    typename parser_result<self_t, ScannerT>::type
-    parse(ScannerT const& scan) const
-    {
-        return impl::escape_char_action_parse<Flags, CharT>::
-            parse(scan, *this);
-    }
+	template <typename ScannerT>
+	typename parser_result<self_t, ScannerT>::type
+	parse ( ScannerT const &scan ) const
+	{
+		return impl::escape_char_action_parse<Flags, CharT>::
+		       parse ( scan, *this );
+	}
 
-    ActionT const& predicate() const { return actor; }
+	ActionT const &predicate() const { return actor; }
 
 private:
 
-    ActionT actor;
+	ActionT actor;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -117,49 +120,52 @@ struct escape_char_action_parser_gen;
 
 template <unsigned long Flags, typename CharT>
 struct escape_char_parser :
-    public parser<escape_char_parser<Flags, CharT> > {
+		public parser<escape_char_parser<Flags, CharT> >
+{
 
-    // only the values c_escapes and lex_escapes are valid for Flags
-    BOOST_STATIC_ASSERT(Flags == c_escapes || Flags == lex_escapes);
+	// only the values c_escapes and lex_escapes are valid for Flags
+	BOOST_STATIC_ASSERT ( Flags == c_escapes || Flags == lex_escapes );
 
-    typedef escape_char_parser<Flags, CharT> self_t;
-    typedef
-        escape_char_action_parser_gen<Flags, CharT>
-        action_parser_generator_t;
+	typedef escape_char_parser<Flags, CharT> self_t;
+	typedef
+	escape_char_action_parser_gen<Flags, CharT>
+	action_parser_generator_t;
 
-    template <typename ScannerT>
-    struct result {
+	template <typename ScannerT>
+	struct result
+	{
 
-        typedef typename match_result<ScannerT, CharT>::type type;
-    };
+		typedef typename match_result<ScannerT, CharT>::type type;
+	};
 
-    template <typename ActionT>
-    escape_char_action<self_t, ActionT, Flags, CharT>
-    operator[](ActionT const& actor) const
-    {
-        return escape_char_action<self_t, ActionT, Flags, CharT>(*this, actor);
-    }
+	template <typename ActionT>
+	escape_char_action<self_t, ActionT, Flags, CharT>
+	operator[] ( ActionT const &actor ) const
+	{
+		return escape_char_action<self_t, ActionT, Flags, CharT> ( *this, actor );
+	}
 
-    template <typename ScannerT>
-    typename parser_result<self_t, ScannerT>::type
-    parse(ScannerT const &scan) const
-    {
-        return impl::escape_char_parse<CharT>::parse(scan, *this);
-    }
+	template <typename ScannerT>
+	typename parser_result<self_t, ScannerT>::type
+	parse ( ScannerT const &scan ) const
+	{
+		return impl::escape_char_parse<CharT>::parse ( scan, *this );
+	}
 };
 
 template <unsigned long Flags, typename CharT>
-struct escape_char_action_parser_gen {
+struct escape_char_action_parser_gen
+{
 
-    template <typename ParserT, typename ActionT>
-    static escape_char_action<ParserT, ActionT, Flags, CharT>
-    generate (ParserT const &p, ActionT const &actor)
-    {
-        typedef
-            escape_char_action<ParserT, ActionT, Flags, CharT>
-            action_parser_t;
-        return action_parser_t(p, actor);
-    }
+	template <typename ParserT, typename ActionT>
+	static escape_char_action<ParserT, ActionT, Flags, CharT>
+	generate ( ParserT const &p, ActionT const &actor )
+	{
+		typedef
+		escape_char_action<ParserT, ActionT, Flags, CharT>
+		action_parser_t;
+		return action_parser_t ( p, actor );
+	}
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -179,6 +185,7 @@ const escape_char_parser<c_escapes> c_escape_ch_p =
 ///////////////////////////////////////////////////////////////////////////////
 BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}} // namespace BOOST_SPIRIT_CLASSIC_NS
+}
+} // namespace BOOST_SPIRIT_CLASSIC_NS
 
 #endif

@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -55,16 +55,18 @@ BOOST_AUTO_TU_REGISTRAR( test_name )(                                   \
 void test_name::test_method()                                           \
 /**/
 
-namespace boost {
+namespace boost
+{
 
-namespace itest {
+namespace itest
+{
 
 // ************************************************************************** //
 // **************             exception safety test            ************** //
 // ************************************************************************** //
 
-void    BOOST_TEST_DECL exception_safety( unit_test::callback0<> const& F, 
-                                          unit_test::const_string test_name = "" );
+void    BOOST_TEST_DECL exception_safety ( unit_test::callback0<> const &F,
+        unit_test::const_string test_name = "" );
 
 } // namespace itest
 
@@ -82,98 +84,98 @@ void    BOOST_TEST_DECL exception_safety( unit_test::callback0<> const& F,
 namespace std { using ::isprint; using ::malloc; using ::free; }
 # endif
 
-inline void*
-operator new( std::size_t s ) throw(std::bad_alloc)
+inline void *
+operator new ( std::size_t s ) throw ( std::bad_alloc )
 {
-    void* res = std::malloc(s ? s : 1);
+	void *res = std::malloc ( s ? s : 1 );
 
-    if( res )
-        ::boost::itest::manager::instance().allocated( 0, 0, res, s );
-    else
-        throw std::bad_alloc();
+	if ( res )
+		::boost::itest::manager::instance().allocated ( 0, 0, res, s );
+	else
+		throw std::bad_alloc();
 
-    return res;
+	return res;
 }
 
 //____________________________________________________________________________//
 
-inline void*
-operator new( std::size_t s, std::nothrow_t const& ) throw()
+inline void *
+operator new ( std::size_t s, std::nothrow_t const & ) throw()
 {
-    void* res = std::malloc(s ? s : 1);
+	void *res = std::malloc ( s ? s : 1 );
 
-    if( res )
-        ::boost::itest::manager::instance().allocated( 0, 0, res, s );
+	if ( res )
+		::boost::itest::manager::instance().allocated ( 0, 0, res, s );
 
-    return res;
+	return res;
 }
 
 //____________________________________________________________________________//
 
-inline void*
-operator new[]( std::size_t s ) throw(std::bad_alloc)
+inline void *
+operator new[] ( std::size_t s ) throw ( std::bad_alloc )
 {
-    void* res = std::malloc(s ? s : 1);
+	void *res = std::malloc ( s ? s : 1 );
 
-    if( res )
-        ::boost::itest::manager::instance().allocated( 0, 0, res, s );
-    else
-        throw std::bad_alloc();
+	if ( res )
+		::boost::itest::manager::instance().allocated ( 0, 0, res, s );
+	else
+		throw std::bad_alloc();
 
-    return res;
+	return res;
 }
 
 //____________________________________________________________________________//
 
-inline void*
-operator new[]( std::size_t s, std::nothrow_t const& ) throw()
+inline void *
+operator new[] ( std::size_t s, std::nothrow_t const & ) throw()
 {
-    void* res = std::malloc(s ? s : 1);
+	void *res = std::malloc ( s ? s : 1 );
 
-    if( res )
-        ::boost::itest::manager::instance().allocated( 0, 0, res, s );
+	if ( res )
+		::boost::itest::manager::instance().allocated ( 0, 0, res, s );
 
-    return res;
-}
-
-//____________________________________________________________________________//
-
-inline void
-operator delete( void* p ) throw()
-{
-    ::boost::itest::manager::instance().freed( p );
-
-    std::free( p );
+	return res;
 }
 
 //____________________________________________________________________________//
 
 inline void
-operator delete( void* p, std::nothrow_t const& ) throw()
+operator delete ( void *p ) throw()
 {
-    ::boost::itest::manager::instance().freed( p );
+	::boost::itest::manager::instance().freed ( p );
 
-    std::free( p );
+	std::free ( p );
 }
 
 //____________________________________________________________________________//
 
 inline void
-operator delete[]( void* p ) throw()
+operator delete ( void *p, std::nothrow_t const & ) throw()
 {
-    ::boost::itest::manager::instance().freed( p );
+	::boost::itest::manager::instance().freed ( p );
 
-    std::free( p );
+	std::free ( p );
 }
 
 //____________________________________________________________________________//
 
 inline void
-operator delete[]( void* p, std::nothrow_t const& ) throw()
+operator delete[] ( void *p ) throw()
 {
-    ::boost::itest::manager::instance().freed( p );
+	::boost::itest::manager::instance().freed ( p );
 
-    std::free( p );
+	std::free ( p );
+}
+
+//____________________________________________________________________________//
+
+inline void
+operator delete[] ( void *p, std::nothrow_t const & ) throw()
+{
+	::boost::itest::manager::instance().freed ( p );
+
+	std::free ( p );
 }
 
 //____________________________________________________________________________//

@@ -1,16 +1,16 @@
 /*
- * Distributed under the Boost Software License, Version 1.0.(See accompanying 
+ * Distributed under the Boost Software License, Version 1.0.(See accompanying
  * file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
- * 
+ *
  * See http://www.boost.org/libs/iostreams for documentation.
  *
- * Defines preprocessor symbols expanding to the names of functions in the 
+ * Defines preprocessor symbols expanding to the names of functions in the
  * C runtime library used to access file descriptors and to the type used
  * to store file offsets for seeking.
- * 
+ *
  * File:        boost/iostreams/detail/config/rtl.hpp
  * Date:        Wed Dec 26 11:58:11 MST 2007
- * 
+ *
  * Copyright:   2007-2008 CodeRage, LLC
  * Author:      Jonathan Turkanis
  * Contact:     turkanis at coderage dot com
@@ -41,7 +41,7 @@
 #  define BOOST_IOSTREAMS_FD_SEEK    _lseeki64
 #  define BOOST_IOSTREAMS_FD_OFFSET  __int64
 # else                                          // Borland, Metrowerks, ...
-#  define BOOST_IOSTREAMS_FD_SEEK    lseek  
+#  define BOOST_IOSTREAMS_FD_SEEK    lseek
 #  define BOOST_IOSTREAMS_FD_OFFSET  long
 # endif
 #else // Non-windows
@@ -49,9 +49,9 @@
          (!defined(_FILE_OFFSET_BITS) || _FILE_OFFSET_BITS != 64) || \
      defined(_AIX) && !defined(_LARGE_FILES) || \
      defined(BOOST_IOSTREAMS_HAS_LARGE_FILE_EXTENSIONS)
-     /**/
+/**/
 
-    /* Systems with transitional extensions for large file support */
+/* Systems with transitional extensions for large file support */
 
 #  define BOOST_IOSTREAMS_FD_SEEK      lseek64
 #  define BOOST_IOSTREAMS_FD_TRUNCATE  ftruncate64

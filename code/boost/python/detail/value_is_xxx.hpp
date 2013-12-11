@@ -55,7 +55,7 @@ struct value_is_##name                                                  \
                            >::value);                                   \
     typedef mpl::bool_<value> type;                                    \
                                                                         \
-};                                                              
+};
 
 # endif
 

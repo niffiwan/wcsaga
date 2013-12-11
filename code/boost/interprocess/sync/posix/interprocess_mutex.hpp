@@ -31,79 +31,86 @@
 #  include <boost/interprocess/detail/os_thread_functions.hpp>
 #endif
 
-namespace boost {
-namespace interprocess {
+namespace boost
+{
+namespace interprocess
+{
 
 inline interprocess_mutex::interprocess_mutex()
 {
-   detail::mutexattr_wrapper mut_attr;
-   detail::mutex_initializer mut(m_mut, mut_attr);
-   mut.release();
+	detail::mutexattr_wrapper mut_attr;
+	detail::mutex_initializer mut ( m_mut, mut_attr );
+	mut.release();
 }
 
-inline interprocess_mutex::~interprocess_mutex() 
+inline interprocess_mutex::~interprocess_mutex()
 {
-   int res = pthread_mutex_destroy(&m_mut);
-   assert(res  == 0);(void)res;
+	int res = pthread_mutex_destroy ( &m_mut );
+	assert ( res  == 0 ); ( void ) res;
 }
 
 inline void interprocess_mutex::lock()
 {
-   if (pthread_mutex_lock(&m_mut) != 0) 
-      throw lock_exception();
+	if ( pthread_mutex_lock ( &m_mut ) != 0 )
+		throw lock_exception();
 }
 
 inline bool interprocess_mutex::try_lock()
 {
-   int res = pthread_mutex_trylock(&m_mut);
-   if (!(res == 0 || res == EBUSY))
-      throw lock_exception();
-   return res == 0;
+	int res = pthread_mutex_trylock ( &m_mut );
+	if ( ! ( res == 0 || res == EBUSY ) )
+		throw lock_exception();
+	return res == 0;
 }
 
-inline bool interprocess_mutex::timed_lock(const boost::posix_time::ptime &abs_time)
+inline bool interprocess_mutex::timed_lock ( const boost::posix_time::ptime &abs_time )
 {
-   if(abs_time == boost::posix_time::pos_infin){
-      this->lock();
-      return true;
-   }
-   #ifdef BOOST_INTERPROCESS_POSIX_TIMEOUTS
+	if ( abs_time == boost::posix_time::pos_infin )
+	{
+		this->lock();
+		return true;
+	}
+#ifdef BOOST_INTERPROCESS_POSIX_TIMEOUTS
 
-   timespec ts = detail::ptime_to_timespec(abs_time);
-   int res = pthread_mutex_timedlock(&m_mut, &ts);
-   if (res != 0 && res != ETIMEDOUT)
-      throw lock_exception();
-   return res == 0;
+	timespec ts = detail::ptime_to_timespec ( abs_time );
+	int res = pthread_mutex_timedlock ( &m_mut, &ts );
+	if ( res != 0 && res != ETIMEDOUT )
+		throw lock_exception();
+	return res == 0;
 
-   #else //BOOST_INTERPROCESS_POSIX_TIMEOUTS
+#else //BOOST_INTERPROCESS_POSIX_TIMEOUTS
 
-   //Obtain current count and target time
-   boost::posix_time::ptime now = microsec_clock::universal_time();
+	//Obtain current count and target time
+	boost::posix_time::ptime now = microsec_clock::universal_time();
 
-   if(now >= abs_time) return false;
+	if ( now >= abs_time ) return false;
 
-   do{
-      if(this->try_lock()){
-         break;
-      }
-      now = microsec_clock::universal_time();
+	do
+	{
+		if ( this->try_lock() )
+		{
+			break;
+		}
+		now = microsec_clock::universal_time();
 
-      if(now >= abs_time){
-         return false;
-      }
-      // relinquish current time slice
-     detail::thread_yield();
-   }while (true);
-   return true;
+		if ( now >= abs_time )
+		{
+			return false;
+		}
+		// relinquish current time slice
+		detail::thread_yield();
+	}
+	while ( true );
+	return true;
 
-   #endif   //BOOST_INTERPROCESS_POSIX_TIMEOUTS
+#endif   //BOOST_INTERPROCESS_POSIX_TIMEOUTS
 }
 
 inline void interprocess_mutex::unlock()
 {
-   int res = 0;
-   res = pthread_mutex_unlock(&m_mut);
-   assert(res == 0);
+	int res = 0;
+	res = pthread_mutex_unlock ( &m_mut );
+	assert ( res == 0 );
 }
 
 }  //namespace interprocess {

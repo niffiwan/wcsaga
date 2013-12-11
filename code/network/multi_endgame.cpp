@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -37,7 +37,7 @@
 
 
 // set when the server/client has ended the game on some notification or error and is waiting for clients to leave
-#define MULTI_ENDGAME_SERVER_WAIT				5.0f
+#define MULTI_ENDGAME_SERVER_WAIT               5.0f
 int Multi_endgame_server_waiting = 0;
 float Multi_endgame_server_wait_stamp = -1.0f;
 int Multi_endgame_client_waiting = 0;
@@ -58,7 +58,7 @@ int Multi_endgame_processing;
 void multi_endgame_cleanup();
 
 // throw up a popup with the given notification code and optional winsock code
-void multi_endgame_popup(int notify_code, int error_code, int wsa_error = -1);
+void multi_endgame_popup ( int notify_code, int error_code, int wsa_error = -1 );
 
 // called when server is waiting for clients to disconnect
 int multi_endgame_server_ok_to_leave();
@@ -93,7 +93,7 @@ void multi_endgame_init()
 // process all endgame related events
 void multi_endgame_process()
 {
-	if (Multi_endgame_processing)
+	if ( Multi_endgame_processing )
 		return;
 
 	Multi_endgame_processing = 1;
@@ -102,38 +102,38 @@ void multi_endgame_process()
 	multi_endgame_check_for_warpout();
 
 	// if we're the server of the game
-	if (Net_player->flags & NETINFO_FLAG_AM_MASTER)
+	if ( Net_player->flags & NETINFO_FLAG_AM_MASTER )
 	{
 		// if we're not waiting for clients to leave, do nothing
-		if (!Multi_endgame_server_waiting)
+		if ( !Multi_endgame_server_waiting )
 		{
 			Multi_endgame_processing = 0;
 			return;
 		}
 
-		// if a popup is already active, do nothing		
-		if (popup_active())
+		// if a popup is already active, do nothing
+		if ( popup_active() )
 		{
 			Multi_endgame_processing = 0;
 			return;
 		}
 
 		// otherwise popup until things are hunky-dory
-		if (!multi_endgame_server_ok_to_leave())
+		if ( !multi_endgame_server_ok_to_leave() )
 		{
-			if (Game_mode & GM_STANDALONE_SERVER)
+			if ( Game_mode & GM_STANDALONE_SERVER )
 			{
-				while (!multi_endgame_server_ok_to_leave())
+				while ( !multi_endgame_server_ok_to_leave() )
 				{
 					// run networking, etc.
-					game_set_frametime(-1);
-					game_do_state_common(gameseq_get_state());
+					game_set_frametime ( -1 );
+					game_do_state_common ( gameseq_get_state() );
 				}
 			}
 			else
 			{
-				popup_till_condition(multi_endgame_server_ok_to_leave, XSTR("&Cancel", 645),
-					XSTR("Waiting for clients to disconnect", 646));
+				popup_till_condition ( multi_endgame_server_ok_to_leave, XSTR ( "&Cancel", 645 ),
+				                       XSTR ( "Waiting for clients to disconnect", 646 ) );
 			}
 		}
 
@@ -143,20 +143,20 @@ void multi_endgame_process()
 	else
 	{
 		// if we're not waiting to leave the game, do nothing
-		if (!Multi_endgame_client_waiting)
+		if ( !Multi_endgame_client_waiting )
 		{
 			Multi_endgame_processing = 0;
 			return;
 		}
 
 		// otherwise, check to see if there is a popup active
-		if (popup_active())
+		if ( popup_active() )
 		{
 			Multi_endgame_processing = 0;
 			return;
 		}
 
-		// if not, then we are good to leave		
+		// if not, then we are good to leave
 		multi_endgame_cleanup();
 	}
 
@@ -166,24 +166,24 @@ void multi_endgame_process()
 // if the game has been flagged as ended (ie, its going to be reset)
 int multi_endgame_ending()
 {
-	return (Multi_endgame_client_waiting || Multi_endgame_server_waiting);
+	return ( Multi_endgame_client_waiting || Multi_endgame_server_waiting );
 }
 
 // reentrancy check
 int Multi_quit_game = 0;
 // general quit function, with optional notification, error, and winsock error codes
-int multi_quit_game(int prompt, int notify_code, int err_code, int wsa_error)
+int multi_quit_game ( int prompt, int notify_code, int err_code, int wsa_error )
 {
 	int ret_val, quit_already;
 
 	// check for reentrancy
-	if (Multi_quit_game)
+	if ( Multi_quit_game )
 	{
 		return 0;
 	}
 
 	// if we're not connected or have not net-player
-	if ((Net_player == NULL) || !(Net_player->flags & NETINFO_FLAG_CONNECTED))
+	if ( ( Net_player == NULL ) || ! ( Net_player->flags & NETINFO_FLAG_CONNECTED ) )
 	{
 		return 1;
 	}
@@ -195,45 +195,45 @@ int multi_quit_game(int prompt, int notify_code, int err_code, int wsa_error)
 
 	// reset my control info so that I don't continually do whacky stuff.  This is ugly
 	//player_control_reset_ci( &Player->ci );
-	if (Game_mode & GM_IN_MISSION)
+	if ( Game_mode & GM_IN_MISSION )
 	{
-		memset(&Player->ci, 0, sizeof(Player->ci));
+		memset ( &Player->ci, 0, sizeof ( Player->ci ) );
 		Player->ci.afterburner_stop = 1;
-		physics_read_flying_controls(&Player_obj->orient, &Player_obj->phys_info, &(Player->ci), flFrametime);
+		physics_read_flying_controls ( &Player_obj->orient, &Player_obj->phys_info, & ( Player->ci ), flFrametime );
 	}
 
 	// CASE 1 - response to a user request
 	// if there is no associated notification or error code, don't override the prompt argument
-	if ((err_code == -1) && (notify_code == -1))
+	if ( ( err_code == -1 ) && ( notify_code == -1 ) )
 	{
 		// if we're the server and we're already waiting for clients to leave, don't do anything
-		if ((Net_player->flags & NETINFO_FLAG_AM_MASTER) && Multi_endgame_server_waiting)
+		if ( ( Net_player->flags & NETINFO_FLAG_AM_MASTER ) && Multi_endgame_server_waiting )
 		{
 			Multi_quit_game = 0;
 			return 0;
 		}
 
 		// if we're the client and we're already waiting to leave, don't do anythin
-		if (!(Net_player->flags & NETINFO_FLAG_AM_MASTER) && Multi_endgame_client_waiting)
+		if ( ! ( Net_player->flags & NETINFO_FLAG_AM_MASTER ) && Multi_endgame_client_waiting )
 		{
 			Multi_quit_game = 0;
 			return 0;
 		}
 
 		// see if we should be prompting the host for confirmation
-		if ((prompt == PROMPT_HOST || prompt == PROMPT_ALL) && (Net_player->flags & NETINFO_FLAG_GAME_HOST))
+		if ( ( prompt == PROMPT_HOST || prompt == PROMPT_ALL ) && ( Net_player->flags & NETINFO_FLAG_GAME_HOST ) )
 		{
 			int p_flags;
 
 			p_flags = PF_USE_AFFIRMATIVE_ICON | PF_USE_NEGATIVE_ICON | PF_BODY_BIG;
-			if (Game_mode & GM_IN_MISSION)
+			if ( Game_mode & GM_IN_MISSION )
 				p_flags |= PF_RUN_STATE;
 
-			ret_val = popup(p_flags, 2, POPUP_CANCEL, POPUP_OK,
-				XSTR("Warning - quitting will end the game for all players!", 647));
+			ret_val = popup ( p_flags, 2, POPUP_CANCEL, POPUP_OK,
+			                  XSTR ( "Warning - quitting will end the game for all players!", 647 ) );
 
 			// check for host cancel
-			if ((ret_val == 0) || (ret_val == -1))
+			if ( ( ret_val == 0 ) || ( ret_val == -1 ) )
 			{
 				Multi_quit_game = 0;
 				return 0;
@@ -244,13 +244,13 @@ int multi_quit_game(int prompt, int notify_code, int err_code, int wsa_error)
 		}
 
 		// see if we should be prompting the client for confirmation
-		if ((prompt == PROMPT_CLIENT || prompt == PROMPT_ALL) && !quit_already)
+		if ( ( prompt == PROMPT_CLIENT || prompt == PROMPT_ALL ) && !quit_already )
 		{
-			ret_val = popup(PF_USE_AFFIRMATIVE_ICON | PF_USE_NEGATIVE_ICON | PF_BODY_BIG, 2, POPUP_NO, POPUP_YES,
-				XSTR("Are you sure you want to quit?", 648));
+			ret_val = popup ( PF_USE_AFFIRMATIVE_ICON | PF_USE_NEGATIVE_ICON | PF_BODY_BIG, 2, POPUP_NO, POPUP_YES,
+			                  XSTR ( "Are you sure you want to quit?", 648 ) );
 
 			// check for host cancel
-			if ((ret_val == 0) || (ret_val == -1))
+			if ( ( ret_val == 0 ) || ( ret_val == -1 ) )
 			{
 				Multi_quit_game = 0;
 				return 0;
@@ -259,48 +259,48 @@ int multi_quit_game(int prompt, int notify_code, int err_code, int wsa_error)
 		}
 
 		// if i'm the server of the game, tell all clients that i'm leaving, then wait
-		if (Net_player->flags & NETINFO_FLAG_AM_MASTER)
+		if ( Net_player->flags & NETINFO_FLAG_AM_MASTER )
 		{
-			send_netgame_end_error_packet(MULTI_END_NOTIFY_SERVER_LEFT, MULTI_END_ERROR_NONE);
+			send_netgame_end_error_packet ( MULTI_END_NOTIFY_SERVER_LEFT, MULTI_END_ERROR_NONE );
 
 			// set the waiting flag and the waiting timestamp
 			Multi_endgame_server_waiting = 1;
 			Multi_endgame_server_wait_stamp = MULTI_ENDGAME_SERVER_WAIT;
 		}
-			// if i'm the client, quit now
+		// if i'm the client, quit now
 		else
 		{
 			multi_endgame_cleanup();
 		}
 	}
-		// CASE 2 - response to an error code or packet from the server
-		// this is the case where we're being forced to quit the game because of some error or other notification
+	// CASE 2 - response to an error code or packet from the server
+	// this is the case where we're being forced to quit the game because of some error or other notification
 	else
 	{
 		// if i'm the server, send a packet to the clients telling them that I'm leaving and why
-		if ((Net_player->flags & NETINFO_FLAG_AM_MASTER) && !Multi_endgame_server_waiting)
+		if ( ( Net_player->flags & NETINFO_FLAG_AM_MASTER ) && !Multi_endgame_server_waiting )
 		{
 			// if we're in the debrief state, mark down that the server has left the game
-			if (((gameseq_get_state() == GS_STATE_DEBRIEF) || (gameseq_get_state() ==
-															   GS_STATE_MULTI_DOGFIGHT_DEBRIEF)) && !(Game_mode &
-																									  GM_STANDALONE_SERVER))
+			if ( ( ( gameseq_get_state() == GS_STATE_DEBRIEF ) || ( gameseq_get_state() ==
+			        GS_STATE_MULTI_DOGFIGHT_DEBRIEF ) ) && ! ( Game_mode &
+			                GM_STANDALONE_SERVER ) )
 			{
 				multi_debrief_server_left();
 
 				// add a message to the chatbox
-				multi_display_chat_msg(XSTR("<Team captains have left>", 649), 0, 0);
+				multi_display_chat_msg ( XSTR ( "<Team captains have left>", 649 ), 0, 0 );
 
 				// set ourselves to be "not quitting"
 				Multi_quit_game = 0;
 
 				// tell the users, the game has ended
-				send_netgame_end_error_packet(notify_code, err_code);
+				send_netgame_end_error_packet ( notify_code, err_code );
 				return 0;
 			}
 
-			send_netgame_end_error_packet(notify_code, err_code);
+			send_netgame_end_error_packet ( notify_code, err_code );
 
-			// store the globals 
+			// store the globals
 			Multi_endgame_notify_code = notify_code;
 			Multi_endgame_error_code = err_code;
 			Multi_endgame_wsa_error = wsa_error;
@@ -309,23 +309,23 @@ int multi_quit_game(int prompt, int notify_code, int err_code, int wsa_error)
 			Multi_endgame_server_waiting = 1;
 			Multi_endgame_server_wait_stamp = MULTI_ENDGAME_SERVER_WAIT;
 		}
-			// if i'm the client, set the error codes and leave the game now
-		else if (!Multi_endgame_client_waiting)
+		// if i'm the client, set the error codes and leave the game now
+		else if ( !Multi_endgame_client_waiting )
 		{
 			// if we're in the debrief state, mark down that the server has left the game
-			if ((gameseq_get_state() == GS_STATE_DEBRIEF) || (gameseq_get_state() == GS_STATE_MULTI_DOGFIGHT_DEBRIEF))
+			if ( ( gameseq_get_state() == GS_STATE_DEBRIEF ) || ( gameseq_get_state() == GS_STATE_MULTI_DOGFIGHT_DEBRIEF ) )
 			{
 				multi_debrief_server_left();
 
 				// add a message to the chatbox
-				multi_display_chat_msg(XSTR("<The server has ended the game>", 650), 0, 0);
+				multi_display_chat_msg ( XSTR ( "<The server has ended the game>", 650 ), 0, 0 );
 
 				// shut our reliable socket to the server down
-				psnet_rel_close_socket(&Net_player->reliable_socket);
+				psnet_rel_close_socket ( &Net_player->reliable_socket );
 				Net_player->reliable_socket = INVALID_SOCKET;
 
 				// remove our do-notworking flag
-				Net_player->flags &= ~(NETINFO_FLAG_DO_NETWORKING);
+				Net_player->flags &= ~ ( NETINFO_FLAG_DO_NETWORKING );
 
 				Multi_quit_game = 0;
 				return 0;
@@ -362,16 +362,16 @@ void multi_endgame_cleanup()
 	multi_io_send_buffered_packets();
 
 	// mark myself as disconnected
-	if (!(Game_mode & GM_STANDALONE_SERVER))
+	if ( ! ( Game_mode & GM_STANDALONE_SERVER ) )
 	{
-		Net_player->flags &= ~(NETINFO_FLAG_CONNECTED | NETINFO_FLAG_DO_NETWORKING);
+		Net_player->flags &= ~ ( NETINFO_FLAG_CONNECTED | NETINFO_FLAG_DO_NETWORKING );
 	}
 
 	/*this is a semi-hack so that if we're the master and we're quitting, we don't get an assert
-	
+
 	Karajorma - From the looks of things this code actually CAUSES an Int3 and doesn't cause an assert anymore
-	besides if the game is over why are we setting flags on a Player_obj anyway? 
-	
+	besides if the game is over why are we setting flags on a Player_obj anyway?
+
 	if((Net_player->flags & NETINFO_FLAG_AM_MASTER) && (Player_obj != NULL)){
 	Player_obj->flags &= ~(OF_PLAYER_SHIP);
 	obj_set_flags( Player_obj, Player_obj->flags | OF_COULD_BE_PLAYER );
@@ -382,9 +382,9 @@ void multi_endgame_cleanup()
 	// psnet_rel_close_socket( &(Net_player->reliable_socket) );
 
 	// 11/18/98 - DB, changed the above to kill all sockets. Its the safest thing to do
-	for (idx = 0; idx < MAX_PLAYERS; idx++)
+	for ( idx = 0; idx < MAX_PLAYERS; idx++ )
 	{
-		psnet_rel_close_socket(&Net_players[idx].reliable_socket);
+		psnet_rel_close_socket ( &Net_players[idx].reliable_socket );
 		Net_players[idx].reliable_socket = INVALID_SOCKET;
 	}
 
@@ -393,57 +393,57 @@ void multi_endgame_cleanup()
 	// Netgame.flags |= (NG_FLAG_QUITTING | NG_FLAG_ENDED);
 
 	// close all open SPX/TCP reliable sockets
-	if (Net_player->flags & NETINFO_FLAG_AM_MASTER)
+	if ( Net_player->flags & NETINFO_FLAG_AM_MASTER )
 	{
 		// do it for all players, since we're leaving anyway.
-		for (idx = 0; idx < MAX_PLAYERS; idx++)
+		for ( idx = 0; idx < MAX_PLAYERS; idx++ )
 		{
 			// 6/25/98 -- MWA delete all players from the game
 
-			if (&Net_players[idx] != Net_player)
+			if ( &Net_players[idx] != Net_player )
 			{
-				delete_player(idx);
+				delete_player ( idx );
 			}
 		}
 	}
 
 	// if we're currently in the pause state, pop back into gameplay first
-	if (gameseq_get_state() == GS_STATE_MULTI_PAUSED)
+	if ( gameseq_get_state() == GS_STATE_MULTI_PAUSED )
 	{
 		gameseq_pop_state();
 	}
 
 	// handle game disconnect from FS2NetD (NOTE: must be done *before* standalone is reset!!)
-	if (MULTI_IS_TRACKER_GAME && (Net_player->flags & NETINFO_FLAG_AM_MASTER))
+	if ( MULTI_IS_TRACKER_GAME && ( Net_player->flags & NETINFO_FLAG_AM_MASTER ) )
 	{
 		fs2netd_gameserver_disconnect();
 	}
 
-	if (Game_mode & GM_STANDALONE_SERVER)
+	if ( Game_mode & GM_STANDALONE_SERVER )
 	{
-		// multi_standalone_quit_game();		
+		// multi_standalone_quit_game();
 		multi_standalone_reset_all();
 	}
 	else
 	{
 		Player->flags |= PLAYER_FLAGS_IS_MULTI;
 
-		// if we're in Parallax Online mode, log back in there	
-		gameseq_post_event(GS_EVENT_MULTI_JOIN_GAME);
+		// if we're in Parallax Online mode, log back in there
+		gameseq_post_event ( GS_EVENT_MULTI_JOIN_GAME );
 
-		// if we have an error code, bring up the discon popup						
-		if (((Multi_endgame_notify_code != -1) || (Multi_endgame_error_code != -1)) &&
-			!(Game_mode & GM_STANDALONE_SERVER))
+		// if we have an error code, bring up the discon popup
+		if ( ( ( Multi_endgame_notify_code != -1 ) || ( Multi_endgame_error_code != -1 ) ) &&
+		        ! ( Game_mode & GM_STANDALONE_SERVER ) )
 		{
-			multi_endgame_popup(Multi_endgame_notify_code, Multi_endgame_error_code, Multi_endgame_wsa_error);
+			multi_endgame_popup ( Multi_endgame_notify_code, Multi_endgame_error_code, Multi_endgame_wsa_error );
 		}
 	}
 
 	/*
 	extern CFILE *obj_stream;
 	if(obj_stream != NULL){
-		cfclose(obj_stream);
-		obj_stream = NULL;
+	    cfclose(obj_stream);
+	    obj_stream = NULL;
 	}
 	*/
 
@@ -455,13 +455,13 @@ void multi_endgame_cleanup()
 }
 
 // throw up a popup with the given notification code and optional winsock code
-void multi_endgame_popup(int notify_code, int error_code, int wsa_error)
+void multi_endgame_popup ( int notify_code, int error_code, int wsa_error )
 {
 	char err_msg[255];
 	int flags = PF_USE_AFFIRMATIVE_ICON;
 
 	// if there is a popup already active, just kill it
-	if (popup_active())
+	if ( popup_active() )
 	{
 		// if there is already a popup active, kill it
 		popup_kill_any_active();
@@ -471,46 +471,46 @@ void multi_endgame_popup(int notify_code, int error_code, int wsa_error)
 	else
 	{
 		// if there is a winsock error code, stick it on the end of the text
-		if (wsa_error != -1)
+		if ( wsa_error != -1 )
 		{
-			sprintf(err_msg, NOX("WSAERROR : %d\n\n"), wsa_error);
+			sprintf ( err_msg, NOX ( "WSAERROR : %d\n\n" ), wsa_error );
 			flags |= PF_TITLE_RED;
 		}
 		else
 		{
-			strcpy_s(err_msg, "");
+			strcpy_s ( err_msg, "" );
 		}
 
 		// setup the error message string
-		if (notify_code != MULTI_END_NOTIFY_NONE)
+		if ( notify_code != MULTI_END_NOTIFY_NONE )
 		{
-			switch (notify_code)
+			switch ( notify_code )
 			{
 			case MULTI_END_NOTIFY_KICKED :
-				strcat_s(err_msg, XSTR("You have been kicked", 651));
+				strcat_s ( err_msg, XSTR ( "You have been kicked", 651 ) );
 				break;
 			case MULTI_END_NOTIFY_SERVER_LEFT:
-				strcat_s(err_msg, XSTR("The server has left the game", 652));
+				strcat_s ( err_msg, XSTR ( "The server has left the game", 652 ) );
 				break;
 			case MULTI_END_NOTIFY_FILE_REJECTED:
-				strcat_s(err_msg, XSTR("Your mission file has been rejected by the server", 653));
+				strcat_s ( err_msg, XSTR ( "Your mission file has been rejected by the server", 653 ) );
 				break;
 			case MULTI_END_NOTIFY_EARLY_END:
-				strcat_s(err_msg, XSTR("The game has ended while you were ingame joining", 654));
+				strcat_s ( err_msg, XSTR ( "The game has ended while you were ingame joining", 654 ) );
 				break;
 			case MULTI_END_NOTIFY_INGAME_TIMEOUT:
-				strcat_s(err_msg, XSTR("You have waited too long to select a ship", 655));
+				strcat_s ( err_msg, XSTR ( "You have waited too long to select a ship", 655 ) );
 				break;
 			case MULTI_END_NOTIFY_KICKED_BAD_XFER:
-				strcat_s(err_msg, XSTR("You were kicked because mission file xfer failed", 998));
+				strcat_s ( err_msg, XSTR ( "You were kicked because mission file xfer failed", 998 ) );
 				break;
 			case MULTI_END_NOTIFY_KICKED_CANT_XFER:
-				strcat_s(err_msg, XSTR("You were kicked because you do not have the builtin mission", 999));
-				strcat_s(err_msg, NOX(" "));
-				strcat_s(err_msg, Game_current_mission_filename);
+				strcat_s ( err_msg, XSTR ( "You were kicked because you do not have the builtin mission", 999 ) );
+				strcat_s ( err_msg, NOX ( " " ) );
+				strcat_s ( err_msg, Game_current_mission_filename );
 				break;
 			case MULTI_END_NOTIFY_KICKED_INGAME_ENDED:
-				strcat_s(err_msg, XSTR("You were kicked because you were ingame joining a game that has ended", 1000));
+				strcat_s ( err_msg, XSTR ( "You were kicked because you were ingame joining a game that has ended", 1000 ) );
 				break;
 			default :
 				Int3();
@@ -518,49 +518,49 @@ void multi_endgame_popup(int notify_code, int error_code, int wsa_error)
 		}
 		else
 		{
-			switch (error_code)
+			switch ( error_code )
 			{
 			case MULTI_END_ERROR_CONTACT_LOST :
-				strcat_s(err_msg, XSTR("Contact with server has been lost", 656));
+				strcat_s ( err_msg, XSTR ( "Contact with server has been lost", 656 ) );
 				break;
 			case MULTI_END_ERROR_CONNECT_FAIL :
-				strcat_s(err_msg, XSTR("Failed to connect to server on reliable socket", 657));
+				strcat_s ( err_msg, XSTR ( "Failed to connect to server on reliable socket", 657 ) );
 				break;
 			case MULTI_END_ERROR_LOAD_FAIL :
-				strcat_s(err_msg, XSTR("Failed to load mission file properly", 658));
+				strcat_s ( err_msg, XSTR ( "Failed to load mission file properly", 658 ) );
 				break;
 			case MULTI_END_ERROR_INGAME_SHIP :
-				strcat_s(err_msg, XSTR("Unable to create ingame join player ship", 659));
+				strcat_s ( err_msg, XSTR ( "Unable to create ingame join player ship", 659 ) );
 				break;
 			case MULTI_END_ERROR_INGAME_BOGUS :
-				strcat_s(err_msg, XSTR("Recevied bogus packet data while ingame joining", 660));
+				strcat_s ( err_msg, XSTR ( "Recevied bogus packet data while ingame joining", 660 ) );
 				break;
 			case MULTI_END_ERROR_STRANS_FAIL :
-				strcat_s(err_msg, XSTR("Server transfer failed (obsolete)", 661));
+				strcat_s ( err_msg, XSTR ( "Server transfer failed (obsolete)", 661 ) );
 				break;
 			case MULTI_END_ERROR_SHIP_ASSIGN:
-				strcat_s(err_msg, XSTR("Server encountered errors trying to assign players to ships", 662));
+				strcat_s ( err_msg, XSTR ( "Server encountered errors trying to assign players to ships", 662 ) );
 				break;
 			case MULTI_END_ERROR_HOST_LEFT:
-				strcat_s(err_msg, XSTR("Host has left the game, aborting...", 663));
+				strcat_s ( err_msg, XSTR ( "Host has left the game, aborting...", 663 ) );
 				break;
 			case MULTI_END_ERROR_XFER_FAIL:
-				strcat_s(err_msg, XSTR("There was an error receiving the mission file!", 665));
+				strcat_s ( err_msg, XSTR ( "There was an error receiving the mission file!", 665 ) );
 				break;
 			case MULTI_END_ERROR_WAVE_COUNT:
-				strcat_s(err_msg,
-					XSTR(
-					"The player wings Alpha, Beta, Gamma, and Zeta must have only 1 wave.  One of these wings currently has more than 1 wave.", 987));
+				strcat_s ( err_msg,
+				           XSTR (
+				               "The player wings Alpha, Beta, Gamma, and Zeta must have only 1 wave.  One of these wings currently has more than 1 wave.", 987 ) );
 				break;
-				// Karajorma - both of these should really be replaced with new strings in strings.tbl but for now this one has much the same meaning
+			// Karajorma - both of these should really be replaced with new strings in strings.tbl but for now this one has much the same meaning
 			case MULTI_END_ERROR_TEAM0_EMPTY:
-				strcat_s(err_msg, XSTR("All players from team 1 have left the game", 664));
+				strcat_s ( err_msg, XSTR ( "All players from team 1 have left the game", 664 ) );
 				break;
 			case MULTI_END_ERROR_TEAM1_EMPTY:
-				strcat_s(err_msg, XSTR("All players from team 2 have left the game", 664));
+				strcat_s ( err_msg, XSTR ( "All players from team 2 have left the game", 664 ) );
 				break;
 			case MULTI_END_ERROR_CAPTAIN_LEFT:
-				strcat_s(err_msg, XSTR("Team captain(s) have left the game, aborting...", 664));
+				strcat_s ( err_msg, XSTR ( "Team captain(s) have left the game, aborting...", 664 ) );
 				break;
 			default :
 				Int3();
@@ -568,7 +568,7 @@ void multi_endgame_popup(int notify_code, int error_code, int wsa_error)
 		}
 
 		// show the popup
-		popup(flags, 1, POPUP_OK, err_msg);
+		popup ( flags, 1, POPUP_OK, err_msg );
 	}
 }
 
@@ -578,10 +578,10 @@ int multi_endgame_server_ok_to_leave()
 	int idx, clients_gone;
 
 	// check to see if our client disconnect timestamp has elapsed
-	if (Multi_endgame_server_wait_stamp > 0.0f)
+	if ( Multi_endgame_server_wait_stamp > 0.0f )
 	{
 		Multi_endgame_server_wait_stamp -= flFrametime;
-		if (Multi_endgame_server_wait_stamp <= 0.0f)
+		if ( Multi_endgame_server_wait_stamp <= 0.0f )
 		{
 			return 1;
 		}
@@ -589,9 +589,9 @@ int multi_endgame_server_ok_to_leave()
 
 	// check to see if all clients have disconnected
 	clients_gone = 1;
-	for (idx = 0; idx < MAX_PLAYERS; idx++)
+	for ( idx = 0; idx < MAX_PLAYERS; idx++ )
 	{
-		if (MULTI_CONNECTED(Net_players[idx]) && (Net_player != &Net_players[idx]))
+		if ( MULTI_CONNECTED ( Net_players[idx] ) && ( Net_player != &Net_players[idx] ) )
 		{
 			clients_gone = 0;
 			return 0;
@@ -608,28 +608,28 @@ void multi_endgame_check_for_warpout()
 	int need_to_warpout = 0;
 
 	// if we're not in the process of warping out - do nothing
-	if (!(Net_player->flags & NETINFO_FLAG_WARPING_OUT))
+	if ( ! ( Net_player->flags & NETINFO_FLAG_WARPING_OUT ) )
 	{
 		return;
 	}
 
 	// determine if sufficient warping-out conditions exist
-	if ((Game_mode & GM_IN_MISSION) &&										// if i'm still in the mission
-		((Netgame.game_state == NETGAME_STATE_ENDGAME) ||				// if the netgame ended
-		 (Netgame.game_state == NETGAME_STATE_DEBRIEF))					// if the netgame is now in the debriefing state
-		)
+	if ( ( Game_mode & GM_IN_MISSION ) &&                                   // if i'm still in the mission
+	        ( ( Netgame.game_state == NETGAME_STATE_ENDGAME ) ||            // if the netgame ended
+	          ( Netgame.game_state == NETGAME_STATE_DEBRIEF ) )              // if the netgame is now in the debriefing state
+	   )
 	{
 		need_to_warpout = 1;
 	}
 
 	// if we need to be warping out but are stuck in a dead popup, cancel it
-	if (need_to_warpout && (popupdead_is_active() || (Net_player->flags & NETINFO_FLAG_RESPAWNING) ||
-							(Net_player->flags & NETINFO_FLAG_OBSERVER)))
+	if ( need_to_warpout && ( popupdead_is_active() || ( Net_player->flags & NETINFO_FLAG_RESPAWNING ) ||
+	                          ( Net_player->flags & NETINFO_FLAG_OBSERVER ) ) )
 	{
 		// flush all active pushed state
 		multi_handle_state_special();
 
-		// begin the warpout process		
+		// begin the warpout process
 		send_debrief_event();
 
 		// if text input mode is active, clear it

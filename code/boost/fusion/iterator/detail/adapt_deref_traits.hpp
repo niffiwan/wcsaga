@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_ADAPT_DEREF_TRAITS_05062005_0900)
@@ -9,25 +9,31 @@
 
 #include <boost/fusion/iterator/deref.hpp>
 
-namespace boost { namespace fusion { namespace detail
+namespace boost
 {
-    struct adapt_deref_traits
-    {
-        template <typename Iterator>
-        struct apply
-        {
-            typedef typename
-                result_of::deref<typename Iterator::first_type>::type
-            type;
+namespace fusion
+{
+namespace detail
+{
+struct adapt_deref_traits
+{
+	template <typename Iterator>
+	struct apply
+	{
+		typedef typename
+		result_of::deref<typename Iterator::first_type>::type
+		type;
 
-            static type
-            call(Iterator const& i)
-            {
-                return *i.first;
-            }
-        };
-    };
-}}}
+		static type
+		call ( Iterator const &i )
+		{
+			return *i.first;
+		}
+	};
+};
+}
+}
+}
 
 #endif
 

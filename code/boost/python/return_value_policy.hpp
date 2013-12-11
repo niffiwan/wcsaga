@@ -8,14 +8,18 @@
 # include <boost/python/detail/prefix.hpp>
 # include <boost/python/default_call_policies.hpp>
 
-namespace boost { namespace python { 
+namespace boost
+{
+namespace python
+{
 
 template <class ResultConverterGenerator, class BasePolicy_ = default_call_policies>
 struct return_value_policy : BasePolicy_
 {
-    typedef ResultConverterGenerator result_converter;
+	typedef ResultConverterGenerator result_converter;
 };
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 #endif // RETURN_VALUE_POLICY_DWA2002131_HPP

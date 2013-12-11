@@ -44,17 +44,20 @@ struct is_set_type_of_relation : {true_|false_} {};
 
 #ifndef BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
 
-namespace boost {
-namespace bimaps {
-namespace detail {
+namespace boost
+{
+namespace bimaps
+{
+namespace detail
+{
 
 template< class Type >
 struct is_set_type_of :
-    is_base_of< set_type_of_tag, Type > {};
+		is_base_of< set_type_of_tag, Type > {};
 
 template< class Type >
 struct is_set_type_of_relation :
-    is_base_of< set_type_of_relation_tag, Type > {};
+		is_base_of< set_type_of_relation_tag, Type > {};
 
 } // namespace detail
 } // namespace bimaps

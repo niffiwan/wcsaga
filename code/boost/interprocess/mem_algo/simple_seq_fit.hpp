@@ -25,25 +25,27 @@
 //!\file
 //!Describes sequential fit algorithm used to allocate objects in shared memory.
 
-namespace boost {
-namespace interprocess {
+namespace boost
+{
+namespace interprocess
+{
 
 //!This class implements the simple sequential fit algorithm with a simply
 //!linked list of free buffers.
 template<class MutexFamily, class VoidPointer>
-class simple_seq_fit 
-   : public detail::simple_seq_fit_impl<MutexFamily, VoidPointer>
+class simple_seq_fit
+	: public detail::simple_seq_fit_impl<MutexFamily, VoidPointer>
 {
-   /// @cond
-   typedef detail::simple_seq_fit_impl<MutexFamily, VoidPointer> base_t;
-   /// @endcond
+	/// @cond
+	typedef detail::simple_seq_fit_impl<MutexFamily, VoidPointer> base_t;
+	/// @endcond
 
-   public:
-   //!Constructor. "size" is the total size of the managed memory segment, 
-   //!"extra_hdr_bytes" indicates the extra bytes beginning in the sizeof(simple_seq_fit)
-   //!offset that the allocator should not use at all.*/
-   simple_seq_fit           (std::size_t size, std::size_t extra_hdr_bytes)
-      : base_t(size, extra_hdr_bytes){}
+public:
+	//!Constructor. "size" is the total size of the managed memory segment,
+	//!"extra_hdr_bytes" indicates the extra bytes beginning in the sizeof(simple_seq_fit)
+	//!offset that the allocator should not use at all.*/
+	simple_seq_fit           ( std::size_t size, std::size_t extra_hdr_bytes )
+		: base_t ( size, extra_hdr_bytes ) {}
 };
 
 }  //namespace interprocess {

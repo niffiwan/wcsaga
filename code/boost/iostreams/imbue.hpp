@@ -23,59 +23,68 @@
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>
 
-namespace boost { namespace iostreams { 
+namespace boost
+{
+namespace iostreams
+{
 
-namespace detail {
+namespace detail
+{
 
 // Implementation templates for simulated tag dispatch.
-template<typename T> 
+template<typename T>
 struct imbue_impl;
 
 } // End namespace detail.
 
 template<typename T, typename Locale>
-void imbue(T& t, const Locale& loc)
-{ detail::imbue_impl<T>::imbue(detail::unwrap(t), loc); }
+void imbue ( T &t, const Locale &loc )
+{ detail::imbue_impl<T>::imbue ( detail::unwrap ( t ), loc ); }
 
-namespace detail {
+namespace detail
+{
 
 //------------------Definition of imbue_impl----------------------------------//
 
 template<typename T>
 struct imbue_impl
-    : mpl::if_<
-          is_custom<T>,
-          operations<T>,
-          imbue_impl<
-              BOOST_DEDUCED_TYPENAME
-              dispatch<
-                  T, streambuf_tag, localizable_tag, any_tag
-              >::type
-          >
-      >::type
-    { };
+		: mpl::if_ <
+		is_custom<T>,
+		operations<T>,
+		imbue_impl <
+		BOOST_DEDUCED_TYPENAME
+		dispatch <
+		T, streambuf_tag, localizable_tag, any_tag
+		>::type
+		>
+		>::type
+{ };
 
 template<>
-struct imbue_impl<any_tag> {
-    template<typename T, typename Locale>
-    static void imbue(T&, const Locale&) { }
+struct imbue_impl<any_tag>
+{
+	template<typename T, typename Locale>
+	static void imbue ( T &, const Locale & ) { }
 };
 
 template<>
-struct imbue_impl<streambuf_tag> {
-    template<typename T, typename Locale>
-    static void imbue(T& t, const Locale& loc) { t.pubimbue(loc); }
+struct imbue_impl<streambuf_tag>
+{
+	template<typename T, typename Locale>
+	static void imbue ( T &t, const Locale &loc ) { t.pubimbue ( loc ); }
 };
 
 template<>
-struct imbue_impl<localizable_tag> {
-    template<typename T, typename Locale>
-    static void imbue(T& t, const Locale& loc) { t.imbue(loc); }
+struct imbue_impl<localizable_tag>
+{
+	template<typename T, typename Locale>
+	static void imbue ( T &t, const Locale &loc ) { t.imbue ( loc ); }
 };
 
 } // End namespace detail.
 
-} } // End namespaces iostreams, boost.
+}
+} // End namespaces iostreams, boost.
 
 #include <boost/iostreams/detail/config/enable_warnings.hpp>
 

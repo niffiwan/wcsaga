@@ -38,10 +38,14 @@ See also member_at, pair_by().
 \ingroup relation_group
                                                                     **/
 
-namespace boost {
-namespace bimaps {
-namespace relation {
-namespace support {
+namespace boost
+{
+namespace bimaps
+{
+namespace relation
+{
+namespace support
+{
 
 // Implementation of pair type by metafunction
 

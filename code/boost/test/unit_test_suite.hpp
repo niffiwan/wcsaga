@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2001-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -190,7 +190,12 @@ static boost::unit_test::ut_detail::global_fixture_impl<F> BOOST_JOIN( gf_, F ) 
 // **************         BOOST_AUTO_TEST_CASE_FIXTURE         ************** //
 // ************************************************************************** //
 
-namespace boost { namespace unit_test { namespace ut_detail {
+namespace boost
+{
+namespace unit_test
+{
+namespace ut_detail
+{
 
 struct nil_t {};
 
@@ -217,23 +222,25 @@ static boost::unit_test::ut_detail::auto_test_unit_registrar BOOST_JOIN( BOOST_J
 #if defined(BOOST_TEST_MAIN)
 
 #ifdef BOOST_TEST_ALTERNATIVE_INIT_API
-bool init_unit_test()                   {
+bool init_unit_test()
+{
 #else
-::boost::unit_test::test_suite*
-init_unit_test_suite( int, char* [] )   {
+::boost::unit_test::test_suite *
+init_unit_test_suite ( int, char *[] )
+{
 #endif
 
 #ifdef BOOST_TEST_MODULE
-    using namespace ::boost::unit_test;
-    assign_op( framework::master_test_suite().p_name.value, BOOST_TEST_STRINGIZE( BOOST_TEST_MODULE ).trim( "\"" ), 0 );
-    
+	using namespace ::boost::unit_test;
+	assign_op ( framework::master_test_suite().p_name.value, BOOST_TEST_STRINGIZE ( BOOST_TEST_MODULE ).trim ( "\"" ), 0 );
+
 #endif
 
 #ifdef BOOST_TEST_ALTERNATIVE_INIT_API
-    return true;
+	return true;
 }
 #else
-    return 0;
+	return 0;
 }
 #endif
 

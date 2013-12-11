@@ -10,25 +10,31 @@
 
 #include <boost/fusion/sequence/intrinsic/value_at.hpp>
 
-namespace boost { namespace fusion { namespace extension
+namespace boost
 {
-    template <typename>
-    struct value_of_impl;
+namespace fusion
+{
+namespace extension
+{
+template <typename>
+struct value_of_impl;
 
-    template <>
-    struct value_of_impl<set_iterator_tag>
-    {
-        template <typename It>
-        struct apply
-        {
-            typedef typename
-                result_of::value_at<
-                    typename It::seq_type::storage_type
-                  , typename It::index
-                >::type
-            type;
-        };
-    };
-}}}
+template <>
+struct value_of_impl<set_iterator_tag>
+{
+	template <typename It>
+	struct apply
+	{
+		typedef typename
+		result_of::value_at <
+		typename It::seq_type::storage_type
+		, typename It::index
+		>::type
+		type;
+	};
+};
+}
+}
+}
 
 #endif

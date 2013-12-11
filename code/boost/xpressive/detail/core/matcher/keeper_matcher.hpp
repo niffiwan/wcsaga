@@ -18,79 +18,85 @@
 #include <boost/xpressive/detail/core/quant_style.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+namespace boost
+{
+namespace xpressive
+{
+namespace detail
 {
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // keeper_matcher
-    //  Xpr can be either a static_xpression, or a shared_matchable
-    template<typename Xpr>
-    struct keeper_matcher
-      : quant_style<quant_variable_width, unknown_width::value, Xpr::pure>
-    {
-        keeper_matcher(Xpr const &xpr, bool pure = Xpr::pure)
-          : xpr_(xpr)
-          , pure_(pure)
-        {
-        }
+///////////////////////////////////////////////////////////////////////////////
+// keeper_matcher
+//  Xpr can be either a static_xpression, or a shared_matchable
+template<typename Xpr>
+struct keeper_matcher
+		: quant_style<quant_variable_width, unknown_width::value, Xpr::pure>
+{
+	keeper_matcher ( Xpr const &xpr, bool pure = Xpr::pure )
+		: xpr_ ( xpr )
+		, pure_ ( pure )
+	{
+	}
 
-        template<typename BidiIter, typename Next>
-        bool match(match_state<BidiIter> &state, Next const &next) const
-        {
-            return Xpr::pure || this->pure_
-              ? this->match_(state, next, mpl::true_())
-              : this->match_(state, next, mpl::false_());
-        }
+	template<typename BidiIter, typename Next>
+	bool match ( match_state<BidiIter> &state, Next const &next ) const
+	{
+		return Xpr::pure || this->pure_
+		       ? this->match_ ( state, next, mpl::true_() )
+		       : this->match_ ( state, next, mpl::false_() );
+	}
 
-        template<typename BidiIter, typename Next>
-        bool match_(match_state<BidiIter> &state, Next const &next, mpl::true_) const
-        {
-            BidiIter const tmp = state.cur_;
+	template<typename BidiIter, typename Next>
+	bool match_ ( match_state<BidiIter> &state, Next const &next, mpl::true_ ) const
+	{
+		BidiIter const tmp = state.cur_;
 
-            // matching xpr is guaranteed to not produce side-effects, don't bother saving state
-            if(!this->xpr_.match(state))
-            {
-                return false;
-            }
-            else if(next.match(state))
-            {
-                return true;
-            }
+		// matching xpr is guaranteed to not produce side-effects, don't bother saving state
+		if ( !this->xpr_.match ( state ) )
+		{
+			return false;
+		}
+		else if ( next.match ( state ) )
+		{
+			return true;
+		}
 
-            state.cur_ = tmp;
-            return false;
-        }
+		state.cur_ = tmp;
+		return false;
+	}
 
-        template<typename BidiIter, typename Next>
-        bool match_(match_state<BidiIter> &state, Next const &next, mpl::false_) const
-        {
-            BidiIter const tmp = state.cur_;
+	template<typename BidiIter, typename Next>
+	bool match_ ( match_state<BidiIter> &state, Next const &next, mpl::false_ ) const
+	{
+		BidiIter const tmp = state.cur_;
 
-            // matching xpr could produce side-effects, save state
-            memento<BidiIter> mem = save_sub_matches(state);
+		// matching xpr could produce side-effects, save state
+		memento<BidiIter> mem = save_sub_matches ( state );
 
-            if(!this->xpr_.match(state))
-            {
-                restore_action_queue(mem, state);
-                reclaim_sub_matches(mem, state, false);
-                return false;
-            }
-            restore_action_queue(mem, state);
-            if(next.match(state))
-            {
-                reclaim_sub_matches(mem, state, true);
-                return true;
-            }
+		if ( !this->xpr_.match ( state ) )
+		{
+			restore_action_queue ( mem, state );
+			reclaim_sub_matches ( mem, state, false );
+			return false;
+		}
+		restore_action_queue ( mem, state );
+		if ( next.match ( state ) )
+		{
+			reclaim_sub_matches ( mem, state, true );
+			return true;
+		}
 
-            restore_sub_matches(mem, state);
-            state.cur_ = tmp;
-            return false;
-        }
+		restore_sub_matches ( mem, state );
+		state.cur_ = tmp;
+		return false;
+	}
 
-        Xpr xpr_;
-        bool pure_; // false if matching xpr_ could modify the sub-matches
-    };
+	Xpr xpr_;
+	bool pure_; // false if matching xpr_ could modify the sub-matches
+};
 
-}}}
+}
+}
+}
 
 #endif

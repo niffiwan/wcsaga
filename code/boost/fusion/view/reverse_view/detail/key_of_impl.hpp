@@ -10,19 +10,25 @@
 
 #include <boost/fusion/iterator/key_of.hpp>
 
-namespace boost { namespace fusion { namespace extension
+namespace boost
 {
-    template <typename>
-    struct key_of_impl;
+namespace fusion
+{
+namespace extension
+{
+template <typename>
+struct key_of_impl;
 
-    template <>
-    struct key_of_impl<reverse_view_iterator_tag>
-    {
-        template <typename It>
-        struct apply
-          : result_of::key_of<typename It::it_type>
-        {};
-    };
-}}}
+template <>
+struct key_of_impl<reverse_view_iterator_tag>
+{
+	template <typename It>
+	struct apply
+			: result_of::key_of<typename It::it_type>
+	{};
+};
+}
+}
+}
 
 #endif

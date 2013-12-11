@@ -11,31 +11,38 @@
 #ifndef BOOST_MPI_BROADCAST_SC_HPP
 #define BOOST_MPI_BROADCAST_SC_HPP
 
-namespace boost { namespace mpi {
+namespace boost
+{
+namespace mpi
+{
 
 template<typename T>
 inline void
-broadcast(const communicator& comm, skeleton_proxy<T>& proxy, int root)
+broadcast ( const communicator &comm, skeleton_proxy<T> &proxy, int root )
 {
-  const skeleton_proxy<T>& const_proxy(proxy);
-  broadcast(comm, const_proxy, root);
+const skeleton_proxy<T> &const_proxy ( proxy );
+broadcast ( comm, const_proxy, root );
 }
 
 template<typename T>
 void
-broadcast(const communicator& comm, const skeleton_proxy<T>& proxy, int root)
+broadcast ( const communicator &comm, const skeleton_proxy<T> &proxy, int root )
 {
-  if (comm.rank() == root) {
-    packed_skeleton_oarchive oa(comm);
-    oa << proxy.object;
-    broadcast(comm, oa, root);
-  } else {
-    packed_skeleton_iarchive ia(comm);
-    broadcast(comm, ia, root);
-    ia >> proxy.object;
-  }
+if ( comm.rank() == root )
+{
+	packed_skeleton_oarchive oa ( comm );
+	oa << proxy.object;
+	broadcast ( comm, oa, root );
+}
+else
+{
+	packed_skeleton_iarchive ia ( comm );
+	broadcast ( comm, ia, root );
+	ia >> proxy.object;
+}
 }
 
-} } // end namespace boost::mpi
+}
+} // end namespace boost::mpi
 
 #endif // BOOST_MPI_BROADCAST_SC_HPP

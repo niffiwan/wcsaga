@@ -22,20 +22,21 @@
 
 #if !BOOST_WORKAROUND(BOOST_MSVC,<=1300)
 
-namespace boost {
+namespace boost
+{
 
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_extent,T,T)
+BOOST_TT_AUX_TYPE_TRAIT_DEF1 ( remove_extent, T, T )
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
-BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_extent,T[N],T type)
-BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_extent,T const[N],T const type)
-BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_extent,T volatile[N],T volatile type)
-BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_extent,T const volatile[N],T const volatile type)
+BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2 ( typename T, std::size_t N, remove_extent, T[N], T type )
+BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2 ( typename T, std::size_t N, remove_extent, T const[N], T const type )
+BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2 ( typename T, std::size_t N, remove_extent, T volatile[N], T volatile type )
+BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2 ( typename T, std::size_t N, remove_extent, T const volatile[N], T const volatile type )
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x610)) && !defined(__IBMCPP__) &&  !BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x840))
-BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(typename T,remove_extent,T[],T)
-BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(typename T,remove_extent,T const[],T const)
-BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(typename T,remove_extent,T volatile[],T volatile)
-BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(typename T,remove_extent,T const volatile[],T const volatile)
+BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1 ( typename T, remove_extent, T[], T )
+BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1 ( typename T, remove_extent, T const[], T const )
+BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1 ( typename T, remove_extent, T volatile[], T volatile )
+BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1 ( typename T, remove_extent, T const volatile[], T const volatile )
 #endif
 #endif
 

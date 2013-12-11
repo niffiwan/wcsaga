@@ -34,18 +34,23 @@
    BOOST_PP_CAT(mpl::vector, BOOST_PP_INC(n))
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace python { namespace detail {
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
 // A metafunction returning C1 if C1 is derived from C2, and C2
 // otherwise
 template <class C1, class C2>
 struct most_derived
 {
-    typedef typename mpl::if_<
-        is_convertible<C1*,C2*>
-      , C1
-      , C2
-    >::type type;
+	typedef typename mpl::if_ <
+	is_convertible<C1 *, C2 *>
+	, C1
+	, C2
+	>::type type;
 };
 
 //  The following macros generate expansions for::
@@ -108,7 +113,9 @@ struct most_derived
 
 // }
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 
 
 # endif // SIGNATURE_JDG20020813_HPP
@@ -121,14 +128,14 @@ struct most_derived
 # define N BOOST_PP_ITERATION()
 
 template <
-    class RT BOOST_PP_ENUM_TRAILING_PARAMS_Z(1, N, class T)>
-inline BOOST_PYTHON_LIST_INC(N)<
-    RT BOOST_PP_ENUM_TRAILING_PARAMS_Z(1, N, T)>
-get_signature(RT(*)(BOOST_PP_ENUM_PARAMS_Z(1, N, T)), void* = 0)
+    class RT BOOST_PP_ENUM_TRAILING_PARAMS_Z ( 1, N, class T ) >
+inline BOOST_PYTHON_LIST_INC ( N ) <
+RT BOOST_PP_ENUM_TRAILING_PARAMS_Z ( 1, N, T ) >
+get_signature ( RT ( * ) ( BOOST_PP_ENUM_PARAMS_Z ( 1, N, T ) ), void * = 0 )
 {
-    return BOOST_PYTHON_LIST_INC(N)<
-            RT BOOST_PP_ENUM_TRAILING_PARAMS_Z(1, N, T)
-        >();
+	return BOOST_PYTHON_LIST_INC ( N ) <
+	       RT BOOST_PP_ENUM_TRAILING_PARAMS_Z ( 1, N, T )
+	       > ();
 }
 
 # undef N
@@ -143,37 +150,37 @@ get_signature(RT(*)(BOOST_PP_ENUM_PARAMS_Z(1, N, T)), void* = 0)
 # define Q BOOST_PYTHON_CV_QUALIFIER(BOOST_PP_ITERATION())
 
 template <
-    class RT, class ClassT BOOST_PP_ENUM_TRAILING_PARAMS_Z(1, N, class T)>
-inline BOOST_PYTHON_LIST_INC(BOOST_PP_INC(N))<
-    RT, ClassT& BOOST_PP_ENUM_TRAILING_PARAMS_Z(1, N, T)>
-get_signature(RT(ClassT::*)(BOOST_PP_ENUM_PARAMS_Z(1, N, T)) Q)
+    class RT, class ClassT BOOST_PP_ENUM_TRAILING_PARAMS_Z ( 1, N, class T ) >
+inline BOOST_PYTHON_LIST_INC ( BOOST_PP_INC ( N ) ) <
+RT, ClassT &BOOST_PP_ENUM_TRAILING_PARAMS_Z ( 1, N, T ) >
+get_signature ( RT ( ClassT::* ) ( BOOST_PP_ENUM_PARAMS_Z ( 1, N, T ) ) Q )
 {
-    return BOOST_PYTHON_LIST_INC(BOOST_PP_INC(N))<
-            RT, ClassT& BOOST_PP_ENUM_TRAILING_PARAMS_Z(1, N, T)
-        >();
+	return BOOST_PYTHON_LIST_INC ( BOOST_PP_INC ( N ) ) <
+	       RT, ClassT & BOOST_PP_ENUM_TRAILING_PARAMS_Z ( 1, N, T )
+	       > ();
 }
 
 template <
     class Target
-  , class RT
-  , class ClassT
-    BOOST_PP_ENUM_TRAILING_PARAMS_Z(1, N, class T)
+    , class RT
+    , class ClassT
+    BOOST_PP_ENUM_TRAILING_PARAMS_Z ( 1, N, class T )
+    >
+inline BOOST_PYTHON_LIST_INC ( BOOST_PP_INC ( N ) ) <
+RT
+, typename most_derived<Target, ClassT>::type &
+BOOST_PP_ENUM_TRAILING_PARAMS_Z ( 1, N, T )
 >
-inline BOOST_PYTHON_LIST_INC(BOOST_PP_INC(N))<
-    RT
-  , typename most_derived<Target, ClassT>::type&
-    BOOST_PP_ENUM_TRAILING_PARAMS_Z(1, N, T)
->
-get_signature(
-    RT(ClassT::*)(BOOST_PP_ENUM_PARAMS_Z(1, N, T)) Q
-  , Target*
+get_signature (
+    RT ( ClassT::* ) ( BOOST_PP_ENUM_PARAMS_Z ( 1, N, T ) ) Q
+    , Target *
 )
 {
-    return BOOST_PYTHON_LIST_INC(BOOST_PP_INC(N))<
-        RT
-      , BOOST_DEDUCED_TYPENAME most_derived<Target, ClassT>::type&
-        BOOST_PP_ENUM_TRAILING_PARAMS_Z(1, N, T)
-    >();
+	return BOOST_PYTHON_LIST_INC ( BOOST_PP_INC ( N ) ) <
+	       RT
+	       , BOOST_DEDUCED_TYPENAME most_derived<Target, ClassT>::type &
+	       BOOST_PP_ENUM_TRAILING_PARAMS_Z ( 1, N, T )
+	       > ();
 }
 
 # undef Q

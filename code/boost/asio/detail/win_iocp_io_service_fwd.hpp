@@ -32,9 +32,12 @@
 // Define this to indicate that IOCP is supported on the target platform.
 #define BOOST_ASIO_HAS_IOCP 1
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 class win_iocp_io_service;
 class win_iocp_overlapped_ptr;

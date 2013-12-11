@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -15,12 +15,14 @@
 #ifndef BOOST_TEST_FWD_DECL_HPP_011605GER
 #define BOOST_TEST_FWD_DECL_HPP_011605GER
 
-namespace boost {
+namespace boost
+{
 
 class  execution_monitor;
 class  execution_exception;
 
-namespace unit_test {
+namespace unit_test
+{
 
 class  test_unit;
 class  test_case;

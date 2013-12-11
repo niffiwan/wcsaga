@@ -32,27 +32,30 @@
 //!Describes a function that creates anonymous shared memory that can be
 //!shared between forked processes
 
-namespace boost {
-namespace interprocess {
+namespace boost
+{
+namespace interprocess
+{
 
 /// @cond
 
-namespace detail{
+namespace detail
+{
 
-   class raw_mapped_region_creator
-   {
-      public:
-      static mapped_region
-         create_posix_mapped_region(void *address, offset_t offset, std::size_t size)
-      {
-         mapped_region region;
-         region.m_base = address;
-         region.m_offset = offset;
-         region.m_extra_offset = 0;
-         region.m_size = size;
-         return region;
-      }
-   };
+class raw_mapped_region_creator
+{
+public:
+	static mapped_region
+	create_posix_mapped_region ( void *address, offset_t offset, std::size_t size )
+	{
+		mapped_region region;
+		region.m_base = address;
+		region.m_offset = offset;
+		region.m_extra_offset = 0;
+		region.m_size = size;
+		return region;
+	}
+};
 }
 
 /// @endcond
@@ -64,49 +67,51 @@ namespace detail{
 //!interprocess_exception if the function fails.
 //static mapped_region
 static mapped_region
-anonymous_shared_memory(std::size_t size, void *address = 0)
+anonymous_shared_memory ( std::size_t size, void *address = 0 )
 #if (!defined(BOOST_INTERPROCESS_WINDOWS))
 {
-   int flags;
-   int fd = -1;
+	int flags;
+	int fd = -1;
 
-   #if defined(MAP_ANONYMOUS) //Use MAP_ANONYMOUS
-   flags = MAP_ANONYMOUS | MAP_SHARED;
-   #elif !defined(MAP_ANONYMOUS) && defined(MAP_ANON) //use MAP_ANON
-   flags = MAP_ANON | MAP_SHARED;
-   #else // Use "/dev/zero"
-   fd = open("/dev/zero", O_RDWR);
-   flags = MAP_SHARED;
-   if(fd == -1){
-      error_info err = system_error_code();
-      throw interprocess_exception(err);
-   }
-   #endif
+#if defined(MAP_ANONYMOUS) //Use MAP_ANONYMOUS
+	flags = MAP_ANONYMOUS | MAP_SHARED;
+#elif !defined(MAP_ANONYMOUS) && defined(MAP_ANON) //use MAP_ANON
+	flags = MAP_ANON | MAP_SHARED;
+#else // Use "/dev/zero"
+	fd = open ( "/dev/zero", O_RDWR );
+	flags = MAP_SHARED;
+	if ( fd == -1 )
+	{
+		error_info err = system_error_code();
+		throw interprocess_exception ( err );
+	}
+#endif
 
 
-   address = mmap( address
-                  , size
-                  , PROT_READ|PROT_WRITE
-                  , flags
-                  , fd
-                  , 0);
+	address = mmap ( address
+	                 , size
+	                 , PROT_READ | PROT_WRITE
+	                 , flags
+	                 , fd
+	                 , 0 );
 
-   if(address == MAP_FAILED){
-      if(fd != -1)   
-         close(fd);
-      error_info err = system_error_code();
-      throw interprocess_exception(err);
-   }
+	if ( address == MAP_FAILED )
+	{
+		if ( fd != -1 )
+			close ( fd );
+		error_info err = system_error_code();
+		throw interprocess_exception ( err );
+	}
 
-   if(fd != -1)   
-      close(fd);
+	if ( fd != -1 )
+		close ( fd );
 
-   return detail::raw_mapped_region_creator::create_posix_mapped_region(address, 0, size);
+	return detail::raw_mapped_region_creator::create_posix_mapped_region ( address, 0, size );
 }
 #else
 {
-   windows_shared_memory anonymous_mapping(create_only, 0, read_write, size);
-   return mapped_region(anonymous_mapping, read_write, 0, size, address);
+	windows_shared_memory anonymous_mapping ( create_only, 0, read_write, size );
+	return mapped_region ( anonymous_mapping, read_write, 0, size, address );
 }
 
 #endif

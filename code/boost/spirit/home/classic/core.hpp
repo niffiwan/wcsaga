@@ -64,8 +64,8 @@
 #include <boost/spirit/home/classic/actor/push_back_actor.hpp>
 
 #if defined(BOOST_SPIRIT_DEBUG)
-    //////////////////////////////////
-    #include <boost/spirit/home/classic/debug/parser_names.hpp>
+//////////////////////////////////
+#include <boost/spirit/home/classic/debug/parser_names.hpp>
 
 #endif // BOOST_SPIRIT_DEBUG
 

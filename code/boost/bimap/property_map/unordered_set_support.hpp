@@ -25,27 +25,28 @@
 
 #ifndef BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
 
-namespace boost {
+namespace boost
+{
 
 template< class Tag, class Bimap >
-struct property_traits< ::boost::bimaps::views::unordered_map_view<Tag,Bimap> >
+struct property_traits< ::boost::bimaps::views::unordered_map_view<Tag, Bimap> >
 {
-    typedef BOOST_DEDUCED_TYPENAME
-        ::boost::bimaps::support::data_type_by<Tag,Bimap>::type value_type;
-    typedef BOOST_DEDUCED_TYPENAME
-        ::boost::bimaps::support:: key_type_by<Tag,Bimap>::type   key_type;
+	typedef BOOST_DEDUCED_TYPENAME
+	::boost::bimaps::support::data_type_by<Tag, Bimap>::type value_type;
+	typedef BOOST_DEDUCED_TYPENAME
+	::boost::bimaps::support:: key_type_by<Tag, Bimap>::type   key_type;
 
-    typedef readable_property_map_tag category;
+	typedef readable_property_map_tag category;
 };
 
 
 template< class Tag, class Bimap >
-const BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::data_type_by<Tag,Bimap>::type &
-    get(const ::boost::bimaps::views::unordered_map_view<Tag,Bimap> & m,
-        const BOOST_DEDUCED_TYPENAME
-            ::boost::bimaps::support::key_type_by<Tag,Bimap>::type & key)
+const BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::data_type_by<Tag, Bimap>::type &
+get ( const ::boost::bimaps::views::unordered_map_view<Tag, Bimap> &m,
+      const BOOST_DEDUCED_TYPENAME
+      ::boost::bimaps::support::key_type_by<Tag, Bimap>::type &key )
 {
-    return m.at(key);
+	return m.at ( key );
 }
 
 } // namespace boost

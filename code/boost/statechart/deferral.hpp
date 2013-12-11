@@ -25,40 +25,40 @@ class event_base;
 template< class Event >
 class deferral
 {
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    // The following declarations should be private.
-    // They are only public because many compilers lack template friends.
-    //////////////////////////////////////////////////////////////////////////
-    template< class State, class EventBase, class IdType >
-    static detail::reaction_result react(
-      State & stt, const EventBase &, const IdType & eventType )
-    {
-      if ( eventType == Event::static_type() )
-      {
-        return detail::result_utility::get_result( stt.defer_event() );
-      }
-      else
-      {
-        return detail::no_reaction;
-      }
-    }
+public:
+	//////////////////////////////////////////////////////////////////////////
+	// The following declarations should be private.
+	// They are only public because many compilers lack template friends.
+	//////////////////////////////////////////////////////////////////////////
+	template< class State, class EventBase, class IdType >
+	static detail::reaction_result react (
+	    State &stt, const EventBase &, const IdType &eventType )
+	{
+		if ( eventType == Event::static_type() )
+		{
+			return detail::result_utility::get_result ( stt.defer_event() );
+		}
+		else
+		{
+			return detail::no_reaction;
+		}
+	}
 };
 
 template<>
 class deferral< event_base >
 {
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    // The following declarations should be private.
-    // They are only public because many compilers lack template friends.
-    //////////////////////////////////////////////////////////////////////////
-    template< class State, class EventBase, class IdType >
-    static detail::reaction_result react(
-      State & stt, const EventBase &, const IdType & )
-    {
-      return detail::result_utility::get_result( stt.defer_event() );
-    }
+public:
+	//////////////////////////////////////////////////////////////////////////
+	// The following declarations should be private.
+	// They are only public because many compilers lack template friends.
+	//////////////////////////////////////////////////////////////////////////
+	template< class State, class EventBase, class IdType >
+	static detail::reaction_result react (
+	    State &stt, const EventBase &, const IdType & )
+	{
+		return detail::result_utility::get_result ( stt.defer_event() );
+	}
 };
 
 

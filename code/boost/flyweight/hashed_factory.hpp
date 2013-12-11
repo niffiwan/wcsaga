@@ -26,85 +26,87 @@
  * with Boost.MultiIndex.
  */
 
-namespace boost{
-
-namespace flyweights{
-
-template<
-  typename Entry,typename Key,
-  typename Hash,typename Pred,typename Allocator
->
-class hashed_factory_class:public factory_marker
+namespace boost
 {
-  struct index_list:
-    boost::mpl::vector1<
-      multi_index::hashed_unique<
-        multi_index::identity<Entry>,
-        typename boost::mpl::if_<
-          mpl::is_na<Hash>,
-          hash<Key>,
-          Hash
-        >::type,
-        typename boost::mpl::if_<
-          mpl::is_na<Pred>,
-          std::equal_to<Key>,
-          Pred
-        >::type
-      >
+
+namespace flyweights
+{
+
+template <
+    typename Entry, typename Key,
+    typename Hash, typename Pred, typename Allocator
     >
-  {};
+class hashed_factory_class: public factory_marker
+{
+	struct index_list:
+			boost::mpl::vector1 <
+			multi_index::hashed_unique <
+			multi_index::identity<Entry>,
+			typename boost::mpl::if_ <
+			mpl::is_na<Hash>,
+			hash<Key>,
+			Hash
+			>::type,
+			typename boost::mpl::if_ <
+			mpl::is_na<Pred>,
+			std::equal_to<Key>,
+			Pred
+			>::type
+			>
+			>
+	{};
 
-  typedef multi_index::multi_index_container<
-    Entry,
-    index_list,
-    typename boost::mpl::if_<
-      mpl::is_na<Allocator>,
-      std::allocator<Entry>,
-      Allocator
-    >::type
-  > container_type;
+	typedef multi_index::multi_index_container <
+	Entry,
+	index_list,
+	typename boost::mpl::if_ <
+	mpl::is_na<Allocator>,
+	std::allocator<Entry>,
+	Allocator
+	>::type
+	> container_type;
 
 public:
-  typedef const Entry* handle_type;
-  
-  handle_type insert(const Entry& x)
-  {
-    return &*cont.insert(x).first;
-  }
+	typedef const Entry *handle_type;
 
-  void erase(handle_type h)
-  {
-    cont.erase(cont.iterator_to(*h));
-  }
+	handle_type insert ( const Entry &x )
+	{
+		return &*cont.insert ( x ).first;
+	}
 
-  static const Entry& entry(handle_type h){return *h;}
+	void erase ( handle_type h )
+	{
+		cont.erase ( cont.iterator_to ( *h ) );
+	}
 
-private:  
-  container_type cont;
+	static const Entry &entry ( handle_type h ) {return *h;}
+
+private:
+	container_type cont;
 
 public:
-  typedef hashed_factory_class type;
-  BOOST_MPL_AUX_LAMBDA_SUPPORT(
-    5,hashed_factory_class,(Entry,Key,Hash,Pred,Allocator))
+	typedef hashed_factory_class type;
+	BOOST_MPL_AUX_LAMBDA_SUPPORT (
+	    5, hashed_factory_class, ( Entry, Key, Hash, Pred, Allocator ) )
 };
 
 /* hashed_factory_class specifier */
 
-template<
-  typename Hash,typename Pred,typename Allocator
-  BOOST_FLYWEIGHT_NOT_A_PLACEHOLDER_EXPRESSION_DEF
->
-struct hashed_factory:factory_marker
-{
-  template<typename Entry,typename Key>
-  struct apply:
-    mpl::apply2<
-      hashed_factory_class<
-        boost::mpl::_1,boost::mpl::_2,Hash,Pred,Allocator
-      >,
-      Entry,Key
+template <
+    typename Hash, typename Pred, typename Allocator
+    BOOST_FLYWEIGHT_NOT_A_PLACEHOLDER_EXPRESSION_DEF
     >
-  {};
+struct hashed_factory: factory_marker
+{
+	template<typename Entry, typename Key>
+	struct apply:
+			mpl::apply2 <
+			hashed_factory_class <
+			boost::mpl::_1, boost::mpl::_2, Hash, Pred, Allocator
+			>,
+			Entry, Key
+			>
+	{};
 };
 
 } /* namespace flyweights */

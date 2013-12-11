@@ -20,19 +20,24 @@
 #  include <boost/mpl/at.hpp>
 #  include <boost/mpl/size.hpp>
 
-namespace boost { namespace python { namespace detail { 
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
 struct signature_element
 {
-    char const* basename;
-    converter::pytype_function pytype_f;
-    bool lvalue;
+	char const *basename;
+	converter::pytype_function pytype_f;
+	bool lvalue;
 };
 
 struct py_func_sig_info
 {
-    signature_element const *signature;
-    signature_element const *ret;
+	signature_element const *signature;
+	signature_element const *ret;
 };
 
 template <unsigned> struct signature_arity;
@@ -48,17 +53,19 @@ template <unsigned> struct signature_arity;
 template <class Sig>
 struct signature_base_select
 {
-    enum { arity = mpl::size<Sig>::value - 1 };
-    typedef typename signature_arity<arity>::template impl<Sig> type;
+	enum { arity = mpl::size<Sig>::value - 1 };
+	typedef typename signature_arity<arity>::template impl<Sig> type;
 };
 
 template <class Sig>
 struct signature
-    : signature_base_select<Sig>::type
+		: signature_base_select<Sig>::type
 {
 };
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 
 # endif // SIGNATURE_DWA20021121_HPP
 
@@ -69,13 +76,14 @@ struct signature
 template <>
 struct signature_arity<N>
 {
-    template <class Sig>
-    struct impl
-    {
-        static signature_element const* elements()
-        {
-            static signature_element const result[N+2] = {
-                
+	template <class Sig>
+	struct impl
+	{
+		static signature_element const *elements()
+		{
+			static signature_element const result[N + 2] =
+			{
+
 #ifndef BOOST_PYTHON_NO_PY_SIGNATURES
 # define BOOST_PP_LOCAL_MACRO(i)                                                            \
                 {                                                                           \
@@ -91,14 +99,14 @@ struct signature_arity<N>
                   , indirect_traits::is_reference_to_non_const<BOOST_DEDUCED_TYPENAME mpl::at_c<Sig,i>::type>::value \
                 },
 #endif
-                
+
 # define BOOST_PP_LOCAL_LIMITS (0, N)
 # include BOOST_PP_LOCAL_ITERATE()
-                {0,0,0}
-            };
-            return result;
-        }
-    };
+				{0, 0, 0}
+			};
+			return result;
+		}
+	};
 };
 
 #endif // BOOST_PP_IS_ITERATING 

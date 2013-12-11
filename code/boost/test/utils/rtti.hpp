@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -17,9 +17,11 @@
 
 #include <cstddef>
 
-namespace boost {
+namespace boost
+{
 
-namespace rtti {
+namespace rtti
+{
 
 // ************************************************************************** //
 // **************                   rtti::type_id              ************** //
@@ -27,27 +29,29 @@ namespace rtti {
 
 typedef std::ptrdiff_t id_t;
 
-namespace rtti_detail {
+namespace rtti_detail
+{
 
 template<typename T>
-struct rttid_holder {
-    static id_t id() { return reinterpret_cast<id_t>( &inst() ); }
+struct rttid_holder
+{
+	static id_t id() { return reinterpret_cast<id_t> ( &inst() ); }
 
 private:
-    struct rttid {};
+	struct rttid {};
 
-    static rttid const& inst() { static rttid s_inst;  return s_inst; }
+	static rttid const &inst() { static rttid s_inst;  return s_inst; }
 };
 
 } // namespace rtti_detail
 
 //____________________________________________________________________________//
 
-template<typename T>   
+template<typename T>
 inline id_t
 type_id()
 {
-    return rtti_detail::rttid_holder<T>::id();
+	return rtti_detail::rttid_holder<T>::id();
 }
 
 //____________________________________________________________________________//

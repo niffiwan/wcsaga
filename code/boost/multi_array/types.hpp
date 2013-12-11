@@ -1,6 +1,6 @@
 // Copyright 2002 The Trustees of Indiana University.
 
-// Use, modification and distribution is subject to the Boost Software 
+// Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
@@ -20,9 +20,12 @@
 #include "boost/config.hpp"
 #include <cstddef>
 
-namespace boost {
-namespace detail {
-namespace multi_array{
+namespace boost
+{
+namespace detail
+{
+namespace multi_array
+{
 
 // needed typedefs
 typedef std::size_t size_type;
@@ -31,7 +34,7 @@ typedef std::ptrdiff_t index;
 } // namespace multi_array
 } // namespace detail
 } // namespace boost
-  
+
 
 
 

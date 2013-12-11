@@ -24,18 +24,18 @@
 
 namespace boost
 {
-    template<class T>
-    struct is_std_list
-        : boost::mpl::false_
-    {};
+template<class T>
+struct is_std_list
+		: boost::mpl::false_
+{};
 
-    template<
-        class Ty
-      , class Alloc
+template <
+    class Ty
+    , class Alloc
     >
-    struct is_std_list< ::std::list<Ty,Alloc> >
-        : boost::mpl::true_
-    {};
+struct is_std_list< ::std::list<Ty, Alloc> >
+		: boost::mpl::true_
+{};
 }
 
 #endif

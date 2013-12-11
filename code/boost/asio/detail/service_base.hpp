@@ -20,23 +20,26 @@
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/detail/service_id.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 // Special service base class to keep classes header-file only.
 template <typename Type>
 class service_base
-  : public boost::asio::io_service::service
+	: public boost::asio::io_service::service
 {
 public:
-  static boost::asio::detail::service_id<Type> id;
+	static boost::asio::detail::service_id<Type> id;
 
-  // Constructor.
-  service_base(boost::asio::io_service& io_service)
-    : boost::asio::io_service::service(io_service)
-  {
-  }
+	// Constructor.
+	service_base ( boost::asio::io_service &io_service )
+		: boost::asio::io_service::service ( io_service )
+	{
+	}
 };
 
 template <typename Type>

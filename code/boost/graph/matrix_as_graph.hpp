@@ -17,13 +17,14 @@
 #include <boost/int_iterator.hpp>
 #include <boost/graph/graph_traits.hpp>
 
-namespace boost {
+namespace boost
+{
 
-  template <class Iter, class Vertex>
-  class matrix_adj_iterator;
+template <class Iter, class Vertex>
+class matrix_adj_iterator;
 
-  template <class Iter, class Vertex>
-  class matrix_incidence_iterator;
+template <class Iter, class Vertex>
+class matrix_incidence_iterator;
 
 }
 
@@ -82,46 +83,47 @@ namespace boost { \
   }; \
 }
 
-namespace boost {
+namespace boost
+{
 
-  template <class Iter, class Vertex>
-  class matrix_adj_iterator
-    : public std::iterator<std::input_iterator_tag, Vertex >
-  {
-    typedef matrix_adj_iterator self;
-  public:
-    matrix_adj_iterator() { }
-    matrix_adj_iterator(Iter i) : _iter(i) { }
-    matrix_adj_iterator(const self& x) : _iter(x._iter) { }
-    self& operator=(const self& x) { _iter = x._iter; return *this; }
-    Vertex operator*() { return _iter.column(); }
-    self& operator++() { ++_iter; return *this; }
-    self operator++(int) { self t = *this; ++_iter; return t; }
-    bool operator==(const self& x) const { return _iter == x._iter; }
-    bool operator!=(const self& x) const { return _iter != x._iter; }
-  protected:
-    Iter _iter;
-  };
+template <class Iter, class Vertex>
+class matrix_adj_iterator
+	: public std::iterator<std::input_iterator_tag, Vertex >
+{
+	typedef matrix_adj_iterator self;
+public:
+	matrix_adj_iterator() { }
+	matrix_adj_iterator ( Iter i ) : _iter ( i ) { }
+	matrix_adj_iterator ( const self &x ) : _iter ( x._iter ) { }
+	self &operator= ( const self &x ) { _iter = x._iter; return *this; }
+	Vertex operator*() { return _iter.column(); }
+	self &operator++() { ++_iter; return *this; }
+	self operator++ ( int ) { self t = *this; ++_iter; return t; }
+	bool operator== ( const self &x ) const { return _iter == x._iter; }
+	bool operator!= ( const self &x ) const { return _iter != x._iter; }
+protected:
+	Iter _iter;
+};
 
-  template <class Iter, class Vertex>
-  class matrix_incidence_iterator
-    : public std::iterator<std::input_iterator_tag, Iter >
-  {
-    typedef matrix_incidence_iterator self;
-  public:
-    matrix_incidence_iterator() { }
-    matrix_incidence_iterator(Iter i) : _iter(i) { }
-    matrix_incidence_iterator(const self& x) : _iter(x._iter) { }
-    self& operator=(const self& x) { _iter = x._iter; return *this; }
-    Iter operator*() { return _iter; }
-    self& operator++() { ++_iter; return *this; }
-    self operator++(int) { self t = *this; ++_iter; return t; }
-    bool operator==(const self& x) const { return _iter == x._iter; }
-    bool operator!=(const self& x) const { return _iter != x._iter; }
-  protected:
-    Iter _iter;
-  };
-  
+template <class Iter, class Vertex>
+class matrix_incidence_iterator
+	: public std::iterator<std::input_iterator_tag, Iter >
+{
+	typedef matrix_incidence_iterator self;
+public:
+	matrix_incidence_iterator() { }
+	matrix_incidence_iterator ( Iter i ) : _iter ( i ) { }
+	matrix_incidence_iterator ( const self &x ) : _iter ( x._iter ) { }
+	self &operator= ( const self &x ) { _iter = x._iter; return *this; }
+	Iter operator*() { return _iter; }
+	self &operator++() { ++_iter; return *this; }
+	self operator++ ( int ) { self t = *this; ++_iter; return t; }
+	bool operator== ( const self &x ) const { return _iter == x._iter; }
+	bool operator!= ( const self &x ) const { return _iter != x._iter; }
+protected:
+	Iter _iter;
+};
+
 } /* namespace boost */
 
 #endif /* BOOST_GRAPH_MATRIX2GRAPH_HPP*/

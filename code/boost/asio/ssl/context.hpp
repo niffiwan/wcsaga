@@ -21,9 +21,12 @@
 #include <boost/asio/ssl/basic_context.hpp>
 #include <boost/asio/ssl/context_service.hpp>
 
-namespace boost {
-namespace asio {
-namespace ssl {
+namespace boost
+{
+namespace asio
+{
+namespace ssl
+{
 
 /// Typedef for the typical usage of context.
 typedef basic_context<context_service> context;

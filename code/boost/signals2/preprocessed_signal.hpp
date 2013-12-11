@@ -28,27 +28,27 @@
 
 namespace boost
 {
-  namespace signals2
-  {
-    template<typename Signature,
-      typename Combiner = optional_last_value<typename boost::function_traits<Signature>::result_type>,
-      typename Group = int,
-      typename GroupCompare = std::less<Group>,
-      typename SlotFunction = function<Signature>,
-      typename ExtendedSlotFunction = typename detail::extended_signature<function_traits<Signature>::arity, Signature>::function_type,
-      typename Mutex = mutex >
-    class signal: public detail::signalN<function_traits<Signature>::arity,
-      Signature, Combiner, Group, GroupCompare, SlotFunction, ExtendedSlotFunction, Mutex>::type
-    {
-    private:
-      typedef typename detail::signalN<boost::function_traits<Signature>::arity,
+namespace signals2
+{
+template<typename Signature,
+         typename Combiner = optional_last_value<typename boost::function_traits<Signature>::result_type>,
+         typename Group = int,
+         typename GroupCompare = std::less<Group>,
+         typename SlotFunction = function<Signature>,
+         typename ExtendedSlotFunction = typename detail::extended_signature<function_traits<Signature>::arity, Signature>::function_type,
+         typename Mutex = mutex >
+class signal: public detail::signalN<function_traits<Signature>::arity,
+Signature, Combiner, Group, GroupCompare, SlotFunction, ExtendedSlotFunction, Mutex>::type
+{
+private:
+typedef typename detail::signalN<boost::function_traits<Signature>::arity,
         Signature, Combiner, Group, GroupCompare, SlotFunction, ExtendedSlotFunction, Mutex>::type base_type;
-    public:
-      signal(const Combiner &combiner = Combiner(), const GroupCompare &group_compare = GroupCompare()):
-        base_type(combiner, group_compare)
-      {}
-    };
-  }
+public:
+signal ( const Combiner &combiner = Combiner(), const GroupCompare &group_compare = GroupCompare() ) :
+	base_type ( combiner, group_compare )
+{}
+};
+}
 }
 
 #endif // BOOST_SIGNALS2_PREPROCESSED_SIGNAL_HPP

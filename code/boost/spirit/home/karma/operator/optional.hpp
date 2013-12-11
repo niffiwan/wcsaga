@@ -22,75 +22,90 @@
 #include <boost/optional.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <>
-    struct use_operator<karma::domain, proto::tag::negate> // enables -g
-      : mpl::true_ {};
+namespace spirit
+{
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
+template <>
+struct use_operator<karma::domain, proto::tag::negate> // enables -g
+		: mpl::true_ {};
 
-}}
+}
+}
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit { namespace karma
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Subject>
-    struct optional : unary_generator<optional<Subject> >
-    {
-        typedef Subject subject_type;
-        typedef typename subject_type::properties properties;
-
-        // Build a boost::optional from the subject's attribute. Note
-        // that boost::optional may return unused_type if the
-        // subject's attribute is an unused_type.
-        template <typename Context, typename Iterator = unused_type>
-        struct attribute
-          : traits::build_optional<
-                typename traits::attribute_of<Subject, Context, Iterator>::type
-            >
-        {};
-
-        optional(Subject const& subject)
-          : subject(subject) {}
-
-        template <
-            typename OutputIterator, typename Context, typename Delimiter
-          , typename Attribute>
-        bool generate(OutputIterator& sink, Context& ctx
-          , Delimiter const& d, Attribute const& attr) const
-        {
-            if (traits::has_optional_value(attr)) 
-                subject.generate(sink, ctx, d, traits::optional_value(attr));
-            return sink_is_good(sink);
-        }
-
-        template <typename Context>
-        info what(Context& context) const
-        {
-            return info("optional", subject.what(context));
-        }
-
-        Subject subject;
-    };
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Generator generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Elements, typename Modifiers>
-    struct make_composite<proto::tag::negate, Elements, Modifiers>
-      : make_unary_composite<Elements, optional> {};
-
-}}}
-
-namespace boost { namespace spirit { namespace traits
+namespace spirit
 {
-    template <typename Subject>
-    struct has_semantic_action<karma::optional<Subject> >
-      : unary_has_semantic_action<Subject> {};
+namespace karma
+{
+///////////////////////////////////////////////////////////////////////////
+template <typename Subject>
+struct optional : unary_generator<optional<Subject> >
+{
+	typedef Subject subject_type;
+	typedef typename subject_type::properties properties;
 
-}}}
+	// Build a boost::optional from the subject's attribute. Note
+	// that boost::optional may return unused_type if the
+	// subject's attribute is an unused_type.
+	template <typename Context, typename Iterator = unused_type>
+	struct attribute
+			: traits::build_optional <
+			typename traits::attribute_of<Subject, Context, Iterator>::type
+			>
+	{};
+
+	optional ( Subject const &subject )
+		: subject ( subject ) {}
+
+	template <
+	    typename OutputIterator, typename Context, typename Delimiter
+	    , typename Attribute >
+	bool generate ( OutputIterator &sink, Context &ctx
+	                , Delimiter const &d, Attribute const &attr ) const
+	{
+		if ( traits::has_optional_value ( attr ) )
+			subject.generate ( sink, ctx, d, traits::optional_value ( attr ) );
+		return sink_is_good ( sink );
+	}
+
+	template <typename Context>
+	info what ( Context &context ) const
+	{
+		return info ( "optional", subject.what ( context ) );
+	}
+
+	Subject subject;
+};
+
+///////////////////////////////////////////////////////////////////////////
+// Generator generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+template <typename Elements, typename Modifiers>
+struct make_composite<proto::tag::negate, Elements, Modifiers>
+		: make_unary_composite<Elements, optional> {};
+
+}
+}
+}
+
+namespace boost
+{
+namespace spirit
+{
+namespace traits
+{
+template <typename Subject>
+struct has_semantic_action<karma::optional<Subject> >
+		: unary_has_semantic_action<Subject> {};
+
+}
+}
+}
 
 #endif

@@ -24,9 +24,12 @@
 #include <boost/asio/ip/basic_resolver_query.hpp>
 #include <boost/asio/detail/socket_types.hpp>
 
-namespace boost {
-namespace asio {
-namespace ip {
+namespace boost
+{
+namespace asio
+{
+namespace ip
+{
 
 /// Encapsulates the flags needed for UDP.
 /**
@@ -42,71 +45,71 @@ namespace ip {
 class udp
 {
 public:
-  /// The type of a UDP endpoint.
-  typedef basic_endpoint<udp> endpoint;
+	/// The type of a UDP endpoint.
+	typedef basic_endpoint<udp> endpoint;
 
-  /// The type of a resolver query.
-  typedef basic_resolver_query<udp> resolver_query;
+	/// The type of a resolver query.
+	typedef basic_resolver_query<udp> resolver_query;
 
-  /// The type of a resolver iterator.
-  typedef basic_resolver_iterator<udp> resolver_iterator;
+	/// The type of a resolver iterator.
+	typedef basic_resolver_iterator<udp> resolver_iterator;
 
-  /// Construct to represent the IPv4 UDP protocol.
-  static udp v4()
-  {
-    return udp(PF_INET);
-  }
+	/// Construct to represent the IPv4 UDP protocol.
+	static udp v4()
+	{
+		return udp ( PF_INET );
+	}
 
-  /// Construct to represent the IPv6 UDP protocol.
-  static udp v6()
-  {
-    return udp(PF_INET6);
-  }
+	/// Construct to represent the IPv6 UDP protocol.
+	static udp v6()
+	{
+		return udp ( PF_INET6 );
+	}
 
-  /// Obtain an identifier for the type of the protocol.
-  int type() const
-  {
-    return SOCK_DGRAM;
-  }
+	/// Obtain an identifier for the type of the protocol.
+	int type() const
+	{
+		return SOCK_DGRAM;
+	}
 
-  /// Obtain an identifier for the protocol.
-  int protocol() const
-  {
-    return IPPROTO_UDP;
-  }
+	/// Obtain an identifier for the protocol.
+	int protocol() const
+	{
+		return IPPROTO_UDP;
+	}
 
-  /// Obtain an identifier for the protocol family.
-  int family() const
-  {
-    return family_;
-  }
+	/// Obtain an identifier for the protocol family.
+	int family() const
+	{
+		return family_;
+	}
 
-  /// The UDP socket type.
-  typedef basic_datagram_socket<udp> socket;
+	/// The UDP socket type.
+	typedef basic_datagram_socket<udp> socket;
 
-  /// The UDP resolver type.
-  typedef basic_resolver<udp> resolver;
+	/// The UDP resolver type.
+	typedef basic_resolver<udp> resolver;
 
-  /// Compare two protocols for equality.
-  friend bool operator==(const udp& p1, const udp& p2)
-  {
-    return p1.family_ == p2.family_;
-  }
+	/// Compare two protocols for equality.
+	friend bool operator== ( const udp &p1, const udp &p2 )
+	{
+		return p1.family_ == p2.family_;
+	}
 
-  /// Compare two protocols for inequality.
-  friend bool operator!=(const udp& p1, const udp& p2)
-  {
-    return p1.family_ != p2.family_;
-  }
+	/// Compare two protocols for inequality.
+	friend bool operator!= ( const udp &p1, const udp &p2 )
+	{
+		return p1.family_ != p2.family_;
+	}
 
 private:
-  // Construct with a specific family.
-  explicit udp(int family)
-    : family_(family)
-  {
-  }
+	// Construct with a specific family.
+	explicit udp ( int family )
+		: family_ ( family )
+	{
+	}
 
-  int family_;
+	int family_;
 };
 
 } // namespace ip

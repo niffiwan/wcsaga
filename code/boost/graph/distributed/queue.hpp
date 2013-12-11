@@ -18,12 +18,17 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-namespace boost { namespace graph { namespace distributed {
+namespace boost
+{
+namespace graph
+{
+namespace distributed
+{
 
 /// A unary predicate that always returns "true".
 struct always_push
 {
-  template<typename T> bool operator()(const T&) const { return true; }
+	template<typename T> bool operator() ( const T & ) const { return true; }
 };
 
 
@@ -92,144 +97,145 @@ template<typename ProcessGroup, typename OwnerMap, typename Buffer,
          typename UnaryPredicate = always_push>
 class distributed_queue
 {
-  typedef distributed_queue self_type;
+	typedef distributed_queue self_type;
 
-  enum {
-    /** Message indicating a remote push. The message contains a
-     * single value x of type value_type that is to be pushed on the
-     * receiver's queue.
-     */
-    msg_push,
-    /** Push many elements at once. */
-    msg_multipush
-  };
+	enum
+	{
+		/** Message indicating a remote push. The message contains a
+		 * single value x of type value_type that is to be pushed on the
+		 * receiver's queue.
+		 */
+		msg_push,
+		/** Push many elements at once. */
+		msg_multipush
+	};
 
- public:
-  typedef ProcessGroup                     process_group_type;
-  typedef Buffer                           buffer_type;
-  typedef typename buffer_type::value_type value_type;
-  typedef typename buffer_type::size_type  size_type;
+public:
+	typedef ProcessGroup                     process_group_type;
+	typedef Buffer                           buffer_type;
+	typedef typename buffer_type::value_type value_type;
+	typedef typename buffer_type::size_type  size_type;
 
-  /** Construct a new distributed queue.
-   *
-   * Build a new distributed queue that communicates over the given @p
-   * process_group, whose local queue is initialized via @p buffer and
-   * which may or may not poll for messages.
-   */
-  explicit
-  distributed_queue(const ProcessGroup& process_group,
-                    const OwnerMap& owner,
-                    const Buffer& buffer,
-                    bool polling = false);
+	/** Construct a new distributed queue.
+	 *
+	 * Build a new distributed queue that communicates over the given @p
+	 * process_group, whose local queue is initialized via @p buffer and
+	 * which may or may not poll for messages.
+	 */
+	explicit
+	distributed_queue ( const ProcessGroup &process_group,
+	                    const OwnerMap &owner,
+	                    const Buffer &buffer,
+	                    bool polling = false );
 
-  /** Construct a new distributed queue.
-   *
-   * Build a new distributed queue that communicates over the given @p
-   * process_group, whose local queue is initialized via @p buffer and
-   * which may or may not poll for messages.
-   */
-  explicit
-  distributed_queue(const ProcessGroup& process_group = ProcessGroup(),
-                    const OwnerMap& owner = OwnerMap(),
-                    const Buffer& buffer = Buffer(),
-                    const UnaryPredicate& pred = UnaryPredicate(),
-                    bool polling = false);
+	/** Construct a new distributed queue.
+	 *
+	 * Build a new distributed queue that communicates over the given @p
+	 * process_group, whose local queue is initialized via @p buffer and
+	 * which may or may not poll for messages.
+	 */
+	explicit
+	distributed_queue ( const ProcessGroup &process_group = ProcessGroup(),
+	                    const OwnerMap &owner = OwnerMap(),
+	                    const Buffer &buffer = Buffer(),
+	                    const UnaryPredicate &pred = UnaryPredicate(),
+	                    bool polling = false );
 
-  /** Construct a new distributed queue.
-   *
-   * Build a new distributed queue that communicates over the given @p
-   * process_group, whose local queue is default-initalized and which
-   * may or may not poll for messages.
-   */
-  distributed_queue(const ProcessGroup& process_group, const OwnerMap& owner,
-                    const UnaryPredicate& pred, bool polling = false);
+	/** Construct a new distributed queue.
+	 *
+	 * Build a new distributed queue that communicates over the given @p
+	 * process_group, whose local queue is default-initalized and which
+	 * may or may not poll for messages.
+	 */
+	distributed_queue ( const ProcessGroup &process_group, const OwnerMap &owner,
+	                    const UnaryPredicate &pred, bool polling = false );
 
-  /** Virtual destructor required with virtual functions.
-   *
-   */
-  virtual ~distributed_queue() {}
+	/** Virtual destructor required with virtual functions.
+	 *
+	 */
+	virtual ~distributed_queue() {}
 
-  /** Push an element onto the distributed queue.
-   *
-   * The element will be sent to its owner process to be added to that
-   * process's local queue. If polling is enabled for this queue and
-   * the owner process is the current process, the value will be
-   * immediately pushed onto the local queue.
-   *
-   * Complexity: O(1) messages of size O(sizeof(value_type)) will be
-   * transmitted.
-   */
-  void push(const value_type& x);
+	/** Push an element onto the distributed queue.
+	 *
+	 * The element will be sent to its owner process to be added to that
+	 * process's local queue. If polling is enabled for this queue and
+	 * the owner process is the current process, the value will be
+	 * immediately pushed onto the local queue.
+	 *
+	 * Complexity: O(1) messages of size O(sizeof(value_type)) will be
+	 * transmitted.
+	 */
+	void push ( const value_type &x );
 
-  /** Pop an element off the local queue.
-   *
-   * @p @c !empty()
-   */
-  void pop() { buffer.pop(); }
+	/** Pop an element off the local queue.
+	 *
+	 * @p @c !empty()
+	 */
+	void pop() { buffer.pop(); }
 
-  /**
-   * Return the element at the top of the local queue.
-   *
-   * @p @c !empty()
-   */
-  value_type& top() { return buffer.top(); }
+	/**
+	 * Return the element at the top of the local queue.
+	 *
+	 * @p @c !empty()
+	 */
+	value_type &top() { return buffer.top(); }
 
-  /**
-   * \overload
-   */
-  const value_type& top() const { return buffer.top(); }
+	/**
+	 * \overload
+	 */
+	const value_type &top() const { return buffer.top(); }
 
-  /** Determine if the queue is empty.
-   *
-   * When the local queue is nonempty, returns @c true. If the local
-   * queue is empty, synchronizes with all other processes in the
-   * process group until either (1) the local queue is nonempty
-   * (returns @c true) (2) the entire distributed queue is empty
-   * (returns @c false).
-   */
-  bool empty() const;
+	/** Determine if the queue is empty.
+	 *
+	 * When the local queue is nonempty, returns @c true. If the local
+	 * queue is empty, synchronizes with all other processes in the
+	 * process group until either (1) the local queue is nonempty
+	 * (returns @c true) (2) the entire distributed queue is empty
+	 * (returns @c false).
+	 */
+	bool empty() const;
 
-  /** Determine the size of the local queue.
-   *
-   * The behavior of this routine is equivalent to the behavior of
-   * @ref empty, except that when @ref empty returns true this
-   * function returns the size of the local queue and when @ref empty
-   * returns false this function returns zero.
-   */
-  size_type size() const;
+	/** Determine the size of the local queue.
+	 *
+	 * The behavior of this routine is equivalent to the behavior of
+	 * @ref empty, except that when @ref empty returns true this
+	 * function returns the size of the local queue and when @ref empty
+	 * returns false this function returns zero.
+	 */
+	size_type size() const;
 
-  // private:
-  /** Synchronize the distributed queue and determine if all queues
-   * are empty.
-   *
-   * \returns \c true when all local queues are empty, or false if at least
-   * one of the local queues is nonempty.
-   * Defined as virtual for derived classes like depth_limited_distributed_queue.
-   */
-  virtual bool do_synchronize() const;
+	// private:
+	/** Synchronize the distributed queue and determine if all queues
+	 * are empty.
+	 *
+	 * \returns \c true when all local queues are empty, or false if at least
+	 * one of the local queues is nonempty.
+	 * Defined as virtual for derived classes like depth_limited_distributed_queue.
+	 */
+	virtual bool do_synchronize() const;
 
- private:
-  // Setup triggers
-  void setup_triggers();
+private:
+	// Setup triggers
+	void setup_triggers();
 
-  // Message handlers
-  void 
-  handle_push(int source, int tag, const value_type& value, 
-              trigger_receive_context);
+	// Message handlers
+	void
+	handle_push ( int source, int tag, const value_type &value,
+	              trigger_receive_context );
 
-  void 
-  handle_multipush(int source, int tag, const std::vector<value_type>& values, 
-                   trigger_receive_context);
+	void
+	handle_multipush ( int source, int tag, const std::vector<value_type> &values,
+	                   trigger_receive_context );
 
-  mutable ProcessGroup process_group;
-  OwnerMap owner;
-  mutable Buffer buffer;
-  UnaryPredicate pred;
-  bool polling;
+	mutable ProcessGroup process_group;
+	OwnerMap owner;
+	mutable Buffer buffer;
+	UnaryPredicate pred;
+	bool polling;
 
-  typedef std::vector<value_type> outgoing_buffer_t;
-  typedef std::vector<outgoing_buffer_t> outgoing_buffers_t;
-  shared_ptr<outgoing_buffers_t> outgoing_buffers;
+	typedef std::vector<value_type> outgoing_buffer_t;
+	typedef std::vector<outgoing_buffer_t> outgoing_buffers_t;
+	shared_ptr<outgoing_buffers_t> outgoing_buffers;
 };
 
 /// Helper macro containing the normal names for the template
@@ -253,22 +259,24 @@ class distributed_queue
  */
 template<BOOST_DISTRIBUTED_QUEUE_PARMS>
 inline void
-synchronize(const BOOST_DISTRIBUTED_QUEUE_TYPE& Q)
+synchronize ( const BOOST_DISTRIBUTED_QUEUE_TYPE &Q )
 { Q.do_synchronize(); }
 
 /// Construct a new distributed queue.
 template<typename ProcessGroup, typename OwnerMap, typename Buffer>
 inline distributed_queue<ProcessGroup, OwnerMap, Buffer>
-make_distributed_queue(const ProcessGroup& process_group,
-                       const OwnerMap& owner,
-                       const Buffer& buffer,
-                       bool polling = false)
+make_distributed_queue ( const ProcessGroup &process_group,
+                         const OwnerMap &owner,
+                         const Buffer &buffer,
+                         bool polling = false )
 {
-  typedef distributed_queue<ProcessGroup, OwnerMap, Buffer> result_type;
-  return result_type(process_group, owner, buffer, polling);
+	typedef distributed_queue<ProcessGroup, OwnerMap, Buffer> result_type;
+	return result_type ( process_group, owner, buffer, polling );
 }
 
-} } } // end namespace boost::graph::distributed
+}
+}
+} // end namespace boost::graph::distributed
 
 #include <boost/graph/distributed/detail/queue.ipp>
 

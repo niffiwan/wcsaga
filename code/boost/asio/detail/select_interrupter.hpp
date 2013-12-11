@@ -28,9 +28,12 @@
 # include <boost/asio/detail/pipe_select_interrupter.hpp>
 #endif
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 #if defined(BOOST_WINDOWS) || defined(__CYGWIN__)
 typedef socket_select_interrupter select_interrupter;

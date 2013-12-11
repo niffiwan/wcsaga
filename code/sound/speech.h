@@ -1,7 +1,7 @@
 /*
  * Code created by Thomas Whittaker (RT) for a FreeSpace 2 source code project
  *
- * You may not sell or otherwise commercially exploit the source or things you 
+ * You may not sell or otherwise commercially exploit the source or things you
  * created based on the source.
  *
 */
@@ -16,13 +16,13 @@ const int MAX_SPEECH_CHAR_LEN = 10000;
 
 bool speech_init();
 void speech_deinit();
-bool speech_play(char *text);
+bool speech_play ( char *text );
 bool speech_pause();
 bool speech_resume();
 bool speech_stop();
 
-bool speech_set_volume(unsigned short volume);
-bool speech_set_voice(int voice);
+bool speech_set_volume ( unsigned short volume );
+bool speech_set_voice ( int voice );
 
 bool speech_is_speaking();
 

@@ -15,8 +15,10 @@
 #include <boost/spirit/home/classic/tree/parse_tree.hpp> // needed for parse tree generation
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost {
-namespace spirit {
+namespace boost
+{
+namespace spirit
+{
 BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -27,7 +29,7 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 ///////////////////////////////////////////////////////////////////////////////
 template <typename T>
 tree_node<T> const &
-get_first_leaf (tree_node<T> const &node);
+get_first_leaf ( tree_node<T> const &node );
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -38,8 +40,8 @@ get_first_leaf (tree_node<T> const &node);
 ///////////////////////////////////////////////////////////////////////////////
 template <typename T>
 bool
-find_node (tree_node<T> const &node, parser_id node_to_search,
-    tree_node<T> const **found_node);
+find_node ( tree_node<T> const &node, parser_id node_to_search,
+            tree_node<T> const **found_node );
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -50,9 +52,9 @@ find_node (tree_node<T> const &node, parser_id node_to_search,
 ///////////////////////////////////////////////////////////////////////////////
 template <typename T>
 bool
-get_node_range (tree_node<T> const &node, parser_id node_to_search,
-    std::pair<typename tree_node<T>::const_tree_iterator,
-        typename tree_node<T>::const_tree_iterator> &nodes);
+get_node_range ( tree_node<T> const &node, parser_id node_to_search,
+                 std::pair<typename tree_node<T>::const_tree_iterator,
+                 typename tree_node<T>::const_tree_iterator> &nodes );
 
 ///////////////////////////////////////////////////////////////////////////////
 BOOST_SPIRIT_CLASSIC_NAMESPACE_END

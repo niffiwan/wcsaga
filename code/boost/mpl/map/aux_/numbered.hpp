@@ -5,8 +5,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -34,17 +34,17 @@
 
 #if defined(BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES)
 
-template<
-      BOOST_PP_ENUM_PARAMS(i_, typename P)
+template <
+    BOOST_PP_ENUM_PARAMS ( i_, typename P )
     >
-struct BOOST_PP_CAT(map,i_)
-    : m_item<
-          typename BOOST_PP_CAT(P,BOOST_PP_DEC(i_))::first
-        , typename BOOST_PP_CAT(P,BOOST_PP_DEC(i_))::second
-        , AUX778076_MAP_TAIL(map,BOOST_PP_DEC(i_),P)
-        >
+struct BOOST_PP_CAT ( map, i_ )
+	: m_item <
+	typename BOOST_PP_CAT ( P, BOOST_PP_DEC ( i_ ) ) ::first
+	, typename BOOST_PP_CAT ( P, BOOST_PP_DEC ( i_ ) ) ::second
+	, AUX778076_MAP_TAIL ( map, BOOST_PP_DEC ( i_ ), P )
+	>
 {
-    typedef BOOST_PP_CAT(map,i_) type;
+	typedef BOOST_PP_CAT ( map, i_ ) type;
 };
 
 #else // "brute force" implementation
@@ -52,53 +52,53 @@ struct BOOST_PP_CAT(map,i_)
 #   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< typename Map>
-struct m_at<Map,BOOST_PP_DEC(i_)>
+struct m_at<Map, BOOST_PP_DEC ( i_ ) >
 {
-    typedef typename Map::BOOST_PP_CAT(item,BOOST_PP_DEC(i_)) type;
+	typedef typename Map::BOOST_PP_CAT ( item, BOOST_PP_DEC ( i_ ) ) type;
 };
 
 template< typename Key, typename T, typename Base >
-struct m_item<i_,Key,T,Base>
-    : m_item_<Key,T,Base>
+struct m_item<i_, Key, T, Base>
+		: m_item_<Key, T, Base>
 {
-    typedef pair<Key,T> BOOST_PP_CAT(item,BOOST_PP_DEC(i_));
+	typedef pair<Key, T> BOOST_PP_CAT ( item, BOOST_PP_DEC ( i_ ) );
 };
 
 #   else
 
 template<>
-struct m_at_impl<BOOST_PP_DEC(i_)>
+struct m_at_impl<BOOST_PP_DEC ( i_ ) >
 {
-    template< typename Map > struct result_
-    {
-        typedef typename Map::BOOST_PP_CAT(item,BOOST_PP_DEC(i_)) type;
-    };
+	template< typename Map > struct result_
+	{
+		typedef typename Map::BOOST_PP_CAT ( item, BOOST_PP_DEC ( i_ ) ) type;
+	};
 };
 
 template<>
 struct m_item_impl<i_>
 {
-    template< typename Key, typename T, typename Base > struct result_
-        : m_item_<Key,T,Base>
-    {
-        typedef pair<Key,T> BOOST_PP_CAT(item,BOOST_PP_DEC(i_));
-    };
+	template< typename Key, typename T, typename Base > struct result_
+			: m_item_<Key, T, Base>
+	{
+		typedef pair<Key, T> BOOST_PP_CAT ( item, BOOST_PP_DEC ( i_ ) );
+	};
 };
 
 #   endif
 
-template<
-      BOOST_PP_ENUM_PARAMS(i_, typename P)
+template <
+    BOOST_PP_ENUM_PARAMS ( i_, typename P )
     >
-struct BOOST_PP_CAT(map,i_)
-    : m_item<
-          i_
-        , typename BOOST_PP_CAT(P,BOOST_PP_DEC(i_))::first
-        , typename BOOST_PP_CAT(P,BOOST_PP_DEC(i_))::second
-        , AUX778076_MAP_TAIL(map,BOOST_PP_DEC(i_),P)
-        >
+struct BOOST_PP_CAT ( map, i_ )
+	: m_item <
+	i_
+	, typename BOOST_PP_CAT ( P, BOOST_PP_DEC ( i_ ) ) ::first
+	, typename BOOST_PP_CAT ( P, BOOST_PP_DEC ( i_ ) ) ::second
+	, AUX778076_MAP_TAIL ( map, BOOST_PP_DEC ( i_ ), P )
+	>
 {
-    typedef BOOST_PP_CAT(map,i_) type;
+	typedef BOOST_PP_CAT ( map, i_ ) type;
 };
 
 #endif // BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES

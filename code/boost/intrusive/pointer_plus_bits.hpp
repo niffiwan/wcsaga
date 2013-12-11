@@ -16,8 +16,10 @@
 #include <boost/intrusive/detail/mpl.hpp> //ls_zeros
 #include <boost/intrusive/detail/assert.hpp> //BOOST_INTRUSIVE_INVARIANT_ASSERT
 
-namespace boost {
-namespace intrusive {
+namespace boost
+{
+namespace intrusive
+{
 
 //!This trait class is used to know if a pointer
 //!can embed extra bits of information if
@@ -26,16 +28,16 @@ namespace intrusive {
 template<class VoidPointer, std::size_t Alignment>
 struct max_pointer_plus_bits
 {
-   static const std::size_t value = 0;
+	static const std::size_t value = 0;
 };
 
 //!This is a specialization for raw pointers.
 //!Raw pointers can embed extra bits in the lower bits
 //!if the alignment is multiple of 2pow(NumBits).
 template<std::size_t Alignment>
-struct max_pointer_plus_bits<void*, Alignment>
+struct max_pointer_plus_bits<void *, Alignment>
 {
-   static const std::size_t value = detail::ls_zeros<Alignment>::value;
+	static const std::size_t value = detail::ls_zeros<Alignment>::value;
 };
 
 //!This is class that is supposed to have static methods
@@ -52,31 +54,31 @@ struct pointer_plus_bits;
 //!This is the specialization to embed extra bits of information
 //!in a raw pointer. The extra bits are stored in the lower bits of the pointer.
 template<class T, std::size_t NumBits>
-struct pointer_plus_bits<T*, NumBits>
+struct pointer_plus_bits<T *, NumBits>
 {
-   static const std::size_t Mask = ((std::size_t(1u) << NumBits) - 1);
-   typedef T*        pointer;
+	static const std::size_t Mask = ( ( std::size_t ( 1u ) << NumBits ) - 1 );
+	typedef T        *pointer;
 
-   static pointer get_pointer(pointer n)
-   {  return pointer(std::size_t(n) & ~Mask);  }
+	static pointer get_pointer ( pointer n )
+	{  return pointer ( std::size_t ( n ) & ~Mask );  }
 
-   static void set_pointer(pointer &n, pointer p)
-   {
-      BOOST_INTRUSIVE_INVARIANT_ASSERT(0 == (std::size_t(p) & Mask));
-      n = pointer(std::size_t(p) | (std::size_t(n) & Mask)); 
-   }
+	static void set_pointer ( pointer &n, pointer p )
+	{
+		BOOST_INTRUSIVE_INVARIANT_ASSERT ( 0 == ( std::size_t ( p ) & Mask ) );
+		n = pointer ( std::size_t ( p ) | ( std::size_t ( n ) & Mask ) );
+	}
 
-   static std::size_t get_bits(pointer n)
-   {  return (std::size_t(n) & Mask);  }
+	static std::size_t get_bits ( pointer n )
+	{  return ( std::size_t ( n ) & Mask );  }
 
-   static void set_bits(pointer &n, std::size_t c)
-   {
-      BOOST_INTRUSIVE_INVARIANT_ASSERT(c <= Mask);
-      n = pointer(std::size_t(get_pointer(n)) | c);
-   }
+	static void set_bits ( pointer &n, std::size_t c )
+	{
+		BOOST_INTRUSIVE_INVARIANT_ASSERT ( c <= Mask );
+		n = pointer ( std::size_t ( get_pointer ( n ) ) | c );
+	}
 };
 
-} //namespace intrusive 
-} //namespace boost 
+} //namespace intrusive
+} //namespace boost
 
 #endif //BOOST_INTRUSIVE_POINTER_PLUS_BITS_HPP

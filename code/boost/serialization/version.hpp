@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // version.hpp:
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -25,8 +25,10 @@
 #include <boost/type_traits/is_base_and_derived.hpp>
 //#include <boost/serialization/traits.hpp>
 
-namespace boost { 
-namespace serialization {
+namespace boost
+{
+namespace serialization
+{
 
 struct basic_traits;
 
@@ -35,21 +37,22 @@ struct basic_traits;
 template<class T>
 struct version
 {
-    template<class U>
-    struct traits_class_version {
-        typedef BOOST_DEDUCED_TYPENAME U::version type;
-    };
+template<class U>
+struct traits_class_version
+{
+	typedef BOOST_DEDUCED_TYPENAME U::version type;
+};
 
-    typedef mpl::integral_c_tag tag;
-    // note: at least one compiler complained w/o the full qualification
-    // on basic traits below
-    typedef
-        BOOST_DEDUCED_TYPENAME mpl::eval_if<
-            is_base_and_derived<boost::serialization::basic_traits,T>,
-            traits_class_version<T>,
-            mpl::int_<0>
-        >::type type;
-    BOOST_STATIC_CONSTANT(int, value = version::type::value);
+typedef mpl::integral_c_tag tag;
+// note: at least one compiler complained w/o the full qualification
+// on basic traits below
+typedef
+BOOST_DEDUCED_TYPENAME mpl::eval_if <
+is_base_and_derived<boost::serialization::basic_traits, T>,
+                    traits_class_version<T>,
+                    mpl::int_<0>
+                    >::type type;
+BOOST_STATIC_CONSTANT ( int, value = version::type::value );
 };
 
 } // namespace serialization

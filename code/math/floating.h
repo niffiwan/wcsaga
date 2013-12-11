@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -16,8 +16,8 @@
 #include <float.h>
 
 extern float frand();
-extern int rand_chance(float frametime, float chance = 1.0f);
-float frand_range(float min, float max);
+extern int rand_chance ( float frametime, float chance = 1.0f );
+float frand_range ( float min, float max );
 
 // determine if a floating point number is NaN (Not a Number)
 #define fl_is_nan(fl) _isnan((double)(fl))
@@ -36,10 +36,10 @@ float frand_range(float min, float max);
 #define fl_tan(fl) tanf(fl)
 
 // convert a measurement in degrees to radians
-#define fl_radian(fl)	((float)((fl * 3.14159f)/180.0f))
+#define fl_radian(fl)   ((float)((fl * 3.14159f)/180.0f))
 
 // convert a measurement in radians to degrees
-#define fl_degrees(fl)	((float)((fl * 180.0f)/3.14159))
+#define fl_degrees(fl)  ((float)((fl * 180.0f)/3.14159))
 
 // use this instead of:
 // for:  (int)floor(x+0.5f) use fl_round_2048(x)
@@ -59,38 +59,38 @@ extern const float *p_fl_magic;
 
 inline int fl_round_2048( float x )
 {
-	double tmp_quad;
-	tmp_quad = x + *p_fl_magic;
-	return *((int *)&tmp_quad);
+    double tmp_quad;
+    tmp_quad = x + *p_fl_magic;
+    return *((int *)&tmp_quad);
 }
 
 inline float fl_sqrt( float x)
 {
-	float retval;
+    float retval;
 
-	_asm fld x
-	_asm fsqrt
-	_asm fstp retval
-	
-	return retval;
+    _asm fld x
+    _asm fsqrt
+    _asm fstp retval
+
+    return retval;
 }
 
 float fl_isqrt( float x )
 {
-	float retval;
+    float retval;
 
-	_asm fld x
-	_asm fsqrt
-	_asm fstp retval
-	
-	return 1.0f / retval;
-} 
+    _asm fld x
+    _asm fsqrt
+    _asm fstp retval
+
+    return 1.0f / retval;
+}
 */
 
 
 
 // rounds off a floating point number to a multiple of some number
-extern float fl_roundoff(float x, int multiple);
+extern float fl_roundoff ( float x, int multiple );
 
 
 #endif

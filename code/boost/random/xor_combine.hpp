@@ -24,96 +24,98 @@
 #include <boost/random/detail/config.hpp>
 
 
-namespace boost {
-namespace random {
+namespace boost
+{
+namespace random
+{
 
 #ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
-  #define BOOST_RANDOM_VAL_TYPE typename URNG1::result_type 
+#define BOOST_RANDOM_VAL_TYPE typename URNG1::result_type
 #else
-  #define BOOST_RANDOM_VAL_TYPE uint32_t
+#define BOOST_RANDOM_VAL_TYPE uint32_t
 #endif
 
 template<class URNG1, int s1, class URNG2, int s2, BOOST_RANDOM_VAL_TYPE val = 0>
 class xor_combine
 {
 public:
-  typedef URNG1 base1_type;
-  typedef URNG2 base2_type;
-  typedef typename base1_type::result_type result_type;
+	typedef URNG1 base1_type;
+	typedef URNG2 base2_type;
+	typedef typename base1_type::result_type result_type;
 
-  BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
-  BOOST_STATIC_CONSTANT(int, shift1 = s1);
-  BOOST_STATIC_CONSTANT(int, shift2 = s2);
+	BOOST_STATIC_CONSTANT ( bool, has_fixed_range = false );
+	BOOST_STATIC_CONSTANT ( int, shift1 = s1 );
+	BOOST_STATIC_CONSTANT ( int, shift2 = s2 );
 
-  xor_combine() : _rng1(), _rng2()
-  { }
-  xor_combine(const base1_type & rng1, const base2_type & rng2)
-    : _rng1(rng1), _rng2(rng2) { }
-  xor_combine(const result_type & v)
-    : _rng1(v), _rng2(v) { }
-  template<class It> xor_combine(It& first, It last)
-    : _rng1(first, last), _rng2( /* advanced by other call */ first, last) { }
-  void seed() { _rng1.seed(); _rng2.seed(); }
-  void seed(const result_type & v) { _rng1.seed(v); _rng2.seed(v); }
-  template<class It> void seed(It& first, It last)
-  {
-    _rng1.seed(first, last);
-    _rng2.seed(first, last);
-  }
+	xor_combine() : _rng1(), _rng2()
+	{ }
+	xor_combine ( const base1_type &rng1, const base2_type &rng2 )
+		: _rng1 ( rng1 ), _rng2 ( rng2 ) { }
+	xor_combine ( const result_type &v )
+		: _rng1 ( v ), _rng2 ( v ) { }
+	template<class It> xor_combine ( It &first, It last )
+		: _rng1 ( first, last ), _rng2 ( /* advanced by other call */ first, last ) { }
+	void seed() { _rng1.seed(); _rng2.seed(); }
+	void seed ( const result_type &v ) { _rng1.seed ( v ); _rng2.seed ( v ); }
+	template<class It> void seed ( It &first, It last )
+	{
+		_rng1.seed ( first, last );
+		_rng2.seed ( first, last );
+	}
 
-  const base1_type& base1() { return _rng1; }
-  const base2_type& base2() { return _rng2; }
+	const base1_type &base1() { return _rng1; }
+	const base2_type &base2() { return _rng2; }
 
-  result_type operator()()
-  {
-    // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
+	result_type operator() ()
+	{
+		// MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
 #if !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) && !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
-    BOOST_STATIC_ASSERT(std::numeric_limits<typename base1_type::result_type>::is_integer);
-    BOOST_STATIC_ASSERT(std::numeric_limits<typename base2_type::result_type>::is_integer);
-    BOOST_STATIC_ASSERT(std::numeric_limits<typename base1_type::result_type>::digits >= std::numeric_limits<typename base2_type::result_type>::digits);
+		BOOST_STATIC_ASSERT ( std::numeric_limits<typename base1_type::result_type>::is_integer );
+		BOOST_STATIC_ASSERT ( std::numeric_limits<typename base2_type::result_type>::is_integer );
+		BOOST_STATIC_ASSERT ( std::numeric_limits<typename base1_type::result_type>::digits >= std::numeric_limits<typename base2_type::result_type>::digits );
 #endif
-    return (_rng1() << s1) ^ (_rng2() << s2);
-  }
+		return ( _rng1() << s1 ) ^ ( _rng2() << s2 );
+	}
 
-  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return std::min BOOST_PREVENT_MACRO_SUBSTITUTION((_rng1.min)(), (_rng2.min)()); }
-  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return std::max BOOST_PREVENT_MACRO_SUBSTITUTION((_rng1.min)(), (_rng2.max)()); }
-  static bool validation(result_type x) { return val == x; }
+	result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return std::min BOOST_PREVENT_MACRO_SUBSTITUTION ( ( _rng1.min ) (), ( _rng2.min ) () ); }
+	result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return std::max BOOST_PREVENT_MACRO_SUBSTITUTION ( ( _rng1.min ) (), ( _rng2.max ) () ); }
+	static bool validation ( result_type x ) { return val == x; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
 
 #ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
-  template<class CharT, class Traits>
-  friend std::basic_ostream<CharT,Traits>&
-  operator<<(std::basic_ostream<CharT,Traits>& os, const xor_combine& s)
-  {
-    os << s._rng1 << " " << s._rng2 << " ";
-    return os;
-  }
+	template<class CharT, class Traits>
+	friend std::basic_ostream<CharT, Traits> &
+	operator<< ( std::basic_ostream<CharT, Traits> &os, const xor_combine &s )
+	{
+		os << s._rng1 << " " << s._rng2 << " ";
+		return os;
+	}
 
-  template<class CharT, class Traits>
-  friend std::basic_istream<CharT,Traits>&
-  operator>>(std::basic_istream<CharT,Traits>& is, xor_combine& s)
-  {
-    is >> s._rng1 >> std::ws >> s._rng2 >> std::ws;
-    return is;
-  }
+	template<class CharT, class Traits>
+	friend std::basic_istream<CharT, Traits> &
+	operator>> ( std::basic_istream<CharT, Traits> &is, xor_combine &s )
+	{
+		is >> s._rng1 >> std::ws >> s._rng2 >> std::ws;
+		return is;
+	}
 #endif
 
-  friend bool operator==(const xor_combine& x, const xor_combine& y)
-  { return x._rng1 == y._rng1 && x._rng2 == y._rng2; }
-  friend bool operator!=(const xor_combine& x, const xor_combine& y)
-  { return !(x == y); }
+	friend bool operator== ( const xor_combine &x, const xor_combine &y )
+	{ return x._rng1 == y._rng1 && x._rng2 == y._rng2; }
+	friend bool operator!= ( const xor_combine &x, const xor_combine &y )
+	{ return ! ( x == y ); }
 #else
-  // Use a member function; Streamable concept not supported.
-  bool operator==(const xor_combine& rhs) const
-  { return _rng1 == rhs._rng1 && _rng2 == rhs._rng2; }
-  bool operator!=(const xor_combine& rhs) const
-  { return !(*this == rhs); }
+	// Use a member function; Streamable concept not supported.
+	bool operator== ( const xor_combine &rhs ) const
+	{ return _rng1 == rhs._rng1 && _rng2 == rhs._rng2; }
+	bool operator!= ( const xor_combine &rhs ) const
+	{ return ! ( *this == rhs ); }
 #endif
 
 private:
-  base1_type _rng1;
-  base2_type _rng2;
+	base1_type _rng1;
+	base2_type _rng2;
 };
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION

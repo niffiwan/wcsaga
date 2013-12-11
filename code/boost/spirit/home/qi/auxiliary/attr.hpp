@@ -21,80 +21,89 @@
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/add_const.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename A0>       // enables attr()
-    struct use_terminal<
-            qi::domain, terminal_ex<tag::attr, fusion::vector1<A0> > > 
-      : mpl::true_ {};
-
-    template <>                  // enables *lazy* attr()
-    struct use_lazy_terminal<qi::domain, tag::attr, 1> 
-      : mpl::true_ {};
-
-}}
-
-namespace boost { namespace spirit { namespace qi
+namespace spirit
 {
-    using spirit::attr;
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
+template <typename A0>       // enables attr()
+struct use_terminal <
+		qi::domain, terminal_ex<tag::attr, fusion::vector1<A0> > >
+		: mpl::true_ {};
 
-    template <typename Value>
-    struct attr_parser : primitive_parser<attr_parser<Value> >
-    {
-        template <typename Context, typename Iterator>
-        struct attribute
-        {
-            typedef Value type;
-        };
+template <>                  // enables *lazy* attr()
+struct use_lazy_terminal<qi::domain, tag::attr, 1>
+		: mpl::true_ {};
 
-        attr_parser(typename add_reference<Value>::type value)
-          : value_(value) {}
+}
+}
 
-        template <typename Iterator, typename Context
-          , typename Skipper, typename Attribute>
-        bool parse(Iterator& /*first*/, Iterator const& /*last*/
-          , Context& /*context*/, Skipper const& /*skipper*/
-          , Attribute& attr) const
-        {
-            spirit::traits::assign_to(value_, attr);
-            return true;        // never consume any input, succeed always
-        }
+namespace boost
+{
+namespace spirit
+{
+namespace qi
+{
+using spirit::attr;
 
-        template <typename Context>
-        info what(Context& /*context*/) const
-        {
-            return info("attr");
-        }
+template <typename Value>
+struct attr_parser : primitive_parser<attr_parser<Value> >
+{
+	template <typename Context, typename Iterator>
+	struct attribute
+	{
+		typedef Value type;
+	};
 
-        Value value_;
+	attr_parser ( typename add_reference<Value>::type value )
+		: value_ ( value ) {}
 
-    private:
-        // silence MSVC warning C4512: assignment operator could not be generated
-        attr_parser& operator= (attr_parser const&);
-    };
+	template <typename Iterator, typename Context
+	          , typename Skipper, typename Attribute>
+	bool parse ( Iterator & /*first*/, Iterator const & /*last*/
+	             , Context & /*context*/, Skipper const & /*skipper*/
+	             , Attribute &attr ) const
+	{
+		spirit::traits::assign_to ( value_, attr );
+		return true;        // never consume any input, succeed always
+	}
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Modifiers, typename A0>
-    struct make_primitive<
-        terminal_ex<tag::attr, fusion::vector1<A0> >
-      , Modifiers>
-    {
-        typedef typename add_const<A0>::type const_value;
-        typedef attr_parser<const_value> result_type;
+	template <typename Context>
+	info what ( Context & /*context*/ ) const
+	{
+		return info ( "attr" );
+	}
 
-        template <typename Terminal>
-        result_type operator()(Terminal const& term, unused_type) const
-        {
-            return result_type(fusion::at_c<0>(term.args));
-        }
-    };
+	Value value_;
 
-}}}
+private:
+	// silence MSVC warning C4512: assignment operator could not be generated
+	attr_parser &operator= ( attr_parser const & );
+};
+
+///////////////////////////////////////////////////////////////////////////
+// Parser generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+template <typename Modifiers, typename A0>
+struct make_primitive <
+		terminal_ex<tag::attr, fusion::vector1<A0> >
+		, Modifiers >
+{
+	typedef typename add_const<A0>::type const_value;
+	typedef attr_parser<const_value> result_type;
+
+	template <typename Terminal>
+	result_type operator() ( Terminal const &term, unused_type ) const
+	{
+		return result_type ( fusion::at_c<0> ( term.args ) );
+	}
+};
+
+}
+}
+}
 
 #endif
 

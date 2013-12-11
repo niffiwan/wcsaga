@@ -13,17 +13,20 @@
 #include <boost/mpl/vector.hpp>
 #include <boost/accumulators/statistics_fwd.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 ///////////////////////////////////////////////////////////////////////////////
 /// An MPL sequence of statistics.
-template<BOOST_PP_ENUM_PARAMS(BOOST_ACCUMULATORS_MAX_FEATURES, typename Stat)>
+template<BOOST_PP_ENUM_PARAMS ( BOOST_ACCUMULATORS_MAX_FEATURES, typename Stat ) >
 struct stats
-  : mpl::vector<BOOST_PP_ENUM_PARAMS(BOOST_ACCUMULATORS_MAX_FEATURES, Stat)>
+: mpl::vector<BOOST_PP_ENUM_PARAMS ( BOOST_ACCUMULATORS_MAX_FEATURES, Stat ) >
 {
 };
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

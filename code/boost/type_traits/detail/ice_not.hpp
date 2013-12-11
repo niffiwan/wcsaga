@@ -10,19 +10,21 @@
 
 #include <boost/config.hpp>
 
-namespace boost {
-namespace type_traits {
+namespace boost
+{
+namespace type_traits
+{
 
 template <bool b>
 struct ice_not
 {
-    BOOST_STATIC_CONSTANT(bool, value = true);
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
 
 template <>
 struct ice_not<true>
 {
-    BOOST_STATIC_CONSTANT(bool, value = false);
+	BOOST_STATIC_CONSTANT ( bool, value = false );
 };
 
 } // namespace type_traits

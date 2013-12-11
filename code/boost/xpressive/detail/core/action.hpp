@@ -16,24 +16,30 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/match_results.hpp> // for type_info_less
 
-namespace boost { namespace xpressive { namespace detail
+namespace boost
+{
+namespace xpressive
+{
+namespace detail
 {
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // actionable
-    //
-    struct actionable
-    {
-        virtual ~actionable() {}
-        virtual void execute(action_args_type *) const {}
+///////////////////////////////////////////////////////////////////////////////
+// actionable
+//
+struct actionable
+{
+	virtual ~actionable() {}
+	virtual void execute ( action_args_type * ) const {}
 
-        actionable()
-          : next(0)
-        {}
+	actionable()
+		: next ( 0 )
+	{}
 
-        actionable const *next;
-    };
+	actionable const *next;
+};
 
-}}} // namespace boost::xpressive::detail
+}
+}
+} // namespace boost::xpressive::detail
 
 #endif

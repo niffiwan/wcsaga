@@ -10,12 +10,15 @@
 
 #include <boost/parameter/keyword.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 // The weight accumulator
-BOOST_PARAMETER_KEYWORD(tag, weights)
+BOOST_PARAMETER_KEYWORD ( tag, weights )
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

@@ -6,24 +6,28 @@
 #ifndef BOOST_PARAMETER_VOID_050329_HPP
 #define BOOST_PARAMETER_VOID_050329_HPP
 
-namespace boost { namespace parameter { 
+namespace boost
+{
+namespace parameter
+{
 
 // A placemarker for "no argument passed."
 // MAINTAINER NOTE: Do not make this into a metafunction
-struct void_ {}; 
+struct void_ {};
 
-namespace aux 
+namespace aux
 {
 
-  inline void_& void_reference()
-  {
-      static void_ instance;
-      return instance;
-  }
+inline void_ &void_reference()
+{
+	static void_ instance;
+	return instance;
+}
 
 } // namespace aux
 
-}} // namespace boost::parameter
+}
+} // namespace boost::parameter
 
 #endif // BOOST_PARAMETER_VOID_050329_HPP
 

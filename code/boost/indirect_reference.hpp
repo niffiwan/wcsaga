@@ -17,27 +17,28 @@
 # include <boost/mpl/eval_if.hpp>
 # include <boost/pointee.hpp>
 
-namespace boost { 
+namespace boost
+{
 
 namespace detail
 {
-  template <class P>
-  struct smart_ptr_reference
-  {
-      typedef typename boost::pointee<P>::type& type;
-  };
+template <class P>
+struct smart_ptr_reference
+{
+	typedef typename boost::pointee<P>::type &type;
+};
 }
 
 template <class P>
 struct indirect_reference
-  : mpl::eval_if<
-        detail::is_incrementable<P>
-      , iterator_reference<P>
-      , detail::smart_ptr_reference<P>
-    >
+		: mpl::eval_if <
+		detail::is_incrementable<P>
+		, iterator_reference<P>
+		, detail::smart_ptr_reference<P>
+		>
 {
 };
-  
+
 } // namespace boost
 
 #endif // INDIRECT_REFERENCE_DWA200415_HPP

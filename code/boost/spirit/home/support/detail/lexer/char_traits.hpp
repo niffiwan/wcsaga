@@ -16,37 +16,37 @@ namespace lexer
 template<typename CharT>
 struct char_traits
 {
-    typedef CharT char_type;
-    typedef CharT index_type;
+	typedef CharT char_type;
+	typedef CharT index_type;
 
-    static index_type call (CharT ch)
-    {
-       return ch;
-    }
+	static index_type call ( CharT ch )
+	{
+		return ch;
+	}
 };
 
 template<>
 struct char_traits<char>
 {
-    typedef char char_type;
-    typedef unsigned char index_type;
-        
-    static index_type call (char ch)
-    {
-        return static_cast<index_type>(ch);
-    }
+	typedef char char_type;
+	typedef unsigned char index_type;
+
+	static index_type call ( char ch )
+	{
+		return static_cast<index_type> ( ch );
+	}
 };
 
 template<>
 struct char_traits<wchar_t>
 {
-    typedef wchar_t char_type;
-    typedef wchar_t index_type;
+	typedef wchar_t char_type;
+	typedef wchar_t index_type;
 
-    static index_type call (wchar_t ch)
-    {
-        return ch;
-    }
+	static index_type call ( wchar_t ch )
+	{
+		return ch;
+	}
 };
 }
 }

@@ -21,18 +21,29 @@
 
 /// @cond
 
-namespace boost{ 
-namespace intrusive{ 
-   //Create namespace to avoid compilation errors
-}}
+namespace boost
+{
+namespace intrusive
+{
+//Create namespace to avoid compilation errors
+}
+}
 
-namespace boost{ namespace container{ namespace containers_detail{
+namespace boost
+{
+namespace container
+{
+namespace containers_detail
+{
 
 namespace bi = boost::intrusive;
 
-}}}
+}
+}
+}
 
-namespace std {
+namespace std
+{
 
 template <class T>
 class allocator;
@@ -43,7 +54,7 @@ struct less;
 template <class T1, class T2>
 struct pair;
 
-template <class CharType> 
+template <class CharType>
 struct char_traits;
 
 }  //namespace std {
@@ -54,90 +65,92 @@ struct char_traits;
 //                             Containers
 //////////////////////////////////////////////////////////////////////////////
 
-namespace boost {
-namespace container {
+namespace boost
+{
+namespace container
+{
 
 //vector class
 template <class T
-         ,class A = std::allocator<T> >
+          , class A = std::allocator<T> >
 class vector;
 
 //vector class
 template <class T
-         ,class A = std::allocator<T> >
+          , class A = std::allocator<T> >
 class stable_vector;
 
 //vector class
 template <class T
-         ,class A = std::allocator<T> >
+          , class A = std::allocator<T> >
 class deque;
 
 //list class
 template <class T
-         ,class A = std::allocator<T> >
+          , class A = std::allocator<T> >
 class list;
 
 //slist class
 template <class T
-         ,class Alloc = std::allocator<T> >
+          , class Alloc = std::allocator<T> >
 class slist;
 
 //set class
 template <class T
-         ,class Pred  = std::less<T>
-         ,class Alloc = std::allocator<T> >
+          , class Pred  = std::less<T>
+          , class Alloc = std::allocator<T> >
 class set;
 
 //multiset class
 template <class T
-         ,class Pred  = std::less<T>
-         ,class Alloc = std::allocator<T> >
+          , class Pred  = std::less<T>
+          , class Alloc = std::allocator<T> >
 class multiset;
 
 //map class
 template <class Key
-         ,class T
-         ,class Pred  = std::less<Key>
-         ,class Alloc = std::allocator<std::pair<const Key, T> > >
+          , class T
+          , class Pred  = std::less<Key>
+          , class Alloc = std::allocator<std::pair<const Key, T> > >
 class map;
 
 //multimap class
 template <class Key
-         ,class T
-         ,class Pred  = std::less<Key>
-         ,class Alloc = std::allocator<std::pair<const Key, T> > >
+          , class T
+          , class Pred  = std::less<Key>
+          , class Alloc = std::allocator<std::pair<const Key, T> > >
 class multimap;
 
 //flat_set class
 template <class T
-         ,class Pred  = std::less<T>
-         ,class Alloc = std::allocator<T> >
+          , class Pred  = std::less<T>
+          , class Alloc = std::allocator<T> >
 class flat_set;
 
 //flat_multiset class
 template <class T
-         ,class Pred  = std::less<T>
-         ,class Alloc = std::allocator<T> >
+          , class Pred  = std::less<T>
+          , class Alloc = std::allocator<T> >
 class flat_multiset;
 
 //flat_map class
 template <class Key
-         ,class T
-         ,class Pred  = std::less<Key>
-         ,class Alloc = std::allocator<std::pair<Key, T> > >
+          , class T
+          , class Pred  = std::less<Key>
+          , class Alloc = std::allocator<std::pair<Key, T> > >
 class flat_map;
 
 //flat_multimap class
 template <class Key
-         ,class T
-         ,class Pred  = std::less<Key>
-         ,class Alloc = std::allocator<std::pair<Key, T> > >
+          , class T
+          , class Pred  = std::less<Key>
+          , class Alloc = std::allocator<std::pair<Key, T> > >
 class flat_multimap;
 
 //basic_string class
 template <class CharT
-         ,class Traits = std::char_traits<CharT>
-         ,class Alloc  = std::allocator<CharT> > 
+          , class Traits = std::char_traits<CharT>
+          , class Alloc  = std::allocator<CharT> >
 class basic_string;
 
 //! Type used to tag that the input range is
@@ -146,11 +159,11 @@ struct ordered_range_impl_t {};
 
 //! Type used to tag that the input range is
 //! guaranteed to be ordered and unique
-struct ordered_unique_range_impl_t{};
+struct ordered_unique_range_impl_t {};
 
 /// @cond
 
-typedef ordered_range_impl_t * ordered_range_t;
+typedef ordered_range_impl_t *ordered_range_t;
 typedef ordered_unique_range_impl_t *ordered_unique_range_t;
 
 /// @endcond
@@ -165,23 +178,25 @@ static const ordered_unique_range_t ordered_unique_range = 0;
 
 /// @cond
 
-namespace detail_really_deep_namespace {
+namespace detail_really_deep_namespace
+{
 
 //Otherwise, gcc issues a warning of previously defined
 //anonymous_instance and unique_instance
 struct dummy
 {
-   dummy()
-   {
-      (void)ordered_range;
-      (void)ordered_unique_range;
-   }
+	dummy()
+	{
+		( void ) ordered_range;
+		( void ) ordered_unique_range;
+	}
 };
 
 }  //detail_really_deep_namespace {
 
 /// @endcond
 
-}}  //namespace boost { namespace container {
+}
+}  //namespace boost { namespace container {
 
 #endif //#ifndef BOOST_CONTAINERS_CONTAINERS_FWD_HPP

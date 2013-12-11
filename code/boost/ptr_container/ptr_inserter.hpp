@@ -13,7 +13,7 @@
 #define BOOST_PTR_CONTAINER_PTR_INSERTER_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-    #pragma once
+#pragma once
 #endif
 
 #include <boost/config.hpp>
@@ -24,234 +24,234 @@ namespace boost
 {
 namespace ptr_container
 {
-    template< class PtrContainer >
-    class ptr_back_insert_iterator;
+template< class PtrContainer >
+class ptr_back_insert_iterator;
 
-    template< class PtrContainer >
-    class ptr_front_insert_iterator;
-    
-    template< class PtrContainer >
-    class ptr_insert_iterator;
+template< class PtrContainer >
+class ptr_front_insert_iterator;
 
-    template< class PtrContainer >
-    ptr_back_insert_iterator<PtrContainer> 
-    ptr_back_inserter( PtrContainer& cont );
+template< class PtrContainer >
+class ptr_insert_iterator;
 
-    template< class PtrContainer >
-    ptr_front_insert_iterator<PtrContainer> 
-    ptr_front_inserter( PtrContainer& cont );
+template< class PtrContainer >
+ptr_back_insert_iterator<PtrContainer>
+ptr_back_inserter ( PtrContainer &cont );
 
-    template< class PtrContainer >
-    ptr_insert_iterator<PtrContainer> 
-    ptr_inserter( PtrContainer& cont, typename PtrContainer::iterator before );
+template< class PtrContainer >
+ptr_front_insert_iterator<PtrContainer>
+ptr_front_inserter ( PtrContainer &cont );
 
-    //////////////////////////////////////////////////////////////////////////
-    // Implementation
-    ////////////////////////////////////////////////////////////////////////// 
+template< class PtrContainer >
+ptr_insert_iterator<PtrContainer>
+ptr_inserter ( PtrContainer &cont, typename PtrContainer::iterator before );
 
-
-    template< class PtrContainer >
-    class ptr_back_insert_iterator :
-        public std::iterator<std::output_iterator_tag,void,void,void,void>
-    {
-    public:
-        typedef PtrContainer container_type;
-
-    public:
-        explicit ptr_back_insert_iterator( PtrContainer& cont )
-        : container(&cont)
-        { }
-
-        ptr_back_insert_iterator& 
-        operator=( typename PtrContainer::value_type r )
-        {
-            typename PtrContainer::value_type obj = 0;
-            if( r != 0 )
-                obj = container_type::clone_allocator_type::allocate_clone(*r);
-
-            container->push_back( obj );
-            return *this;
-        }
-
-        template< class T >
-        ptr_back_insert_iterator& 
-        operator=( std::auto_ptr<T> r )
-        {
-            container->push_back( r );
-            return *this;
-        }
-
-        ptr_back_insert_iterator& 
-        operator=( typename PtrContainer::const_reference r )
-        {
-            container->push_back( container_type::clone_allocator_type::
-                                  allocate_clone(r) );
-            return *this;
-        }
-
-        ptr_back_insert_iterator& operator*()
-        { 
-            return *this;
-        }
-
-        ptr_back_insert_iterator& operator++()
-        { 
-            return *this;
-        }
-
-        ptr_back_insert_iterator operator++(int)
-        { 
-            return *this;
-        }
-        
-    protected:
-        PtrContainer* container;
-    };
+//////////////////////////////////////////////////////////////////////////
+// Implementation
+//////////////////////////////////////////////////////////////////////////
 
 
-    
-    template< class PtrContainer >
-    class ptr_front_insert_iterator :
-        public std::iterator<std::output_iterator_tag,void,void,void,void>
-    {
-    public:
-        typedef PtrContainer container_type;
+template< class PtrContainer >
+class ptr_back_insert_iterator :
+	public std::iterator<std::output_iterator_tag, void, void, void, void>
+{
+public:
+	typedef PtrContainer container_type;
 
-    public:
-        explicit ptr_front_insert_iterator( PtrContainer& cont )
-        : container(&cont)
-        { }
+public:
+	explicit ptr_back_insert_iterator ( PtrContainer &cont )
+		: container ( &cont )
+	{ }
 
-        ptr_front_insert_iterator& 
-        operator=( typename PtrContainer::value_type r )
-        {
-            typename PtrContainer::value_type obj = 0;
-            if( r != 0 )
-                obj = container_type::clone_allocator_type::allocate_clone(*r);
+	ptr_back_insert_iterator &
+	operator= ( typename PtrContainer::value_type r )
+	{
+		typename PtrContainer::value_type obj = 0;
+		if ( r != 0 )
+			obj = container_type::clone_allocator_type::allocate_clone ( *r );
 
-            container->push_front( obj );
-            return *this;
-        }
+		container->push_back ( obj );
+		return *this;
+	}
 
-        template< class T >
-        ptr_front_insert_iterator& 
-        operator=( std::auto_ptr<T> r )
-        {
-            container->push_front( r );
-            return *this;
-        }
-        
-        ptr_front_insert_iterator& 
-        operator=( typename PtrContainer::const_reference r )
-        {
-            container->push_front( container_type::clone_allocator_type::
-                                   allocate_clone(r) );
-            return *this;
-        }
+	template< class T >
+	ptr_back_insert_iterator &
+	operator= ( std::auto_ptr<T> r )
+	{
+		container->push_back ( r );
+		return *this;
+	}
 
-        ptr_front_insert_iterator& operator*()
-        { 
-            return *this;
-        }
+	ptr_back_insert_iterator &
+	operator= ( typename PtrContainer::const_reference r )
+	{
+		container->push_back ( container_type::clone_allocator_type::
+		                       allocate_clone ( r ) );
+		return *this;
+	}
 
-        ptr_front_insert_iterator& operator++()
-        { 
-            return *this;
-        }
+	ptr_back_insert_iterator &operator*()
+	{
+		return *this;
+	}
 
-        ptr_front_insert_iterator operator++(int)
-        { 
-            return *this;
-        }
-        
-    protected:
-        PtrContainer* container;
-    };
+	ptr_back_insert_iterator &operator++()
+	{
+		return *this;
+	}
+
+	ptr_back_insert_iterator operator++ ( int )
+	{
+		return *this;
+	}
+
+protected:
+	PtrContainer *container;
+};
 
 
-    
-    template< class PtrContainer >
-    class ptr_insert_iterator :
-        public std::iterator<std::output_iterator_tag,void,void,void,void>
-    {
-    public:
-        typedef PtrContainer container_type;
 
-    public:
-        ptr_insert_iterator( PtrContainer& cont,
-                               typename PtrContainer::iterator before )
-        : container(&cont), iter(before)
-        { }
+template< class PtrContainer >
+class ptr_front_insert_iterator :
+	public std::iterator<std::output_iterator_tag, void, void, void, void>
+{
+public:
+	typedef PtrContainer container_type;
 
-        ptr_insert_iterator& 
-        operator=( typename PtrContainer::value_type r )
-        {
-            typename PtrContainer::value_type obj = 0;
-            if( r != 0 )
-                obj = container_type::clone_allocator_type::allocate_clone(*r);
+public:
+	explicit ptr_front_insert_iterator ( PtrContainer &cont )
+		: container ( &cont )
+	{ }
 
-            iter = container->insert( iter, obj );
-            return *this;
-        }
+	ptr_front_insert_iterator &
+	operator= ( typename PtrContainer::value_type r )
+	{
+		typename PtrContainer::value_type obj = 0;
+		if ( r != 0 )
+			obj = container_type::clone_allocator_type::allocate_clone ( *r );
 
-        template< class T >
-        ptr_insert_iterator& 
-        operator=( std::auto_ptr<T> r )
-        {
-            iter = container->insert( iter, r );
-            return *this;
-        }
-        
-        ptr_insert_iterator& 
-        operator=( typename PtrContainer::const_reference r )
-        {
-            iter = container->insert( iter, container_type::clone_allocator_type::
-                                            allocate_clone(r) );
-            return *this;
-        }
+		container->push_front ( obj );
+		return *this;
+	}
 
-        ptr_insert_iterator& operator*()
-        { 
-            return *this;
-        }
+	template< class T >
+	ptr_front_insert_iterator &
+	operator= ( std::auto_ptr<T> r )
+	{
+		container->push_front ( r );
+		return *this;
+	}
 
-        ptr_insert_iterator& operator++()
-        { 
-            return *this;
-        }
+	ptr_front_insert_iterator &
+	operator= ( typename PtrContainer::const_reference r )
+	{
+		container->push_front ( container_type::clone_allocator_type::
+		                        allocate_clone ( r ) );
+		return *this;
+	}
 
-        ptr_insert_iterator operator++(int)
-        { 
-            return *this;
-        }
-        
-    protected:
-        PtrContainer*                    container;
-        typename PtrContainer::iterator  iter;
-    };
+	ptr_front_insert_iterator &operator*()
+	{
+		return *this;
+	}
 
-    template< class PtrContainer >
-    inline ptr_back_insert_iterator<PtrContainer> 
-    ptr_back_inserter( PtrContainer& cont )
-    {
-        return ptr_back_insert_iterator<PtrContainer>( cont );
-    }
+	ptr_front_insert_iterator &operator++()
+	{
+		return *this;
+	}
 
-    template< class PtrContainer >
-    inline ptr_front_insert_iterator<PtrContainer> 
-    ptr_front_inserter( PtrContainer& cont )
-    {
-        return ptr_front_insert_iterator<PtrContainer>( cont );
-    }
+	ptr_front_insert_iterator operator++ ( int )
+	{
+		return *this;
+	}
 
-    template< class PtrContainer >
-    inline ptr_insert_iterator<PtrContainer> 
-    ptr_inserter( PtrContainer& cont, 
-                    typename PtrContainer::iterator before )
-    {
-        return ptr_insert_iterator<PtrContainer>( cont, before );
-    }
-    
+protected:
+	PtrContainer *container;
+};
+
+
+
+template< class PtrContainer >
+class ptr_insert_iterator :
+	public std::iterator<std::output_iterator_tag, void, void, void, void>
+{
+public:
+	typedef PtrContainer container_type;
+
+public:
+	ptr_insert_iterator ( PtrContainer &cont,
+	                      typename PtrContainer::iterator before )
+		: container ( &cont ), iter ( before )
+	{ }
+
+	ptr_insert_iterator &
+	operator= ( typename PtrContainer::value_type r )
+	{
+		typename PtrContainer::value_type obj = 0;
+		if ( r != 0 )
+			obj = container_type::clone_allocator_type::allocate_clone ( *r );
+
+		iter = container->insert ( iter, obj );
+		return *this;
+	}
+
+	template< class T >
+	ptr_insert_iterator &
+	operator= ( std::auto_ptr<T> r )
+	{
+		iter = container->insert ( iter, r );
+		return *this;
+	}
+
+	ptr_insert_iterator &
+	operator= ( typename PtrContainer::const_reference r )
+	{
+		iter = container->insert ( iter, container_type::clone_allocator_type::
+		                           allocate_clone ( r ) );
+		return *this;
+	}
+
+	ptr_insert_iterator &operator*()
+	{
+		return *this;
+	}
+
+	ptr_insert_iterator &operator++()
+	{
+		return *this;
+	}
+
+	ptr_insert_iterator operator++ ( int )
+	{
+		return *this;
+	}
+
+protected:
+	PtrContainer                    *container;
+	typename PtrContainer::iterator  iter;
+};
+
+template< class PtrContainer >
+inline ptr_back_insert_iterator<PtrContainer>
+ptr_back_inserter ( PtrContainer &cont )
+{
+	return ptr_back_insert_iterator<PtrContainer> ( cont );
+}
+
+template< class PtrContainer >
+inline ptr_front_insert_iterator<PtrContainer>
+ptr_front_inserter ( PtrContainer &cont )
+{
+	return ptr_front_insert_iterator<PtrContainer> ( cont );
+}
+
+template< class PtrContainer >
+inline ptr_insert_iterator<PtrContainer>
+ptr_inserter ( PtrContainer &cont,
+               typename PtrContainer::iterator before )
+{
+	return ptr_insert_iterator<PtrContainer> ( cont, before );
+}
+
 } // namespace 'ptr_container'
 } // namespace 'boost'
 

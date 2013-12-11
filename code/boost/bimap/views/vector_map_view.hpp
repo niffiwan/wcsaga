@@ -23,9 +23,12 @@
 #include <boost/bimap/detail/map_view_base.hpp>
 #include <boost/bimap/container_adaptor/detail/comparison_adaptor.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace views {
+namespace boost
+{
+namespace bimaps
+{
+namespace views
+{
 
 /// \brief View of a side of a bimap.
 /**
@@ -37,227 +40,227 @@ See also const_map_view.
                                                                              **/
 template< class Tag, class BimapType >
 class vector_map_view
-:
-    public BOOST_BIMAP_MAP_VIEW_CONTAINER_ADAPTOR(
-        vector_map_adaptor,
-        Tag,BimapType,
-        reverse_iterator_type_by, const_reverse_iterator_type_by
-    ),
+	:
+	public BOOST_BIMAP_MAP_VIEW_CONTAINER_ADAPTOR (
+	    vector_map_adaptor,
+	    Tag, BimapType,
+	    reverse_iterator_type_by, const_reverse_iterator_type_by
+	),
 
-    public ::boost::bimaps::detail::
-                map_view_base< vector_map_view<Tag,BimapType>,Tag,BimapType >
+	public ::boost::bimaps::detail::
+	map_view_base< vector_map_view<Tag, BimapType>, Tag, BimapType >
 {
-    typedef BOOST_BIMAP_MAP_VIEW_CONTAINER_ADAPTOR(
-        vector_map_adaptor,
-        Tag,BimapType,
-        reverse_iterator_type_by, const_reverse_iterator_type_by
+	typedef BOOST_BIMAP_MAP_VIEW_CONTAINER_ADAPTOR (
+	    vector_map_adaptor,
+	    Tag, BimapType,
+	    reverse_iterator_type_by, const_reverse_iterator_type_by
 
-    ) base_;
+	) base_;
 
-    BOOST_BIMAP_MAP_VIEW_BASE_FRIEND(vector_map_view,Tag,BimapType)
+	BOOST_BIMAP_MAP_VIEW_BASE_FRIEND ( vector_map_view, Tag, BimapType )
 
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::data_extractor
-    <
-        Tag,
-        BOOST_DEDUCED_TYPENAME BimapType::relation
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::data_extractor
+	<
+	Tag,
+	BOOST_DEDUCED_TYPENAME BimapType::relation
 
-    >::type key_from_base_value;
+	>::type key_from_base_value;
 
-    public:
+public:
 
-    typedef BOOST_DEDUCED_TYPENAME base_::value_type::info_type info_type;
+	typedef BOOST_DEDUCED_TYPENAME base_::value_type::info_type info_type;
 
-    vector_map_view(BOOST_DEDUCED_TYPENAME base_::base_type & c) :
-        base_(c) {}
+	vector_map_view ( BOOST_DEDUCED_TYPENAME base_::base_type &c ) :
+		base_ ( c ) {}
 
-    vector_map_view & operator=(const vector_map_view & v)
-    {
-        this->base() = v.base();
-        return *this;
-    }
+	vector_map_view &operator= ( const vector_map_view &v )
+	{
+		this->base() = v.base();
+		return *this;
+	}
 
-    BOOST_BIMAP_VIEW_ASSIGN_IMPLEMENTATION(base_)
+	BOOST_BIMAP_VIEW_ASSIGN_IMPLEMENTATION ( base_ )
 
-    BOOST_BIMAP_VIEW_FRONT_BACK_IMPLEMENTATION(base_)
+	BOOST_BIMAP_VIEW_FRONT_BACK_IMPLEMENTATION ( base_ )
 
-    // Lists operations
+	// Lists operations
 
-    void splice(BOOST_DEDUCED_TYPENAME base_::iterator position, vector_map_view & x)
-    {
-        this->base().splice(
-            this->template functor<
-                BOOST_DEDUCED_TYPENAME base_::iterator_to_base>()(position),
-            x.base()
-        );
-    }
+	void splice ( BOOST_DEDUCED_TYPENAME base_::iterator position, vector_map_view &x )
+	{
+		this->base().splice (
+		    this->template functor <
+		        BOOST_DEDUCED_TYPENAME base_::iterator_to_base > () ( position ),
+		    x.base()
+		    );
+	}
 
-    void splice(BOOST_DEDUCED_TYPENAME base_::iterator position,
-                vector_map_view & x,
-                BOOST_DEDUCED_TYPENAME base_::iterator i)
-    {
-        this->base().splice(
-            this->template functor<
-                BOOST_DEDUCED_TYPENAME base_::iterator_to_base>()(position),
-            x.base(),
-            this->template functor<
-                BOOST_DEDUCED_TYPENAME base_::iterator_to_base>()(i)
-        );
-    }
+	void splice ( BOOST_DEDUCED_TYPENAME base_::iterator position,
+	              vector_map_view &x,
+	              BOOST_DEDUCED_TYPENAME base_::iterator i )
+	{
+		this->base().splice (
+		    this->template functor <
+		        BOOST_DEDUCED_TYPENAME base_::iterator_to_base > () ( position ),
+		    x.base(),
+		    this->template functor <
+		        BOOST_DEDUCED_TYPENAME base_::iterator_to_base > () ( i )
+		    );
+	}
 
-    void splice(BOOST_DEDUCED_TYPENAME base_::iterator position,
-                vector_map_view & x,
-                BOOST_DEDUCED_TYPENAME base_::iterator first,
-                BOOST_DEDUCED_TYPENAME base_::iterator last)
-    {
-        this->base().splice(
-            this->template functor<
-                BOOST_DEDUCED_TYPENAME base_::iterator_to_base>()(position),
-            x.base(),
-            this->template functor<
-                BOOST_DEDUCED_TYPENAME base_::iterator_to_base>()(first),
-            this->template functor<
-                BOOST_DEDUCED_TYPENAME base_::iterator_to_base>()(last)
-        );
-    }
+	void splice ( BOOST_DEDUCED_TYPENAME base_::iterator position,
+	              vector_map_view &x,
+	              BOOST_DEDUCED_TYPENAME base_::iterator first,
+	              BOOST_DEDUCED_TYPENAME base_::iterator last )
+	{
+		this->base().splice (
+		    this->template functor <
+		        BOOST_DEDUCED_TYPENAME base_::iterator_to_base > () ( position ),
+		    x.base(),
+		    this->template functor <
+		        BOOST_DEDUCED_TYPENAME base_::iterator_to_base > () ( first ),
+		    this->template functor <
+		        BOOST_DEDUCED_TYPENAME base_::iterator_to_base > () ( last )
+		    );
+	}
 
-    void remove(BOOST_DEDUCED_TYPENAME ::boost::call_traits< 
-                    BOOST_DEDUCED_TYPENAME base_::value_type >::param_type value)
-    {
-        this->base().remove(
-            this->template functor<
-                BOOST_DEDUCED_TYPENAME base_::value_to_base>()(value)
-        );
-    }
+	void remove ( BOOST_DEDUCED_TYPENAME ::boost::call_traits <
+	              BOOST_DEDUCED_TYPENAME base_::value_type >::param_type value )
+	{
+		this->base().remove (
+		    this->template functor <
+		        BOOST_DEDUCED_TYPENAME base_::value_to_base > () ( value )
+		    );
+	}
 
-    template< class Predicate >
-    void remove_if(Predicate pred)
-    {
-        this->base().remove_if(
-            ::boost::bimaps::container_adaptor::detail::unary_check_adaptor
-            <
-                Predicate,
-                BOOST_DEDUCED_TYPENAME base_::base_type::value_type,
-                key_from_base_value
+	template< class Predicate >
+	void remove_if ( Predicate pred )
+	{
+		this->base().remove_if (
+		    ::boost::bimaps::container_adaptor::detail::unary_check_adaptor
+		    <
+		    Predicate,
+		    BOOST_DEDUCED_TYPENAME base_::base_type::value_type,
+		    key_from_base_value
 
-            >( pred, key_from_base_value() )
-        );
-    }
+		    > ( pred, key_from_base_value() )
+		);
+	}
 
-    void unique()
-    {
-        this->base().unique(
-            ::boost::bimaps::container_adaptor::detail::comparison_adaptor
-            <
-                std::equal_to<BOOST_DEDUCED_TYPENAME base_::key_type>,
-                BOOST_DEDUCED_TYPENAME base_::base_type::value_type,
-                key_from_base_value
+	void unique()
+	{
+		this->base().unique (
+		    ::boost::bimaps::container_adaptor::detail::comparison_adaptor
+		    <
+		    std::equal_to<BOOST_DEDUCED_TYPENAME base_::key_type>,
+		    BOOST_DEDUCED_TYPENAME base_::base_type::value_type,
+		    key_from_base_value
 
-            >(std::equal_to<BOOST_DEDUCED_TYPENAME base_::key_type>(),
-                    key_from_base_value() )
-        );
-    }
+		    > ( std::equal_to<BOOST_DEDUCED_TYPENAME base_::key_type>(),
+		        key_from_base_value() )
+		);
+	}
 
-    template< class BinaryPredicate >
-    void unique(BinaryPredicate binary_pred)
-    {
-        this->base().unique(
-            ::boost::bimaps::container_adaptor::detail::comparison_adaptor
-            <
-                BinaryPredicate,
-                BOOST_DEDUCED_TYPENAME base_::base_type::value_type,
-                key_from_base_value
+	template< class BinaryPredicate >
+	void unique ( BinaryPredicate binary_pred )
+	{
+		this->base().unique (
+		    ::boost::bimaps::container_adaptor::detail::comparison_adaptor
+		    <
+		    BinaryPredicate,
+		    BOOST_DEDUCED_TYPENAME base_::base_type::value_type,
+		    key_from_base_value
 
-            >( binary_pred, key_from_base_value() )
-        );
-    }
+		    > ( binary_pred, key_from_base_value() )
+		);
+	}
 
-    void merge(vector_map_view & x)
-    {
-        this->base().merge(x.base(),
-            ::boost::bimaps::container_adaptor::detail::comparison_adaptor
-            <
-                std::less<BOOST_DEDUCED_TYPENAME base_::key_type>,
-                BOOST_DEDUCED_TYPENAME base_::base_type::value_type,
-                key_from_base_value
+	void merge ( vector_map_view &x )
+	{
+		this->base().merge ( x.base(),
+		                     ::boost::bimaps::container_adaptor::detail::comparison_adaptor
+		                     <
+		                     std::less<BOOST_DEDUCED_TYPENAME base_::key_type>,
+		                     BOOST_DEDUCED_TYPENAME base_::base_type::value_type,
+		                     key_from_base_value
 
-            >( std::less<BOOST_DEDUCED_TYPENAME base_::key_type>(), 
-                    key_from_base_value() )
-        );
-    }
+		                     > ( std::less<BOOST_DEDUCED_TYPENAME base_::key_type>(),
+		                         key_from_base_value() )
+		                   );
+	}
 
-    template< class Compare >
-    void merge(vector_map_view & x, Compare comp)
-    {
-        this->base().merge(x.base(),
-            ::boost::bimaps::container_adaptor::detail::comparison_adaptor
-            <
-                Compare,
-                BOOST_DEDUCED_TYPENAME base_::base_type::value_type,
-                key_from_base_value
+	template< class Compare >
+	void merge ( vector_map_view &x, Compare comp )
+	{
+		this->base().merge ( x.base(),
+		                     ::boost::bimaps::container_adaptor::detail::comparison_adaptor
+		                     <
+		                     Compare,
+		                     BOOST_DEDUCED_TYPENAME base_::base_type::value_type,
+		                     key_from_base_value
 
-            >( comp, key_from_base_value() )
-        );
-    }
+		                     > ( comp, key_from_base_value() )
+		                   );
+	}
 
-    void sort()
-    {
-        this->base().sort(
-            ::boost::bimaps::container_adaptor::detail::comparison_adaptor
-            <
-                std::less<BOOST_DEDUCED_TYPENAME base_::key_type>,
-                BOOST_DEDUCED_TYPENAME base_::base_type::value_type,
-                key_from_base_value
+	void sort()
+	{
+		this->base().sort (
+		    ::boost::bimaps::container_adaptor::detail::comparison_adaptor
+		    <
+		    std::less<BOOST_DEDUCED_TYPENAME base_::key_type>,
+		    BOOST_DEDUCED_TYPENAME base_::base_type::value_type,
+		    key_from_base_value
 
-            >( std::less<BOOST_DEDUCED_TYPENAME base_::key_type>(),
-                    key_from_base_value() )
-        );
-    }
+		    > ( std::less<BOOST_DEDUCED_TYPENAME base_::key_type>(),
+		        key_from_base_value() )
+		);
+	}
 
-    template< class Compare >
-    void sort(Compare comp)
-    {
-        this->base().sort(
-            ::boost::bimaps::container_adaptor::detail::comparison_adaptor
-            <
-                Compare,
-                BOOST_DEDUCED_TYPENAME base_::base_type::value_type,
-                key_from_base_value
+	template< class Compare >
+	void sort ( Compare comp )
+	{
+		this->base().sort (
+		    ::boost::bimaps::container_adaptor::detail::comparison_adaptor
+		    <
+		    Compare,
+		    BOOST_DEDUCED_TYPENAME base_::base_type::value_type,
+		    key_from_base_value
 
-            >( comp, key_from_base_value() )
-        );
-    }
+		    > ( comp, key_from_base_value() )
+		);
+	}
 
-    void reverse()
-    {
-        this->base().reverse();
-    }
+	void reverse()
+	{
+		this->base().reverse();
+	}
 
-    // Rearrange Operations
+	// Rearrange Operations
 
-    void relocate(BOOST_DEDUCED_TYPENAME base_::iterator position, 
-                  BOOST_DEDUCED_TYPENAME base_::iterator i)
-    {
-        this->base().relocate(
-            this->template functor<
-                BOOST_DEDUCED_TYPENAME base_::iterator_to_base>()(position),
-            this->template functor<
-                BOOST_DEDUCED_TYPENAME base_::iterator_to_base>()(i)
-        );
-    }
+	void relocate ( BOOST_DEDUCED_TYPENAME base_::iterator position,
+	                BOOST_DEDUCED_TYPENAME base_::iterator i )
+	{
+		this->base().relocate (
+		    this->template functor <
+		        BOOST_DEDUCED_TYPENAME base_::iterator_to_base > () ( position ),
+		    this->template functor <
+		        BOOST_DEDUCED_TYPENAME base_::iterator_to_base > () ( i )
+		    );
+	}
 
-    void relocate(BOOST_DEDUCED_TYPENAME base_::iterator position,
-                  BOOST_DEDUCED_TYPENAME base_::iterator first, 
-                  BOOST_DEDUCED_TYPENAME base_::iterator last)
-    {
-        this->base().relocate(
-            this->template functor<
-                BOOST_DEDUCED_TYPENAME base_::iterator_to_base>()(position),
-            this->template functor<
-                BOOST_DEDUCED_TYPENAME base_::iterator_to_base>()(first),
-            this->template functor<
-                BOOST_DEDUCED_TYPENAME base_::iterator_to_base>()(last)
-        );
-    }
+	void relocate ( BOOST_DEDUCED_TYPENAME base_::iterator position,
+	                BOOST_DEDUCED_TYPENAME base_::iterator first,
+	                BOOST_DEDUCED_TYPENAME base_::iterator last )
+	{
+		this->base().relocate (
+		    this->template functor <
+		        BOOST_DEDUCED_TYPENAME base_::iterator_to_base > () ( position ),
+		    this->template functor <
+		        BOOST_DEDUCED_TYPENAME base_::iterator_to_base > () ( first ),
+		    this->template functor <
+		        BOOST_DEDUCED_TYPENAME base_::iterator_to_base > () ( last )
+		    );
+	}
 
 };
 
@@ -276,20 +279,21 @@ typedef BOOST_DEDUCED_TYPENAME MAP_VIEW::TYPENAME                             \
     BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,const_reverse_iterator)  \
 /*===========================================================================*/
 
-namespace detail {
+namespace detail
+{
 
 template< class Tag, class BimapType >
-struct left_map_view_extra_typedefs< ::boost::bimaps::views::vector_map_view<Tag,BimapType> >
+struct left_map_view_extra_typedefs< ::boost::bimaps::views::vector_map_view<Tag, BimapType> >
 {
-    private: typedef ::boost::bimaps::views::vector_map_view<Tag,BimapType> map_view_;
-    public : BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY(map_view_,left)
+private: typedef ::boost::bimaps::views::vector_map_view<Tag, BimapType> map_view_;
+public : BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY ( map_view_, left )
 };
 
 template< class Tag, class BimapType >
-struct right_map_view_extra_typedefs< ::boost::bimaps::views::vector_map_view<Tag,BimapType> >
+struct right_map_view_extra_typedefs< ::boost::bimaps::views::vector_map_view<Tag, BimapType> >
 {
-    private: typedef ::boost::bimaps::views::vector_map_view<Tag,BimapType> map_view_;
-    public : BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY(map_view_,right)
+private: typedef ::boost::bimaps::views::vector_map_view<Tag, BimapType> map_view_;
+public : BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY ( map_view_, right )
 };
 
 } // namespace detail

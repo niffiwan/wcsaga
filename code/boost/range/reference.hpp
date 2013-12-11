@@ -21,9 +21,9 @@
 
 namespace boost
 {
-    template< class T >
-    struct range_reference : iterator_reference< typename range_iterator<T>::type >
-    { };
+template< class T >
+struct range_reference : iterator_reference< typename range_iterator<T>::type >
+{ };
 }
 
 #endif

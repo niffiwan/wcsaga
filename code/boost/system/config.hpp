@@ -7,7 +7,7 @@
 
 //  See http://www.boost.org/libs/system for documentation.
 
-#ifndef BOOST_SYSTEM_CONFIG_HPP                  
+#ifndef BOOST_SYSTEM_CONFIG_HPP
 #define BOOST_SYSTEM_CONFIG_HPP
 
 #include <boost/config.hpp>
@@ -21,7 +21,7 @@
 #   if defined(_WIN32) || defined(__WIN32__) || defined(WIN32) || defined(__CYGWIN__)
 #     define BOOST_WINDOWS_API
 #   else
-#     define BOOST_POSIX_API 
+#     define BOOST_POSIX_API
 #   endif
 # endif
 
@@ -51,7 +51,7 @@
 #define BOOST_SYSTEM_DECL
 #endif
 
-//  enable automatic library variant selection  ------------------------------// 
+//  enable automatic library variant selection  ------------------------------//
 
 #if !defined(BOOST_SYSTEM_SOURCE) && !defined(BOOST_ALL_NO_LIB) && !defined(BOOST_SYSTEM_NO_LIB)
 //

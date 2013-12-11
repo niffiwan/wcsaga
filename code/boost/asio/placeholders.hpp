@@ -22,9 +22,12 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/asio/detail/pop_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace placeholders {
+namespace boost
+{
+namespace asio
+{
+namespace placeholders
+{
 
 #if defined(GENERATING_DOCUMENTATION)
 
@@ -47,52 +50,52 @@ unspecified iterator;
 
 inline boost::arg<1> error()
 {
-  return boost::arg<1>();
+	return boost::arg<1>();
 }
 
 inline boost::arg<2> bytes_transferred()
 {
-  return boost::arg<2>();
+	return boost::arg<2>();
 }
 
 inline boost::arg<2> iterator()
 {
-  return boost::arg<2>();
+	return boost::arg<2>();
 }
 
 #else
 
 namespace detail
 {
-  template <int Number>
-  struct placeholder
-  {
-    static boost::arg<Number>& get()
-    {
-      static boost::arg<Number> result;
-      return result;
-    }
-  };
+template <int Number>
+struct placeholder
+{
+	static boost::arg<Number> &get()
+	{
+		static boost::arg<Number> result;
+		return result;
+	}
+};
 }
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1400)
 
-static boost::arg<1>& error
-  = boost::asio::placeholders::detail::placeholder<1>::get();
-static boost::arg<2>& bytes_transferred
-  = boost::asio::placeholders::detail::placeholder<2>::get();
-static boost::arg<2>& iterator
-  = boost::asio::placeholders::detail::placeholder<2>::get();
+static boost::arg<1> &error
+    = boost::asio::placeholders::detail::placeholder<1>::get();
+static boost::arg<2> &bytes_transferred
+    = boost::asio::placeholders::detail::placeholder<2>::get();
+static boost::arg<2> &iterator
+    = boost::asio::placeholders::detail::placeholder<2>::get();
 
 #else
 
 namespace
 {
-  boost::arg<1>& error
+boost::arg<1> &error
     = boost::asio::placeholders::detail::placeholder<1>::get();
-  boost::arg<2>& bytes_transferred
+boost::arg<2> &bytes_transferred
     = boost::asio::placeholders::detail::placeholder<2>::get();
-  boost::arg<2>& iterator
+boost::arg<2> &iterator
     = boost::asio::placeholders::detail::placeholder<2>::get();
 } // namespace
 

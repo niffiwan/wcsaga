@@ -16,11 +16,14 @@
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/mpl/bool.hpp>
 
-namespace boost{
+namespace boost
+{
 
-namespace multi_index{
+namespace multi_index
+{
 
-namespace detail{
+namespace detail
+{
 
 /* has_uintptr_type is an MPL integral constant determining whether
  * there exists an unsigned integral type with the same size as
@@ -33,7 +36,7 @@ namespace detail{
  */
 
 template<int N>struct uintptr_candidates;
-template<>struct uintptr_candidates<-1>{typedef unsigned int           type;};
+template<>struct uintptr_candidates < -1 > {typedef unsigned int           type;};
 template<>struct uintptr_candidates<0> {typedef unsigned int           type;};
 template<>struct uintptr_candidates<1> {typedef unsigned short         type;};
 template<>struct uintptr_candidates<2> {typedef unsigned long          type;};
@@ -52,16 +55,16 @@ template<>struct uintptr_candidates<4> {typedef unsigned int           type;};
 
 struct uintptr_aux
 {
-  BOOST_STATIC_CONSTANT(int,index=
-    sizeof(void*)==sizeof(uintptr_candidates<0>::type)?0:
-    sizeof(void*)==sizeof(uintptr_candidates<1>::type)?1:
-    sizeof(void*)==sizeof(uintptr_candidates<2>::type)?2:
-    sizeof(void*)==sizeof(uintptr_candidates<3>::type)?3:
-    sizeof(void*)==sizeof(uintptr_candidates<4>::type)?4:-1);
+	BOOST_STATIC_CONSTANT ( int, index =
+	                            sizeof ( void * ) == sizeof ( uintptr_candidates<0>::type ) ? 0 :
+	                            sizeof ( void * ) == sizeof ( uintptr_candidates<1>::type ) ? 1 :
+	                            sizeof ( void * ) == sizeof ( uintptr_candidates<2>::type ) ? 2 :
+	                            sizeof ( void * ) == sizeof ( uintptr_candidates<3>::type ) ? 3 :
+	                            sizeof ( void * ) == sizeof ( uintptr_candidates<4>::type ) ? 4 : -1 );
 
-  BOOST_STATIC_CONSTANT(bool,has_uintptr_type=(index>=0));
+	BOOST_STATIC_CONSTANT ( bool, has_uintptr_type = ( index >= 0 ) );
 
-  typedef uintptr_candidates<index>::type type;
+	typedef uintptr_candidates<index>::type type;
 };
 
 typedef mpl::bool_<uintptr_aux::has_uintptr_type> has_uintptr_type;

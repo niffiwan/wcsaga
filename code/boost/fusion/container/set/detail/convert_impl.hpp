@@ -13,33 +13,36 @@
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct set_tag;
+namespace fusion
+{
+struct set_tag;
 
-    namespace extension
-    {
-        template <typename T>
-        struct convert_impl;
+namespace extension
+{
+template <typename T>
+struct convert_impl;
 
-        template <>
-        struct convert_impl<set_tag>
-        {
-            template <typename Sequence>
-            struct apply
-            {
-                typedef typename detail::as_set<result_of::size<Sequence>::value> gen;
-                typedef typename gen::
-                    template apply<typename result_of::begin<Sequence>::type>::type
-                type;
+template <>
+struct convert_impl<set_tag>
+{
+	template <typename Sequence>
+	struct apply
+	{
+		typedef typename detail::as_set<result_of::size<Sequence>::value> gen;
+		typedef typename gen::
+		template apply<typename result_of::begin<Sequence>::type>::type
+		type;
 
-                static type call(Sequence& seq)
-                {
-                    return gen::call(fusion::begin(seq));
-                }
-            };
-        };
-    }
-}}
+		static type call ( Sequence &seq )
+		{
+			return gen::call ( fusion::begin ( seq ) );
+		}
+	};
+};
+}
+}
+}
 
 #endif

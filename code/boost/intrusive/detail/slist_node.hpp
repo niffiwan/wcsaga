@@ -19,15 +19,17 @@
 #include <boost/intrusive/detail/assert.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 
-namespace boost {
-namespace intrusive {
+namespace boost
+{
+namespace intrusive
+{
 
 template<class VoidPointer>
 struct slist_node
 {
-   typedef typename boost::pointer_to_other
-      <VoidPointer, slist_node>::type   node_ptr;
-   node_ptr next_;
+	typedef typename boost::pointer_to_other
+	<VoidPointer, slist_node>::type   node_ptr;
+	node_ptr next_;
 };
 
 // slist_node_traits can be used with circular_slist_algorithms and supplies
@@ -36,131 +38,131 @@ struct slist_node
 template<class VoidPointer>
 struct slist_node_traits
 {
-   typedef slist_node<VoidPointer> node;
-   typedef typename boost::pointer_to_other
-      <VoidPointer, node>::type          node_ptr;
-   typedef typename boost::pointer_to_other
-      <VoidPointer, const node>::type    const_node_ptr;
+	typedef slist_node<VoidPointer> node;
+	typedef typename boost::pointer_to_other
+	<VoidPointer, node>::type          node_ptr;
+	typedef typename boost::pointer_to_other
+	<VoidPointer, const node>::type    const_node_ptr;
 
-   static node_ptr get_next(const_node_ptr n)
-   {  return n->next_;  }  
+	static node_ptr get_next ( const_node_ptr n )
+	{  return n->next_;  }
 
-   static void set_next(node_ptr n, node_ptr next)
-   {  n->next_ = next;  }  
+	static void set_next ( node_ptr n, node_ptr next )
+	{  n->next_ = next;  }
 };
 
-// slist_iterator provides some basic functions for a 
+// slist_iterator provides some basic functions for a
 // node oriented bidirectional iterator:
 template<class Container, bool IsConst>
 class slist_iterator
-   :  public std::iterator
-         < std::forward_iterator_tag
-         , typename Container::value_type
-         , typename std::iterator_traits<typename Container::value_type*>::difference_type
-         , typename detail::add_const_if_c
-                     <typename Container::value_type, IsConst>::type *
-         , typename detail::add_const_if_c
-                     <typename Container::value_type, IsConst>::type &
-         >
+	:  public std::iterator
+	< std::forward_iterator_tag
+	, typename Container::value_type
+	, typename std::iterator_traits<typename Container::value_type *>::difference_type
+	, typename detail::add_const_if_c
+	<typename Container::value_type, IsConst>::type *
+	, typename detail::add_const_if_c
+	<typename Container::value_type, IsConst>::type &
+	>
 {
-   protected:
-   typedef typename Container::real_value_traits   real_value_traits;
-   typedef typename real_value_traits::node_traits node_traits;
-   typedef typename node_traits::node              node;
-   typedef typename node_traits::node_ptr          node_ptr;
-   typedef typename boost::pointer_to_other
-      <node_ptr, void>::type                       void_pointer;
-   static const bool store_container_ptr = 
-      detail::store_cont_ptr_on_it<Container>::value;
+protected:
+	typedef typename Container::real_value_traits   real_value_traits;
+	typedef typename real_value_traits::node_traits node_traits;
+	typedef typename node_traits::node              node;
+	typedef typename node_traits::node_ptr          node_ptr;
+	typedef typename boost::pointer_to_other
+	<node_ptr, void>::type                       void_pointer;
+	static const bool store_container_ptr =
+	    detail::store_cont_ptr_on_it<Container>::value;
 
-   public:
-   typedef typename Container::value_type    value_type;
-   typedef  typename detail::add_const_if_c
-                     <typename Container::value_type, IsConst>::type *pointer;
-   typedef typename detail::add_const_if_c
-                     <typename Container::value_type, IsConst>::type &reference;
+public:
+	typedef typename Container::value_type    value_type;
+	typedef  typename detail::add_const_if_c
+	<typename Container::value_type, IsConst>::type *pointer;
+	typedef typename detail::add_const_if_c
+	<typename Container::value_type, IsConst>::type &reference;
 
-   slist_iterator()
-      : members_ (node_ptr(0), 0)
-   {}
+	slist_iterator()
+		: members_ ( node_ptr ( 0 ), 0 )
+	{}
 
-   explicit slist_iterator(node_ptr node, const Container *cont_ptr)
-      : members_ (node, cont_ptr)
-   {}
+	explicit slist_iterator ( node_ptr node, const Container *cont_ptr )
+		: members_ ( node, cont_ptr )
+	{}
 
-   slist_iterator(slist_iterator<Container, false> const& other)
-      :  members_(other.pointed_node(), other.get_container())
-   {}
+	slist_iterator ( slist_iterator<Container, false> const &other )
+		:  members_ ( other.pointed_node(), other.get_container() )
+	{}
 
-   const node_ptr &pointed_node() const
-   { return members_.nodeptr_; }
+	const node_ptr &pointed_node() const
+	{ return members_.nodeptr_; }
 
-   slist_iterator &operator=(const node_ptr &node)
-   {  members_.nodeptr_ = node;  return static_cast<slist_iterator&>(*this);  }
+	slist_iterator &operator= ( const node_ptr &node )
+	{  members_.nodeptr_ = node;  return static_cast<slist_iterator &> ( *this );  }
 
-   public:
-   slist_iterator& operator++() 
-   { 
-      members_.nodeptr_ = node_traits::get_next(members_.nodeptr_); 
-      return static_cast<slist_iterator&> (*this); 
-   }
-   
-   slist_iterator operator++(int)
-   {
-      slist_iterator result (*this);
-      members_.nodeptr_ = node_traits::get_next(members_.nodeptr_);
-      return result;
-   }
+public:
+	slist_iterator &operator++()
+	{
+		members_.nodeptr_ = node_traits::get_next ( members_.nodeptr_ );
+		return static_cast<slist_iterator &> ( *this );
+	}
 
-   bool operator== (const slist_iterator& i) const
-   {  return members_.nodeptr_ == i.pointed_node();   }
+	slist_iterator operator++ ( int )
+	{
+		slist_iterator result ( *this );
+		members_.nodeptr_ = node_traits::get_next ( members_.nodeptr_ );
+		return result;
+	}
 
-   bool operator!= (const slist_iterator& i) const
-   {  return !operator== (i); }
+	bool operator== ( const slist_iterator &i ) const
+	{  return members_.nodeptr_ == i.pointed_node();   }
 
-   reference operator*() const
-   {  return *operator->();   }
+	bool operator!= ( const slist_iterator &i ) const
+	{  return !operator== ( i ); }
 
-   pointer operator->() const
-   { return detail::get_pointer(this->get_real_value_traits()->to_value_ptr(members_.nodeptr_)); }
+	reference operator*() const
+	{  return *operator->();   }
 
-   const Container *get_container() const
-   {
-      if(store_container_ptr)
-         return static_cast<const Container*>(members_.get_ptr());
-      else
-         return 0;
-   }
+	pointer operator->() const
+	{ return detail::get_pointer ( this->get_real_value_traits()->to_value_ptr ( members_.nodeptr_ ) ); }
 
-   slist_iterator<Container, false> unconst() const
-   {  return slist_iterator<Container, false>(this->pointed_node(), this->get_container());   }
+	const Container *get_container() const
+	{
+		if ( store_container_ptr )
+			return static_cast<const Container *> ( members_.get_ptr() );
+		else
+			return 0;
+	}
 
-   const real_value_traits *get_real_value_traits() const
-   {
-      if(store_container_ptr)
-         return &this->get_container()->get_real_value_traits();
-      else
-         return 0;
-   }
+	slist_iterator<Container, false> unconst() const
+	{  return slist_iterator<Container, false> ( this->pointed_node(), this->get_container() );   }
 
-   private:
-   struct members
-      :  public detail::select_constptr
-         <void_pointer, store_container_ptr>::type
-   {
-      typedef typename detail::select_constptr
-         <void_pointer, store_container_ptr>::type Base;
+	const real_value_traits *get_real_value_traits() const
+	{
+		if ( store_container_ptr )
+			return &this->get_container()->get_real_value_traits();
+		else
+			return 0;
+	}
 
-      members(const node_ptr &n_ptr, const void *cont)
-         :  Base(cont), nodeptr_(n_ptr)
-      {}
+private:
+	struct members
+			:  public detail::select_constptr
+			<void_pointer, store_container_ptr>::type
+	{
+		typedef typename detail::select_constptr
+		<void_pointer, store_container_ptr>::type Base;
 
-      node_ptr nodeptr_;
-   } members_;
+		members ( const node_ptr &n_ptr, const void *cont )
+			:  Base ( cont ), nodeptr_ ( n_ptr )
+		{}
+
+		node_ptr nodeptr_;
+	} members_;
 };
 
-} //namespace intrusive 
-} //namespace boost 
+} //namespace intrusive
+} //namespace boost
 
 #include <boost/intrusive/detail/config_end.hpp>
 

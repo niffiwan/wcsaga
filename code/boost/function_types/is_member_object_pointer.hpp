@@ -14,21 +14,21 @@
 
 #include <boost/function_types/components.hpp>
 
-namespace boost 
-{ 
-  namespace function_types 
-  {
-    template< typename T > 
-    struct is_member_object_pointer
-      : function_types::detail::represents_impl
-        < function_types::components<T>
-        , detail::member_object_pointer_tag >
-    { 
-      BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_member_object_pointer,(T))
-    };
-  }
-  BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(1,function_types::is_member_object_pointer)
-} 
+namespace boost
+{
+namespace function_types
+{
+template< typename T >
+struct is_member_object_pointer
+		: function_types::detail::represents_impl
+		< function_types::components<T>
+		, detail::member_object_pointer_tag >
+{
+	BOOST_MPL_AUX_LAMBDA_SUPPORT ( 1, is_member_object_pointer, ( T ) )
+};
+}
+BOOST_TT_AUX_TEMPLATE_ARITY_SPEC ( 1, function_types::is_member_object_pointer )
+}
 
-#endif 
+#endif
 

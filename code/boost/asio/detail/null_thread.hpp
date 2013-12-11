@@ -31,32 +31,35 @@
 #include <boost/asio/error.hpp>
 #include <boost/asio/detail/noncopyable.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 class null_thread
-  : private noncopyable
+	: private noncopyable
 {
 public:
-  // Constructor.
-  template <typename Function>
-  null_thread(Function f)
-  {
-    boost::system::system_error e(
-        boost::asio::error::operation_not_supported, "thread");
-    boost::throw_exception(e);
-  }
+	// Constructor.
+	template <typename Function>
+	null_thread ( Function f )
+	{
+		boost::system::system_error e (
+		    boost::asio::error::operation_not_supported, "thread" );
+		boost::throw_exception ( e );
+	}
 
-  // Destructor.
-  ~null_thread()
-  {
-  }
+	// Destructor.
+	~null_thread()
+	{
+	}
 
-  // Wait for the thread to exit.
-  void join()
-  {
-  }
+	// Wait for the thread to exit.
+	void join()
+	{
+	}
 };
 
 } // namespace detail

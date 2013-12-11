@@ -15,162 +15,162 @@
 
 namespace boost
 {
-    namespace detail
-    {
-        struct thread_exit_callback_node;
-        struct tss_data_node;
+namespace detail
+{
+struct thread_exit_callback_node;
+struct tss_data_node;
 
-        struct thread_data_base;
-        void intrusive_ptr_add_ref(thread_data_base * p);
-        void intrusive_ptr_release(thread_data_base * p);
-        
-        struct thread_data_base
-        {
-            long count;
-            detail::win32::handle_manager thread_handle;
-            detail::win32::handle_manager interruption_handle;
-            boost::detail::thread_exit_callback_node* thread_exit_callbacks;
-            boost::detail::tss_data_node* tss_data;
-            bool interruption_enabled;
-            unsigned id;
+struct thread_data_base;
+void intrusive_ptr_add_ref ( thread_data_base *p );
+void intrusive_ptr_release ( thread_data_base *p );
 
-            thread_data_base():
-                count(0),thread_handle(detail::win32::invalid_handle_value),
-                interruption_handle(create_anonymous_event(detail::win32::manual_reset_event,detail::win32::event_initially_reset)),
-                thread_exit_callbacks(0),tss_data(0),
-                interruption_enabled(true),
-                id(0)
-            {}
-            virtual ~thread_data_base()
-            {}
+struct thread_data_base
+{
+	long count;
+	detail::win32::handle_manager thread_handle;
+	detail::win32::handle_manager interruption_handle;
+	boost::detail::thread_exit_callback_node *thread_exit_callbacks;
+	boost::detail::tss_data_node *tss_data;
+	bool interruption_enabled;
+	unsigned id;
 
-            friend void intrusive_ptr_add_ref(thread_data_base * p)
-            {
-                BOOST_INTERLOCKED_INCREMENT(&p->count);
-            }
-            
-            friend void intrusive_ptr_release(thread_data_base * p)
-            {
-                if(!BOOST_INTERLOCKED_DECREMENT(&p->count))
-                {
-                    detail::heap_delete(p);
-                }
-            }
+	thread_data_base() :
+		count ( 0 ), thread_handle ( detail::win32::invalid_handle_value ),
+		interruption_handle ( create_anonymous_event ( detail::win32::manual_reset_event, detail::win32::event_initially_reset ) ),
+		thread_exit_callbacks ( 0 ), tss_data ( 0 ),
+		interruption_enabled ( true ),
+		id ( 0 )
+	{}
+	virtual ~thread_data_base()
+	{}
 
-            void interrupt()
-            {
-                BOOST_VERIFY(detail::win32::SetEvent(interruption_handle)!=0);
-            }
-            
-            typedef detail::win32::handle native_handle_type;
+	friend void intrusive_ptr_add_ref ( thread_data_base *p )
+	{
+		BOOST_INTERLOCKED_INCREMENT ( &p->count );
+	}
 
-            virtual void run()=0;
-        };
+	friend void intrusive_ptr_release ( thread_data_base *p )
+	{
+		if ( !BOOST_INTERLOCKED_DECREMENT ( &p->count ) )
+		{
+			detail::heap_delete ( p );
+		}
+	}
 
-        typedef boost::intrusive_ptr<detail::thread_data_base> thread_data_ptr;
+	void interrupt()
+	{
+		BOOST_VERIFY ( detail::win32::SetEvent ( interruption_handle ) != 0 );
+	}
 
-        struct timeout
-        {
-            unsigned long start;
-            uintmax_t milliseconds;
-            bool relative;
-            boost::system_time abs_time;
+	typedef detail::win32::handle native_handle_type;
 
-            static unsigned long const max_non_infinite_wait=0xfffffffe;
+	virtual void run() = 0;
+};
 
-            timeout(uintmax_t milliseconds_):
-                start(win32::GetTickCount()),
-                milliseconds(milliseconds_),
-                relative(true),
-                abs_time(boost::get_system_time())
-            {}
+typedef boost::intrusive_ptr<detail::thread_data_base> thread_data_ptr;
 
-            timeout(boost::system_time const& abs_time_):
-                start(win32::GetTickCount()),
-                milliseconds(0),
-                relative(false),
-                abs_time(abs_time_)
-            {}
+struct timeout
+{
+	unsigned long start;
+	uintmax_t milliseconds;
+	bool relative;
+	boost::system_time abs_time;
 
-            struct remaining_time
-            {
-                bool more;
-                unsigned long milliseconds;
+	static unsigned long const max_non_infinite_wait = 0xfffffffe;
 
-                remaining_time(uintmax_t remaining):
-                    more(remaining>max_non_infinite_wait),
-                    milliseconds(more?max_non_infinite_wait:(unsigned long)remaining)
-                {}
-            };
+	timeout ( uintmax_t milliseconds_ ) :
+		start ( win32::GetTickCount() ),
+		milliseconds ( milliseconds_ ),
+		relative ( true ),
+		abs_time ( boost::get_system_time() )
+	{}
 
-            remaining_time remaining_milliseconds() const
-            {
-                if(is_sentinel())
-                {
-                    return remaining_time(win32::infinite);
-                }
-                else if(relative)
-                {
-                    unsigned long const now=win32::GetTickCount();
-                    unsigned long const elapsed=now-start;
-                    return remaining_time((elapsed<milliseconds)?(milliseconds-elapsed):0);
-                }
-                else
-                {
-                    system_time const now=get_system_time();
-                    if(abs_time<=now)
-                    {
-                        return remaining_time(0);
-                    }
-                    return remaining_time((abs_time-now).total_milliseconds()+1);
-                }
-            }
+	timeout ( boost::system_time const &abs_time_ ) :
+		start ( win32::GetTickCount() ),
+		milliseconds ( 0 ),
+		relative ( false ),
+		abs_time ( abs_time_ )
+	{}
 
-            bool is_sentinel() const
-            {
-                return milliseconds==~uintmax_t(0);
-            }
-            
+	struct remaining_time
+	{
+		bool more;
+		unsigned long milliseconds;
 
-            static timeout sentinel()
-            {
-                return timeout(sentinel_type());
-            }
-        private:
-            struct sentinel_type
-            {};
-                
-            explicit timeout(sentinel_type):
-                start(0),milliseconds(~uintmax_t(0)),relative(true)
-            {}
-        };
-    }
+		remaining_time ( uintmax_t remaining ) :
+			more ( remaining > max_non_infinite_wait ),
+			milliseconds ( more ? max_non_infinite_wait : ( unsigned long ) remaining )
+		{}
+	};
 
-    namespace this_thread
-    {
-        void BOOST_THREAD_DECL yield();
+	remaining_time remaining_milliseconds() const
+	{
+		if ( is_sentinel() )
+		{
+			return remaining_time ( win32::infinite );
+		}
+		else if ( relative )
+		{
+			unsigned long const now = win32::GetTickCount();
+			unsigned long const elapsed = now - start;
+			return remaining_time ( ( elapsed < milliseconds ) ? ( milliseconds - elapsed ) : 0 );
+		}
+		else
+		{
+			system_time const now = get_system_time();
+			if ( abs_time <= now )
+			{
+				return remaining_time ( 0 );
+			}
+			return remaining_time ( ( abs_time - now ).total_milliseconds() + 1 );
+		}
+	}
 
-        bool BOOST_THREAD_DECL interruptible_wait(detail::win32::handle handle_to_wait_for,detail::timeout target_time);
-        inline void interruptible_wait(unsigned long milliseconds)
-        {
-            interruptible_wait(detail::win32::invalid_handle_value,milliseconds);
-        }
-        inline void interruptible_wait(system_time const& abs_time)
-        {
-            interruptible_wait(detail::win32::invalid_handle_value,abs_time);
-        }
+	bool is_sentinel() const
+	{
+		return milliseconds == ~uintmax_t ( 0 );
+	}
 
-        template<typename TimeDuration>
-        inline void sleep(TimeDuration const& rel_time)
-        {
-            interruptible_wait(static_cast<unsigned long>(rel_time.total_milliseconds()));
-        }
-        inline void sleep(system_time const& abs_time)
-        {
-            interruptible_wait(abs_time);
-        }
-    }
-    
+
+	static timeout sentinel()
+	{
+		return timeout ( sentinel_type() );
+	}
+private:
+	struct sentinel_type
+	{};
+
+	explicit timeout ( sentinel_type ) :
+		start ( 0 ), milliseconds ( ~uintmax_t ( 0 ) ), relative ( true )
+	{}
+};
+}
+
+namespace this_thread
+{
+void BOOST_THREAD_DECL yield();
+
+bool BOOST_THREAD_DECL interruptible_wait ( detail::win32::handle handle_to_wait_for, detail::timeout target_time );
+inline void interruptible_wait ( unsigned long milliseconds )
+{
+	interruptible_wait ( detail::win32::invalid_handle_value, milliseconds );
+}
+inline void interruptible_wait ( system_time const &abs_time )
+{
+	interruptible_wait ( detail::win32::invalid_handle_value, abs_time );
+}
+
+template<typename TimeDuration>
+inline void sleep ( TimeDuration const &rel_time )
+{
+	interruptible_wait ( static_cast<unsigned long> ( rel_time.total_milliseconds() ) );
+}
+inline void sleep ( system_time const &abs_time )
+{
+	interruptible_wait ( abs_time );
+}
+}
+
 }
 
 #include <boost/config/abi_suffix.hpp>

@@ -7,12 +7,16 @@
 
 # include <boost/python/detail/prefix.hpp>
 
-namespace boost { namespace python { 
+namespace boost
+{
+namespace python
+{
 namespace api
 {
-  class object;
+class object;
 }
 using api::object;
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 #endif // OBJECT_FWD_DWA2002724_HPP

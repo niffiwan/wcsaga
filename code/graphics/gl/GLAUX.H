@@ -18,14 +18,14 @@ Abstract:
 
 /*
  * (c) Copyright 1993, Silicon Graphics, Inc.
- * ALL RIGHTS RESERVED 
- * Permission to use, copy, modify, and distribute this software for 
+ * ALL RIGHTS RESERVED
+ * Permission to use, copy, modify, and distribute this software for
  * any purpose and without fee is hereby granted, provided that the above
  * copyright notice appear in all copies and that both the copyright notice
- * and this permission notice appear in supporting documentation, and that 
+ * and this permission notice appear in supporting documentation, and that
  * the name of Silicon Graphics, Inc. not be used in advertising
  * or publicity pertaining to distribution of the software without specific,
- * written prior permission. 
+ * written prior permission.
  *
  * THE MATERIAL EMBODIED ON THIS SOFTWARE IS PROVIDED TO YOU "AS-IS"
  * AND WITHOUT WARRANTY OF ANY KIND, EXPRESS, IMPLIED OR OTHERWISE,
@@ -39,8 +39,8 @@ Abstract:
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS, HOWEVER CAUSED AND ON
  * ANY THEORY OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE
  * POSSESSION, USE OR PERFORMANCE OF THIS SOFTWARE.
- * 
- * US Government Users Restricted Rights 
+ *
+ * US Government Users Restricted Rights
  * Use, duplication, or disclosure by the Government is subject to
  * restrictions set forth in FAR 52.227.19(c)(2) or subparagraph
  * (c)(1)(ii) of the Rights in Technical Data and Computer Software
@@ -83,7 +83,7 @@ extern "C" {
 #define AUX_FIXED_332_PAL   512
 #define AUX_DEPTH           AUX_DEPTH16 /* default is 16-bit depth buffer */
 
-/* 
+/*
 ** Window Masks
 */
 
@@ -103,12 +103,13 @@ extern "C" {
 ** ToolKit Event Structure
 */
 
-typedef struct _AUX_EVENTREC {
-    GLint event;
-    GLint data[4];
+typedef struct _AUX_EVENTREC
+{
+	GLint event;
+	GLint data[4];
 } AUX_EVENTREC;
 
-/* 
+/*
 ** ToolKit Event Types
 */
 #define AUX_EXPOSE      1
@@ -139,7 +140,7 @@ typedef struct _AUX_EVENTREC {
 #define AUX_SHIFT               1
 #define AUX_CONTROL             2
 
-/* 
+/*
 ** ToolKit Key Codes
 */
 #define AUX_RETURN              0x0D
@@ -243,17 +244,18 @@ extern float auxRGBMap[20][3];
 ** RGB Image Structure
 */
 
-typedef struct _AUX_RGBImageRec {
-    GLint sizeX, sizeY;
-    unsigned char *data;
+typedef struct _AUX_RGBImageRec
+{
+	GLint sizeX, sizeY;
+	unsigned char *data;
 } AUX_RGBImageRec;
 
 /*
 ** Prototypes
 */
 
-void APIENTRY auxInitDisplayMode(GLenum);
-void APIENTRY auxInitPosition(int, int, int, int);
+void APIENTRY auxInitDisplayMode ( GLenum );
+void APIENTRY auxInitPosition ( int, int, int, int );
 
 /* GLenum APIENTRY auxInitWindow(LPCTSTR); */
 #ifdef UNICODE
@@ -261,37 +263,37 @@ void APIENTRY auxInitPosition(int, int, int, int);
 #else
 #define auxInitWindow auxInitWindowA
 #endif
-GLenum APIENTRY auxInitWindowA(LPCSTR);
-GLenum APIENTRY auxInitWindowW(LPCWSTR);
+GLenum APIENTRY auxInitWindowA ( LPCSTR );
+GLenum APIENTRY auxInitWindowW ( LPCWSTR );
 
-void APIENTRY auxCloseWindow(void);
-void APIENTRY auxQuit(void);
-void APIENTRY auxSwapBuffers(void);
+void APIENTRY auxCloseWindow ( void );
+void APIENTRY auxQuit ( void );
+void APIENTRY auxSwapBuffers ( void );
 
-typedef void (CALLBACK* AUXMAINPROC)(void);
-void APIENTRY auxMainLoop(AUXMAINPROC);
+typedef void ( CALLBACK *AUXMAINPROC ) ( void );
+void APIENTRY auxMainLoop ( AUXMAINPROC );
 
-typedef void (CALLBACK* AUXEXPOSEPROC)(int, int);
-void APIENTRY auxExposeFunc(AUXEXPOSEPROC);
+typedef void ( CALLBACK *AUXEXPOSEPROC ) ( int, int );
+void APIENTRY auxExposeFunc ( AUXEXPOSEPROC );
 
-typedef void (CALLBACK* AUXRESHAPEPROC)(GLsizei, GLsizei);
-void APIENTRY auxReshapeFunc(AUXRESHAPEPROC);
+typedef void ( CALLBACK *AUXRESHAPEPROC ) ( GLsizei, GLsizei );
+void APIENTRY auxReshapeFunc ( AUXRESHAPEPROC );
 
-typedef void (CALLBACK* AUXIDLEPROC)(void);
-void APIENTRY auxIdleFunc(AUXIDLEPROC);
+typedef void ( CALLBACK *AUXIDLEPROC ) ( void );
+void APIENTRY auxIdleFunc ( AUXIDLEPROC );
 
-typedef void (CALLBACK* AUXKEYPROC)(void);
-void APIENTRY auxKeyFunc(int, AUXKEYPROC);
+typedef void ( CALLBACK *AUXKEYPROC ) ( void );
+void APIENTRY auxKeyFunc ( int, AUXKEYPROC );
 
-typedef void (CALLBACK* AUXMOUSEPROC)(AUX_EVENTREC *);
-void APIENTRY auxMouseFunc(int, int, AUXMOUSEPROC);
+typedef void ( CALLBACK *AUXMOUSEPROC ) ( AUX_EVENTREC * );
+void APIENTRY auxMouseFunc ( int, int, AUXMOUSEPROC );
 
-int  APIENTRY auxGetColorMapSize(void);
-void APIENTRY auxGetMouseLoc(int *, int *);
-void APIENTRY auxSetOneColor(int, float, float, float);
-void APIENTRY auxSetFogRamp(int, int);
-void APIENTRY auxSetGreyRamp(void);
-void APIENTRY auxSetRGBMap(int, float *);
+int  APIENTRY auxGetColorMapSize ( void );
+void APIENTRY auxGetMouseLoc ( int *, int * );
+void APIENTRY auxSetOneColor ( int, float, float, float );
+void APIENTRY auxSetFogRamp ( int, int );
+void APIENTRY auxSetGreyRamp ( void );
+void APIENTRY auxSetRGBMap ( int, float * );
 
 /* AUX_RGBImageRec * APIENTRY auxRGBImageLoad(LPCTSTR); */
 #ifdef UNICODE
@@ -299,72 +301,73 @@ void APIENTRY auxSetRGBMap(int, float *);
 #else
 #define auxRGBImageLoad auxRGBImageLoadA
 #endif
-AUX_RGBImageRec * APIENTRY auxRGBImageLoadA(LPCSTR);
-AUX_RGBImageRec * APIENTRY auxRGBImageLoadW(LPCWSTR);
+AUX_RGBImageRec *APIENTRY auxRGBImageLoadA ( LPCSTR );
+AUX_RGBImageRec *APIENTRY auxRGBImageLoadW ( LPCWSTR );
 
 #ifdef UNICODE
 #define auxDIBImageLoad auxDIBImageLoadW
 #else
 #define auxDIBImageLoad auxDIBImageLoadA
 #endif
-AUX_RGBImageRec * APIENTRY auxDIBImageLoadA(LPCSTR);
-AUX_RGBImageRec * APIENTRY auxDIBImageLoadW(LPCWSTR);
+AUX_RGBImageRec *APIENTRY auxDIBImageLoadA ( LPCSTR );
+AUX_RGBImageRec *APIENTRY auxDIBImageLoadW ( LPCWSTR );
 
-void APIENTRY auxCreateFont(void);
+void APIENTRY auxCreateFont ( void );
 /* void APIENTRY auxDrawStr(LPCTSTR); */
 #ifdef UNICODE
 #define auxDrawStr auxDrawStrW
 #else
 #define auxDrawStr auxDrawStrA
 #endif
-void APIENTRY auxDrawStrA(LPCSTR);
-void APIENTRY auxDrawStrW(LPCWSTR);
+void APIENTRY auxDrawStrA ( LPCSTR );
+void APIENTRY auxDrawStrW ( LPCWSTR );
 
-void APIENTRY auxWireSphere(GLdouble);
-void APIENTRY auxSolidSphere(GLdouble);
-void APIENTRY auxWireCube(GLdouble);
-void APIENTRY auxSolidCube(GLdouble);
-void APIENTRY auxWireBox(GLdouble, GLdouble, GLdouble);
-void APIENTRY auxSolidBox(GLdouble, GLdouble, GLdouble);
-void APIENTRY auxWireTorus(GLdouble, GLdouble);
-void APIENTRY auxSolidTorus(GLdouble, GLdouble);
-void APIENTRY auxWireCylinder(GLdouble, GLdouble);
-void APIENTRY auxSolidCylinder(GLdouble, GLdouble);
-void APIENTRY auxWireIcosahedron(GLdouble);
-void APIENTRY auxSolidIcosahedron(GLdouble);
-void APIENTRY auxWireOctahedron(GLdouble);
-void APIENTRY auxSolidOctahedron(GLdouble);
-void APIENTRY auxWireTetrahedron(GLdouble);
-void APIENTRY auxSolidTetrahedron(GLdouble);
-void APIENTRY auxWireDodecahedron(GLdouble);
-void APIENTRY auxSolidDodecahedron(GLdouble);
-void APIENTRY auxWireCone(GLdouble, GLdouble);
-void APIENTRY auxSolidCone(GLdouble, GLdouble);
-void APIENTRY auxWireTeapot(GLdouble);
-void APIENTRY auxSolidTeapot(GLdouble);
+void APIENTRY auxWireSphere ( GLdouble );
+void APIENTRY auxSolidSphere ( GLdouble );
+void APIENTRY auxWireCube ( GLdouble );
+void APIENTRY auxSolidCube ( GLdouble );
+void APIENTRY auxWireBox ( GLdouble, GLdouble, GLdouble );
+void APIENTRY auxSolidBox ( GLdouble, GLdouble, GLdouble );
+void APIENTRY auxWireTorus ( GLdouble, GLdouble );
+void APIENTRY auxSolidTorus ( GLdouble, GLdouble );
+void APIENTRY auxWireCylinder ( GLdouble, GLdouble );
+void APIENTRY auxSolidCylinder ( GLdouble, GLdouble );
+void APIENTRY auxWireIcosahedron ( GLdouble );
+void APIENTRY auxSolidIcosahedron ( GLdouble );
+void APIENTRY auxWireOctahedron ( GLdouble );
+void APIENTRY auxSolidOctahedron ( GLdouble );
+void APIENTRY auxWireTetrahedron ( GLdouble );
+void APIENTRY auxSolidTetrahedron ( GLdouble );
+void APIENTRY auxWireDodecahedron ( GLdouble );
+void APIENTRY auxSolidDodecahedron ( GLdouble );
+void APIENTRY auxWireCone ( GLdouble, GLdouble );
+void APIENTRY auxSolidCone ( GLdouble, GLdouble );
+void APIENTRY auxWireTeapot ( GLdouble );
+void APIENTRY auxSolidTeapot ( GLdouble );
 
 /*
 ** Window specific functions
 ** hwnd, hdc, and hglrc valid after auxInitWindow()
 */
-HWND  APIENTRY auxGetHWND(void);
-HDC   APIENTRY auxGetHDC(void);
-HGLRC APIENTRY auxGetHGLRC(void);
+HWND  APIENTRY auxGetHWND ( void );
+HDC   APIENTRY auxGetHDC ( void );
+HGLRC APIENTRY auxGetHGLRC ( void );
 
 /*
 ** Viewperf support functions and constants
 */
 /* Display Mode Selection Criteria */
-enum {
-    AUX_USE_ID = 1,
-    AUX_EXACT_MATCH,
-    AUX_MINIMUM_CRITERIA
+enum
+{
+	AUX_USE_ID = 1,
+	AUX_EXACT_MATCH,
+	AUX_MINIMUM_CRITERIA
 };
-void   APIENTRY auxInitDisplayModePolicy(GLenum);
-GLenum APIENTRY auxInitDisplayModeID(GLint);
-GLenum APIENTRY auxGetDisplayModePolicy(void);
-GLint  APIENTRY auxGetDisplayModeID(void);
-GLenum APIENTRY auxGetDisplayMode(void);
+void   APIENTRY auxInitDisplayModePolicy ( GLenum );
+GLenum APIENTRY auxInitDisplayModeID ( GLint );
+GLenum APIENTRY auxGetDisplayModePolicy ( void );
+GLint  APIENTRY auxGetDisplayModeID ( void );
+GLenum APIENTRY auxGetDisplayMode ( void );
 
 #ifdef __cplusplus
 }

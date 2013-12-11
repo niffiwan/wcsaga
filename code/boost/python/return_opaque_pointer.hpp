@@ -15,33 +15,37 @@
 # include <boost/python/detail/value_arg.hpp>
 # include <boost/mpl/assert.hpp>
 
-namespace boost { namespace python {
+namespace boost
+{
+namespace python
+{
 
 namespace detail
 {
-  template <class Pointee>
-  static void opaque_pointee(Pointee const volatile*)
-  {
-      force_instantiate(opaque<Pointee>::instance);
-  }
+template <class Pointee>
+static void opaque_pointee ( Pointee const volatile * )
+{
+	force_instantiate ( opaque<Pointee>::instance );
+}
 }
 
 struct return_opaque_pointer
 {
-    template <class R>
-    struct apply
-    {
-        BOOST_MPL_ASSERT_MSG( is_pointer<R>::value, RETURN_OPAQUE_POINTER_EXPECTS_A_POINTER_TYPE, (R));
-        
-        struct type :  
-          boost::python::to_python_value<
-              typename detail::value_arg<R>::type
-          >
-        {
-            type() { detail::opaque_pointee(R()); }
-        };
-    };
+	template <class R>
+	struct apply
+	{
+		BOOST_MPL_ASSERT_MSG ( is_pointer<R>::value, RETURN_OPAQUE_POINTER_EXPECTS_A_POINTER_TYPE, ( R ) );
+
+		struct type :
+				boost::python::to_python_value <
+				typename detail::value_arg<R>::type
+				>
+		{
+			type() { detail::opaque_pointee ( R() ); }
+		};
+	};
 };
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 # endif // RETURN_OPAQUE_POINTER_HPP_

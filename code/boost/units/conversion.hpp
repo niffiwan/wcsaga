@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -13,9 +13,11 @@
 
 #include <boost/units/detail/conversion_impl.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units {
+namespace units
+{
 
 template<class From, class To>
 struct conversion_helper;
@@ -48,7 +50,7 @@ struct conversion_helper;
 template<class From, class To>
 struct conversion_helper
 {
-    static To convert(const From&);
+	static To convert ( const From & );
 };
 
 #endif
@@ -165,12 +167,12 @@ BOOST_UNITS_DEFINE_CONVERSION_FACTOR(namespace_::name_ ## _base_unit, unit, doub
 BOOST_UNITS_DEFAULT_CONVERSION(namespace_::name_ ## _base_unit, unit)
 
 /// Find the conversion factor between two units.
-template<class FromUnit,class ToUnit>
+template<class FromUnit, class ToUnit>
 inline
 typename detail::conversion_factor_helper<FromUnit, ToUnit>::type
-conversion_factor(const FromUnit&,const ToUnit&)
+conversion_factor ( const FromUnit &, const ToUnit & )
 {
-    return(detail::conversion_factor_helper<FromUnit, ToUnit>::value());
+	return ( detail::conversion_factor_helper<FromUnit, ToUnit>::value() );
 }
 
 } // namespace units

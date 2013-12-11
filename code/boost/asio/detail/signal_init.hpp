@@ -27,19 +27,22 @@
 #include <csignal>
 #include <boost/asio/detail/pop_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 template <int Signal = SIGPIPE>
 class signal_init
 {
 public:
-  // Constructor.
-  signal_init()
-  {
-    std::signal(Signal, SIG_IGN);
-  }
+	// Constructor.
+	signal_init()
+	{
+		std::signal ( Signal, SIG_IGN );
+	}
 };
 
 } // namespace detail

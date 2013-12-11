@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2009 Hartmut Kaiser
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 
@@ -11,39 +11,42 @@
 #include <boost/mpl/advance.hpp>
 #include <boost/fusion/iterator/advance.hpp>
 
-namespace boost { namespace fusion 
+namespace boost
 {
-    struct nview_iterator_tag;
+namespace fusion
+{
+struct nview_iterator_tag;
 
-    template <typename Sequence, typename Pos>
-    struct nview_iterator;
+template <typename Sequence, typename Pos>
+struct nview_iterator;
 
-    namespace extension
-    {
-        template<typename Tag>
-        struct advance_impl;
+namespace extension
+{
+template<typename Tag>
+struct advance_impl;
 
-        template<>
-        struct advance_impl<nview_iterator_tag>
-        {
-            template<typename Iterator, typename Dist>
-            struct apply
-            {
-                typedef typename Iterator::first_type::iterator_type iterator_type;
-                typedef typename Iterator::sequence_type sequence_type;
+template<>
+struct advance_impl<nview_iterator_tag>
+{
+	template<typename Iterator, typename Dist>
+	struct apply
+	{
+		typedef typename Iterator::first_type::iterator_type iterator_type;
+		typedef typename Iterator::sequence_type sequence_type;
 
-                typedef nview_iterator<sequence_type, 
-                    typename mpl::advance<iterator_type, Dist>::type> type;
+		typedef nview_iterator<sequence_type,
+		        typename mpl::advance<iterator_type, Dist>::type> type;
 
-                static type
-                call(Iterator const& i)
-                {
-                    return type(i.seq);
-                }
-            };
-        };
-    }
+		static type
+		call ( Iterator const &i )
+		{
+			return type ( i.seq );
+		}
+	};
+};
+}
 
-}}
+}
+}
 
 #endif

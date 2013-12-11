@@ -55,28 +55,28 @@ namespace detail
 {
 
 #if !defined( BOOST_USE_WINDOWS_H )
-  extern "C" void __stdcall Sleep( unsigned ms );
+extern "C" void __stdcall Sleep ( unsigned ms );
 #endif
 
-inline void yield( unsigned k )
+inline void yield ( unsigned k )
 {
-    if( k < 4 )
-    {
-    }
+	if ( k < 4 )
+	{
+	}
 #if defined( BOOST_SMT_PAUSE )
-    else if( k < 16 )
-    {
-        BOOST_SMT_PAUSE
-    }
+	else if ( k < 16 )
+	{
+		BOOST_SMT_PAUSE
+	}
 #endif
-    else if( k < 32 )
-    {
-        Sleep( 0 );
-    }
-    else
-    {
-        Sleep( 1 );
-    }
+	else if ( k < 32 )
+	{
+		Sleep ( 0 );
+	}
+	else
+	{
+		Sleep ( 1 );
+	}
 }
 
 } // namespace detail
@@ -94,34 +94,34 @@ namespace boost
 namespace detail
 {
 
-inline void yield( unsigned k )
+inline void yield ( unsigned k )
 {
-    if( k < 4 )
-    {
-    }
+	if ( k < 4 )
+	{
+	}
 #if defined( BOOST_SMT_PAUSE )
-    else if( k < 16 )
-    {
-        BOOST_SMT_PAUSE
-    }
+	else if ( k < 16 )
+	{
+		BOOST_SMT_PAUSE
+	}
 #endif
-    else if( k < 32 || k & 1 )
-    {
-        sched_yield();
-    }
-    else
-    {
-        // g++ -Wextra warns on {} or {0}
-        struct timespec rqtp = { 0, 0 };
+	else if ( k < 32 || k & 1 )
+	{
+		sched_yield();
+	}
+	else
+	{
+		// g++ -Wextra warns on {} or {0}
+		struct timespec rqtp = { 0, 0 };
 
-        // POSIX says that timespec has tv_sec and tv_nsec
-        // But it doesn't guarantee order or placement
+		// POSIX says that timespec has tv_sec and tv_nsec
+		// But it doesn't guarantee order or placement
 
-        rqtp.tv_sec = 0;
-        rqtp.tv_nsec = 1000;
+		rqtp.tv_sec = 0;
+		rqtp.tv_nsec = 1000;
 
-        nanosleep( &rqtp, 0 );
-    }
+		nanosleep ( &rqtp, 0 );
+	}
 }
 
 } // namespace detail
@@ -136,7 +136,7 @@ namespace boost
 namespace detail
 {
 
-inline void yield( unsigned )
+inline void yield ( unsigned )
 {
 }
 

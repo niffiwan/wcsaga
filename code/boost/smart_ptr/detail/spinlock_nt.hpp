@@ -27,58 +27,58 @@ class spinlock
 {
 public:
 
-    bool locked_;
+	bool locked_;
 
 public:
 
-    inline bool try_lock()
-    {
-        if( locked_ )
-        {
-            return false;
-        }
-        else
-        {
-            locked_ = true;
-            return true;
-        }
-    }
+	inline bool try_lock()
+	{
+		if ( locked_ )
+		{
+			return false;
+		}
+		else
+		{
+			locked_ = true;
+			return true;
+		}
+	}
 
-    inline void lock()
-    {
-        BOOST_ASSERT( !locked_ );
-        locked_ = true;
-    }
+	inline void lock()
+	{
+		BOOST_ASSERT ( !locked_ );
+		locked_ = true;
+	}
 
-    inline void unlock()
-    {
-        BOOST_ASSERT( locked_ );
-        locked_ = false;
-    }
+	inline void unlock()
+	{
+		BOOST_ASSERT ( locked_ );
+		locked_ = false;
+	}
 
 public:
 
-    class scoped_lock
-    {
-    private:
+	class scoped_lock
+	{
+	private:
 
-        spinlock & sp_;
+		spinlock &sp_;
 
-        scoped_lock( scoped_lock const & );
-        scoped_lock & operator=( scoped_lock const & );
+		scoped_lock ( scoped_lock const & );
+		scoped_lock &operator= ( scoped_lock const & );
 
-    public:
+	public:
 
-        explicit scoped_lock( spinlock & sp ): sp_( sp )
-        {
-            sp.lock();
-        }
+		explicit scoped_lock ( spinlock &sp ) : sp_ ( sp )
+		{
+			sp.lock();
+		}
 
-        ~scoped_lock()
-        {
-            sp_.unlock();
-        }
-    };
+		~scoped_lock()
+		{
+			sp_.unlock();
+		}
+	};
 };
 
 } // namespace detail

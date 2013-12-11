@@ -20,9 +20,12 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
 
-namespace boost {
-namespace random {
-namespace detail {
+namespace boost
+{
+namespace random
+{
+namespace detail
+{
 
 template<class T>
 struct disable_seed : boost::disable_if<boost::is_arithmetic<T> > {};
@@ -31,7 +34,8 @@ template<class Engine, class T>
 struct disable_constructor : disable_seed<T> {};
 
 template<class Engine>
-struct disable_constructor<Engine, Engine> {
+struct disable_constructor<Engine, Engine>
+{
 };
 
 #define BOOST_RANDOM_DETAIL_GENERATOR_CONSTRUCTOR(Self, Generator, gen) \

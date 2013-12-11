@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -27,25 +27,28 @@
 #include <boost/units/base_units/angle/radian.hpp>
 #include <boost/units/base_units/angle/steradian.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace si {
+namespace si
+{
 
 /// placeholder class defining si unit system
-typedef make_system<meter_base_unit, 
-                    kilogram_base_unit, 
-                    second_base_unit, 
-                    ampere_base_unit,
-                    kelvin_base_unit,
-                    mole_base_unit,
-                    candela_base_unit,
-                    angle::radian_base_unit,
-                    angle::steradian_base_unit>::type system;
+typedef make_system<meter_base_unit,
+        kilogram_base_unit,
+        second_base_unit,
+        ampere_base_unit,
+        kelvin_base_unit,
+        mole_base_unit,
+        candela_base_unit,
+        angle::radian_base_unit,
+        angle::steradian_base_unit>::type system;
 
 /// dimensionless si unit
-typedef unit<dimensionless_type,system>         dimensionless;
+typedef unit<dimensionless_type, system>         dimensionless;
 
 } // namespace si
 

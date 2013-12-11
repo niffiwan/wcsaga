@@ -17,39 +17,39 @@
 
 namespace boost
 {
-  template<typename T> class shared_ptr;
+template<typename T> class shared_ptr;
 
-  namespace signals2
-  {
-    namespace postconstructible_adl_barrier
-    {
-      class postconstructible;
-    }
-    namespace detail
-    {
-      void do_postconstruct(const boost::signals2::postconstructible_adl_barrier::postconstructible *ptr);
-    } // namespace detail
+namespace signals2
+{
+namespace postconstructible_adl_barrier
+{
+class postconstructible;
+}
+namespace detail
+{
+void do_postconstruct ( const boost::signals2::postconstructible_adl_barrier::postconstructible *ptr );
+} // namespace detail
 
-    namespace postconstructible_adl_barrier
-    {
-      class postconstructible
-      {
-      public:
-        friend void detail::do_postconstruct(const postconstructible *ptr);
-        template<typename T>
-          friend void adl_postconstruct(const shared_ptr<T> &sp, postconstructible *p)
-        {
-          p->postconstruct();
-        }
-      protected:
-        postconstructible() {}
-        virtual ~postconstructible() {}
-        virtual void postconstruct() = 0;
-      };
-    } // namespace postconstructible_adl_barrier
-    using postconstructible_adl_barrier::postconstructible;
+namespace postconstructible_adl_barrier
+{
+class postconstructible
+{
+public:
+friend void detail::do_postconstruct ( const postconstructible *ptr );
+template<typename T>
+friend void adl_postconstruct ( const shared_ptr<T> &sp, postconstructible *p )
+{
+	p->postconstruct();
+}
+protected:
+postconstructible() {}
+virtual ~postconstructible() {}
+virtual void postconstruct() = 0;
+};
+} // namespace postconstructible_adl_barrier
+using postconstructible_adl_barrier::postconstructible;
 
-  }
+}
 }
 
 #endif // BOOST_SIGNALS2_POSTCONSTRUCTIBLE_HPP

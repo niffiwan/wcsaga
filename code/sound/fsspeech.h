@@ -1,7 +1,7 @@
 /*
  * Code created by Thomas Whittaker (RT) for a FreeSpace 2 source code project
  *
- * You may not sell or otherwise commercially exploit the source or things you 
+ * You may not sell or otherwise commercially exploit the source or things you
  * created based on the source.
  *
 */
@@ -22,15 +22,15 @@ enum
 
 bool fsspeech_init();
 void fsspeech_deinit();
-void fsspeech_play(int type, char *text);
+void fsspeech_play ( int type, char *text );
 void fsspeech_stop();
-void fsspeech_pause(bool playing);
+void fsspeech_pause ( bool playing );
 
 void fsspeech_start_buffer();
-void fsspeech_stuff_buffer(char *text);
-void fsspeech_play_buffer(int type);
+void fsspeech_stuff_buffer ( char *text );
+void fsspeech_play_buffer ( int type );
 
-bool fsspeech_play_from(int type);
+bool fsspeech_play_from ( int type );
 bool fsspeech_playing();
 
 inline bool fsspeech_was_compiled() { return true; }
@@ -44,25 +44,25 @@ inline bool fsspeech_init()
 	return false;
 }
 inline void fsspeech_deinit() {}
-inline void fsspeech_play(int type, char* text)
+inline void fsspeech_play ( int type, char *text )
 {
-	(type);
-	(text);
+	( type );
+	( text );
 }
 inline void fsspeech_stop() {}
-inline void fsspeech_pause(bool playing)
+inline void fsspeech_pause ( bool playing )
 {
-	(playing);
+	( playing );
 }
 
 inline void fsspeech_start_buffer() {}
-inline void fsspeech_stuff_buffer(char* text)
+inline void fsspeech_stuff_buffer ( char *text )
 {
-	(text);
+	( text );
 }
-inline void fsspeech_play_buffer(int type) {}
+inline void fsspeech_play_buffer ( int type ) {}
 
-inline bool fsspeech_play_from(int type)
+inline bool fsspeech_play_from ( int type )
 {
 	return false;
 }
@@ -77,4 +77,4 @@ inline bool fsspeech_was_compiled()
 
 #endif
 
-#endif	// header define
+#endif  // header define

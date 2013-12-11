@@ -18,91 +18,100 @@
 #include <boost/variant.hpp>
 #include <boost/mpl/bool.hpp>
 
-namespace boost { namespace spirit { namespace qi { namespace detail
+namespace boost
 {
-    template <typename Iterator, typename Context, typename Skipper,
-        typename Attribute>
-    struct alternative_function
-    {
-        alternative_function(
-            Iterator& first, Iterator const& last, Context& context,
-            Skipper const& skipper, Attribute& attr)
-          : first(first), last(last), context(context), skipper(skipper),
-            attr(attr)
-        {
-        }
+namespace spirit
+{
+namespace qi
+{
+namespace detail
+{
+template <typename Iterator, typename Context, typename Skipper,
+          typename Attribute>
+struct alternative_function
+{
+	alternative_function (
+	    Iterator &first, Iterator const &last, Context &context,
+	    Skipper const &skipper, Attribute &attr )
+		: first ( first ), last ( last ), context ( context ), skipper ( skipper ),
+		  attr ( attr )
+	{
+	}
 
-        template <typename Component>
-        bool call(Component const& component, mpl::true_) const
-        {
-            // if Attribute is not a variant, then pass it as-is
-            return component.parse(first, last, context, skipper, attr);
-        }
+	template <typename Component>
+	bool call ( Component const &component, mpl::true_ ) const
+	{
+		// if Attribute is not a variant, then pass it as-is
+		return component.parse ( first, last, context, skipper, attr );
+	}
 
-        template <typename Component>
-        bool call(Component const& component, mpl::false_) const
-        {
-            // if Attribute is a variant or optional, then create an 
-            // attribute for the Component with its expected type.
-            typename traits::attribute_of<Component, Context, Iterator>::type val;
-            if (component.parse(first, last, context, skipper, val))
-            {
-                traits::assign_to(val, attr);
-                return true;
-            }
-            return false;
-        }
+	template <typename Component>
+	bool call ( Component const &component, mpl::false_ ) const
+	{
+		// if Attribute is a variant or optional, then create an
+		// attribute for the Component with its expected type.
+		typename traits::attribute_of<Component, Context, Iterator>::type val;
+		if ( component.parse ( first, last, context, skipper, val ) )
+		{
+			traits::assign_to ( val, attr );
+			return true;
+		}
+		return false;
+	}
 
-        template <typename Component>
-        bool operator()(Component const& component) const
-        {
-            // return true if the parser succeeds
-            return call(component, 
-                mpl::and_<
-                    spirit::traits::not_is_variant<Attribute>,
-                    spirit::traits::not_is_optional<Attribute> 
-                >());
-        }
+	template <typename Component>
+	bool operator() ( Component const &component ) const
+	{
+		// return true if the parser succeeds
+		return call ( component,
+		              mpl::and_ <
+		              spirit::traits::not_is_variant<Attribute>,
+		              spirit::traits::not_is_optional<Attribute>
+		              > () );
+	}
 
-        Iterator& first;
-        Iterator const& last;
-        Context& context;
-        Skipper const& skipper;
-        Attribute& attr;
+	Iterator &first;
+	Iterator const &last;
+	Context &context;
+	Skipper const &skipper;
+	Attribute &attr;
 
-    private:
-        // silence MSVC warning C4512: assignment operator could not be generated
-        alternative_function& operator= (alternative_function const&);
-    };
+private:
+	// silence MSVC warning C4512: assignment operator could not be generated
+	alternative_function &operator= ( alternative_function const & );
+};
 
-    template <typename Iterator, typename Context, typename Skipper>
-    struct alternative_function<Iterator, Context, Skipper, unused_type const>
-    {
-        alternative_function(
-            Iterator& first, Iterator const& last, Context& context,
-            Skipper const& skipper, unused_type)
-          : first(first), last(last), context(context), skipper(skipper)
-        {
-        }
+template <typename Iterator, typename Context, typename Skipper>
+struct alternative_function<Iterator, Context, Skipper, unused_type const>
+{
+	alternative_function (
+	    Iterator &first, Iterator const &last, Context &context,
+	    Skipper const &skipper, unused_type )
+		: first ( first ), last ( last ), context ( context ), skipper ( skipper )
+	{
+	}
 
-        template <typename Component>
-        bool operator()(Component const& component)
-        {
-            // return true if the parser succeeds
-            return component.parse(first, last, context, skipper,
-                unused);
-        }
+	template <typename Component>
+	bool operator() ( Component const &component )
+	{
+		// return true if the parser succeeds
+		return component.parse ( first, last, context, skipper,
+		                         unused );
+	}
 
-        Iterator& first;
-        Iterator const& last;
-        Context& context;
-        Skipper const& skipper;
+	Iterator &first;
+	Iterator const &last;
+	Context &context;
+	Skipper const &skipper;
 
-    private:
-        // silence MSVC warning C4512: assignment operator could not be generated
-        alternative_function& operator= (alternative_function const&);
-    };
+private:
+	// silence MSVC warning C4512: assignment operator could not be generated
+	alternative_function &operator= ( alternative_function const & );
+};
 
-}}}}
+}
+}
+}
+}
 
 #endif

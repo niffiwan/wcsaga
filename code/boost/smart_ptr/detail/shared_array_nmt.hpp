@@ -31,119 +31,119 @@ template<class T> class shared_array
 {
 private:
 
-    typedef detail::atomic_count count_type;
+	typedef detail::atomic_count count_type;
 
 public:
 
-    typedef T element_type;
-      
-    explicit shared_array(T * p = 0): px(p)
-    {
+	typedef T element_type;
+
+	explicit shared_array ( T *p = 0 ) : px ( p )
+	{
 #ifndef BOOST_NO_EXCEPTIONS
 
-        try  // prevent leak if new throws
-        {
-            pn = new count_type(1);
-        }
-        catch(...)
-        {
-            boost::checked_array_delete(p);
-            throw;
-        }
+		try  // prevent leak if new throws
+		{
+			pn = new count_type ( 1 );
+		}
+		catch ( ... )
+		{
+			boost::checked_array_delete ( p );
+			throw;
+		}
 
 #else
 
-        pn = new count_type(1);
+		pn = new count_type ( 1 );
 
-        if(pn == 0)
-        {
-            boost::checked_array_delete(p);
-            boost::throw_exception(std::bad_alloc());
-        }
+		if ( pn == 0 )
+		{
+			boost::checked_array_delete ( p );
+			boost::throw_exception ( std::bad_alloc() );
+		}
 
 #endif
-    }
+	}
 
-    ~shared_array()
-    {
-        if(--*pn == 0)
-        {
-            boost::checked_array_delete(px);
-            delete pn;
-        }
-    }
+	~shared_array()
+	{
+		if ( --*pn == 0 )
+		{
+			boost::checked_array_delete ( px );
+			delete pn;
+		}
+	}
 
-    shared_array(shared_array const & r) : px(r.px)  // never throws
-    {
-        pn = r.pn;
-        ++*pn;
-    }
+	shared_array ( shared_array const &r ) : px ( r.px ) // never throws
+	{
+		pn = r.pn;
+		++*pn;
+	}
 
-    shared_array & operator=(shared_array const & r)
-    {
-        shared_array(r).swap(*this);
-        return *this;
-    }
+	shared_array &operator= ( shared_array const &r )
+	{
+		shared_array ( r ).swap ( *this );
+		return *this;
+	}
 
-    void reset(T * p = 0)
-    {
-        BOOST_ASSERT(p == 0 || p != px);
-        shared_array(p).swap(*this);
-    }
+	void reset ( T *p = 0 )
+	{
+		BOOST_ASSERT ( p == 0 || p != px );
+		shared_array ( p ).swap ( *this );
+	}
 
-    T * get() const  // never throws
-    {
-        return px;
-    }
+	T *get() const   // never throws
+	{
+		return px;
+	}
 
-    T & operator[](std::ptrdiff_t i) const  // never throws
-    {
-        BOOST_ASSERT(px != 0);
-        BOOST_ASSERT(i >= 0);
-        return px[i];
-    }
+	T &operator[] ( std::ptrdiff_t i ) const // never throws
+	{
+		BOOST_ASSERT ( px != 0 );
+		BOOST_ASSERT ( i >= 0 );
+		return px[i];
+	}
 
-    long use_count() const  // never throws
-    {
-        return *pn;
-    }
+	long use_count() const  // never throws
+	{
+		return *pn;
+	}
 
-    bool unique() const  // never throws
-    {
-        return *pn == 1;
-    }
+	bool unique() const  // never throws
+	{
+		return *pn == 1;
+	}
 
-    void swap(shared_array<T> & other)  // never throws
-    {
-        std::swap(px, other.px);
-        std::swap(pn, other.pn);
-    }
+	void swap ( shared_array<T> &other ) // never throws
+	{
+		std::swap ( px, other.px );
+		std::swap ( pn, other.pn );
+	}
 
 private:
 
-    T * px;            // contained pointer
-    count_type * pn;   // ptr to reference counter
-      
+	T *px;             // contained pointer
+	count_type *pn;    // ptr to reference counter
+
 };  // shared_array
 
-template<class T, class U> inline bool operator==(shared_array<T> const & a, shared_array<U> const & b)
+template<class T, class U> inline bool operator== ( shared_array<T> const &a, shared_array<U> const &b )
 {
-    return a.get() == b.get();
+	return a.get() == b.get();
 }
 
-template<class T, class U> inline bool operator!=(shared_array<T> const & a, shared_array<U> const & b)
+template<class T, class U> inline bool operator!= ( shared_array<T> const &a, shared_array<U> const &b )
 {
-    return a.get() != b.get();
+	return a.get() != b.get();
 }
 
-template<class T> inline bool operator<(shared_array<T> const & a, shared_array<T> const & b)
+template<class T> inline bool operator< ( shared_array<T> const &a, shared_array<T> const &b )
 {
-    return std::less<T*>()(a.get(), b.get());
+	return std::less<T *>() ( a.get(), b.get() );
 }
 
-template<class T> void swap(shared_array<T> & a, shared_array<T> & b)
+template<class T> void swap ( shared_array<T> &a, shared_array<T> &b )
 {
-    a.swap(b);
+	a.swap ( b );
 }
 
 } // namespace boost

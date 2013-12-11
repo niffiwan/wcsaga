@@ -6,24 +6,24 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 #ifndef BOOST_IOSTREAMS_DETAIL_PUSH_HPP_INCLUDED
-#define BOOST_IOSTREAMS_DETAIL_PUSH_HPP_INCLUDED 
+#define BOOST_IOSTREAMS_DETAIL_PUSH_HPP_INCLUDED
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif                    
- 
+#endif
+
 #include <boost/config.hpp> // BOOST_MSVC.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/adapter/range_adapter.hpp>
 #include <boost/iostreams/detail/config/wide_streams.hpp>
-#include <boost/iostreams/detail/enable_if_stream.hpp>   
-#include <boost/iostreams/pipeline.hpp>   
-#include <boost/iostreams/detail/push_params.hpp>   
+#include <boost/iostreams/detail/enable_if_stream.hpp>
+#include <boost/iostreams/pipeline.hpp>
+#include <boost/iostreams/detail/push_params.hpp>
 #include <boost/iostreams/detail/resolve.hpp>
-#include <boost/mpl/bool.hpp>   
-#include <boost/preprocessor/cat.hpp> 
+#include <boost/mpl/bool.hpp>
+#include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
@@ -47,7 +47,7 @@
     /**/
 
 //--------------------Definition of BOOST_IOSTREAMS_DEFINE_PUSH_IMPL----------//
-          
+
 #define BOOST_IOSTREAMS_ADAPT_STREAM(mode, ch, arg, helper, has_return) \
     this->helper( ::boost::iostreams::detail::resolve<mode, ch>(arg) \
                   BOOST_IOSTREAMS_PUSH_ARGS() ); \

@@ -24,8 +24,12 @@
 #endif
 
 
-namespace boost {
-namespace detail { namespace variant {
+namespace boost
+{
+namespace detail
+{
+namespace variant
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) class over_sequence
@@ -35,7 +39,7 @@ namespace detail { namespace variant {
 template <typename Types>
 struct over_sequence
 {
-    typedef Types type;
+	typedef Types type;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -48,48 +52,49 @@ struct over_sequence
 
 template <typename T>
 struct is_over_sequence
-    : mpl::false_
+		: mpl::false_
 {
 };
 
 template <typename Types>
 struct is_over_sequence< over_sequence<Types> >
-    : mpl::true_
+		: mpl::true_
 {
 };
 
 #else // defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
-typedef char (&yes_over_sequence_t)[1];
-typedef char (&no_over_sequence_t)[2];
+typedef char ( &yes_over_sequence_t ) [1];
+typedef char ( &no_over_sequence_t ) [2];
 
-no_over_sequence_t is_over_sequence_test(...);
+no_over_sequence_t is_over_sequence_test ( ... );
 
 template<typename T>
-yes_over_sequence_t is_over_sequence_test(
-      type< ::boost::detail::variant::over_sequence<T> >
-    );
+yes_over_sequence_t is_over_sequence_test (
+    type< ::boost::detail::variant::over_sequence<T> >
+);
 
 template<typename T>
 struct is_over_sequence_impl
 {
-    BOOST_STATIC_CONSTANT(bool, value = (
-          sizeof(is_over_sequence_test(type<T>()))
-          == sizeof(yes_over_sequence_t)
-        ));
+	BOOST_STATIC_CONSTANT ( bool, value = (
+	        sizeof ( is_over_sequence_test ( type<T>() ) )
+	        == sizeof ( yes_over_sequence_t )
+	                                      ) );
 };
 
 template <typename T>
 struct is_over_sequence
-    : mpl::bool_<
-          ::boost::detail::variant::is_over_sequence_impl<T>::value
-        >
+		: mpl::bool_ <
+		::boost::detail::variant::is_over_sequence_impl<T>::value
+		>
 {
 };
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION workaround
 
-}} // namespace detail::variant
+}
+} // namespace detail::variant
 } // namespace boost
 
 #endif // BOOST_VARIANT_DETAIL_OVER_SEQUENCE_HPP

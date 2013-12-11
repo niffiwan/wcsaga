@@ -7,8 +7,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -69,77 +69,80 @@
 #   define AUX778076_OP_TAG_NAME BOOST_PP_CAT(AUX778076_OP_PREFIX,_tag)
 #endif
 
-namespace boost { namespace mpl {
+namespace boost
+{
+namespace mpl
+{
 
-template< 
-      typename Tag1
+template <
+    typename Tag1
     , typename Tag2
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-    , BOOST_MPL_AUX_NTTP_DECL(int, tag1_) = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag1)::value 
-    , BOOST_MPL_AUX_NTTP_DECL(int, tag2_) = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag2)::value 
+    , BOOST_MPL_AUX_NTTP_DECL ( int, tag1_ ) = BOOST_MPL_AUX_MSVC_VALUE_WKND ( Tag1 ) ::value
+    , BOOST_MPL_AUX_NTTP_DECL ( int, tag2_ ) = BOOST_MPL_AUX_MSVC_VALUE_WKND ( Tag2 ) ::value
     >
 struct AUX778076_OP_IMPL_NAME
-    : if_c<
-          ( tag1_ > tag2_ )
+		: if_c <
+( tag1_ > tag2_ )
 #else
     >
 struct AUX778076_OP_IMPL_NAME
-    : if_c<
-          ( BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag1)
-              > BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag2)
-            )
+		: if_c <
+( BOOST_MPL_AUX_NESTED_VALUE_WKND ( int, Tag1 )
+  > BOOST_MPL_AUX_NESTED_VALUE_WKND ( int, Tag2 )
+)
 #endif
-        , aux::cast2nd_impl< AUX778076_OP_IMPL_NAME<Tag1,Tag1>,Tag1,Tag2 >
-        , aux::cast1st_impl< AUX778076_OP_IMPL_NAME<Tag2,Tag2>,Tag1,Tag2 >
-        >::type
+, aux::cast2nd_impl< AUX778076_OP_IMPL_NAME<Tag1, Tag1>, Tag1, Tag2 >
+, aux::cast1st_impl< AUX778076_OP_IMPL_NAME<Tag2, Tag2>, Tag1, Tag2 >
+>::type
 {
 };
 
 /// for Digital Mars C++/compilers with no CTPS/TTP support
-template<> struct AUX778076_OP_IMPL_NAME<na,na>
+template<> struct AUX778076_OP_IMPL_NAME<na, na>
 {
-    template< typename U1, typename U2 > struct apply 
-    {
-        typedef apply type;
-        BOOST_STATIC_CONSTANT(int, value = 0);
-    };
+	template< typename U1, typename U2 > struct apply
+	{
+		typedef apply type;
+		BOOST_STATIC_CONSTANT ( int, value = 0 );
+	};
 };
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-template< typename Tag > struct AUX778076_OP_IMPL_NAME<na,Tag>
+template< typename Tag > struct AUX778076_OP_IMPL_NAME<na, Tag>
 {
-    template< typename U1, typename U2 > struct apply 
-    {
-        typedef apply type;
-        BOOST_STATIC_CONSTANT(int, value = 0);
-    };
+	template< typename U1, typename U2 > struct apply
+	{
+		typedef apply type;
+		BOOST_STATIC_CONSTANT ( int, value = 0 );
+	};
 };
 
-template< typename Tag > struct AUX778076_OP_IMPL_NAME<Tag,na>
+template< typename Tag > struct AUX778076_OP_IMPL_NAME<Tag, na>
 {
-    template< typename U1, typename U2 > struct apply 
-    {
-        typedef apply type;
-        BOOST_STATIC_CONSTANT(int, value = 0);
-    };
+	template< typename U1, typename U2 > struct apply
+	{
+		typedef apply type;
+		BOOST_STATIC_CONSTANT ( int, value = 0 );
+	};
 };
 #else
-template<> struct AUX778076_OP_IMPL_NAME<na,integral_c_tag>
+template<> struct AUX778076_OP_IMPL_NAME<na, integral_c_tag>
 {
-    template< typename U1, typename U2 > struct apply 
-    {
-        typedef apply type;
-        BOOST_STATIC_CONSTANT(int, value = 0);
-    };
+	template< typename U1, typename U2 > struct apply
+	{
+		typedef apply type;
+		BOOST_STATIC_CONSTANT ( int, value = 0 );
+	};
 };
 
-template<> struct AUX778076_OP_IMPL_NAME<integral_c_tag,na>
+template<> struct AUX778076_OP_IMPL_NAME<integral_c_tag, na>
 {
-    template< typename U1, typename U2 > struct apply 
-    {
-        typedef apply type;
-        BOOST_STATIC_CONSTANT(int, value = 0);
-    };
+	template< typename U1, typename U2 > struct apply
+	{
+		typedef apply type;
+		BOOST_STATIC_CONSTANT ( int, value = 0 );
+	};
 };
 #endif
 
@@ -147,13 +150,13 @@ template<> struct AUX778076_OP_IMPL_NAME<integral_c_tag,na>
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
     && BOOST_WORKAROUND(BOOST_MSVC, >= 1300)
 template< typename T > struct AUX778076_OP_TAG_NAME
-    : tag<T,na>
+		: tag<T, na>
 {
 };
 #else
 template< typename T > struct AUX778076_OP_TAG_NAME
 {
-    typedef typename T::tag type;
+	typedef typename T::tag type;
 };
 #endif
 
@@ -168,19 +171,19 @@ template< typename T > struct AUX778076_OP_TAG_NAME
     N1 BOOST_MPL_PP_REPEAT( BOOST_MPL_PP_SUB(i, 1), AUX778076_OP_RIGHT_OPERAND, N ) \
 /**/
 
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(N1)
-    , typename BOOST_MPL_AUX_NA_PARAM(N2)
-    BOOST_MPL_PP_DEF_PARAMS_TAIL(2, typename N, na)
+template <
+    typename BOOST_MPL_AUX_NA_PARAM ( N1 )
+    , typename BOOST_MPL_AUX_NA_PARAM ( N2 )
+    BOOST_MPL_PP_DEF_PARAMS_TAIL ( 2, typename N, na )
     >
 struct AUX778076_OP_NAME
-    : AUX778076_OP_N_CALLS(AUX778076_OP_ARITY, N)
+: AUX778076_OP_N_CALLS ( AUX778076_OP_ARITY, N )
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(
-          AUX778076_OP_ARITY
-        , AUX778076_OP_NAME
-        , ( BOOST_MPL_PP_PARAMS(AUX778076_OP_ARITY, N) )
-        )
+	BOOST_MPL_AUX_LAMBDA_SUPPORT (
+	    AUX778076_OP_ARITY
+	    , AUX778076_OP_NAME
+	    , ( BOOST_MPL_PP_PARAMS ( AUX778076_OP_ARITY, N ) )
+	)
 };
 
 #define BOOST_PP_ITERATION_PARAMS_1 \
@@ -193,95 +196,96 @@ struct AUX778076_OP_NAME
 #   else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 /// forward declaration
-template< 
-      typename BOOST_MPL_AUX_NA_PARAM(N1)
-    , typename BOOST_MPL_AUX_NA_PARAM(N2)
+template <
+    typename BOOST_MPL_AUX_NA_PARAM ( N1 )
+    , typename BOOST_MPL_AUX_NA_PARAM ( N2 )
     >
-struct BOOST_PP_CAT(AUX778076_OP_NAME,2);
+struct BOOST_PP_CAT ( AUX778076_OP_NAME, 2 );
 
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(N1)
-    , typename BOOST_MPL_AUX_NA_PARAM(N2)
-    BOOST_MPL_PP_DEF_PARAMS_TAIL(2, typename N, na)
+template <
+    typename BOOST_MPL_AUX_NA_PARAM ( N1 )
+    , typename BOOST_MPL_AUX_NA_PARAM ( N2 )
+    BOOST_MPL_PP_DEF_PARAMS_TAIL ( 2, typename N, na )
     >
 struct AUX778076_OP_NAME
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
-    : aux::msvc_eti_base< typename if_<
+		: aux::msvc_eti_base < typename if_ <
 #else
-    : if_<
+		: if_ <
 #endif
-          is_na<N3>
-        , BOOST_PP_CAT(AUX778076_OP_NAME,2)<N1,N2>
-        , AUX778076_OP_NAME<
-              BOOST_PP_CAT(AUX778076_OP_NAME,2)<N1,N2>
-            , BOOST_MPL_PP_EXT_PARAMS(3, BOOST_PP_INC(AUX778076_OP_ARITY), N)
-            >
-        >::type
+		is_na<N3>
+, BOOST_PP_CAT ( AUX778076_OP_NAME, 2 ) <N1, N2>
+, AUX778076_OP_NAME <
+BOOST_PP_CAT ( AUX778076_OP_NAME, 2 ) <N1, N2>
+, BOOST_MPL_PP_EXT_PARAMS ( 3, BOOST_PP_INC ( AUX778076_OP_ARITY ), N )
+>
+>::type
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
-    >
+>
 #endif
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(
-          AUX778076_OP_ARITY
+    BOOST_MPL_AUX_LAMBDA_SUPPORT (
+        AUX778076_OP_ARITY
         , AUX778076_OP_NAME
-        , ( BOOST_MPL_PP_PARAMS(AUX778076_OP_ARITY, N) )
-        )
+        , ( BOOST_MPL_PP_PARAMS ( AUX778076_OP_ARITY, N ) )
+    )
 };
 
-template< 
-      typename N1
+template <
+    typename N1
     , typename N2
     >
-struct BOOST_PP_CAT(AUX778076_OP_NAME,2)
+struct BOOST_PP_CAT ( AUX778076_OP_NAME, 2 )
 
 #endif
 
 #else // AUX778076_OP_ARITY == 2
 
-template< 
-      typename BOOST_MPL_AUX_NA_PARAM(N1)
-    , typename BOOST_MPL_AUX_NA_PARAM(N2)
+template <
+    typename BOOST_MPL_AUX_NA_PARAM ( N1 )
+    , typename BOOST_MPL_AUX_NA_PARAM ( N2 )
     >
 struct AUX778076_OP_NAME
 
 #endif
 
 #if !defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
-    : AUX778076_OP_IMPL_NAME<
-          typename AUX778076_OP_TAG_NAME<N1>::type
-        , typename AUX778076_OP_TAG_NAME<N2>::type
-        >::template apply<N1,N2>::type
+: AUX778076_OP_IMPL_NAME <
+typename AUX778076_OP_TAG_NAME<N1>::type
+, typename AUX778076_OP_TAG_NAME<N2>::type
+>::template apply<N1, N2>::type
 #else
-    : aux::msvc_eti_base< typename apply_wrap2<
-          AUX778076_OP_IMPL_NAME<
-              typename AUX778076_OP_TAG_NAME<N1>::type
-            , typename AUX778076_OP_TAG_NAME<N2>::type
-            >
-        , N1
-        , N2
-        >::type >::type
+: aux::msvc_eti_base< typename apply_wrap2<
+AUX778076_OP_IMPL_NAME<
+typename AUX778076_OP_TAG_NAME<N1>::type
+, typename AUX778076_OP_TAG_NAME<N2>::type
+>
+, N1
+, N2
+>::type >::type
 #endif
 {
 #if AUX778076_OP_ARITY != 2
 
 #   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(
-          AUX778076_OP_ARITY
+    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC (
+        AUX778076_OP_ARITY
         , AUX778076_OP_NAME
-        , ( BOOST_MPL_PP_PARTIAL_SPEC_PARAMS(2, N, na) )
-        )
+        , ( BOOST_MPL_PP_PARTIAL_SPEC_PARAMS ( 2, N, na ) )
+    )
 #   else
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(2, BOOST_PP_CAT(AUX778076_OP_NAME,2), (N1, N2))
+    BOOST_MPL_AUX_LAMBDA_SUPPORT ( 2, BOOST_PP_CAT ( AUX778076_OP_NAME, 2 ), ( N1, N2 ) )
 #   endif
 
 #else
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(2, AUX778076_OP_NAME, (N1, N2))
+    BOOST_MPL_AUX_LAMBDA_SUPPORT ( 2, AUX778076_OP_NAME, ( N1, N2 ) )
 #endif
 };
 
-BOOST_MPL_AUX_NA_SPEC2(2, AUX778076_OP_ARITY, AUX778076_OP_NAME)
+BOOST_MPL_AUX_NA_SPEC2 ( 2, AUX778076_OP_ARITY, AUX778076_OP_NAME )
 
-}}
+}
+}
 
 #endif // BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
 
@@ -294,18 +298,18 @@ BOOST_MPL_AUX_NA_SPEC2(2, AUX778076_OP_ARITY, AUX778076_OP_NAME)
 
 #   define i_ BOOST_PP_FRAME_ITERATION(1)
 
-template<
-      BOOST_MPL_PP_PARAMS(i_, typename N)
+template <
+    BOOST_MPL_PP_PARAMS ( i_, typename N )
     >
-struct AUX778076_OP_NAME<BOOST_MPL_PP_PARTIAL_SPEC_PARAMS(i_, N, na)>
+struct AUX778076_OP_NAME<BOOST_MPL_PP_PARTIAL_SPEC_PARAMS ( i_, N, na ) >
 #if i_ != 2
-    : AUX778076_OP_N_CALLS(i_, N)
+: AUX778076_OP_N_CALLS ( i_, N )
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(
-          AUX778076_OP_ARITY
-        , AUX778076_OP_NAME
-        , ( BOOST_MPL_PP_PARTIAL_SPEC_PARAMS(i_, N, na) )
-        )
+	BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC (
+	    AUX778076_OP_ARITY
+	    , AUX778076_OP_NAME
+	    , ( BOOST_MPL_PP_PARTIAL_SPEC_PARAMS ( i_, N, na ) )
+	)
 };
 #endif
 

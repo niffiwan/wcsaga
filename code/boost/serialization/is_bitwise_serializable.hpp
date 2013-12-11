@@ -24,12 +24,14 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
 
-namespace boost {
-namespace serialization {
-    template<class T>
-    struct is_bitwise_serializable
-     : public is_arithmetic<T>
-    {};
+namespace boost
+{
+namespace serialization
+{
+template<class T>
+struct is_bitwise_serializable
+	: public is_arithmetic<T>
+{};
 } // namespace serialization
 } // namespace boost
 

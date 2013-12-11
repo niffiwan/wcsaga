@@ -26,9 +26,9 @@
 
 namespace boost
 {
-    template< class T >
-    struct range_value : iterator_value< typename range_iterator<T>::type >
-    { };
+template< class T >
+struct range_value : iterator_value< typename range_iterator<T>::type >
+{ };
 }
 
 #endif

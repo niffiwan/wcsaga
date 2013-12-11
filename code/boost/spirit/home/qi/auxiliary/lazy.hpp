@@ -24,200 +24,209 @@
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/mpl/not.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Eval>
-    struct use_terminal<qi::domain, phoenix::actor<Eval> >  // enables phoenix actors
-        : mpl::true_ {};
-
-    // forward declaration
-    template <typename Terminal, typename Actor, int Arity>
-    struct lazy_terminal;
-}}
-
-namespace boost { namespace spirit { namespace qi
+namespace spirit
 {
-    using spirit::lazy;
-    typedef modify<qi::domain> qi_modify;
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
+template <typename Eval>
+struct use_terminal<qi::domain, phoenix::actor<Eval> >  // enables phoenix actors
+		: mpl::true_ {};
 
-    template <typename Function, typename Modifiers>
-    struct lazy_parser : parser<lazy_parser<Function, Modifiers> >
-    {
-        template <typename Context, typename Iterator>
-        struct attribute
-        {
-            typedef typename
-                boost::result_of<qi_modify(tag::lazy_eval, Modifiers)>::type
-            modifier;
+// forward declaration
+template <typename Terminal, typename Actor, int Arity>
+struct lazy_terminal;
+}
+}
 
-            typedef typename
-                remove_reference<
-                    typename boost::result_of<Function(unused_type, Context)>::type
-                >::type
-            expr_type;
+namespace boost
+{
+namespace spirit
+{
+namespace qi
+{
+using spirit::lazy;
+typedef modify<qi::domain> qi_modify;
 
-            // If you got an error_invalid_expression error message here,
-            // then the expression (expr_type) is not a valid spirit qi
-            // expression.
-            BOOST_SPIRIT_ASSERT_MATCH(qi::domain, expr_type);
+template <typename Function, typename Modifiers>
+struct lazy_parser : parser<lazy_parser<Function, Modifiers> >
+{
+	template <typename Context, typename Iterator>
+	struct attribute
+	{
+		typedef typename
+		boost::result_of<qi_modify ( tag::lazy_eval, Modifiers ) >::type
+		modifier;
 
-            typedef typename
-                result_of::compile<qi::domain, expr_type, modifier>::type
-            parser_type;
+		typedef typename
+		remove_reference <
+		typename boost::result_of<Function ( unused_type, Context ) >::type
+		>::type
+		expr_type;
 
-            typedef typename
-                traits::attribute_of<parser_type, Context, Iterator>::type
-            type;
-        };
+		// If you got an error_invalid_expression error message here,
+		// then the expression (expr_type) is not a valid spirit qi
+		// expression.
+		BOOST_SPIRIT_ASSERT_MATCH ( qi::domain, expr_type );
 
-        lazy_parser(Function const& function, Modifiers const& modifiers)
-          : function(function), modifiers(modifiers) {}
+		typedef typename
+		result_of::compile<qi::domain, expr_type, modifier>::type
+		parser_type;
 
-        template <typename Iterator, typename Context
-          , typename Skipper, typename Attribute>
-        bool parse(Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper
-          , Attribute& attr) const
-        {
-            return compile<qi::domain>(function(unused, context)
-                , qi_modify()(tag::lazy_eval(), modifiers))
-                    .parse(first, last, context, skipper, attr);
-        }
+		typedef typename
+		traits::attribute_of<parser_type, Context, Iterator>::type
+		type;
+	};
 
-        template <typename Context>
-        info what(Context& context) const
-        {
-            return info("lazy"
-              , compile<qi::domain>(function(unused, context)
-                , qi_modify()(tag::lazy_eval(), modifiers))
-                    .what(context)
-            );
-        }
+	lazy_parser ( Function const &function, Modifiers const &modifiers )
+		: function ( function ), modifiers ( modifiers ) {}
 
-        Function function;
-        Modifiers modifiers;
-    };
+	template <typename Iterator, typename Context
+	          , typename Skipper, typename Attribute>
+	bool parse ( Iterator &first, Iterator const &last
+	             , Context &context, Skipper const &skipper
+	             , Attribute &attr ) const
+	{
+		return compile<qi::domain> ( function ( unused, context )
+		                             , qi_modify() ( tag::lazy_eval(), modifiers ) )
+		       .parse ( first, last, context, skipper, attr );
+	}
+
+	template <typename Context>
+	info what ( Context &context ) const
+	{
+		return info ( "lazy"
+		              , compile<qi::domain> ( function ( unused, context )
+		                                      , qi_modify() ( tag::lazy_eval(), modifiers ) )
+		              .what ( context )
+		            );
+	}
+
+	Function function;
+	Modifiers modifiers;
+};
 
 
-    template <typename Function, typename Subject, typename Modifiers>
-    struct lazy_directive 
-        : unary_parser<lazy_directive<Function, Subject, Modifiers> >
-    {
-        typedef Subject subject_type;
+template <typename Function, typename Subject, typename Modifiers>
+struct lazy_directive
+		: unary_parser<lazy_directive<Function, Subject, Modifiers> >
+{
+	typedef Subject subject_type;
 
-        template <typename Context, typename Iterator>
-        struct attribute
-        {
-            typedef typename
-                boost::result_of<qi_modify(tag::lazy_eval, Modifiers)>::type
-            modifier;
+	template <typename Context, typename Iterator>
+	struct attribute
+	{
+		typedef typename
+		boost::result_of<qi_modify ( tag::lazy_eval, Modifiers ) >::type
+		modifier;
 
-            typedef typename
-                remove_reference<
-                    typename boost::result_of<Function(unused_type, Context)>::type
-                >::type
-            directive_expr_type;
+		typedef typename
+		remove_reference <
+		typename boost::result_of<Function ( unused_type, Context ) >::type
+		>::type
+		directive_expr_type;
 
-            typedef typename
-                proto::result_of::make_expr<
-                    proto::tag::subscript
-                  , directive_expr_type
-                  , Subject
-                >::type
-            expr_type;
+		typedef typename
+		proto::result_of::make_expr <
+		proto::tag::subscript
+		, directive_expr_type
+		, Subject
+		>::type
+		expr_type;
 
-            // If you got an error_invalid_expression error message here,
-            // then the expression (expr_type) is not a valid spirit qi
-            // expression.
-            BOOST_SPIRIT_ASSERT_MATCH(qi::domain, expr_type);
+		// If you got an error_invalid_expression error message here,
+		// then the expression (expr_type) is not a valid spirit qi
+		// expression.
+		BOOST_SPIRIT_ASSERT_MATCH ( qi::domain, expr_type );
 
-            typedef typename
-                result_of::compile<qi::domain, expr_type, modifier>::type
-            parser_type;
+		typedef typename
+		result_of::compile<qi::domain, expr_type, modifier>::type
+		parser_type;
 
-            typedef typename
-                traits::attribute_of<parser_type, Context, Iterator>::type
-            type;
-        };
+		typedef typename
+		traits::attribute_of<parser_type, Context, Iterator>::type
+		type;
+	};
 
-        lazy_directive(
-            Function const& function
-          , Subject const& subject
-          , Modifiers const& modifiers)
-          : function(function), subject(subject), modifiers(modifiers) {}
+	lazy_directive (
+	    Function const &function
+	    , Subject const &subject
+	    , Modifiers const &modifiers )
+		: function ( function ), subject ( subject ), modifiers ( modifiers ) {}
 
-        template <typename Iterator, typename Context
-          , typename Skipper, typename Attribute>
-        bool parse(Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper
-          , Attribute& attr) const
-        {
-            return compile<qi::domain>(
-                proto::make_expr<proto::tag::subscript>(
-                    function(unused, context)
-                  , subject
-                ), qi_modify()(tag::lazy_eval(), modifiers))
-                .parse(first, last, context, skipper, attr);
-        }
+	template <typename Iterator, typename Context
+	          , typename Skipper, typename Attribute>
+	bool parse ( Iterator &first, Iterator const &last
+	             , Context &context, Skipper const &skipper
+	             , Attribute &attr ) const
+	{
+		return compile<qi::domain> (
+		           proto::make_expr<proto::tag::subscript> (
+		               function ( unused, context )
+		               , subject
+		           ), qi_modify() ( tag::lazy_eval(), modifiers ) )
+		       .parse ( first, last, context, skipper, attr );
+	}
 
-        template <typename Context>
-        info what(Context& context) const
-        {
-            return info("lazy-directive"
-              , compile<qi::domain>(
-                    proto::make_expr<proto::tag::subscript>(
-                        function(unused, context)
-                      , subject
-                    ), qi_modify()(tag::lazy_eval(), modifiers))
-                    .what(context)
-            );
-        }
+	template <typename Context>
+	info what ( Context &context ) const
+	{
+		return info ( "lazy-directive"
+		              , compile<qi::domain> (
+		                  proto::make_expr<proto::tag::subscript> (
+		                      function ( unused, context )
+		                      , subject
+		                  ), qi_modify() ( tag::lazy_eval(), modifiers ) )
+		              .what ( context )
+		            );
+	}
 
-        Function function;
-        Subject subject;
-        Modifiers modifiers;
-    };
+	Function function;
+	Subject subject;
+	Modifiers modifiers;
+};
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Eval, typename Modifiers>
-    struct make_primitive<phoenix::actor<Eval>, Modifiers>
-    {
-        typedef lazy_parser<phoenix::actor<Eval>, Modifiers> result_type;
-        result_type operator()(phoenix::actor<Eval> const& f
-          , Modifiers const& modifiers) const
-        {
-            return result_type(f, modifiers);
-        }
-    };
+///////////////////////////////////////////////////////////////////////////
+// Parser generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+template <typename Eval, typename Modifiers>
+struct make_primitive<phoenix::actor<Eval>, Modifiers>
+{
+	typedef lazy_parser<phoenix::actor<Eval>, Modifiers> result_type;
+	result_type operator() ( phoenix::actor<Eval> const &f
+	                         , Modifiers const &modifiers ) const
+	{
+		return result_type ( f, modifiers );
+	}
+};
 
-    template <typename Terminal, typename Actor, int Arity, typename Modifiers>
-    struct make_primitive<lazy_terminal<Terminal, Actor, Arity>, Modifiers>
-    {
-        typedef lazy_parser<Actor, Modifiers> result_type;
-        result_type operator()(
-            lazy_terminal<Terminal, Actor, Arity> const& lt
-          , Modifiers const& modifiers) const
-        {
-            return result_type(lt.actor, modifiers);
-        }
-    };
+template <typename Terminal, typename Actor, int Arity, typename Modifiers>
+struct make_primitive<lazy_terminal<Terminal, Actor, Arity>, Modifiers>
+{
+	typedef lazy_parser<Actor, Modifiers> result_type;
+	result_type operator() (
+	    lazy_terminal<Terminal, Actor, Arity> const &lt
+	    , Modifiers const &modifiers ) const
+	{
+		return result_type ( lt.actor, modifiers );
+	}
+};
 
-    template <typename Terminal, typename Actor, int Arity, typename Subject, typename Modifiers>
-    struct make_directive<lazy_terminal<Terminal, Actor, Arity>, Subject, Modifiers>
-    {
-        typedef lazy_directive<Actor, Subject, Modifiers> result_type;
-        result_type operator()(
-            lazy_terminal<Terminal, Actor, Arity> const& lt
-          , Subject const& subject, Modifiers const& modifiers) const
-        {
-            return result_type(lt.actor, subject, modifiers);
-        }
-    };
-}}}
+template <typename Terminal, typename Actor, int Arity, typename Subject, typename Modifiers>
+struct make_directive<lazy_terminal<Terminal, Actor, Arity>, Subject, Modifiers>
+{
+	typedef lazy_directive<Actor, Subject, Modifiers> result_type;
+	result_type operator() (
+	    lazy_terminal<Terminal, Actor, Arity> const &lt
+	    , Subject const &subject, Modifiers const &modifiers ) const
+	{
+		return result_type ( lt.actor, subject, modifiers );
+	}
+};
+}
+}
+}
 
 #endif

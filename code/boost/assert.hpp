@@ -26,7 +26,7 @@
 namespace boost
 {
 
-void assertion_failed(char const * expr, char const * function, char const * file, long line); // user defined
+void assertion_failed ( char const *expr, char const *function, char const *file, long line ); // user defined
 
 } // namespace boost
 

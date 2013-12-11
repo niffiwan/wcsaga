@@ -24,14 +24,15 @@
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std {
+namespace std
+{
 // For STLport on WinCE, BOOST_NO_STDC_NAMESPACE can get defined if STLport is putting symbols in its own namespace.
 // In the case of codecvt, however, this does not mean that codecvt is in the global namespace (it will be in STLport's namespace)
 #  if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
-    using ::codecvt;
+using ::codecvt;
 #  endif
-    using ::mbstate_t;
-    using ::size_t;
+using ::mbstate_t;
+using ::size_t;
 } // namespace
 #endif
 
@@ -40,8 +41,10 @@ namespace std {
 #  pragma warning(disable : 4511 4512)
 #endif
 
-namespace boost {
-namespace archive {
+namespace boost
+{
+namespace archive
+{
 
 template<class Ch>
 class codecvt_null;
@@ -49,44 +52,47 @@ class codecvt_null;
 template<>
 class codecvt_null<char> : public std::codecvt<char, char, std::mbstate_t>
 {
-    virtual bool do_always_noconv() const throw() {
-        return true;
-    }
+	virtual bool do_always_noconv() const throw()
+	{
+		return true;
+	}
 public:
-    explicit codecvt_null(std::size_t no_locale_manage = 0) :
-        std::codecvt<char, char, std::mbstate_t>(no_locale_manage)
-    {}
+	explicit codecvt_null ( std::size_t no_locale_manage = 0 ) :
+		std::codecvt<char, char, std::mbstate_t> ( no_locale_manage )
+	{}
 };
 
 template<>
 class codecvt_null<wchar_t> : public std::codecvt<wchar_t, char, std::mbstate_t>
 {
-    virtual BOOST_WARCHIVE_DECL(std::codecvt_base::result)
-    do_out(
-        std::mbstate_t & state,
-        const wchar_t * first1,
-        const wchar_t * last1,
-        const wchar_t * & next1,
-        char * first2,
-        char * last2,
-        char * & next2
-    ) const;
-    virtual BOOST_WARCHIVE_DECL(std::codecvt_base::result)
-    do_in(
-        std::mbstate_t & state,
-        const char * first1,
-        const char * last1,
-        const char * & next1,
-        wchar_t * first2,
-        wchar_t * last2,
-        wchar_t * & next2
-    ) const;
-    virtual int do_encoding( ) const throw( ){
-        return sizeof(wchar_t) / sizeof(char);
-    }
-    virtual int do_max_length( ) const throw( ){
-        return do_encoding();
-    }
+	virtual BOOST_WARCHIVE_DECL ( std::codecvt_base::result )
+	do_out (
+	    std::mbstate_t &state,
+	    const wchar_t *first1,
+	    const wchar_t *last1,
+	    const wchar_t *&next1,
+	    char *first2,
+	    char *last2,
+	    char *&next2
+	) const;
+	virtual BOOST_WARCHIVE_DECL ( std::codecvt_base::result )
+	do_in (
+	    std::mbstate_t &state,
+	    const char *first1,
+	    const char *last1,
+	    const char *&next1,
+	    wchar_t *first2,
+	    wchar_t *last2,
+	    wchar_t *&next2
+	) const;
+	virtual int do_encoding( ) const throw( )
+	{
+		return sizeof ( wchar_t ) / sizeof ( char );
+	}
+	virtual int do_max_length( ) const throw( )
+	{
+		return do_encoding();
+	}
 };
 
 } // namespace archive

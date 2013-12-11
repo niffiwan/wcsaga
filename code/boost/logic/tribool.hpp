@@ -18,10 +18,14 @@
 #  pragma once
 #endif
 
-namespace boost { namespace logic {
+namespace boost
+{
+namespace logic
+{
 
 /// INTERNAL ONLY
-namespace detail {
+namespace detail
+{
 /**
  * INTERNAL ONLY
  *
@@ -31,7 +35,7 @@ namespace detail {
 struct indeterminate_t
 {
 #if BOOST_WORKAROUND(__BORLANDC__, < 0x0600)
-  char dummy_; // BCB would use 8 bytes by default
+	char dummy_; // BCB would use 8 bytes by default
 #endif
 };
 
@@ -43,7 +47,7 @@ struct indeterminate_t
  * function 'indeterminate' so that we can recognize when the keyword is
  * used.
  */
-typedef bool (*indeterminate_keyword_t)(tribool, detail::indeterminate_t);
+typedef bool ( *indeterminate_keyword_t ) ( tribool, detail::indeterminate_t );
 
 /**
  * \brief Keyword and test function for the indeterminate tribool value
@@ -60,8 +64,8 @@ typedef bool (*indeterminate_keyword_t)(tribool, detail::indeterminate_t);
  * \throws nothrow
  */
 inline bool
-indeterminate(tribool x,
-              detail::indeterminate_t dummy = detail::indeterminate_t());
+indeterminate ( tribool x,
+                detail::indeterminate_t dummy = detail::indeterminate_t() );
 
 /**
  * \brief A 3-state boolean type.
@@ -72,60 +76,61 @@ indeterminate(tribool x,
 class tribool
 {
 private:
-  /// INTERNAL ONLY
-  struct dummy {
-    void nonnull() {};
-  };
+	/// INTERNAL ONLY
+	struct dummy
+	{
+		void nonnull() {};
+	};
 
-  typedef void (dummy::*safe_bool)();
+	typedef void ( dummy::*safe_bool ) ();
 
 public:
-  /**
-   * Construct a new 3-state boolean value with the value 'false'.
-   *
-   * \throws nothrow
-   */
-  tribool() : value(false_value) {}
+	/**
+	 * Construct a new 3-state boolean value with the value 'false'.
+	 *
+	 * \throws nothrow
+	 */
+	tribool() : value ( false_value ) {}
 
-  /**
-   * Construct a new 3-state boolean value with the given boolean
-   * value, which may be \c true or \c false.
-   *
-   * \throws nothrow
-   */
-  tribool(bool value) : value(value? true_value : false_value) {}
+	/**
+	 * Construct a new 3-state boolean value with the given boolean
+	 * value, which may be \c true or \c false.
+	 *
+	 * \throws nothrow
+	 */
+	tribool ( bool value ) : value ( value ? true_value : false_value ) {}
 
-  /**
-   * Construct a new 3-state boolean value with an indeterminate value.
-   *
-   * \throws nothrow
-   */
-  tribool(indeterminate_keyword_t) : value(indeterminate_value) {}
+	/**
+	 * Construct a new 3-state boolean value with an indeterminate value.
+	 *
+	 * \throws nothrow
+	 */
+	tribool ( indeterminate_keyword_t ) : value ( indeterminate_value ) {}
 
-  /**
-   * Use a 3-state boolean in a boolean context. Will evaluate true in a
-   * boolean context only when the 3-state boolean is definitely true.
-   *
-   * \returns true if the 3-state boolean is true, false otherwise
-   * \throws nothrow
-   */
-  operator safe_bool() const
-  {
-    return value == true_value? &dummy::nonnull : 0;
-  }
+	/**
+	 * Use a 3-state boolean in a boolean context. Will evaluate true in a
+	 * boolean context only when the 3-state boolean is definitely true.
+	 *
+	 * \returns true if the 3-state boolean is true, false otherwise
+	 * \throws nothrow
+	 */
+	operator safe_bool() const
+	{
+		return value == true_value ? &dummy::nonnull : 0;
+	}
 
-  /**
-   * The actual stored value in this 3-state boolean, which may be false, true,
-   * or indeterminate.
-   */
-  enum value_t { false_value, true_value, indeterminate_value } value;
+	/**
+	 * The actual stored value in this 3-state boolean, which may be false, true,
+	 * or indeterminate.
+	 */
+	enum value_t { false_value, true_value, indeterminate_value } value;
 };
 
 // Check if the given tribool has an indeterminate value. Also doubles as a
 // keyword for the 'indeterminate' value
-inline bool indeterminate(tribool x, detail::indeterminate_t)
+inline bool indeterminate ( tribool x, detail::indeterminate_t )
 {
-  return x.value == tribool::indeterminate_value;
+	return x.value == tribool::indeterminate_value;
 }
 
 /** @defgroup logical Logical operations
@@ -156,11 +161,11 @@ inline bool indeterminate(tribool x, detail::indeterminate_t)
  *  </table>
  * \throws nothrow
  */
-inline tribool operator!(tribool x)
+inline tribool operator! ( tribool x )
 {
-  return x.value == tribool::false_value? tribool(true)
-        :x.value == tribool::true_value? tribool(false)
-        :tribool(indeterminate);
+	return x.value == tribool::false_value ? tribool ( true )
+	       : x.value == tribool::true_value ? tribool ( false )
+	       : tribool ( indeterminate );
 }
 
 /**
@@ -196,39 +201,39 @@ inline tribool operator!(tribool x)
  *       </table>
  * \throws nothrow
  */
-inline tribool operator&&(tribool x, tribool y)
+inline tribool operator&& ( tribool x, tribool y )
 {
-  if (static_cast<bool>(!x) || static_cast<bool>(!y))
-    return false;
-  else if (static_cast<bool>(x) && static_cast<bool>(y))
-    return true;
-  else
-    return indeterminate;
+	if ( static_cast<bool> ( !x ) || static_cast<bool> ( !y ) )
+		return false;
+	else if ( static_cast<bool> ( x ) && static_cast<bool> ( y ) )
+		return true;
+	else
+		return indeterminate;
 }
 
 /**
  * \overload
  */
-inline tribool operator&&(tribool x, bool y)
-{ return y? x : tribool(false); }
+inline tribool operator&& ( tribool x, bool y )
+{ return y ? x : tribool ( false ); }
 
 /**
  * \overload
  */
-inline tribool operator&&(bool x, tribool y)
-{ return x? y : tribool(false); }
+inline tribool operator&& ( bool x, tribool y )
+{ return x ? y : tribool ( false ); }
 
 /**
  * \overload
  */
-inline tribool operator&&(indeterminate_keyword_t, tribool x)
-{ return !x? tribool(false) : tribool(indeterminate); }
+inline tribool operator&& ( indeterminate_keyword_t, tribool x )
+{ return !x ? tribool ( false ) : tribool ( indeterminate ); }
 
 /**
  * \overload
  */
-inline tribool operator&&(tribool x, indeterminate_keyword_t)
-{ return !x? tribool(false) : tribool(indeterminate); }
+inline tribool operator&& ( tribool x, indeterminate_keyword_t )
+{ return !x ? tribool ( false ) : tribool ( indeterminate ); }
 
 /**
  * \brief Computes the logical disjunction of two tribools
@@ -263,39 +268,39 @@ inline tribool operator&&(tribool x, indeterminate_keyword_t)
  *       </table>
  *  \throws nothrow
  */
-inline tribool operator||(tribool x, tribool y)
+inline tribool operator|| ( tribool x, tribool y )
 {
-  if (static_cast<bool>(!x) && static_cast<bool>(!y))
-    return false;
-  else if (static_cast<bool>(x) || static_cast<bool>(y))
-    return true;
-  else
-    return indeterminate;
+	if ( static_cast<bool> ( !x ) && static_cast<bool> ( !y ) )
+		return false;
+	else if ( static_cast<bool> ( x ) || static_cast<bool> ( y ) )
+		return true;
+	else
+		return indeterminate;
 }
 
 /**
  * \overload
  */
-inline tribool operator||(tribool x, bool y)
-{ return y? tribool(true) : x; }
+inline tribool operator|| ( tribool x, bool y )
+{ return y ? tribool ( true ) : x; }
 
 /**
  * \overload
  */
-inline tribool operator||(bool x, tribool y)
-{ return x? tribool(true) : y; }
+inline tribool operator|| ( bool x, tribool y )
+{ return x ? tribool ( true ) : y; }
 
 /**
  * \overload
  */
-inline tribool operator||(indeterminate_keyword_t, tribool x)
-{ return x? tribool(true) : tribool(indeterminate); }
+inline tribool operator|| ( indeterminate_keyword_t, tribool x )
+{ return x ? tribool ( true ) : tribool ( indeterminate ); }
 
 /**
  * \overload
  */
-inline tribool operator||(tribool x, indeterminate_keyword_t)
-{ return x? tribool(true) : tribool(indeterminate); }
+inline tribool operator|| ( tribool x, indeterminate_keyword_t )
+{ return x ? tribool ( true ) : tribool ( indeterminate ); }
 //@}
 
 /**
@@ -331,35 +336,35 @@ inline tribool operator||(tribool x, indeterminate_keyword_t)
  *      </table>
  * \throws nothrow
  */
-inline tribool operator==(tribool x, tribool y)
+inline tribool operator== ( tribool x, tribool y )
 {
-  if (indeterminate(x) || indeterminate(y))
-    return indeterminate;
-  else
-    return (x && y) || (!x && !y);
+	if ( indeterminate ( x ) || indeterminate ( y ) )
+		return indeterminate;
+	else
+		return ( x && y ) || ( !x && !y );
 }
 
 /**
  * \overload
  */
-inline tribool operator==(tribool x, bool y) { return x == tribool(y); }
+inline tribool operator== ( tribool x, bool y ) { return x == tribool ( y ); }
 
 /**
  * \overload
  */
-inline tribool operator==(bool x, tribool y) { return tribool(x) == y; }
+inline tribool operator== ( bool x, tribool y ) { return tribool ( x ) == y; }
 
 /**
  * \overload
  */
-inline tribool operator==(indeterminate_keyword_t, tribool x)
-{ return tribool(indeterminate) == x; }
+inline tribool operator== ( indeterminate_keyword_t, tribool x )
+{ return tribool ( indeterminate ) == x; }
 
 /**
  * \overload
  */
-inline tribool operator==(tribool x, indeterminate_keyword_t)
-{ return tribool(indeterminate) == x; }
+inline tribool operator== ( tribool x, indeterminate_keyword_t )
+{ return tribool ( indeterminate ) == x; }
 
 /**
  * \brief Compare tribools for inequality
@@ -394,42 +399,44 @@ inline tribool operator==(tribool x, indeterminate_keyword_t)
  *       </table>
  * \throws nothrow
  */
-inline tribool operator!=(tribool x, tribool y)
+inline tribool operator!= ( tribool x, tribool y )
 {
-  if (indeterminate(x) || indeterminate(y))
-    return indeterminate;
-  else
-    return !((x && y) || (!x && !y));
+	if ( indeterminate ( x ) || indeterminate ( y ) )
+		return indeterminate;
+	else
+		return ! ( ( x && y ) || ( !x && !y ) );
 }
 
 /**
  * \overload
  */
-inline tribool operator!=(tribool x, bool y) { return x != tribool(y); }
+inline tribool operator!= ( tribool x, bool y ) { return x != tribool ( y ); }
 
 /**
  * \overload
  */
-inline tribool operator!=(bool x, tribool y) { return tribool(x) != y; }
+inline tribool operator!= ( bool x, tribool y ) { return tribool ( x ) != y; }
 
 /**
  * \overload
  */
-inline tribool operator!=(indeterminate_keyword_t, tribool x)
-{ return tribool(indeterminate) != x; }
+inline tribool operator!= ( indeterminate_keyword_t, tribool x )
+{ return tribool ( indeterminate ) != x; }
 
 /**
  * \overload
  */
-inline tribool operator!=(tribool x, indeterminate_keyword_t)
-{ return x != tribool(indeterminate); }
+inline tribool operator!= ( tribool x, indeterminate_keyword_t )
+{ return x != tribool ( indeterminate ); }
 
-} } // end namespace boost::logic
+}
+} // end namespace boost::logic
 
 // Pull tribool and indeterminate into namespace "boost"
-namespace boost {
-  using logic::tribool;
-  using logic::indeterminate;
+namespace boost
+{
+using logic::tribool;
+using logic::indeterminate;
 }
 
 /**

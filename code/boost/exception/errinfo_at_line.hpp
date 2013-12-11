@@ -7,12 +7,12 @@
 #define UUID_E7255CE26C1211DE85800C9155D89593
 
 namespace
-boost
-    {
-    template <class Tag,class T> class error_info;
+		boost
+{
+template <class Tag, class T> class error_info;
 
-    //Use with parsing errors exceptions, for example in a XML file parser.
-    typedef error_info<struct errinfo_at_line_,int> errinfo_at_line;
-    }
+//Use with parsing errors exceptions, for example in a XML file parser.
+typedef error_info<struct errinfo_at_line_, int> errinfo_at_line;
+}
 
 #endif

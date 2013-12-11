@@ -17,31 +17,31 @@
 namespace boost
 {
 
-  //
-  // Meta function that determines whether two
-  // iterator types are considered interoperable.
-  //
-  // Two iterator types A,B are considered interoperable if either
-  // A is convertible to B or vice versa.
-  // This interoperability definition is in sync with the
-  // standards requirements on constant/mutable container
-  // iterators (23.1 [lib.container.requirements]).
-  //
-  // For compilers that don't support is_convertible 
-  // is_interoperable gives false positives. See comments
-  // on operator implementation for consequences.
-  //
-  template <typename A, typename B>
-  struct is_interoperable
+//
+// Meta function that determines whether two
+// iterator types are considered interoperable.
+//
+// Two iterator types A,B are considered interoperable if either
+// A is convertible to B or vice versa.
+// This interoperability definition is in sync with the
+// standards requirements on constant/mutable container
+// iterators (23.1 [lib.container.requirements]).
+//
+// For compilers that don't support is_convertible
+// is_interoperable gives false positives. See comments
+// on operator implementation for consequences.
+//
+template <typename A, typename B>
+struct is_interoperable
 # ifdef BOOST_NO_STRICT_ITERATOR_INTEROPERABILITY
-    : mpl::true_
+		: mpl::true_
 # else
-    : mpl::or_<
-          is_convertible< A, B >
-        , is_convertible< B, A > >
+		: mpl::or_ <
+		is_convertible< A, B >
+		, is_convertible< B, A > >
 # endif
-  { 
-  };
+{
+};
 
 } // namespace boost
 

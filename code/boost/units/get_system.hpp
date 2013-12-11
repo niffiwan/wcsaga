@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -13,32 +13,34 @@
 
 #include <boost/units/units_fwd.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units {
+namespace units
+{
 
 template<class T>
 struct get_system {};
 
 /// get the system of a unit
-template<class Dim,class System>
-struct get_system< unit<Dim,System> >
+template<class Dim, class System>
+struct get_system< unit<Dim, System> >
 {
-    typedef System type;
+	typedef System type;
 };
 
 /// get the system of an absolute unit
 template<class Unit>
 struct get_system< absolute<Unit> >
 {
-    typedef typename get_system<Unit>::type type;
+	typedef typename get_system<Unit>::type type;
 };
 
 /// get the system of a quantity
-template<class Unit,class Y>
-struct get_system< quantity<Unit,Y> >
+template<class Unit, class Y>
+struct get_system< quantity<Unit, Y> >
 {
-    typedef typename get_system<Unit>::type     type;
+	typedef typename get_system<Unit>::type     type;
 };
 
 } // namespace units

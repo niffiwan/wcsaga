@@ -32,58 +32,61 @@
 #include <boost/throw_exception.hpp>
 #include <boost/asio/detail/pop_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 template <typename T>
 class win_tss_ptr
-  : private noncopyable
+	: private noncopyable
 {
 public:
 #if defined(UNDER_CE)
-  enum { out_of_indexes = 0xFFFFFFFF };
+	enum { out_of_indexes = 0xFFFFFFFF };
 #else
-  enum { out_of_indexes = TLS_OUT_OF_INDEXES };
+	enum { out_of_indexes = TLS_OUT_OF_INDEXES };
 #endif
 
-  // Constructor.
-  win_tss_ptr()
-  {
-    tss_key_ = ::TlsAlloc();
-    if (tss_key_ == out_of_indexes)
-    {
-      DWORD last_error = ::GetLastError();
-      boost::system::system_error e(
-          boost::system::error_code(last_error,
-            boost::asio::error::get_system_category()),
-          "tss");
-      boost::throw_exception(e);
-    }
-  }
+	// Constructor.
+	win_tss_ptr()
+	{
+		tss_key_ = ::TlsAlloc();
+		if ( tss_key_ == out_of_indexes )
+		{
+			DWORD last_error = ::GetLastError();
+			boost::system::system_error e (
+			    boost::system::error_code ( last_error,
+			                                boost::asio::error::get_system_category() ),
+			    "tss" );
+			boost::throw_exception ( e );
+		}
+	}
 
-  // Destructor.
-  ~win_tss_ptr()
-  {
-    ::TlsFree(tss_key_);
-  }
+	// Destructor.
+	~win_tss_ptr()
+	{
+		::TlsFree ( tss_key_ );
+	}
 
-  // Get the value.
-  operator T*() const
-  {
-    return static_cast<T*>(::TlsGetValue(tss_key_));
-  }
+	// Get the value.
+	operator T *() const
+	{
+		return static_cast<T *> ( ::TlsGetValue ( tss_key_ ) );
+	}
 
-  // Set the value.
-  void operator=(T* value)
-  {
-    ::TlsSetValue(tss_key_, value);
-  }
+	// Set the value.
+	void operator= ( T *value )
+	{
+		::TlsSetValue ( tss_key_, value );
+	}
 
 private:
-  // Thread-specific storage to allow unlocked access to determine whether a
-  // thread is a member of the pool.
-  DWORD tss_key_;
+	// Thread-specific storage to allow unlocked access to determine whether a
+	// thread is a member of the pool.
+	DWORD tss_key_;
 };
 
 } // namespace detail

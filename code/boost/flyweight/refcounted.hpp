@@ -39,128 +39,133 @@
  * value is effectively erasable only when the deleter count goes down to 0.
  */
 
-namespace boost{
+namespace boost
+{
 
-namespace flyweights{
+namespace flyweights
+{
 
-namespace detail{
+namespace detail
+{
 
-template<typename Value,typename Key>
+template<typename Value, typename Key>
 class refcounted_value
 {
 public:
-  explicit refcounted_value(const Value& x_):
-    x(x_),ref(0),del_ref(0)
-  {}
-  
-  refcounted_value(const refcounted_value& r):
-    x(r.x),ref(0),del_ref(0)
-  {}
+	explicit refcounted_value ( const Value &x_ ) :
+		x ( x_ ), ref ( 0 ), del_ref ( 0 )
+	{}
 
-  ~refcounted_value()
-  {
-    /* count()!=0 most likely indicates that the flyweight factory
-     * has been destructed before some of the flyweight objects using
-     * it. Check for static initialization order problems with this
-     * flyweight type.
-     */
+	refcounted_value ( const refcounted_value &r ) :
+		x ( r.x ), ref ( 0 ), del_ref ( 0 )
+	{}
 
-    BOOST_ASSERT(count()==0);
-  }
+	~refcounted_value()
+	{
+		/* count()!=0 most likely indicates that the flyweight factory
+		 * has been destructed before some of the flyweight objects using
+		 * it. Check for static initialization order problems with this
+		 * flyweight type.
+		 */
 
-  refcounted_value& operator=(const refcounted_value& r)
-  {
-    x=r.x;
-    return *this;
-  }
-  
-  operator const Value&()const{return x;}
-  operator const Key&()const{return x;}
-    
+		BOOST_ASSERT ( count() == 0 );
+	}
+
+	refcounted_value &operator= ( const refcounted_value &r )
+	{
+		x = r.x;
+		return *this;
+	}
+
+	operator const Value &() const {return x;}
+	operator const Key &() const {return x;}
+
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 private:
-  template<typename,typename> friend class refcounted_handle;
+	template<typename, typename> friend class refcounted_handle;
 #endif
 
-  long count()const{return ref;}
-  long add_ref()const{return ++ref;}
-  bool release()const{return (--ref==0);}
+	long count() const {return ref;}
+	long add_ref() const {return ++ref;}
+	bool release() const {return ( --ref == 0 );}
 
-  void add_deleter()const{++del_ref;}
-  bool release_deleter()const{return (--del_ref==0);}
+	void add_deleter() const {++del_ref;}
+	bool release_deleter() const {return ( --del_ref == 0 );}
 
 private:
-  Value                               x;
-  mutable boost::detail::atomic_count ref;
-  mutable long                        del_ref;
+	Value                               x;
+	mutable boost::detail::atomic_count ref;
+	mutable long                        del_ref;
 };
 
-template<typename Handle,typename TrackingHelper>
+template<typename Handle, typename TrackingHelper>
 class refcounted_handle
 {
 public:
-  explicit refcounted_handle(const Handle& h_):h(h_)
-  {
-    if(TrackingHelper::entry(*this).add_ref()==1){
-      TrackingHelper::entry(*this).add_deleter();
-    }
-  }
-  
-  refcounted_handle(const refcounted_handle& x):h(x.h)
-  {
-    TrackingHelper::entry(*this).add_ref();
-  }
+	explicit refcounted_handle ( const Handle &h_ ) : h ( h_ )
+	{
+		if ( TrackingHelper::entry ( *this ).add_ref() == 1 )
+		{
+			TrackingHelper::entry ( *this ).add_deleter();
+		}
+	}
 
-  refcounted_handle& operator=(refcounted_handle x)
-  {
-    swap(*this,x);
-    return *this;
-  }
+	refcounted_handle ( const refcounted_handle &x ) : h ( x.h )
+	{
+		TrackingHelper::entry ( *this ).add_ref();
+	}
 
-  ~refcounted_handle()
-  {
-    if(TrackingHelper::entry(*this).release()){
-      TrackingHelper::erase(*this,check_erase);
-    }
-  }
+	refcounted_handle &operator= ( refcounted_handle x )
+	{
+		swap ( *this, x );
+		return *this;
+	}
 
-  operator const Handle&()const{return h;}
+	~refcounted_handle()
+	{
+		if ( TrackingHelper::entry ( *this ).release() )
+		{
+			TrackingHelper::erase ( *this, check_erase );
+		}
+	}
 
-  friend void swap(refcounted_handle& x, refcounted_handle& y)
-  {
-    boost::swap(x.h,y.h);
-  }
+	operator const Handle &() const {return h;}
+
+	friend void swap ( refcounted_handle &x, refcounted_handle &y )
+	{
+		boost::swap ( x.h, y.h );
+	}
 
 private:
-  static bool check_erase(const refcounted_handle& x)
-  {
-    return TrackingHelper::entry(x).release_deleter();
-  }
+	static bool check_erase ( const refcounted_handle &x )
+	{
+		return TrackingHelper::entry ( x ).release_deleter();
+	}
 
-  Handle h;
+	Handle h;
 };
 
 } /* namespace flyweights::detail */
 
-struct refcounted:tracking_marker
+struct refcounted: tracking_marker
 {
-  struct entry_type
-  {
-    template<typename Value,typename Key>
-    struct apply
-    {
-      typedef detail::refcounted_value<Value,Key> type;
-    };
-  };
+	struct entry_type
+	{
+		template<typename Value, typename Key>
+		struct apply
+		{
+			typedef detail::refcounted_value<Value, Key> type;
+		};
+	};
 
-  struct handle_type
-  {
-    template<typename Handle,typename TrackingHelper>
-    struct apply
-    {
-      typedef detail::refcounted_handle<Handle,TrackingHelper> type;
-    };
-  };
+	struct handle_type
+	{
+		template<typename Handle, typename TrackingHelper>
+		struct apply
+		{
+			typedef detail::refcounted_handle<Handle, TrackingHelper> type;
+		};
+	};
 };
 
 } /* namespace flyweights */

@@ -20,7 +20,12 @@
 #include <boost/mpi/python/serialize.hpp>
 
 
-namespace boost { namespace mpi { namespace python {
+namespace boost
+{
+namespace mpi
+{
+namespace python
+{
 
 /**
  * INTERNAL ONLY
@@ -31,16 +36,16 @@ namespace boost { namespace mpi { namespace python {
  */
 class content : public boost::mpi::content
 {
-  typedef boost::mpi::content inherited;
+typedef boost::mpi::content inherited;
 
- public:
-  content(const inherited& base, boost::python::object object) 
-    : inherited(base), object(object) { }
+public:
+content ( const inherited &base, boost::python::object object )
+	: inherited ( base ), object ( object ) { }
 
-  inherited&       base()       { return *this; }
-  const inherited& base() const { return *this; }
+inherited       &base()       { return *this; }
+const inherited &base() const { return *this; }
 
-  boost::python::object object;
+boost::python::object object;
 };
 
 /**
@@ -54,12 +59,12 @@ class content : public boost::mpi::content
  * skeleton_proxy<T>) will be returned from the Python skeleton()
  * function.
  */
-class skeleton_proxy_base 
+class skeleton_proxy_base
 {
 public:
-  skeleton_proxy_base(const boost::python::object& object) : object(object) { }
+skeleton_proxy_base ( const boost::python::object &object ) : object ( object ) { }
 
-  boost::python::object object;
+boost::python::object object;
 };
 
 /**
@@ -74,136 +79,142 @@ public:
 template<typename T>
 class skeleton_proxy : public skeleton_proxy_base
 {
- public:
-  skeleton_proxy(const boost::python::object& object) 
-    : skeleton_proxy_base(object) { }
+public:
+skeleton_proxy ( const boost::python::object &object )
+	: skeleton_proxy_base ( object ) { }
 };
 
-namespace detail {
-  using boost::python::object;
-  using boost::python::extract;
-   
-  extern BOOST_MPI_DECL boost::python::object skeleton_proxy_base_type;
+namespace detail
+{
+using boost::python::object;
+using boost::python::extract;
 
-  template<typename T>
-  struct skeleton_saver
-  {
-    void 
-    operator()(packed_oarchive& ar, const object& obj, const unsigned int)
-    {
-      packed_skeleton_oarchive pso(ar);
-      pso << extract<T&>(obj.attr("object"))();
-    }
-  };
+extern BOOST_MPI_DECL boost::python::object skeleton_proxy_base_type;
 
-  template<typename T> 
-  struct skeleton_loader
-  {
-    void 
-    operator()(packed_iarchive& ar, object& obj, const unsigned int)
-    {
-      packed_skeleton_iarchive psi(ar);
-      extract<skeleton_proxy<T>&> proxy(obj);
-      if (!proxy.check())
-        obj = object(skeleton_proxy<T>(object(T())));
+template<typename T>
+struct skeleton_saver
+{
+void
+operator() ( packed_oarchive &ar, const object &obj, const unsigned int )
+{
+	packed_skeleton_oarchive pso ( ar );
+	pso << extract<T &> ( obj.attr ( "object" ) ) ();
+}
+};
 
-      psi >> extract<T&>(obj.attr("object"))();
-    }
-  };
+template<typename T>
+struct skeleton_loader
+{
+void
+operator() ( packed_iarchive &ar, object &obj, const unsigned int )
+{
+	packed_skeleton_iarchive psi ( ar );
+	extract<skeleton_proxy<T>&> proxy ( obj );
+	if ( !proxy.check() )
+		obj = object ( skeleton_proxy<T> ( object ( T() ) ) );
 
-  /**
-   * The @c skeleton_content_handler structure contains all of the
-   * information required to extract a skeleton and content from a
-   * Python object with a certain C++ type.
-   */
-  struct skeleton_content_handler {
-    function1<object, const object&> get_skeleton_proxy;
-    function1<content, const object&> get_content;
-  };
+	psi >> extract<T &> ( obj.attr ( "object" ) ) ();
+}
+};
 
-  /**
-   * A function object that extracts the skeleton from of a Python
-   * object, which is actually a wrapped C++ object of type T.
-   */
-  template<typename T>
-  struct do_get_skeleton_proxy
-  {
-    object operator()(object value) {
-      return object(skeleton_proxy<T>(value));
-    }
-  };
+/**
+ * The @c skeleton_content_handler structure contains all of the
+ * information required to extract a skeleton and content from a
+ * Python object with a certain C++ type.
+ */
+struct skeleton_content_handler
+{
+function1<object, const object &> get_skeleton_proxy;
+function1<content, const object &> get_content;
+};
 
-  /**
-   * A function object that extracts the content of a Python object,
-   * which is actually a wrapped C++ object of type T.
-   */
-  template<typename T>
-  struct do_get_content
-  {
-    content operator()(object value_obj) {
-      T& value = extract<T&>(value_obj)();
-      return content(boost::mpi::get_content(value), value_obj);
-    }
-  };
+/**
+ * A function object that extracts the skeleton from of a Python
+ * object, which is actually a wrapped C++ object of type T.
+ */
+template<typename T>
+struct do_get_skeleton_proxy
+{
+object operator() ( object value )
+{
+	return object ( skeleton_proxy<T> ( value ) );
+}
+};
 
-  /**
-   * Determine if a skeleton and content handler for @p type has
-   * already been registered.
-   */
-  BOOST_MPI_PYTHON_DECL bool
-  skeleton_and_content_handler_registered(PyTypeObject* type);
- 
-  /**
-   * Register a skeleton/content handler with a particular Python type
-   * (which actually wraps a C++ type).
-   */
-  BOOST_MPI_PYTHON_DECL void 
-  register_skeleton_and_content_handler(PyTypeObject*, 
-                                        const skeleton_content_handler&);
+/**
+ * A function object that extracts the content of a Python object,
+ * which is actually a wrapped C++ object of type T.
+ */
+template<typename T>
+struct do_get_content
+{
+content operator() ( object value_obj )
+{
+	T &value = extract<T &> ( value_obj ) ();
+	return content ( boost::mpi::get_content ( value ), value_obj );
+}
+};
+
+/**
+ * Determine if a skeleton and content handler for @p type has
+ * already been registered.
+ */
+BOOST_MPI_PYTHON_DECL bool
+skeleton_and_content_handler_registered ( PyTypeObject *type );
+
+/**
+ * Register a skeleton/content handler with a particular Python type
+ * (which actually wraps a C++ type).
+ */
+BOOST_MPI_PYTHON_DECL void
+register_skeleton_and_content_handler ( PyTypeObject *,
+                                        const skeleton_content_handler & );
 } // end namespace detail
 
 template<typename T>
-void register_skeleton_and_content(const T& value, PyTypeObject* type)
+void register_skeleton_and_content ( const T &value, PyTypeObject *type )
 {
-  using boost::python::detail::direct_serialization_table;
-  using boost::python::detail::get_direct_serialization_table;
-  using namespace boost::python;
+using boost::python::detail::direct_serialization_table;
+using boost::python::detail::get_direct_serialization_table;
+using namespace boost::python;
 
-  // Determine the type
-  if (!type)
-    type = object(value).ptr()->ob_type;
+// Determine the type
+if ( !type )
+	type = object ( value ).ptr()->ob_type;
 
-  // Don't re-register the same type.
-  if (detail::skeleton_and_content_handler_registered(type))
-    return;
+// Don't re-register the same type.
+if ( detail::skeleton_and_content_handler_registered ( type ) )
+	return;
 
-  // Register the skeleton proxy type
-  {
-    boost::python::scope proxy_scope(detail::skeleton_proxy_base_type);
-    std::string name("skeleton_proxy<");
-    name += typeid(T).name();
-    name += ">";
-    class_<skeleton_proxy<T>, bases<skeleton_proxy_base> >(name.c_str(), 
-                                                           no_init);
-  }
-
-  // Register the saver and loader for the associated skeleton and
-  // proxy, to allow (de-)serialization of skeletons via the proxy.
-  direct_serialization_table<packed_iarchive, packed_oarchive>& table = 
-    get_direct_serialization_table<packed_iarchive, packed_oarchive>();
-  table.register_type(detail::skeleton_saver<T>(), 
-                      detail::skeleton_loader<T>(), 
-                      skeleton_proxy<T>(object(value)));
-
-  // Register the rest of the skeleton/content mechanism, including
-  // handlers that extract a skeleton proxy from a Python object and
-  // extract the content from a Python object.
-  detail::skeleton_content_handler handler;
-  handler.get_skeleton_proxy = detail::do_get_skeleton_proxy<T>();
-  handler.get_content = detail::do_get_content<T>();
-  detail::register_skeleton_and_content_handler(type, handler);
+// Register the skeleton proxy type
+{
+	boost::python::scope proxy_scope ( detail::skeleton_proxy_base_type );
+	std::string name ( "skeleton_proxy<" );
+	name += typeid ( T ).name();
+	name += ">";
+	class_<skeleton_proxy<T>, bases<skeleton_proxy_base> > ( name.c_str(),
+	        no_init );
 }
 
-} } } // end namespace boost::mpi::python
+// Register the saver and loader for the associated skeleton and
+// proxy, to allow (de-)serialization of skeletons via the proxy.
+direct_serialization_table<packed_iarchive, packed_oarchive> &table =
+    get_direct_serialization_table<packed_iarchive, packed_oarchive>();
+table.register_type ( detail::skeleton_saver<T>(),
+                      detail::skeleton_loader<T>(),
+                      skeleton_proxy<T> ( object ( value ) ) );
+
+// Register the rest of the skeleton/content mechanism, including
+// handlers that extract a skeleton proxy from a Python object and
+// extract the content from a Python object.
+detail::skeleton_content_handler handler;
+handler.get_skeleton_proxy = detail::do_get_skeleton_proxy<T>();
+handler.get_content = detail::do_get_content<T>();
+detail::register_skeleton_and_content_handler ( type, handler );
+}
+
+}
+}
+} // end namespace boost::mpi::python
 
 #endif // BOOST_MPI_PYTHON_SKELETON_AND_CONTENT_HPP

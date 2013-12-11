@@ -1,10 +1,10 @@
-//  (C) Copyright John Maddock 2001 - 2003. 
-//  (C) Copyright Jens Maurer 2001 - 2003. 
-//  (C) Copyright David Abrahams 2002. 
-//  (C) Copyright Toon Knapen 2003. 
+//  (C) Copyright John Maddock 2001 - 2003.
+//  (C) Copyright Jens Maurer 2001 - 2003.
+//  (C) Copyright David Abrahams 2002.
+//  (C) Copyright Toon Knapen 2003.
 //  (C) Copyright Boris Gubenko 2006 - 2007.
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
@@ -30,10 +30,10 @@
 
 #if defined(__GNUC__)
 #  if (__GNUC__ < 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ < 3))
-      // GNU C on HP-UX does not support threads (checked up to gcc 3.3)
+// GNU C on HP-UX does not support threads (checked up to gcc 3.3)
 #     define BOOST_DISABLE_THREADS
 #  elif !defined(BOOST_DISABLE_THREADS)
-      // threads supported from gcc-3.3 onwards:
+// threads supported from gcc-3.3 onwards:
 #     define BOOST_HAS_THREADS
 #     define BOOST_HAS_PTHREADS
 #  endif
@@ -73,12 +73,12 @@
 #ifndef BOOST_HAS_SIGACTION
 #  define BOOST_HAS_SIGACTION
 #endif
-#ifndef BOOST_HAS_NRVO 
+#ifndef BOOST_HAS_NRVO
 #  ifndef __parisc
 #    define BOOST_HAS_NRVO
 #  endif
 #endif
-#ifndef BOOST_HAS_LOG1P 
+#ifndef BOOST_HAS_LOG1P
 #  define BOOST_HAS_LOG1P
 #endif
 #ifndef BOOST_HAS_EXPM1

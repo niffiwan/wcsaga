@@ -31,9 +31,12 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost {
-namespace wave {
-namespace grammars {
+namespace boost
+{
+namespace wave
+{
+namespace grammars
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -65,10 +68,10 @@ namespace grammars {
 #define BOOST_WAVE_ENDREGION_ID          23
 
 ///////////////////////////////////////////////////////////////////////////////
-//  
+//
 //  cpp_grammar_gen template class
 //
-//      This template helps separating the compilation of the cpp_grammar 
+//      This template helps separating the compilation of the cpp_grammar
 //      class from the compilation of the main pp_iterator. This is done to
 //      safe compilation time.
 //
@@ -77,20 +80,20 @@ namespace grammars {
 template <typename LexIteratorT, typename TokenContainerT>
 struct BOOST_WAVE_DECL cpp_grammar_gen
 {
-    typedef LexIteratorT                          iterator_type;
-    typedef typename LexIteratorT::token_type     token_type;
-    typedef TokenContainerT                       token_container_type;
-    typedef typename token_type::position_type    position_type;
-    typedef boost::spirit::classic::node_val_data_factory<
-//             boost::spirit::nil_t,
-//             boost::pool_allocator<boost::spirit::nil_t> 
-        > node_factory_type;
+	typedef LexIteratorT                          iterator_type;
+	typedef typename LexIteratorT::token_type     token_type;
+	typedef TokenContainerT                       token_container_type;
+	typedef typename token_type::position_type    position_type;
+	typedef boost::spirit::classic::node_val_data_factory <
+	//             boost::spirit::nil_t,
+	//             boost::pool_allocator<boost::spirit::nil_t>
+	> node_factory_type;
 
-//  parse the cpp_grammar and return the resulting parse tree    
-    static boost::spirit::classic::tree_parse_info<iterator_type, node_factory_type> 
-    parse_cpp_grammar (iterator_type const &first, iterator_type const &last,
-        position_type const &act_pos, bool &found_eof, 
-        token_type &found_directive, token_container_type &found_eoltokens);
+	//  parse the cpp_grammar and return the resulting parse tree
+	static boost::spirit::classic::tree_parse_info<iterator_type, node_factory_type>
+	parse_cpp_grammar ( iterator_type const &first, iterator_type const &last,
+	                    position_type const &act_pos, bool &found_eof,
+	                    token_type &found_directive, token_container_type &found_eoltokens );
 };
 
 ///////////////////////////////////////////////////////////////////////////////

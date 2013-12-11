@@ -20,30 +20,30 @@
 #include <boost/function_types/is_callable_builtin.hpp>
 #include <boost/function_types/components.hpp>
 
-namespace boost 
-{ 
-  namespace function_types 
-  {
-    template< typename T > struct result_type;
+namespace boost
+{
+namespace function_types
+{
+template< typename T > struct result_type;
 
-    namespace detail
-    {
-      template<typename T> struct result_type_impl
-        : mpl::at_c
-          < typename function_types::components<T>::types, 0 >
-      { };
-    }
+namespace detail
+{
+template<typename T> struct result_type_impl
+		: mpl::at_c
+		< typename function_types::components<T>::types, 0 >
+{ };
+}
 
-    template<typename T> struct result_type
-      : mpl::if_
-        < function_types::is_callable_builtin<T>
-        , detail::result_type_impl<T>, boost::blank
-        >::type
-    { 
-      BOOST_MPL_AUX_LAMBDA_SUPPORT(1,result_type,(T)) 
-    };
-  }
-  BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(1,function_types::result_type)
+template<typename T> struct result_type
+		: mpl::if_
+		< function_types::is_callable_builtin<T>
+		, detail::result_type_impl<T>, boost::blank
+		>::type
+{
+	BOOST_MPL_AUX_LAMBDA_SUPPORT ( 1, result_type, ( T ) )
+};
+}
+BOOST_TT_AUX_TEMPLATE_ARITY_SPEC ( 1, function_types::result_type )
 }
 
 #endif

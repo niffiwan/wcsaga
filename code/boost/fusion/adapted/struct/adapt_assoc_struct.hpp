@@ -33,10 +33,17 @@
 #include <boost/mpl/int.hpp>
 #include <boost/config/no_tr1/utility.hpp>
 
-namespace boost { namespace fusion { namespace extension {
-    template<typename Struct, typename Key>
-    struct struct_assoc_member;
-}}}
+namespace boost
+{
+namespace fusion
+{
+namespace extension
+{
+template<typename Struct, typename Key>
+struct struct_assoc_member;
+}
+}
+}
 
 
 #define BOOST_FUSION_ADAPT_ASSOC_STRUCT(name, bseq)                                   \
@@ -108,6 +115,6 @@ namespace boost { namespace fusion { namespace extension {
             return struct_.BOOST_PP_TUPLE_ELEM(3, 1, xy);                       \
         };                                                                      \
     };
-    /***/
+/***/
 
 #endif

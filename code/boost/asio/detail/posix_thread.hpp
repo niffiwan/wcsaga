@@ -33,91 +33,94 @@
 #include <boost/asio/error.hpp>
 #include <boost/asio/detail/noncopyable.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
-extern "C" void* boost_asio_detail_posix_thread_function(void* arg);
+extern "C" void *boost_asio_detail_posix_thread_function ( void *arg );
 
 class posix_thread
-  : private noncopyable
+	: private noncopyable
 {
 public:
-  // Constructor.
-  template <typename Function>
-  posix_thread(Function f)
-    : joined_(false)
-  {
-    std::auto_ptr<func_base> arg(new func<Function>(f));
-    int error = ::pthread_create(&thread_, 0,
-          boost_asio_detail_posix_thread_function, arg.get());
-    if (error != 0)
-    {
-      boost::system::system_error e(
-          boost::system::error_code(error,
-            boost::asio::error::get_system_category()),
-          "thread");
-      boost::throw_exception(e);
-    }
-    arg.release();
-  }
+	// Constructor.
+	template <typename Function>
+	posix_thread ( Function f )
+		: joined_ ( false )
+	{
+		std::auto_ptr<func_base> arg ( new func<Function> ( f ) );
+		int error = ::pthread_create ( &thread_, 0,
+		                               boost_asio_detail_posix_thread_function, arg.get() );
+		if ( error != 0 )
+		{
+			boost::system::system_error e (
+			    boost::system::error_code ( error,
+			                                boost::asio::error::get_system_category() ),
+			    "thread" );
+			boost::throw_exception ( e );
+		}
+		arg.release();
+	}
 
-  // Destructor.
-  ~posix_thread()
-  {
-    if (!joined_)
-      ::pthread_detach(thread_);
-  }
+	// Destructor.
+	~posix_thread()
+	{
+		if ( !joined_ )
+			::pthread_detach ( thread_ );
+	}
 
-  // Wait for the thread to exit.
-  void join()
-  {
-    if (!joined_)
-    {
-      ::pthread_join(thread_, 0);
-      joined_ = true;
-    }
-  }
+	// Wait for the thread to exit.
+	void join()
+	{
+		if ( !joined_ )
+		{
+			::pthread_join ( thread_, 0 );
+			joined_ = true;
+		}
+	}
 
 private:
-  friend void* boost_asio_detail_posix_thread_function(void* arg);
+	friend void *boost_asio_detail_posix_thread_function ( void *arg );
 
-  class func_base
-  {
-  public:
-    virtual ~func_base() {}
-    virtual void run() = 0;
-  };
+	class func_base
+	{
+	public:
+		virtual ~func_base() {}
+		virtual void run() = 0;
+	};
 
-  template <typename Function>
-  class func
-    : public func_base
-  {
-  public:
-    func(Function f)
-      : f_(f)
-    {
-    }
+	template <typename Function>
+	class func
+		: public func_base
+	{
+	public:
+		func ( Function f )
+			: f_ ( f )
+		{
+		}
 
-    virtual void run()
-    {
-      f_();
-    }
+		virtual void run()
+		{
+			f_();
+		}
 
-  private:
-    Function f_;
-  };
+	private:
+		Function f_;
+	};
 
-  ::pthread_t thread_;
-  bool joined_;
+	::pthread_t thread_;
+	bool joined_;
 };
 
-inline void* boost_asio_detail_posix_thread_function(void* arg)
+inline void *boost_asio_detail_posix_thread_function ( void *arg )
 {
-  std::auto_ptr<posix_thread::func_base> f(
-      static_cast<posix_thread::func_base*>(arg));
-  f->run();
-  return 0;
+	std::auto_ptr<posix_thread::func_base> f (
+	    static_cast<posix_thread::func_base *> ( arg ) );
+	f->run();
+	return 0;
 }
 
 } // namespace detail

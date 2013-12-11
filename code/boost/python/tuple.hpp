@@ -12,50 +12,53 @@
 #include <boost/preprocessor/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 
-namespace boost { namespace python {
+namespace boost
+{
+namespace python
+{
 
 namespace detail
 {
-  struct BOOST_PYTHON_DECL tuple_base : object
-  {
-   protected:
-      tuple_base();
-      tuple_base(object_cref sequence);
-      
-      BOOST_PYTHON_FORWARD_OBJECT_CONSTRUCTORS(tuple_base, object)
+struct BOOST_PYTHON_DECL tuple_base : object
+{
+protected:
+	tuple_base();
+	tuple_base ( object_cref sequence );
 
-   private:
-      static detail::new_reference call(object const&);
-  };
+	BOOST_PYTHON_FORWARD_OBJECT_CONSTRUCTORS ( tuple_base, object )
+
+private:
+	static detail::new_reference call ( object const & );
+};
 }
 
 class tuple : public detail::tuple_base
 {
-    typedef detail::tuple_base base;
- public:
-    tuple() {}
+	typedef detail::tuple_base base;
+public:
+	tuple() {}
 
-    template <class T>
-    explicit tuple(T const& sequence)
-        : base(object(sequence))
-    {
-    }
+	template <class T>
+	explicit tuple ( T const &sequence )
+		: base ( object ( sequence ) )
+	{
+	}
 
- public: // implementation detail -- for internal use only
-    BOOST_PYTHON_FORWARD_OBJECT_CONSTRUCTORS(tuple, base)
+public: // implementation detail -- for internal use only
+	BOOST_PYTHON_FORWARD_OBJECT_CONSTRUCTORS ( tuple, base )
 };
 
 //
 // Converter Specializations    // $$$ JDG $$$ moved here to prevent
 //                              // G++ bug complaining specialization
-                                // provided after instantiation
+// provided after instantiation
 namespace converter
 {
-  template <>
-  struct object_manager_traits<tuple>
-      : pytype_object_manager_traits<&PyTuple_Type,tuple>
-  {
-  };
+template <>
+struct object_manager_traits<tuple>
+		: pytype_object_manager_traits<&PyTuple_Type, tuple>
+{
+};
 }
 
 // for completeness
@@ -64,7 +67,8 @@ inline tuple make_tuple() { return tuple(); }
 # define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PYTHON_MAX_ARITY, <boost/python/detail/make_tuple.hpp>))
 # include BOOST_PP_ITERATE()
 
-}}  // namespace boost::python
+}
+}  // namespace boost::python
 
 #endif
 

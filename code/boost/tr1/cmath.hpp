@@ -20,7 +20,10 @@
 
 #include <boost/math/tr1.hpp>
 
-namespace std{ namespace tr1{
+namespace std
+{
+namespace tr1
+{
 
 using boost::math::tr1::assoc_laguerre;
 using boost::math::tr1::assoc_laguerref;
@@ -260,7 +263,8 @@ using boost::math::tr1::islessequal;
 using boost::math::tr1::islessgreater;
 using boost::math::tr1::isunordered;
 #endif
-} } // namespaces
+}
+} // namespaces
 
 #endif // BOOST_HAS_TR1_CMATH
 

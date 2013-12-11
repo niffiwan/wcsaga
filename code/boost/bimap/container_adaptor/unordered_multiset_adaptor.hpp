@@ -23,9 +23,12 @@
 #include <boost/mpl/aux_/na.hpp>
 #include <boost/mpl/vector.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace container_adaptor {
+namespace boost
+{
+namespace bimaps
+{
+namespace container_adaptor
+{
 
 /// \brief Container adaptor to easily build a std::unordered_multiset signature compatible container.
 
@@ -46,50 +49,50 @@ template
     class KeyToBaseConverter             = ::boost::mpl::na,
 
     class FunctorsFromDerivedClasses = mpl::vector<>
->
+    >
 class unordered_multiset_adaptor :
 
-    public ::boost::bimaps::container_adaptor::
-                unordered_associative_container_adaptor
-    <
-        Base,
-        Iterator, ConstIterator, LocalIterator, ConstLocalIterator,
-        BOOST_DEDUCED_TYPENAME Iterator::value_type,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        LocalIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        KeyToBaseConverter,
-        FunctorsFromDerivedClasses
-    >
+	public ::boost::bimaps::container_adaptor::
+	unordered_associative_container_adaptor
+	<
+	Base,
+	Iterator, ConstIterator, LocalIterator, ConstLocalIterator,
+	BOOST_DEDUCED_TYPENAME Iterator::value_type,
+	IteratorToBaseConverter, IteratorFromBaseConverter,
+	LocalIteratorFromBaseConverter,
+	ValueToBaseConverter, ValueFromBaseConverter,
+	KeyToBaseConverter,
+	FunctorsFromDerivedClasses
+	>
 {
-    typedef ::boost::bimaps::container_adaptor::
-                unordered_associative_container_adaptor
-    <
-        Base,
-        Iterator, ConstIterator, LocalIterator, ConstLocalIterator,
-        BOOST_DEDUCED_TYPENAME Iterator::value_type,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        LocalIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        KeyToBaseConverter,
-        FunctorsFromDerivedClasses
+	typedef ::boost::bimaps::container_adaptor::
+	unordered_associative_container_adaptor
+	<
+	Base,
+	Iterator, ConstIterator, LocalIterator, ConstLocalIterator,
+	BOOST_DEDUCED_TYPENAME Iterator::value_type,
+	IteratorToBaseConverter, IteratorFromBaseConverter,
+	LocalIteratorFromBaseConverter,
+	ValueToBaseConverter, ValueFromBaseConverter,
+	KeyToBaseConverter,
+	FunctorsFromDerivedClasses
 
-    > base_;
+	> base_;
 
-    // Access -----------------------------------------------------------------
+	// Access -----------------------------------------------------------------
 
-    public:
+public:
 
-    explicit unordered_multiset_adaptor(Base & c) :
-        base_(c) {}
+	explicit unordered_multiset_adaptor ( Base &c ) :
+		base_ ( c ) {}
 
-    protected:
+protected:
 
-    typedef unordered_multiset_adaptor unordered_multiset_adaptor_;
+	typedef unordered_multiset_adaptor unordered_multiset_adaptor_;
 
-    public:
+public:
 
-    BOOST_BIMAP_NON_UNIQUE_CONTAINER_ADAPTOR_INSERT_FUNCTIONS
+	BOOST_BIMAP_NON_UNIQUE_CONTAINER_ADAPTOR_INSERT_FUNCTIONS
 };
 
 

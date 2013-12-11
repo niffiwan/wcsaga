@@ -14,7 +14,11 @@
 #include <boost/xpressive/detail/core/linker.hpp>
 #include <boost/xpressive/detail/utility/ignore_unused.hpp>
 
-namespace boost { namespace xpressive { namespace regex_constants
+namespace boost
+{
+namespace xpressive
+{
+namespace regex_constants
 {
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,12 +35,13 @@ using regex_constants::icase;
 
 namespace detail
 {
-    inline void ignore_unused_icase()
-    {
-        ignore_unused(icase);
-    }
+inline void ignore_unused_icase()
+{
+	ignore_unused ( icase );
+}
 }
 
-}} // namespace boost::xpressive
+}
+} // namespace boost::xpressive
 
 #endif

@@ -24,49 +24,49 @@
 
 namespace boost
 {
-    
-    template< class T >
-    struct nullable
-    {
-        typedef T type;
-    };   
 
-    namespace ptr_container_detail
-    {
-        template< class T >
-        type_traits::yes_type is_nullable( const nullable<T>* );
+template< class T >
+struct nullable
+{
+	typedef T type;
+};
 
-        type_traits::no_type is_nullable( ... );        
-    }
+namespace ptr_container_detail
+{
+template< class T >
+type_traits::yes_type is_nullable ( const nullable<T> * );
 
-    template< class T >
-    struct is_nullable
-    {
-    private:
-            BOOST_STATIC_CONSTANT( T*, var );
-    public:
+type_traits::no_type is_nullable ( ... );
+}
 
-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)  
-#pragma warning(push)  
-#pragma warning(disable:6334)  
-#endif  
+template< class T >
+struct is_nullable
+{
+private:
+	BOOST_STATIC_CONSTANT ( T *, var );
+public:
 
-            BOOST_STATIC_CONSTANT(bool, value = sizeof( ptr_container_detail::is_nullable( var ) ) 
-                                                == sizeof( type_traits::yes_type ) );
-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)  
-#pragma warning(pop)  
-#endif  
-            
-    };
-    
-    template< class T >
-    struct remove_nullable
-    {
-        typedef BOOST_DEDUCED_TYPENAME mpl::eval_if< is_nullable<T>,
-                                                      T,
-                                            mpl::identity<T> >::type
-            type;
-    };
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+#pragma warning(push)
+#pragma warning(disable:6334)
+#endif
+
+	BOOST_STATIC_CONSTANT ( bool, value = sizeof ( ptr_container_detail::is_nullable ( var ) )
+	                                      == sizeof ( type_traits::yes_type ) );
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+#pragma warning(pop)
+#endif
+
+};
+
+template< class T >
+struct remove_nullable
+{
+	typedef BOOST_DEDUCED_TYPENAME mpl::eval_if< is_nullable<T>,
+	        T,
+	        mpl::identity<T> >::type
+	        type;
+};
 
 }
 

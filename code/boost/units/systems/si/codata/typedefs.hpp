@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -30,45 +30,50 @@
 #include <boost/units/systems/si/time.hpp>
 #include <boost/units/systems/si/volume.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace si {
-                            
-namespace constants {
+namespace si
+{
 
-namespace codata {
+namespace constants
+{
 
-typedef divide_typeof_helper<frequency,electric_potential>::type frequency_over_electric_potential;
-typedef divide_typeof_helper<electric_charge,mass>::type electric_charge_over_mass;
-typedef divide_typeof_helper<mass,amount>::type mass_over_amount;
-typedef divide_typeof_helper<energy,magnetic_flux_density>::type energy_over_magnetic_flux_density;
-typedef divide_typeof_helper<frequency,magnetic_flux_density>::type frequency_over_magnetic_flux_density;
-typedef divide_typeof_helper<current,energy>::type current_over_energy;
-typedef divide_typeof_helper<dimensionless,amount>::type inverse_amount;
-typedef divide_typeof_helper<energy,temperature>::type energy_over_temperature;
-typedef divide_typeof_helper<energy_over_temperature,amount>::type energy_over_temperature_amount;
-typedef divide_typeof_helper<
-            divide_typeof_helper<power,area>::type,
-            power_typeof_helper<temperature,static_rational<4> >::type
-        >::type power_over_area_temperature_4;
-typedef multiply_typeof_helper<power,area>::type power_area;
-typedef divide_typeof_helper<power_area,solid_angle>::type power_area_over_solid_angle;
-typedef multiply_typeof_helper<length,temperature>::type length_temperature;
-typedef divide_typeof_helper<frequency,temperature>::type frequency_over_temperature;
-typedef divide_typeof_helper<divide_typeof_helper<force,current>::type,current>::type force_over_current_squared;
-typedef divide_typeof_helper<capacitance,length>::type capacitance_over_length;
-typedef divide_typeof_helper<
-            divide_typeof_helper<divide_typeof_helper<volume,mass>::type,time>::type,
-            time
-        >::type volume_over_mass_time_squared;
-typedef multiply_typeof_helper<energy,time>::type energy_time;
-typedef divide_typeof_helper<electric_charge,amount>::type electric_charge_over_amount;
+namespace codata
+{
+
+typedef divide_typeof_helper<frequency, electric_potential>::type frequency_over_electric_potential;
+typedef divide_typeof_helper<electric_charge, mass>::type electric_charge_over_mass;
+typedef divide_typeof_helper<mass, amount>::type mass_over_amount;
+typedef divide_typeof_helper<energy, magnetic_flux_density>::type energy_over_magnetic_flux_density;
+typedef divide_typeof_helper<frequency, magnetic_flux_density>::type frequency_over_magnetic_flux_density;
+typedef divide_typeof_helper<current, energy>::type current_over_energy;
+typedef divide_typeof_helper<dimensionless, amount>::type inverse_amount;
+typedef divide_typeof_helper<energy, temperature>::type energy_over_temperature;
+typedef divide_typeof_helper<energy_over_temperature, amount>::type energy_over_temperature_amount;
+typedef divide_typeof_helper <
+divide_typeof_helper<power, area>::type,
+                     power_typeof_helper<temperature, static_rational<4> >::type
+                     >::type power_over_area_temperature_4;
+typedef multiply_typeof_helper<power, area>::type power_area;
+typedef divide_typeof_helper<power_area, solid_angle>::type power_area_over_solid_angle;
+typedef multiply_typeof_helper<length, temperature>::type length_temperature;
+typedef divide_typeof_helper<frequency, temperature>::type frequency_over_temperature;
+typedef divide_typeof_helper<divide_typeof_helper<force, current>::type, current>::type force_over_current_squared;
+typedef divide_typeof_helper<capacitance, length>::type capacitance_over_length;
+typedef divide_typeof_helper <
+divide_typeof_helper<divide_typeof_helper<volume, mass>::type, time>::type,
+                     time
+                     >::type volume_over_mass_time_squared;
+typedef multiply_typeof_helper<energy, time>::type energy_time;
+typedef divide_typeof_helper<electric_charge, amount>::type electric_charge_over_amount;
 
 } // namespace codata
 
-} // namespace constants    
+} // namespace constants
 
 } // namespace si
 

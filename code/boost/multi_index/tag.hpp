@@ -18,9 +18,9 @@
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/transform.hpp>
 #include <boost/mpl/vector.hpp>
-#include <boost/preprocessor/facilities/intercept.hpp> 
-#include <boost/preprocessor/repetition/enum_binary_params.hpp> 
-#include <boost/preprocessor/repetition/enum_params.hpp> 
+#include <boost/preprocessor/facilities/intercept.hpp>
+#include <boost/preprocessor/repetition/enum_binary_params.hpp>
+#include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 
@@ -47,40 +47,43 @@
 #define BOOST_MULTI_INDEX_TAG_SIZE BOOST_MPL_LIMIT_VECTOR_SIZE
 #endif
 
-namespace boost{
+namespace boost
+{
 
-namespace multi_index{
+namespace multi_index
+{
 
-namespace detail{
+namespace detail
+{
 
-struct tag_marker{};
+struct tag_marker {};
 
 template<typename T>
 struct is_tag
 {
-  BOOST_STATIC_CONSTANT(bool,value=(is_base_and_derived<tag_marker,T>::value));
+	BOOST_STATIC_CONSTANT ( bool, value = ( is_base_and_derived<tag_marker, T>::value ) );
 };
 
 } /* namespace multi_index::detail */
 
-template<
-  BOOST_PP_ENUM_BINARY_PARAMS(
-    BOOST_MULTI_INDEX_TAG_SIZE,
-    typename T,
-    =mpl::na BOOST_PP_INTERCEPT) 
->
-struct tag:private detail::tag_marker
+template <
+    BOOST_PP_ENUM_BINARY_PARAMS (
+        BOOST_MULTI_INDEX_TAG_SIZE,
+        typename T,
+        = mpl::na BOOST_PP_INTERCEPT )
+    >
+struct tag: private detail::tag_marker
 {
-  /* The mpl::transform pass produces shorter symbols (without
-   * trailing mpl::na's.)
-   */
+	/* The mpl::transform pass produces shorter symbols (without
+	 * trailing mpl::na's.)
+	 */
 
-  typedef typename mpl::transform<
-    mpl::vector<BOOST_PP_ENUM_PARAMS(BOOST_MULTI_INDEX_TAG_SIZE,T)>,
-    mpl::identity<mpl::_1>
-  >::type type;
+	typedef typename mpl::transform <
+	mpl::vector<BOOST_PP_ENUM_PARAMS ( BOOST_MULTI_INDEX_TAG_SIZE, T ) >,
+	    mpl::identity<mpl::_1>
+	    >::type type;
 
-  BOOST_STATIC_ASSERT(detail::no_duplicate_tags<type>::value);
+	BOOST_STATIC_ASSERT ( detail::no_duplicate_tags<type>::value );
 };
 
 } /* namespace multi_index */

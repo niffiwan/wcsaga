@@ -16,21 +16,24 @@
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <algorithm>
 
-namespace boost{
+namespace boost
+{
 
-namespace multi_index{
+namespace multi_index
+{
 
-namespace detail{
+namespace detail
+{
 
 template<typename T>
-void adl_swap(T& x,T& y)
+void adl_swap ( T &x, T &y )
 {
 
 #if !defined(BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL)
-  using std::swap;
-  swap(x,y);
+	using std::swap;
+	swap ( x, y );
 #else
-  std::swap(x,y);
+	std::swap ( x, y );
 #endif
 
 }

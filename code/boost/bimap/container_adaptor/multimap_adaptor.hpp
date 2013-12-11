@@ -23,9 +23,12 @@
 #include <boost/mpl/aux_/na.hpp>
 #include <boost/mpl/vector.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace container_adaptor {
+namespace boost
+{
+namespace bimaps
+{
+namespace container_adaptor
+{
 
 /// \brief Container adaptor to easily build a std::multimap signature compatible container.
 
@@ -46,56 +49,56 @@ template
     class KeyToBaseConverter               = ::boost::mpl::na,
 
     class FunctorsFromDerivedClasses = mpl::vector<>
->
+    >
 class multimap_adaptor :
 
-    public ::boost::bimaps::container_adaptor::
-                ordered_associative_container_adaptor
-    <
-        Base,
-        Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
-        BOOST_DEDUCED_TYPENAME Iterator::value_type::first_type,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        ReverseIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        KeyToBaseConverter,
-        FunctorsFromDerivedClasses
-    >
+	public ::boost::bimaps::container_adaptor::
+	ordered_associative_container_adaptor
+	<
+	Base,
+	Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
+	BOOST_DEDUCED_TYPENAME Iterator::value_type::first_type,
+	IteratorToBaseConverter, IteratorFromBaseConverter,
+	ReverseIteratorFromBaseConverter,
+	ValueToBaseConverter, ValueFromBaseConverter,
+	KeyToBaseConverter,
+	FunctorsFromDerivedClasses
+	>
 {
-    typedef ::boost::bimaps::container_adaptor::
-                ordered_associative_container_adaptor
-    <
-        Base,
-        Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
-        BOOST_DEDUCED_TYPENAME Iterator::value_type::first_type,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        ReverseIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        KeyToBaseConverter,
-        FunctorsFromDerivedClasses
+	typedef ::boost::bimaps::container_adaptor::
+	ordered_associative_container_adaptor
+	<
+	Base,
+	Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
+	BOOST_DEDUCED_TYPENAME Iterator::value_type::first_type,
+	IteratorToBaseConverter, IteratorFromBaseConverter,
+	ReverseIteratorFromBaseConverter,
+	ValueToBaseConverter, ValueFromBaseConverter,
+	KeyToBaseConverter,
+	FunctorsFromDerivedClasses
 
-    > base_;
+	> base_;
 
-    // MetaData -------------------------------------------------------------
+	// MetaData -------------------------------------------------------------
 
-    public:
+public:
 
-    typedef BOOST_DEDUCED_TYPENAME Iterator::value_type::second_type data_type;
+	typedef BOOST_DEDUCED_TYPENAME Iterator::value_type::second_type data_type;
 
-    // Access -----------------------------------------------------------------
+	// Access -----------------------------------------------------------------
 
-    public:
+public:
 
-    explicit multimap_adaptor(Base & c) :
-        base_(c) {}
+	explicit multimap_adaptor ( Base &c ) :
+		base_ ( c ) {}
 
-    protected:
+protected:
 
-    typedef multimap_adaptor multimap_adaptor_;
+	typedef multimap_adaptor multimap_adaptor_;
 
-    public:
+public:
 
-    BOOST_BIMAP_NON_UNIQUE_CONTAINER_ADAPTOR_INSERT_FUNCTIONS
+	BOOST_BIMAP_NON_UNIQUE_CONTAINER_ADAPTOR_INSERT_FUNCTIONS
 };
 
 

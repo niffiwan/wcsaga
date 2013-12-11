@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #ifndef BOOST_PP_IS_ITERATING
@@ -26,17 +26,17 @@
 ///////////////////////////////////////////////////////////////////////////////
 #define N BOOST_PP_ITERATION()
 
-    static type
-    call(BOOST_PP_ENUM_BINARY_PARAMS(
-        N, typename detail::call_param<T, >::type _))
-    {
-        return type(_0 
+static type
+call ( BOOST_PP_ENUM_BINARY_PARAMS (
+           N, typename detail::call_param<T, >::type _ ) )
+{
+	return type ( _0
 #if N > 1
-            , tail_list_to_cons::call(BOOST_PP_ENUM_SHIFTED_PARAMS(N, _)));
+	              , tail_list_to_cons::call ( BOOST_PP_ENUM_SHIFTED_PARAMS ( N, _ ) ) );
 #else
-            );
+	            );
 #endif
-    }
+}
 
 #undef N
 #endif // defined(BOOST_PP_IS_ITERATING)

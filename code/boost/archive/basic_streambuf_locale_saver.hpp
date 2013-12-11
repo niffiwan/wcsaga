@@ -37,29 +37,31 @@
 #  pragma warning(disable : 4511 4512)
 #endif
 
-namespace boost{
-namespace archive{
+namespace boost
+{
+namespace archive
+{
 
 template < typename Ch, class Tr >
 class basic_streambuf_locale_saver :
-    private boost::noncopyable
+	private boost::noncopyable
 {
 public:
-    typedef ::std::basic_streambuf<Ch, Tr> state_type;
-    typedef ::std::locale aspect_type;
-    explicit basic_streambuf_locale_saver( state_type &s )
-        : s_save_( s ), a_save_( s.getloc() )
-        {}
-    basic_streambuf_locale_saver( state_type &s, aspect_type const &a )
-        : s_save_( s ), a_save_( s.pubimbue(a) )
-        {}
-    ~basic_streambuf_locale_saver()
-        { this->restore(); }
-    void  restore()
-        { s_save_.pubimbue( a_save_ ); }
+	typedef ::std::basic_streambuf<Ch, Tr> state_type;
+	typedef ::std::locale aspect_type;
+	explicit basic_streambuf_locale_saver ( state_type &s )
+		: s_save_ ( s ), a_save_ ( s.getloc() )
+	{}
+	basic_streambuf_locale_saver ( state_type &s, aspect_type const &a )
+		: s_save_ ( s ), a_save_ ( s.pubimbue ( a ) )
+	{}
+	~basic_streambuf_locale_saver()
+	{ this->restore(); }
+	void  restore()
+	{ s_save_.pubimbue ( a_save_ ); }
 private:
-    state_type &       s_save_;
-    aspect_type const  a_save_;
+	state_type        &s_save_;
+	aspect_type const  a_save_;
 };
 
 } // archive

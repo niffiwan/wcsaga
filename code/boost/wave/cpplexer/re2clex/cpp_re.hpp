@@ -2,7 +2,7 @@
     Boost.Wave: A Standard compliant C++ preprocessor library
 
     Re2C based C++ lexer
-    
+
     http://www.boost.org/
 
     Copyright (c) 2001-2010 Hartmut Kaiser. Distributed under the Boost
@@ -28,16 +28,20 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost {
-namespace wave {
-namespace cpplexer {
-namespace re2clex {
+namespace boost
+{
+namespace wave
+{
+namespace cpplexer
+{
+namespace re2clex
+{
 
-struct Scanner; 
+struct Scanner;
 
 ///////////////////////////////////////////////////////////////////////////////
 //  The scanner function to call whenever a new token is requested
-BOOST_WAVE_DECL boost::wave::token_id scan(Scanner *s);
+BOOST_WAVE_DECL boost::wave::token_id scan ( Scanner *s );
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace re2clex

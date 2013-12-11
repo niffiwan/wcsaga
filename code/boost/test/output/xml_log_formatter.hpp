@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -26,37 +26,41 @@
 
 //____________________________________________________________________________//
 
-namespace boost {
+namespace boost
+{
 
-namespace unit_test {
+namespace unit_test
+{
 
-namespace output {
+namespace output
+{
 
 // ************************************************************************** //
 // **************               xml_log_formatter              ************** //
 // ************************************************************************** //
 
-class xml_log_formatter : public unit_test_log_formatter {
+class xml_log_formatter : public unit_test_log_formatter
+{
 public:
-    // Formatter interface
-    void    log_start( std::ostream&, counter_t test_cases_amount );
-    void    log_finish( std::ostream& );
-    void    log_build_info( std::ostream& );
+	// Formatter interface
+	void    log_start ( std::ostream &, counter_t test_cases_amount );
+	void    log_finish ( std::ostream & );
+	void    log_build_info ( std::ostream & );
 
-    void    test_unit_start( std::ostream&, test_unit const& tu );
-    void    test_unit_finish( std::ostream&, test_unit const& tu, unsigned long elapsed );
-    void    test_unit_skipped( std::ostream&, test_unit const& tu );
+	void    test_unit_start ( std::ostream &, test_unit const &tu );
+	void    test_unit_finish ( std::ostream &, test_unit const &tu, unsigned long elapsed );
+	void    test_unit_skipped ( std::ostream &, test_unit const &tu );
 
-    void    log_exception( std::ostream&, log_checkpoint_data const&, execution_exception const& ex );
+	void    log_exception ( std::ostream &, log_checkpoint_data const &, execution_exception const &ex );
 
-    void    log_entry_start( std::ostream&, log_entry_data const&, log_entry_types let );
-    using   unit_test_log_formatter::log_entry_value; // bring base class functions into overload set
-    void    log_entry_value( std::ostream&, const_string value );
-    void    log_entry_finish( std::ostream& );
+	void    log_entry_start ( std::ostream &, log_entry_data const &, log_entry_types let );
+	using   unit_test_log_formatter::log_entry_value; // bring base class functions into overload set
+	void    log_entry_value ( std::ostream &, const_string value );
+	void    log_entry_finish ( std::ostream & );
 
 private:
-    // Data members
-    const_string    m_curr_tag;
+	// Data members
+	const_string    m_curr_tag;
 };
 
 } // namespace output

@@ -11,33 +11,39 @@
 
 #include <boost/fusion/iterator/basic_iterator.hpp>
 
-namespace boost { namespace fusion { namespace extension
+namespace boost
 {
-    template <typename>
-    struct begin_impl;
+namespace fusion
+{
+namespace extension
+{
+template <typename>
+struct begin_impl;
 
-    template <>
-    struct begin_impl<set_tag>
-    {
-        template <typename Seq>
-        struct apply
-        {
-            typedef
-                basic_iterator<
-                    set_iterator_tag
-                  , typename Seq::category
-                  , Seq
-                  , 0
-                >
-            type;
+template <>
+struct begin_impl<set_tag>
+{
+	template <typename Seq>
+	struct apply
+	{
+		typedef
+		basic_iterator <
+		set_iterator_tag
+		, typename Seq::category
+		, Seq
+		, 0
+		>
+		type;
 
-            static type
-            call(Seq& seq)
-            {
-                return type(seq,0);
-            }
-        };
-    };
-}}}
+		static type
+		call ( Seq &seq )
+		{
+			return type ( seq, 0 );
+		}
+	};
+};
+}
+}
+}
 
 #endif

@@ -19,36 +19,36 @@
 
 namespace boost
 {
-  namespace system
-  {
-    //  To construct an error_code after a API error:
-    //
-    //      error_code( errno, system_category )
+namespace system
+{
+//  To construct an error_code after a API error:
+//
+//      error_code( errno, system_category )
 
-    //  User code should use the portable "posix" enums for POSIX errors; this
-    //  allows such code to be portable to non-POSIX systems. For the non-POSIX
-    //  errno values that POSIX-based systems typically provide in addition to 
-    //  POSIX values, use the system specific enums below.
+//  User code should use the portable "posix" enums for POSIX errors; this
+//  allows such code to be portable to non-POSIX systems. For the non-POSIX
+//  errno values that POSIX-based systems typically provide in addition to
+//  POSIX values, use the system specific enums below.
 
-   namespace cygwin_error
-    {
-      enum cygwin_errno
-      {
-        no_net = ENONET,
-        no_package = ENOPKG,
-        no_share = ENOSHARE
-      };
-    }  // namespace cygwin_error
+namespace cygwin_error
+{
+enum cygwin_errno
+{
+	no_net = ENONET,
+	no_package = ENOPKG,
+	no_share = ENOSHARE
+};
+}  // namespace cygwin_error
 
-    template<> struct is_error_code_enum<cygwin_error::cygwin_errno>
-      { static const bool value = true; };
+template<> struct is_error_code_enum<cygwin_error::cygwin_errno>
+{ static const bool value = true; };
 
-    namespace cygwin_error
-    {
-      inline error_code make_error_code( cygwin_errno e )
-        { return error_code( e, get_system_category() ); }
-    }
-  }
+namespace cygwin_error
+{
+inline error_code make_error_code ( cygwin_errno e )
+{ return error_code ( e, get_system_category() ); }
+}
+}
 }
 
 #endif  // __CYGWIN__

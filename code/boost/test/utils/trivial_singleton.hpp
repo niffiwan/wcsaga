@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -24,21 +24,24 @@
 
 //____________________________________________________________________________//
 
-namespace boost {
+namespace boost
+{
 
-namespace unit_test {
+namespace unit_test
+{
 
 // ************************************************************************** //
 // **************                   singleton                  ************** //
 // ************************************************************************** //
 
 template<typename Derived>
-class singleton : private boost::noncopyable {
+class singleton : private boost::noncopyable
+{
 public:
-    static Derived& instance() { static Derived the_inst; return the_inst; }    
+	static Derived &instance() { static Derived the_inst; return the_inst; }
 protected:
-    singleton()  {}
-    ~singleton() {}
+	singleton()  {}
+	~singleton() {}
 };
 
 } // namespace unit_test

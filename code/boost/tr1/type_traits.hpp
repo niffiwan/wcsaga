@@ -21,66 +21,70 @@
 #include <boost/type_traits.hpp>
 #include <boost/type_traits/is_base_of_tr1.hpp>
 
-namespace std { namespace tr1{
+namespace std
+{
+namespace tr1
+{
 
-   using ::boost::integral_constant;
-   using ::boost::true_type;
-   using ::boost::false_type;
-   using ::boost::is_void;
-   using ::boost::is_integral;
-   using ::boost::is_floating_point;
-   using ::boost::is_array;
-   using ::boost::is_pointer;
-   using ::boost::is_reference;
-   using ::boost::is_member_object_pointer;
-   using ::boost::is_member_function_pointer;
-   using ::boost::is_enum;
-   using ::boost::is_union;
-   using ::boost::is_class;
-   using ::boost::is_function;
-   using ::boost::is_arithmetic;
-   using ::boost::is_fundamental;
-   using ::boost::is_object;
-   using ::boost::is_scalar;
-   using ::boost::is_compound;
-   using ::boost::is_member_pointer;
-   using ::boost::is_const;
-   using ::boost::is_volatile;
-   using ::boost::is_pod;
-   using ::boost::is_empty;
-   using ::boost::is_polymorphic;
-   using ::boost::is_abstract;
-   using ::boost::has_trivial_constructor;
-   using ::boost::has_trivial_copy;
-   using ::boost::has_trivial_assign;
-   using ::boost::has_trivial_destructor;
-   using ::boost::has_nothrow_constructor;
-   using ::boost::has_nothrow_copy;
-   using ::boost::has_nothrow_assign;
-   using ::boost::has_virtual_destructor;
-   using ::boost::is_signed;
-   using ::boost::is_unsigned;
-   using ::boost::alignment_of;
-   using ::boost::rank;
-   using ::boost::extent;
-   using ::boost::is_same;
-   using ::boost::tr1::is_base_of;
-   using ::boost::is_convertible;
-   using ::boost::remove_const;
-   using ::boost::remove_volatile;
-   using ::boost::remove_cv;
-   using ::boost::add_const;
-   using ::boost::add_volatile;
-   using ::boost::add_cv;
-   using ::boost::remove_reference;
-   using ::boost::add_reference;
-   using ::boost::remove_extent;
-   using ::boost::remove_all_extents;
-   using ::boost::remove_pointer;
-   using ::boost::add_pointer;
-   using ::boost::aligned_storage;
+using ::boost::integral_constant;
+using ::boost::true_type;
+using ::boost::false_type;
+using ::boost::is_void;
+using ::boost::is_integral;
+using ::boost::is_floating_point;
+using ::boost::is_array;
+using ::boost::is_pointer;
+using ::boost::is_reference;
+using ::boost::is_member_object_pointer;
+using ::boost::is_member_function_pointer;
+using ::boost::is_enum;
+using ::boost::is_union;
+using ::boost::is_class;
+using ::boost::is_function;
+using ::boost::is_arithmetic;
+using ::boost::is_fundamental;
+using ::boost::is_object;
+using ::boost::is_scalar;
+using ::boost::is_compound;
+using ::boost::is_member_pointer;
+using ::boost::is_const;
+using ::boost::is_volatile;
+using ::boost::is_pod;
+using ::boost::is_empty;
+using ::boost::is_polymorphic;
+using ::boost::is_abstract;
+using ::boost::has_trivial_constructor;
+using ::boost::has_trivial_copy;
+using ::boost::has_trivial_assign;
+using ::boost::has_trivial_destructor;
+using ::boost::has_nothrow_constructor;
+using ::boost::has_nothrow_copy;
+using ::boost::has_nothrow_assign;
+using ::boost::has_virtual_destructor;
+using ::boost::is_signed;
+using ::boost::is_unsigned;
+using ::boost::alignment_of;
+using ::boost::rank;
+using ::boost::extent;
+using ::boost::is_same;
+using ::boost::tr1::is_base_of;
+using ::boost::is_convertible;
+using ::boost::remove_const;
+using ::boost::remove_volatile;
+using ::boost::remove_cv;
+using ::boost::add_const;
+using ::boost::add_volatile;
+using ::boost::add_cv;
+using ::boost::remove_reference;
+using ::boost::add_reference;
+using ::boost::remove_extent;
+using ::boost::remove_all_extents;
+using ::boost::remove_pointer;
+using ::boost::add_pointer;
+using ::boost::aligned_storage;
 
-} }
+}
+}
 
 #endif
 

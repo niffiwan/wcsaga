@@ -10,16 +10,22 @@
 
 #include <boost/mpl/bool.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+namespace boost
+{
+namespace xpressive
+{
+namespace detail
 {
 
-    // for use in static asserts
-    template<typename T>
-    struct never_true
-      : mpl::false_
-    {
-    };
+// for use in static asserts
+template<typename T>
+struct never_true
+		: mpl::false_
+{
+};
 
-}}}
+}
+}
+}
 
 #endif

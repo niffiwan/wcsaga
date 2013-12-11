@@ -1,12 +1,12 @@
-//  (C) Copyright John Maddock 2001 - 2003. 
-//  (C) Copyright Darin Adler 2001 - 2002. 
-//  (C) Copyright Jens Maurer 2001 - 2002. 
-//  (C) Copyright Beman Dawes 2001 - 2003. 
-//  (C) Copyright Douglas Gregor 2002. 
-//  (C) Copyright David Abrahams 2002 - 2003. 
-//  (C) Copyright Synge Todo 2003. 
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  (C) Copyright John Maddock 2001 - 2003.
+//  (C) Copyright Darin Adler 2001 - 2002.
+//  (C) Copyright Jens Maurer 2001 - 2002.
+//  (C) Copyright Beman Dawes 2001 - 2003.
+//  (C) Copyright Douglas Gregor 2002.
+//  (C) Copyright David Abrahams 2002 - 2003.
+//  (C) Copyright Synge Todo 2003.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
@@ -15,15 +15,15 @@
 
 #if __GNUC__ < 3
 #   if __GNUC_MINOR__ == 91
-       // egcs 1.1 won't parse shared_ptr.hpp without this:
+// egcs 1.1 won't parse shared_ptr.hpp without this:
 #      define BOOST_NO_AUTO_PTR
 #   endif
 #   if __GNUC_MINOR__ < 95
-      //
-      // Prior to gcc 2.95 member templates only partly
-      // work - define BOOST_MSVC6_MEMBER_TEMPLATES
-      // instead since inline member templates mostly work.
-      //
+//
+// Prior to gcc 2.95 member templates only partly
+// work - define BOOST_MSVC6_MEMBER_TEMPLATES
+// instead since inline member templates mostly work.
+//
 #     define BOOST_NO_MEMBER_TEMPLATES
 #     if __GNUC_MINOR__ >= 9
 #       define BOOST_MSVC6_MEMBER_TEMPLATES
@@ -47,11 +47,11 @@
 #     define BOOST_NO_TWO_PHASE_NAME_LOOKUP
 #     define BOOST_NO_IS_ABSTRACT
 #  endif
-   //
-   // gcc-3.x problems:
-   //
-   // Bug specific to gcc 3.1 and 3.2:
-   //
+//
+// gcc-3.x problems:
+//
+// Bug specific to gcc 3.1 and 3.2:
+//
 #  if ((__GNUC_MINOR__ == 1) || (__GNUC_MINOR__ == 2))
 #     define BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 #  endif
@@ -81,7 +81,7 @@
 //
 #if !defined(__MINGW32__) && !defined(linux) && !defined(__linux) && !defined(__linux__)
 # define BOOST_HAS_THREADS
-#endif 
+#endif
 
 //
 // gcc has "long long"
@@ -130,7 +130,7 @@
 #  define BOOST_NO_RVALUE_REFERENCES
 #  define BOOST_NO_STATIC_ASSERT
 
-// Variadic templates compiler: 
+// Variadic templates compiler:
 //   http://www.generic-programming.org/~dgregor/cpp/variadic-templates.html
 #  ifdef __VARIADIC_TEMPLATES
 #    define BOOST_HAS_VARIADIC_TMPL
@@ -149,7 +149,7 @@
 #  define BOOST_NO_DEFAULTED_FUNCTIONS
 #  define BOOST_NO_DELETED_FUNCTIONS
 #  define BOOST_NO_INITIALIZER_LISTS
-#  define BOOST_NO_SCOPED_ENUMS  
+#  define BOOST_NO_SCOPED_ENUMS
 #endif
 
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 4)

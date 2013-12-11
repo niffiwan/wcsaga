@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -19,16 +19,16 @@
 #include "cmdline/cmdline.h"
 
 // Legacy stuff
-#define MAX_SHADER_UNIFORMS		15
+#define MAX_SHADER_UNIFORMS     15
 
-#define SDR_FLAG_LIGHT			opengl::main_shader::flag_light
-#define SDR_FLAG_FOG			opengl::main_shader::flag_fog
-#define SDR_FLAG_DIFFUSE_MAP	opengl::main_shader::flag_diffuse_map
-#define SDR_FLAG_GLOW_MAP		opengl::main_shader::flag_glow_map
-#define SDR_FLAG_SPEC_MAP		opengl::main_shader::flag_specular_map
-#define SDR_FLAG_NORMAL_MAP		opengl::main_shader::flag_normal_map
-#define SDR_FLAG_HEIGHT_MAP		opengl::main_shader::flag_height_map
-#define SDR_FLAG_ENV_MAP		opengl::main_shader::flag_env_map
+#define SDR_FLAG_LIGHT          opengl::main_shader::flag_light
+#define SDR_FLAG_FOG            opengl::main_shader::flag_fog
+#define SDR_FLAG_DIFFUSE_MAP    opengl::main_shader::flag_diffuse_map
+#define SDR_FLAG_GLOW_MAP       opengl::main_shader::flag_glow_map
+#define SDR_FLAG_SPEC_MAP       opengl::main_shader::flag_specular_map
+#define SDR_FLAG_NORMAL_MAP     opengl::main_shader::flag_normal_map
+#define SDR_FLAG_HEIGHT_MAP     opengl::main_shader::flag_height_map
+#define SDR_FLAG_ENV_MAP        opengl::main_shader::flag_env_map
 
 namespace resources
 {
@@ -36,7 +36,8 @@ namespace resources
  * @todo Resedsign this class.
  */
 class text_file
-/*: resource*/ {
+/*: resource*/
+{
 public:
 	enum txt_file_type
 	{
@@ -46,20 +47,20 @@ public:
 
 	text_file() {}
 
-	bool open(const char*, txt_file_type ftype);
+	bool open ( const char *, txt_file_type ftype );
 
-	const SCP_string& read() const;
+	const SCP_string &read() const;
 
-	static bool file_exist(const char*, txt_file_type ftype);
+	static bool file_exist ( const char *, txt_file_type ftype );
 protected:
 	SCP_string data;
 
-	static int get_cfile_type(txt_file_type);
+	static int get_cfile_type ( txt_file_type );
 };
 }
 
 // We do need better matrices support
-typedef GLfloat* matrix4x4;
+typedef GLfloat *matrix4x4;
 
 namespace opengl
 {
@@ -71,11 +72,11 @@ class config
 public:
 	enum feature
 	{
-		bloom_int,		// 1
+		bloom_int,      // 1
 		env_map,
 		no_fbo,
 		glow,
-		glsl,			// 5
+		glsl,           // 5
 		height_map,
 		normal_map,
 		post_process,
@@ -83,9 +84,9 @@ public:
 	};
 private:
 	/** Gets pointer to variable that denotes if specified feature is enabled. */
-	static int* get_switch_int(feature fconf)
+	static int *get_switch_int ( feature fconf )
 	{
-		switch (fconf)
+		switch ( fconf )
 		{
 		case bloom_int:
 			return &Cmdline_bloom_intensity;
@@ -106,27 +107,27 @@ private:
 		case specular:
 			return &Cmdline_spec;
 		default:
-			mprintf(("ERROR: Unknown feature: 0x%x!\n", fconf));
+			mprintf ( ( "ERROR: Unknown feature: 0x%x!\n", fconf ) );
 			Int3();
 			return NULL; // get rid of compiler warning
 		}
 	}
 public:
 	/** Checks if specified feature is enabled. */
-	static bool is_enabled(feature fconf)
+	static bool is_enabled ( feature fconf )
 	{
-		return (*get_switch_int(fconf)) != 0;
+		return ( *get_switch_int ( fconf ) ) != 0;
 	}
 
 	/** Disables specified feature. */
-	static void disable(feature fconf)
+	static void disable ( feature fconf )
 	{
-		*get_switch_int(fconf) = 0;
+		*get_switch_int ( fconf ) = 0;
 	}
 
-	static int get_integer(feature fconf)
+	static int get_integer ( feature fconf )
 	{
-		return *get_switch_int(fconf);
+		return *get_switch_int ( fconf );
 	}
 };
 
@@ -145,14 +146,14 @@ public:
 	 * @param v vertex porogram GLSL source
 	 * @param f fragment program GLSL source
 	 */
-	shader(resources::text_file* v, resources::text_file* f);
+	shader ( resources::text_file *v, resources::text_file *f );
 	~shader();
 
 	/** Configures %shader. */
-	virtual void configure(int) = 0;
+	virtual void configure ( int ) = 0;
 
 	/** Returns list of used uniform names. */
-	virtual SCP_vector<SCP_string>& get_uniform_names() = 0;
+	virtual SCP_vector<SCP_string> &get_uniform_names() = 0;
 
 	/** Returns %shader ID. */
 	int get_id() const
@@ -160,7 +161,7 @@ public:
 		return id_flags;
 	}
 
-	/** Compiles and links %shader. 
+	/** Compiles and links %shader.
 	 * @return @c true if compilation and linking were successful
 	 */
 	bool compile_link();
@@ -172,29 +173,29 @@ public:
 	 * @param id uniform variable id
 	 * @param value integer value
 	 */
-	void set_uniform(unsigned int id, int value);
+	void set_uniform ( unsigned int id, int value );
 
 	/** Set uniform variables.
 	 * @param id uniform variable id
 	 * @param value float value
 	 */
-	void set_uniform(unsigned int id, float value);
+	void set_uniform ( unsigned int id, float value );
 
 	/** Set uniform variables.
 	 * @param id uniform variable id
 	 * @param matrix matrix
 	 */
-	void set_uniformMatrix4f(unsigned int id, matrix4x4 matrix);
+	void set_uniformMatrix4f ( unsigned int id, matrix4x4 matrix );
 
 	/** Set %texture.
 	 * @param id uniform id
 	 * @param tex texture instance
 	 */
-	void set_texture(unsigned int id, const texture* tex)
+	void set_texture ( unsigned int id, const texture *tex )
 	{
-		vglActiveTextureARB(GL_TEXTURE0_ARB + last_texture);
+		vglActiveTextureARB ( GL_TEXTURE0_ARB + last_texture );
 		tex->bind();
-		set_uniform(id, last_texture);
+		set_uniform ( id, last_texture );
 		last_texture++;
 	}
 
@@ -224,7 +225,7 @@ protected:
 	 * @param id uniform variable ID
 	 * @return uniform variable location
 	 */
-	inline GLint get_uniform_location(unsigned int id);
+	inline GLint get_uniform_location ( unsigned int id );
 
 	/** Compile object.
 	 * This member function compiles given GLSL source code, performs all require error
@@ -234,7 +235,7 @@ protected:
 	 * @param shader_type type of %shader program (fragment or vertex)
 	 * @return OpenGL name of compiled object
 	 */
-	GLhandleARB compile_object(const GLcharARB* shader_source, GLenum shader_type);
+	GLhandleARB compile_object ( const GLcharARB *shader_source, GLenum shader_type );
 
 	/** Link fragment and vertex programs.
 	 * This member function links two given compiled objects, performs all require error
@@ -244,7 +245,7 @@ protected:
 	 * @param fragment_object compiled fragment object
 	 * @return OpenGL name of linked object
 	 */
-	GLhandleARB link_objects(GLhandleARB vertex_object, GLhandleARB shader_object);
+	GLhandleARB link_objects ( GLhandleARB vertex_object, GLhandleARB shader_object );
 
 	/** Check for compilation and linking errors.
 	 * This member function is an wrapper for OpenGL functions responsible for
@@ -253,7 +254,7 @@ protected:
 	 * @param shader_object OpenGL shader object
 	 * @return error log
 	 */
-	SCP_string check_info_log(GLhandleARB shader_object);
+	SCP_string check_info_log ( GLhandleARB shader_object );
 };
 
 /** Main shader.
@@ -263,47 +264,47 @@ protected:
 class main_shader : public shader
 {
 private:
-	static const char* uniform_names[];
+	static const char *uniform_names[];
 	static SCP_vector<SCP_string> uninames;
 public:
 	/** Shader features flags. */
 	enum config
 	{
-		flag_light = 1,				/**< enable lightning */
-		flag_fog = 2,				/**< enable fog */
-		flag_diffuse_map = 4,		/**< enable diffuse maps */
-		flag_glow_map = 8,			/**< enable glow maps */
-		flag_specular_map = 0x10,	/**< enable specular maps */
-		flag_normal_map = 0x20,		/**< enable normal maps */
-		flag_height_map = 0x40,		/**< enable height maps */
-		flag_env_map = 0x80			/**< enable environment maps */
+		flag_light = 1,             /**< enable lightning */
+		flag_fog = 2,               /**< enable fog */
+		flag_diffuse_map = 4,       /**< enable diffuse maps */
+		flag_glow_map = 8,          /**< enable glow maps */
+		flag_specular_map = 0x10,   /**< enable specular maps */
+		flag_normal_map = 0x20,     /**< enable normal maps */
+		flag_height_map = 0x40,     /**< enable height maps */
+		flag_env_map = 0x80         /**< enable environment maps */
 	};
 
 	enum uniform
 	{
-		n_lights,		// 1
+		n_lights,       // 1
 		sBasemap,
 		sGlowmap,
 		sSpecmap,
-		alpha_spec,		// 5
+		alpha_spec,     // 5
 		envMatrix,
 		sEnvmap,
 		sNormalmap,
 		sHeightmap
 	};
 
-	main_shader(resources::text_file* v, resources::text_file* f)
-		: shader(v, f) {}
+	main_shader ( resources::text_file *v, resources::text_file *f )
+		: shader ( v, f ) {}
 	virtual ~main_shader() {}
 
 	/** Configure %shader
 	 * Enables required features in %shader code.
 	 * @param flags bitfield of main_shader::config flags
 	 */
-	void configure(int flags);
+	void configure ( int flags );
 
 	/** Get uniform variables names. */
-	SCP_vector<SCP_string>& get_uniform_names();
+	SCP_vector<SCP_string> &get_uniform_names();
 };
 
 /** Post-processing shader.
@@ -333,13 +334,13 @@ public:
 	{
 		bloom, /**< %bloom @see bloom */
 #ifdef DEPTH_OF_FIELD
-			dof, /**< depth of field @see depth_of_field */
+		dof, /**< depth of field @see depth_of_field */
 #endif
-			simple /**< simple effects @see simple_effects */
+		simple /**< simple effects @see simple_effects */
 	};
 
-	post_shader(resources::text_file* v, resources::text_file* f)
-		: shader(v, f) {}
+	post_shader ( resources::text_file *v, resources::text_file *f )
+		: shader ( v, f ) {}
 	virtual ~post_shader() {}
 
 	/** Configure post-processing shader.
@@ -347,15 +348,15 @@ public:
 	 * that means effect with index @e n is enabled. The index of effect depends on its position
 	 * in @c post_processing.tbl.
 	 */
-	void configure(int flags);
+	void configure ( int flags );
 
 	/** Set uniform variables.
 	 * @param id uniform variable id
 	 * @param value integer value
 	 */
-	void set_uniform(unsigned int uni, float value)
+	void set_uniform ( unsigned int uni, float value )
 	{
-		shader::set_uniform(uni, value);
+		shader::set_uniform ( uni, value );
 	}
 
 	/** Set uniform variables.
@@ -363,20 +364,20 @@ public:
 	 * @param id uniform variable id
 	 * @param value integer value
 	 */
-	void set_uniform(unsigned int cls, unsigned int uni, float value)
+	void set_uniform ( unsigned int cls, unsigned int uni, float value )
 	{
-		Assert(cls < unif_classes.size());
+		Assert ( cls < unif_classes.size() );
 
-		shader::set_uniform(unif_classes[cls] + uni, value);
+		shader::set_uniform ( unif_classes[cls] + uni, value );
 	}
 
 	/** Set %texture.
 	 * @param id uniform id
 	 * @param tex texture instance
 	 */
-	void set_texture(unsigned int id, const opengl::texture* tex)
+	void set_texture ( unsigned int id, const opengl::texture *tex )
 	{
-		shader::set_texture(id, tex);
+		shader::set_texture ( id, tex );
 	}
 
 	/** Set %texture.
@@ -384,18 +385,18 @@ public:
 	 * @param id uniform id
 	 * @param tex texture instance
 	 */
-	void set_texture(unsigned int cls, unsigned int uni, const opengl::texture* tex)
+	void set_texture ( unsigned int cls, unsigned int uni, const opengl::texture *tex )
 	{
-		Assert(cls < unif_classes.size());
+		Assert ( cls < unif_classes.size() );
 
-		shader::set_texture(unif_classes[cls] + uni, tex);
+		shader::set_texture ( unif_classes[cls] + uni, tex );
 	}
 
 	static SCP_vector<SCP_string> uniform_names;
-	SCP_vector<SCP_string>& get_uniform_names();
+	SCP_vector<SCP_string> &get_uniform_names();
 
 	/** Return post-processing effects list */
-	static SCP_vector<post_effect>& get_effects()
+	static SCP_vector<post_effect> &get_effects()
 	{
 		return simple_effects::get_effects();
 	}
@@ -433,19 +434,19 @@ private:
 		/** Required GLSL version, 0 for default. */
 		int version;
 		/** Name of vertex program source code. */
-		const char* vert_name;
+		const char *vert_name;
 		/** Name of fragment program source code. */
-		const char* frag_name;
+		const char *frag_name;
 		/** An array of uniform variables. */
-		const char* uniforms[MAX_SHADER_UNIFORMS];
+		const char *uniforms[MAX_SHADER_UNIFORMS];
 	};
 	static const shader_data shaders[];
 	static SCP_map<int, SCP_vector<SCP_string> > uniforms;
 
 public:
-	special_shader(int id, resources::text_file* v, resources::text_file* f)
-		: shader(v, f),
-		  flags_id(id) {}
+	special_shader ( int id, resources::text_file *v, resources::text_file *f )
+		: shader ( v, f ),
+		  flags_id ( id ) {}
 	virtual ~special_shader() {}
 
 	enum
@@ -458,29 +459,29 @@ public:
 	 * Configure %shader by choosing appropriate pass.
 	 * @param pass pass to apply
 	 */
-	void configure(int pass);
+	void configure ( int pass );
 	/** Start new pass.
 	 * This functions configures %shader to a given pass and applies it.
 	 * @param pass pass number
 	 */
-	bool start_pass(int pass);
+	bool start_pass ( int pass );
 
 	/** Apply %shader. */
 	bool apply();
 
-	SCP_vector<SCP_string>& get_uniform_names();
+	SCP_vector<SCP_string> &get_uniform_names();
 
 	/** Get vertex fragment source file name.
 	 * @param sdr %shader index
 	 * @return filename
 	 */
-	static SCP_string get_vert_name(int sdr);
+	static SCP_string get_vert_name ( int sdr );
 
 	/** Get fragment fragment source file name.
 	 * @param sdr %shader index
 	 * @return filename
 	 */
-	static SCP_string get_frag_name(int sdr);
+	static SCP_string get_frag_name ( int sdr );
 };
 
 /** Shaders Manager.
@@ -494,28 +495,28 @@ public:
 	/** Applies main %shader.
 	 * @param flags flags that identify the %shader
 	 */
-	void apply_main_shader(int flags);
+	void apply_main_shader ( int flags );
 
 	/** Applies post shader.
 	 * Chooses apropriate post-processing %shader and applies it.
 	 */
-	post_shader* apply_post_shader();
+	post_shader *apply_post_shader();
 
 	/** Applies specific post %shader.
 	 * @param flags flags that identify the %shader
 	 */
-	post_shader* apply_post_shader(int flags);
+	post_shader *apply_post_shader ( int flags );
 
 	/** Get specific special %shader.
 	 * @param flags special %shader index
 	 */
-	special_shader* get_special_shader(int flags);
+	special_shader *get_special_shader ( int flags );
 
 	/** Turns main %shader off. */
 	void apply_fixed_pipeline();
 
 	/** Returns current main %shader. */
-	shader* get_main_shader()
+	shader *get_main_shader()
 	{
 		return current_main;
 	}
@@ -529,9 +530,9 @@ public:
 	}
 
 	/** Get shader_manager instance. */
-	static shader_manager* get()
+	static shader_manager *get()
 	{
-		Assert(instance != NULL);
+		Assert ( instance != NULL );
 
 		return instance;
 	}
@@ -539,14 +540,14 @@ public:
 	/** Initialize shader_manager. */
 	static void create()
 	{
-		if (config::is_enabled(config::glsl))
+		if ( config::is_enabled ( config::glsl ) )
 			instance = new shader_manager;
 	}
 
 	/** Destroy shaders manager objects. */
 	static void destroy()
 	{
-		if (instance)
+		if ( instance )
 			delete instance;
 		instance = NULL;
 	}
@@ -555,7 +556,7 @@ private:
 	shader_manager();
 	~shader_manager();
 
-	static shader_manager* instance;
+	static shader_manager *instance;
 
 	/** Loads all main shaders. */
 	void load_main_shaders();
@@ -563,7 +564,7 @@ private:
 	/** Loads post shader.
 	 * @param flags value that specified shader that is to be loaded
 	 */
-	opengl::post_shader* load_post_shader(int flag);
+	opengl::post_shader *load_post_shader ( int flag );
 
 	/** Shaders cache.
 	* @note It appears that this cache can bring significant performance gain.
@@ -572,16 +573,16 @@ private:
 	* needed to find proper shader. However such improvement will require
 	* major changes in rendering engine.
 	*/
-	SCP_map<int, main_shader*> main_shaders_cache;
-	SCP_map<int, main_shader*> main_shaders;
+	SCP_map<int, main_shader *> main_shaders_cache;
+	SCP_map<int, main_shader *> main_shaders;
 
-	SCP_map<int, post_shader*> post_shaders;
+	SCP_map<int, post_shader *> post_shaders;
 
-	SCP_map<int, special_shader*> special_shaders;
+	SCP_map<int, special_shader *> special_shaders;
 
-	main_shader* current_main;
-	post_shader* current_post;
+	main_shader *current_main;
+	post_shader *current_post;
 };
 }
 
-#endif	// _GROPENGLSHADER_H
+#endif  // _GROPENGLSHADER_H

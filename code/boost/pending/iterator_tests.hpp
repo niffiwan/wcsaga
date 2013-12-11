@@ -27,102 +27,105 @@
 # include <boost/implicit_cast.hpp>
 # include <boost/type_traits/broken_compiler_spec.hpp>
 
-namespace boost {
+namespace boost
+{
 
-  // use this for the value type
-struct dummyT { 
-  dummyT() { }
-  dummyT(detail::dummy_constructor) { }
-  dummyT(int x) : m_x(x) { }
-  int foo() const { return m_x; } 
-  bool operator==(const dummyT& d) const { return m_x == d.m_x; }
-  int m_x;
+// use this for the value type
+struct dummyT
+{
+	dummyT() { }
+	dummyT ( detail::dummy_constructor ) { }
+	dummyT ( int x ) : m_x ( x ) { }
+	int foo() const { return m_x; }
+	bool operator== ( const dummyT &d ) const { return m_x == d.m_x; }
+	int m_x;
 };
 
 }
 
-BOOST_TT_BROKEN_COMPILER_SPEC(boost::dummyT)
-    
-namespace boost {
+BOOST_TT_BROKEN_COMPILER_SPEC ( boost::dummyT )
+
+namespace boost
+{
 
 // Tests whether type Iterator satisfies the requirements for a
-// TrivialIterator. 
+// TrivialIterator.
 // Preconditions: i != j, *i == val
 template <class Iterator, class T>
-void trivial_iterator_test(const Iterator i, const Iterator j, T val)
+void trivial_iterator_test ( const Iterator i, const Iterator j, T val )
 {
-  Iterator k;
-  assert(i == i);
-  assert(j == j);
-  assert(i != j);
+	Iterator k;
+	assert ( i == i );
+	assert ( j == j );
+	assert ( i != j );
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
-  T v = *i;
+	T v = *i;
 #else
-  typename std::iterator_traits<Iterator>::value_type v = *i;
+	typename std::iterator_traits<Iterator>::value_type v = *i;
 #endif
-  assert(v == val);
+	assert ( v == val );
 #if 0
-  // hmm, this will give a warning for transform_iterator...  perhaps
-  // this should be separated out into a stand-alone test since there
-  // are several situations where it can't be used, like for
-  // integer_range::iterator.
-  assert(v == i->foo());
+	// hmm, this will give a warning for transform_iterator...  perhaps
+	// this should be separated out into a stand-alone test since there
+	// are several situations where it can't be used, like for
+	// integer_range::iterator.
+	assert ( v == i->foo() );
 #endif
-  k = i;
-  assert(k == k);
-  assert(k == i);
-  assert(k != j);
-  assert(*k == val);
+	k = i;
+	assert ( k == k );
+	assert ( k == i );
+	assert ( k != j );
+	assert ( *k == val );
 }
 
 
 // Preconditions: i != j
 template <class Iterator, class T>
-void mutable_trivial_iterator_test(const Iterator i, const Iterator j, T val)
+void mutable_trivial_iterator_test ( const Iterator i, const Iterator j, T val )
 {
-  *i = val;
-  trivial_iterator_test(i, j, val);
+	*i = val;
+	trivial_iterator_test ( i, j, val );
 }
 
 
 // Preconditions: *i == v1, *++i == v2
 template <class Iterator, class T>
-void input_iterator_test(Iterator i, T v1, T v2) 
+void input_iterator_test ( Iterator i, T v1, T v2 )
 {
-  Iterator i1(i);
+	Iterator i1 ( i );
 
-  assert(i == i1);
-  assert(!(i != i1));
+	assert ( i == i1 );
+	assert ( ! ( i != i1 ) );
 
-  // I can see no generic way to create an input iterator
-  // that is in the domain of== of i and != i.
-  // The following works for istream_iterator but is not
-  // guaranteed to work for arbitrary input iterators.
-  //
-  //   Iterator i2;
-  //
-  //   assert(i != i2);
-  //   assert(!(i == i2));
+	// I can see no generic way to create an input iterator
+	// that is in the domain of== of i and != i.
+	// The following works for istream_iterator but is not
+	// guaranteed to work for arbitrary input iterators.
+	//
+	//   Iterator i2;
+	//
+	//   assert(i != i2);
+	//   assert(!(i == i2));
 
-  assert(*i1 == v1);
-  assert(*i  == v1);
+	assert ( *i1 == v1 );
+	assert ( *i  == v1 );
 
-  // we cannot test for equivalence of (void)++i & (void)i++
-  // as i is only guaranteed to be single pass.
-  assert(*i++ == v1);
+	// we cannot test for equivalence of (void)++i & (void)i++
+	// as i is only guaranteed to be single pass.
+	assert ( *i++ == v1 );
 
-  i1 = i;
+	i1 = i;
 
-  assert(i == i1);
-  assert(!(i != i1));
+	assert ( i == i1 );
+	assert ( ! ( i != i1 ) );
 
-  assert(*i1 == v2);
-  assert(*i  == v2);
+	assert ( *i1 == v2 );
+	assert ( *i  == v2 );
 
-  // i is dereferencable, so it must be incrementable.
-  ++i;
+	// i is dereferencable, so it must be incrementable.
+	++i;
 
-  // how to test for operator-> ?
+	// how to test for operator-> ?
 }
 
 // how to test output iterator?
@@ -130,79 +133,80 @@ void input_iterator_test(Iterator i, T v1, T v2)
 
 template <bool is_pointer> struct lvalue_test
 {
-    template <class Iterator> static void check(Iterator)
-    {
+	template <class Iterator> static void check ( Iterator )
+	{
 # ifndef BOOST_NO_STD_ITERATOR_TRAITS
-        typedef typename std::iterator_traits<Iterator>::reference reference;
-        typedef typename std::iterator_traits<Iterator>::value_type value_type;
+		typedef typename std::iterator_traits<Iterator>::reference reference;
+		typedef typename std::iterator_traits<Iterator>::value_type value_type;
 # else
-        typedef typename Iterator::reference reference;
-        typedef typename Iterator::value_type value_type;
+		typedef typename Iterator::reference reference;
+		typedef typename Iterator::value_type value_type;
 # endif
-        BOOST_STATIC_ASSERT(boost::is_reference<reference>::value);
-        BOOST_STATIC_ASSERT((boost::is_same<reference,value_type&>::value
-                             || boost::is_same<reference,const value_type&>::value
-            ));
-    }
+		BOOST_STATIC_ASSERT ( boost::is_reference<reference>::value );
+		BOOST_STATIC_ASSERT ( ( boost::is_same<reference, value_type &>::value
+		                        || boost::is_same<reference, const value_type &>::value
+		                      ) );
+	}
 };
 
 # ifdef BOOST_NO_STD_ITERATOR_TRAITS
-template <> struct lvalue_test<true> {
-    template <class T> static void check(T) {}
+template <> struct lvalue_test<true>
+{
+	template <class T> static void check ( T ) {}
 };
 #endif
 
 template <class Iterator, class T>
-void forward_iterator_test(Iterator i, T v1, T v2) 
+void forward_iterator_test ( Iterator i, T v1, T v2 )
 {
-  input_iterator_test(i, v1, v2);
+	input_iterator_test ( i, v1, v2 );
 
-  Iterator i1 = i, i2 = i;
+	Iterator i1 = i, i2 = i;
 
-  assert(i == i1++);
-  assert(i != ++i2);
+	assert ( i == i1++ );
+	assert ( i != ++i2 );
 
-  trivial_iterator_test(i, i1, v1);
-  trivial_iterator_test(i, i2, v1);
+	trivial_iterator_test ( i, i1, v1 );
+	trivial_iterator_test ( i, i2, v1 );
 
-  ++i;
-  assert(i == i1);
-  assert(i == i2);
-  ++i1;
-  ++i2;
+	++i;
+	assert ( i == i1 );
+	assert ( i == i2 );
+	++i1;
+	++i2;
 
-  trivial_iterator_test(i, i1, v2);
-  trivial_iterator_test(i, i2, v2);
+	trivial_iterator_test ( i, i1, v2 );
+	trivial_iterator_test ( i, i2, v2 );
 
- // borland doesn't allow non-type template parameters
+	// borland doesn't allow non-type template parameters
 # if !defined(__BORLANDC__) || (__BORLANDC__ > 0x551)
-  lvalue_test<(boost::is_pointer<Iterator>::value)>::check(i);
+	lvalue_test< ( boost::is_pointer<Iterator>::value ) >::check ( i );
 #endif
 }
 
 // Preconditions: *i == v1, *++i == v2
 template <class Iterator, class T>
-void bidirectional_iterator_test(Iterator i, T v1, T v2)
+void bidirectional_iterator_test ( Iterator i, T v1, T v2 )
 {
-  forward_iterator_test(i, v1, v2);
-  ++i;
+	forward_iterator_test ( i, v1, v2 );
+	++i;
 
-  Iterator i1 = i, i2 = i;
+	Iterator i1 = i, i2 = i;
 
-  assert(i == i1--);
-  assert(i != --i2);
+	assert ( i == i1-- );
+	assert ( i != --i2 );
 
-  trivial_iterator_test(i, i1, v2);
-  trivial_iterator_test(i, i2, v2);
+	trivial_iterator_test ( i, i1, v2 );
+	trivial_iterator_test ( i, i2, v2 );
 
-  --i;
-  assert(i == i1);
-  assert(i == i2);
-  ++i1;
-  ++i2;
+	--i;
+	assert ( i == i1 );
+	assert ( i == i2 );
+	++i1;
+	++i2;
 
-  trivial_iterator_test(i, i1, v1);
-  trivial_iterator_test(i, i2, v1);
+	trivial_iterator_test ( i, i1, v1 );
+	trivial_iterator_test ( i, i2, v1 );
 }
 
 // mutable_bidirectional_iterator_test
@@ -211,56 +215,58 @@ template <class U> struct undefined;
 
 // Preconditions: [i,i+N) is a valid range
 template <class Iterator, class TrueVals>
-void random_access_iterator_test(Iterator i, int N, TrueVals vals)
+void random_access_iterator_test ( Iterator i, int N, TrueVals vals )
 {
-  bidirectional_iterator_test(i, vals[0], vals[1]);
-  const Iterator j = i;
-  int c;
+	bidirectional_iterator_test ( i, vals[0], vals[1] );
+	const Iterator j = i;
+	int c;
 
-  typedef typename boost::detail::iterator_traits<Iterator>::value_type value_type;
-  
-  for (c = 0; c < N-1; ++c) {
-    assert(i == j + c);
-    assert(*i == vals[c]);
-    assert(*i == boost::implicit_cast<value_type>(j[c]));
-    assert(*i == *(j + c));
-    assert(*i == *(c + j));
-    ++i;
-    assert(i > j);
-    assert(i >= j);
-    assert(j <= i);
-    assert(j < i);
-  }
+	typedef typename boost::detail::iterator_traits<Iterator>::value_type value_type;
 
-  Iterator k = j + N - 1;
-  for (c = 0; c < N-1; ++c) {
-    assert(i == k - c);
-    assert(*i == vals[N - 1 - c]);
-    assert(*i == boost::implicit_cast<value_type>(j[N - 1 - c]));
-    Iterator q = k - c; 
-    assert(*i == *q);
-    assert(i > j);
-    assert(i >= j);
-    assert(j <= i);
-    assert(j < i);
-    --i;
-  }
+	for ( c = 0; c < N - 1; ++c )
+	{
+		assert ( i == j + c );
+		assert ( *i == vals[c] );
+		assert ( *i == boost::implicit_cast<value_type> ( j[c] ) );
+		assert ( *i == * ( j + c ) );
+		assert ( *i == * ( c + j ) );
+		++i;
+		assert ( i > j );
+		assert ( i >= j );
+		assert ( j <= i );
+		assert ( j < i );
+	}
+
+	Iterator k = j + N - 1;
+	for ( c = 0; c < N - 1; ++c )
+	{
+		assert ( i == k - c );
+		assert ( *i == vals[N - 1 - c] );
+		assert ( *i == boost::implicit_cast<value_type> ( j[N - 1 - c] ) );
+		Iterator q = k - c;
+		assert ( *i == *q );
+		assert ( i > j );
+		assert ( i >= j );
+		assert ( j <= i );
+		assert ( j < i );
+		--i;
+	}
 }
 
 // Precondition: i != j
 template <class Iterator, class ConstIterator>
-void const_nonconst_iterator_test(Iterator i, ConstIterator j)
+void const_nonconst_iterator_test ( Iterator i, ConstIterator j )
 {
-  assert(i != j);
-  assert(j != i);
+	assert ( i != j );
+	assert ( j != i );
 
-  ConstIterator k(i);
-  assert(k == i);
-  assert(i == k);
+	ConstIterator k ( i );
+	assert ( k == i );
+	assert ( i == k );
 
-  k = i;
-  assert(k == i);
-  assert(i == k);
+	k = i;
+	assert ( k == i );
+	assert ( i == k );
 }
 
 } // namespace boost

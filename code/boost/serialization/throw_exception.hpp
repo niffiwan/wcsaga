@@ -21,19 +21,23 @@
 #include <exception>
 #endif
 
-namespace boost {
-namespace serialization {
+namespace boost
+{
+namespace serialization
+{
 
 #ifdef BOOST_NO_EXCEPTIONS
 
-void inline throw_exception(std::exception const & e) {
-    ::boost::throw_exception(e);
+void inline throw_exception ( std::exception const &e )
+{
+::boost::throw_exception ( e );
 }
 
 #else
 
-template<class E> inline void throw_exception(E const & e){
-    throw e;
+template<class E> inline void throw_exception ( E const &e )
+{
+throw e;
 }
 
 #endif

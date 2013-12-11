@@ -19,9 +19,13 @@
 // Should be the last #include
 #include <boost/type_traits/detail/type_trait_def.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace type_traits { namespace detail {
+namespace type_traits
+{
+namespace detail
+{
 
 // 4.5/2
 template <class T> struct need_promotion : boost::is_enum<T> {};
@@ -47,24 +51,24 @@ template<> struct need_promotion<unsigned short int> : true_type {};
     || (defined(BOOST_INTEL_CXX_VERSION) && defined(_MSC_VER) && (BOOST_INTEL_CXX_VERSION <= 600)) \
     || (defined(__BORLANDC__) && (__BORLANDC__ == 0x600) && (_MSC_VER < 1300))
 // TODO: common macro for this #if. Or better yet, PP SEQ of non-standard types.
-BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE(__int8          )
-BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE(unsigned __int8 )
-BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE(__int16         )
-BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE(unsigned __int16)
-BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE(__int32         )
-BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE(unsigned __int32)
+BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE ( __int8          )
+BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE ( unsigned __int8 )
+BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE ( __int16         )
+BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE ( unsigned __int16 )
+BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE ( __int32         )
+BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE ( unsigned __int32 )
 #ifdef __BORLANDC__
-BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE(unsigned __int64)
-BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE(         __int64)
+BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE ( unsigned __int64 )
+BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE (         __int64 )
 #endif
 #endif
 
 #if defined(BOOST_HAS_LONG_LONG)
-BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE(boost::ulong_long_type)
-BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE(boost::long_long_type )
+BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE ( boost::ulong_long_type )
+BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE ( boost::long_long_type )
 #elif defined(BOOST_HAS_MS_INT64)
-BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE(unsigned __int64)
-BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE(         __int64)
+BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE ( unsigned __int64 )
+BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE (         __int64 )
 #endif
 
 #undef BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE
@@ -92,10 +96,10 @@ template<int Index, int IsConst, int IsVolatile> struct promote_from_index;
     template<> struct promote_from_index<N,1,1> { typedef T const volatile type; };
 
 
-BOOST_TT_AUX_PROMOTE_FROM_INDEX(1, int          )
-BOOST_TT_AUX_PROMOTE_FROM_INDEX(2, unsigned int )
-BOOST_TT_AUX_PROMOTE_FROM_INDEX(3, long         )
-BOOST_TT_AUX_PROMOTE_FROM_INDEX(4, unsigned long)
+BOOST_TT_AUX_PROMOTE_FROM_INDEX ( 1, int          )
+BOOST_TT_AUX_PROMOTE_FROM_INDEX ( 2, unsigned int )
+BOOST_TT_AUX_PROMOTE_FROM_INDEX ( 3, long         )
+BOOST_TT_AUX_PROMOTE_FROM_INDEX ( 4, unsigned long )
 
 
 // WARNING: integral promotions to non-standard types
@@ -104,11 +108,11 @@ BOOST_TT_AUX_PROMOTE_FROM_INDEX(4, unsigned long)
 // introduce ambiguity, though.
 
 #if defined(BOOST_HAS_LONG_LONG)
-BOOST_TT_AUX_PROMOTE_FROM_INDEX(5, boost::long_long_type )
-BOOST_TT_AUX_PROMOTE_FROM_INDEX(6, boost::ulong_long_type)
+BOOST_TT_AUX_PROMOTE_FROM_INDEX ( 5, boost::long_long_type )
+BOOST_TT_AUX_PROMOTE_FROM_INDEX ( 6, boost::ulong_long_type )
 #elif defined(BOOST_HAS_MS_INT64)
-BOOST_TT_AUX_PROMOTE_FROM_INDEX(7, __int64         )
-BOOST_TT_AUX_PROMOTE_FROM_INDEX(8, unsigned __int64)
+BOOST_TT_AUX_PROMOTE_FROM_INDEX ( 7, __int64         )
+BOOST_TT_AUX_PROMOTE_FROM_INDEX ( 8, unsigned __int64 )
 #endif
 
 #undef BOOST_TT_AUX_PROMOTE_FROM_INDEX
@@ -120,7 +124,7 @@ BOOST_TT_AUX_PROMOTE_FROM_INDEX(8, unsigned __int64)
 template<int N>
 struct sized_type_for_promotion
 {
-    typedef char (&type)[N];
+	typedef char ( &type ) [N];
 };
 
 #define BOOST_TT_AUX_PROMOTED_INDEX_TESTER(I,T) \
@@ -133,17 +137,17 @@ struct sized_type_for_promotion
 
 #endif
 
-BOOST_TT_AUX_PROMOTED_INDEX_TESTER(1, int          )
-BOOST_TT_AUX_PROMOTED_INDEX_TESTER(2, unsigned int )
-BOOST_TT_AUX_PROMOTED_INDEX_TESTER(3, long         )
-BOOST_TT_AUX_PROMOTED_INDEX_TESTER(4, unsigned long)
+BOOST_TT_AUX_PROMOTED_INDEX_TESTER ( 1, int          )
+BOOST_TT_AUX_PROMOTED_INDEX_TESTER ( 2, unsigned int )
+BOOST_TT_AUX_PROMOTED_INDEX_TESTER ( 3, long         )
+BOOST_TT_AUX_PROMOTED_INDEX_TESTER ( 4, unsigned long )
 
 #if defined(BOOST_HAS_LONG_LONG)
-BOOST_TT_AUX_PROMOTED_INDEX_TESTER(5, boost::long_long_type )
-BOOST_TT_AUX_PROMOTED_INDEX_TESTER(6, boost::ulong_long_type)
+BOOST_TT_AUX_PROMOTED_INDEX_TESTER ( 5, boost::long_long_type )
+BOOST_TT_AUX_PROMOTED_INDEX_TESTER ( 6, boost::ulong_long_type )
 #elif defined(BOOST_HAS_MS_INT64)
-BOOST_TT_AUX_PROMOTED_INDEX_TESTER(7, __int64         )
-BOOST_TT_AUX_PROMOTED_INDEX_TESTER(8, unsigned __int64)
+BOOST_TT_AUX_PROMOTED_INDEX_TESTER ( 7, __int64         )
+BOOST_TT_AUX_PROMOTED_INDEX_TESTER ( 8, unsigned __int64 )
 #endif
 
 #undef BOOST_TT_AUX_PROMOTED_INDEX_TESTER
@@ -154,39 +158,40 @@ BOOST_TT_AUX_PROMOTED_INDEX_TESTER(8, unsigned __int64)
 template<class T>
 struct promoted_index
 {
-    static T testee; // undefined
-    BOOST_STATIC_CONSTANT(int, value = sizeof(promoted_index_tester(+testee)) );
-    // Unary plus promotes testee                    LOOK HERE ---> ^
+	static T testee; // undefined
+	BOOST_STATIC_CONSTANT ( int, value = sizeof ( promoted_index_tester ( +testee ) ) );
+	// Unary plus promotes testee                    LOOK HERE ---> ^
 };
 
 template<class T>
 struct integral_promotion_impl
 {
-    typedef BOOST_DEDUCED_TYPENAME promote_from_index<
-        (boost::type_traits::detail::promoted_index<T>::value)
-      , (boost::is_const<T>::value)
-      , (boost::is_volatile<T>::value)
-      >::type type;
+	typedef BOOST_DEDUCED_TYPENAME promote_from_index <
+	( boost::type_traits::detail::promoted_index<T>::value )
+	, ( boost::is_const<T>::value )
+	, ( boost::is_volatile<T>::value )
+	>::type type;
 };
 
 template<class T>
 struct integral_promotion
-  : boost::mpl::eval_if<
-        need_promotion<BOOST_DEDUCED_TYPENAME remove_cv<T>::type>
-      , integral_promotion_impl<T>
-      , boost::mpl::identity<T>
-      >
+		: boost::mpl::eval_if <
+		need_promotion<BOOST_DEDUCED_TYPENAME remove_cv<T>::type>
+		, integral_promotion_impl<T>
+		, boost::mpl::identity<T>
+		>
 {
 };
 
-} }
+}
+}
 
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(
-      integral_promotion
+BOOST_TT_AUX_TYPE_TRAIT_DEF1 (
+    integral_promotion
     , T
     , BOOST_DEDUCED_TYPENAME
-        boost::type_traits::detail::integral_promotion<T>::type
-    )
+    boost::type_traits::detail::integral_promotion<T>::type
+)
 }
 
 #include <boost/type_traits/detail/type_trait_undef.hpp>

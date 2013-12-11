@@ -12,45 +12,48 @@
 # endif
 
 
-namespace boost { namespace concept {
+namespace boost
+{
+namespace concept
+{
 
 template <class Model>
 struct check
 {
-    virtual void failed(Model* x)
-    {
-        x->~Model();
-    }
+	virtual void failed ( Model *x )
+	{
+		x->~Model();
+	}
 };
-  
+
 # ifdef BOOST_OLD_CONCEPT_SUPPORT
-  
+
 namespace detail
 {
-  // No need for a virtual function here, since evaluating
-  // not_satisfied below will have already instantiated the
-  // constraints() member.
-  struct constraint {};
+// No need for a virtual function here, since evaluating
+// not_satisfied below will have already instantiated the
+// constraints() member.
+struct constraint {};
 }
 
 template <class Model>
 struct require
-  : mpl::if_c<
-        not_satisfied<Model>::value
-      , detail::constraint
-      , check<Model>
-        >::type
+		: mpl::if_c <
+		not_satisfied<Model>::value
+		, detail::constraint
+		, check<Model>
+		>::type
 {};
-      
+
 # else
-  
+
 template <class Model>
 struct require
-  : check<Model>
+		: check<Model>
 {};
-  
+
 # endif
-    
+
 # if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
 
 //
@@ -58,12 +61,12 @@ struct require
 // do things this way.
 //
 template <class Model>
-struct require<void(*)(Model)>
+struct require<void ( * ) ( Model ) >
 {
-    virtual void failed(Model*)
-    {
-        require<Model>();
-    }
+    virtual void failed ( Model * )
+{
+	require<Model>();
+}
 };
 
 # define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )      \
@@ -72,21 +75,22 @@ enum                                                \
     BOOST_PP_CAT(boost_concept_check,__LINE__) =    \
     sizeof(::boost::concept::require<ModelFnPtr>)    \
 }
-  
+
 # else // Not vc-7.1
-  
+
 template <class Model>
 require<Model>
-require_(void(*)(Model));
-  
+require_ ( void ( * ) ( Model ) );
+
 # define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )          \
 enum                                                    \
 {                                                       \
     BOOST_PP_CAT(boost_concept_check,__LINE__) =        \
       sizeof(::boost::concept::require_((ModelFnPtr)0)) \
 }
-  
+
 # endif
-}}
+}
+}
 
 #endif // BOOST_CONCEPT_CHECK_MSVC_DWA2006429_HPP

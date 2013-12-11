@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2002-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -51,53 +51,56 @@
 
 //____________________________________________________________________________//
 
-int test_main( int argc, char* argv[] );  // prototype for users test_main()
+int test_main ( int argc, char *argv[] ); // prototype for users test_main()
 
-namespace boost {
-namespace minimal_test {
+namespace boost
+{
+namespace minimal_test
+{
 
 typedef boost::unit_test::const_string const_string;
 
-inline unit_test::counter_t& errors_counter() { static unit_test::counter_t ec = 0; return ec; }
+inline unit_test::counter_t &errors_counter() { static unit_test::counter_t ec = 0; return ec; }
 
 inline void
-report_error( const char* msg, const char* file, int line, const_string func_name, bool is_msg = false )
+report_error ( const char *msg, const char *file, int line, const_string func_name, bool is_msg = false )
 {
-    ++errors_counter();
-    std::cerr << file << "(" << line << "): ";
+	++errors_counter();
+	std::cerr << file << "(" << line << "): ";
 
-    if( is_msg )
-        std::cerr << msg;
-    else
-        std::cerr << "test " << msg << " failed";
+	if ( is_msg )
+		std::cerr << msg;
+	else
+		std::cerr << "test " << msg << " failed";
 
-    if( func_name != "(unknown)" )
-        std::cerr << " in function: '" << func_name << "'";
+	if ( func_name != "(unknown)" )
+		std::cerr << " in function: '" << func_name << "'";
 
-    std::cerr << std::endl;
+	std::cerr << std::endl;
 }
 
 inline void
-report_critical_error( const char* msg, const char* file, int line, const_string func_name, bool is_msg = false )
+report_critical_error ( const char *msg, const char *file, int line, const_string func_name, bool is_msg = false )
 {
-    report_error( msg, file, line, func_name, is_msg );
+	report_error ( msg, file, line, func_name, is_msg );
 
-    throw boost::execution_aborted();
+	throw boost::execution_aborted();
 }
 
-class caller {
+class caller
+{
 public:
-    // constructor
-    caller( int argc, char** argv )
-    : m_argc( argc ), m_argv( argv ) {}
+	// constructor
+	caller ( int argc, char **argv )
+		: m_argc ( argc ), m_argv ( argv ) {}
 
-    // execution monitor hook implementation
-    int operator()() { return test_main( m_argc, m_argv ); }
+	// execution monitor hook implementation
+	int operator() () { return test_main ( m_argc, m_argv ); }
 
 private:
-    // Data members
-    int         m_argc;
-    char**      m_argv;
+	// Data members
+	int         m_argc;
+	char      **m_argv;
 }; // monitor
 
 } // namespace minimal_test
@@ -106,34 +109,37 @@ private:
 
 //____________________________________________________________________________//
 
-int BOOST_TEST_CALL_DECL main( int argc, char* argv[] )
+int BOOST_TEST_CALL_DECL main ( int argc, char *argv[] )
 {
-    using namespace boost::minimal_test;
+	using namespace boost::minimal_test;
 
-    try {
-        ::boost::execution_monitor ex_mon;
-        int run_result = ex_mon.execute( caller( argc, argv ) );
+	try
+	{
+		::boost::execution_monitor ex_mon;
+		int run_result = ex_mon.execute ( caller ( argc, argv ) );
 
-        BOOST_CHECK( run_result == 0 || run_result == boost::exit_success );
-    }
-    catch( boost::execution_exception const& exex ) {
-        if( exex.code() != boost::execution_exception::no_error )
-            BOOST_ERROR( (std::string( "exception \"" ).
-                            append( exex.what().begin(), exex.what().end() ).
-                            append( "\" caught" ) ).c_str() );
-        std::cerr << "\n**** Testing aborted.";
-    }
+		BOOST_CHECK ( run_result == 0 || run_result == boost::exit_success );
+	}
+	catch ( boost::execution_exception const &exex )
+	{
+		if ( exex.code() != boost::execution_exception::no_error )
+			BOOST_ERROR ( ( std::string ( "exception \"" ).
+			                append ( exex.what().begin(), exex.what().end() ).
+			                append ( "\" caught" ) ).c_str() );
+		std::cerr << "\n**** Testing aborted.";
+	}
 
-    if( boost::minimal_test::errors_counter() != 0 ) {
-        std::cerr << "\n**** " << errors_counter()
-                  << " error" << (errors_counter() > 1 ? "s" : "" ) << " detected\n";
+	if ( boost::minimal_test::errors_counter() != 0 )
+	{
+		std::cerr << "\n**** " << errors_counter()
+		          << " error" << ( errors_counter() > 1 ? "s" : "" ) << " detected\n";
 
-        return boost::exit_test_failure;
-    }
+		return boost::exit_test_failure;
+	}
 
-    std::cout << "\n**** no errors detected\n";
-    
-    return boost::exit_success;
+	std::cout << "\n**** no errors detected\n";
+
+	return boost::exit_success;
 }
 
 //____________________________________________________________________________//

@@ -14,75 +14,84 @@
 #include <boost/spirit/home/support/unused.hpp>
 #include <boost/optional.hpp>
 
-namespace boost { namespace spirit { namespace qi { namespace detail
+namespace boost
 {
-    template <typename Iterator, typename Context, typename Skipper>
-    struct permute_function
-    {
-        permute_function(
-            Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper)
-          : first(first)
-          , last(last)
-          , context(context)
-          , skipper(skipper)
-        {
-        }
+namespace spirit
+{
+namespace qi
+{
+namespace detail
+{
+template <typename Iterator, typename Context, typename Skipper>
+struct permute_function
+{
+	permute_function (
+	    Iterator &first, Iterator const &last
+	    , Context &context, Skipper const &skipper )
+		: first ( first )
+		, last ( last )
+		, context ( context )
+		, skipper ( skipper )
+	{
+	}
 
-        template <typename Component, typename Attribute>
-        bool operator()(Component const& component, Attribute& attr)
-        {
-            // return true if the parser succeeds and the slot is not yet taken
-            if (!*taken && component.parse(first, last, context, skipper, attr))
-            {
-                *taken = true;
-                ++taken;
-                return true;
-            }
-            ++taken;
-            return false;
-        }
+	template <typename Component, typename Attribute>
+	bool operator() ( Component const &component, Attribute &attr )
+	{
+		// return true if the parser succeeds and the slot is not yet taken
+		if ( !*taken && component.parse ( first, last, context, skipper, attr ) )
+		{
+			*taken = true;
+			++taken;
+			return true;
+		}
+		++taken;
+		return false;
+	}
 
-        template <typename Component, typename Attribute>
-        bool operator()(Component const& component, boost::optional<Attribute>& attr)
-        {
-            // return true if the parser succeeds and the slot is not yet taken
-            Attribute val;
-            if (!*taken && component.parse(first, last, context, skipper, val))
-            {
-                attr = val;
-                *taken = true;
-                ++taken;
-                return true;
-            }
-            ++taken;
-            return false;
-        }
+	template <typename Component, typename Attribute>
+	bool operator() ( Component const &component, boost::optional<Attribute> &attr )
+	{
+		// return true if the parser succeeds and the slot is not yet taken
+		Attribute val;
+		if ( !*taken && component.parse ( first, last, context, skipper, val ) )
+		{
+			attr = val;
+			*taken = true;
+			++taken;
+			return true;
+		}
+		++taken;
+		return false;
+	}
 
-        template <typename Component>
-        bool operator()(Component const& component)
-        {
-            // return true if the parser succeeds and the slot is not yet taken
-            if (!*taken && component.parse(first, last, context, skipper, unused))
-            {
-                *taken = true;
-                ++taken;
-                return true;
-            }
-            ++taken;
-            return false;
-        }
+	template <typename Component>
+	bool operator() ( Component const &component )
+	{
+		// return true if the parser succeeds and the slot is not yet taken
+		if ( !*taken && component.parse ( first, last, context, skipper, unused ) )
+		{
+			*taken = true;
+			++taken;
+			return true;
+		}
+		++taken;
+		return false;
+	}
 
-        Iterator& first;
-        Iterator const& last;
-        Context& context;
-        Skipper const& skipper;
-        bool* taken;
+	Iterator &first;
+	Iterator const &last;
+	Context &context;
+	Skipper const &skipper;
+	bool *taken;
 
-    private:
-        // silence MSVC warning C4512: assignment operator could not be generated
-        permute_function& operator= (permute_function const&);
-    };
-}}}}
+private:
+	// silence MSVC warning C4512: assignment operator could not be generated
+	permute_function &operator= ( permute_function const & );
+};
+}
+}
+}
+}
 
 #endif

@@ -34,7 +34,10 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/archive/detail/register_archive.hpp>
 
-namespace boost { namespace mpi {
+namespace boost
+{
+namespace mpi
+{
 
 /**
  *  @brief A proxy that requests that the skeleton of an object be
@@ -54,17 +57,17 @@ namespace boost { namespace mpi {
 template <class T>
 struct BOOST_MPI_DECL skeleton_proxy
 {
-  /**
-   *  Constructs a @c skeleton_proxy that references object @p x.
-   *
-   *  @param x the object whose structure will be transmitted or
-   *  altered.
-   */
-  skeleton_proxy(T& x)
-   : object(x)
-  {}
+/**
+ *  Constructs a @c skeleton_proxy that references object @p x.
+ *
+ *  @param x the object whose structure will be transmitted or
+ *  altered.
+ */
+skeleton_proxy ( T &x )
+	: object ( x )
+{}
 
-  T& object;
+T &object;
 };
 
 /**
@@ -80,50 +83,51 @@ struct BOOST_MPI_DECL skeleton_proxy
  *  @returns a skeleton_proxy object referencing @p x
  */
 template <class T>
-inline const skeleton_proxy<T> skeleton(T& x)
+inline const skeleton_proxy<T> skeleton ( T &x )
 {
-  return skeleton_proxy<T>(x);
+return skeleton_proxy<T> ( x );
 }
 
-namespace detail {
-  /// @brief a class holding an MPI datatype
-  /// INTERNAL ONLY
-  /// the type is freed upon destruction
-  class BOOST_MPI_DECL mpi_datatype_holder : public boost::noncopyable
-  {
-  public:
-    mpi_datatype_holder()
-     : is_committed(false)
-    {}
+namespace detail
+{
+/// @brief a class holding an MPI datatype
+/// INTERNAL ONLY
+/// the type is freed upon destruction
+class BOOST_MPI_DECL mpi_datatype_holder : public boost::noncopyable
+{
+public:
+mpi_datatype_holder()
+	: is_committed ( false )
+{}
 
-    mpi_datatype_holder(MPI_Datatype t, bool committed = true)
-     : d(t)
-     , is_committed(committed)
-    {}
+mpi_datatype_holder ( MPI_Datatype t, bool committed = true )
+	: d ( t )
+	, is_committed ( committed )
+{}
 
-    void commit()
-    {
-      BOOST_MPI_CHECK_RESULT(MPI_Type_commit,(&d));
-      is_committed=true;
-    }
+void commit()
+{
+	BOOST_MPI_CHECK_RESULT ( MPI_Type_commit, ( &d ) );
+	is_committed = true;
+}
 
-    MPI_Datatype get_mpi_datatype() const
-    {
-      return d;
-    }
+MPI_Datatype get_mpi_datatype() const
+{
+	return d;
+}
 
-    ~mpi_datatype_holder()
-    {
-      int finalized=0;
-      BOOST_MPI_CHECK_RESULT(MPI_Finalized,(&finalized));
-      if (!finalized && is_committed)
-        BOOST_MPI_CHECK_RESULT(MPI_Type_free,(&d));
-    }
+~mpi_datatype_holder()
+{
+	int finalized = 0;
+	BOOST_MPI_CHECK_RESULT ( MPI_Finalized, ( &finalized ) );
+	if ( !finalized && is_committed )
+		BOOST_MPI_CHECK_RESULT ( MPI_Type_free, ( &d ) );
+}
 
-  private:
-    MPI_Datatype d;
-    bool is_committed;
-  };
+private:
+MPI_Datatype d;
+bool is_committed;
+};
 } // end namespace detail
 
 /** @brief A proxy object that transfers the content of an object
@@ -142,62 +146,62 @@ namespace detail {
 class BOOST_MPI_DECL content
 {
 public:
-  /**
-   *  Constructs an empty @c content object. This object will not be
-   *  useful for any Boost.MPI operations until it is reassigned.
-   */
-  content() {}
+/**
+ *  Constructs an empty @c content object. This object will not be
+ *  useful for any Boost.MPI operations until it is reassigned.
+ */
+content() {}
 
-  /**
-   *  This routine initializes the @c content object with an MPI data
-   *  type that refers to the content of an object without its structure.
-   *
-   *  @param d the MPI data type referring to the content of the object.
-   *
-   *  @param committed @c true indicates that @c MPI_Type_commit has
-   *  already been excuted for the data type @p d.
-   */
-  content(MPI_Datatype d, bool committed=true)
-   : holder(new detail::mpi_datatype_holder(d,committed))
-  {}
+/**
+ *  This routine initializes the @c content object with an MPI data
+ *  type that refers to the content of an object without its structure.
+ *
+ *  @param d the MPI data type referring to the content of the object.
+ *
+ *  @param committed @c true indicates that @c MPI_Type_commit has
+ *  already been excuted for the data type @p d.
+ */
+content ( MPI_Datatype d, bool committed = true )
+	: holder ( new detail::mpi_datatype_holder ( d, committed ) )
+{}
 
-  /**
-   *  Replace the MPI data type referencing the content of an object.
-   *
-   *  @param d the new MPI data type referring to the content of the
-   *  object.
-   *
-   *  @returns *this
-   */
-  const content& operator=(MPI_Datatype d)
-  {
-    holder.reset(new detail::mpi_datatype_holder(d));
-    return *this;
-  }
+/**
+ *  Replace the MPI data type referencing the content of an object.
+ *
+ *  @param d the new MPI data type referring to the content of the
+ *  object.
+ *
+ *  @returns *this
+ */
+const content &operator= ( MPI_Datatype d )
+{
+	holder.reset ( new detail::mpi_datatype_holder ( d ) );
+	return *this;
+}
 
-  /**
-   * Retrieve the MPI data type that refers to the content of the
-   * object.
-   *
-   * @returns the MPI data type, which should only be transmitted or
-   * received using @c MPI_BOTTOM as the address.
-   */
-  MPI_Datatype get_mpi_datatype() const
-  {
-    return holder->get_mpi_datatype();
-  }
+/**
+ * Retrieve the MPI data type that refers to the content of the
+ * object.
+ *
+ * @returns the MPI data type, which should only be transmitted or
+ * received using @c MPI_BOTTOM as the address.
+ */
+MPI_Datatype get_mpi_datatype() const
+{
+	return holder->get_mpi_datatype();
+}
 
-  /**
-   *  Commit the MPI data type referring to the content of the
-   *  object.
-   */
-  void commit()
-  {
-    holder->commit();
-  }
+/**
+ *  Commit the MPI data type referring to the content of the
+ *  object.
+ */
+void commit()
+{
+	holder->commit();
+}
 
 private:
-  boost::shared_ptr<detail::mpi_datatype_holder> holder;
+boost::shared_ptr<detail::mpi_datatype_holder> holder;
 };
 
 /** @brief Returns the content of an object, suitable for transmission
@@ -225,7 +229,7 @@ private:
  *  @returns the content of the object @p x, which can be used for
  *  transmission via @c send, @c recv, or @c broadcast.
  */
-template <class T> const content get_content(const T& x);
+template <class T> const content get_content ( const T &x );
 
 /** @brief An archiver that reconstructs a data structure based on the
  *  binary skeleton stored in a buffer.
@@ -241,60 +245,60 @@ template <class T> const content get_content(const T& x);
  *  directly. Instead, use @c skeleton or @c get_skeleton.
  */
 class BOOST_MPI_DECL packed_skeleton_iarchive
-  : public detail::ignore_iprimitive,
-    public detail::forward_skeleton_iarchive<packed_skeleton_iarchive,packed_iarchive>
+: public detail::ignore_iprimitive,
+  public detail::forward_skeleton_iarchive<packed_skeleton_iarchive, packed_iarchive>
 {
 public:
-  /**
-   *  Construct a @c packed_skeleton_iarchive for the given
-   *  communicator.
-   *
-   *  @param comm The communicator over which this archive will be
-   *  transmitted.
-   *
-   *  @param flags Control the serialization of the skeleton. Refer to
-   *  the Boost.Serialization documentation before changing the
-   *  default flags.
-   */
-  packed_skeleton_iarchive(MPI_Comm const & comm,
-                           unsigned int flags =  boost::archive::no_header)
-         : detail::forward_skeleton_iarchive<packed_skeleton_iarchive,packed_iarchive>(skeleton_archive_)
-         , skeleton_archive_(comm,flags)
-        {}
+/**
+ *  Construct a @c packed_skeleton_iarchive for the given
+ *  communicator.
+ *
+ *  @param comm The communicator over which this archive will be
+ *  transmitted.
+ *
+ *  @param flags Control the serialization of the skeleton. Refer to
+ *  the Boost.Serialization documentation before changing the
+ *  default flags.
+ */
+packed_skeleton_iarchive ( MPI_Comm const &comm,
+                           unsigned int flags =  boost::archive::no_header )
+	: detail::forward_skeleton_iarchive<packed_skeleton_iarchive, packed_iarchive> ( skeleton_archive_ )
+	, skeleton_archive_ ( comm, flags )
+{}
 
-  /**
-   *  Construct a @c packed_skeleton_iarchive that unpacks a skeleton
-   *  from the given @p archive.
-   *
-   *  @param archive the archive from which the skeleton will be
-   *  unpacked.
-   *
-   */
-  explicit packed_skeleton_iarchive(packed_iarchive & archive)
-         : detail::forward_skeleton_iarchive<packed_skeleton_iarchive,packed_iarchive>(archive)
-         , skeleton_archive_(MPI_COMM_WORLD, boost::archive::no_header)
-        {}
+/**
+ *  Construct a @c packed_skeleton_iarchive that unpacks a skeleton
+ *  from the given @p archive.
+ *
+ *  @param archive the archive from which the skeleton will be
+ *  unpacked.
+ *
+ */
+explicit packed_skeleton_iarchive ( packed_iarchive &archive )
+	: detail::forward_skeleton_iarchive<packed_skeleton_iarchive, packed_iarchive> ( archive )
+	, skeleton_archive_ ( MPI_COMM_WORLD, boost::archive::no_header )
+{}
 
-  /**
-   *  Retrieve the archive corresponding to this skeleton.
-   */
-  const packed_iarchive& get_skeleton() const
-  {
-    return this->implementation_archive;
-  }
+/**
+ *  Retrieve the archive corresponding to this skeleton.
+ */
+const packed_iarchive &get_skeleton() const
+{
+	return this->implementation_archive;
+}
 
-  /**
-   *  Retrieve the archive corresponding to this skeleton.
-   */
-  packed_iarchive& get_skeleton()
-  {
-    return this->implementation_archive;
-  }
+/**
+ *  Retrieve the archive corresponding to this skeleton.
+ */
+packed_iarchive &get_skeleton()
+{
+	return this->implementation_archive;
+}
 
 private:
-  /// Store the actual archive that holds the structure, unless the
-  /// user overrides this with their own archive.
-  packed_iarchive skeleton_archive_;
+/// Store the actual archive that holds the structure, unless the
+/// user overrides this with their own archive.
+packed_iarchive skeleton_archive_;
 };
 
 /** @brief An archiver that records the binary skeleton of a data
@@ -311,59 +315,61 @@ private:
  *  directly. Instead, use @c skeleton or @c get_skeleton.
  */
 class BOOST_MPI_DECL packed_skeleton_oarchive
-  : public detail::ignore_oprimitive,
-    public detail::forward_skeleton_oarchive<packed_skeleton_oarchive,packed_oarchive>
+: public detail::ignore_oprimitive,
+  public detail::forward_skeleton_oarchive<packed_skeleton_oarchive, packed_oarchive>
 {
 public:
-  /**
-   *  Construct a @c packed_skeleton_oarchive for the given
-   *  communicator.
-   *
-   *  @param comm The communicator over which this archive will be
-   *  transmitted.
-   *
-   *  @param flags Control the serialization of the skeleton. Refer to
-   *  the Boost.Serialization documentation before changing the
-   *  default flags.
-   */
-  packed_skeleton_oarchive(MPI_Comm const & comm,
-                           unsigned int flags =  boost::archive::no_header)
-         : detail::forward_skeleton_oarchive<packed_skeleton_oarchive,packed_oarchive>(skeleton_archive_)
-         , skeleton_archive_(comm,flags)
-        {}
+/**
+ *  Construct a @c packed_skeleton_oarchive for the given
+ *  communicator.
+ *
+ *  @param comm The communicator over which this archive will be
+ *  transmitted.
+ *
+ *  @param flags Control the serialization of the skeleton. Refer to
+ *  the Boost.Serialization documentation before changing the
+ *  default flags.
+ */
+packed_skeleton_oarchive ( MPI_Comm const &comm,
+                           unsigned int flags =  boost::archive::no_header )
+	: detail::forward_skeleton_oarchive<packed_skeleton_oarchive, packed_oarchive> ( skeleton_archive_ )
+	, skeleton_archive_ ( comm, flags )
+{}
 
-  /**
-   *  Construct a @c packed_skeleton_oarchive that packs a skeleton
-   *  into the given @p archive.
-   *
-   *  @param archive the archive to which the skeleton will be packed.
-   *
-   */
-  explicit packed_skeleton_oarchive(packed_oarchive & archive)
-         : detail::forward_skeleton_oarchive<packed_skeleton_oarchive,packed_oarchive>(archive)
-         , skeleton_archive_(MPI_COMM_WORLD, boost::archive::no_header)
-        {}
+/**
+ *  Construct a @c packed_skeleton_oarchive that packs a skeleton
+ *  into the given @p archive.
+ *
+ *  @param archive the archive to which the skeleton will be packed.
+ *
+ */
+explicit packed_skeleton_oarchive ( packed_oarchive &archive )
+	: detail::forward_skeleton_oarchive<packed_skeleton_oarchive, packed_oarchive> ( archive )
+	, skeleton_archive_ ( MPI_COMM_WORLD, boost::archive::no_header )
+{}
 
-  /**
-   *  Retrieve the archive corresponding to this skeleton.
-   */
-  const packed_oarchive& get_skeleton() const
-  {
-    return this->implementation_archive;
-  }
+/**
+ *  Retrieve the archive corresponding to this skeleton.
+ */
+const packed_oarchive &get_skeleton() const
+{
+	return this->implementation_archive;
+}
 
 private:
-  /// Store the actual archive that holds the structure.
-  packed_oarchive skeleton_archive_;
+/// Store the actual archive that holds the structure.
+packed_oarchive skeleton_archive_;
 };
 
-namespace detail {
-  typedef boost::mpi::detail::forward_skeleton_oarchive<boost::mpi::packed_skeleton_oarchive,boost::mpi::packed_oarchive> type1;
-  typedef boost::mpi::detail::forward_skeleton_iarchive<boost::mpi::packed_skeleton_iarchive,boost::mpi::packed_iarchive> type2;
+namespace detail
+{
+typedef boost::mpi::detail::forward_skeleton_oarchive<boost::mpi::packed_skeleton_oarchive, boost::mpi::packed_oarchive> type1;
+typedef boost::mpi::detail::forward_skeleton_iarchive<boost::mpi::packed_skeleton_iarchive, boost::mpi::packed_iarchive> type2;
 }
 
 
-} } // end namespace boost::mpi
+}
+} // end namespace boost::mpi
 
 #include <boost/mpi/detail/content_oarchive.hpp>
 
@@ -381,12 +387,12 @@ namespace detail {
 #endif
 
 // required by export
-BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::packed_skeleton_oarchive)
-BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::packed_skeleton_iarchive)
-BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::detail::type1)
-BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::detail::type2)
+BOOST_SERIALIZATION_REGISTER_ARCHIVE ( boost::mpi::packed_skeleton_oarchive )
+BOOST_SERIALIZATION_REGISTER_ARCHIVE ( boost::mpi::packed_skeleton_iarchive )
+BOOST_SERIALIZATION_REGISTER_ARCHIVE ( boost::mpi::detail::type1 )
+BOOST_SERIALIZATION_REGISTER_ARCHIVE ( boost::mpi::detail::type2 )
 
-BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION(boost::mpi::packed_skeleton_oarchive)
-BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION(boost::mpi::packed_skeleton_iarchive)
+BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION ( boost::mpi::packed_skeleton_oarchive )
+BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION ( boost::mpi::packed_skeleton_iarchive )
 
 #endif // BOOST_MPI_SKELETON_AND_CONTENT_HPP

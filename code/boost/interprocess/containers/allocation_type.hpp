@@ -18,8 +18,10 @@
 #include <boost/interprocess/detail/config_begin.hpp>
 #include <boost/interprocess/containers/container/detail/allocation_type.hpp>
 
-namespace boost {
-namespace interprocess {
+namespace boost
+{
+namespace interprocess
+{
 
 /// @cond
 typedef int allocation_type;
@@ -28,7 +30,7 @@ static const allocation_type allocate_new       = boost::container::allocate_new
 static const allocation_type expand_fwd         = boost::container::expand_fwd;
 static const allocation_type expand_bwd         = boost::container::expand_bwd;
 static const allocation_type shrink_in_place    = boost::container::shrink_in_place;
-static const allocation_type try_shrink_in_place= boost::container::try_shrink_in_place;
+static const allocation_type try_shrink_in_place = boost::container::try_shrink_in_place;
 static const allocation_type nothrow_allocation = boost::container::nothrow_allocation;
 static const allocation_type zero_memory        = boost::container::zero_memory;
 

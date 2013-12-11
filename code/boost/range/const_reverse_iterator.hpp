@@ -19,14 +19,14 @@
 
 namespace boost
 {
-    //
-    // This interface is deprecated, use range_reverse_iterator<const T>
-    //
-    
-    template< typename C >
-    struct range_const_reverse_iterator : range_reverse_iterator<const C>
-    { };
-    
+//
+// This interface is deprecated, use range_reverse_iterator<const T>
+//
+
+template< typename C >
+struct range_const_reverse_iterator : range_reverse_iterator<const C>
+{ };
+
 } // namespace boost
 
 #endif

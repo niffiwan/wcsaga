@@ -37,10 +37,14 @@ struct opposite_tag
 \ingroup relation_group
                                                                     **/
 
-namespace boost {
-namespace bimaps {
-namespace relation {
-namespace support {
+namespace boost
+{
+namespace bimaps
+{
+namespace relation
+{
+namespace support
+{
 
 // Implementation of const pair reference type by metafunction
 

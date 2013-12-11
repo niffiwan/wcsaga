@@ -18,51 +18,51 @@ template<typename Type>
 class ptr_list
 {
 public:
-    typedef std::list<Type *> list;
+	typedef std::list<Type *> list;
 
-    ptr_list ()
-    {
-    }
+	ptr_list ()
+	{
+	}
 
-    ~ptr_list ()
-    {
-        clear ();
-    }
+	~ptr_list ()
+	{
+		clear ();
+	}
 
-    list *operator -> ()
-    {
-        return &_list;
-    }
+	list *operator -> ()
+	{
+		return &_list;
+	}
 
-    const list *operator -> () const
-    {
-        return &_list;
-    }
+	const list *operator -> () const
+	{
+		return &_list;
+	}
 
-    list &operator * ()
-    {
-        return _list;
-    }
+	list &operator * ()
+	{
+		return _list;
+	}
 
-    const list &operator * () const
-    {
-        return _list;
-    }
+	const list &operator * () const
+	{
+		return _list;
+	}
 
-    void clear ()
-    {
-        while (!_list.empty ())
-        {
-            delete _list.front ();
-            _list.pop_front ();
-        }
-    }
+	void clear ()
+	{
+		while ( !_list.empty () )
+		{
+			delete _list.front ();
+			_list.pop_front ();
+		}
+	}
 
 private:
-    list _list;
+	list _list;
 
-    ptr_list (const ptr_list &); // No copy construction.
-    ptr_list &operator = (const ptr_list &); // No assignment.
+	ptr_list ( const ptr_list & ); // No copy construction.
+	ptr_list &operator = ( const ptr_list & ); // No assignment.
 };
 }
 }

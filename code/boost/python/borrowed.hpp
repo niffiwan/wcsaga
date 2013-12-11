@@ -8,14 +8,18 @@
 # include <boost/python/detail/prefix.hpp>
 # include <boost/python/detail/borrowed_ptr.hpp>
 
-namespace boost { namespace python { 
+namespace boost
+{
+namespace python
+{
 
 template <class T>
-inline python::detail::borrowed<T>* borrowed(T* p)
+inline python::detail::borrowed<T> *borrowed ( T *p )
 {
-    return (detail::borrowed<T>*)p;
+	return ( detail::borrowed<T> * ) p;
 }
-    
-}} // namespace boost::python
+
+}
+} // namespace boost::python
 
 #endif // BORROWED_DWA2002614_HPP

@@ -21,9 +21,9 @@
 
 namespace boost
 {
-    template< class T >
-    struct range_difference : iterator_difference< typename range_iterator<T>::type >
-    { };
+template< class T >
+struct range_difference : iterator_difference< typename range_iterator<T>::type >
+{ };
 }
 
 #endif

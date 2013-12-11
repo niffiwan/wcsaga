@@ -16,18 +16,23 @@
 #  include <boost/preprocessor/iterate.hpp>
 #  include <boost/mpl/void.hpp>
 
-namespace boost { namespace python { namespace detail { 
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
 template< typename T >
 struct is_list_arg
 {
-    enum { value = true };
+	enum { value = true };
 };
 
 template<>
 struct is_list_arg<mpl::void_>
 {
-    enum { value = false };
+	enum { value = false };
 };
 
 template<int> struct type_list_impl_chooser;
@@ -43,36 +48,36 @@ template<int> struct type_list_impl_chooser;
 #  define BOOST_PYTHON_IS_LIST_ARG(z, n, data)          \
     BOOST_PP_IF(n, BOOST_PYTHON_PLUS, BOOST_PP_EMPTY)() \
     is_list_arg< BOOST_PP_CAT(T,n) >::value
-    
-template<
+
+template <
     BOOST_PYTHON_LIST_FORMAL_PARAMS
     >
 struct type_list_count_args
 {
-    enum { value =
-           BOOST_PP_REPEAT_1(BOOST_PYTHON_LIST_SIZE, BOOST_PYTHON_IS_LIST_ARG, _)
-    };
+	enum { value =
+	           BOOST_PP_REPEAT_1 ( BOOST_PYTHON_LIST_SIZE, BOOST_PYTHON_IS_LIST_ARG, _ )
+	     };
 };
 
-template<
+template <
     BOOST_PYTHON_LIST_FORMAL_PARAMS
     >
 struct type_list_impl
 {
-    typedef type_list_count_args< BOOST_PYTHON_LIST_ACTUAL_PARAMS > arg_num_;
-    typedef typename detail::type_list_impl_chooser< arg_num_::value >
-    ::template result_< BOOST_PYTHON_LIST_ACTUAL_PARAMS >::type type;
+	typedef type_list_count_args< BOOST_PYTHON_LIST_ACTUAL_PARAMS > arg_num_;
+	typedef typename detail::type_list_impl_chooser< arg_num_::value >
+	::template result_< BOOST_PYTHON_LIST_ACTUAL_PARAMS >::type type;
 };
 
-template<
-    BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PYTHON_LIST_SIZE, class T, mpl::void_)
+template <
+    BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT ( BOOST_PYTHON_LIST_SIZE, class T, mpl::void_ )
     >
 struct type_list
-    : detail::type_list_impl< BOOST_PYTHON_LIST_ACTUAL_PARAMS >::type
+		: detail::type_list_impl< BOOST_PYTHON_LIST_ACTUAL_PARAMS >::type
 {
-    typedef typename detail::type_list_impl<
-        BOOST_PYTHON_LIST_ACTUAL_PARAMS
-        >::type type;
+	typedef typename detail::type_list_impl <
+	BOOST_PYTHON_LIST_ACTUAL_PARAMS
+	>::type type;
 };
 
 #  undef BOOST_PYTHON_IS_LIST_ARG
@@ -80,7 +85,9 @@ struct type_list
 #  undef BOOST_PYTHON_LIST_FORMAL_PARAMS
 #  undef BOOST_PYTHON_LIST_ACTUAL_PARAMS
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 
 # endif // TYPE_LIST_IMPL_NO_PTS_DWA2002913_HPP
 
@@ -91,15 +98,15 @@ struct type_list
 template<>
 struct type_list_impl_chooser<N>
 {
-    template<
-        BOOST_PYTHON_LIST_FORMAL_PARAMS
-        >
-    struct result_
-    {
-        typedef typename BOOST_PP_CAT(mpl::vector,N)<
-            BOOST_PP_ENUM_PARAMS(N, T)
-            >::type type;
-    };
+	template <
+	    BOOST_PYTHON_LIST_FORMAL_PARAMS
+	    >
+	struct result_
+	{
+		typedef typename BOOST_PP_CAT ( mpl::vector, N ) <
+		BOOST_PP_ENUM_PARAMS ( N, T )
+		>::type type;
+	};
 };
 
 # undef N

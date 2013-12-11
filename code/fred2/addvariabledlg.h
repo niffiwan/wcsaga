@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -22,42 +22,42 @@
 
 class CAddVariableDlg : public CDialog
 {
-// Construction
+	// Construction
 public:
-	CAddVariableDlg(CWnd* pParent = NULL);   // standard constructor
+	CAddVariableDlg ( CWnd *pParent = NULL ); // standard constructor
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(CAddVariableDlg)
 	enum { IDD = IDD_ADD_VARIABLE };
-	CString	m_default_value;
-	CString	m_variable_name;
-	bool		m_name_validated;
-	bool		m_data_validated;
-	bool		m_type_number;
-	bool		m_type_campaign_persistent;
-	bool		m_type_player_persistent;
-	bool		m_type_network_variable;
-	bool		m_create;
-	int		m_sexp_var_index;
+	CString m_default_value;
+	CString m_variable_name;
+	bool        m_name_validated;
+	bool        m_data_validated;
+	bool        m_type_number;
+	bool        m_type_campaign_persistent;
+	bool        m_type_player_persistent;
+	bool        m_type_network_variable;
+	bool        m_create;
+	int     m_sexp_var_index;
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CAddVariableDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions
 	//{{AFX_MSG(CAddVariableDlg)
 	virtual void OnOK();
 	virtual BOOL OnInitDialog();
-	afx_msg void validate_variable_name(int set_focus);
-	afx_msg void validate_data(int set_focus);
+	afx_msg void validate_variable_name ( int set_focus );
+	afx_msg void validate_data ( int set_focus );
 	afx_msg void OnTypeNumber();
 	afx_msg void OnTypeString();
 	afx_msg void OnTypePlayerPersistent();

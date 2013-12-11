@@ -25,9 +25,12 @@
 #include <boost/bimap/container_adaptor/detail/identity_converters.hpp>
 #include <boost/mpl/vector.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace container_adaptor {
+namespace boost
+{
+namespace bimaps
+{
+namespace container_adaptor
+{
 
 /// \brief Container adaptor.
 
@@ -47,49 +50,49 @@ template
     class ValueFromBaseConverter           = ::boost::mpl::na,
 
     class FunctorsFromDerivedClasses = mpl::vector<>
->
+    >
 class vector_map_adaptor :
 
-    public vector_adaptor
-    <
-        Base,
-        Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        ReverseIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        FunctorsFromDerivedClasses
-    >
+	public vector_adaptor
+	<
+	Base,
+	Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
+	IteratorToBaseConverter, IteratorFromBaseConverter,
+	ReverseIteratorFromBaseConverter,
+	ValueToBaseConverter, ValueFromBaseConverter,
+	FunctorsFromDerivedClasses
+	>
 {
-    typedef vector_adaptor
-    <
-        Base,
-        Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        ReverseIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        FunctorsFromDerivedClasses
+	typedef vector_adaptor
+	<
+	Base,
+	Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
+	IteratorToBaseConverter, IteratorFromBaseConverter,
+	ReverseIteratorFromBaseConverter,
+	ValueToBaseConverter, ValueFromBaseConverter,
+	FunctorsFromDerivedClasses
 
-    > base_;
+	> base_;
 
-    // MetaData -------------------------------------------------------------
+	// MetaData -------------------------------------------------------------
 
-    public:
+public:
 
-    typedef BOOST_DEDUCED_TYPENAME Iterator::value_type::first_type  key_type;
-    typedef BOOST_DEDUCED_TYPENAME Iterator::value_type::second_type data_type;
+	typedef BOOST_DEDUCED_TYPENAME Iterator::value_type::first_type  key_type;
+	typedef BOOST_DEDUCED_TYPENAME Iterator::value_type::second_type data_type;
 
-    // Access -----------------------------------------------------------------
+	// Access -----------------------------------------------------------------
 
-    public:
+public:
 
-    vector_map_adaptor() {}
+	vector_map_adaptor() {}
 
-    explicit vector_map_adaptor(Base & c) :
-        base_(c) {}
+	explicit vector_map_adaptor ( Base &c ) :
+		base_ ( c ) {}
 
-    protected:
+protected:
 
-    typedef vector_map_adaptor vector_map_adaptor_;
+	typedef vector_map_adaptor vector_map_adaptor_;
 
 };
 

@@ -22,46 +22,48 @@
 #  define BOOST_RESULT_OF_NUM_ARGS 10
 #endif
 
-namespace boost {
+namespace boost
+{
 
 template<typename F> struct result_of;
 
 #if !defined(BOOST_NO_SFINAE) && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-namespace detail {
+namespace detail
+{
 
-BOOST_MPL_HAS_XXX_TRAIT_DEF(result_type)
+BOOST_MPL_HAS_XXX_TRAIT_DEF ( result_type )
 
 template<typename F, typename FArgs, bool HasResultType> struct result_of_impl;
 
 template<typename F>
 struct result_of_void_impl
 {
-  typedef void type;
+	typedef void type;
 };
 
 template<typename R>
-struct result_of_void_impl<R (*)(void)>
+struct result_of_void_impl<R ( * ) ( void ) >
 {
-  typedef R type;
+    typedef R type;
 };
 
 template<typename R>
-struct result_of_void_impl<R (&)(void)>
+struct result_of_void_impl<R ( & ) ( void ) >
 {
-  typedef R type;
+    typedef R type;
 };
 
 template<typename F, typename FArgs>
 struct result_of_impl<F, FArgs, true>
 {
-  typedef typename F::result_type type;
+	typedef typename F::result_type type;
 };
 
 template<typename FArgs>
 struct is_function_with_no_args : mpl::false_ {};
 
 template<typename F>
-struct is_function_with_no_args<F(void)> : mpl::true_ {};
+struct is_function_with_no_args<F ( void ) > : mpl::true_ {};
 
 template<typename F, typename FArgs>
 struct result_of_nested_result : F::template result<FArgs>
@@ -69,9 +71,9 @@ struct result_of_nested_result : F::template result<FArgs>
 
 template<typename F, typename FArgs>
 struct result_of_impl<F, FArgs, false>
-  : mpl::if_<is_function_with_no_args<FArgs>,
-             result_of_void_impl<F>,
-             result_of_nested_result<F, FArgs> >::type
+		: mpl::if_<is_function_with_no_args<FArgs>,
+		  result_of_void_impl<F>,
+		  result_of_nested_result<F, FArgs> >::type
 {};
 
 } // end namespace detail

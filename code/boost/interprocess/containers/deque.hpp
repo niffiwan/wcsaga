@@ -19,8 +19,10 @@
 #include <boost/interprocess/containers/container/deque.hpp>
 #include <boost/interprocess/containers/containers_fwd.hpp>
 
-namespace boost {
-namespace interprocess {
+namespace boost
+{
+namespace interprocess
+{
 
 using boost::container::deque;
 

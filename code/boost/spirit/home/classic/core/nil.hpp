@@ -10,15 +10,19 @@
 
 #include <boost/spirit/home/classic/namespace.hpp>
 
-namespace boost { namespace spirit {
+namespace boost
+{
+namespace spirit
+{
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-    struct nil_t {};
+struct nil_t {};
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}}
+}
+}
 
 #endif
 

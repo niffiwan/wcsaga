@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // strong_typedef.hpp:
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -26,7 +26,7 @@
 #include <boost/operators.hpp>
 
 #if !defined(__BORLANDC__) || __BORLANDC__ >= 0x590
-    #define BOOST_STRONG_TYPEDEF(T, D)                              \
+#define BOOST_STRONG_TYPEDEF(T, D)                              \
     struct D                                                        \
         : boost::totally_ordered1< D                                \
         , boost::totally_ordered2< D, T                             \
@@ -44,7 +44,7 @@
         bool operator<(const D & rhs) const { return t < rhs.t; }   \
     };
 #else
-    #define BOOST_STRONG_TYPEDEF(T, D)                              \
+#define BOOST_STRONG_TYPEDEF(T, D)                              \
     struct D                                                        \
         : boost::totally_ordered1< D                                \
         , boost::totally_ordered2< D, T                             \

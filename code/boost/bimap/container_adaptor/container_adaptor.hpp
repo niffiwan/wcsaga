@@ -33,12 +33,15 @@
 
 
 
-namespace boost {
-namespace bimaps {
+namespace boost
+{
+namespace bimaps
+{
 
 /// \brief Container Adaptor toolbox, easy way to build new containers from existing ones.
 
-namespace container_adaptor {
+namespace container_adaptor
+{
 
 /// \brief Container adaptor to build a type that is compliant to the concept of a container.
 
@@ -55,231 +58,231 @@ template
     class ValueFromBaseConverter    = ::boost::mpl::na,
 
     class FunctorsFromDerivedClasses = mpl::vector<>
->
+    >
 class container_adaptor
 {
-    // MetaData -------------------------------------------------------------
+	// MetaData -------------------------------------------------------------
 
-    public:
+public:
 
-    typedef Iterator iterator;
-    typedef ConstIterator const_iterator;
+	typedef Iterator iterator;
+	typedef ConstIterator const_iterator;
 
-    typedef BOOST_DEDUCED_TYPENAME iterator_value    <       iterator >::type value_type;
-    typedef BOOST_DEDUCED_TYPENAME iterator_pointer  <       iterator >::type pointer;
-    typedef BOOST_DEDUCED_TYPENAME iterator_reference<       iterator >::type reference;
-    typedef BOOST_DEDUCED_TYPENAME iterator_reference< const_iterator >::type const_reference;
+	typedef BOOST_DEDUCED_TYPENAME iterator_value    <       iterator >::type value_type;
+	typedef BOOST_DEDUCED_TYPENAME iterator_pointer  <       iterator >::type pointer;
+	typedef BOOST_DEDUCED_TYPENAME iterator_reference<       iterator >::type reference;
+	typedef BOOST_DEDUCED_TYPENAME iterator_reference< const_iterator >::type const_reference;
 
-    typedef BOOST_DEDUCED_TYPENAME Base::size_type size_type;
-    typedef BOOST_DEDUCED_TYPENAME Base::difference_type difference_type;
+	typedef BOOST_DEDUCED_TYPENAME Base::size_type size_type;
+	typedef BOOST_DEDUCED_TYPENAME Base::difference_type difference_type;
 
-    typedef BOOST_DEDUCED_TYPENAME mpl::if_< ::boost::mpl::is_na<IteratorToBaseConverter>,
-        // {
-                ::boost::bimaps::container_adaptor::detail::
-                    iterator_to_base_identity
-                <
-                    BOOST_DEDUCED_TYPENAME Base::iterator                , iterator,
-                    BOOST_DEDUCED_TYPENAME Base::const_iterator          , const_iterator
-                >,
-        // }
-        // else
-        // {
-                IteratorToBaseConverter
-        // }
+	typedef BOOST_DEDUCED_TYPENAME mpl::if_< ::boost::mpl::is_na<IteratorToBaseConverter>,
+	        // {
+	        ::boost::bimaps::container_adaptor::detail::
+	        iterator_to_base_identity
+	        <
+	        BOOST_DEDUCED_TYPENAME Base::iterator                , iterator,
+	        BOOST_DEDUCED_TYPENAME Base::const_iterator          , const_iterator
+	        >,
+	        // }
+	        // else
+	        // {
+	        IteratorToBaseConverter
+	        // }
 
-        >::type iterator_to_base;
+	        >::type iterator_to_base;
 
-    typedef BOOST_DEDUCED_TYPENAME mpl::if_< ::boost::mpl::is_na<IteratorFromBaseConverter>,
-        // {
-                ::boost::bimaps::container_adaptor::detail::
-                    iterator_from_base_identity
-                <
-                    BOOST_DEDUCED_TYPENAME Base::iterator                , iterator,
-                    BOOST_DEDUCED_TYPENAME Base::const_iterator          , const_iterator
-                >,
-        // }
-        // else
-        // {
-                IteratorFromBaseConverter
-        // }
+	typedef BOOST_DEDUCED_TYPENAME mpl::if_< ::boost::mpl::is_na<IteratorFromBaseConverter>,
+	        // {
+	        ::boost::bimaps::container_adaptor::detail::
+	        iterator_from_base_identity
+	        <
+	        BOOST_DEDUCED_TYPENAME Base::iterator                , iterator,
+	        BOOST_DEDUCED_TYPENAME Base::const_iterator          , const_iterator
+	        >,
+	        // }
+	        // else
+	        // {
+	        IteratorFromBaseConverter
+	        // }
 
-        >::type iterator_from_base;
+	        >::type iterator_from_base;
 
-    typedef BOOST_DEDUCED_TYPENAME mpl::if_< ::boost::mpl::is_na<ValueToBaseConverter>,
-        // {
-                ::boost::bimaps::container_adaptor::detail::
-                    value_to_base_identity
-                <
-                    BOOST_DEDUCED_TYPENAME Base::value_type,
-                    value_type
-                >,
-        // }
-        // else
-        // {
-                ValueToBaseConverter
-        // }
+	typedef BOOST_DEDUCED_TYPENAME mpl::if_< ::boost::mpl::is_na<ValueToBaseConverter>,
+	        // {
+	        ::boost::bimaps::container_adaptor::detail::
+	        value_to_base_identity
+	        <
+	        BOOST_DEDUCED_TYPENAME Base::value_type,
+	        value_type
+	        >,
+	        // }
+	        // else
+	        // {
+	        ValueToBaseConverter
+	        // }
 
-        >::type value_to_base;
+	        >::type value_to_base;
 
-    typedef BOOST_DEDUCED_TYPENAME mpl::if_< ::boost::mpl::is_na<ValueFromBaseConverter>,
-        // {
-                ::boost::bimaps::container_adaptor::detail::
-                    value_from_base_identity
-                <
-                    BOOST_DEDUCED_TYPENAME Base::value_type,
-                    value_type
-                >,
-        // }
-        // else
-        // {
-                ValueFromBaseConverter
-        // }
+	typedef BOOST_DEDUCED_TYPENAME mpl::if_< ::boost::mpl::is_na<ValueFromBaseConverter>,
+	        // {
+	        ::boost::bimaps::container_adaptor::detail::
+	        value_from_base_identity
+	        <
+	        BOOST_DEDUCED_TYPENAME Base::value_type,
+	        value_type
+	        >,
+	        // }
+	        // else
+	        // {
+	        ValueFromBaseConverter
+	        // }
 
-        >::type value_from_base;
+	        >::type value_from_base;
 
-    // ACCESS -----------------------------------------------------------------
+	// ACCESS -----------------------------------------------------------------
 
-    public:
+public:
 
-    explicit container_adaptor(Base & c) : dwfb(c) {}
+	explicit container_adaptor ( Base &c ) : dwfb ( c ) {}
 
-    protected:
+protected:
 
-    typedef Base base_type;
+	typedef Base base_type;
 
-    typedef container_adaptor container_adaptor_;
+	typedef container_adaptor container_adaptor_;
 
-    const Base & base() const { return dwfb.data; }
-          Base & base()       { return dwfb.data; }
+	const Base &base() const { return dwfb.data; }
+	Base &base()       { return dwfb.data; }
 
-    // Interface --------------------------------------------------------------
+	// Interface --------------------------------------------------------------
 
-    public:
+public:
 
-    size_type size() const                    { return base().size();         }
-    size_type max_size() const                { return base().max_size();     }
-    bool empty() const                        { return base().empty();        }
+	size_type size() const                    { return base().size();         }
+	size_type max_size() const                { return base().max_size();     }
+	bool empty() const                        { return base().empty();        }
 
-    iterator begin()
-    {
-        return this->template functor<iterator_from_base>()( base().begin() );
-    }
+	iterator begin()
+	{
+		return this->template functor<iterator_from_base>() ( base().begin() );
+	}
 
-    iterator end()
-    {
-        return this->template functor<iterator_from_base>()( base().end() );
-    }
+	iterator end()
+	{
+		return this->template functor<iterator_from_base>() ( base().end() );
+	}
 
-    const_iterator begin() const
-    {
-        return this->template functor<iterator_from_base>()( base().begin() );
-    }
+	const_iterator begin() const
+	{
+		return this->template functor<iterator_from_base>() ( base().begin() );
+	}
 
-    const_iterator end() const
-    {
-        return this->template functor<iterator_from_base>()( base().end() );
-    }
+	const_iterator end() const
+	{
+		return this->template functor<iterator_from_base>() ( base().end() );
+	}
 
 
-    iterator erase(iterator pos)
-    {
-        return this->template functor<iterator_from_base>()(
-            base().erase(this->template functor<iterator_to_base>()(pos))
-        );
-    }
+	iterator erase ( iterator pos )
+	{
+		return this->template functor<iterator_from_base>() (
+		    base().erase ( this->template functor<iterator_to_base>() ( pos ) )
+		                 );
+	}
 
-    iterator erase(iterator first, iterator last)
-    {
-        return this->template functor<iterator_from_base>()(
-            base().erase(
-                this->template functor<iterator_to_base>()(first),
-                this->template functor<iterator_to_base>()(last)
-            )
-        );
-    }
+	iterator erase ( iterator first, iterator last )
+	{
+		return this->template functor<iterator_from_base>() (
+		    base().erase (
+		        this->template functor<iterator_to_base>() ( first ),
+		        this->template functor<iterator_to_base>() ( last )
+		                              )
+		                              );
+	}
 
-    void clear()
-    {
-        base().clear();
-    }
+	void clear()
+	{
+		base().clear();
+	}
 
-    template< class InputIterator >
-    void insert(InputIterator iterBegin, InputIterator iterEnd)
-    {
-        for( ; iterBegin != iterEnd ; ++iterBegin )
-        {
-            base().insert( this->template
-                functor<value_to_base>()( *iterBegin )
-            );
-        }
-    }
+	template< class InputIterator >
+	void insert ( InputIterator iterBegin, InputIterator iterEnd )
+	{
+		for ( ; iterBegin != iterEnd ; ++iterBegin )
+		{
+			base().insert ( this->template
+			                functor<value_to_base>() ( *iterBegin )
+			                       );
+		}
+	}
 
-    std::pair<iterator, bool> insert(
-        BOOST_DEDUCED_TYPENAME ::boost::call_traits< value_type >::param_type x)
-    {
-        std::pair< BOOST_DEDUCED_TYPENAME Base::iterator, bool > r(
-            base().insert( this->template functor<value_to_base>()(x) )
-        );
+	std::pair<iterator, bool> insert (
+	    BOOST_DEDUCED_TYPENAME ::boost::call_traits< value_type >::param_type x )
+	{
+		std::pair< BOOST_DEDUCED_TYPENAME Base::iterator, bool > r (
+		    base().insert ( this->template functor<value_to_base>() ( x ) )
+		                  );
 
-        return std::pair<iterator, bool>( this->template
-                    functor<iterator_from_base>()(r.first),r.second
-               );
-    }
+		return std::pair<iterator, bool> ( this->template
+		                                   functor<iterator_from_base>() ( r.first ), r.second
+		                                          );
+	}
 
-    iterator insert(iterator pos,
-                    BOOST_DEDUCED_TYPENAME ::boost::call_traits< value_type >::param_type x)
-    {
-        return this->template functor<iterator_from_base>()(
-            base().insert(
-                this->template functor<iterator_to_base>()(pos),
-                this->template functor<value_to_base>()(x))
-        );
-    }
+	iterator insert ( iterator pos,
+	                  BOOST_DEDUCED_TYPENAME ::boost::call_traits< value_type >::param_type x )
+	{
+		return this->template functor<iterator_from_base>() (
+		    base().insert (
+		        this->template functor<iterator_to_base>() ( pos ),
+		        this->template functor<value_to_base>() ( x ) )
+		                              );
+	}
 
-    void swap( container_adaptor & c )
-    {
-        base().swap( c.base() );
-    }
+	void swap ( container_adaptor &c )
+	{
+		base().swap ( c.base() );
+	}
 
-    // Access to functors ----------------------------------------------------
+	// Access to functors ----------------------------------------------------
 
-    protected:
+protected:
 
-    template< class Functor >
-    Functor & functor()
-    {
-        return dwfb.template functor<Functor>();
-    }
+	template< class Functor >
+	Functor &functor()
+	{
+		return dwfb.template functor<Functor>();
+	}
 
-    template< class Functor >
-    Functor const & functor() const
-    {
-        return dwfb.template functor<Functor>();
-    }
+	template< class Functor >
+	Functor const &functor() const
+	{
+		return dwfb.template functor<Functor>();
+	}
 
-    // Data ------------------------------------------------------------------
+	// Data ------------------------------------------------------------------
 
-    private:
+private:
 
-    ::boost::bimaps::container_adaptor::detail::data_with_functor_bag
-    <
-        Base &,
+	::boost::bimaps::container_adaptor::detail::data_with_functor_bag
+	<
+	Base &,
 
-        BOOST_DEDUCED_TYPENAME mpl::copy
-        <
-            mpl::vector
-            <
-                iterator_to_base,
-                iterator_from_base,
-                value_to_base,
-                value_from_base
-            >,
+	     BOOST_DEDUCED_TYPENAME mpl::copy
+	     <
+	     mpl::vector
+	     <
+	     iterator_to_base,
+	     iterator_from_base,
+	     value_to_base,
+	     value_from_base
+	     >,
 
-            mpl::front_inserter< FunctorsFromDerivedClasses >
+	     mpl::front_inserter< FunctorsFromDerivedClasses >
 
-        >::type
+	     >::type
 
-    > dwfb;
+	     > dwfb;
 };
 
 

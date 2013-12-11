@@ -23,164 +23,173 @@
 #include <boost/mpl/bool.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <>
-    struct use_terminal<karma::domain, tag::auto_>     // enables auto_
-      : mpl::true_ {};
+namespace spirit
+{
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
+template <>
+struct use_terminal<karma::domain, tag::auto_>     // enables auto_
+		: mpl::true_ {};
 
-    template <typename A0>
-    struct use_terminal<karma::domain                   // enables auto_(...)
-      , terminal_ex<tag::auto_, fusion::vector1<A0> >
-    > : mpl::true_ {};
+template <typename A0>
+struct use_terminal<karma::domain                   // enables auto_(...)
+		, terminal_ex<tag::auto_, fusion::vector1<A0> >
+		> : mpl::true_ {};
 
-    template <>                                         // enables auto_(f)
-    struct use_lazy_terminal<
-        karma::domain, tag::auto_, 1   /*arity*/
-    > : mpl::true_ {};
+template <>                                         // enables auto_(f)
+struct use_lazy_terminal <
+		karma::domain, tag::auto_, 1   /*arity*/
+		> : mpl::true_ {};
 
-}}
+}
+}
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit { namespace karma
+namespace boost
 {
-    using spirit::auto_;
-    using spirit::auto__type;
+namespace spirit
+{
+namespace karma
+{
+using spirit::auto_;
+using spirit::auto__type;
 
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Modifiers>
-    struct auto_generator
-      : generator<auto_generator<Modifiers> >
-    {
-        typedef mpl::int_<generator_properties::all_properties> properties;
+///////////////////////////////////////////////////////////////////////////
+template <typename Modifiers>
+struct auto_generator
+		: generator<auto_generator<Modifiers> >
+{
+	typedef mpl::int_<generator_properties::all_properties> properties;
 
-        template <typename Context, typename Unused>
-        struct attribute
-        {
-            typedef spirit::hold_any type;
-        };
+	template <typename Context, typename Unused>
+	struct attribute
+	{
+		typedef spirit::hold_any type;
+	};
 
-        auto_generator(Modifiers const& modifiers)
-          : modifiers_(modifiers) {}
+	auto_generator ( Modifiers const &modifiers )
+		: modifiers_ ( modifiers ) {}
 
-        // auto_generator has an attached attribute 
-        template <
-            typename OutputIterator, typename Context, typename Delimiter
-          , typename Attribute>
-        bool generate(OutputIterator& sink, Context& context
-          , Delimiter const& d, Attribute const& attr) const
-        {
-            return compile<karma::domain>(create_generator<Attribute>(), modifiers_)
-                      .generate(sink, context, d, attr);
-        }
+	// auto_generator has an attached attribute
+	template <
+	    typename OutputIterator, typename Context, typename Delimiter
+	    , typename Attribute >
+	bool generate ( OutputIterator &sink, Context &context
+	                , Delimiter const &d, Attribute const &attr ) const
+	{
+		return compile<karma::domain> ( create_generator<Attribute>(), modifiers_ )
+		       .generate ( sink, context, d, attr );
+	}
 
-        // this auto_generator has no attribute attached, it needs to have been
-        // initialized from a value/variable
-        template <typename OutputIterator, typename Context
-          , typename Delimiter>
-        static bool
-        generate(OutputIterator&, Context&, Delimiter const&, unused_type)
-        {
-            // It is not possible (doesn't make sense) to use auto_ generators 
-            // without providing any attribute, as the generator doesn't 'know' 
-            // what to output. The following assertion fires if this situation
-            // is detected in your code.
-            BOOST_SPIRIT_ASSERT_MSG(false, auto_not_usable_without_attribute, ());
-            return false;
-        }
+	// this auto_generator has no attribute attached, it needs to have been
+	// initialized from a value/variable
+	template <typename OutputIterator, typename Context
+	          , typename Delimiter>
+	static bool
+	generate ( OutputIterator &, Context &, Delimiter const &, unused_type )
+	{
+		// It is not possible (doesn't make sense) to use auto_ generators
+		// without providing any attribute, as the generator doesn't 'know'
+		// what to output. The following assertion fires if this situation
+		// is detected in your code.
+		BOOST_SPIRIT_ASSERT_MSG ( false, auto_not_usable_without_attribute, () );
+		return false;
+	}
 
-        template <typename Context>
-        info what(Context& /*context*/) const
-        {
-            return info("auto_");
-        }
+	template <typename Context>
+	info what ( Context & /*context*/ ) const
+	{
+		return info ( "auto_" );
+	}
 
-        Modifiers modifiers_;
-    };
+	Modifiers modifiers_;
+};
 
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename T, typename Modifiers>
-    struct lit_auto_generator
-      : generator<lit_auto_generator<T, Modifiers> >
-    {
-        typedef mpl::int_<generator_properties::all_properties> properties;
+///////////////////////////////////////////////////////////////////////////
+template <typename T, typename Modifiers>
+struct lit_auto_generator
+		: generator<lit_auto_generator<T, Modifiers> >
+{
+	typedef mpl::int_<generator_properties::all_properties> properties;
 
-        template <typename Context, typename Unused>
-        struct attribute
-        {
-            typedef unused_type type;
-        };
+	template <typename Context, typename Unused>
+	struct attribute
+	{
+		typedef unused_type type;
+	};
 
-        lit_auto_generator(typename add_reference<T>::type t, Modifiers const& modifiers)
-          : t_(t)
-          , generator_(compile<karma::domain>(create_generator<T>(), modifiers)) 
-        {}
+	lit_auto_generator ( typename add_reference<T>::type t, Modifiers const &modifiers )
+		: t_ ( t )
+		, generator_ ( compile<karma::domain> ( create_generator<T>(), modifiers ) )
+	{}
 
-        // auto_generator has an attached attribute 
-        template <
-            typename OutputIterator, typename Context, typename Delimiter
-          , typename Attribute>
-        bool generate(OutputIterator& sink, Context& context
-          , Delimiter const& d, Attribute const&) const
-        {
-            return generator_.generate(sink, context, d, t_);
-        }
+	// auto_generator has an attached attribute
+	template <
+	    typename OutputIterator, typename Context, typename Delimiter
+	    , typename Attribute >
+	bool generate ( OutputIterator &sink, Context &context
+	                , Delimiter const &d, Attribute const & ) const
+	{
+		return generator_.generate ( sink, context, d, t_ );
+	}
 
-        template <typename Context>
-        info what(Context& /*context*/) const
-        {
-            return info("auto_");
-        }
+	template <typename Context>
+	info what ( Context & /*context*/ ) const
+	{
+		return info ( "auto_" );
+	}
 
-        typedef typename spirit::result_of::create_generator<T>::type 
-            generator_type;
+	typedef typename spirit::result_of::create_generator<T>::type
+	generator_type;
 
-        typedef typename spirit::result_of::compile<
-            karma::domain, generator_type, Modifiers>::type generator_impl_type;
+	typedef typename spirit::result_of::compile <
+	karma::domain, generator_type, Modifiers >::type generator_impl_type;
 
-        T t_;
-        generator_impl_type generator_;
+	T t_;
+	generator_impl_type generator_;
 
-    private:
-        // silence MSVC warning C4512: assignment operator could not be generated
-        lit_auto_generator& operator= (lit_auto_generator const&);
-    };
+private:
+	// silence MSVC warning C4512: assignment operator could not be generated
+	lit_auto_generator &operator= ( lit_auto_generator const & );
+};
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Generator generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+// Generator generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
 
-    // auto_
-    template <typename Modifiers>
-    struct make_primitive<tag::auto_, Modifiers> 
-    {
-        typedef auto_generator<Modifiers> result_type;
+// auto_
+template <typename Modifiers>
+struct make_primitive<tag::auto_, Modifiers>
+{
+	typedef auto_generator<Modifiers> result_type;
 
-        result_type operator()(unused_type, Modifiers const& modifiers) const
-        {
-            return result_type(modifiers);
-        }
-    };
+	result_type operator() ( unused_type, Modifiers const &modifiers ) const
+	{
+		return result_type ( modifiers );
+	}
+};
 
-    // auto_(...)
-    template <typename Modifiers, typename A0>
-    struct make_primitive<
-            terminal_ex<tag::auto_, fusion::vector1<A0> >, Modifiers>
-    {
-        typedef typename add_const<A0>::type const_attribute;
+// auto_(...)
+template <typename Modifiers, typename A0>
+struct make_primitive <
+		terminal_ex<tag::auto_, fusion::vector1<A0> >, Modifiers >
+{
+	typedef typename add_const<A0>::type const_attribute;
 
-        typedef lit_auto_generator<const_attribute, Modifiers> result_type;
+	typedef lit_auto_generator<const_attribute, Modifiers> result_type;
 
-        template <typename Terminal>
-        result_type operator()(Terminal const& term, Modifiers const& modifiers) const
-        {
-            return result_type(fusion::at_c<0>(term.args), modifiers);
-        }
-    };
+	template <typename Terminal>
+	result_type operator() ( Terminal const &term, Modifiers const &modifiers ) const
+	{
+		return result_type ( fusion::at_c<0> ( term.args ), modifiers );
+	}
+};
 
-}}}
+}
+}
+}
 
 #endif

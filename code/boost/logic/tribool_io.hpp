@@ -22,7 +22,10 @@
 #include <string>
 #include <iostream>
 
-namespace boost { namespace logic {
+namespace boost
+{
+namespace logic
+{
 
 #ifdef BOOST_NO_STD_LOCALE
 
@@ -105,8 +108,8 @@ inline std::basic_string<char> get_default_indeterminate_name<char>()
 { return "indeterminate"; }
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-// VC++ 6.0 chokes on the specialization below, so we're stuck without 
-// wchar_t support. What a pain. TODO: it might just need a the template 
+// VC++ 6.0 chokes on the specialization below, so we're stuck without
+// wchar_t support. What a pain. TODO: it might just need a the template
 // parameter as function parameter...
 #else
 #  ifndef BOOST_NO_WCHAR_T
@@ -133,23 +136,23 @@ template<typename CharT>
 class indeterminate_name : public std::locale::facet, private boost::noncopyable
 {
 public:
-  typedef CharT char_type;
-  typedef std::basic_string<CharT> string_type;
+	typedef CharT char_type;
+	typedef std::basic_string<CharT> string_type;
 
-  /// Construct the facet with the default name
-  indeterminate_name() : name_(get_default_indeterminate_name<CharT>()) {}
+	/// Construct the facet with the default name
+	indeterminate_name() : name_ ( get_default_indeterminate_name<CharT>() ) {}
 
-  /// Construct the facet with the given name for the indeterminate value
-  explicit indeterminate_name(const string_type& name) : name_(name) {}
+	/// Construct the facet with the given name for the indeterminate value
+	explicit indeterminate_name ( const string_type &name ) : name_ ( name ) {}
 
-  /// Returns the name for the indeterminate value
-  string_type name() const { return name_; }
+	/// Returns the name for the indeterminate value
+	string_type name() const { return name_; }
 
-  /// Uniquily identifies this facet with the locale.
-  static std::locale::id id;
+	/// Uniquily identifies this facet with the locale.
+	static std::locale::id id;
 
 private:
-  string_type name_;
+	string_type name_;
 };
 
 template<typename CharT> std::locale::id indeterminate_name<CharT>::id;
@@ -174,32 +177,40 @@ template<typename CharT> std::locale::id indeterminate_name<CharT>::id;
  * \returns @p out
  */
 template<typename CharT, typename Traits>
-inline std::basic_ostream<CharT, Traits>&
-operator<<(std::basic_ostream<CharT, Traits>& out, tribool x)
+inline std::basic_ostream<CharT, Traits> &
+operator<< ( std::basic_ostream<CharT, Traits> &out, tribool x )
 {
-  if (!indeterminate(x)) {
-    out << static_cast<bool>(x);
-  } else {
-    typename std::basic_ostream<CharT, Traits>::sentry cerberus(out);
-    if (cerberus) {
-      if (out.flags() & std::ios_base::boolalpha) {
+	if ( !indeterminate ( x ) )
+	{
+		out << static_cast<bool> ( x );
+	}
+	else
+	{
+		typename std::basic_ostream<CharT, Traits>::sentry cerberus ( out );
+		if ( cerberus )
+		{
+			if ( out.flags() & std::ios_base::boolalpha )
+			{
 #ifndef BOOST_NO_STD_LOCALE
-        if (BOOST_HAS_FACET(indeterminate_name<CharT>, out.getloc())) {
-          const indeterminate_name<CharT>& facet =
-            BOOST_USE_FACET(indeterminate_name<CharT>, out.getloc());
-          out << facet.name();
-        } else {
-          out << get_default_indeterminate_name<CharT>();
-        }
+				if ( BOOST_HAS_FACET ( indeterminate_name<CharT>, out.getloc() ) )
+				{
+					const indeterminate_name<CharT> &facet =
+					    BOOST_USE_FACET ( indeterminate_name<CharT>, out.getloc() );
+					out << facet.name();
+				}
+				else
+				{
+					out << get_default_indeterminate_name<CharT>();
+				}
 #else
-        out << get_default_indeterminate_name<CharT>();
+				out << get_default_indeterminate_name<CharT>();
 #endif
-      }
-      else
-        out << 2;
-    }
-  }
-  return out;
+			}
+			else
+				out << 2;
+		}
+	}
+	return out;
 }
 
 /**
@@ -217,10 +228,10 @@ operator<<(std::basic_ostream<CharT, Traits>& out, tribool x)
  * \returns @p out
  */
 template<typename CharT, typename Traits>
-inline std::basic_ostream<CharT, Traits>&
-operator<<(std::basic_ostream<CharT, Traits>& out, 
-           bool (*)(tribool, detail::indeterminate_t))
-{ return out << tribool(indeterminate); } 
+inline std::basic_ostream<CharT, Traits> &
+operator<< ( std::basic_ostream<CharT, Traits> &out,
+             bool ( * ) ( tribool, detail::indeterminate_t ) )
+{ return out << tribool ( indeterminate ); }
 
 /**
  * \brief Reads a tribool value from a stream.
@@ -252,97 +263,112 @@ operator<<(std::basic_ostream<CharT, Traits>& out,
  * \returns @p in
  */
 template<typename CharT, typename Traits>
-inline std::basic_istream<CharT, Traits>&
-operator>>(std::basic_istream<CharT, Traits>& in, tribool& x)
+inline std::basic_istream<CharT, Traits> &
+operator>> ( std::basic_istream<CharT, Traits> &in, tribool &x )
 {
-  if (in.flags() & std::ios_base::boolalpha) {
-    typename std::basic_istream<CharT, Traits>::sentry cerberus(in);
-    if (cerberus) {
-      typedef std::basic_string<CharT> string_type;
+	if ( in.flags() & std::ios_base::boolalpha )
+	{
+		typename std::basic_istream<CharT, Traits>::sentry cerberus ( in );
+		if ( cerberus )
+		{
+			typedef std::basic_string<CharT> string_type;
 
 #ifndef BOOST_NO_STD_LOCALE
-      const std::numpunct<CharT>& numpunct_facet =
-        BOOST_USE_FACET(std::numpunct<CharT>, in.getloc());
+			const std::numpunct<CharT> &numpunct_facet =
+			    BOOST_USE_FACET ( std::numpunct<CharT>, in.getloc() );
 
-      string_type falsename = numpunct_facet.falsename();
-      string_type truename = numpunct_facet.truename();
+			string_type falsename = numpunct_facet.falsename();
+			string_type truename = numpunct_facet.truename();
 
-      string_type othername;
-      if (BOOST_HAS_FACET(indeterminate_name<CharT>, in.getloc())) {
-        othername =
-          BOOST_USE_FACET(indeterminate_name<CharT>, in.getloc()).name();
-      } else {
-        othername = get_default_indeterminate_name<CharT>();
-      }
+			string_type othername;
+			if ( BOOST_HAS_FACET ( indeterminate_name<CharT>, in.getloc() ) )
+			{
+				othername =
+				    BOOST_USE_FACET ( indeterminate_name<CharT>, in.getloc() ).name();
+			}
+			else
+			{
+				othername = get_default_indeterminate_name<CharT>();
+			}
 #else
-      string_type falsename = default_false_name<CharT>();
-      string_type truename = default_true_name<CharT>();
-      string_type othername = get_default_indeterminate_name<CharT>();
+			string_type falsename = default_false_name<CharT>();
+			string_type truename = default_true_name<CharT>();
+			string_type othername = get_default_indeterminate_name<CharT>();
 #endif
 
-      typename string_type::size_type pos = 0;
-      bool falsename_ok = true, truename_ok = true, othername_ok = true;
+			typename string_type::size_type pos = 0;
+			bool falsename_ok = true, truename_ok = true, othername_ok = true;
 
-      // Modeled after the code from Library DR 17
-      while (falsename_ok && pos < falsename.size()
-             || truename_ok && pos < truename.size()
-             || othername_ok && pos < othername.size()) {
-        typename Traits::int_type c = in.get();
-        if (c == Traits::eof())
-          return in;
+			// Modeled after the code from Library DR 17
+			while ( falsename_ok && pos < falsename.size()
+			        || truename_ok && pos < truename.size()
+			        || othername_ok && pos < othername.size() )
+			{
+				typename Traits::int_type c = in.get();
+				if ( c == Traits::eof() )
+					return in;
 
-        bool matched = false;
-        if (falsename_ok && pos < falsename.size()) {
-          if (Traits::eq(Traits::to_char_type(c), falsename[pos]))
-            matched = true;
-          else
-            falsename_ok = false;
-        }
+				bool matched = false;
+				if ( falsename_ok && pos < falsename.size() )
+				{
+					if ( Traits::eq ( Traits::to_char_type ( c ), falsename[pos] ) )
+						matched = true;
+					else
+						falsename_ok = false;
+				}
 
-        if (truename_ok && pos < truename.size()) {
-          if (Traits::eq(Traits::to_char_type(c), truename[pos]))
-            matched = true;
-          else
-            truename_ok = false;
-        }
+				if ( truename_ok && pos < truename.size() )
+				{
+					if ( Traits::eq ( Traits::to_char_type ( c ), truename[pos] ) )
+						matched = true;
+					else
+						truename_ok = false;
+				}
 
-        if (othername_ok && pos < othername.size()) {
-          if (Traits::eq(Traits::to_char_type(c), othername[pos]))
-            matched = true;
-          else
-            othername_ok = false;
-        }
+				if ( othername_ok && pos < othername.size() )
+				{
+					if ( Traits::eq ( Traits::to_char_type ( c ), othername[pos] ) )
+						matched = true;
+					else
+						othername_ok = false;
+				}
 
-        if (matched) { ++pos; }
-        if (pos > falsename.size()) falsename_ok = false;
-        if (pos > truename.size())  truename_ok = false;
-        if (pos > othername.size()) othername_ok = false;
-      }
+				if ( matched ) { ++pos; }
+				if ( pos > falsename.size() ) falsename_ok = false;
+				if ( pos > truename.size() )  truename_ok = false;
+				if ( pos > othername.size() ) othername_ok = false;
+			}
 
-      if (pos == 0)
-        in.setstate(std::ios_base::failbit);
-      else {
-        if (falsename_ok)      x = false;
-        else if (truename_ok)  x = true;
-        else if (othername_ok) x = indeterminate;
-        else in.setstate(std::ios_base::failbit);
-      }
-    }
-  } else {
-    long value;
-    if (in >> value) {
-      switch (value) {
-      case 0: x = false; break;
-      case 1: x = true; break;
-      case 2: x = indeterminate; break;
-      default: in.setstate(std::ios_base::failbit); break;
-      }
-    }
-  }
+			if ( pos == 0 )
+				in.setstate ( std::ios_base::failbit );
+			else
+			{
+				if ( falsename_ok )      x = false;
+				else if ( truename_ok )  x = true;
+				else if ( othername_ok ) x = indeterminate;
+				else in.setstate ( std::ios_base::failbit );
+			}
+		}
+	}
+	else
+	{
+		long value;
+		if ( in >> value )
+		{
+			switch ( value )
+			{
+			case 0: x = false; break;
+			case 1: x = true; break;
+			case 2: x = indeterminate; break;
+			default: in.setstate ( std::ios_base::failbit ); break;
+			}
+		}
+	}
 
-  return in;
+	return in;
 }
 
-} } // end namespace boost::logic
+}
+} // end namespace boost::logic
 
 #endif // BOOST_LOGIC_TRIBOOL_IO_HPP

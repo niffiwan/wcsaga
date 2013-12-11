@@ -13,55 +13,57 @@
 #include <boost/numeric/interval/detail/interval_prototype.hpp>
 #include <boost/numeric/interval/detail/test_input.hpp>
 
-namespace boost {
-namespace numeric {
+namespace boost
+{
+namespace numeric
+{
 
 template<class T, class Policies> inline
-interval<T, Policies> operator+ (const interval<T, Policies>& x, int y)
+interval<T, Policies> operator+ ( const interval<T, Policies> &x, int y )
 {
-  return x + static_cast<T>(y);
+	return x + static_cast<T> ( y );
 }
 
 template<class T, class Policies> inline
-interval<T, Policies> operator+ (int x, const interval<T, Policies>& y)
+interval<T, Policies> operator+ ( int x, const interval<T, Policies> &y )
 {
-  return static_cast<T>(x) + y;
+	return static_cast<T> ( x ) + y;
 }
 
 template<class T, class Policies> inline
-interval<T, Policies> operator- (const interval<T, Policies>& x, int y)
+interval<T, Policies> operator- ( const interval<T, Policies> &x, int y )
 {
-  return x - static_cast<T>(y);
+	return x - static_cast<T> ( y );
 }
 
 template<class T, class Policies> inline
-interval<T, Policies> operator- (int x, const interval<T, Policies>& y)
+interval<T, Policies> operator- ( int x, const interval<T, Policies> &y )
 {
-  return static_cast<T>(x) - y;
+	return static_cast<T> ( x ) - y;
 }
 
 template<class T, class Policies> inline
-interval<T, Policies> operator* (const interval<T, Policies>& x, int y)
+interval<T, Policies> operator* ( const interval<T, Policies> &x, int y )
 {
-  return x * static_cast<T>(y);
+	return x * static_cast<T> ( y );
 }
 
 template<class T, class Policies> inline
-interval<T, Policies> operator* (int x, const interval<T, Policies>& y)
+interval<T, Policies> operator* ( int x, const interval<T, Policies> &y )
 {
-  return static_cast<T>(x) * y;
+	return static_cast<T> ( x ) * y;
 }
 
 template<class T, class Policies> inline
-interval<T, Policies> operator/ (const interval<T, Policies>& x, int y)
+interval<T, Policies> operator/ ( const interval<T, Policies> &x, int y )
 {
-  return x / static_cast<T>(y);
+	return x / static_cast<T> ( y );
 }
 
 template<class T, class Policies> inline
-interval<T, Policies> operator/ (int x, const interval<T, Policies>& y)
+interval<T, Policies> operator/ ( int x, const interval<T, Policies> &y )
 {
-  return static_cast<T>(x) / y;
+	return static_cast<T> ( x ) / y;
 }
 
 } // namespace numeric

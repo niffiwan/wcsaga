@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,29 +14,33 @@
 #include <boost/units/heterogeneous_system.hpp>
 #include <boost/units/unit.hpp>
 
-namespace boost {
-namespace units {
+namespace boost
+{
+namespace units
+{
 
 template<class Unit, class Scale>
-struct make_scaled_unit {
-    typedef typename make_scaled_unit<typename reduce_unit<Unit>::type, Scale>::type type;
+struct make_scaled_unit
+{
+	typedef typename make_scaled_unit<typename reduce_unit<Unit>::type, Scale>::type type;
 };
 
 template<class Dimension, class UnitList, class OldScale, class Scale>
-struct make_scaled_unit<unit<Dimension, heterogeneous_system<heterogeneous_system_impl<UnitList, Dimension, OldScale> > >, Scale> {
-    typedef unit<
-        Dimension,
-        heterogeneous_system<
-            heterogeneous_system_impl<
-                UnitList,
-                Dimension,
-                typename mpl::times<
-                    OldScale,
-                    list<scale_list_dim<Scale>, dimensionless_type>
-                >::type
-            >
-        >
-    > type;
+struct make_scaled_unit<unit<Dimension, heterogeneous_system<heterogeneous_system_impl<UnitList, Dimension, OldScale> > >, Scale>
+{
+	typedef unit <
+	Dimension,
+	heterogeneous_system <
+	heterogeneous_system_impl <
+	UnitList,
+	Dimension,
+	typename mpl::times <
+	OldScale,
+	list<scale_list_dim<Scale>, dimensionless_type>
+	>::type
+	>
+	>
+	> type;
 };
 
 }

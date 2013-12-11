@@ -19,30 +19,35 @@
 
 #include <boost/mpl/if.hpp>
 
-namespace boost {
-  struct false_tag;
-  struct true_tag;
+namespace boost
+{
+struct false_tag;
+struct true_tag;
 
-  namespace graph_detail {
-    
+namespace graph_detail
+{
+
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    template <class U, class V>
-    struct is_same {
-      typedef boost::false_tag is_same_tag; 
-    };
-    template <class U>
-    struct is_same<U, U> {
-      typedef boost::true_tag is_same_tag;
-    };
+template <class U, class V>
+struct is_same
+{
+	typedef boost::false_tag is_same_tag;
+};
+template <class U>
+struct is_same<U, U>
+{
+	typedef boost::true_tag is_same_tag;
+};
 #else
-    template <class U, class V>
-    struct is_same {
-      enum { Unum = U::num, Vnum = V::num };
-      typedef typename mpl::if_c< (Unum == Vnum),
-               boost::true_tag, boost::false_tag>::type is_same_tag;
-    };
+template <class U, class V>
+struct is_same
+{
+	enum { Unum = U::num, Vnum = V::num };
+	typedef typename mpl::if_c< ( Unum == Vnum ),
+	        boost::true_tag, boost::false_tag>::type is_same_tag;
+};
 #endif
-  } // namespace graph_detail
+} // namespace graph_detail
 } // namespace boost
 
 #endif

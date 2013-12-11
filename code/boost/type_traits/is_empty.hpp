@@ -31,20 +31,22 @@
 // should be always the last #include directive
 #include <boost/type_traits/detail/bool_trait_def.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace detail {
+namespace detail
+{
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <typename T>
 struct empty_helper_t1 : public T
 {
-    empty_helper_t1();  // hh compiler bug workaround
-    int i[256];
+	empty_helper_t1();  // hh compiler bug workaround
+	int i[256];
 private:
-   // suppress compiler warnings:
-   empty_helper_t1(const empty_helper_t1&);
-   empty_helper_t1& operator=(const empty_helper_t1&);
+	// suppress compiler warnings:
+	empty_helper_t1 ( const empty_helper_t1 & );
+	empty_helper_t1 &operator= ( const empty_helper_t1 & );
 };
 
 struct empty_helper_t2 { int i[256]; };
@@ -54,28 +56,28 @@ struct empty_helper_t2 { int i[256]; };
 template <typename T, bool is_a_class = false>
 struct empty_helper
 {
-    BOOST_STATIC_CONSTANT(bool, value = false);
+	BOOST_STATIC_CONSTANT ( bool, value = false );
 };
 
 template <typename T>
 struct empty_helper<T, true>
 {
-    BOOST_STATIC_CONSTANT(
-        bool, value = (sizeof(empty_helper_t1<T>) == sizeof(empty_helper_t2))
-        );
+	BOOST_STATIC_CONSTANT (
+	    bool, value = ( sizeof ( empty_helper_t1<T> ) == sizeof ( empty_helper_t2 ) )
+	);
 };
 
 template <typename T>
 struct is_empty_impl
 {
-    typedef typename remove_cv<T>::type cvt;
-    BOOST_STATIC_CONSTANT(
-        bool, value = (
-            ::boost::type_traits::ice_or<
-              ::boost::detail::empty_helper<cvt,::boost::is_class<T>::value>::value
-              , BOOST_IS_EMPTY(cvt)
-            >::value
-            ));
+	typedef typename remove_cv<T>::type cvt;
+	BOOST_STATIC_CONSTANT (
+	    bool, value = (
+	                      ::boost::type_traits::ice_or <
+	                      ::boost::detail::empty_helper<cvt, ::boost::is_class<T>::value>::value
+	                      , BOOST_IS_EMPTY ( cvt )
+	                      >::value
+	                  ) );
 };
 
 #else // __BORLANDC__
@@ -83,33 +85,33 @@ struct is_empty_impl
 template <typename T, bool is_a_class, bool convertible_to_int>
 struct empty_helper
 {
-    BOOST_STATIC_CONSTANT(bool, value = false);
+	BOOST_STATIC_CONSTANT ( bool, value = false );
 };
 
 template <typename T>
 struct empty_helper<T, true, false>
 {
-    BOOST_STATIC_CONSTANT(bool, value = (
-        sizeof(empty_helper_t1<T>) == sizeof(empty_helper_t2)
-        ));
+	BOOST_STATIC_CONSTANT ( bool, value = (
+	        sizeof ( empty_helper_t1<T> ) == sizeof ( empty_helper_t2 )
+	                                      ) );
 };
 
 template <typename T>
 struct is_empty_impl
 {
-   typedef typename remove_cv<T>::type cvt;
-   typedef typename add_reference<T>::type r_type;
+	typedef typename remove_cv<T>::type cvt;
+	typedef typename add_reference<T>::type r_type;
 
-   BOOST_STATIC_CONSTANT(
-       bool, value = (
-           ::boost::type_traits::ice_or<
-              ::boost::detail::empty_helper<
-                  cvt
-                , ::boost::is_class<T>::value
-                , ::boost::is_convertible< r_type,int>::value
-              >::value
-              , BOOST_IS_EMPTY(cvt)
-           >::value));
+	BOOST_STATIC_CONSTANT (
+	    bool, value = (
+	                      ::boost::type_traits::ice_or <
+	                      ::boost::detail::empty_helper <
+	                      cvt
+	                      , ::boost::is_class<T>::value
+	                      , ::boost::is_convertible< r_type, int>::value
+	                      >::value
+	                      , BOOST_IS_EMPTY ( cvt )
+	                      >::value ) );
 };
 
 #endif // __BORLANDC__
@@ -121,8 +123,8 @@ struct is_empty_impl
 template <typename T>
 struct empty_helper_t1 : public T
 {
-   empty_helper_t1();
-   int i[256];
+	empty_helper_t1();
+	int i[256];
 };
 
 struct empty_helper_t2 { int i[256]; };
@@ -130,61 +132,61 @@ struct empty_helper_t2 { int i[256]; };
 template <typename T>
 struct empty_helper_base
 {
-   enum { value = (sizeof(empty_helper_t1<T>) == sizeof(empty_helper_t2)) };
+	enum { value = ( sizeof ( empty_helper_t1<T> ) == sizeof ( empty_helper_t2 ) ) };
 };
 
 template <typename T>
 struct empty_helper_nonbase
 {
-   enum { value = false };
+	enum { value = false };
 };
 
 template <bool base>
 struct empty_helper_chooser
 {
-   template <typename T> struct result_
-   {
-      typedef empty_helper_nonbase<T> type;
-   };
+	template <typename T> struct result_
+	{
+		typedef empty_helper_nonbase<T> type;
+	};
 };
 
 template <>
 struct empty_helper_chooser<true>
 {
-   template <typename T> struct result_
-   {
-      typedef empty_helper_base<T> type;
-   };
+	template <typename T> struct result_
+	{
+		typedef empty_helper_base<T> type;
+	};
 };
 
 template <typename T>
 struct is_empty_impl
 {
-   typedef ::boost::detail::empty_helper_chooser<
-      ::boost::type_traits::ice_and<
-         ::boost::type_traits::ice_not< ::boost::is_reference<T>::value >::value,
-         ::boost::type_traits::ice_not< ::boost::is_convertible<T,double>::value >::value,
-         ::boost::type_traits::ice_not< ::boost::is_pointer<T>::value >::value,
-         ::boost::type_traits::ice_not< ::boost::is_member_pointer<T>::value >::value,
-         ::boost::type_traits::ice_not< ::boost::is_array<T>::value >::value,
-         ::boost::type_traits::ice_not< ::boost::is_void<T>::value >::value,
-         ::boost::type_traits::ice_not<
-            ::boost::is_convertible<T,void const volatile*>::value
-            >::value
-      >::value > chooser;
+	typedef ::boost::detail::empty_helper_chooser <
+	::boost::type_traits::ice_and <
+	::boost::type_traits::ice_not< ::boost::is_reference<T>::value >::value,
+	::boost::type_traits::ice_not< ::boost::is_convertible<T, double>::value >::value,
+	::boost::type_traits::ice_not< ::boost::is_pointer<T>::value >::value,
+	::boost::type_traits::ice_not< ::boost::is_member_pointer<T>::value >::value,
+	::boost::type_traits::ice_not< ::boost::is_array<T>::value >::value,
+	::boost::type_traits::ice_not< ::boost::is_void<T>::value >::value,
+	::boost::type_traits::ice_not <
+	::boost::is_convertible<T, void const volatile *>::value
+	>::value
+	>::value > chooser;
 
-   typedef typename chooser::template result_<T> result;
-   typedef typename result::type eh_type;
+	typedef typename chooser::template result_<T> result;
+	typedef typename result::type eh_type;
 
-   BOOST_STATIC_CONSTANT(bool, value =
-      (::boost::type_traits::ice_or<eh_type::value, BOOST_IS_EMPTY(T)>::value));
+	BOOST_STATIC_CONSTANT ( bool, value =
+	                            ( ::boost::type_traits::ice_or<eh_type::value, BOOST_IS_EMPTY ( T ) >::value ) );
 };
 
 #else
 
 template <typename T> struct is_empty_impl
 {
-    BOOST_STATIC_CONSTANT(bool, value = BOOST_IS_EMPTY(T));
+	BOOST_STATIC_CONSTANT ( bool, value = BOOST_IS_EMPTY ( T ) );
 };
 
 #endif  // BOOST_MSVC6_MEMBER_TEMPLATES
@@ -192,16 +194,16 @@ template <typename T> struct is_empty_impl
 #endif  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 // these help when the compiler has no partial specialization support:
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_empty,void,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1 ( is_empty, void, false )
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_empty,void const,false)
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_empty,void volatile,false)
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_empty,void const volatile,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1 ( is_empty, void const, false )
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1 ( is_empty, void volatile, false )
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1 ( is_empty, void const volatile, false )
 #endif
 
 } // namespace detail
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_empty,T,::boost::detail::is_empty_impl<T>::value)
+BOOST_TT_AUX_BOOL_TRAIT_DEF1 ( is_empty, T, ::boost::detail::is_empty_impl<T>::value )
 
 } // namespace boost
 

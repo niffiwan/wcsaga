@@ -4,8 +4,8 @@
 // Copyright Peter Dimov 2000-2002
 // Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -25,17 +25,17 @@
 
 #if i == 1
 
-template<
-      BOOST_PP_ENUM_PARAMS(i, typename T)
+template <
+    BOOST_PP_ENUM_PARAMS ( i, typename T )
     >
 struct list1
-    : l_item<
-          long_<1>
-        , T0
-        , l_end
-        >
+		: l_item <
+		long_<1>
+		, T0
+		, l_end
+		>
 {
-    typedef list1 type;
+	typedef list1 type;
 };
 
 #else
@@ -45,18 +45,18 @@ struct list1
       BOOST_PP_ENUM_SHIFTED_PARAMS(i, T) \
     > \
     /**/
-    
-template<
-      BOOST_PP_ENUM_PARAMS(i, typename T)
+
+template <
+    BOOST_PP_ENUM_PARAMS ( i, typename T )
     >
-struct BOOST_PP_CAT(list,i)
-    : l_item<
-          long_<i>
-        , T0
-        , MPL_AUX_LIST_TAIL(list,i,T)
-        >
+struct BOOST_PP_CAT ( list, i )
+	: l_item <
+	long_<i>
+	, T0
+	, MPL_AUX_LIST_TAIL ( list, i, T )
+	>
 {
-    typedef BOOST_PP_CAT(list,i) type;
+	typedef BOOST_PP_CAT ( list, i ) type;
 };
 
 #   undef MPL_AUX_LIST_TAIL

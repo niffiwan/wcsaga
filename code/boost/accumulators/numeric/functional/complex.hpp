@@ -19,64 +19,73 @@
 #include <boost/typeof/std/complex.hpp>
 #include <boost/accumulators/numeric/functional_fwd.hpp>
 
-namespace boost { namespace numeric { namespace operators
+namespace boost
 {
-    // So that the stats compile when Sample type is std::complex
-    template<typename T, typename U>
-    typename
-        disable_if<
-            mpl::or_<is_same<T, U>, is_same<std::complex<T>, U> >
-          , std::complex<T>
-        >::type
-    operator *(std::complex<T> ri, U const &u)
-    {
-        // BUGBUG promote result to typeof(T()*u) ?
-        return ri *= static_cast<T>(u);
-    }
-
-    template<typename T, typename U>
-    typename
-        disable_if<
-            mpl::or_<is_same<T, U>, is_same<std::complex<T>, U> >
-          , std::complex<T>
-        >::type
-    operator /(std::complex<T> ri, U const &u)
-    {
-        // BUGBUG promote result to typeof(T()*u) ?
-        return ri /= static_cast<T>(u);
-    }
-
-}}} // namespace boost::numeric::operators
-
-namespace boost { namespace numeric
+namespace numeric
 {
-    namespace detail
-    {
-        template<typename T>
-        struct one_complex
-        {
-            static std::complex<T> const value;
-        };
+namespace operators
+{
+// So that the stats compile when Sample type is std::complex
+template<typename T, typename U>
+typename
+disable_if <
+mpl::or_<is_same<T, U>, is_same<std::complex<T>, U> >
+, std::complex<T>
+>::type
+operator * ( std::complex<T> ri, U const &u )
+{
+	// BUGBUG promote result to typeof(T()*u) ?
+	return ri *= static_cast<T> ( u );
+}
 
-        template<typename T>
-        std::complex<T> const one_complex<T>::value
-          = std::complex<T>(numeric::one<T>::value, numeric::one<T>::value);
-    }
+template<typename T, typename U>
+typename
+disable_if <
+mpl::or_<is_same<T, U>, is_same<std::complex<T>, U> >
+, std::complex<T>
+>::type
+operator / ( std::complex<T> ri, U const &u )
+{
+	// BUGBUG promote result to typeof(T()*u) ?
+	return ri /= static_cast<T> ( u );
+}
 
-    /// INTERNAL ONLY
-    ///
-    template<typename T>
-    struct one<std::complex<T> >
-      : detail::one_complex<T>
-    {
-        typedef one type;
-        typedef std::complex<T> value_type;
-        operator value_type const & () const
-        {
-            return detail::one_complex<T>::value;
-        }
-    };
+}
+}
+} // namespace boost::numeric::operators
 
-}} // namespace boost::numeric
+namespace boost
+{
+namespace numeric
+{
+namespace detail
+{
+template<typename T>
+struct one_complex
+{
+	static std::complex<T> const value;
+};
+
+template<typename T>
+std::complex<T> const one_complex<T>::value
+    = std::complex<T> ( numeric::one<T>::value, numeric::one<T>::value );
+}
+
+/// INTERNAL ONLY
+///
+template<typename T>
+struct one<std::complex<T> >
+		: detail::one_complex<T>
+{
+	typedef one type;
+	typedef std::complex<T> value_type;
+	operator value_type const &() const
+	{
+		return detail::one_complex<T>::value;
+	}
+};
+
+}
+} // namespace boost::numeric
 
 #endif

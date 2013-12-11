@@ -28,7 +28,7 @@
 #error "boost::format uses a local macro that is already defined."
 #endif
 
-// specific workarounds. each header can define BOOS_IO_STD if it 
+// specific workarounds. each header can define BOOS_IO_STD if it
 // needs. (e.g. because of IO_NEEDS_USING_DECLARATION)
 #include <boost/format/detail/workarounds_gcc-2_95.hpp>
 #include <boost/format/detail/workarounds_stlport.hpp>
@@ -51,45 +51,57 @@
 
 // gcc-2.95's native stringstream is not usable
 #if BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
-#define BOOST_FORMAT_IGNORE_STRINGSTREAM  
+#define BOOST_FORMAT_IGNORE_STRINGSTREAM
 #endif
 
 
 // **** Workaround for io streams, stlport and msvc.
 #ifdef BOOST_IO_NEEDS_USING_DECLARATION
-namespace boost {
-  using std::char_traits;
-  using std::basic_ostream;
-  namespace io {
-    using std::basic_ostream;
-    namespace detail {
-      using std::basic_ios;
-      using std::basic_ostream;
-    }
-  }
+namespace boost
+{
+using std::char_traits;
+using std::basic_ostream;
+namespace io
+{
+using std::basic_ostream;
+namespace detail
+{
+using std::basic_ios;
+using std::basic_ostream;
+}
+}
 #if ! defined(BOOST_NO_STD_LOCALE)
-    using std::locale;
-    namespace io {
-        using std::locale;
-        namespace detail {
-            using std::locale;
-        }
-    }
+using std::locale;
+namespace io
+{
+using std::locale;
+namespace detail
+{
+using std::locale;
+}
+}
 #endif // locale
 }
-  // -end N.S. boost
+// -end N.S. boost
 #endif // needs_using_declaration
 
 
-// ***  hide std::locale if it doesnt exist. 
+// ***  hide std::locale if it doesnt exist.
 // this typedef is either std::locale or int, avoids placing ifdefs everywhere
-namespace boost { namespace io { namespace detail {
+namespace boost
+{
+namespace io
+{
+namespace detail
+{
 #if ! defined(BOOST_NO_STD_LOCALE)
-    typedef BOOST_IO_STD locale locale_t;
-#else 
-    typedef int          locale_t;
+typedef BOOST_IO_STD locale locale_t;
+#else
+typedef int          locale_t;
 #endif
-} } }
+}
+}
+}
 
 
 // ----------------------------------------------------------------------------

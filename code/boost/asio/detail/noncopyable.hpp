@@ -23,9 +23,12 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/asio/detail/pop_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 // Redefine the noncopyable class for Borland C++ since that compiler does not
@@ -34,12 +37,12 @@ namespace detail {
 class noncopyable
 {
 protected:
-  noncopyable() {}
-  ~noncopyable() {}
+	noncopyable() {}
+	~noncopyable() {}
 private:
-  noncopyable(const noncopyable&);
-  const noncopyable& operator=(const noncopyable&);
-  char dummy_;
+	noncopyable ( const noncopyable & );
+	const noncopyable &operator= ( const noncopyable & );
+	char dummy_;
 };
 #else
 using boost::noncopyable;

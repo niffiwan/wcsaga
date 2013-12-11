@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -17,9 +17,9 @@
 //
 
 // operation return codes
-#define MULTI_UPDATE_CONTINUE							0				// continue to next screen
-#define MULTI_UPDATE_SHUTTING_DOWN					1				// freespace is exiting to the launcher
-#define MULTI_UPDATE_MAIN_MENU						2				// caller should move back to the main menu
+#define MULTI_UPDATE_CONTINUE                           0               // continue to next screen
+#define MULTI_UPDATE_SHUTTING_DOWN                  1               // freespace is exiting to the launcher
+#define MULTI_UPDATE_MAIN_MENU                      2               // caller should move back to the main menu
 
 
 // -------------------------------------------------------------------------------------------------------------------

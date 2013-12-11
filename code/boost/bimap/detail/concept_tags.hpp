@@ -22,9 +22,12 @@
 #include <boost/mpl/placeholders.hpp>
 #include <boost/mpl/bool.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace detail {
+namespace boost
+{
+namespace bimaps
+{
+namespace detail
+{
 
 /// \brief Tag of {SetType}_of definition classes
 /**
@@ -67,22 +70,22 @@ See also left_based.
 
 struct left_based : ::boost::bimaps::detail::side_based_tag
 {
-    // I run into troubles if I do not define bind for side based tags.
-    // Maybe a more coherent way of binding the relation can be developped.
-    template< class Relation > struct bind_to { typedef void type; };
+	// I run into troubles if I do not define bind for side based tags.
+	// Maybe a more coherent way of binding the relation can be developped.
+	template< class Relation > struct bind_to { typedef void type; };
 
-    typedef mpl::bool_<true>  left_mutable_key;
-    typedef mpl::bool_<true> right_mutable_key;
+	typedef mpl::bool_<true>  left_mutable_key;
+	typedef mpl::bool_<true> right_mutable_key;
 };
 
 struct right_based : ::boost::bimaps::detail::side_based_tag
 {
-    // I run into troubles if I do not define bind for side based tags.
-    // Maybe a more coherent way of binding the relation can be developped.
-    template< class Relation > struct bind_to { typedef void type; };
+	// I run into troubles if I do not define bind for side based tags.
+	// Maybe a more coherent way of binding the relation can be developped.
+	template< class Relation > struct bind_to { typedef void type; };
 
-    typedef mpl::bool_<true>  left_mutable_key;
-    typedef mpl::bool_<true> right_mutable_key;
+	typedef mpl::bool_<true>  left_mutable_key;
+	typedef mpl::bool_<true> right_mutable_key;
 };
 
 #endif // BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES

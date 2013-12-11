@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // split_member.hpp:
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -22,51 +22,61 @@
 
 #include <boost/serialization/access.hpp>
 
-namespace boost {
-namespace archive {
-    namespace detail {
-        template<class Archive> class interface_oarchive;
-        template<class Archive> class interface_iarchive;
-    } // namespace detail
+namespace boost
+{
+namespace archive
+{
+namespace detail
+{
+template<class Archive> class interface_oarchive;
+template<class Archive> class interface_iarchive;
+} // namespace detail
 } // namespace archive
 
-namespace serialization {
-namespace detail {
+namespace serialization
+{
+namespace detail
+{
 
-    template<class Archive, class T>
-    struct member_saver {
-        static void invoke(
-            Archive & ar, 
-            const T & t,
-            const unsigned int file_version
-        ){
-            access::member_save(ar, t, file_version);
-        }
-    };
+template<class Archive, class T>
+struct member_saver
+{
+static void invoke (
+    Archive &ar,
+    const T &t,
+    const unsigned int file_version
+)
+{
+	access::member_save ( ar, t, file_version );
+}
+};
 
-    template<class Archive, class T>
-    struct member_loader {
-        static void invoke(
-            Archive & ar, 
-            T & t,
-            const unsigned int file_version
-        ){
-            access::member_load(ar, t, file_version);
-        }
-    };
+template<class Archive, class T>
+struct member_loader
+{
+static void invoke (
+    Archive &ar,
+    T &t,
+    const unsigned int file_version
+)
+{
+	access::member_load ( ar, t, file_version );
+}
+};
 
 } // detail
 
 template<class Archive, class T>
-inline void split_member(
-    Archive & ar, T & t, const unsigned int file_version
-){
-    typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
-        BOOST_DEDUCED_TYPENAME Archive::is_saving,
-        mpl::identity<detail::member_saver<Archive, T> >, 
-        mpl::identity<detail::member_loader<Archive, T> >
-    >::type typex;
-    typex::invoke(ar, t, file_version);
+inline void split_member (
+    Archive &ar, T &t, const unsigned int file_version
+)
+{
+typedef BOOST_DEDUCED_TYPENAME mpl::eval_if <
+BOOST_DEDUCED_TYPENAME Archive::is_saving,
+                       mpl::identity<detail::member_saver<Archive, T> >,
+                       mpl::identity<detail::member_loader<Archive, T> >
+                       >::type typex;
+typex::invoke ( ar, t, file_version );
 }
 
 } // namespace serialization

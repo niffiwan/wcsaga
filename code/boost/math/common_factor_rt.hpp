@@ -4,13 +4,13 @@
 //  use, modify, sell and distribute this software is granted provided this
 //  copyright notice appears in all copies.  This software is provided "as is"
 //  without express or implied warranty, and with no claim as to its suitability
-//  for any purpose. 
+//  for any purpose.
 
 // boostinspect:nolicense (don't complain about the lack of a Boost license)
 // (Paul Moore hasn't been in contact for years, so there's no way to change the
 // license.)
 
-//  See http://www.boost.org for updates, documentation, and revision history. 
+//  See http://www.boost.org for updates, documentation, and revision history.
 
 #ifndef BOOST_MATH_COMMON_FACTOR_RT_HPP
 #define BOOST_MATH_COMMON_FACTOR_RT_HPP
@@ -31,10 +31,10 @@ namespace math
 //  Forward declarations for function templates  -----------------------------//
 
 template < typename IntegerType >
-    IntegerType  gcd( IntegerType const &a, IntegerType const &b );
+IntegerType  gcd ( IntegerType const &a, IntegerType const &b );
 
 template < typename IntegerType >
-    IntegerType  lcm( IntegerType const &a, IntegerType const &b );
+IntegerType  lcm ( IntegerType const &a, IntegerType const &b );
 
 
 //  Greatest common divisor evaluator class declaration  ---------------------//
@@ -43,12 +43,12 @@ template < typename IntegerType >
 class gcd_evaluator
 {
 public:
-    // Types
-    typedef IntegerType  result_type, first_argument_type, second_argument_type;
+	// Types
+	typedef IntegerType  result_type, first_argument_type, second_argument_type;
 
-    // Function object interface
-    result_type  operator ()( first_argument_type const &a,
-     second_argument_type const &b ) const;
+	// Function object interface
+	result_type  operator () ( first_argument_type const &a,
+	                           second_argument_type const &b ) const;
 
 };  // boost::math::gcd_evaluator
 
@@ -59,12 +59,12 @@ template < typename IntegerType >
 class lcm_evaluator
 {
 public:
-    // Types
-    typedef IntegerType  result_type, first_argument_type, second_argument_type;
+	// Types
+	typedef IntegerType  result_type, first_argument_type, second_argument_type;
 
-    // Function object interface
-    result_type  operator ()( first_argument_type const &a,
-     second_argument_type const &b ) const;
+	// Function object interface
+	result_type  operator () ( first_argument_type const &a,
+	                           second_argument_type const &b ) const;
 
 };  // boost::math::lcm_evaluator
 
@@ -73,243 +73,243 @@ public:
 
 namespace detail
 {
-    // Greatest common divisor for rings (including unsigned integers)
-    template < typename RingType >
-    RingType
-    gcd_euclidean
-    (
-        RingType  a,
-        RingType  b
-    )
-    {
-        // Avoid repeated construction
-        #ifndef __BORLANDC__
-        RingType const  zero = static_cast<RingType>( 0 );
-        #else
-        RingType  zero = static_cast<RingType>( 0 );
-        #endif
-
-        // Reduce by GCD-remainder property [GCD(a,b) == GCD(b,a MOD b)]
-        while ( true )
-        {
-            if ( a == zero )
-                return b;
-            b %= a;
-
-            if ( b == zero )
-                return a;
-            a %= b;
-        }
-    }
-
-    // Greatest common divisor for (signed) integers
-    template < typename IntegerType >
-    inline
-    IntegerType
-    gcd_integer
-    (
-        IntegerType const &  a,
-        IntegerType const &  b
-    )
-    {
-        // Avoid repeated construction
-        IntegerType const  zero = static_cast<IntegerType>( 0 );
-        IntegerType const  result = gcd_euclidean( a, b );
-
-        return ( result < zero ) ? -result : result;
-    }
-
-    // Greatest common divisor for unsigned binary integers
-    template < typename BuiltInUnsigned >
-    BuiltInUnsigned
-    gcd_binary
-    (
-        BuiltInUnsigned  u,
-        BuiltInUnsigned  v
-    )
-    {
-        if ( u && v )
-        {
-            // Shift out common factors of 2
-            unsigned  shifts = 0;
-
-            while ( !(u & 1u) && !(v & 1u) )
-            {
-                ++shifts;
-                u >>= 1;
-                v >>= 1;
-            }
-
-            // Start with the still-even one, if any
-            BuiltInUnsigned  r[] = { u, v };
-            unsigned         which = static_cast<bool>( u & 1u );
-
-            // Whittle down the values via their differences
-            do
-            {
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-                while ( !(r[ which ] & 1u) )
-                {
-                    r[ which ] = (r[which] >> 1);
-                }
+// Greatest common divisor for rings (including unsigned integers)
+template < typename RingType >
+RingType
+gcd_euclidean
+(
+    RingType  a,
+    RingType  b
+)
+{
+	// Avoid repeated construction
+#ifndef __BORLANDC__
+	RingType const  zero = static_cast<RingType> ( 0 );
 #else
-                // Remove factors of two from the even one
-                while ( !(r[ which ] & 1u) )
-                {
-                    r[ which ] >>= 1;
-                }
+	RingType  zero = static_cast<RingType> ( 0 );
 #endif
 
-                // Replace the larger of the two with their difference
-                if ( r[!which] > r[which] )
-                {
-                    which ^= 1u;
-                }
+	// Reduce by GCD-remainder property [GCD(a,b) == GCD(b,a MOD b)]
+	while ( true )
+	{
+		if ( a == zero )
+			return b;
+		b %= a;
 
-                r[ which ] -= r[ !which ];
-            }
-            while ( r[which] );
+		if ( b == zero )
+			return a;
+		a %= b;
+	}
+}
 
-            // Shift-in the common factor of 2 to the residues' GCD
-            return r[ !which ] << shifts;
-        }
-        else
-        {
-            // At least one input is zero, return the other
-            // (adding since zero is the additive identity)
-            // or zero if both are zero.
-            return u + v;
-        }
-    }
+// Greatest common divisor for (signed) integers
+template < typename IntegerType >
+inline
+IntegerType
+gcd_integer
+(
+    IntegerType const   &a,
+    IntegerType const   &b
+)
+{
+	// Avoid repeated construction
+	IntegerType const  zero = static_cast<IntegerType> ( 0 );
+	IntegerType const  result = gcd_euclidean ( a, b );
 
-    // Least common multiple for rings (including unsigned integers)
-    template < typename RingType >
-    inline
-    RingType
-    lcm_euclidean
-    (
-        RingType const &  a,
-        RingType const &  b
-    )
-    {
-        RingType const  zero = static_cast<RingType>( 0 );
-        RingType const  temp = gcd_euclidean( a, b );
+	return ( result < zero ) ? -result : result;
+}
 
-        return ( temp != zero ) ? ( a / temp * b ) : zero;
-    }
+// Greatest common divisor for unsigned binary integers
+template < typename BuiltInUnsigned >
+BuiltInUnsigned
+gcd_binary
+(
+    BuiltInUnsigned  u,
+    BuiltInUnsigned  v
+)
+{
+	if ( u && v )
+	{
+		// Shift out common factors of 2
+		unsigned  shifts = 0;
 
-    // Least common multiple for (signed) integers
-    template < typename IntegerType >
-    inline
-    IntegerType
-    lcm_integer
-    (
-        IntegerType const &  a,
-        IntegerType const &  b
-    )
-    {
-        // Avoid repeated construction
-        IntegerType const  zero = static_cast<IntegerType>( 0 );
-        IntegerType const  result = lcm_euclidean( a, b );
+		while ( ! ( u & 1u ) && ! ( v & 1u ) )
+		{
+			++shifts;
+			u >>= 1;
+			v >>= 1;
+		}
 
-        return ( result < zero ) ? -result : result;
-    }
+		// Start with the still-even one, if any
+		BuiltInUnsigned  r[] = { u, v };
+		unsigned         which = static_cast<bool> ( u & 1u );
 
-    // Function objects to find the best way of computing GCD or LCM
+		// Whittle down the values via their differences
+		do
+		{
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+			while ( ! ( r[ which ] & 1u ) )
+			{
+				r[ which ] = ( r[which] >> 1 );
+			}
+#else
+			// Remove factors of two from the even one
+			while ( ! ( r[ which ] & 1u ) )
+			{
+				r[ which ] >>= 1;
+			}
+#endif
+
+			// Replace the larger of the two with their difference
+			if ( r[!which] > r[which] )
+			{
+				which ^= 1u;
+			}
+
+			r[ which ] -= r[ !which ];
+		}
+		while ( r[which] );
+
+		// Shift-in the common factor of 2 to the residues' GCD
+		return r[ !which ] << shifts;
+	}
+	else
+	{
+		// At least one input is zero, return the other
+		// (adding since zero is the additive identity)
+		// or zero if both are zero.
+		return u + v;
+	}
+}
+
+// Least common multiple for rings (including unsigned integers)
+template < typename RingType >
+inline
+RingType
+lcm_euclidean
+(
+    RingType const   &a,
+    RingType const   &b
+)
+{
+	RingType const  zero = static_cast<RingType> ( 0 );
+	RingType const  temp = gcd_euclidean ( a, b );
+
+	return ( temp != zero ) ? ( a / temp * b ) : zero;
+}
+
+// Least common multiple for (signed) integers
+template < typename IntegerType >
+inline
+IntegerType
+lcm_integer
+(
+    IntegerType const   &a,
+    IntegerType const   &b
+)
+{
+	// Avoid repeated construction
+	IntegerType const  zero = static_cast<IntegerType> ( 0 );
+	IntegerType const  result = lcm_euclidean ( a, b );
+
+	return ( result < zero ) ? -result : result;
+}
+
+// Function objects to find the best way of computing GCD or LCM
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    template < typename T, bool IsSpecialized, bool IsSigned >
-    struct gcd_optimal_evaluator_helper_t
-    {
-        T  operator ()( T const &a, T const &b )
-        {
-            return gcd_euclidean( a, b );
-        }
-    };
+template < typename T, bool IsSpecialized, bool IsSigned >
+struct gcd_optimal_evaluator_helper_t
+{
+	T  operator () ( T const &a, T const &b )
+	{
+		return gcd_euclidean ( a, b );
+	}
+};
 
-    template < typename T >
-    struct gcd_optimal_evaluator_helper_t< T, true, true >
-    {
-        T  operator ()( T const &a, T const &b )
-        {
-            return gcd_integer( a, b );
-        }
-    };
+template < typename T >
+struct gcd_optimal_evaluator_helper_t< T, true, true >
+{
+	T  operator () ( T const &a, T const &b )
+	{
+		return gcd_integer ( a, b );
+	}
+};
 #else
-    template < bool IsSpecialized, bool IsSigned >
-    struct gcd_optimal_evaluator_helper2_t
-    {
-        template < typename T >
-        struct helper
-        {
-            T  operator ()( T const &a, T const &b )
-            {
-                return gcd_euclidean( a, b );
-            }
-        };
-    };
+template < bool IsSpecialized, bool IsSigned >
+struct gcd_optimal_evaluator_helper2_t
+{
+	template < typename T >
+	struct helper
+	{
+		T  operator () ( T const &a, T const &b )
+		{
+			return gcd_euclidean ( a, b );
+		}
+	};
+};
 
-    template < >
-    struct gcd_optimal_evaluator_helper2_t< true, true >
-    {
-        template < typename T >
-        struct helper
-        {
-            T  operator ()( T const &a, T const &b )
-            {
-                return gcd_integer( a, b );
-            }
-        };
-    };
+template < >
+struct gcd_optimal_evaluator_helper2_t< true, true >
+{
+	template < typename T >
+	struct helper
+	{
+		T  operator () ( T const &a, T const &b )
+		{
+			return gcd_integer ( a, b );
+		}
+	};
+};
 
-    template < typename T, bool IsSpecialized, bool IsSigned >
-    struct gcd_optimal_evaluator_helper_t
-        : gcd_optimal_evaluator_helper2_t<IsSpecialized, IsSigned>
-           ::BOOST_NESTED_TEMPLATE helper<T>
-    {
-    };
+template < typename T, bool IsSpecialized, bool IsSigned >
+struct gcd_optimal_evaluator_helper_t
+		: gcd_optimal_evaluator_helper2_t<IsSpecialized, IsSigned>
+		::BOOST_NESTED_TEMPLATE helper<T>
+{
+};
 #endif
 
-    template < typename T >
-    struct gcd_optimal_evaluator
-    {
-        T  operator ()( T const &a, T const &b )
-        {
-            typedef ::std::numeric_limits<T>  limits_type;
+template < typename T >
+struct gcd_optimal_evaluator
+{
+	T  operator () ( T const &a, T const &b )
+	{
+		typedef ::std::numeric_limits<T>  limits_type;
 
-            typedef gcd_optimal_evaluator_helper_t<T,
-             limits_type::is_specialized, limits_type::is_signed>  helper_type;
+		typedef gcd_optimal_evaluator_helper_t<T,
+		        limits_type::is_specialized, limits_type::is_signed>  helper_type;
 
-            helper_type  solver;
+		helper_type  solver;
 
-            return solver( a, b );
-        }
-    };
+		return solver ( a, b );
+	}
+};
 #else // BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-    template < typename T >
-    struct gcd_optimal_evaluator
-    {
-        T  operator ()( T const &a, T const &b )
-        {
-            return gcd_integer( a, b );
-        }
-    };
+template < typename T >
+struct gcd_optimal_evaluator
+{
+	T  operator () ( T const &a, T const &b )
+	{
+		return gcd_integer ( a, b );
+	}
+};
 #endif
 
-    // Specialize for the built-in integers
+// Specialize for the built-in integers
 #define BOOST_PRIVATE_GCD_UF( Ut )                  \
     template < >  struct gcd_optimal_evaluator<Ut>  \
     {  Ut  operator ()( Ut a, Ut b ) const  { return gcd_binary( a, b ); }  }
 
-    BOOST_PRIVATE_GCD_UF( unsigned char );
-    BOOST_PRIVATE_GCD_UF( unsigned short );
-    BOOST_PRIVATE_GCD_UF( unsigned );
-    BOOST_PRIVATE_GCD_UF( unsigned long );
+BOOST_PRIVATE_GCD_UF ( unsigned char );
+BOOST_PRIVATE_GCD_UF ( unsigned short );
+BOOST_PRIVATE_GCD_UF ( unsigned );
+BOOST_PRIVATE_GCD_UF ( unsigned long );
 
 #ifdef BOOST_HAS_LONG_LONG
-    BOOST_PRIVATE_GCD_UF( boost::ulong_long_type );
+BOOST_PRIVATE_GCD_UF ( boost::ulong_long_type );
 #elif defined(BOOST_HAS_MS_INT64)
-    BOOST_PRIVATE_GCD_UF( unsigned __int64 );
+BOOST_PRIVATE_GCD_UF ( unsigned __int64 );
 #endif
 
 #undef BOOST_PRIVATE_GCD_UF
@@ -321,129 +321,129 @@ namespace detail
     b < 0 ? -b : +b ); return static_cast<St>(                    \
     gcd_optimal_evaluator<Ut>()(a_abs, b_abs) ); }  }
 
-    BOOST_PRIVATE_GCD_SF( signed char, unsigned char );
-    BOOST_PRIVATE_GCD_SF( short, unsigned short );
-    BOOST_PRIVATE_GCD_SF( int, unsigned );
-    BOOST_PRIVATE_GCD_SF( long, unsigned long );
+BOOST_PRIVATE_GCD_SF ( signed char, unsigned char );
+BOOST_PRIVATE_GCD_SF ( short, unsigned short );
+BOOST_PRIVATE_GCD_SF ( int, unsigned );
+BOOST_PRIVATE_GCD_SF ( long, unsigned long );
 
-    BOOST_PRIVATE_GCD_SF( char, unsigned char ); // should work even if unsigned
+BOOST_PRIVATE_GCD_SF ( char, unsigned char ); // should work even if unsigned
 
 #ifdef BOOST_HAS_LONG_LONG
-    BOOST_PRIVATE_GCD_SF( boost::long_long_type, boost::ulong_long_type );
+BOOST_PRIVATE_GCD_SF ( boost::long_long_type, boost::ulong_long_type );
 #elif defined(BOOST_HAS_MS_INT64)
-    BOOST_PRIVATE_GCD_SF( __int64, unsigned __int64 );
+BOOST_PRIVATE_GCD_SF ( __int64, unsigned __int64 );
 #endif
 
 #undef BOOST_PRIVATE_GCD_SF
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    template < typename T, bool IsSpecialized, bool IsSigned >
-    struct lcm_optimal_evaluator_helper_t
-    {
-        T  operator ()( T const &a, T const &b )
-        {
-            return lcm_euclidean( a, b );
-        }
-    };
+template < typename T, bool IsSpecialized, bool IsSigned >
+struct lcm_optimal_evaluator_helper_t
+{
+	T  operator () ( T const &a, T const &b )
+	{
+		return lcm_euclidean ( a, b );
+	}
+};
 
-    template < typename T >
-    struct lcm_optimal_evaluator_helper_t< T, true, true >
-    {
-        T  operator ()( T const &a, T const &b )
-        {
-            return lcm_integer( a, b );
-        }
-    };
+template < typename T >
+struct lcm_optimal_evaluator_helper_t< T, true, true >
+{
+	T  operator () ( T const &a, T const &b )
+	{
+		return lcm_integer ( a, b );
+	}
+};
 #else
-    template < bool IsSpecialized, bool IsSigned >
-    struct lcm_optimal_evaluator_helper2_t
-    {
-        template < typename T >
-        struct helper
-        {
-            T  operator ()( T const &a, T const &b )
-            {
-                return lcm_euclidean( a, b );
-            }
-        };
-    };
+template < bool IsSpecialized, bool IsSigned >
+struct lcm_optimal_evaluator_helper2_t
+{
+	template < typename T >
+	struct helper
+	{
+		T  operator () ( T const &a, T const &b )
+		{
+			return lcm_euclidean ( a, b );
+		}
+	};
+};
 
-    template < >
-    struct lcm_optimal_evaluator_helper2_t< true, true >
-    {
-        template < typename T >
-        struct helper
-        {
-            T  operator ()( T const &a, T const &b )
-            {
-                return lcm_integer( a, b );
-            }
-        };
-    };
+template < >
+struct lcm_optimal_evaluator_helper2_t< true, true >
+{
+	template < typename T >
+	struct helper
+	{
+		T  operator () ( T const &a, T const &b )
+		{
+			return lcm_integer ( a, b );
+		}
+	};
+};
 
-    template < typename T, bool IsSpecialized, bool IsSigned >
-    struct lcm_optimal_evaluator_helper_t
-        : lcm_optimal_evaluator_helper2_t<IsSpecialized, IsSigned>
-           ::BOOST_NESTED_TEMPLATE helper<T>
-    {
-    };
+template < typename T, bool IsSpecialized, bool IsSigned >
+struct lcm_optimal_evaluator_helper_t
+		: lcm_optimal_evaluator_helper2_t<IsSpecialized, IsSigned>
+		::BOOST_NESTED_TEMPLATE helper<T>
+{
+};
 #endif
 
-    template < typename T >
-    struct lcm_optimal_evaluator
-    {
-        T  operator ()( T const &a, T const &b )
-        {
-            typedef ::std::numeric_limits<T>  limits_type;
+template < typename T >
+struct lcm_optimal_evaluator
+{
+	T  operator () ( T const &a, T const &b )
+	{
+		typedef ::std::numeric_limits<T>  limits_type;
 
-            typedef lcm_optimal_evaluator_helper_t<T,
-             limits_type::is_specialized, limits_type::is_signed>  helper_type;
+		typedef lcm_optimal_evaluator_helper_t<T,
+		        limits_type::is_specialized, limits_type::is_signed>  helper_type;
 
-            helper_type  solver;
+		helper_type  solver;
 
-            return solver( a, b );
-        }
-    };
+		return solver ( a, b );
+	}
+};
 #else // BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-    template < typename T >
-    struct lcm_optimal_evaluator
-    {
-        T  operator ()( T const &a, T const &b )
-        {
-            return lcm_integer( a, b );
-        }
-    };
+template < typename T >
+struct lcm_optimal_evaluator
+{
+	T  operator () ( T const &a, T const &b )
+	{
+		return lcm_integer ( a, b );
+	}
+};
 #endif
 
-    // Functions to find the GCD or LCM in the best way
-    template < typename T >
-    inline
-    T
-    gcd_optimal
-    (
-        T const &  a,
-        T const &  b
-    )
-    {
-        gcd_optimal_evaluator<T>  solver;
+// Functions to find the GCD or LCM in the best way
+template < typename T >
+inline
+T
+gcd_optimal
+(
+    T const   &a,
+    T const   &b
+)
+{
+	gcd_optimal_evaluator<T>  solver;
 
-        return solver( a, b );
-    }
+	return solver ( a, b );
+}
 
-    template < typename T >
-    inline
-    T
-    lcm_optimal
-    (
-        T const &  a,
-        T const &  b
-    )
-    {
-        lcm_optimal_evaluator<T>  solver;
+template < typename T >
+inline
+T
+lcm_optimal
+(
+    T const   &a,
+    T const   &b
+)
+{
+	lcm_optimal_evaluator<T>  solver;
 
-        return solver( a, b );
-    }
+	return solver ( a, b );
+}
 
 }  // namespace detail
 
@@ -455,11 +455,11 @@ inline
 typename gcd_evaluator<IntegerType>::result_type
 gcd_evaluator<IntegerType>::operator ()
 (
-    first_argument_type const &   a,
-    second_argument_type const &  b
+    first_argument_type const    &a,
+    second_argument_type const   &b
 ) const
 {
-    return detail::gcd_optimal( a, b );
+	return detail::gcd_optimal ( a, b );
 }
 
 
@@ -470,11 +470,11 @@ inline
 typename lcm_evaluator<IntegerType>::result_type
 lcm_evaluator<IntegerType>::operator ()
 (
-    first_argument_type const &   a,
-    second_argument_type const &  b
+    first_argument_type const    &a,
+    second_argument_type const   &b
 ) const
 {
-    return detail::lcm_optimal( a, b );
+	return detail::lcm_optimal ( a, b );
 }
 
 
@@ -485,13 +485,13 @@ inline
 IntegerType
 gcd
 (
-    IntegerType const &  a,
-    IntegerType const &  b
+    IntegerType const   &a,
+    IntegerType const   &b
 )
 {
-    gcd_evaluator<IntegerType>  solver;
+	gcd_evaluator<IntegerType>  solver;
 
-    return solver( a, b );
+	return solver ( a, b );
 }
 
 template < typename IntegerType >
@@ -499,13 +499,13 @@ inline
 IntegerType
 lcm
 (
-    IntegerType const &  a,
-    IntegerType const &  b
+    IntegerType const   &a,
+    IntegerType const   &b
 )
 {
-    lcm_evaluator<IntegerType>  solver;
+	lcm_evaluator<IntegerType>  solver;
 
-    return solver( a, b );
+	return solver ( a, b );
 }
 
 

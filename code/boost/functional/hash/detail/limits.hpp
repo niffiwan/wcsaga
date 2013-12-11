@@ -25,37 +25,40 @@
 
 namespace boost
 {
-    namespace hash_detail
-    {
-        template <class T>
-        struct limits : std::numeric_limits<T> {};
+namespace hash_detail
+{
+template <class T>
+struct limits : std::numeric_limits<T> {};
 
 #if defined(__OpenBSD__) || defined(_STLP_NO_LONG_DOUBLE)
-        template <>
-        struct limits<long double>
-             : std::numeric_limits<long double>
-        {
-            static long double epsilon() {
-                return LDBL_EPSILON;
-            }
+template <>
+struct limits<long double>
+		: std::numeric_limits<long double>
+{
+	static long double epsilon()
+	{
+		return LDBL_EPSILON;
+	}
 
-            static long double (max)() {
-                return LDBL_MAX;
-            }
+	static long double ( max ) ()
+	{
+		return LDBL_MAX;
+	}
 
-            static long double (min)() {
-                return LDBL_MIN;
-            }
+	static long double ( min ) ()
+	{
+		return LDBL_MIN;
+	}
 
-            BOOST_STATIC_CONSTANT(int, digits = LDBL_MANT_DIG);
-            BOOST_STATIC_CONSTANT(int, max_exponent = LDBL_MAX_EXP);
-            BOOST_STATIC_CONSTANT(int, min_exponent = LDBL_MIN_EXP);
+	BOOST_STATIC_CONSTANT ( int, digits = LDBL_MANT_DIG );
+	BOOST_STATIC_CONSTANT ( int, max_exponent = LDBL_MAX_EXP );
+	BOOST_STATIC_CONSTANT ( int, min_exponent = LDBL_MIN_EXP );
 #if defined(_STLP_NO_LONG_DOUBLE)
-            BOOST_STATIC_CONSTANT(int, radix = FLT_RADIX);
+	BOOST_STATIC_CONSTANT ( int, radix = FLT_RADIX );
 #endif
-        };
+};
 #endif // __OpenBSD__
-    }
+}
 }
 
 #endif

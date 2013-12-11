@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,16 +14,19 @@
 #include <boost/units/systems/si/base.hpp>
 #include <boost/units/physical_dimensions/electric_charge.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace si {
+namespace si
+{
 
-typedef unit<electric_charge_dimension,si::system>    electric_charge;
-   
-BOOST_UNITS_STATIC_CONSTANT(coulomb,electric_charge);   
-BOOST_UNITS_STATIC_CONSTANT(coulombs,electric_charge);  
+typedef unit<electric_charge_dimension, si::system>    electric_charge;
+
+BOOST_UNITS_STATIC_CONSTANT ( coulomb, electric_charge );
+BOOST_UNITS_STATIC_CONSTANT ( coulombs, electric_charge );
 
 } // namespace si
 

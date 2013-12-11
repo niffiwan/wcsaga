@@ -27,13 +27,17 @@
 #include <boost/mpl/not.hpp>
 #include <boost/utility/enable_if.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace relation {
+namespace boost
+{
+namespace bimaps
+{
+namespace relation
+{
 
 /// \brief Relation details, mutant idiom and symmetrical metafunctions builders.
 
-namespace detail {
+namespace detail
+{
 
 //@{
 /// \brief Converts a mutant class to a view with zero overhead.
@@ -49,27 +53,27 @@ See also mutant, can_mutate_in.
 template< class View, class Type >
 BOOST_DEDUCED_TYPENAME enable_if< mpl::not_< is_const< Type > >,
 
-View&
+                       View &
 
->::type mutate( Type & m )
+                       >::type mutate ( Type &m )
 {
-    BOOST_MPL_ASSERT((
-        ::boost::mpl::contains<BOOST_DEDUCED_TYPENAME Type::mutant_views,View>
-    ));
-    return *reinterpret_cast< View* >(boost::addressof(m));
+	BOOST_MPL_ASSERT ( (
+	                       ::boost::mpl::contains<BOOST_DEDUCED_TYPENAME Type::mutant_views, View>
+	                   ) );
+	return *reinterpret_cast< View * > ( boost::addressof ( m ) );
 }
 
 template< class View, class Type >
 BOOST_DEDUCED_TYPENAME enable_if< is_const< Type >,
 
-const View&
+                       const View &
 
->::type mutate( Type & m )
+                       >::type mutate ( Type &m )
 {
-    BOOST_MPL_ASSERT((
-        ::boost::mpl::contains<BOOST_DEDUCED_TYPENAME Type::mutant_views,View> 
-    ));
-    return *reinterpret_cast< const View* >(boost::addressof(m));
+	BOOST_MPL_ASSERT ( (
+	                       ::boost::mpl::contains<BOOST_DEDUCED_TYPENAME Type::mutant_views, View>
+	                   ) );
+	return *reinterpret_cast< const View * > ( boost::addressof ( m ) );
 }
 
 //@}

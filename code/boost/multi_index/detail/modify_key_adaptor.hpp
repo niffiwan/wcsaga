@@ -13,31 +13,34 @@
 #pragma once
 #endif
 
-namespace boost{
+namespace boost
+{
 
-namespace multi_index{
+namespace multi_index
+{
 
-namespace detail{
+namespace detail
+{
 
 /* Functional adaptor to resolve modify_key as a call to modify.
  * Preferred over compose_f_gx and stuff cause it eliminates problems
  * with references to references, dealing with function pointers, etc.
  */
 
-template<typename Fun,typename Value,typename KeyFromValue>
+template<typename Fun, typename Value, typename KeyFromValue>
 struct modify_key_adaptor
 {
 
-  modify_key_adaptor(Fun f_,KeyFromValue kfv_):f(f_),kfv(kfv_){}
+	modify_key_adaptor ( Fun f_, KeyFromValue kfv_ ) : f ( f_ ), kfv ( kfv_ ) {}
 
-  void operator()(Value& x)
-  {
-    f(kfv(x));
-  }
+	void operator() ( Value &x )
+	{
+		f ( kfv ( x ) );
+	}
 
 private:
-  Fun          f;
-  KeyFromValue kfv;
+	Fun          f;
+	KeyFromValue kfv;
 };
 
 } /* namespace multi_index::detail */

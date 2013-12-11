@@ -19,42 +19,44 @@
 #include <boost/accumulators/statistics_fwd.hpp>
 #include <boost/accumulators/statistics/count.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 namespace impl
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    // sum_impl
-    template<typename Sample, typename Tag>
-    struct sum_impl
-      : accumulator_base
-    {
-        // for boost::result_of
-        typedef Sample result_type;
+///////////////////////////////////////////////////////////////////////////////
+// sum_impl
+template<typename Sample, typename Tag>
+struct sum_impl
+		: accumulator_base
+{
+	// for boost::result_of
+	typedef Sample result_type;
 
-        template<typename Args>
-        sum_impl(Args const &args)
-          : sum(args[parameter::keyword<Tag>::get() | Sample()])
-        {
-        }
+	template<typename Args>
+	sum_impl ( Args const &args )
+		: sum ( args[parameter::keyword<Tag>::get() | Sample()] )
+	{
+	}
 
-        template<typename Args>
-        void operator ()(Args const &args)
-        {
-            // what about overflow?
-            this->sum += args[parameter::keyword<Tag>::get()];
-        }
+	template<typename Args>
+	void operator () ( Args const &args )
+	{
+		// what about overflow?
+		this->sum += args[parameter::keyword<Tag>::get()];
+	}
 
-        result_type result(dont_care) const
-        {
-            return this->sum;
-        }
+	result_type result ( dont_care ) const
+	{
+		return this->sum;
+	}
 
-    private:
+private:
 
-        Sample sum;
-    };
+	Sample sum;
+};
 
 } // namespace impl
 
@@ -65,36 +67,36 @@ namespace impl
 //
 namespace tag
 {
-    struct sum
-      : depends_on<>
-    {
-        /// INTERNAL ONLY
-        ///
-        typedef accumulators::impl::sum_impl<mpl::_1, tag::sample> impl;
-    };
+struct sum
+		: depends_on<>
+{
+	/// INTERNAL ONLY
+	///
+	typedef accumulators::impl::sum_impl<mpl::_1, tag::sample> impl;
+};
 
-    struct sum_of_weights
-      : depends_on<>
-    {
-        typedef mpl::true_ is_weight_accumulator;
-        /// INTERNAL ONLY
-        ///
-        typedef accumulators::impl::sum_impl<mpl::_2, tag::weight> impl;
-    };
+struct sum_of_weights
+		: depends_on<>
+{
+	typedef mpl::true_ is_weight_accumulator;
+	/// INTERNAL ONLY
+	///
+	typedef accumulators::impl::sum_impl<mpl::_2, tag::weight> impl;
+};
 
-    template<typename VariateType, typename VariateTag>
-    struct sum_of_variates
-      : depends_on<>
-    {
-        /// INTERNAL ONLY
-        ///
-        typedef mpl::always<accumulators::impl::sum_impl<VariateType, VariateTag> > impl;
-    };
+template<typename VariateType, typename VariateTag>
+struct sum_of_variates
+		: depends_on<>
+{
+	/// INTERNAL ONLY
+	///
+	typedef mpl::always<accumulators::impl::sum_impl<VariateType, VariateTag> > impl;
+};
 
-    struct abstract_sum_of_variates
-      : depends_on<>
-    {
-    };
+struct abstract_sum_of_variates
+		: depends_on<>
+{
+};
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -104,13 +106,13 @@ namespace tag
 //
 namespace extract
 {
-    extractor<tag::sum> const sum = {};
-    extractor<tag::sum_of_weights> const sum_of_weights = {};
-    extractor<tag::abstract_sum_of_variates> const sum_of_variates = {};
+extractor<tag::sum> const sum = {};
+extractor<tag::sum_of_weights> const sum_of_weights = {};
+extractor<tag::abstract_sum_of_variates> const sum_of_variates = {};
 
-    BOOST_ACCUMULATORS_IGNORE_GLOBAL(sum)
-    BOOST_ACCUMULATORS_IGNORE_GLOBAL(sum_of_weights)
-    BOOST_ACCUMULATORS_IGNORE_GLOBAL(sum_of_variates)
+BOOST_ACCUMULATORS_IGNORE_GLOBAL ( sum )
+BOOST_ACCUMULATORS_IGNORE_GLOBAL ( sum_of_weights )
+BOOST_ACCUMULATORS_IGNORE_GLOBAL ( sum_of_variates )
 }
 
 using extract::sum;
@@ -122,20 +124,21 @@ using extract::sum_of_variates;
 template<>
 struct as_weighted_feature<tag::sum>
 {
-    typedef tag::weighted_sum type;
+	typedef tag::weighted_sum type;
 };
 
 template<>
 struct feature_of<tag::weighted_sum>
-  : feature_of<tag::sum>
+		: feature_of<tag::sum>
 {};
 
 template<typename VariateType, typename VariateTag>
 struct feature_of<tag::sum_of_variates<VariateType, VariateTag> >
-  : feature_of<tag::abstract_sum_of_variates>
+		: feature_of<tag::abstract_sum_of_variates>
 {
 };
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

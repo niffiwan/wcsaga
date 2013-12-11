@@ -11,7 +11,7 @@
 // -----------------------------------------------------------------------------
 //
 // Usage:
-//      
+//
 // typedef typename select<
 //                      case1,  type1,
 //                      case2,  type2,
@@ -23,19 +23,22 @@
 // bool, and n <= 12.
 
 #ifndef BOOST_IOSTREAMS_SELECT_HPP_INCLUDED
-#define BOOST_IOSTREAMS_SELECT_HPP_INCLUDED   
+#define BOOST_IOSTREAMS_SELECT_HPP_INCLUDED
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif                  
- 
+#endif
+
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/void.hpp>
 
-namespace boost { namespace iostreams { 
+namespace boost
+{
+namespace iostreams
+{
 
 typedef mpl::true_ else_;
 
@@ -63,24 +66,26 @@ template< typename Case1 = mpl::true_,
           typename Type11 = mpl::void_,
           typename Case12 = mpl::true_,
           typename Type12 = mpl::void_ >
-struct select {
-    typedef typename
-            mpl::eval_if<
-                Case1, mpl::identity<Type1>, mpl::eval_if<
-                Case2, mpl::identity<Type2>, mpl::eval_if<
-                Case3, mpl::identity<Type3>, mpl::eval_if<
-                Case4, mpl::identity<Type4>, mpl::eval_if<
-                Case5, mpl::identity<Type5>, mpl::eval_if<
-                Case6, mpl::identity<Type6>, mpl::eval_if<
-                Case7, mpl::identity<Type7>, mpl::eval_if<
-                Case8, mpl::identity<Type8>, mpl::eval_if<
-                Case9, mpl::identity<Type9>, mpl::eval_if<
-                Case10, mpl::identity<Type10>, mpl::eval_if<
-                Case11, mpl::identity<Type11>, mpl::if_<
-                Case12, Type12, mpl::void_ > > > > > > > > > > >
-            >::type type;
+struct select
+{
+	typedef typename
+	mpl::eval_if <
+	Case1, mpl::identity<Type1>, mpl::eval_if <
+	Case2, mpl::identity<Type2>, mpl::eval_if <
+	Case3, mpl::identity<Type3>, mpl::eval_if <
+	Case4, mpl::identity<Type4>, mpl::eval_if <
+	Case5, mpl::identity<Type5>, mpl::eval_if <
+	Case6, mpl::identity<Type6>, mpl::eval_if <
+	Case7, mpl::identity<Type7>, mpl::eval_if <
+	Case8, mpl::identity<Type8>, mpl::eval_if <
+	Case9, mpl::identity<Type9>, mpl::eval_if <
+	Case10, mpl::identity<Type10>, mpl::eval_if <
+	Case11, mpl::identity<Type11>, mpl::if_ <
+	Case12, Type12, mpl::void_ > > > > > > > > > > >
+	>::type type;
 };
 
-} } // End namespaces iostreams, boost.
+}
+} // End namespaces iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_SELECT_HPP_INCLUDED

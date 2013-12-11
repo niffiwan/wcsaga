@@ -11,28 +11,32 @@
 #include <boost/spirit/home/classic/namespace.hpp>
 #include <boost/spirit/home/classic/core/parser.hpp>
 
-namespace boost { namespace spirit {
+namespace boost
+{
+namespace spirit
+{
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-    struct is_nested;
-    struct non_nested;
-    struct is_lexeme;
-    struct non_lexeme;
+struct is_nested;
+struct non_nested;
+struct is_lexeme;
+struct non_lexeme;
 
-    template <
-        typename OpenT, typename ExprT, typename CloseT, 
-        typename CategoryT = plain_parser_category,
-        typename NestedT = non_nested, typename LexemeT = non_lexeme
+template <
+    typename OpenT, typename ExprT, typename CloseT,
+    typename CategoryT = plain_parser_category,
+    typename NestedT = non_nested, typename LexemeT = non_lexeme
     >
-    struct confix_parser;
+struct confix_parser;
 
-    template<typename OpenT, typename CloseT>
-    struct comment_nest_parser;
+template<typename OpenT, typename CloseT>
+struct comment_nest_parser;
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}} // namespace BOOST_SPIRIT_CLASSIC_NS
+}
+} // namespace BOOST_SPIRIT_CLASSIC_NS
 
 #endif
 

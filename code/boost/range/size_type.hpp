@@ -27,49 +27,49 @@
 
 namespace boost
 {
-    namespace detail
-    {
+namespace detail
+{
 
-        //////////////////////////////////////////////////////////////////////////
-        // default
-        //////////////////////////////////////////////////////////////////////////
-    
-        template< typename C >
-        struct range_size
-        {
-            typedef BOOST_DEDUCED_TYPENAME C::size_type type;
-        };
-    
-        //////////////////////////////////////////////////////////////////////////
-        // pair
-        //////////////////////////////////////////////////////////////////////////
-    
-        template< typename Iterator >
-        struct range_size< std::pair<Iterator,Iterator> >
-        {
-            typedef std::size_t type;
-        };
-    
-        //////////////////////////////////////////////////////////////////////////
-        // array
-        //////////////////////////////////////////////////////////////////////////
-    
-        template< typename T, std::size_t sz >
-        struct range_size< T[sz] >
-        {
-            typedef std::size_t type;
-        };
-    }
+//////////////////////////////////////////////////////////////////////////
+// default
+//////////////////////////////////////////////////////////////////////////
 
-    template< class T >
-    struct range_size : 
-        detail::range_size<T>
-    { };
+template< typename C >
+struct range_size
+{
+	typedef BOOST_DEDUCED_TYPENAME C::size_type type;
+};
 
-    template< class T >
-    struct range_size<const T > : range_size<T>
-    { };
-    
+//////////////////////////////////////////////////////////////////////////
+// pair
+//////////////////////////////////////////////////////////////////////////
+
+template< typename Iterator >
+struct range_size< std::pair<Iterator, Iterator> >
+{
+	typedef std::size_t type;
+};
+
+//////////////////////////////////////////////////////////////////////////
+// array
+//////////////////////////////////////////////////////////////////////////
+
+template< typename T, std::size_t sz >
+struct range_size< T[sz] >
+{
+	typedef std::size_t type;
+};
+}
+
+template< class T >
+struct range_size :
+		detail::range_size<T>
+{ };
+
+template< class T >
+struct range_size<const T > : range_size<T>
+{ };
+
 } // namespace boost
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION

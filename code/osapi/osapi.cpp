@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -38,7 +38,7 @@
 #include "graphics/2d.h"
 #include "localization/localize.h"
 
-#define THREADED	// to use the proper set of macros
+#define THREADED    // to use the proper set of macros
 #include "osapi/osapi.h"
 
 
@@ -74,11 +74,11 @@ int Os_debugger_running = 0;
 //
 
 #ifdef THREADED_PROCESS
-	// thread handler for the main message thread
-	DWORD win32_process(DWORD lparam);
+// thread handler for the main message thread
+DWORD win32_process ( DWORD lparam );
 #else
-	DWORD win32_process1(DWORD lparam);
-DWORD win32_process2(DWORD lparam);
+DWORD win32_process1 ( DWORD lparam );
+DWORD win32_process2 ( DWORD lparam );
 #endif
 
 // Fills in the Os_debugger_running with non-zero if debugger detected.
@@ -88,10 +88,10 @@ void os_check_debugger();
 void os_deinit();
 
 // go through all windows and try and find the one that matches the search string
-BOOL __stdcall os_enum_windows(HWND hwnd, char* search_string);
+BOOL __stdcall os_enum_windows ( HWND hwnd, char *search_string );
 
 // message handler for the main thread
-LRESULT CALLBACK win32_message_handler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK win32_message_handler ( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam );
 
 
 // ----------------------------------------------------------------------------------------------------
@@ -100,15 +100,15 @@ LRESULT CALLBACK win32_message_handler(HWND hwnd, UINT msg, WPARAM wParam, LPARA
 
 // detect home/base directory  (placeholder for possible future Win32 userdir support, just returns current directory for now)
 char Cur_path[MAX_PATH];
-const char* detect_home(void)
+const char *detect_home ( void )
 {
 	//if ( strlen(Cfile_root_dir) )
-	//	return Cfile_root_dir;
+	//  return Cfile_root_dir;
 
 	//memset( Cur_path, 0, MAX_PATH_LEN );
 	//GetCurrentDirectory( MAX_PATH_LEN-1, Cur_path );
 
-	SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, Cur_path);
+	SHGetFolderPath ( NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, Cur_path );
 
 	return Cur_path;
 }
@@ -120,17 +120,17 @@ void os_set_process_affinity()
 	HANDLE pHandle = GetCurrentProcess();
 	DWORD pMaskProcess = 0, pMaskSystem = 0;
 
-	if (GetProcessAffinityMask(pHandle, &pMaskProcess, &pMaskSystem))
+	if ( GetProcessAffinityMask ( pHandle, &pMaskProcess, &pMaskSystem ) )
 	{
 		// only do this if we have at least 2 procs
-		if (pMaskProcess >= 3)
+		if ( pMaskProcess >= 3 )
 		{
 			// prefer running on the second processor by default
-			pMaskProcess = os_config_read_uint(NULL, "ProcessorAffinity", 2);
+			pMaskProcess = os_config_read_uint ( NULL, "ProcessorAffinity", 2 );
 
-			if (pMaskProcess > 0)
+			if ( pMaskProcess > 0 )
 			{
-				SetProcessAffinityMask(pHandle, pMaskProcess);
+				SetProcessAffinityMask ( pHandle, pMaskProcess );
 			}
 		}
 	}
@@ -138,31 +138,31 @@ void os_set_process_affinity()
 
 // If app_name is NULL or ommited, then TITLE is used
 // for the app name, which is where registry keys are stored.
-void os_init(char* wclass, char* title, char* app_name, char* version_string)
+void os_init ( char *wclass, char *title, char *app_name, char *version_string )
 {
 #ifndef NDEBUG
-	outwnd_init(1);
+	outwnd_init ( 1 );
 #endif
 
-	os_init_registry_stuff(Osreg_company_name, title, version_string);
+	os_init_registry_stuff ( Osreg_company_name, title, version_string );
 
-	strcpy_s(szWinTitle, title);
-	strcpy_s(szWinClass, wclass);
+	strcpy_s ( szWinTitle, title );
+	strcpy_s ( szWinClass, wclass );
 
-	INITIALIZE_CRITICAL_SECTION(Os_lock);
+	INITIALIZE_CRITICAL_SECTION ( Os_lock );
 	/*
-		#ifdef THREADED_PROCESS
-			// Create an even to signal that the window is created, 
-			// so that we don't return from this function until 
-			// the window is all properly created.
-			HANDLE Window_created = CreateEvent( NULL, FALSE, FALSE, NULL );
-			hThread = CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)win32_process, Window_created, 0, &ThreadID );
-			if ( WaitForSingleObject( Window_created, 5000 )==WAIT_TIMEOUT)	{			//INFINITE );
-				mprintf(( "Wait timeout!\n" ));
-			}
-			CloseHandle(Window_created);
-			Window_created = NULL;
-		#endif // THREADED
+	    #ifdef THREADED_PROCESS
+	        // Create an even to signal that the window is created,
+	        // so that we don't return from this function until
+	        // the window is all properly created.
+	        HANDLE Window_created = CreateEvent( NULL, FALSE, FALSE, NULL );
+	        hThread = CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)win32_process, Window_created, 0, &ThreadID );
+	        if ( WaitForSingleObject( Window_created, 5000 )==WAIT_TIMEOUT) {           //INFINITE );
+	            mprintf(( "Wait timeout!\n" ));
+	        }
+	        CloseHandle(Window_created);
+	        Window_created = NULL;
+	    #endif // THREADED
 	*/
 	// initialized
 	Os_inited = 1;
@@ -173,14 +173,14 @@ void os_init(char* wclass, char* title, char* app_name, char* version_string)
 	// deal with processor affinity
 	os_set_process_affinity();
 
-	atexit(os_deinit);
+	atexit ( os_deinit );
 }
 
 // set the main window title
-void os_set_title(char* title)
+void os_set_title ( char *title )
 {
-	strcpy_s(szWinTitle, title);
-	SetWindowText(hwndApp, szWinTitle);
+	strcpy_s ( szWinTitle, title );
+	SetWindowText ( hwndApp, szWinTitle );
 }
 
 extern void gr_opengl_shutdown();
@@ -188,16 +188,16 @@ extern void gr_opengl_shutdown();
 // call at program end
 void os_cleanup()
 {
-	if (gr_screen.mode == GR_OPENGL)
+	if ( gr_screen.mode == GR_OPENGL )
 		gr_opengl_shutdown();
 
-	if (dcApp != NULL)
+	if ( dcApp != NULL )
 	{
-		ReleaseDC(hwndApp, dcApp);
+		ReleaseDC ( hwndApp, dcApp );
 	}
 
 	// destroy the window (takes care of a lot of window related cleanup and sys messages)
-	DestroyWindow(hwndApp);
+	DestroyWindow ( hwndApp );
 
 #ifndef NDEBUG
 	outwnd_close();
@@ -216,44 +216,44 @@ int os_foreground()
 // Returns the handle to the main window
 uint os_get_window()
 {
-	return (uint)hwndApp;
+	return ( uint ) hwndApp;
 }
 
 uint os_get_dc()
 {
-	if (dcApp == NULL)
+	if ( dcApp == NULL )
 	{
-		dcApp = GetDC(hwndApp);
+		dcApp = GetDC ( hwndApp );
 	}
 
-	return (uint)dcApp;
+	return ( uint ) dcApp;
 }
 
 // Returns the handle to the main window
-void os_set_window(uint new_handle)
+void os_set_window ( uint new_handle )
 {
-	hwndApp = (HWND)new_handle;
+	hwndApp = ( HWND ) new_handle;
 }
 
 
 // process management -----------------------------------------------------------------
 
 // Sleeps for n milliseconds or until app becomes active.
-void os_sleep(int ms)
+void os_sleep ( int ms )
 {
-	Sleep(ms);
+	Sleep ( ms );
 }
 
 // Used to stop message processing
 void os_suspend()
 {
-	ENTER_CRITICAL_SECTION(Os_lock);
+	ENTER_CRITICAL_SECTION ( Os_lock );
 }
 
 // resume message processing
 void os_resume()
 {
-	LEAVE_CRITICAL_SECTION(Os_lock);
+	LEAVE_CRITICAL_SECTION ( Os_lock );
 }
 
 
@@ -264,48 +264,48 @@ void os_resume()
 #ifdef THREADED_PROCESS
 
 // thread handler for the main message thread
-DWORD win32_process(DWORD lparam)
+DWORD win32_process ( DWORD lparam )
 {
-/*	MSG msg;
-	HANDLE Window_created = (HANDLE)lparam;
+	/*  MSG msg;
+	    HANDLE Window_created = (HANDLE)lparam;
 
-	if ( !win32_create_window() )
-		return 0;
+	    if ( !win32_create_window() )
+	        return 0;
 
-	// Let the app continue once the window is created
-	SetEvent(Window_created);
+	    // Let the app continue once the window is created
+	    SetEvent(Window_created);
 
-	while (1)	{	
-		if (WaitMessage() == TRUE)	{
-			ENTER_CRITICAL_SECTION( Os_lock );			
-			while(PeekMessage(&msg,0,0,0,PM_REMOVE))	{
-				if ( msg.message == WM_DESTROY )	{
-					LEAVE_CRITICAL_SECTION( Os_lock );
+	    while (1)   {
+	        if (WaitMessage() == TRUE)  {
+	            ENTER_CRITICAL_SECTION( Os_lock );
+	            while(PeekMessage(&msg,0,0,0,PM_REMOVE))    {
+	                if ( msg.message == WM_DESTROY )    {
+	                    LEAVE_CRITICAL_SECTION( Os_lock );
 
-					// cleanup and exit this thread!!
-					DELETE_CRITICAL_SECTION( Os_lock );
-					return 0;
-				}
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-			LEAVE_CRITICAL_SECTION( Os_lock );
-		} 
-	}*/
+	                    // cleanup and exit this thread!!
+	                    DELETE_CRITICAL_SECTION( Os_lock );
+	                    return 0;
+	                }
+	                TranslateMessage(&msg);
+	                DispatchMessage(&msg);
+	            }
+	            LEAVE_CRITICAL_SECTION( Os_lock );
+	        }
+	    }*/
 
 	return 0;
 }
 
 #else
 
-DWORD win32_process(DWORD lparam)
+DWORD win32_process ( DWORD lparam )
 {
 	MSG msg;
 
-	while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
+	while ( PeekMessage ( &msg, 0, 0, 0, PM_REMOVE ) )
 	{
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+		TranslateMessage ( &msg );
+		DispatchMessage ( &msg );
 	}
 
 	return 0;
@@ -319,73 +319,73 @@ void os_check_debugger()
 	char search_string[256];
 	char myname[128];
 	int namelen;
-	char* p;
+	char *p;
 
-	Os_debugger_running = 0;		// Assume its not
+	Os_debugger_running = 0;        // Assume its not
 
 	// Find my EXE file name
-	hMod = GetModuleHandle(NULL);
-	if (!hMod)
+	hMod = GetModuleHandle ( NULL );
+	if ( !hMod )
 		return;
-	namelen = GetModuleFileName(hMod, myname, 127);
-	if (namelen < 1)
+	namelen = GetModuleFileName ( hMod, myname, 127 );
+	if ( namelen < 1 )
 		return;
 
 	// Strip off the .EXE
-	p = strstr(myname, ".exe");
-	if (!p)
+	p = strstr ( myname, ".exe" );
+	if ( !p )
 		return;
 	*p = '\0';
 
 	// Move p to point to first letter of EXE filename
-	while ((*p != '\\') && (*p != '/') && (*p != ':'))
+	while ( ( *p != '\\' ) && ( *p != '/' ) && ( *p != ':' ) )
 		p--;
 	p++;
-	if (strlen(p) < 1)
+	if ( strlen ( p ) < 1 )
 		return;
 
 	// Build what the debugger's window title would be if the debugger is running...
-	sprintf(search_string, "[run] - %s -", p);
+	sprintf ( search_string, "[run] - %s -", p );
 
 	// ... and then search for it.
-	EnumWindows((int (__stdcall*)(struct HWND__*, long))os_enum_windows, (long)&search_string);
+	EnumWindows ( ( int ( __stdcall * ) ( struct HWND__ *, long ) ) os_enum_windows, ( long ) &search_string );
 }
 
 // called at shutdown. Makes sure all thread processing terminates.
 void os_deinit()
 {
-	if (hThread)
+	if ( hThread )
 	{
-		CloseHandle(hThread);
+		CloseHandle ( hThread );
 		hThread = NULL;
 	}
 }
 
 // go through all windows and try and find the one that matches the search string
-BOOL __stdcall os_enum_windows(HWND hwnd, char* search_string)
+BOOL __stdcall os_enum_windows ( HWND hwnd, char *search_string )
 {
 	char tmp[128];
 	int len;
 
-	len = GetWindowText(hwnd, tmp, 127);
+	len = GetWindowText ( hwnd, tmp, 127 );
 
-	if (len)
+	if ( len )
 	{
-		if (strstr(tmp, search_string))
+		if ( strstr ( tmp, search_string ) )
 		{
-			Os_debugger_running = 1;		// found the search string!
-			return FALSE;	// stop enumerating windows
+			Os_debugger_running = 1;        // found the search string!
+			return FALSE;   // stop enumerating windows
 		}
 	}
 
-	return TRUE;	// continue enumeration
+	return TRUE;    // continue enumeration
 }
 
 void change_window_active_state()
 {
-	if (fAppActive != fOldAppActive)
+	if ( fAppActive != fOldAppActive )
 	{
-		if (fAppActive)
+		if ( fAppActive )
 		{
 			// maximize it
 			joy_reacquire_ff();
@@ -393,41 +393,41 @@ void change_window_active_state()
 			game_unpause();
 
 #ifdef THREADED_PROCESS
-			SetThreadPriority( hThread, THREAD_PRIORITY_HIGHEST );
+			SetThreadPriority ( hThread, THREAD_PRIORITY_HIGHEST );
 #endif
 
-			if (!Is_standalone)
+			if ( !Is_standalone )
 				disableWindowsKey();
 
-			if (!Cmdline_window)
+			if ( !Cmdline_window )
 			{
-				SetWindowPos(hwndApp, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+				SetWindowPos ( hwndApp, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE );
 			}
 		}
 		else
 		{
 			joy_unacquire_ff();
 
-			if (Mouse_hidden)
+			if ( Mouse_hidden )
 				Mouse_hidden = 0;
 
 			// Pause sounds and put up pause screen if necessary
 			game_pause();
 
 #ifdef THREADED_PROCESS
-			SetThreadPriority( hThread, THREAD_PRIORITY_NORMAL );
+			SetThreadPriority ( hThread, THREAD_PRIORITY_NORMAL );
 #endif
 
-			if (!Is_standalone)
+			if ( !Is_standalone )
 				enableWindowsKey();
 
-			if (!Cmdline_window)
+			if ( !Cmdline_window )
 			{
-				SetWindowPos(hwndApp, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+				SetWindowPos ( hwndApp, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE );
 			}
 		}
 
-		gr_activate(fAppActive);
+		gr_activate ( fAppActive );
 
 		fOldAppActive = fAppActive;
 	}
@@ -436,17 +436,17 @@ void change_window_active_state()
 int Got_message = 0;
 extern bool Messagebox_active;
 // message handler for the main thread
-LRESULT CALLBACK win32_message_handler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK win32_message_handler ( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
 	static bool isEscapeDown = false;
 	// Got_message++;
 
-	switch (msg)
+	switch ( msg )
 	{
 
 	case WM_QUERYNEWPALETTE:
 		// mprintf(( "WM: QueryNewPalette\n" ));
-		return TRUE;	// Say that I've realized my own palette
+		return TRUE;    // Say that I've realized my own palette
 		break;
 	case WM_PALETTECHANGED:
 		// mprintf(( "WM: PaletteChanged\n" ));
@@ -460,27 +460,27 @@ LRESULT CALLBACK win32_message_handler(HWND hwnd, UINT msg, WPARAM wParam, LPARA
 		break;
 
 	case WM_LBUTTONDOWN:
-		mouse_mark_button(MOUSE_LEFT_BUTTON, 1);
+		mouse_mark_button ( MOUSE_LEFT_BUTTON, 1 );
 		break;
 
 	case WM_LBUTTONUP:
-		mouse_mark_button(MOUSE_LEFT_BUTTON, 0);
+		mouse_mark_button ( MOUSE_LEFT_BUTTON, 0 );
 		break;
 
 	case WM_RBUTTONDOWN:
-		mouse_mark_button(MOUSE_RIGHT_BUTTON, 1);
+		mouse_mark_button ( MOUSE_RIGHT_BUTTON, 1 );
 		break;
 
 	case WM_RBUTTONUP:
-		mouse_mark_button(MOUSE_RIGHT_BUTTON, 0);
+		mouse_mark_button ( MOUSE_RIGHT_BUTTON, 0 );
 		break;
 
 	case WM_MBUTTONDOWN:
-		mouse_mark_button(MOUSE_MIDDLE_BUTTON, 1);
+		mouse_mark_button ( MOUSE_MIDDLE_BUTTON, 1 );
 		break;
 
 	case WM_MBUTTONUP:
-		mouse_mark_button(MOUSE_MIDDLE_BUTTON, 0);
+		mouse_mark_button ( MOUSE_MIDDLE_BUTTON, 0 );
 		break;
 
 	case WM_TIMER:
@@ -491,177 +491,177 @@ LRESULT CALLBACK win32_message_handler(HWND hwnd, UINT msg, WPARAM wParam, LPARA
 
 	case WM_SYSKEYDOWN:
 	case WM_KEYDOWN:
+	{
+		int nVirtKey;
+		uint lKeyData;
+
+		int latency;
+		latency = timeGetTime() - GetMessageTime();
+		if ( latency < 0 )
+			latency = 0;
+
+		nVirtKey = ( int ) wParam; // virtual-key code
+		lKeyData = ( lParam >> 16 ) & 255;        // key data
+		if ( ( lParam >> 16 ) & 256 )
+			lKeyData += 0x80;
+
+		// Fix up print screen, whose OEM code is wrong under 95.
+		if ( nVirtKey == VK_SNAPSHOT )
 		{
-			int nVirtKey;
-			uint lKeyData;
-
-			int latency;
-			latency = timeGetTime() - GetMessageTime();
-			if (latency < 0)
-				latency = 0;
-
-			nVirtKey = (int)wParam;    // virtual-key code 
-			lKeyData = (lParam >> 16) & 255;          // key data 
-			if ((lParam >> 16) & 256)
-				lKeyData += 0x80;
-
-			// Fix up print screen, whose OEM code is wrong under 95.
-			if (nVirtKey == VK_SNAPSHOT)
-			{
-				lKeyData = KEY_PRINT_SCRN;
-			}
-
-			if (lKeyData == KEY_RSHIFT)  // either shift is just a shift to us..
-				lKeyData = KEY_LSHIFT;
-
-			if (lKeyData == KEY_RALT)  // Same with alt keys..
-				lKeyData = KEY_LALT;
-
-			key_mark(lKeyData, 1, latency);
-
-			if (lKeyData == KEY_ESC)
-			{
-				isEscapeDown = true;
-			}
+			lKeyData = KEY_PRINT_SCRN;
 		}
-		break;
+
+		if ( lKeyData == KEY_RSHIFT ) // either shift is just a shift to us..
+			lKeyData = KEY_LSHIFT;
+
+		if ( lKeyData == KEY_RALT ) // Same with alt keys..
+			lKeyData = KEY_LALT;
+
+		key_mark ( lKeyData, 1, latency );
+
+		if ( lKeyData == KEY_ESC )
+		{
+			isEscapeDown = true;
+		}
+	}
+	break;
 
 	case WM_SYSKEYUP:
 	case WM_KEYUP:
+	{
+		int nVirtKey;
+		uint lKeyData;
+
+		int latency;
+		latency = timeGetTime() - GetMessageTime();
+		if ( latency < 0 )
+			latency = 0;
+
+		nVirtKey = ( int ) wParam; // virtual-key code
+		lKeyData = ( lParam >> 16 ) & 255;        // key data
+		if ( ( lParam >> 16 ) & 256 )
+			lKeyData += 0x80;
+
+		// Fix up print screen, whose OEM code is wrong under 95.
+		if ( nVirtKey == VK_SNAPSHOT )
 		{
-			int nVirtKey;
-			uint lKeyData;
+			lKeyData = KEY_PRINT_SCRN;
+		}
 
-			int latency;
-			latency = timeGetTime() - GetMessageTime();
-			if (latency < 0)
-				latency = 0;
+		if ( lKeyData == KEY_RSHIFT ) // either shift is just a shift to us..
+			lKeyData = KEY_LSHIFT;
 
-			nVirtKey = (int)wParam;    // virtual-key code 
-			lKeyData = (lParam >> 16) & 255;          // key data 
-			if ((lParam >> 16) & 256)
-				lKeyData += 0x80;
+		if ( lKeyData == KEY_RALT ) // Same with alt keys..
+			lKeyData = KEY_LALT;
 
-			// Fix up print screen, whose OEM code is wrong under 95.
-			if (nVirtKey == VK_SNAPSHOT)
+		//          mprintf(( "Key up = 0x%x|%x\n", lKeyData, nVirtKey ));
+		if ( lKeyData == 0xB7 )
+		{
+			// Hack for PrintScreen and ESC which only send one up message!
+			key_mark ( lKeyData, 1, latency );
+			key_mark ( lKeyData, 0, latency );
+
+		}
+		else
+		{
+			// For some reason we sometimes miss the WM_KEYDOWN for the ESC key.
+			if ( lKeyData == KEY_ESC )
 			{
-				lKeyData = KEY_PRINT_SCRN;
-			}
-
-			if (lKeyData == KEY_RSHIFT)  // either shift is just a shift to us..
-				lKeyData = KEY_LSHIFT;
-
-			if (lKeyData == KEY_RALT)  // Same with alt keys..
-				lKeyData = KEY_LALT;
-
-			//			mprintf(( "Key up = 0x%x|%x\n", lKeyData, nVirtKey ));
-			if (lKeyData == 0xB7)
-			{
-				// Hack for PrintScreen and ESC which only send one up message!
-				key_mark(lKeyData, 1, latency);
-				key_mark(lKeyData, 0, latency);
-
-			}
-			else
-			{
-				// For some reason we sometimes miss the WM_KEYDOWN for the ESC key.
-				if (lKeyData == KEY_ESC)
+				if ( !isEscapeDown )
 				{
-					if (!isEscapeDown)
-					{
-						key_mark(lKeyData, 1, latency);
-					}
-
-					isEscapeDown = false;
+					key_mark ( lKeyData, 1, latency );
 				}
 
-				key_mark(lKeyData, 0, latency);
+				isEscapeDown = false;
 			}
+
+			key_mark ( lKeyData, 0, latency );
 		}
-		break;
+	}
+	break;
 
 	case WM_KILLFOCUS:
-		{
-			if (Messagebox_active)
-				break;
-
-			key_lost_focus();
-			mouse_lost_focus();
-			if (!Is_standalone)
-				gr_activate(0);
+	{
+		if ( Messagebox_active )
 			break;
-		}
+
+		key_lost_focus();
+		mouse_lost_focus();
+		if ( !Is_standalone )
+			gr_activate ( 0 );
+		break;
+	}
 
 	case WM_SETFOCUS:
-		{
-			if (Messagebox_active)
-				break;
-
-			key_got_focus();
-			mouse_got_focus();
-			if (!Is_standalone)
-				gr_activate(1);
+	{
+		if ( Messagebox_active )
 			break;
-		}
+
+		key_got_focus();
+		mouse_got_focus();
+		if ( !Is_standalone )
+			gr_activate ( 1 );
+		break;
+	}
 
 
 	case WM_ACTIVATE:
-		{
-			if (Messagebox_active)
-				break;
-
-			int flag = LOWORD(wParam);
-			fAppActive = ((flag == WA_ACTIVE) || (flag == WA_CLICKACTIVE)) ? TRUE : FALSE;
-			change_window_active_state();
+	{
+		if ( Messagebox_active )
 			break;
-		}
+
+		int flag = LOWORD ( wParam );
+		fAppActive = ( ( flag == WA_ACTIVE ) || ( flag == WA_CLICKACTIVE ) ) ? TRUE : FALSE;
+		change_window_active_state();
+		break;
+	}
 
 	case WM_ACTIVATEAPP:
-		if (Messagebox_active)
+		if ( Messagebox_active )
 			break;
 
-		fAppActive = (BOOL)wParam;
+		fAppActive = ( BOOL ) wParam;
 		change_window_active_state();
 		break;
 
 	case WM_DESTROY:
 		// mprintf(( "WM_DESTROY called\n" ));
-		PostQuitMessage(0);
+		PostQuitMessage ( 0 );
 		break;
 
 	case WM_CLOSE:
-		gameseq_post_event(GS_EVENT_QUIT_GAME);
+		gameseq_post_event ( GS_EVENT_QUIT_GAME );
 		break;
 
 	case WM_SYSCOMMAND:
 		// mprintf(( "Sys command called '%x'\n", wParam ));
-		if (wParam != SC_SCREENSAVE)
+		if ( wParam != SC_SCREENSAVE )
 		{
-			return DefWindowProc(hwnd, msg, wParam, lParam);
+			return DefWindowProc ( hwnd, msg, wParam, lParam );
 		}
 		break;
 
 		/*
-			case MM_WIM_DATA:
-				rtvoice_stream_data((uint)hwnd, (uint)wParam, (uint)lParam);
-				break;
+		    case MM_WIM_DATA:
+		        rtvoice_stream_data((uint)hwnd, (uint)wParam, (uint)lParam);
+		        break;
 		*/
 #ifdef FS2_VOICER
-    case WM_RECOEVENT:
-		if ( Game_mode & GM_IN_MISSION && Cmdline_voice_recognition)
+	case WM_RECOEVENT:
+		if ( Game_mode & GM_IN_MISSION && Cmdline_voice_recognition )
 		{
-			VOICEREC_process_event( hwnd );
+			VOICEREC_process_event ( hwnd );
 		}
-        break;
+		break;
 #endif
 
-		// report back that we handle this ourselves (with gr_clear()) in order to
-		// prevent flickering (especially with movies)
+	// report back that we handle this ourselves (with gr_clear()) in order to
+	// prevent flickering (especially with movies)
 	case WM_ERASEBKGND:
 		return TRUE;
 
 	default:
-		return DefWindowProc(hwnd, msg, wParam, lParam);
+		return DefWindowProc ( hwnd, msg, wParam, lParam );
 		break;
 	}
 
@@ -669,75 +669,75 @@ LRESULT CALLBACK win32_message_handler(HWND hwnd, UINT msg, WPARAM wParam, LPARA
 }
 
 // create the main window
-void win32_create_window(int width, int height)
+void win32_create_window ( int width, int height )
 {
-	WNDCLASSEX wclass;							// Huh?
-	HINSTANCE hInst = GetModuleHandle(NULL);
+	WNDCLASSEX wclass;                          // Huh?
+	HINSTANCE hInst = GetModuleHandle ( NULL );
 
-	if (hwndApp != NULL)
+	if ( hwndApp != NULL )
 	{
-		if (dcApp != NULL)
+		if ( dcApp != NULL )
 		{
-			ReleaseDC(hwndApp, dcApp);
+			ReleaseDC ( hwndApp, dcApp );
 			dcApp = NULL;
 		}
 
-		DestroyWindow(hwndApp);
+		DestroyWindow ( hwndApp );
 		hwndApp = NULL;
 	}
 
-	memset(&wclass, 0, sizeof(WNDCLASSEX));
+	memset ( &wclass, 0, sizeof ( WNDCLASSEX ) );
 
 	wclass.hInstance = hInst;
 	wclass.lpszClassName = szWinClass;
-	wclass.lpfnWndProc = (WNDPROC)win32_message_handler;
+	wclass.lpfnWndProc = ( WNDPROC ) win32_message_handler;
 
-	//	if (Cmdline_window) {
-	//		wclass.style			= CS_VREDRAW | CS_HREDRAW | CS_OWNDC;
-	//	} else {
-	//		wclass.style			= CS_BYTEALIGNCLIENT | CS_VREDRAW | CS_HREDRAW;
-	//	}
-	wclass.style = CS_OWNDC;	// using CS_OWNDC for better Win9x/WinME support (I think it's implied with WinNT+)
+	//  if (Cmdline_window) {
+	//      wclass.style            = CS_VREDRAW | CS_HREDRAW | CS_OWNDC;
+	//  } else {
+	//      wclass.style            = CS_BYTEALIGNCLIENT | CS_VREDRAW | CS_HREDRAW;
+	//  }
+	wclass.style = CS_OWNDC;    // using CS_OWNDC for better Win9x/WinME support (I think it's implied with WinNT+)
 
-	wclass.cbSize = sizeof(WNDCLASSEX);
-	wclass.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_APP_ICON));
-	wclass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wclass.lpszMenuName = NULL;	//"FreeSpaceMenu";
+	wclass.cbSize = sizeof ( WNDCLASSEX );
+	wclass.hIcon = LoadIcon ( hInst, MAKEINTRESOURCE ( IDI_APP_ICON ) );
+	wclass.hCursor = LoadCursor ( NULL, IDC_ARROW );
+	wclass.lpszMenuName = NULL; //"FreeSpaceMenu";
 	wclass.cbClsExtra = 0;
 	wclass.cbWndExtra = 0;
 	// set background to erase/clear with a black brush
 	// (NULL means that we had to do it ourselves, and created a white-screen problem)
-	wclass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	wclass.hbrBackground = ( HBRUSH ) GetStockObject ( BLACK_BRUSH );
 
-	if (!RegisterClassEx(&wclass))
+	if ( !RegisterClassEx ( &wclass ) )
 	{
-		Error(LOCATION, "FATAL ERROR:  Unable to register window class!!");
+		Error ( LOCATION, "FATAL ERROR:  Unable to register window class!!" );
 	}
 
 	int style = WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE;
 
-	if (Cmdline_window)
-		style |= (WS_CAPTION | WS_SYSMENU | WS_BORDER);
+	if ( Cmdline_window )
+		style |= ( WS_CAPTION | WS_SYSMENU | WS_BORDER );
 
 	int x_add, y_add;
 	int start_x, start_y;
 
-	if (Cmdline_window)
+	if ( Cmdline_window )
 	{
 		RECT my_rect;
 
-		// make sure we adjust for the actual window border	
-		x_add = GetSystemMetrics(SM_CXFIXEDFRAME) * 2;
-		y_add = 2 * GetSystemMetrics(SM_CYFIXEDFRAME) + GetSystemMetrics(SM_CYCAPTION);
+		// make sure we adjust for the actual window border
+		x_add = GetSystemMetrics ( SM_CXFIXEDFRAME ) * 2;
+		y_add = 2 * GetSystemMetrics ( SM_CYFIXEDFRAME ) + GetSystemMetrics ( SM_CYCAPTION );
 
-		GetWindowRect(GetDesktopWindow(), &my_rect);
+		GetWindowRect ( GetDesktopWindow(), &my_rect );
 
-		start_x = (my_rect.right - width - x_add) / 2;
-		start_y = (my_rect.bottom - height - y_add) / 2;
+		start_x = ( my_rect.right - width - x_add ) / 2;
+		start_y = ( my_rect.bottom - height - y_add ) / 2;
 
-		if (start_x < 0)
+		if ( start_x < 0 )
 			start_x = 0;
-		if (start_y < 0)
+		if ( start_y < 0 )
 			start_y = 0;
 	}
 	else
@@ -748,39 +748,39 @@ void win32_create_window(int width, int height)
 
 	// we don't sicky TOPMOST for windowed mode since we wouldn't be able to bring
 	// the debug window (or anything else) to the true foreground otherwise
-	hwndApp = CreateWindowEx((Cmdline_window || Cmdline_fullscreen_window) ? 0 : WS_EX_TOPMOST,
-		szWinClass, szWinTitle,
-		style,
-		start_x,		// x
-		start_y,		// y
-		width + x_add,	// w
-		height + y_add,	// h
-		NULL, (HMENU)NULL, hInst,
-		(LPSTR)NULL);
+	hwndApp = CreateWindowEx ( ( Cmdline_window || Cmdline_fullscreen_window ) ? 0 : WS_EX_TOPMOST,
+	                           szWinClass, szWinTitle,
+	                           style,
+	                           start_x,        // x
+	                           start_y,        // y
+	                           width + x_add,  // w
+	                           height + y_add, // h
+	                           NULL, ( HMENU ) NULL, hInst,
+	                           ( LPSTR ) NULL );
 
-	if (!hwndApp)
+	if ( !hwndApp )
 	{
-		Error(LOCATION, "FATAL ERROR:  Unable to create game window!!");
+		Error ( LOCATION, "FATAL ERROR:  Unable to create game window!!" );
 	}
 
 	main_window_inited = 1;
 
-	win32_process(0);
+	win32_process ( 0 );
 
 #ifndef NDEBUG
-	extern void outwnd_init_debug_window(int);
-	outwnd_init_debug_window(1);
+	extern void outwnd_init_debug_window ( int );
+	outwnd_init_debug_window ( 1 );
 #endif
 
-	ShowWindow(hwndApp, SW_SHOWNORMAL);
+	ShowWindow ( hwndApp, SW_SHOWNORMAL );
 
-	SetForegroundWindow(hwndApp);
-	SetActiveWindow(hwndApp);
-	SetFocus(hwndApp);
+	SetForegroundWindow ( hwndApp );
+	SetActiveWindow ( hwndApp );
+	SetFocus ( hwndApp );
 
 	// Hack!! Turn off Window's cursor.
-	//	ShowCursor(false);
-	//	ClipCursor(NULL);
+	//  ShowCursor(false);
+	//  ClipCursor(NULL);
 
 	return;// TRUE;
 }
@@ -788,29 +788,32 @@ void win32_create_window(int width, int height)
 void os_poll()
 {
 #ifndef THREADED_PROCESS
-	win32_process(0);
+	win32_process ( 0 );
 #else
 	MSG msg;
-	ENTER_CRITICAL_SECTION( Os_lock );
-	while(PeekMessage(&msg,0,0,0,PM_NOREMOVE))	{
-		if ( msg.message == WM_DESTROY )	{
+	ENTER_CRITICAL_SECTION ( Os_lock );
+	while ( PeekMessage ( &msg, 0, 0, 0, PM_NOREMOVE ) )
+	{
+		if ( msg.message == WM_DESTROY )
+		{
 			break;
 		}
-		if (PeekMessage(&msg,0,0,0,PM_REMOVE))	{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
+		if ( PeekMessage ( &msg, 0, 0, 0, PM_REMOVE ) )
+		{
+			TranslateMessage ( &msg );
+			DispatchMessage ( &msg );
 		}
 		Got_message++;
 	}
-	LEAVE_CRITICAL_SECTION( Os_lock );
+	LEAVE_CRITICAL_SECTION ( Os_lock );
 #endif
 }
 
-void debug_int3(char* file, int line)
+void debug_int3 ( char *file, int line )
 {
-	mprintf(("Int3(): From %s at line %d\n", file, line));
+	mprintf ( ( "Int3(): From %s at line %d\n", file, line ) );
 
-	gr_activate(0);
+	gr_activate ( 0 );
 
 #ifdef _WIN32
 #if defined(_MSC_VER) && _MSC_VER >= 1400
@@ -818,7 +821,7 @@ void debug_int3(char* file, int line)
 #elif defined(_MSC_VER)
 	_asm int 3;
 #elif defined __GNUC__
-	asm("int $3");
+	asm ( "int $3" );
 #else
 #error debug_int3: unknown compiler
 #endif
@@ -827,7 +830,7 @@ void debug_int3(char* file, int line)
 #error debug_int3: unknown OS
 #endif
 
-	gr_activate(1);
+	gr_activate ( 1 );
 
 }
 
@@ -840,45 +843,45 @@ static HHOOK g_hKeyboardHook = NULL;
 
 // ugh
 #ifndef WH_KEYBOARD_LL
-  #define WH_KEYBOARD_LL	13
+#define WH_KEYBOARD_LL    13
 #endif
 
-LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK LowLevelKeyboardProc ( int nCode, WPARAM wParam, LPARAM lParam )
 {
-	if (nCode < 0 || nCode != HC_ACTION)  // do not process message 
-		return CallNextHookEx(g_hKeyboardHook, nCode, wParam, lParam);
+	if ( nCode < 0 || nCode != HC_ACTION ) // do not process message
+		return CallNextHookEx ( g_hKeyboardHook, nCode, wParam, lParam );
 
 	// hack!
 	// this is because the KBDLLHOOKSTRUCT type requires a mess of #includes,
 	// but all we need from it is the first field
-	DWORD vkCode = *( (DWORD *) lParam );
+	DWORD vkCode = * ( ( DWORD * ) lParam );
 
 	// determine key event
-	switch (wParam)
+	switch ( wParam )
 	{
-		case WM_KEYDOWN:
-		case WM_KEYUP:
-			if ( (vkCode == VK_LWIN) || (vkCode == VK_RWIN) )
-				return 1;
+	case WM_KEYDOWN:
+	case WM_KEYUP:
+		if ( ( vkCode == VK_LWIN ) || ( vkCode == VK_RWIN ) )
+			return 1;
 	}
 
-	return CallNextHookEx( g_hKeyboardHook, nCode, wParam, lParam );
+	return CallNextHookEx ( g_hKeyboardHook, nCode, wParam, lParam );
 }
 
 void disableWindowsKey()
 {
-	if (g_hKeyboardHook != NULL)
+	if ( g_hKeyboardHook != NULL )
 		return;
 
-	g_hKeyboardHook = SetWindowsHookEx( WH_KEYBOARD_LL,  LowLevelKeyboardProc, GetModuleHandle(NULL), 0 );
+	g_hKeyboardHook = SetWindowsHookEx ( WH_KEYBOARD_LL,  LowLevelKeyboardProc, GetModuleHandle ( NULL ), 0 );
 }
 
 void enableWindowsKey()
 {
-	if (g_hKeyboardHook == NULL)
+	if ( g_hKeyboardHook == NULL )
 		return;
 
-	UnhookWindowsHookEx( g_hKeyboardHook );
+	UnhookWindowsHookEx ( g_hKeyboardHook );
 	g_hKeyboardHook = NULL;
 }
 
@@ -887,18 +890,19 @@ int get_keyboad_layout()
 	int layout = LCL_ENGLISH;
 	char layout_name[KL_NAMELENGTH];
 
-	if (GetKeyboardLayoutName(layout_name))
+	if ( GetKeyboardLayoutName ( layout_name ) )
 	{
-		std::string layout_string(layout_name);
+		std::string layout_string ( layout_name );
 		std::string german = "07";
 		std::string french = "0C";
 
-		if (layout_string.length() >= german.length()) {
-			if (0 == layout_string.compare (layout_string.length() - german.length(), german.length(), german))
+		if ( layout_string.length() >= german.length() )
+		{
+			if ( 0 == layout_string.compare ( layout_string.length() - german.length(), german.length(), german ) )
 			{
 				layout = LCL_GERMAN;
 			}
-			else if (0 == layout_string.compare (layout_string.length() - french.length(), french.length(), french))
+			else if ( 0 == layout_string.compare ( layout_string.length() - french.length(), french.length(), french ) )
 			{
 				layout = LCL_FRENCH;
 			}

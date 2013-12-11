@@ -25,8 +25,10 @@
 #include <boost/asio/basic_streambuf.hpp>
 #include <boost/asio/error.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 /**
  * @defgroup write boost::asio::write
@@ -72,7 +74,7 @@ namespace asio {
  *     boost::asio::transfer_all()); @endcode
  */
 template <typename SyncWriteStream, typename ConstBufferSequence>
-std::size_t write(SyncWriteStream& s, const ConstBufferSequence& buffers);
+std::size_t write ( SyncWriteStream &s, const ConstBufferSequence &buffers );
 
 /// Write a certain amount of data to a stream before returning.
 /**
@@ -121,9 +123,9 @@ std::size_t write(SyncWriteStream& s, const ConstBufferSequence& buffers);
  * std::vector.
  */
 template <typename SyncWriteStream, typename ConstBufferSequence,
-    typename CompletionCondition>
-std::size_t write(SyncWriteStream& s, const ConstBufferSequence& buffers,
-    CompletionCondition completion_condition);
+          typename CompletionCondition>
+std::size_t write ( SyncWriteStream &s, const ConstBufferSequence &buffers,
+                    CompletionCondition completion_condition );
 
 /// Write a certain amount of data to a stream before returning.
 /**
@@ -165,9 +167,9 @@ std::size_t write(SyncWriteStream& s, const ConstBufferSequence& buffers,
  * number of bytes successfully transferred prior to the error.
  */
 template <typename SyncWriteStream, typename ConstBufferSequence,
-    typename CompletionCondition>
-std::size_t write(SyncWriteStream& s, const ConstBufferSequence& buffers,
-    CompletionCondition completion_condition, boost::system::error_code& ec);
+          typename CompletionCondition>
+std::size_t write ( SyncWriteStream &s, const ConstBufferSequence &buffers,
+                    CompletionCondition completion_condition, boost::system::error_code &ec );
 
 #if !defined(BOOST_NO_IOSTREAM)
 
@@ -198,7 +200,7 @@ std::size_t write(SyncWriteStream& s, const ConstBufferSequence& buffers,
  *     boost::asio::transfer_all()); @endcode
  */
 template <typename SyncWriteStream, typename Allocator>
-std::size_t write(SyncWriteStream& s, basic_streambuf<Allocator>& b);
+std::size_t write ( SyncWriteStream &s, basic_streambuf<Allocator> &b );
 
 /// Write a certain amount of data to a stream before returning.
 /**
@@ -236,9 +238,9 @@ std::size_t write(SyncWriteStream& s, basic_streambuf<Allocator>& b);
  * @throws boost::system::system_error Thrown on failure.
  */
 template <typename SyncWriteStream, typename Allocator,
-    typename CompletionCondition>
-std::size_t write(SyncWriteStream& s, basic_streambuf<Allocator>& b,
-    CompletionCondition completion_condition);
+          typename CompletionCondition>
+std::size_t write ( SyncWriteStream &s, basic_streambuf<Allocator> &b,
+                    CompletionCondition completion_condition );
 
 /// Write a certain amount of data to a stream before returning.
 /**
@@ -277,9 +279,9 @@ std::size_t write(SyncWriteStream& s, basic_streambuf<Allocator>& b,
  * number of bytes successfully transferred prior to the error.
  */
 template <typename SyncWriteStream, typename Allocator,
-    typename CompletionCondition>
-std::size_t write(SyncWriteStream& s, basic_streambuf<Allocator>& b,
-    CompletionCondition completion_condition, boost::system::error_code& ec);
+          typename CompletionCondition>
+std::size_t write ( SyncWriteStream &s, basic_streambuf<Allocator> &b,
+                    CompletionCondition completion_condition, boost::system::error_code &ec );
 
 #endif // !defined(BOOST_NO_IOSTREAM)
 
@@ -342,9 +344,9 @@ std::size_t write(SyncWriteStream& s, basic_streambuf<Allocator>& b,
  * std::vector.
  */
 template <typename AsyncWriteStream, typename ConstBufferSequence,
-    typename WriteHandler>
-void async_write(AsyncWriteStream& s, const ConstBufferSequence& buffers,
-    WriteHandler handler);
+          typename WriteHandler>
+void async_write ( AsyncWriteStream &s, const ConstBufferSequence &buffers,
+                   WriteHandler handler );
 
 /// Start an asynchronous operation to write a certain amount of data to a
 /// stream.
@@ -411,9 +413,9 @@ void async_write(AsyncWriteStream& s, const ConstBufferSequence& buffers,
  * std::vector.
  */
 template <typename AsyncWriteStream, typename ConstBufferSequence,
-    typename CompletionCondition, typename WriteHandler>
-void async_write(AsyncWriteStream& s, const ConstBufferSequence& buffers,
-    CompletionCondition completion_condition, WriteHandler handler);
+          typename CompletionCondition, typename WriteHandler>
+void async_write ( AsyncWriteStream &s, const ConstBufferSequence &buffers,
+                   CompletionCondition completion_condition, WriteHandler handler );
 
 #if !defined(BOOST_NO_IOSTREAM)
 
@@ -456,8 +458,8 @@ void async_write(AsyncWriteStream& s, const ConstBufferSequence& buffers,
  * boost::asio::io_service::post().
  */
 template <typename AsyncWriteStream, typename Allocator, typename WriteHandler>
-void async_write(AsyncWriteStream& s, basic_streambuf<Allocator>& b,
-    WriteHandler handler);
+void async_write ( AsyncWriteStream &s, basic_streambuf<Allocator> &b,
+                   WriteHandler handler );
 
 /// Start an asynchronous operation to write a certain amount of data to a
 /// stream.
@@ -512,9 +514,9 @@ void async_write(AsyncWriteStream& s, basic_streambuf<Allocator>& b,
  * boost::asio::io_service::post().
  */
 template <typename AsyncWriteStream, typename Allocator,
-    typename CompletionCondition, typename WriteHandler>
-void async_write(AsyncWriteStream& s, basic_streambuf<Allocator>& b,
-    CompletionCondition completion_condition, WriteHandler handler);
+          typename CompletionCondition, typename WriteHandler>
+void async_write ( AsyncWriteStream &s, basic_streambuf<Allocator> &b,
+                   CompletionCondition completion_condition, WriteHandler handler );
 
 #endif // !defined(BOOST_NO_IOSTREAM)
 

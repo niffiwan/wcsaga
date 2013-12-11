@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -13,11 +13,14 @@
 
 #include <boost/mpl/long.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units {
+namespace units
+{
 
-namespace detail {
+namespace detail
+{
 
 struct no { no() {} char dummy; };
 struct yes { no dummy[2]; };
@@ -37,15 +40,15 @@ struct ordinal_has_already_been_defined<false>  { typedef void type; };
 /// be found by ADL
 /// INTERNAL ONLY
 template<class T>
-detail::no 
-boost_units_is_registered(const T&) 
-{ detail::no result; return(result); }
+detail::no
+boost_units_is_registered ( const T & )
+{ detail::no result; return ( result ); }
 
 /// INTERNAL ONLY
 template<class T>
-detail::no 
-boost_units_unit_is_registered(const T&) 
-{ detail::no result; return(result); }
+detail::no
+boost_units_unit_is_registered ( const T & )
+{ detail::no result; return ( result ); }
 
 } // namespace units
 

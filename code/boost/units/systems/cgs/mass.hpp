@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -13,18 +13,21 @@
 
 #include <boost/units/systems/cgs/base.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace cgs {
+namespace cgs
+{
 
-typedef unit<mass_dimension,cgs::system>     mass;
-    
-BOOST_UNITS_STATIC_CONSTANT(gram,mass); 
-BOOST_UNITS_STATIC_CONSTANT(grams,mass);    
-BOOST_UNITS_STATIC_CONSTANT(gramme,mass);   
-BOOST_UNITS_STATIC_CONSTANT(grammes,mass);  
+typedef unit<mass_dimension, cgs::system>     mass;
+
+BOOST_UNITS_STATIC_CONSTANT ( gram, mass );
+BOOST_UNITS_STATIC_CONSTANT ( grams, mass );
+BOOST_UNITS_STATIC_CONSTANT ( gramme, mass );
+BOOST_UNITS_STATIC_CONSTANT ( grammes, mass );
 
 
 } // namespace cgs

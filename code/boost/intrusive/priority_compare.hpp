@@ -18,21 +18,23 @@
 
 #include <functional>
 
-namespace boost {
-namespace intrusive {
+namespace boost
+{
+namespace intrusive
+{
 
 template <class T>
 struct priority_compare
-   : public std::binary_function<T, T, bool>
+		: public std::binary_function<T, T, bool>
 {
-   bool operator()(const T &val, const T &val2) const
-   {
-      return priority_order(val, val2);
-   }
+	bool operator() ( const T &val, const T &val2 ) const
+	{
+		return priority_order ( val, val2 );
+	}
 };
 
-} //namespace intrusive 
-} //namespace boost 
+} //namespace intrusive
+} //namespace boost
 
 #include <boost/intrusive/detail/config_end.hpp>
 

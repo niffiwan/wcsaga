@@ -8,7 +8,7 @@
 
 #include <cstddef>
 
-#if defined(__GNUC__) || (!defined(_AIX) && defined(__IBMCPP__)  && (__IBMCPP__ >= 800)) 
+#if defined(__GNUC__) || (!defined(_AIX) && defined(__IBMCPP__)  && (__IBMCPP__ >= 800))
 #if !defined(BOOST_HAS_INCLUDE_NEXT)
 #  define BOOST_HAS_INCLUDE_NEXT
 #endif
@@ -50,7 +50,7 @@
 #endif
 
 #ifdef __IBMCPP_TR1__
-   // turn on support for everything:
+// turn on support for everything:
 #  define BOOST_HAS_TR1
 #endif
 
@@ -60,7 +60,7 @@
 #endif
 
 #ifdef BOOST_HAS_TR1
-   // turn on support for everything:
+// turn on support for everything:
 #  define BOOST_HAS_TR1_ARRAY
 #  define BOOST_HAS_TR1_COMPLEX_OVERLOADS
 #  define BOOST_HAS_TR1_COMPLEX_INVERSE_TRIG
@@ -94,7 +94,7 @@
 #endif
 
 #ifdef BOOST_HAS_GCC_TR1
-   // turn on support for everything in gcc 4.0.x:
+// turn on support for everything in gcc 4.0.x:
 #  define BOOST_HAS_TR1_ARRAY
 #if (__GNUC__ * 100 + __GNUC_MINOR__) >= 403
 //#  define BOOST_HAS_TR1_COMPLEX_OVERLOADS

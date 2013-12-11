@@ -23,81 +23,85 @@
 #include <boost/mpl/always.hpp>
 #include <boost/type_traits/remove_const.hpp>
 
-namespace boost { namespace mpi {
+namespace boost
+{
+namespace mpi
+{
 
 /// serialization using binary copy into a buffer
 
 class BOOST_MPI_DECL binary_buffer_oprimitive
 {
 public:
-    /// the type of the buffer into which the data is packed upon serialization
-    typedef std::vector<char, allocator<char> > buffer_type;
+/// the type of the buffer into which the data is packed upon serialization
+typedef std::vector<char, allocator<char> > buffer_type;
 
-    binary_buffer_oprimitive(buffer_type & b, MPI_Comm const &)
-     : buffer_(b)
-    {
-    }
+binary_buffer_oprimitive ( buffer_type &b, MPI_Comm const & )
+	: buffer_ ( b )
+{
+}
 
-    void const * address() const
-    {
-      return &buffer_.front();
-    }
+void const *address() const
+{
+	return &buffer_.front();
+}
 
-    const std::size_t& size() const
-    {
-      return size_ = buffer_.size();
-    }
+const std::size_t &size() const
+{
+	return size_ = buffer_.size();
+}
 
-    void save_binary(void const *address, std::size_t count)
-    {
-      save_impl(address,count);
-    }
+void save_binary ( void const *address, std::size_t count )
+{
+	save_impl ( address, count );
+}
 
-    // fast saving of arrays
-    template<class T>
-    void save_array(serialization::array<T> const& x, unsigned int /* file_version */)
-    {
-    
-      BOOST_MPL_ASSERT((serialization::is_bitwise_serializable<BOOST_DEDUCED_TYPENAME remove_const<T>::type>));
-      if (x.count())
-        save_impl(x.address(), x.count()*sizeof(T));
-    }
+// fast saving of arrays
+template<class T>
+void save_array ( serialization::array<T> const &x, unsigned int /* file_version */ )
+{
 
-    template<class T>
-    void save(serialization::array<T> const& x)
-    {
-      save_array(x,0u);
-    }
+	BOOST_MPL_ASSERT ( ( serialization::is_bitwise_serializable<BOOST_DEDUCED_TYPENAME remove_const<T>::type> ) );
+	if ( x.count() )
+		save_impl ( x.address(), x.count() *sizeof ( T ) );
+}
 
-    typedef serialization::is_bitwise_serializable<mpl::_1> use_array_optimization;
+template<class T>
+void save ( serialization::array<T> const &x )
+{
+	save_array ( x, 0u );
+}
 
-    // default saving of primitives.
-    template<class T>
-    void save(const T & t)
-    {
-      BOOST_MPL_ASSERT((serialization::is_bitwise_serializable<BOOST_DEDUCED_TYPENAME remove_const<T>::type>));
-      save_impl(&t, sizeof(T));
-    }
+typedef serialization::is_bitwise_serializable<mpl::_1> use_array_optimization;
 
-    void save(const std::string &s)
-    {
-      unsigned int l = static_cast<unsigned int>(s.size());
-      save(l);
-      save_impl(s.data(),s.size());
-    }
+// default saving of primitives.
+template<class T>
+void save ( const T &t )
+{
+	BOOST_MPL_ASSERT ( ( serialization::is_bitwise_serializable<BOOST_DEDUCED_TYPENAME remove_const<T>::type> ) );
+	save_impl ( &t, sizeof ( T ) );
+}
+
+void save ( const std::string &s )
+{
+	unsigned int l = static_cast<unsigned int> ( s.size() );
+	save ( l );
+	save_impl ( s.data(), s.size() );
+}
 
 private:
 
-    void save_impl(void const * p, int l)
-    {
-      char const* ptr = reinterpret_cast<char const*>(p);
-      buffer_.insert(buffer_.end(),ptr,ptr+l);
-    }
+void save_impl ( void const *p, int l )
+{
+	char const *ptr = reinterpret_cast<char const *> ( p );
+	buffer_.insert ( buffer_.end(), ptr, ptr + l );
+}
 
-  buffer_type& buffer_;
-  mutable std::size_t size_;
+buffer_type &buffer_;
+mutable std::size_t size_;
 };
 
-} } // end namespace boost::mpi
+}
+} // end namespace boost::mpi
 
 #endif // BOOST_MPI_BINARY_BUFFER_OPRIMITIVE_HPP

@@ -11,22 +11,31 @@
 #pragma once
 #endif
 
-namespace boost { namespace spirit { namespace support { namespace detail
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    //  A closed range (first, last)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename T>
-    struct range
-    {
-        typedef T value_type;
+namespace spirit
+{
+namespace support
+{
+namespace detail
+{
+///////////////////////////////////////////////////////////////////////////
+//  A closed range (first, last)
+///////////////////////////////////////////////////////////////////////////
+template <typename T>
+struct range
+{
+	typedef T value_type;
 
-        range() : first(), last() {}
-        range(T first, T last) : first(first), last(last) {}
+	range() : first(), last() {}
+	range ( T first, T last ) : first ( first ), last ( last ) {}
 
-        T first;
-        T last;
-    };
-}}}}
+	T first;
+	T last;
+};
+}
+}
+}
+}
 
 #endif

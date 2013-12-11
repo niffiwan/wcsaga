@@ -3,12 +3,12 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
- /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         auto_link.hpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: Automatic library inclusion for Borland/Microsoft compilers.
-  */
+/*
+ *   LOCATION:    see http://www.boost.org for most recent version.
+ *   FILE         auto_link.hpp
+ *   VERSION      see <boost/version.hpp>
+ *   DESCRIPTION: Automatic library inclusion for Borland/Microsoft compilers.
+ */
 
 /*************************************************************************
 
@@ -113,56 +113,56 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 #if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
 
 #  ifdef UNDER_CE
-     // vc6:
+// vc6:
 #    define BOOST_LIB_TOOLSET "evc4"
 #  else
-     // vc6:
+// vc6:
 #    define BOOST_LIB_TOOLSET "vc6"
 #  endif
 
 #elif defined(BOOST_MSVC) && (BOOST_MSVC == 1300)
 
-   // vc7:
+// vc7:
 #  define BOOST_LIB_TOOLSET "vc7"
 
 #elif defined(BOOST_MSVC) && (BOOST_MSVC == 1310)
 
-   // vc71:
+// vc71:
 #  define BOOST_LIB_TOOLSET "vc71"
 
 #elif defined(BOOST_MSVC) && (BOOST_MSVC == 1400)
 
-   // vc80:
+// vc80:
 #  define BOOST_LIB_TOOLSET "vc80"
 
 #elif defined(BOOST_MSVC) && (BOOST_MSVC == 1500)
 
-   // vc90:
+// vc90:
 #  define BOOST_LIB_TOOLSET "vc90"
 
 #elif defined(BOOST_MSVC) && (BOOST_MSVC >= 1600)
 
-   // vc10:
+// vc10:
 #  define BOOST_LIB_TOOLSET "vc100"
 
 #elif defined(__BORLANDC__)
 
-   // CBuilder 6:
+// CBuilder 6:
 #  define BOOST_LIB_TOOLSET "bcb"
 
 #elif defined(__ICL)
 
-   // Intel C++, no version number:
+// Intel C++, no version number:
 #  define BOOST_LIB_TOOLSET "iw"
 
 #elif defined(__MWERKS__) && (__MWERKS__ <= 0x31FF )
 
-   // Metrowerks CodeWarrior 8.x
+// Metrowerks CodeWarrior 8.x
 #  define BOOST_LIB_TOOLSET "cw8"
 
 #elif defined(__MWERKS__) && (__MWERKS__ <= 0x32FF )
 
-   // Metrowerks CodeWarrior 9.x
+// Metrowerks CodeWarrior 9.x
 #  define BOOST_LIB_TOOLSET "cw9"
 
 #endif
@@ -337,7 +337,7 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 #if defined(BOOST_LIB_NAME)
 #  undef BOOST_LIB_NAME
 #endif
-// Don't undef this one: it can be set by the user and should be the 
+// Don't undef this one: it can be set by the user and should be the
 // same for all libraries:
 //#if defined(BOOST_LIB_TOOLSET)
 //#  undef BOOST_LIB_TOOLSET

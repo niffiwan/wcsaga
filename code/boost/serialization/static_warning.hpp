@@ -16,7 +16,7 @@
 /*
  Revision history:
    15 June  2003 - Initial version.
-   31 March 2004 - improved diagnostic messages and portability 
+   31 March 2004 - improved diagnostic messages and portability
                    (Jonathan Turkanis)
    03 April 2004 - works on VC6 at class and namespace scope
                  - ported to DigitalMars
@@ -49,17 +49,17 @@
 // 3. static_warning_impl<B>::type overloads operator& to return a dynamically
 //    allocated int pointer only is B is true, so  returning the address of an
 //    automatic variable of this type generates a warning iff B is fasle.
-// 4. static_warning_impl<B>::STATIC_WARNING is decalred as a struct iff B is 
-//    false. 
+// 4. static_warning_impl<B>::STATIC_WARNING is decalred as a struct iff B is
+//    false.
 // 5. static_warning_impl<B>::type is incomplete iff B is false, so deleting a
 //    pointer to this type generates a warning iff B is false.
 //
 
 //------------------Enable selected warnings----------------------------------//
 
-// Enable the warnings relied on by BOOST_STATIC_WARNING, where possible. The 
-// only pragma which is absolutely necessary here is for Borland 5.x, since 
-// W8073 is disabled by default. If enabling selected warnings is considered 
+// Enable the warnings relied on by BOOST_STATIC_WARNING, where possible. The
+// only pragma which is absolutely necessary here is for Borland 5.x, since
+// W8073 is disabled by default. If enabling selected warnings is considered
 // unacceptable, this section can be replaced with:
 //   #if defined(__BORLANDC__) && (__BORLANDC__ <= 0x600)
 //    pragma warn +st
@@ -73,23 +73,26 @@
 #include <boost/mpl/print.hpp>
 #include <boost/mpl/eval_if.hpp>
 
-namespace boost {
-namespace serialization {
+namespace boost
+{
+namespace serialization
+{
 
-template<int L> 
-struct BOOST_SERIALIZATION_STATIC_WARNING_LINE{};
+template<int L>
+struct BOOST_SERIALIZATION_STATIC_WARNING_LINE {};
 
 template<bool B, int L>
-struct static_warning_test{
-    typename boost::mpl::eval_if_c<
-        B,
-        boost::mpl::true_,
-        typename boost::mpl::identity<
-            boost::mpl::print<
-                BOOST_SERIALIZATION_STATIC_WARNING_LINE<L>
-            >
-        >
-    >::type type;
+struct static_warning_test
+{
+typename boost::mpl::eval_if_c <
+B,
+boost::mpl::true_,
+typename boost::mpl::identity <
+boost::mpl::print <
+BOOST_SERIALIZATION_STATIC_WARNING_LINE<L>
+>
+>
+>::type type;
 };
 
 template<int i>

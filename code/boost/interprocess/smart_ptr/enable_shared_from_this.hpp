@@ -24,8 +24,10 @@
 //!\file
 //!Describes an utility to form a shared pointer from this
 
-namespace boost{
-namespace interprocess{
+namespace boost
+{
+namespace interprocess
+{
 
 //!This class is used as a base class that allows a shared_ptr to the current
 //!object to be obtained from within a member function.
@@ -34,40 +36,40 @@ namespace interprocess{
 template<class T, class A, class D>
 class enable_shared_from_this
 {
-   /// @cond
-   protected:
-   enable_shared_from_this()
-   {}
+	/// @cond
+protected:
+	enable_shared_from_this()
+	{}
 
-   enable_shared_from_this(enable_shared_from_this const &)
-   {}
+	enable_shared_from_this ( enable_shared_from_this const & )
+	{}
 
-   enable_shared_from_this & operator=(enable_shared_from_this const &)
-   {  return *this;  }
+	enable_shared_from_this &operator= ( enable_shared_from_this const & )
+	{  return *this;  }
 
-   ~enable_shared_from_this()
-   {}
-   /// @endcond
+	~enable_shared_from_this()
+	{}
+	/// @endcond
 
-   public:
-   shared_ptr<T, A, D> shared_from_this()
-   {
-      shared_ptr<T, A, D> p(_internal_weak_this);
-      BOOST_ASSERT(detail::get_pointer(p.get()) == this);
-      return p;
-   }
+public:
+	shared_ptr<T, A, D> shared_from_this()
+	{
+		shared_ptr<T, A, D> p ( _internal_weak_this );
+		BOOST_ASSERT ( detail::get_pointer ( p.get() ) == this );
+		return p;
+	}
 
-   shared_ptr<T const, A, D> shared_from_this() const
-   {
-      shared_ptr<T const, A, D> p(_internal_weak_this);
-      BOOST_ASSERT(detail::get_pointer(p.get()) == this);
-      return p;
-   }
+	shared_ptr<T const, A, D> shared_from_this() const
+	{
+		shared_ptr<T const, A, D> p ( _internal_weak_this );
+		BOOST_ASSERT ( detail::get_pointer ( p.get() ) == this );
+		return p;
+	}
 
-   /// @cond
-   typedef T element_type;
-   mutable weak_ptr<element_type, A, D> _internal_weak_this;
-   /// @endcond
+	/// @cond
+	typedef T element_type;
+	mutable weak_ptr<element_type, A, D> _internal_weak_this;
+	/// @endcond
 };
 
 } // namespace interprocess

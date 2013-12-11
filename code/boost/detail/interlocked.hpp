@@ -35,11 +35,11 @@
 
 // under Windows CE we still have old-style Interlocked* functions
 
-extern "C" long __cdecl InterlockedIncrement( long* );
-extern "C" long __cdecl InterlockedDecrement( long* );
-extern "C" long __cdecl InterlockedCompareExchange( long*, long, long );
-extern "C" long __cdecl InterlockedExchange( long*, long );
-extern "C" long __cdecl InterlockedExchangeAdd( long*, long );
+extern "C" long __cdecl InterlockedIncrement ( long * );
+extern "C" long __cdecl InterlockedDecrement ( long * );
+extern "C" long __cdecl InterlockedCompareExchange ( long *, long, long );
+extern "C" long __cdecl InterlockedExchange ( long *, long );
+extern "C" long __cdecl InterlockedExchangeAdd ( long *, long );
 
 # define BOOST_INTERLOCKED_INCREMENT InterlockedIncrement
 # define BOOST_INTERLOCKED_DECREMENT InterlockedDecrement
@@ -56,19 +56,19 @@ extern "C" long __cdecl InterlockedExchangeAdd( long*, long );
 
 #if defined( __CLRCALL_PURE_OR_CDECL )
 
-extern "C" long __CLRCALL_PURE_OR_CDECL _InterlockedIncrement( long volatile * );
-extern "C" long __CLRCALL_PURE_OR_CDECL _InterlockedDecrement( long volatile * );
-extern "C" long __CLRCALL_PURE_OR_CDECL _InterlockedCompareExchange( long volatile *, long, long );
-extern "C" long __CLRCALL_PURE_OR_CDECL _InterlockedExchange( long volatile *, long );
-extern "C" long __CLRCALL_PURE_OR_CDECL _InterlockedExchangeAdd( long volatile *, long );
+extern "C" long __CLRCALL_PURE_OR_CDECL _InterlockedIncrement ( long volatile * );
+extern "C" long __CLRCALL_PURE_OR_CDECL _InterlockedDecrement ( long volatile * );
+extern "C" long __CLRCALL_PURE_OR_CDECL _InterlockedCompareExchange ( long volatile *, long, long );
+extern "C" long __CLRCALL_PURE_OR_CDECL _InterlockedExchange ( long volatile *, long );
+extern "C" long __CLRCALL_PURE_OR_CDECL _InterlockedExchangeAdd ( long volatile *, long );
 
 #else
 
-extern "C" long __cdecl _InterlockedIncrement( long volatile * );
-extern "C" long __cdecl _InterlockedDecrement( long volatile * );
-extern "C" long __cdecl _InterlockedCompareExchange( long volatile *, long, long );
-extern "C" long __cdecl _InterlockedExchange( long volatile *, long );
-extern "C" long __cdecl _InterlockedExchangeAdd( long volatile *, long );
+extern "C" long __cdecl _InterlockedIncrement ( long volatile * );
+extern "C" long __cdecl _InterlockedDecrement ( long volatile * );
+extern "C" long __cdecl _InterlockedCompareExchange ( long volatile *, long, long );
+extern "C" long __cdecl _InterlockedExchange ( long volatile *, long );
+extern "C" long __cdecl _InterlockedExchangeAdd ( long volatile *, long );
 
 #endif
 
@@ -80,8 +80,8 @@ extern "C" long __cdecl _InterlockedExchangeAdd( long volatile *, long );
 
 # if defined(_M_IA64) || defined(_M_AMD64)
 
-extern "C" void* __cdecl _InterlockedCompareExchangePointer( void* volatile *, void*, void* );
-extern "C" void* __cdecl _InterlockedExchangePointer( void* volatile *, void* );
+extern "C" void *__cdecl _InterlockedCompareExchangePointer ( void *volatile *, void *, void * );
+extern "C" void *__cdecl _InterlockedExchangePointer ( void *volatile *, void * );
 
 #  pragma intrinsic( _InterlockedCompareExchangePointer )
 #  pragma intrinsic( _InterlockedExchangePointer )
@@ -112,11 +112,11 @@ namespace boost
 namespace detail
 {
 
-extern "C" __declspec(dllimport) long __stdcall InterlockedIncrement( long volatile * );
-extern "C" __declspec(dllimport) long __stdcall InterlockedDecrement( long volatile * );
-extern "C" __declspec(dllimport) long __stdcall InterlockedCompareExchange( long volatile *, long, long );
-extern "C" __declspec(dllimport) long __stdcall InterlockedExchange( long volatile *, long );
-extern "C" __declspec(dllimport) long __stdcall InterlockedExchangeAdd( long volatile *, long );
+extern "C" __declspec ( dllimport ) long __stdcall InterlockedIncrement ( long volatile * );
+extern "C" __declspec ( dllimport ) long __stdcall InterlockedDecrement ( long volatile * );
+extern "C" __declspec ( dllimport ) long __stdcall InterlockedCompareExchange ( long volatile *, long, long );
+extern "C" __declspec ( dllimport ) long __stdcall InterlockedExchange ( long volatile *, long );
+extern "C" __declspec ( dllimport ) long __stdcall InterlockedExchangeAdd ( long volatile *, long );
 
 } // namespace detail
 

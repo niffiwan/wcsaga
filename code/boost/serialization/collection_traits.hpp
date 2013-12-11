@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // collection_traits.hpp:
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -40,9 +40,9 @@ struct implementation_level< C < T > > {                            \
 /**/
 
 #if defined(BOOST_NO_CWCHAR) || defined(BOOST_NO_INTRINSIC_WCHAR_T)
-    #define BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER_WCHAR(C)
+#define BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER_WCHAR(C)
 #else
-    #define BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER_WCHAR(C)   \
+#define BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER_WCHAR(C)   \
     BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER(wchar_t, C)        \
     /**/
 #endif
@@ -51,29 +51,29 @@ struct implementation_level< C < T > > {                            \
 // i.e. that its not a synonym for (unsigned) long
 // if there is no 64 bit int or if its the same as a long
 // we shouldn't define separate functions for int64 data types.
-#if defined(BOOST_NO_INT64_T)  
-     #define BOOST_NO_INTRINSIC_INT64_T  
-#else   
-    #if defined(ULLONG_MAX)  
-        #if(ULONG_MAX == 18446744073709551615ul) // 2**64 - 1  
-            #define BOOST_NO_INTRINSIC_INT64_T  
-        #endif  
-    #elif defined(ULONG_MAX)  
-        #if(ULONG_MAX != 0xffffffff && ULONG_MAX == 18446744073709551615ul) // 2**64 - 1  
-            #define BOOST_NO_INTRINSIC_INT64_T  
-        #endif  
-    #else   
-        #define BOOST_NO_INTRINSIC_INT64_T  
-    #endif  
-#endif  
+#if defined(BOOST_NO_INT64_T)
+#define BOOST_NO_INTRINSIC_INT64_T
+#else
+#if defined(ULLONG_MAX)
+#if(ULONG_MAX == 18446744073709551615ul) // 2**64 - 1  
+#define BOOST_NO_INTRINSIC_INT64_T
+#endif
+#elif defined(ULONG_MAX)
+#if(ULONG_MAX != 0xffffffff && ULONG_MAX == 18446744073709551615ul) // 2**64 - 1  
+#define BOOST_NO_INTRINSIC_INT64_T
+#endif
+#else
+#define BOOST_NO_INTRINSIC_INT64_T
+#endif
+#endif
 
 #if !defined(BOOST_NO_INTRINSIC_INT64_T)
-    #define BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER_INT64(C)    \
+#define BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER_INT64(C)    \
     BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER(boost::int64_t, C)  \
     BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER(boost::uint64_t, C) \
     /**/
 #else
-    #define BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER_INT64(C)
+#define BOOST_SERIALIZATION_COLLECTION_TRAITS_HELPER_INT64(C)
 #endif
 
 #define BOOST_SERIALIZATION_COLLECTION_TRAITS(C)                     \

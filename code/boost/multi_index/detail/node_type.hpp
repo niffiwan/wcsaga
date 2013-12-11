@@ -25,11 +25,14 @@
 #include <boost/multi_index/detail/msvc_index_specifier.hpp>
 #include <boost/static_assert.hpp>
 
-namespace boost{
+namespace boost
+{
 
-namespace multi_index{
+namespace multi_index
+{
 
-namespace detail{
+namespace detail
+{
 
 /* MPL machinery to construct the internal node type associated to an
  * index list.
@@ -38,36 +41,36 @@ namespace detail{
 #if BOOST_WORKAROUND(BOOST_MSVC,<1310)
 struct index_node_applier
 {
-  template<typename IndexSpecifierIterator,typename Super>
-  struct apply:
-    msvc_index_specifier< mpl::deref<IndexSpecifierIterator>::type >::
-      template result_node_class<Super>
-  {
-  }; 
+	template<typename IndexSpecifierIterator, typename Super>
+	struct apply:
+			msvc_index_specifier< mpl::deref<IndexSpecifierIterator>::type >::
+			template result_node_class<Super>
+	{
+	};
 };
 #else
 struct index_node_applier
 {
-  template<typename IndexSpecifierIterator,typename Super>
-  struct apply
-  {
-    typedef typename mpl::deref<IndexSpecifierIterator>::type index_specifier;
-    typedef typename index_specifier::
-      BOOST_NESTED_TEMPLATE node_class<Super>::type type;
-  }; 
+	template<typename IndexSpecifierIterator, typename Super>
+	struct apply
+	{
+		typedef typename mpl::deref<IndexSpecifierIterator>::type index_specifier;
+		typedef typename index_specifier::
+		BOOST_NESTED_TEMPLATE node_class<Super>::type type;
+	};
 };
 #endif
 
-template<typename Value,typename IndexSpecifierList,typename Allocator>
+template<typename Value, typename IndexSpecifierList, typename Allocator>
 struct multi_index_node_type
 {
-  BOOST_STATIC_ASSERT(detail::is_index_list<IndexSpecifierList>::value);
+	BOOST_STATIC_ASSERT ( detail::is_index_list<IndexSpecifierList>::value );
 
-  typedef typename mpl::reverse_iter_fold<
-    IndexSpecifierList,
-    index_node_base<Value,Allocator>,
-    mpl::bind2<index_node_applier,mpl::_2,mpl::_1>
-  >::type type;
+	typedef typename mpl::reverse_iter_fold <
+	IndexSpecifierList,
+	index_node_base<Value, Allocator>,
+	mpl::bind2<index_node_applier, mpl::_2, mpl::_1>
+	>::type type;
 };
 
 } /* namespace multi_index::detail */

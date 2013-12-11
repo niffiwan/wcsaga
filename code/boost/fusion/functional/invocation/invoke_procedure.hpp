@@ -36,61 +36,64 @@
 #include <boost/fusion/functional/invocation/limits.hpp>
 #include <boost/fusion/functional/invocation/detail/that_ptr.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    namespace result_of
-    {
-        template <typename Function, class Sequence> struct invoke_procedure
-        {
-            typedef void type;
-        };
-    }
+namespace fusion
+{
+namespace result_of
+{
+template <typename Function, class Sequence> struct invoke_procedure
+{
+	typedef void type;
+};
+}
 
-    template <typename Function, class Sequence>
-    inline void invoke_procedure(Function, Sequence &);
+template <typename Function, class Sequence>
+inline void invoke_procedure ( Function, Sequence & );
 
-    template <typename Function, class Sequence>
-    inline void invoke_procedure(Function, Sequence const &);
+template <typename Function, class Sequence>
+inline void invoke_procedure ( Function, Sequence const & );
 
-    //----- ---- --- -- - -  -   -
+//----- ---- --- -- - -  -   -
 
-    namespace detail
-    {
-        namespace ft = function_types;
+namespace detail
+{
+namespace ft = function_types;
 
-        template<
-            typename Function, class Sequence,
-            int N = result_of::size<Sequence>::value,
-            bool MFP = ft::is_member_function_pointer<Function>::value,
-            bool RandomAccess = traits::is_random_access<Sequence>::value
-            >
-        struct invoke_procedure_impl;
+template <
+    typename Function, class Sequence,
+    int N = result_of::size<Sequence>::value,
+    bool MFP = ft::is_member_function_pointer<Function>::value,
+    bool RandomAccess = traits::is_random_access<Sequence>::value
+    >
+struct invoke_procedure_impl;
 
-        #define  BOOST_PP_FILENAME_1 \
+#define  BOOST_PP_FILENAME_1 \
             <boost/fusion/functional/invocation/invoke_procedure.hpp>
-        #define  BOOST_PP_ITERATION_LIMITS \
+#define  BOOST_PP_ITERATION_LIMITS \
             (0, BOOST_FUSION_INVOKE_PROCEDURE_MAX_ARITY)
-        #include BOOST_PP_ITERATE()
+#include BOOST_PP_ITERATE()
 
-    }
+}
 
-    template <typename Function, class Sequence>
-    inline void invoke_procedure(Function f, Sequence & s)
-    {
-        detail::invoke_procedure_impl<
-                typename boost::remove_reference<Function>::type,Sequence
-            >::call(f,s);
-    }
+template <typename Function, class Sequence>
+inline void invoke_procedure ( Function f, Sequence &s )
+{
+	detail::invoke_procedure_impl <
+	typename boost::remove_reference<Function>::type, Sequence
+	>::call ( f, s );
+}
 
-    template <typename Function, class Sequence>
-    inline void invoke_procedure(Function f, Sequence const & s)
-    {
-        detail::invoke_procedure_impl<
-                typename boost::remove_reference<Function>::type,Sequence const
-            >::call(f,s);
-    }
+template <typename Function, class Sequence>
+inline void invoke_procedure ( Function f, Sequence const &s )
+{
+	detail::invoke_procedure_impl <
+	typename boost::remove_reference<Function>::type, Sequence const
+	>::call ( f, s );
+}
 
-}}
+}
+}
 
 #define BOOST_FUSION_FUNCTIONAL_INVOCATION_INVOKE_PROCEDURE_HPP_INCLUDED
 #else // defined(BOOST_PP_IS_ITERATING)
@@ -103,26 +106,26 @@ namespace boost { namespace fusion
 
 #define M(z,j,data) fusion::at_c<j>(s)
 
-        template <typename Function, class Sequence>
-        struct invoke_procedure_impl<Function,Sequence,N,false,true>
-        {
-            static inline void call(Function & f, Sequence & s)
-            {
-                f(BOOST_PP_ENUM(N,M,~));
-            }
-        };
+template <typename Function, class Sequence>
+struct invoke_procedure_impl<Function, Sequence, N, false, true>
+{
+	static inline void call ( Function &f, Sequence &s )
+	{
+		f ( BOOST_PP_ENUM ( N, M, ~ ) );
+	}
+};
 
 #if N > 0
-        template <typename Function, class Sequence>
-        struct invoke_procedure_impl<Function,Sequence,N,true,true>
-        {
-            static inline void call(Function & f, Sequence & s)
-            {
-                (that_ptr<typename mpl::front<
-                                ft::parameter_types<Function> >::type
-                    >::get(fusion::at_c<0>(s))->*f)(BOOST_PP_ENUM_SHIFTED(N,M,~));
-            }
-        };
+template <typename Function, class Sequence>
+struct invoke_procedure_impl<Function, Sequence, N, true, true>
+{
+	static inline void call ( Function &f, Sequence &s )
+	{
+		( that_ptr<typename mpl::front<
+		  ft::parameter_types<Function> >::type
+		  >::get ( fusion::at_c<0> ( s ) )->*f ) ( BOOST_PP_ENUM_SHIFTED ( N, M, ~ ) );
+	}
+};
 #endif
 
 #undef M
@@ -132,35 +135,35 @@ namespace boost { namespace fusion
                 >::type I ## j ;                                               \
             I##j i##j = fusion::next(BOOST_PP_CAT(i,BOOST_PP_DEC(j)));
 
-        template <typename Function, class Sequence>
-        struct invoke_procedure_impl<Function,Sequence,N,false,false>
-        {
-            static inline void call(Function & f, Sequence & s)
-            {
+template <typename Function, class Sequence>
+struct invoke_procedure_impl<Function, Sequence, N, false, false>
+{
+	static inline void call ( Function &f, Sequence &s )
+	{
 #if N > 0
-                typedef typename result_of::begin<Sequence>::type I0;
-                I0 i0 = fusion::begin(s);
-                BOOST_PP_REPEAT_FROM_TO(1,N,M,~)
+		typedef typename result_of::begin<Sequence>::type I0;
+		I0 i0 = fusion::begin ( s );
+		BOOST_PP_REPEAT_FROM_TO ( 1, N, M, ~ )
 #endif
-                f( BOOST_PP_ENUM_PARAMS(N,*i) );
-            }
-        };
+		f ( BOOST_PP_ENUM_PARAMS ( N, *i ) );
+	}
+};
 
 #if N > 0
-        template <typename Function, class Sequence>
-        struct invoke_procedure_impl<Function,Sequence,N,true,false>
-        {
-            static inline void call(Function & f, Sequence & s)
-            {
-                typedef typename result_of::begin<Sequence>::type I0;
-                I0 i0 = fusion::begin(s);
-                BOOST_PP_REPEAT_FROM_TO(1,N,M,~)
+template <typename Function, class Sequence>
+struct invoke_procedure_impl<Function, Sequence, N, true, false>
+{
+	static inline void call ( Function &f, Sequence &s )
+	{
+		typedef typename result_of::begin<Sequence>::type I0;
+		I0 i0 = fusion::begin ( s );
+		BOOST_PP_REPEAT_FROM_TO ( 1, N, M, ~ )
 
-                (that_ptr<typename mpl::front<
-                                ft::parameter_types<Function> >::type
-                    >::get(*i0)->*f)(BOOST_PP_ENUM_SHIFTED_PARAMS(N,*i));
-            }
-        };
+		( that_ptr<typename mpl::front<
+		  ft::parameter_types<Function> >::type
+		  >::get ( *i0 )->*f ) ( BOOST_PP_ENUM_SHIFTED_PARAMS ( N, *i ) );
+	}
+};
 #endif
 
 #undef M

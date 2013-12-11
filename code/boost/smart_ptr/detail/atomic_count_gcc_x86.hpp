@@ -23,51 +23,51 @@ class atomic_count
 {
 public:
 
-    explicit atomic_count( long v ) : value_( static_cast< int >( v ) ) {}
+explicit atomic_count ( long v ) : value_ ( static_cast< int > ( v ) ) {}
 
-    long operator++()
-    {
-        return atomic_exchange_and_add( &value_, +1 ) + 1;
-    }
+long operator++()
+{
+	return atomic_exchange_and_add ( &value_, +1 ) + 1;
+}
 
-    long operator--()
-    {
-        return atomic_exchange_and_add( &value_, -1 ) - 1;
-    }
+long operator--()
+{
+	return atomic_exchange_and_add ( &value_, -1 ) - 1;
+}
 
-    operator long() const
-    {
-        return atomic_exchange_and_add( &value_, 0 );
-    }
-
-private:
-
-    atomic_count(atomic_count const &);
-    atomic_count & operator=(atomic_count const &);
-
-    mutable int value_;
+operator long() const
+{
+	return atomic_exchange_and_add ( &value_, 0 );
+}
 
 private:
 
-    static int atomic_exchange_and_add( int * pw, int dv )
-    {
-        // int r = *pw;
-        // *pw += dv;
-        // return r;
+atomic_count ( atomic_count const & );
+atomic_count &operator= ( atomic_count const & );
 
-        int r;
+mutable int value_;
 
-        __asm__ __volatile__
-        (
-            "lock\n\t"
-            "xadd %1, %0":
-            "+m"( *pw ), "=r"( r ): // outputs (%0, %1)
-            "1"( dv ): // inputs (%2 == %1)
-            "memory", "cc" // clobbers
-        );
+private:
 
-        return r;
-    }
+static int atomic_exchange_and_add ( int *pw, int dv )
+{
+	// int r = *pw;
+	// *pw += dv;
+	// return r;
+
+	int r;
+
+	__asm__ __volatile__
+	(
+	    "lock\n\t"
+	    "xadd %1, %0":
+	    "+m" ( *pw ), "=r" ( r ) : // outputs (%0, %1)
+	    "1" ( dv ) : // inputs (%2 == %1)
+	    "memory", "cc" // clobbers
+	);
+
+	return r;
+}
 };
 
 } // namespace detail

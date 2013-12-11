@@ -9,7 +9,7 @@
 //  Revision History
 //  01 Apr 01  Modified to use new <boost/limits.hpp> header. (JMaddock)
 //  12 Jan 01  Change to inline implementation to allow use without library
-//             builds. See docs for more rationale. (Beman Dawes) 
+//             builds. See docs for more rationale. (Beman Dawes)
 //  25 Sep 99  elapsed_max() and elapsed_min() added (John Maddock)
 //  16 Jul 99  Second beta
 //   6 Jul 99  Initial boost version
@@ -22,11 +22,12 @@
 #include <boost/limits.hpp>
 
 # ifdef BOOST_NO_STDC_NAMESPACE
-    namespace std { using ::clock_t; using ::clock; }
+namespace std { using ::clock_t; using ::clock; }
 # endif
 
 
-namespace boost {
+namespace boost
+{
 
 //  timer  -------------------------------------------------------------------//
 
@@ -43,28 +44,28 @@ namespace boost {
 
 class timer
 {
- public:
-         timer() { _start_time = std::clock(); } // postcondition: elapsed()==0
-//         timer( const timer& src );      // post: elapsed()==src.elapsed()
-//        ~timer(){}
-//  timer& operator=( const timer& src );  // post: elapsed()==src.elapsed()
-  void   restart() { _start_time = std::clock(); } // post: elapsed()==0
-  double elapsed() const                  // return elapsed time in seconds
-    { return  double(std::clock() - _start_time) / CLOCKS_PER_SEC; }
+public:
+	timer() { _start_time = std::clock(); } // postcondition: elapsed()==0
+	//         timer( const timer& src );      // post: elapsed()==src.elapsed()
+	//        ~timer(){}
+	//  timer& operator=( const timer& src );  // post: elapsed()==src.elapsed()
+	void   restart() { _start_time = std::clock(); } // post: elapsed()==0
+	double elapsed() const                  // return elapsed time in seconds
+	{ return  double ( std::clock() - _start_time ) / CLOCKS_PER_SEC; }
 
-  double elapsed_max() const   // return estimated maximum value for elapsed()
-  // Portability warning: elapsed_max() may return too high a value on systems
-  // where std::clock_t overflows or resets at surprising values.
-  {
-    return (double((std::numeric_limits<std::clock_t>::max)())
-       - double(_start_time)) / double(CLOCKS_PER_SEC); 
-  }
+	double elapsed_max() const   // return estimated maximum value for elapsed()
+	// Portability warning: elapsed_max() may return too high a value on systems
+	// where std::clock_t overflows or resets at surprising values.
+	{
+		return ( double ( ( std::numeric_limits<std::clock_t>::max ) () )
+		         - double ( _start_time ) ) / double ( CLOCKS_PER_SEC );
+	}
 
-  double elapsed_min() const            // return minimum value for elapsed()
-   { return double(1)/double(CLOCKS_PER_SEC); }
+	double elapsed_min() const            // return minimum value for elapsed()
+	{ return double ( 1 ) / double ( CLOCKS_PER_SEC ); }
 
- private:
-  std::clock_t _start_time;
+private:
+	std::clock_t _start_time;
 }; // timer
 
 } // namespace boost

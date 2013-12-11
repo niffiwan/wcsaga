@@ -32,135 +32,135 @@ namespace boost
 namespace detail
 {
 
-inline void atomic_increment( register long * pw )
+inline void atomic_increment ( register long *pw )
 {
-    register int a;
+	register int a;
 
-    asm
-    {
-loop:
+	asm
+	{
+		loop:
 
-    lwarx   a, 0, pw
-    addi    a, a, 1
-    stwcx.  a, 0, pw
-    bne-    loop
-    }
+		lwarx   a, 0, pw
+		addi    a, a, 1
+		stwcx.  a, 0, pw
+		bne-    loop
+	}
 }
 
-inline long atomic_decrement( register long * pw )
+inline long atomic_decrement ( register long *pw )
 {
-    register int a;
+	register int a;
 
-    asm
-    {
-    sync
+	asm
+	{
+		sync
 
-loop:
+		loop:
 
-    lwarx   a, 0, pw
-    addi    a, a, -1
-    stwcx.  a, 0, pw
-    bne-    loop
+		lwarx   a, 0, pw
+		addi    a, a, -1
+		stwcx.  a, 0, pw
+		bne-    loop
 
-    isync
-    }
+		isync
+	}
 
-    return a;
+	return a;
 }
 
-inline long atomic_conditional_increment( register long * pw )
+inline long atomic_conditional_increment ( register long *pw )
 {
-    register int a;
+	register int a;
 
-    asm
-    {
-loop:
+	asm
+	{
+		loop:
 
-    lwarx   a, 0, pw
-    cmpwi   a, 0
-    beq     store
+		lwarx   a, 0, pw
+		cmpwi   a, 0
+		beq     store
 
-    addi    a, a, 1
+		addi    a, a, 1
 
-store:
+		store:
 
-    stwcx.  a, 0, pw
-    bne-    loop
-    }
+		stwcx.  a, 0, pw
+		bne-    loop
+	}
 
-    return a;
+	return a;
 }
 
 class sp_counted_base
 {
 private:
 
-    sp_counted_base( sp_counted_base const & );
-    sp_counted_base & operator= ( sp_counted_base const & );
+	sp_counted_base ( sp_counted_base const & );
+	sp_counted_base &operator= ( sp_counted_base const & );
 
-    long use_count_;        // #shared
-    long weak_count_;       // #weak + (#shared != 0)
+	long use_count_;        // #shared
+	long weak_count_;       // #weak + (#shared != 0)
 
 public:
 
-    sp_counted_base(): use_count_( 1 ), weak_count_( 1 )
-    {
-    }
+	sp_counted_base() : use_count_ ( 1 ), weak_count_ ( 1 )
+	{
+	}
 
-    virtual ~sp_counted_base() // nothrow
-    {
-    }
+	virtual ~sp_counted_base() // nothrow
+	{
+	}
 
-    // dispose() is called when use_count_ drops to zero, to release
-    // the resources managed by *this.
+	// dispose() is called when use_count_ drops to zero, to release
+	// the resources managed by *this.
 
-    virtual void dispose() = 0; // nothrow
+	virtual void dispose() = 0; // nothrow
 
-    // destroy() is called when weak_count_ drops to zero.
+	// destroy() is called when weak_count_ drops to zero.
 
-    virtual void destroy() // nothrow
-    {
-        delete this;
-    }
+	virtual void destroy() // nothrow
+	{
+		delete this;
+	}
 
-    virtual void * get_deleter( sp_typeinfo const & ti ) = 0;
+	virtual void *get_deleter ( sp_typeinfo const &ti ) = 0;
 
-    void add_ref_copy()
-    {
-        atomic_increment( &use_count_ );
-    }
+	void add_ref_copy()
+	{
+		atomic_increment ( &use_count_ );
+	}
 
-    bool add_ref_lock() // true on success
-    {
-        return atomic_conditional_increment( &use_count_ ) != 0;
-    }
+	bool add_ref_lock() // true on success
+	{
+		return atomic_conditional_increment ( &use_count_ ) != 0;
+	}
 
-    void release() // nothrow
-    {
-        if( atomic_decrement( &use_count_ ) == 0 )
-        {
-            dispose();
-            weak_release();
-        }
-    }
+	void release() // nothrow
+	{
+		if ( atomic_decrement ( &use_count_ ) == 0 )
+		{
+			dispose();
+			weak_release();
+		}
+	}
 
-    void weak_add_ref() // nothrow
-    {
-        atomic_increment( &weak_count_ );
-    }
+	void weak_add_ref() // nothrow
+	{
+		atomic_increment ( &weak_count_ );
+	}
 
-    void weak_release() // nothrow
-    {
-        if( atomic_decrement( &weak_count_ ) == 0 )
-        {
-            destroy();
-        }
-    }
+	void weak_release() // nothrow
+	{
+		if ( atomic_decrement ( &weak_count_ ) == 0 )
+		{
+			destroy();
+		}
+	}
 
-    long use_count() const // nothrow
-    {
-        return static_cast<long const volatile &>( use_count_ );
-    }
+	long use_count() const // nothrow
+	{
+		return static_cast<long const volatile &> ( use_count_ );
+	}
 };
 
 } // namespace detail

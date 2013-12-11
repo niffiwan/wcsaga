@@ -16,8 +16,10 @@
 #include <boost/intrusive/link_mode.hpp>
 #include <iterator>
 
-namespace boost {
-namespace intrusive {
+namespace boost
+{
+namespace intrusive
+{
 
 //!This value traits template is used to create value traits
 //!from user defined node traits where value_traits::value_type will
@@ -25,32 +27,32 @@ namespace intrusive {
 template<class T, class NodeTraits, link_mode_type LinkMode = safe_link>
 struct derivation_value_traits
 {
-   public:
-   typedef NodeTraits                                                node_traits;
-   typedef T                                                         value_type;
-   typedef typename node_traits::node                                node;
-   typedef typename node_traits::node_ptr                            node_ptr;
-   typedef typename node_traits::const_node_ptr                      const_node_ptr;
-   typedef typename boost::pointer_to_other<node_ptr, T>::type       pointer;
-   typedef typename boost::pointer_to_other<node_ptr, const T>::type const_pointer;
-   typedef typename std::iterator_traits<pointer>::reference         reference;
-   typedef typename std::iterator_traits<const_pointer>::reference   const_reference;
-   static const link_mode_type link_mode = LinkMode;
+public:
+	typedef NodeTraits                                                node_traits;
+	typedef T                                                         value_type;
+	typedef typename node_traits::node                                node;
+	typedef typename node_traits::node_ptr                            node_ptr;
+	typedef typename node_traits::const_node_ptr                      const_node_ptr;
+	typedef typename boost::pointer_to_other<node_ptr, T>::type       pointer;
+	typedef typename boost::pointer_to_other<node_ptr, const T>::type const_pointer;
+	typedef typename std::iterator_traits<pointer>::reference         reference;
+	typedef typename std::iterator_traits<const_pointer>::reference   const_reference;
+	static const link_mode_type link_mode = LinkMode;
 
-   static node_ptr to_node_ptr(reference value)
-   { return node_ptr(&value); }
+	static node_ptr to_node_ptr ( reference value )
+	{ return node_ptr ( &value ); }
 
-   static const_node_ptr to_node_ptr(const_reference value)
-   { return node_ptr(&value); }
+	static const_node_ptr to_node_ptr ( const_reference value )
+	{ return node_ptr ( &value ); }
 
-   static pointer to_value_ptr(node_ptr n) 
-   {  return pointer(static_cast<T*>(detail::get_pointer(n))); }
+	static pointer to_value_ptr ( node_ptr n )
+	{  return pointer ( static_cast<T *> ( detail::get_pointer ( n ) ) ); }
 
-   static const_pointer to_value_ptr(const_node_ptr n)
-   {  return const_pointer(static_cast<const T*>(detail::get_pointer(n))); }
+	static const_pointer to_value_ptr ( const_node_ptr n )
+	{  return const_pointer ( static_cast<const T *> ( detail::get_pointer ( n ) ) ); }
 };
 
-} //namespace intrusive 
-} //namespace boost 
+} //namespace intrusive
+} //namespace boost
 
 #endif //BOOST_INTRUSIVE_DERIVATION_VALUE_TRAITS_HPP

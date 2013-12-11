@@ -24,13 +24,16 @@
 #include <boost/type_traits/is_convertible.hpp>
 #endif
 
-namespace boost{
+namespace boost
+{
 
 template<class Type> class reference_wrapper; /* fwd decl. */
 
-namespace multi_index{
+namespace multi_index
+{
 
-namespace detail{
+namespace detail
+{
 
 /* identity is a do-nothing key extractor that returns the [const] Type&
  * object passed.
@@ -55,88 +58,88 @@ namespace detail{
 template<typename Type>
 struct const_identity_base
 {
-  typedef Type result_type;
+	typedef Type result_type;
 
-  template<typename ChainedPtr>
+	template<typename ChainedPtr>
 
 #if !defined(BOOST_NO_SFINAE)
-  typename disable_if<is_convertible<const ChainedPtr&,Type&>,Type&>::type
+	typename disable_if<is_convertible<const ChainedPtr &, Type &>, Type &>::type
 #else
-  Type&
-#endif 
-  
-  operator()(const ChainedPtr& x)const
-  {
-    return operator()(*x);
-  }
+	Type &
+#endif
 
-  Type& operator()(Type& x)const
-  {
-    return x;
-  }
+	operator() ( const ChainedPtr &x ) const
+	{
+		return operator() ( *x );
+	}
 
-  Type& operator()(const reference_wrapper<Type>& x)const
-  { 
-    return x.get();
-  }
+	Type &operator() ( Type &x ) const
+	{
+		return x;
+	}
 
-  Type& operator()(
-    const reference_wrapper<typename remove_const<Type>::type>& x,int=0)const
-  { 
-    return x.get();
-  }
+	Type &operator() ( const reference_wrapper<Type> &x ) const
+	{
+		return x.get();
+	}
+
+	Type &operator() (
+	    const reference_wrapper<typename remove_const<Type>::type> &x, int = 0 ) const
+	{
+		return x.get();
+	}
 };
 
 template<typename Type>
 struct non_const_identity_base
 {
-  typedef Type result_type;
+	typedef Type result_type;
 
-  /* templatized for pointer-like types */
-  
-  template<typename ChainedPtr>
+	/* templatized for pointer-like types */
+
+	template<typename ChainedPtr>
 
 #if !defined(BOOST_NO_SFINAE)
-  typename disable_if<
-    is_convertible<const ChainedPtr&,const Type&>,Type&>::type
+	typename disable_if <
+	is_convertible<const ChainedPtr &, const Type &>, Type & >::type
 #else
-  Type&
-#endif 
-    
-  operator()(const ChainedPtr& x)const
-  {
-    return operator()(*x);
-  }
+	Type &
+#endif
 
-  const Type& operator()(const Type& x,int=0)const
-  {
-    return x;
-  }
+	operator() ( const ChainedPtr &x ) const
+	{
+		return operator() ( *x );
+	}
 
-  Type& operator()(Type& x)const
-  {
-    return x;
-  }
+	const Type &operator() ( const Type &x, int = 0 ) const
+	{
+		return x;
+	}
 
-  const Type& operator()(const reference_wrapper<const Type>& x,int=0)const
-  { 
-    return x.get();
-  }
+	Type &operator() ( Type &x ) const
+	{
+		return x;
+	}
 
-  Type& operator()(const reference_wrapper<Type>& x)const
-  { 
-    return x.get();
-  }
+	const Type &operator() ( const reference_wrapper<const Type> &x, int = 0 ) const
+	{
+		return x.get();
+	}
+
+	Type &operator() ( const reference_wrapper<Type> &x ) const
+	{
+		return x.get();
+	}
 };
 
 } /* namespace multi_index::detail */
 
 template<class Type>
 struct identity:
-  mpl::if_c<
-    is_const<Type>::value,
-    detail::const_identity_base<Type>,detail::non_const_identity_base<Type>
-  >::type
+		mpl::if_c <
+		is_const<Type>::value,
+		detail::const_identity_base<Type>, detail::non_const_identity_base<Type>
+		>::type
 {
 };
 

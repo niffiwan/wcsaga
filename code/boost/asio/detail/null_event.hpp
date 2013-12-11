@@ -25,41 +25,44 @@
 
 #include <boost/asio/detail/noncopyable.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 class null_event
-  : private noncopyable
+	: private noncopyable
 {
 public:
-  // Constructor.
-  null_event()
-  {
-  }
+	// Constructor.
+	null_event()
+	{
+	}
 
-  // Destructor.
-  ~null_event()
-  {
-  }
+	// Destructor.
+	~null_event()
+	{
+	}
 
-  // Signal the event.
-  template <typename Lock>
-  void signal(Lock&)
-  {
-  }
+	// Signal the event.
+	template <typename Lock>
+	void signal ( Lock & )
+	{
+	}
 
-  // Reset the event.
-  template <typename Lock>
-  void clear(Lock&)
-  {
-  }
+	// Reset the event.
+	template <typename Lock>
+	void clear ( Lock & )
+	{
+	}
 
-  // Wait for the event to become signalled.
-  template <typename Lock>
-  void wait(Lock&)
-  {
-  }
+	// Wait for the event to become signalled.
+	template <typename Lock>
+	void wait ( Lock & )
+	{
+	}
 };
 
 } // namespace detail

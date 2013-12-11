@@ -1,4 +1,4 @@
-//  Copyright David Abrahams 2002. 
+//  Copyright David Abrahams 2002.
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -11,18 +11,21 @@
 
 #include <boost/config.hpp>
 
-namespace boost {
-namespace type_traits {
+namespace boost
+{
+namespace type_traits
+{
 
 // Utility class which always "returns" false
 struct false_result
 {
-    template <typename T> struct result_
-    {
-        BOOST_STATIC_CONSTANT(bool, value = false);
-    };
+	template <typename T> struct result_
+	{
+		BOOST_STATIC_CONSTANT ( bool, value = false );
+	};
 };
 
-}} // namespace boost::type_traits
+}
+} // namespace boost::type_traits
 
 #endif // BOOST_TT_DETAIL_FALSE_RESULT_HPP_INCLUDED

@@ -23,62 +23,62 @@
 
 namespace boost
 {
-  namespace signals2
-  {
-    namespace detail
-    {
-      extern inline void do_postconstruct(const postconstructible *ptr)
-      {
-        postconstructible *nonconst_ptr = const_cast<postconstructible*>(ptr);
-        nonconst_ptr->postconstruct();
-      }
-      extern inline void do_postconstruct(...)
-      {
-      }
-      extern inline void do_predestruct(...)
-      {
-      }
-      extern inline void do_predestruct(const predestructible *ptr)
-      {
-        try
-        {
-          predestructible *nonconst_ptr = const_cast<predestructible*>(ptr);
-          nonconst_ptr->predestruct();
-        }
-        catch(...)
-        {
-          BOOST_ASSERT(false);
-        }
-      }
-    }
+namespace signals2
+{
+namespace detail
+{
+extern inline void do_postconstruct ( const postconstructible *ptr )
+{
+postconstructible *nonconst_ptr = const_cast<postconstructible *> ( ptr );
+nonconst_ptr->postconstruct();
+}
+extern inline void do_postconstruct ( ... )
+{
+}
+extern inline void do_predestruct ( ... )
+{
+}
+extern inline void do_predestruct ( const predestructible *ptr )
+{
+try
+{
+	predestructible *nonconst_ptr = const_cast<predestructible *> ( ptr );
+	nonconst_ptr->predestruct();
+}
+catch ( ... )
+{
+	BOOST_ASSERT ( false );
+}
+}
+}
 
-    template<typename T> class predestructing_deleter
-    {
-    public:
-      void operator()(const T *ptr) const
-      {
-        detail::do_predestruct(ptr);
-        checked_delete(ptr);
-      }
-    };
+template<typename T> class predestructing_deleter
+{
+public:
+void operator() ( const T *ptr ) const
+{
+	detail::do_predestruct ( ptr );
+	checked_delete ( ptr );
+}
+};
 
-    template<typename T>
-    shared_ptr<T> deconstruct_ptr(T *ptr)
-    {
-      if(ptr == 0) return shared_ptr<T>(ptr);
-      shared_ptr<T> shared(ptr, boost::signals2::predestructing_deleter<T>());
-      detail::do_postconstruct(ptr);
-      return shared;
-    }
-    template<typename T, typename D>
-    shared_ptr<T> deconstruct_ptr(T *ptr, D deleter)
-    {
-      shared_ptr<T> shared(ptr, deleter);
-      if(ptr == 0) return shared;
-      detail::do_postconstruct(ptr);
-      return shared;
-    }
-  }
+template<typename T>
+shared_ptr<T> deconstruct_ptr ( T *ptr )
+{
+if ( ptr == 0 ) return shared_ptr<T> ( ptr );
+shared_ptr<T> shared ( ptr, boost::signals2::predestructing_deleter<T>() );
+detail::do_postconstruct ( ptr );
+return shared;
+}
+template<typename T, typename D>
+shared_ptr<T> deconstruct_ptr ( T *ptr, D deleter )
+{
+shared_ptr<T> shared ( ptr, deleter );
+if ( ptr == 0 ) return shared;
+detail::do_postconstruct ( ptr );
+return shared;
+}
+}
 }
 
 #endif // BOOST_SIGNALS2_DECONSTRUCT_PTR_HPP

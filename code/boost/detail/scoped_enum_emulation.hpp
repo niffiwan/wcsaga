@@ -11,7 +11,7 @@
 //
 //  See http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2347.pdf for a
 //  description of the scoped enum feature. Note that the committee changed the name
-//  from strongly typed enum to scoped enum.  
+//  from strongly typed enum to scoped enum.
 //
 //  Caution: only the syntax is emulated; the semantics are not emulated and
 //  the syntax emulation doesn't include being able to specify the underlying
@@ -22,7 +22,7 @@
 //
 //  Helpful comments and suggestions were also made by Kjell Elster, Phil Endecott,
 //  Joel Falcou, Mathias Gaunard, Felipe Magno de Almeida, Matt Calabrese, Vincente
-//  Botet, and Daniel James. 
+//  Botet, and Daniel James.
 //
 //  Sample usage:
 //

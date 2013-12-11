@@ -11,30 +11,34 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/not.hpp>
 
-namespace boost { namespace fusion {
+namespace boost
+{
+namespace fusion
+{
 
-    struct struct_tag;
+struct struct_tag;
 
-    namespace extension
-    {
-        struct no_such_member;
+namespace extension
+{
+struct no_such_member;
 
-        template<typename T>
-        struct has_key_impl;
+template<typename T>
+struct has_key_impl;
 
-        template<typename Struct, typename Key>
-        struct struct_assoc_member;
+template<typename Struct, typename Key>
+struct struct_assoc_member;
 
-        template<>
-        struct has_key_impl<struct_tag>
-        {
-            template<typename Sequence, typename Key>
-            struct apply
-                : mpl::not_<is_same<no_such_member, typename struct_assoc_member<Sequence, Key>::type> >
-            {
-            };
-        };
-    }
-}}
+template<>
+struct has_key_impl<struct_tag>
+{
+	template<typename Sequence, typename Key>
+	struct apply
+			: mpl::not_<is_same<no_such_member, typename struct_assoc_member<Sequence, Key>::type> >
+	{
+	};
+};
+}
+}
+}
 
 #endif

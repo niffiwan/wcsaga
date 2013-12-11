@@ -13,7 +13,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #if defined(BOOST_BZIP2_BINARY)
 # if defined(BOOST_MSVC) || \
@@ -25,7 +25,7 @@
 // Specify the name of the .lib file.
 #  pragma comment(lib, BOOST_STRINGIZE(BOOST_BZIP2_BINARY))
 # endif
-#else 
+#else
 # if !defined(BOOST_IOSTREAMS_SOURCE) && \
      !defined(BOOST_ALL_NO_LIB) && \
      !defined(BOOST_IOSTREAMS_NO_LIB) \

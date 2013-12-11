@@ -66,7 +66,7 @@ namespace boost { namespace python { namespace api {    \
                                                         \
   template<typename R, typename T>                      \
   struct enable_binary< OArchiver , R, T> {};           \
-} } } 
+} } }
 # else
 #  define BOOST_PYTHON_SERIALIZATION_ARCHIVE(IArchiver, OArchiver)
 #endif
@@ -128,24 +128,28 @@ template<>                                                              \
 }                                                                       \
 } } }
 
-namespace boost { namespace python {
+namespace boost
+{
+namespace python
+{
 
 /**
  * INTERNAL ONLY
  *
  * Provides access to the Python "pickle" module from within C++.
  */
-class BOOST_MPI_PYTHON_DECL pickle {
-  struct data_t;
+class BOOST_MPI_PYTHON_DECL pickle
+{
+struct data_t;
 
 public:
-  static str dumps(object obj, int protocol = -1);
-  static object loads(str s);
-  
-private:
-  static void initialize_data();
+static str dumps ( object obj, int protocol = -1 );
+static object loads ( str s );
 
-  static data_t* data;
+private:
+static void initialize_data();
+
+static data_t *data;
 };
 
 /**
@@ -180,186 +184,198 @@ template<typename IArchiver> struct output_archiver { };
  */
 template<typename OArchiver> struct input_archiver { };
 
-namespace detail {
+namespace detail
+{
 
-  /**
-   * INTERNAL ONLY
-   *
-   * This class contains the direct-serialization code for the given
-   * IArchiver/OArchiver pair. It is intended to be used as a
-   * singleton class, and will be accessed when (de-)serializing a
-   * Boost.Python object with an archiver that supports direct
-   * serializations. Do not create instances of this class directly:
-   * instead, use get_direct_serialization_table.
-   */
-  template<typename IArchiver, typename OArchiver>
-  class BOOST_MPI_PYTHON_DECL direct_serialization_table
-  {
-  public:
-    typedef boost::function3<void, OArchiver&, const object&, const unsigned int>
-      saver_t;
-    typedef boost::function3<void, IArchiver&, object&, const unsigned int>
-      loader_t;
+/**
+ * INTERNAL ONLY
+ *
+ * This class contains the direct-serialization code for the given
+ * IArchiver/OArchiver pair. It is intended to be used as a
+ * singleton class, and will be accessed when (de-)serializing a
+ * Boost.Python object with an archiver that supports direct
+ * serializations. Do not create instances of this class directly:
+ * instead, use get_direct_serialization_table.
+ */
+template<typename IArchiver, typename OArchiver>
+class BOOST_MPI_PYTHON_DECL direct_serialization_table
+{
+public:
+typedef boost::function3<void, OArchiver &, const object &, const unsigned int>
+saver_t;
+typedef boost::function3<void, IArchiver &, object &, const unsigned int>
+loader_t;
 
-    typedef std::map<PyTypeObject*, std::pair<int, saver_t> > savers_t;
-    typedef std::map<int, loader_t> loaders_t;
+typedef std::map<PyTypeObject *, std::pair<int, saver_t> > savers_t;
+typedef std::map<int, loader_t> loaders_t;
 
-    /**
-     * Retrieve the saver (serializer) associated with the Python
-     * object @p obj.
-     *
-     *   @param obj The object we want to save. Only its (Python) type
-     *   is important.
-     *
-     *   @param descriptor The value of the descriptor associated to
-     *   the returned saver. Will be set to zero if no saver was found
-     *   for @p obj.
-     *
-     *   @returns a function object that can be used to serialize this
-     *   object (and other objects of the same type), if possible. If
-     *   no saver can be found, returns an empty function object..
-     */
-    saver_t saver(const object& obj, int& descriptor)
-    {
-      typename savers_t::iterator pos = savers.find(obj.ptr()->ob_type);
-      if (pos != savers.end()) {
-        descriptor = pos->second.first;
-        return pos->second.second;
-      }
-      else {
-        descriptor = 0;
-        return saver_t();
-      }
-    }
+/**
+ * Retrieve the saver (serializer) associated with the Python
+ * object @p obj.
+ *
+ *   @param obj The object we want to save. Only its (Python) type
+ *   is important.
+ *
+ *   @param descriptor The value of the descriptor associated to
+ *   the returned saver. Will be set to zero if no saver was found
+ *   for @p obj.
+ *
+ *   @returns a function object that can be used to serialize this
+ *   object (and other objects of the same type), if possible. If
+ *   no saver can be found, returns an empty function object..
+ */
+saver_t saver ( const object &obj, int &descriptor )
+{
+	typename savers_t::iterator pos = savers.find ( obj.ptr()->ob_type );
+	if ( pos != savers.end() )
+	{
+		descriptor = pos->second.first;
+		return pos->second.second;
+	}
+	else
+	{
+		descriptor = 0;
+		return saver_t();
+	}
+}
 
-    /**
-     * Retrieve the loader (deserializer) associated with the given
-     * descriptor.
-     *
-     *  @param descriptor The descriptor number provided by saver()
-     *  when determining the saver for this type.
-     *
-     *  @returns a function object that can be used to deserialize an
-     *  object whose type is the same as that corresponding to the
-     *  descriptor. If the descriptor is unknown, the return value
-     *  will be an empty function object.
-     */
-    loader_t loader(int descriptor)
-    {
-      typename loaders_t::iterator pos = loaders.find(descriptor);
-      if (pos != loaders.end())
-        return pos->second;
-      else
-        return loader_t();
-    }
+/**
+ * Retrieve the loader (deserializer) associated with the given
+ * descriptor.
+ *
+ *  @param descriptor The descriptor number provided by saver()
+ *  when determining the saver for this type.
+ *
+ *  @returns a function object that can be used to deserialize an
+ *  object whose type is the same as that corresponding to the
+ *  descriptor. If the descriptor is unknown, the return value
+ *  will be an empty function object.
+ */
+loader_t loader ( int descriptor )
+{
+	typename loaders_t::iterator pos = loaders.find ( descriptor );
+	if ( pos != loaders.end() )
+		return pos->second;
+	else
+		return loader_t();
+}
 
-    /**
-     * Register the type T for direct serialization.
-     *
-     *  @param value A sample value of the type @c T. This may be used
-     *  to compute the Python type associated with the C++ type @c T.
-     *
-     *  @param type The Python type associated with the C++ type @c
-     *  T. If not provided, it will be computed from the same value @p
-     *  value.
-     */
-    template<typename T>
-    void register_type(const T& value = T(), PyTypeObject* type = 0)
-    {
-      // If the user did not provide us with a Python type, figure it
-      // out for ourselves.
-      if (!type) {
-        object obj(value);
-        type = obj.ptr()->ob_type;
-      }
+/**
+ * Register the type T for direct serialization.
+ *
+ *  @param value A sample value of the type @c T. This may be used
+ *  to compute the Python type associated with the C++ type @c T.
+ *
+ *  @param type The Python type associated with the C++ type @c
+ *  T. If not provided, it will be computed from the same value @p
+ *  value.
+ */
+template<typename T>
+void register_type ( const T &value = T(), PyTypeObject *type = 0 )
+{
+	// If the user did not provide us with a Python type, figure it
+	// out for ourselves.
+	if ( !type )
+	{
+		object obj ( value );
+		type = obj.ptr()->ob_type;
+	}
 
-      register_type(default_saver<T>(), default_loader<T>(type), value, type);
-    }
+	register_type ( default_saver<T>(), default_loader<T> ( type ), value, type );
+}
 
-    /**
-     * Register the type T for direct serialization.
-     *
-     *  @param saver A function object that will serialize a
-     *  Boost.Python object (that represents a C++ object of type @c
-     *  T) to an @c OArchive.
-     *
-     *  @param loader A function object that will deserialize from an
-     *  @c IArchive into a Boost.Python object that represents a C++
-     *  object of type @c T.
-     *
-     *  @param value A sample value of the type @c T. This may be used
-     *  to compute the Python type associated with the C++ type @c T.
-     *
-     *  @param type The Python type associated with the C++ type @c
-     *  T. If not provided, it will be computed from the same value @p
-     *  value.
-     */
-    template<typename T>
-    void register_type(const saver_t& saver, const loader_t& loader, 
-                       const T& value = T(), PyTypeObject* type = 0)
-    {
-      // If the user did not provide us with a Python type, figure it
-      // out for ourselves.
-      if (!type) {
-        object obj(value);
-        type = obj.ptr()->ob_type;
-      }
+/**
+ * Register the type T for direct serialization.
+ *
+ *  @param saver A function object that will serialize a
+ *  Boost.Python object (that represents a C++ object of type @c
+ *  T) to an @c OArchive.
+ *
+ *  @param loader A function object that will deserialize from an
+ *  @c IArchive into a Boost.Python object that represents a C++
+ *  object of type @c T.
+ *
+ *  @param value A sample value of the type @c T. This may be used
+ *  to compute the Python type associated with the C++ type @c T.
+ *
+ *  @param type The Python type associated with the C++ type @c
+ *  T. If not provided, it will be computed from the same value @p
+ *  value.
+ */
+template<typename T>
+void register_type ( const saver_t &saver, const loader_t &loader,
+                     const T &value = T(), PyTypeObject *type = 0 )
+{
+	// If the user did not provide us with a Python type, figure it
+	// out for ourselves.
+	if ( !type )
+	{
+		object obj ( value );
+		type = obj.ptr()->ob_type;
+	}
 
-      int descriptor = savers.size() + 1;
-      if (savers.find(type) != savers.end())
-        return;
+	int descriptor = savers.size() + 1;
+	if ( savers.find ( type ) != savers.end() )
+		return;
 
-      savers[type] = std::make_pair(descriptor, saver);
-      loaders[descriptor] = loader;
-    }
+	savers[type] = std::make_pair ( descriptor, saver );
+	loaders[descriptor] = loader;
+}
 
-  protected:
-    template<typename T>
-    struct default_saver {
-      void operator()(OArchiver& ar, const object& obj, const unsigned int) {
-        T value = extract<T>(obj)();
-        ar << value;
-      }
-    };
+protected:
+template<typename T>
+struct default_saver
+{
+	void operator() ( OArchiver &ar, const object &obj, const unsigned int )
+	{
+		T value = extract<T> ( obj ) ();
+		ar << value;
+	}
+};
 
-    template<typename T>
-    struct default_loader {
-      default_loader(PyTypeObject* type) : type(type) { }
+template<typename T>
+struct default_loader
+{
+	default_loader ( PyTypeObject *type ) : type ( type ) { }
 
-      void operator()(IArchiver& ar, object& obj, const unsigned int) {
-        // If we can, extract the object in place.
-        if (!is_fundamental<T>::value && obj && obj.ptr()->ob_type == type) {
-          ar >> extract<T&>(obj)();
-        } else {
-          T value;
-          ar >> value;
-          obj = object(value);
-        }
-      }
+	void operator() ( IArchiver &ar, object &obj, const unsigned int )
+	{
+		// If we can, extract the object in place.
+		if ( !is_fundamental<T>::value && obj && obj.ptr()->ob_type == type )
+		{
+			ar >> extract<T &> ( obj ) ();
+		}
+		else
+		{
+			T value;
+			ar >> value;
+			obj = object ( value );
+		}
+	}
 
-    private:
-      PyTypeObject* type;
-    };
+private:
+	PyTypeObject *type;
+};
 
-    savers_t savers;
-    loaders_t loaders;
-  };
+savers_t savers;
+loaders_t loaders;
+};
 
-  /**
-   * @brief Retrieve the direct-serialization table for an
-   * IArchiver/OArchiver pair.
-   *
-   * This function is responsible for returning a reference to the
-   * singleton direct-serialization table. Its primary template is
-   * left undefined, to force the use of an explicit specialization
-   * with a definition in a single translation unit. Use the macro
-   * BOOST_PYTHON_DIRECT_SERIALIZATION_ARCHIVE_IMPL to define this
-   * explicit specialization.
-   */
-  template<typename IArchiver, typename OArchiver>
-  direct_serialization_table<IArchiver, OArchiver>&
-  get_direct_serialization_table();
-} // end namespace detail 
+/**
+ * @brief Retrieve the direct-serialization table for an
+ * IArchiver/OArchiver pair.
+ *
+ * This function is responsible for returning a reference to the
+ * singleton direct-serialization table. Its primary template is
+ * left undefined, to force the use of an explicit specialization
+ * with a definition in a single translation unit. Use the macro
+ * BOOST_PYTHON_DIRECT_SERIALIZATION_ARCHIVE_IMPL to define this
+ * explicit specialization.
+ */
+template<typename IArchiver, typename OArchiver>
+direct_serialization_table<IArchiver, OArchiver> &
+get_direct_serialization_table();
+} // end namespace detail
 
 /**
  * @brief Register the type T for direct serialization.
@@ -382,158 +398,177 @@ namespace detail {
  */
 template<typename IArchiver, typename OArchiver, typename T>
 void
-register_serialized(const T& value = T(), PyTypeObject* type = 0)
+register_serialized ( const T &value = T(), PyTypeObject *type = 0 )
 {
-  detail::direct_serialization_table<IArchiver, OArchiver>& table = 
+detail::direct_serialization_table<IArchiver, OArchiver> &table =
     detail::get_direct_serialization_table<IArchiver, OArchiver>();
-  table.register_type(value, type);
+table.register_type ( value, type );
 }
 
-namespace detail {
+namespace detail
+{
 
 /// Save a Python object by pickling it.
 template<typename Archiver>
-void 
-save_impl(Archiver& ar, const boost::python::object& obj, 
-          const unsigned int /*version*/,
-          mpl::false_ /*has_direct_serialization*/)
+void
+save_impl ( Archiver &ar, const boost::python::object &obj,
+            const unsigned int /*version*/,
+            mpl::false_ /*has_direct_serialization*/ )
 {
-  boost::python::str py_string = boost::python::pickle::dumps(obj);
-  int len = boost::python::extract<int>(py_string.attr("__len__")());
-  const char* string = boost::python::extract<const char*>(py_string);
-  ar << len << boost::serialization::make_array(string, len);
+boost::python::str py_string = boost::python::pickle::dumps ( obj );
+int len = boost::python::extract<int> ( py_string.attr ( "__len__" ) () );
+const char *string = boost::python::extract<const char *> ( py_string );
+ar << len << boost::serialization::make_array ( string, len );
 }
 
 /// Try to save a Python object by directly serializing it; fall back
 /// on pickling if required.
 template<typename Archiver>
-void 
-save_impl(Archiver& ar, const boost::python::object& obj, 
-          const unsigned int version,
-          mpl::true_ /*has_direct_serialization*/)
+void
+save_impl ( Archiver &ar, const boost::python::object &obj,
+            const unsigned int version,
+            mpl::true_ /*has_direct_serialization*/ )
 {
-  typedef Archiver OArchiver;
-  typedef typename input_archiver<OArchiver>::type IArchiver;
-  typedef typename direct_serialization_table<IArchiver, OArchiver>::saver_t
-    saver_t;
+typedef Archiver OArchiver;
+typedef typename input_archiver<OArchiver>::type IArchiver;
+typedef typename direct_serialization_table<IArchiver, OArchiver>::saver_t
+saver_t;
 
-  direct_serialization_table<IArchiver, OArchiver>& table = 
+direct_serialization_table<IArchiver, OArchiver> &table =
     get_direct_serialization_table<IArchiver, OArchiver>();
 
-  int descriptor = 0;
-  if (saver_t saver = table.saver(obj, descriptor)) {
-    ar << descriptor;
-    saver(ar, obj, version);
-  } else {
-    // Pickle it
-    ar << descriptor;
-    detail::save_impl(ar, obj, version, mpl::false_());
-  }
+int descriptor = 0;
+if ( saver_t saver = table.saver ( obj, descriptor ) )
+{
+	ar << descriptor;
+	saver ( ar, obj, version );
+}
+else
+{
+	// Pickle it
+	ar << descriptor;
+	detail::save_impl ( ar, obj, version, mpl::false_() );
+}
 }
 
 /// Load a Python object by unpickling it
 template<typename Archiver>
-void 
-load_impl(Archiver& ar, boost::python::object& obj, 
-          const unsigned int /*version*/, 
-          mpl::false_ /*has_direct_serialization*/)
+void
+load_impl ( Archiver &ar, boost::python::object &obj,
+            const unsigned int /*version*/,
+            mpl::false_ /*has_direct_serialization*/ )
 {
-  int len;
-  ar >> len;
+int len;
+ar >> len;
 
-  std::auto_ptr<char> string(new char[len]);
-  ar >> boost::serialization::make_array(string.get(), len);
-  boost::python::str py_string(string.get(), len);
-  obj = boost::python::pickle::loads(py_string);
+std::auto_ptr<char> string ( new char[len] );
+ar >> boost::serialization::make_array ( string.get(), len );
+boost::python::str py_string ( string.get(), len );
+obj = boost::python::pickle::loads ( py_string );
 }
 
 /// Try to load a Python object by directly deserializing it; fall back
 /// on unpickling if required.
 template<typename Archiver>
-void 
-load_impl(Archiver& ar, boost::python::object& obj, 
-          const unsigned int version,
-          mpl::true_ /*has_direct_serialization*/)
+void
+load_impl ( Archiver &ar, boost::python::object &obj,
+            const unsigned int version,
+            mpl::true_ /*has_direct_serialization*/ )
 {
-  typedef Archiver IArchiver;
-  typedef typename output_archiver<IArchiver>::type OArchiver;
-  typedef typename direct_serialization_table<IArchiver, OArchiver>::loader_t
-    loader_t;
+typedef Archiver IArchiver;
+typedef typename output_archiver<IArchiver>::type OArchiver;
+typedef typename direct_serialization_table<IArchiver, OArchiver>::loader_t
+loader_t;
 
-  direct_serialization_table<IArchiver, OArchiver>& table = 
+direct_serialization_table<IArchiver, OArchiver> &table =
     get_direct_serialization_table<IArchiver, OArchiver>();
 
-  int descriptor;
-  ar >> descriptor;
+int descriptor;
+ar >> descriptor;
 
-  if (descriptor) {
-    loader_t loader = table.loader(descriptor);
-    BOOST_ASSERT(loader);
+if ( descriptor )
+{
+	loader_t loader = table.loader ( descriptor );
+	BOOST_ASSERT ( loader );
 
-    loader(ar, obj, version);
-  } else {
-    // Unpickle it
-    detail::load_impl(ar, obj, version, mpl::false_());
-  }
+	loader ( ar, obj, version );
+}
+else
+{
+	// Unpickle it
+	detail::load_impl ( ar, obj, version, mpl::false_() );
+}
 }
 
 } // end namespace detail
 
 template<typename Archiver>
-void 
-save(Archiver& ar, const boost::python::object& obj, 
-     const unsigned int version)
+void
+save ( Archiver &ar, const boost::python::object &obj,
+       const unsigned int version )
 {
-  typedef Archiver OArchiver;
-  typedef typename input_archiver<OArchiver>::type IArchiver;
+typedef Archiver OArchiver;
+typedef typename input_archiver<OArchiver>::type IArchiver;
 
-  detail::save_impl(ar, obj, version, 
-                    has_direct_serialization<IArchiver, OArchiver>());
+detail::save_impl ( ar, obj, version,
+                    has_direct_serialization<IArchiver, OArchiver>() );
 }
 
 template<typename Archiver>
-void 
-load(Archiver& ar, boost::python::object& obj, 
-     const unsigned int version)
+void
+load ( Archiver &ar, boost::python::object &obj,
+       const unsigned int version )
 {
-  typedef Archiver IArchiver;
-  typedef typename output_archiver<IArchiver>::type OArchiver;
+typedef Archiver IArchiver;
+typedef typename output_archiver<IArchiver>::type OArchiver;
 
-  detail::load_impl(ar, obj, version, 
-                    has_direct_serialization<IArchiver, OArchiver>());
+detail::load_impl ( ar, obj, version,
+                    has_direct_serialization<IArchiver, OArchiver>() );
 }
 
 template<typename Archive>
-inline void 
-serialize(Archive& ar, boost::python::object& obj, const unsigned int version)
+inline void
+serialize ( Archive &ar, boost::python::object &obj, const unsigned int version )
 {
-  boost::serialization::split_free(ar, obj, version);
+boost::serialization::split_free ( ar, obj, version );
 }
 
-} } // end namespace boost::python
+}
+} // end namespace boost::python
 
 /************************************************************************
  * Boost.MPI-Specific Section                                           *
  ************************************************************************/
-namespace boost { namespace mpi {
- class packed_iarchive;
- class packed_oarchive;
-} } // end namespace boost::mpi
+namespace boost
+{
+namespace mpi
+{
+class packed_iarchive;
+class packed_oarchive;
+}
+} // end namespace boost::mpi
 
-BOOST_PYTHON_DIRECT_SERIALIZATION_ARCHIVE(
-  ::boost::mpi::packed_iarchive,
-  ::boost::mpi::packed_oarchive)
+BOOST_PYTHON_DIRECT_SERIALIZATION_ARCHIVE (
+    ::boost::mpi::packed_iarchive,
+    ::boost::mpi::packed_oarchive )
 
-namespace boost { namespace mpi { namespace python {
+namespace boost
+{
+namespace mpi
+{
+namespace python
+{
 
 template<typename T>
 void
-register_serialized(const T& value, PyTypeObject* type)
+register_serialized ( const T &value, PyTypeObject *type )
 {
-  using boost::python::register_serialized;
-  register_serialized<packed_iarchive, packed_oarchive>(value, type);
+using boost::python::register_serialized;
+register_serialized<packed_iarchive, packed_oarchive> ( value, type );
 }
 
-} } } // end namespace boost::mpi::python
+}
+}
+} // end namespace boost::mpi::python
 
 #endif // BOOST_MPI_PYTHON_SERIALIZE_HPP

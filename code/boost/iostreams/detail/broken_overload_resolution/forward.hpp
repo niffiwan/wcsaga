@@ -12,20 +12,28 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-namespace boost { namespace iostreams { namespace detail {
+namespace boost
+{
+namespace iostreams
+{
+namespace detail
+{
 
 template<typename Device, typename U>
-struct forward_impl {
-    BOOST_STATIC_CONSTANT(bool, value =
-        ( !is_same< U, Device >::value &&
-          !is_same< U, reference_wrapper<Device> >::value ));
+struct forward_impl
+{
+	BOOST_STATIC_CONSTANT ( bool, value =
+	                            ( !is_same< U, Device >::value &&
+	                              !is_same< U, reference_wrapper<Device> >::value ) );
 };
 
 template<typename Device, typename U>
 struct forward
-    : mpl::bool_<forward_impl<Device, U>::value>
-    { };
+		: mpl::bool_<forward_impl<Device, U>::value>
+{ };
 
-} } } // End namespaces detail, iostreams, boost.
+}
+}
+} // End namespaces detail, iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_BROKEN_OVERLOAD_RESOLUTION_HPP_INCLUDED

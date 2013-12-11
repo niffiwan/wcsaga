@@ -16,27 +16,29 @@
 // should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
 
-namespace boost {
+namespace boost
+{
 
 #if !defined( __CODEGEARC__ )
-namespace detail {
+namespace detail
+{
 
 template <typename T>
 struct is_compound_impl
 {
-   BOOST_STATIC_CONSTANT(bool, value =
-      (::boost::type_traits::ice_not<
-         ::boost::is_fundamental<T>::value
-       >::value));
+	BOOST_STATIC_CONSTANT ( bool, value =
+	                            ( ::boost::type_traits::ice_not <
+	                              ::boost::is_fundamental<T>::value
+	                              >::value ) );
 };
 
 } // namespace detail
 #endif // !defined( __CODEGEARC__ )
 
 #if defined( __CODEGEARC__ )
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_compound,T,__is_compound(T))
+BOOST_TT_AUX_BOOL_TRAIT_DEF1 ( is_compound, T, __is_compound ( T ) )
 #else
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_compound,T,::boost::detail::is_compound_impl<T>::value)
+BOOST_TT_AUX_BOOL_TRAIT_DEF1 ( is_compound, T, ::boost::detail::is_compound_impl<T>::value )
 #endif
 
 } // namespace boost

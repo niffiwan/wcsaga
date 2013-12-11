@@ -11,36 +11,40 @@
 # include <boost/python/to_python_indirect.hpp>
 # include <boost/type_traits/composite_traits.hpp>
 
-namespace boost { namespace python { 
+namespace boost
+{
+namespace python
+{
 
 namespace detail
 {
-  template <class R>
-  struct reference_existing_object_requires_a_pointer_or_reference_return_type
+template <class R>
+struct reference_existing_object_requires_a_pointer_or_reference_return_type
 # if defined(__GNUC__) && __GNUC__ >= 3 || defined(__EDG__)
-  {}
+{}
 # endif
-  ;
+;
 }
 
 template <class T> struct to_python_value;
 
 struct reference_existing_object
 {
-    template <class T>
-    struct apply
-    {
-        BOOST_STATIC_CONSTANT(
-            bool, ok = is_pointer<T>::value || is_reference<T>::value);
-        
-        typedef typename mpl::if_c<
-            ok
-            , to_python_indirect<T, detail::make_reference_holder>
-            , detail::reference_existing_object_requires_a_pointer_or_reference_return_type<T>
-        >::type type;
-    };
+	template <class T>
+	struct apply
+	{
+		BOOST_STATIC_CONSTANT (
+		    bool, ok = is_pointer<T>::value || is_reference<T>::value );
+
+		typedef typename mpl::if_c <
+		ok
+		, to_python_indirect<T, detail::make_reference_holder>
+		, detail::reference_existing_object_requires_a_pointer_or_reference_return_type<T>
+		>::type type;
+	};
 };
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 #endif // REFERENCE_EXISTING_OBJECT_DWA200222_HPP

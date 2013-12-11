@@ -21,31 +21,35 @@
 #include <memory>
 #include <utility>
 
-namespace boost { namespace BOOST_SIGNALS_NAMESPACE {
+namespace boost
+{
+namespace BOOST_SIGNALS_NAMESPACE
+{
 
 enum connect_position { at_back, at_front };
 
-namespace detail {
+namespace detail
+{
 
 class stored_group
 {
- public:
-  enum storage_kind { sk_empty, sk_front, sk_back, sk_group };
+public:
+enum storage_kind { sk_empty, sk_front, sk_back, sk_group };
 
-  stored_group(storage_kind kind = sk_empty) : kind(kind), group() { }
+stored_group ( storage_kind kind = sk_empty ) : kind ( kind ), group() { }
 
-  template<typename T>
-  stored_group(const T& group) : kind(sk_group), group(new T(group)) { }
+template<typename T>
+stored_group ( const T &group ) : kind ( sk_group ), group ( new T ( group ) ) { }
 
-  bool is_front() const { return kind == sk_front; }
-  bool is_back() const { return kind == sk_back; }
-  bool empty() const { return kind == sk_empty; }
+bool is_front() const { return kind == sk_front; }
+bool is_back() const { return kind == sk_back; }
+bool empty() const { return kind == sk_empty; }
 
-  void* get() const { return group.get(); }
+void *get() const { return group.get(); }
 
- private:
-  storage_kind kind;
-  shared_ptr<void> group;
+private:
+storage_kind kind;
+shared_ptr<void> group;
 };
 
 typedef function2<bool, stored_group, stored_group> compare_type;
@@ -54,140 +58,146 @@ typedef function2<bool, stored_group, stored_group> compare_type;
 // values of type Key to the underlying function object that compares
 // values of type Key.
 template<typename Compare, typename Key>
-class group_bridge_compare {
+class group_bridge_compare
+{
 public:
-  typedef bool result_type;
-  typedef const stored_group& first_argument_type;
-  typedef const stored_group& second_argument_type;
+typedef bool result_type;
+typedef const stored_group &first_argument_type;
+typedef const stored_group &second_argument_type;
 
-  group_bridge_compare(const Compare& c) : comp(c) 
-  { }
+group_bridge_compare ( const Compare &c ) : comp ( c )
+{ }
 
-  bool operator()(const stored_group& k1, const stored_group& k2) const
-  {
-    if (k1.is_front()) return !k2.is_front();
-    if (k1.is_back()) return false;
-    if (k2.is_front()) return false;
-    if (k2.is_back()) return true;
+bool operator() ( const stored_group &k1, const stored_group &k2 ) const
+{
+	if ( k1.is_front() ) return !k2.is_front();
+	if ( k1.is_back() ) return false;
+	if ( k2.is_front() ) return false;
+	if ( k2.is_back() ) return true;
 
-    // Neither is empty, so compare their values to order them
-    return comp(*static_cast<Key*>(k1.get()), *static_cast<Key*>(k2.get()));
-  }
+	// Neither is empty, so compare their values to order them
+	return comp ( *static_cast<Key *> ( k1.get() ), *static_cast<Key *> ( k2.get() ) );
+}
 
 private:
-  Compare comp;
+Compare comp;
 };
 
 class BOOST_SIGNALS_DECL named_slot_map_iterator :
-  public iterator_facade<named_slot_map_iterator,
-                         connection_slot_pair,
-                         forward_traversal_tag>
+public iterator_facade<named_slot_map_iterator,
+connection_slot_pair,
+forward_traversal_tag>
 {
-  typedef std::list<connection_slot_pair> group_list;
-  typedef group_list::iterator slot_pair_iterator;
-  typedef std::map<stored_group, group_list, compare_type> slot_container_type;
-  typedef slot_container_type::iterator group_iterator;
-  typedef slot_container_type::const_iterator const_group_iterator;
+typedef std::list<connection_slot_pair> group_list;
+typedef group_list::iterator slot_pair_iterator;
+typedef std::map<stored_group, group_list, compare_type> slot_container_type;
+typedef slot_container_type::iterator group_iterator;
+typedef slot_container_type::const_iterator const_group_iterator;
 
-  typedef iterator_facade<named_slot_map_iterator,
-                          connection_slot_pair,
-                          forward_traversal_tag> inherited;
+typedef iterator_facade<named_slot_map_iterator,
+        connection_slot_pair,
+        forward_traversal_tag> inherited;
 public:
-  named_slot_map_iterator() : slot_assigned(false) 
-  { }
-  named_slot_map_iterator(const named_slot_map_iterator& other) 
-    : group(other.group), last_group(other.last_group),
-    slot_assigned(other.slot_assigned)
-  {
-    if (slot_assigned) slot_ = other.slot_;
-  }
-  named_slot_map_iterator& operator=(const named_slot_map_iterator& other) 
-  {
-    slot_assigned = other.slot_assigned;
-    group = other.group;
-    last_group = other.last_group;
-    if (slot_assigned) slot_ = other.slot_;
-    return *this;
-  }
-  connection_slot_pair& dereference() const 
-  {
-    return *slot_;
-  }
-  void increment() 
-  {
-    ++slot_;
-    if (slot_ == group->second.end()) {
-      ++group;
-      init_next_group();
-    }
-  }
-  bool equal(const named_slot_map_iterator& other) const {
-    return (group == other.group
-        && (group == last_group
-        || slot_ == other.slot_));
-  }
+named_slot_map_iterator() : slot_assigned ( false )
+{ }
+named_slot_map_iterator ( const named_slot_map_iterator &other )
+	: group ( other.group ), last_group ( other.last_group ),
+	  slot_assigned ( other.slot_assigned )
+{
+	if ( slot_assigned ) slot_ = other.slot_;
+}
+named_slot_map_iterator &operator= ( const named_slot_map_iterator &other )
+{
+	slot_assigned = other.slot_assigned;
+	group = other.group;
+	last_group = other.last_group;
+	if ( slot_assigned ) slot_ = other.slot_;
+	return *this;
+}
+connection_slot_pair &dereference() const
+{
+	return *slot_;
+}
+void increment()
+{
+	++slot_;
+	if ( slot_ == group->second.end() )
+	{
+		++group;
+		init_next_group();
+	}
+}
+bool equal ( const named_slot_map_iterator &other ) const
+{
+	return ( group == other.group
+	         && ( group == last_group
+	              || slot_ == other.slot_ ) );
+}
 
 #if BOOST_WORKAROUND(_MSC_VER, <= 1600)
-  void decrement();
-  void advance(difference_type);
+void decrement();
+void advance ( difference_type );
 #endif
 
 private:
-  named_slot_map_iterator(group_iterator group, group_iterator last) :
-    group(group), last_group(last), slot_assigned(false)
-  { init_next_group(); }
-  named_slot_map_iterator(group_iterator group, group_iterator last,
-                          slot_pair_iterator slot) :
-    group(group), last_group(last), slot_(slot), slot_assigned(true)
-  { }
+named_slot_map_iterator ( group_iterator group, group_iterator last ) :
+	group ( group ), last_group ( last ), slot_assigned ( false )
+{ init_next_group(); }
+named_slot_map_iterator ( group_iterator group, group_iterator last,
+                          slot_pair_iterator slot ) :
+	group ( group ), last_group ( last ), slot_ ( slot ), slot_assigned ( true )
+{ }
 
-  void init_next_group()
-  {
-    while (group != last_group && group->second.empty()) ++group;
-    if (group != last_group) {
-      slot_ = group->second.begin();
-      slot_assigned = true;
-    }
-  }
+void init_next_group()
+{
+	while ( group != last_group && group->second.empty() ) ++group;
+	if ( group != last_group )
+	{
+		slot_ = group->second.begin();
+		slot_assigned = true;
+	}
+}
 
-  group_iterator group;
-  group_iterator last_group;
-  slot_pair_iterator slot_;
-  bool slot_assigned;
+group_iterator group;
+group_iterator last_group;
+slot_pair_iterator slot_;
+bool slot_assigned;
 
-  friend class named_slot_map;
+friend class named_slot_map;
 };
 
 class BOOST_SIGNALS_DECL named_slot_map
 {
 public:
-  typedef named_slot_map_iterator iterator;
+typedef named_slot_map_iterator iterator;
 
-  named_slot_map(const compare_type& compare);
+named_slot_map ( const compare_type &compare );
 
-  void clear();
-  iterator begin();
-  iterator end();
-  iterator insert(const stored_group& name, const connection& con,
-                  const any& slot, connect_position at);
-  void disconnect(const stored_group& name);
-  void erase(iterator pos);
-  void remove_disconnected_slots();
+void clear();
+iterator begin();
+iterator end();
+iterator insert ( const stored_group &name, const connection &con,
+                  const any &slot, connect_position at );
+void disconnect ( const stored_group &name );
+void erase ( iterator pos );
+void remove_disconnected_slots();
 
 private:
-  typedef std::list<connection_slot_pair> group_list;
-  typedef std::map<stored_group, group_list, compare_type> slot_container_type;
-  typedef slot_container_type::iterator group_iterator;
-  typedef slot_container_type::const_iterator const_group_iterator;
+typedef std::list<connection_slot_pair> group_list;
+typedef std::map<stored_group, group_list, compare_type> slot_container_type;
+typedef slot_container_type::iterator group_iterator;
+typedef slot_container_type::const_iterator const_group_iterator;
 
-  bool empty(const_group_iterator group) const
-  {
-    return (group->second.empty() && group != groups.begin() && group != back);
-  }
-  slot_container_type groups;
-  group_iterator back;
+bool empty ( const_group_iterator group ) const
+{
+	return ( group->second.empty() && group != groups.begin() && group != back );
+}
+slot_container_type groups;
+group_iterator back;
 };
 
-} } }
+}
+}
+}
 
 #endif // BOOST_SIGNALS_NAMED_SLOT_MAP_HPP

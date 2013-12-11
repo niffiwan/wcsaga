@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -15,8 +15,8 @@
 #define OO_NEW
 
 #ifdef OO_NEW
-	#include "network/multi_obj.h"
-#else 
+#include "network/multi_obj.h"
+#else
 
 // ---------------------------------------------------------------------------------------------------
 // OBJECT UPDATE DEFINES/VARS
@@ -27,15 +27,16 @@ struct header;
 struct net_player;
 
 // client button info flags
-#define OOC_FIRE_PRIMARY			(1<<0)
-#define OOC_FIRE_SECONDARY			(1<<1)
-#define OOC_FIRE_COUNTERMEASURE	(1<<2)
-#define OOC_TARGET_LOCKED			(1<<3)
-#define OOC_TARGET_SEEK_LOCK		(1<<4)
-#define OOC_LOCKING_ON_CENTER		(1<<5)
+#define OOC_FIRE_PRIMARY            (1<<0)
+#define OOC_FIRE_SECONDARY          (1<<1)
+#define OOC_FIRE_COUNTERMEASURE (1<<2)
+#define OOC_TARGET_LOCKED           (1<<3)
+#define OOC_TARGET_SEEK_LOCK        (1<<4)
+#define OOC_LOCKING_ON_CENTER       (1<<5)
 
-// interpolation info struct 
-typedef struct interp_info {
+// interpolation info struct
+typedef struct interp_info
+{
 	// position and timestamp
 	vec3d pos;
 	int pos_time;
@@ -61,8 +62,8 @@ typedef struct interp_info {
 	int desired_rotvel_time;
 
 	// ping info (in ms)
-	int lowest_ping;				// lowest ping (or -1, if not known)
-	int lowest_ping_avg;			// (lowest ping + average ping)/2   or -1 if not known
+	int lowest_ping;                // lowest ping (or -1, if not known)
+	int lowest_ping_avg;            // (lowest ping + average ping)/2   or -1 if not known
 } interp_info;
 
 
@@ -74,16 +75,16 @@ typedef struct interp_info {
 void multi_oo_process();
 
 // process incoming object update data
-void multi_oo_process_update(ubyte *data, header *hinfo);
+void multi_oo_process_update ( ubyte *data, header *hinfo );
 
 // initialize all object update timestamps (call whenever entering gameplay state)
 void multi_oo_gameplay_init();
 
 // process an object update sync packet
-void multi_oo_process_update_sync(ubyte *data, header *hinfo);
+void multi_oo_process_update_sync ( ubyte *data, header *hinfo );
 
 // send an update sync packet
-void multi_oo_send_update_sync(net_player *pl = NULL);
+void multi_oo_send_update_sync ( net_player *pl = NULL );
 
 // initialize the server's time sync stuff
 void multi_oo_sync_init();
@@ -95,7 +96,7 @@ void multi_oo_send_control_info();
 void multi_oo_reset_sequencing();
 
 // interpolate for this object
-void multi_oo_interpolate(object *objp, interp_info *current, interp_info *last);
+void multi_oo_interpolate ( object *objp, interp_info *current, interp_info *last );
 
 // do all interpolation for this frame - client side and server side
 void multi_oo_interpolate_all();
@@ -108,7 +109,7 @@ void multi_oo_set_global_timestamp();
 // DATARATE DEFINES/VARS
 //
 
-#define OO_HIGH_RATE_DEFAULT				11000
+#define OO_HIGH_RATE_DEFAULT                11000
 
 
 // ---------------------------------------------------------------------------------------------------
@@ -122,10 +123,10 @@ void multi_oo_rate_process();
 void multi_oo_rate_init_all();
 
 // initialize the rate limiting for the passed in player
-void multi_oo_rate_init(net_player *pl);
+void multi_oo_rate_init ( net_player *pl );
 
 // if the given net-player has exceeded his datarate limit, or if the overall datarate limit has been reached
-int multi_oo_rate_exceeded(net_player *pl);
+int multi_oo_rate_exceeded ( net_player *pl );
 
 // if it is ok for me to send a control info (will be ~N times a second)
 int multi_oo_cirate_can_send();

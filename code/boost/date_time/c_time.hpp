@@ -22,8 +22,11 @@
 
 //Work around libraries that don't put time_t and time in namespace std
 #ifdef BOOST_NO_STDC_NAMESPACE
-namespace std { using ::time_t; using ::time; using ::localtime;
-                using ::tm;  using ::gmtime; }
+namespace std
+{
+using ::time_t; using ::time; using ::localtime;
+using ::tm;  using ::gmtime;
+}
 #endif // BOOST_NO_STDC_NAMESPACE
 
 //The following is used to support high precision time clocks
@@ -35,73 +38,77 @@ namespace std { using ::time_t; using ::time; using ::localtime;
 #include <time.h>
 #endif
 
-namespace boost {
-namespace date_time {
-  //! Provides a uniform interface to some 'ctime' functions
-  /*! Provides a uniform interface to some ctime functions and
-   * their '_r' counterparts. The '_r' functions require a pointer to a
-   * user created std::tm struct whereas the regular functions use a
-   * staticly created struct and return a pointer to that. These wrapper
-   * functions require the user to create a std::tm struct and send in a
-   * pointer to it. This struct may be used to store the resulting time.
-   * The returned pointer may or may not point to this struct, however,
-   * it will point to the result of the corresponding function.
-   * All functions do proper checking of the C function results and throw
-   * exceptions on error. Therefore the functions will never return NULL.
-   */
-  struct c_time {
-    public:
+namespace boost
+{
+namespace date_time
+{
+//! Provides a uniform interface to some 'ctime' functions
+/*! Provides a uniform interface to some ctime functions and
+ * their '_r' counterparts. The '_r' functions require a pointer to a
+ * user created std::tm struct whereas the regular functions use a
+ * staticly created struct and return a pointer to that. These wrapper
+ * functions require the user to create a std::tm struct and send in a
+ * pointer to it. This struct may be used to store the resulting time.
+ * The returned pointer may or may not point to this struct, however,
+ * it will point to the result of the corresponding function.
+ * All functions do proper checking of the C function results and throw
+ * exceptions on error. Therefore the functions will never return NULL.
+ */
+struct c_time
+{
+public:
 #if defined(BOOST_DATE_TIME_HAS_REENTRANT_STD_FUNCTIONS)
-      //! requires a pointer to a user created std::tm struct
-      inline
-      static std::tm* localtime(const std::time_t* t, std::tm* result)
-      {
-        // localtime_r() not in namespace std???
-        result = localtime_r(t, result);
-        if (!result)
-          boost::throw_exception(std::runtime_error("could not convert calendar time to local time"));
-        return result;
-      }
-      //! requires a pointer to a user created std::tm struct
-      inline
-      static std::tm* gmtime(const std::time_t* t, std::tm* result)
-      {
-        // gmtime_r() not in namespace std???
-        result = gmtime_r(t, result);
-        if (!result)
-          boost::throw_exception(std::runtime_error("could not convert calendar time to UTC time"));
-        return result;
-      }
+	//! requires a pointer to a user created std::tm struct
+	inline
+	static std::tm *localtime ( const std::time_t *t, std::tm *result )
+	{
+		// localtime_r() not in namespace std???
+		result = localtime_r ( t, result );
+		if ( !result )
+			boost::throw_exception ( std::runtime_error ( "could not convert calendar time to local time" ) );
+		return result;
+	}
+	//! requires a pointer to a user created std::tm struct
+	inline
+	static std::tm *gmtime ( const std::time_t *t, std::tm *result )
+	{
+		// gmtime_r() not in namespace std???
+		result = gmtime_r ( t, result );
+		if ( !result )
+			boost::throw_exception ( std::runtime_error ( "could not convert calendar time to UTC time" ) );
+		return result;
+	}
 #else // BOOST_HAS_THREADS
 
 #if (defined(_MSC_VER) && (_MSC_VER >= 1400))
 #pragma warning(push) // preserve warning settings
 #pragma warning(disable : 4996) // disable depricated localtime/gmtime warning on vc8
 #endif // _MSC_VER >= 1400
-      //! requires a pointer to a user created std::tm struct
-      inline
-      static std::tm* localtime(const std::time_t* t, std::tm* result)
-      {
-        result = std::localtime(t);
-        if (!result)
-          boost::throw_exception(std::runtime_error("could not convert calendar time to local time"));
-        return result;
-      }
-      //! requires a pointer to a user created std::tm struct
-      inline
-      static std::tm* gmtime(const std::time_t* t, std::tm* result)
-      {
-        result = std::gmtime(t);
-        if (!result)
-          boost::throw_exception(std::runtime_error("could not convert calendar time to UTC time"));
-        return result;
-      }
+	//! requires a pointer to a user created std::tm struct
+	inline
+	static std::tm *localtime ( const std::time_t *t, std::tm *result )
+	{
+		result = std::localtime ( t );
+		if ( !result )
+			boost::throw_exception ( std::runtime_error ( "could not convert calendar time to local time" ) );
+		return result;
+	}
+	//! requires a pointer to a user created std::tm struct
+	inline
+	static std::tm *gmtime ( const std::time_t *t, std::tm *result )
+	{
+		result = std::gmtime ( t );
+		if ( !result )
+			boost::throw_exception ( std::runtime_error ( "could not convert calendar time to UTC time" ) );
+		return result;
+	}
 #if (defined(_MSC_VER) && (_MSC_VER >= 1400))
 #pragma warning(pop) // restore warnings to previous state
 #endif // _MSC_VER >= 1400
 
 #endif // BOOST_HAS_THREADS
-  };
-}} // namespaces
+};
+}
+} // namespaces
 
 #endif // DATE_TIME_C_TIME_HPP___

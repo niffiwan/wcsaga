@@ -17,8 +17,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "boost/lambda/core.hpp"
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost {
-namespace lambda {
+namespace boost
+{
+namespace lambda
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -150,29 +152,30 @@ namespace lambda {
 //
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ClosureT>
-class closure_frame : public ClosureT::tuple_t {
+class closure_frame : public ClosureT::tuple_t
+{
 
 public:
 
-    closure_frame(ClosureT& clos)
-    : ClosureT::tuple_t(), save(clos.frame), frame(clos.frame)
-    { clos.frame = this; }
+	closure_frame ( ClosureT &clos )
+		: ClosureT::tuple_t(), save ( clos.frame ), frame ( clos.frame )
+	{ clos.frame = this; }
 
-    template <typename TupleT>
-    closure_frame(ClosureT& clos, TupleT const& init)
-    : ClosureT::tuple_t(init), save(clos.frame), frame(clos.frame)
-    { clos.frame = this; }
+	template <typename TupleT>
+	closure_frame ( ClosureT &clos, TupleT const &init )
+		: ClosureT::tuple_t ( init ), save ( clos.frame ), frame ( clos.frame )
+	{ clos.frame = this; }
 
-    ~closure_frame()
-    { frame = save; }
+	~closure_frame()
+	{ frame = save; }
 
 private:
 
-    closure_frame(closure_frame const&);            // no copy
-    closure_frame& operator=(closure_frame const&); // no assign
+	closure_frame ( closure_frame const & );        // no copy
+	closure_frame &operator= ( closure_frame const & ); // no assign
 
-    closure_frame* save;
-    closure_frame*& frame;
+	closure_frame *save;
+	closure_frame *&frame;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -181,37 +184,39 @@ private:
 //
 ///////////////////////////////////////////////////////////////////////////////
 template <int N, typename ClosureT>
-class closure_member {
+class closure_member
+{
 
 public:
 
-    typedef typename ClosureT::tuple_t tuple_t;
+	typedef typename ClosureT::tuple_t tuple_t;
 
-    closure_member()
-    : frame(ClosureT::closure_frame_ref()) {}
+	closure_member()
+		: frame ( ClosureT::closure_frame_ref() ) {}
 
-    template <typename TupleT>
-    struct sig {
+	template <typename TupleT>
+	struct sig
+	{
 
-        typedef typename detail::tuple_element_as_reference<
-            N, typename ClosureT::tuple_t
-        >::type type;
-    };
+		typedef typename detail::tuple_element_as_reference <
+		N, typename ClosureT::tuple_t
+		>::type type;
+	};
 
-    template <class Ret, class A, class B, class C>
-    //    typename detail::tuple_element_as_reference
-    //        <N, typename ClosureT::tuple_t>::type
-    Ret
-    call(A&, B&, C&) const
-    {
-        assert(frame);
-        return boost::tuples::get<N>(*frame);
-    }
+	template <class Ret, class A, class B, class C>
+	//    typename detail::tuple_element_as_reference
+	//        <N, typename ClosureT::tuple_t>::type
+	Ret
+	call ( A &, B &, C & ) const
+	{
+		assert ( frame );
+		return boost::tuples::get<N> ( *frame );
+	}
 
 
 private:
 
-    typename ClosureT::closure_frame_t*& frame;
+	typename ClosureT::closure_frame_t *&frame;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -225,50 +230,52 @@ template <
     typename T2 = null_type,
     typename T3 = null_type,
     typename T4 = null_type
->
-class closure {
+    >
+class closure
+{
 
 public:
 
-    typedef tuple<T0, T1, T2, T3, T4> tuple_t;
-    typedef closure<T0, T1, T2, T3, T4> self_t;
-    typedef closure_frame<self_t> closure_frame_t;
+	typedef tuple<T0, T1, T2, T3, T4> tuple_t;
+	typedef closure<T0, T1, T2, T3, T4> self_t;
+	typedef closure_frame<self_t> closure_frame_t;
 
-                            closure()
-                            : frame(0)      { closure_frame_ref(&frame); }
-    closure_frame_t&        context()       { assert(frame); return frame; }
-    closure_frame_t const&  context() const { assert(frame); return frame; }
+	closure()
+		: frame ( 0 )      { closure_frame_ref ( &frame ); }
+	closure_frame_t        &context()       { assert ( frame ); return frame; }
+	closure_frame_t const  &context() const { assert ( frame ); return frame; }
 
-    typedef lambda_functor<closure_member<0, self_t> > member1;
-    typedef lambda_functor<closure_member<1, self_t> > member2;
-    typedef lambda_functor<closure_member<2, self_t> > member3;
-    typedef lambda_functor<closure_member<3, self_t> > member4;
-    typedef lambda_functor<closure_member<4, self_t> > member5;
+	typedef lambda_functor<closure_member<0, self_t> > member1;
+	typedef lambda_functor<closure_member<1, self_t> > member2;
+	typedef lambda_functor<closure_member<2, self_t> > member3;
+	typedef lambda_functor<closure_member<3, self_t> > member4;
+	typedef lambda_functor<closure_member<4, self_t> > member5;
 
 private:
 
-    closure(closure const&);            // no copy
-    closure& operator=(closure const&); // no assign
+	closure ( closure const & );        // no copy
+	closure &operator= ( closure const & ); // no assign
 
-    template <int N, typename ClosureT>
-    friend struct closure_member;
+	template <int N, typename ClosureT>
+	friend struct closure_member;
 
-    template <typename ClosureT>
-    friend class closure_frame;
+	template <typename ClosureT>
+	friend class closure_frame;
 
-    static closure_frame_t*&
-    closure_frame_ref(closure_frame_t** frame_ = 0)
-    {
-        static closure_frame_t** frame = 0;
-        if (frame_ != 0)
-            frame = frame_;
-        return *frame;
-    }
+	static closure_frame_t *&
+	closure_frame_ref ( closure_frame_t **frame_ = 0 )
+	{
+		static closure_frame_t **frame = 0;
+		if ( frame_ != 0 )
+			frame = frame_;
+		return *frame;
+	}
 
-    closure_frame_t* frame;
+	closure_frame_t *frame;
 };
 
-}}
-   //  namespace 
+}
+}
+//  namespace
 
 #endif

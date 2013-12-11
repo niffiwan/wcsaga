@@ -79,70 +79,72 @@
   } \
   /**/
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 /// Iostream interface for a socket.
 template <typename Protocol,
-    typename StreamSocketService = stream_socket_service<Protocol> >
+          typename StreamSocketService = stream_socket_service<Protocol> >
 class basic_socket_iostream
-  : public boost::base_from_member<
-      basic_socket_streambuf<Protocol, StreamSocketService> >,
-    public std::basic_iostream<char>
+	: public boost::base_from_member <
+	basic_socket_streambuf<Protocol, StreamSocketService> >,
+	public std::basic_iostream<char>
 {
 public:
-  /// Construct a basic_socket_iostream without establishing a connection.
-  basic_socket_iostream()
-    : std::basic_iostream<char>(&this->boost::base_from_member<
-        basic_socket_streambuf<Protocol, StreamSocketService> >::member)
-  {
-    tie(this);
-  }
+	/// Construct a basic_socket_iostream without establishing a connection.
+	basic_socket_iostream()
+		: std::basic_iostream<char> ( &this->boost::base_from_member <
+		                              basic_socket_streambuf<Protocol, StreamSocketService> >::member )
+	{
+		tie ( this );
+	}
 
 #if defined(GENERATING_DOCUMENTATION)
-  /// Establish a connection to an endpoint corresponding to a resolver query.
-  /**
-   * This constructor automatically establishes a connection based on the
-   * supplied resolver query parameters. The arguments are used to construct
-   * a resolver query object.
-   */
-  template <typename T1, ..., typename TN>
-  explicit basic_socket_iostream(T1 t1, ..., TN tn);
+	/// Establish a connection to an endpoint corresponding to a resolver query.
+	/**
+	 * This constructor automatically establishes a connection based on the
+	 * supplied resolver query parameters. The arguments are used to construct
+	 * a resolver query object.
+	 */
+	template <typename T1, ..., typename TN>
+	explicit basic_socket_iostream ( T1 t1, ..., TN tn );
 #else
-  BOOST_PP_REPEAT_FROM_TO(
-      1, BOOST_PP_INC(BOOST_ASIO_SOCKET_IOSTREAM_MAX_ARITY),
-      BOOST_ASIO_PRIVATE_CTR_DEF, _ )
+	BOOST_PP_REPEAT_FROM_TO (
+	    1, BOOST_PP_INC ( BOOST_ASIO_SOCKET_IOSTREAM_MAX_ARITY ),
+	    BOOST_ASIO_PRIVATE_CTR_DEF, _ )
 #endif
 
 #if defined(GENERATING_DOCUMENTATION)
-  /// Establish a connection to an endpoint corresponding to a resolver query.
-  /**
-   * This function automatically establishes a connection based on the supplied
-   * resolver query parameters. The arguments are used to construct a resolver
-   * query object.
-   */
-  template <typename T1, ..., typename TN>
-  void connect(T1 t1, ..., TN tn);
+	/// Establish a connection to an endpoint corresponding to a resolver query.
+	/**
+	 * This function automatically establishes a connection based on the supplied
+	 * resolver query parameters. The arguments are used to construct a resolver
+	 * query object.
+	 */
+	template <typename T1, ..., typename TN>
+	void connect ( T1 t1, ..., TN tn );
 #else
-  BOOST_PP_REPEAT_FROM_TO(
-      1, BOOST_PP_INC(BOOST_ASIO_SOCKET_IOSTREAM_MAX_ARITY),
-      BOOST_ASIO_PRIVATE_CONNECT_DEF, _ )
+	BOOST_PP_REPEAT_FROM_TO (
+	    1, BOOST_PP_INC ( BOOST_ASIO_SOCKET_IOSTREAM_MAX_ARITY ),
+	    BOOST_ASIO_PRIVATE_CONNECT_DEF, _ )
 #endif
 
-  /// Close the connection.
-  void close()
-  {
-    if (rdbuf()->close() == 0)
-      this->setstate(std::ios_base::failbit);
-  }
+	/// Close the connection.
+	void close()
+	{
+		if ( rdbuf()->close() == 0 )
+			this->setstate ( std::ios_base::failbit );
+	}
 
-  /// Return a pointer to the underlying streambuf.
-  basic_socket_streambuf<Protocol, StreamSocketService>* rdbuf() const
-  {
-    return const_cast<basic_socket_streambuf<Protocol, StreamSocketService>*>(
-        &this->boost::base_from_member<
-          basic_socket_streambuf<Protocol, StreamSocketService> >::member);
-  }
+	/// Return a pointer to the underlying streambuf.
+	basic_socket_streambuf<Protocol, StreamSocketService> *rdbuf() const
+	{
+		return const_cast<basic_socket_streambuf<Protocol, StreamSocketService>*> (
+		           &this->boost::base_from_member <
+		           basic_socket_streambuf<Protocol, StreamSocketService> >::member );
+	}
 };
 
 } // namespace asio

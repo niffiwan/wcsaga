@@ -10,7 +10,7 @@
 // Provides an arbitrary number of types (case_<0>, case_<1>, ...) for
 // determining the results of overload resultion using 'sizeof', plus a uniform
 // means of using the result. yes_type and no_type are typedefs for case_<1>
-// and case_<0>. A single case with negative argument, case_<-1>, is also 
+// and case_<0>. A single case with negative argument, case_<-1>, is also
 // provided, for convenience.
 //
 // This header may be included any number of times, with
@@ -18,7 +18,7 @@
 // is needed for a particular application. It defaults to 20.
 //
 // This header depends only on Boost.Config and Boost.Preprocessor. Dependence
-// on Type Traits or MPL was intentionally avoided, to leave open the 
+// on Type Traits or MPL was intentionally avoided, to leave open the
 // possibility that select_by_size could be used by these libraries.
 //
 // Example usage:
@@ -69,7 +69,7 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/iteration/local.hpp>
 
-/* Alternative implementation using max_align. 
+/* Alternative implementation using max_align.
 
 #include <boost/type_traits/alignment_of.hpp>
 #include <boost/type_traits/type_with_alignment.hpp>
@@ -81,7 +81,7 @@ struct case_ { char c[(N + 1) * alignment_of<detail::max_align>::value]; };
 
 template<unsigned Size>
 struct select_by_size {
-    BOOST_STATIC_CONSTANT(int, value = 
+    BOOST_STATIC_CONSTANT(int, value =
         (Size / alignment_of<detail::max_align>::value - 1));
 };
 
@@ -89,12 +89,17 @@ struct select_by_size {
 
 */              // End alternate implementation.
 
-namespace boost { namespace iostreams { namespace detail {
+namespace boost
+{
+namespace iostreams
+{
+namespace detail
+{
 
 //--------------Definition of case_-------------------------------------------//
 
-template<int N> struct case_ { char c1; case_<N - 1> c2; };
-template<> struct case_<-1> { char c; };
+template<int N> struct case_ { char c1; case_ < N - 1 > c2; };
+template<> struct case_ < -1 > { char c; };
 typedef case_<true> yes_type;
 typedef case_<false> no_type;
 
@@ -102,7 +107,9 @@ typedef case_<false> no_type;
 
 template<unsigned Size> struct select_by_size;
 
-} } } // End namespaces detail, iostreams, boost.
+}
+}
+} // End namespaces detail, iostreams, boost.
 
 //--------------Definition of SELECT_BY_SIZE_SPEC-----------------------------//
 

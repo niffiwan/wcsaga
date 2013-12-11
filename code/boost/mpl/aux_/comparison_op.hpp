@@ -3,8 +3,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -39,7 +39,10 @@
 #   include <boost/mpl/aux_/config/integral.hpp>
 #   include <boost/preprocessor/cat.hpp>
 
-namespace boost { namespace mpl {
+namespace boost
+{
+namespace mpl
+{
 
 // MSVC workaround: implement less in terms of greater
 #if 0 AUX778076_OP_TOKEN 1 && !(1 AUX778076_OP_TOKEN 0) && !(0 AUX778076_OP_TOKEN 0)
@@ -55,23 +58,24 @@ namespace boost { namespace mpl {
 #endif
 
 template<>
-struct AUX778076_OP_IMPL_NAME<integral_c_tag,integral_c_tag>
+struct AUX778076_OP_IMPL_NAME<integral_c_tag, integral_c_tag>
 {
-    template< typename N1, typename N2 > struct apply
+	template< typename N1, typename N2 > struct apply
 #if !defined(BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC)
-        : bool_< AUX778076_OP(N1, N2) >
-    {
+	: bool_< AUX778076_OP ( N1, N2 ) >
+	{
 #else
-    {
-        BOOST_STATIC_CONSTANT(bool, value = AUX778076_OP(N1, N2));
-        typedef bool_<value> type;
+	{
+		BOOST_STATIC_CONSTANT ( bool, value = AUX778076_OP ( N1, N2 ) );
+		typedef bool_<value> type;
 #endif
-    };
+	};
 };
 
 #undef AUX778076_OP
 
-}}
+}
+}
 
 #endif // BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
 

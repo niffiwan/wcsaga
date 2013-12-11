@@ -15,30 +15,33 @@
 #include <boost/accumulators/statistics_fwd.hpp>
 #include <boost/accumulators/statistics/error_of.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 namespace detail
 {
-    template<typename Feature>
-    struct error_of_tag
-    {
-        typedef tag::error_of<Feature> type;
-    };
+template<typename Feature>
+struct error_of_tag
+{
+	typedef tag::error_of<Feature> type;
+};
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // with_error
 //
-template<BOOST_PP_ENUM_PARAMS(BOOST_ACCUMULATORS_MAX_FEATURES, typename Feature)>
+template<BOOST_PP_ENUM_PARAMS ( BOOST_ACCUMULATORS_MAX_FEATURES, typename Feature ) >
 struct with_error
-  : mpl::transform_view<
-        mpl::vector<BOOST_PP_ENUM_PARAMS(BOOST_ACCUMULATORS_MAX_FEATURES, Feature)>
-      , detail::error_of_tag<mpl::_1>
-    >
+		: mpl::transform_view <
+mpl::vector<BOOST_PP_ENUM_PARAMS ( BOOST_ACCUMULATORS_MAX_FEATURES, Feature ) >
+, detail::error_of_tag<mpl::_1>
+>
 {
 };
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

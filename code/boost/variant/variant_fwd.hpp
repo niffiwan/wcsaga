@@ -38,7 +38,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_NO_REFERENCE_SUPPORT
 //
-// Defined if variant does not support references as bounded types. 
+// Defined if variant does not support references as bounded types.
 //
 #if defined(BOOST_VARIANT_AUX_BROKEN_CONSTRUCTOR_TEMPLATE_ORDERING) \
  && !defined(BOOST_VARIANT_AUX_HAS_CONSTRUCTOR_TEMPLATE_ORDERING_SFINAE_WKND) \
@@ -49,7 +49,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
 //
-// Defined if variant does not support make_variant_over (see below). 
+// Defined if variant does not support make_variant_over (see below).
 //
 #if defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 #   define BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
@@ -101,13 +101,17 @@
     BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_VARIANT_LIMIT_TYPES, param)
 
 
-namespace boost {
+namespace boost
+{
 
-namespace detail { namespace variant {
+namespace detail
+{
+namespace variant
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) class void_ and class template convert_void
-// 
+//
 // Provides the mechanism by which void(NN) types are converted to
 // mpl::void_ (and thus can be passed to mpl::list).
 //
@@ -122,13 +126,13 @@ struct void_;
 template <typename T>
 struct convert_void
 {
-    typedef T type;
+	typedef T type;
 };
 
 template <>
 struct convert_void< void_ >
 {
-    typedef mpl::na type;
+	typedef mpl::na type;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -156,17 +160,18 @@ struct convert_void< void_ >
     };                                                     \
     /**/
 
-BOOST_PP_REPEAT(
-      BOOST_VARIANT_LIMIT_TYPES
+BOOST_PP_REPEAT (
+    BOOST_VARIANT_LIMIT_TYPES
     , BOOST_VARIANT_DETAIL_DEFINE_VOID_N
     , _
-    )
+)
 
 #undef BOOST_VARIANT_DETAIL_DEFINE_VOID_N
 
 #endif // BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE workaround
 
-}} // namespace detail::variant
+}
+} // namespace detail::variant
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) macro BOOST_VARIANT_AUX_DECLARE_PARAM
@@ -229,9 +234,9 @@ template < BOOST_VARIANT_AUX_DECLARE_PARAMS > struct make_recursive_variant;
 // Tag type indicates where recursive variant substitution should occur.
 //
 #if !defined(BOOST_VARIANT_NO_FULL_RECURSIVE_VARIANT_SUPPORT)
-    struct recursive_variant_;
+struct recursive_variant_;
 #else
-    typedef mpl::arg<1> recursive_variant_;
+typedef mpl::arg<1> recursive_variant_;
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////

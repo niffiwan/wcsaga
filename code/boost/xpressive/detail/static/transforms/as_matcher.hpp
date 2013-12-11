@@ -17,32 +17,38 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 
-namespace boost { namespace xpressive { namespace grammar_detail
+namespace boost
 {
-    struct as_matcher : proto::transform<as_matcher>
-    {
-        template<typename Expr, typename State, typename Data>
-        struct impl : proto::transform_impl<Expr, State, Data>
-        {
-            typedef typename impl::data data_type;
+namespace xpressive
+{
+namespace grammar_detail
+{
+struct as_matcher : proto::transform<as_matcher>
+{
+	template<typename Expr, typename State, typename Data>
+	struct impl : proto::transform_impl<Expr, State, Data>
+	{
+		typedef typename impl::data data_type;
 
-            typedef
-                typename data_type::template apply<
-                    typename proto::result_of::value<typename impl::expr>::type
-                >::type
-            result_type;
+		typedef
+		typename data_type::template apply <
+		    typename proto::result_of::value<typename impl::expr>::type
+		    >::type
+		result_type;
 
-            result_type operator ()(
-                typename impl::expr_param expr
-              , typename impl::state_param
-              , typename impl::data_param data
-            ) const
-            {
-                return data.call(proto::value(expr));
-            }
-        };
-    };
+		result_type operator () (
+		    typename impl::expr_param expr
+		    , typename impl::state_param
+		    , typename impl::data_param data
+		) const
+		{
+			return data.call ( proto::value ( expr ) );
+		}
+	};
+};
 
-}}}
+}
+}
+}
 
 #endif

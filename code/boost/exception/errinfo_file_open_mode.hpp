@@ -9,18 +9,18 @@
 #include <string>
 
 namespace
-boost
-    {
-    template <class Tag,class T> class error_info;
+		boost
+{
+template <class Tag, class T> class error_info;
 
-    //Usage hint:
-    //FILE * f=fopen(name,mode);
-    //if( !f )
-    //    BOOST_THROW_EXCEPTION(
-    //        file_open_error() <<
-    //        errinfo_file_name(name) <<
-    //        errinfo_file_open_mode(mode) );
-    typedef error_info<struct errinfo_file_open_mode_,std::string> errinfo_file_open_mode;
-    }
+//Usage hint:
+//FILE * f=fopen(name,mode);
+//if( !f )
+//    BOOST_THROW_EXCEPTION(
+//        file_open_error() <<
+//        errinfo_file_name(name) <<
+//        errinfo_file_open_mode(mode) );
+typedef error_info<struct errinfo_file_open_mode_, std::string> errinfo_file_open_mode;
+}
 
 #endif

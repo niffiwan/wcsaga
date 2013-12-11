@@ -15,123 +15,129 @@
 #include <cctype>
 #include <boost/cstdint.hpp>
 
-namespace boost { namespace spirit { namespace char_encoding
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    //  Test characters for specified conditions (using std functions)
-    ///////////////////////////////////////////////////////////////////////////
-    struct standard
-    {
-        typedef char char_type;
+namespace spirit
+{
+namespace char_encoding
+{
+///////////////////////////////////////////////////////////////////////////
+//  Test characters for specified conditions (using std functions)
+///////////////////////////////////////////////////////////////////////////
+struct standard
+{
+	typedef char char_type;
 
-        static bool
-        isascii_(int ch)
-        {
-            return (0 == (ch & ~0x7f)) ? true : false;
-        }
+	static bool
+	isascii_ ( int ch )
+	{
+		return ( 0 == ( ch & ~0x7f ) ) ? true : false;
+	}
 
-        static bool
-        ischar(int ch)
-        {
-            // uses all 8 bits
-            // we have to watch out for sign extensions
-            return (0 == (ch & ~0xff) || ~0 == (ch | 0xff)) ? true : false;
-        }
+	static bool
+	ischar ( int ch )
+	{
+		// uses all 8 bits
+		// we have to watch out for sign extensions
+		return ( 0 == ( ch & ~0xff ) || ~0 == ( ch | 0xff ) ) ? true : false;
+	}
 
-        static int
-        isalnum(int ch)
-        {
-            return std::isalnum(ch);
-        }
+	static int
+	isalnum ( int ch )
+	{
+		return std::isalnum ( ch );
+	}
 
-        static int
-        isalpha(int ch)
-        {
-            return std::isalpha(ch);
-        }
+	static int
+	isalpha ( int ch )
+	{
+		return std::isalpha ( ch );
+	}
 
-        static int
-        isdigit(int ch)
-        {
-            return std::isdigit(ch);
-        }
+	static int
+	isdigit ( int ch )
+	{
+		return std::isdigit ( ch );
+	}
 
-        static int
-        isxdigit(int ch)
-        {
-            return std::isxdigit(ch);
-        }
+	static int
+	isxdigit ( int ch )
+	{
+		return std::isxdigit ( ch );
+	}
 
-        static int
-        iscntrl(int ch)
-        {
-            return std::iscntrl(ch);
-        }
+	static int
+	iscntrl ( int ch )
+	{
+		return std::iscntrl ( ch );
+	}
 
-        static int
-        isgraph(int ch)
-        {
-            return std::isgraph(ch);
-        }
+	static int
+	isgraph ( int ch )
+	{
+		return std::isgraph ( ch );
+	}
 
-        static int
-        islower(int ch)
-        {
-            return std::islower(ch);
-        }
+	static int
+	islower ( int ch )
+	{
+		return std::islower ( ch );
+	}
 
-        static int
-        isprint(int ch)
-        {
-            return std::isprint(ch);
-        }
+	static int
+	isprint ( int ch )
+	{
+		return std::isprint ( ch );
+	}
 
-        static int
-        ispunct(int ch)
-        {
-            return std::ispunct(ch);
-        }
+	static int
+	ispunct ( int ch )
+	{
+		return std::ispunct ( ch );
+	}
 
-        static int
-        isspace(int ch)
-        {
-            return std::isspace(ch);
-        }
+	static int
+	isspace ( int ch )
+	{
+		return std::isspace ( ch );
+	}
 
-        static int
-        isblank BOOST_PREVENT_MACRO_SUBSTITUTION (int ch)
-        {
-            return (ch == ' ' || ch == '\t');
-        }
+	static int
+	isblank BOOST_PREVENT_MACRO_SUBSTITUTION ( int ch )
+	{
+		return ( ch == ' ' || ch == '\t' );
+	}
 
-        static int
-        isupper(int ch)
-        {
-            return std::isupper(ch);
-        }
+	static int
+	isupper ( int ch )
+	{
+		return std::isupper ( ch );
+	}
 
-    ///////////////////////////////////////////////////////////////////////////////
-    //  Simple character conversions
-    ///////////////////////////////////////////////////////////////////////////////
-        static int
-        tolower(int ch)
-        {
-            return std::tolower(ch);
-        }
+	///////////////////////////////////////////////////////////////////////////////
+	//  Simple character conversions
+	///////////////////////////////////////////////////////////////////////////////
+	static int
+	tolower ( int ch )
+	{
+		return std::tolower ( ch );
+	}
 
-        static int
-        toupper(int ch)
-        {
-            return std::toupper(ch);
-        }
+	static int
+	toupper ( int ch )
+	{
+		return std::toupper ( ch );
+	}
 
-        static ::boost::uint32_t
-        toucs4(int ch)
-        {
-            return ch;
-        }
-    };
-}}}
+	static ::boost::uint32_t
+	toucs4 ( int ch )
+	{
+		return ch;
+	}
+};
+}
+}
+}
 
 #endif
 

@@ -13,47 +13,56 @@
 
 #include <boost/spirit/home/support/unused.hpp>
 
-namespace boost { namespace spirit { namespace qi { namespace detail
+namespace boost
 {
-    template <typename Iterator, typename Context, typename Skipper>
-    struct fail_function
-    {
-        typedef Iterator iterator_type;
-        typedef Context context_type;
+namespace spirit
+{
+namespace qi
+{
+namespace detail
+{
+template <typename Iterator, typename Context, typename Skipper>
+struct fail_function
+{
+	typedef Iterator iterator_type;
+	typedef Context context_type;
 
-        fail_function(
-            Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper)
-          : first(first)
-          , last(last)
-          , context(context)
-          , skipper(skipper)
-        {
-        }
+	fail_function (
+	    Iterator &first, Iterator const &last
+	    , Context &context, Skipper const &skipper )
+		: first ( first )
+		, last ( last )
+		, context ( context )
+		, skipper ( skipper )
+	{
+	}
 
-        template <typename Component, typename Attribute>
-        bool operator()(Component const& component, Attribute& attr) const
-        {
-            // return true if the parser fails
-            return !component.parse(first, last, context, skipper, attr);
-        }
+	template <typename Component, typename Attribute>
+	bool operator() ( Component const &component, Attribute &attr ) const
+	{
+		// return true if the parser fails
+		return !component.parse ( first, last, context, skipper, attr );
+	}
 
-        template <typename Component>
-        bool operator()(Component const& component) const
-        {
-            // return true if the parser fails
-            return !component.parse(first, last, context, skipper, unused);
-        }
+	template <typename Component>
+	bool operator() ( Component const &component ) const
+	{
+		// return true if the parser fails
+		return !component.parse ( first, last, context, skipper, unused );
+	}
 
-        Iterator& first;
-        Iterator const& last;
-        Context& context;
-        Skipper const& skipper;
+	Iterator &first;
+	Iterator const &last;
+	Context &context;
+	Skipper const &skipper;
 
-    private:
-        // silence MSVC warning C4512: assignment operator could not be generated
-        fail_function& operator= (fail_function const&);
-    };
-}}}}
+private:
+	// silence MSVC warning C4512: assignment operator could not be generated
+	fail_function &operator= ( fail_function const & );
+};
+}
+}
+}
+}
 
 #endif

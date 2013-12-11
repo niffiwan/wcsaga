@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_VECTOR40_05052005_0208)
@@ -33,18 +33,21 @@
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct vector_tag;
-    struct fusion_sequence_tag;
-    struct random_access_traversal_tag;
+namespace fusion
+{
+struct vector_tag;
+struct fusion_sequence_tag;
+struct random_access_traversal_tag;
 
 // expand vector31 to vector40
 #define BOOST_PP_FILENAME_1 <boost/fusion/container/vector/detail/vector_n.hpp>
 #define BOOST_PP_ITERATION_LIMITS (31, 40)
 #include BOOST_PP_ITERATE()
 
-}}
+}
+}
 
 #endif
 

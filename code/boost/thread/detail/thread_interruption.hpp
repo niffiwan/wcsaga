@@ -7,29 +7,29 @@
 
 namespace boost
 {
-    namespace this_thread
-    {
-        class BOOST_THREAD_DECL disable_interruption
-        {
-            disable_interruption(const disable_interruption&);
-            disable_interruption& operator=(const disable_interruption&);
-            
-            bool interruption_was_enabled;
-            friend class restore_interruption;
-        public:
-            disable_interruption();
-            ~disable_interruption();
-        };
+namespace this_thread
+{
+class BOOST_THREAD_DECL disable_interruption
+{
+	disable_interruption ( const disable_interruption & );
+	disable_interruption &operator= ( const disable_interruption & );
 
-        class BOOST_THREAD_DECL restore_interruption
-        {
-            restore_interruption(const restore_interruption&);
-            restore_interruption& operator=(const restore_interruption&);
-        public:
-            explicit restore_interruption(disable_interruption& d);
-            ~restore_interruption();
-        };
-    }
+	bool interruption_was_enabled;
+	friend class restore_interruption;
+public:
+	disable_interruption();
+	~disable_interruption();
+};
+
+class BOOST_THREAD_DECL restore_interruption
+{
+	restore_interruption ( const restore_interruption & );
+	restore_interruption &operator= ( const restore_interruption & );
+public:
+	explicit restore_interruption ( disable_interruption &d );
+	~restore_interruption();
+};
+}
 }
 
 #endif

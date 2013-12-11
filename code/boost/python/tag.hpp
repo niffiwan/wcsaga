@@ -7,12 +7,16 @@
 
 # include <boost/python/detail/prefix.hpp>
 
-namespace boost { namespace python { 
+namespace boost
+{
+namespace python
+{
 
 // used only to prevent argument-dependent lookup from finding the
 // wrong function in some cases. Cheaper than qualification.
 enum tag_t { tag };
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 #endif // TAG_DWA2002720_HPP

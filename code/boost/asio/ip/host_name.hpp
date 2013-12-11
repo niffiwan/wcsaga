@@ -25,34 +25,37 @@
 #include <boost/asio/detail/socket_ops.hpp>
 #include <boost/asio/detail/throw_error.hpp>
 
-namespace boost {
-namespace asio {
-namespace ip {
+namespace boost
+{
+namespace asio
+{
+namespace ip
+{
 
 /// Get the current host name.
 std::string host_name();
 
 /// Get the current host name.
-std::string host_name(boost::system::error_code& ec);
+std::string host_name ( boost::system::error_code &ec );
 
 inline std::string host_name()
 {
-  char name[1024];
-  boost::system::error_code ec;
-  if (boost::asio::detail::socket_ops::gethostname(name, sizeof(name), ec) != 0)
-  {
-    boost::asio::detail::throw_error(ec);
-    return std::string();
-  }
-  return std::string(name);
+	char name[1024];
+	boost::system::error_code ec;
+	if ( boost::asio::detail::socket_ops::gethostname ( name, sizeof ( name ), ec ) != 0 )
+	{
+		boost::asio::detail::throw_error ( ec );
+		return std::string();
+	}
+	return std::string ( name );
 }
 
-inline std::string host_name(boost::system::error_code& ec)
+inline std::string host_name ( boost::system::error_code &ec )
 {
-  char name[1024];
-  if (boost::asio::detail::socket_ops::gethostname(name, sizeof(name), ec) != 0)
-    return std::string();
-  return std::string(name);
+	char name[1024];
+	if ( boost::asio::detail::socket_ops::gethostname ( name, sizeof ( name ), ec ) != 0 )
+		return std::string();
+	return std::string ( name );
 }
 
 } // namespace ip

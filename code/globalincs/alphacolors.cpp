@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -25,7 +25,7 @@ color Color_ui_light_green, Color_ui_green;
 color Color_ui_light_pink, Color_ui_pink;
 
 // netplayer colors
-color* Color_netplayer[20] =
+color *Color_netplayer[20] =
 {
 
 	&Color_blue,
@@ -59,39 +59,39 @@ color* Color_netplayer[20] =
 void alpha_colors_init()
 {
 	// See the variable declarations above for color usage
-	gr_init_alphacolor(&Color_blue, 84, 172, 255, 255);
-	gr_init_alphacolor(&Color_bright_blue, 128, 193, 255, 255);
+	gr_init_alphacolor ( &Color_blue, 84, 172, 255, 255 );
+	gr_init_alphacolor ( &Color_bright_blue, 128, 193, 255, 255 );
 
-	gr_init_alphacolor(&Color_green, 0, 120, 0, 255);
-	gr_init_alphacolor(&Color_bright_green, 50, 190, 50, 255);
+	gr_init_alphacolor ( &Color_green, 0, 120, 0, 255 );
+	gr_init_alphacolor ( &Color_bright_green, 50, 190, 50, 255 );
 
-	gr_init_alphacolor(&Color_black, 0, 0, 0, 255);
-	gr_init_alphacolor(&Color_grey, 128, 128, 128, 255);
-	gr_init_alphacolor(&Color_silver, 191, 191, 191, 255);
-	gr_init_alphacolor(&Color_dark_grey, 32, 32, 32, 255);
+	gr_init_alphacolor ( &Color_black, 0, 0, 0, 255 );
+	gr_init_alphacolor ( &Color_grey, 128, 128, 128, 255 );
+	gr_init_alphacolor ( &Color_silver, 191, 191, 191, 255 );
+	gr_init_alphacolor ( &Color_dark_grey, 32, 32, 32, 255 );
 	//gr_init_alphacolor( &Color_white, 185, 185, 185, 255 );
-	gr_init_alphacolor(&Color_white, 192, 192, 192, 255);
-	gr_init_alphacolor(&Color_bright_white, 255, 255, 255, 255);
+	gr_init_alphacolor ( &Color_white, 192, 192, 192, 255 );
+	gr_init_alphacolor ( &Color_bright_white, 255, 255, 255, 255 );
 
-	gr_init_alphacolor(&Color_violet_gray, 160, 144, 160, 255);
-	gr_init_alphacolor(&Color_violet, 192, 104, 192, 255);
+	gr_init_alphacolor ( &Color_violet_gray, 160, 144, 160, 255 );
+	gr_init_alphacolor ( &Color_violet, 192, 104, 192, 255 );
 
-	gr_init_alphacolor(&Color_dim_red, 80, 6, 6, 255);
-	gr_init_alphacolor(&Color_red, 126, 6, 6, 255);
-	gr_init_alphacolor(&Color_bright_red, 200, 0, 0, 255);
+	gr_init_alphacolor ( &Color_dim_red, 80, 6, 6, 255 );
+	gr_init_alphacolor ( &Color_red, 126, 6, 6, 255 );
+	gr_init_alphacolor ( &Color_bright_red, 200, 0, 0, 255 );
 
-	gr_init_alphacolor(&Color_pink, 185, 150, 150, 255);
-	gr_init_alphacolor(&Color_light_pink, 230, 190, 190, 255);
+	gr_init_alphacolor ( &Color_pink, 185, 150, 150, 255 );
+	gr_init_alphacolor ( &Color_light_pink, 230, 190, 190, 255 );
 
-	//	gr_init_alphacolor( &Color_yellow, 113, 184, 124, 255 );
-	//	gr_init_alphacolor( &Color_bright_yellow, 162, 210, 162, 255 );
+	//  gr_init_alphacolor( &Color_yellow, 113, 184, 124, 255 );
+	//  gr_init_alphacolor( &Color_bright_yellow, 162, 210, 162, 255 );
 	//  This didn't look very "yellow"
-	gr_init_alphacolor(&Color_yellow, 255, 255, 122, 255);
-	gr_init_alphacolor(&Color_bright_yellow, 255, 255, 0, 255);
+	gr_init_alphacolor ( &Color_yellow, 255, 255, 122, 255 );
+	gr_init_alphacolor ( &Color_bright_yellow, 255, 255, 0, 255 );
 
-	gr_init_alphacolor(&Color_ui_light_green, 48, 90, 190, 255);
-	gr_init_alphacolor(&Color_ui_green, 0, 102, 191, 255);
+	gr_init_alphacolor ( &Color_ui_light_green, 48, 90, 190, 255 );
+	gr_init_alphacolor ( &Color_ui_green, 0, 102, 191, 255 );
 
-	gr_init_alphacolor(&Color_ui_light_pink, 255, 210, 171, 255);
-	gr_init_alphacolor(&Color_ui_pink, 255, 166, 86, 255);
+	gr_init_alphacolor ( &Color_ui_light_pink, 255, 210, 171, 255 );
+	gr_init_alphacolor ( &Color_ui_pink, 255, 166, 86, 255 );
 }

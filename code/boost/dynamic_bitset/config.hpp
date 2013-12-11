@@ -22,9 +22,13 @@
 
 // no-op function to workaround gcc bug c++/8419
 //
-namespace boost { namespace detail {
-    template <typename T> T make_non_const(T t) { return t; }
-}}
+namespace boost
+{
+namespace detail
+{
+template <typename T> T make_non_const ( T t ) { return t; }
+}
+}
 
 #if defined(__GNUC__)
 # define BOOST_DYNAMIC_BITSET_WRAP_CONSTANT(expr) \

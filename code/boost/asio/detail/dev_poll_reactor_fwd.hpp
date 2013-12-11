@@ -23,9 +23,12 @@
 // Define this to indicate that /dev/poll is supported on the target platform.
 #define BOOST_ASIO_HAS_DEV_POLL 1
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 template <bool Own_Thread>
 class dev_poll_reactor;

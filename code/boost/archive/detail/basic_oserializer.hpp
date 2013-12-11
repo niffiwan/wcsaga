@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // basic_oserializer.hpp: extenstion of type_info required for serialization.
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -31,53 +31,60 @@
 #  pragma warning(disable : 4511 4512)
 #endif
 
-namespace boost {
-namespace serialization {
-    class extended_type_info;
+namespace boost
+{
+namespace serialization
+{
+class extended_type_info;
 } // namespace serialization
 
 // forward declarations
-namespace archive {
-namespace detail {
+namespace archive
+{
+namespace detail
+{
 
-class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oarchive;
-class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_pointer_oserializer;
+class BOOST_ARCHIVE_DECL ( BOOST_PP_EMPTY() ) basic_oarchive;
+class BOOST_ARCHIVE_DECL ( BOOST_PP_EMPTY() ) basic_pointer_oserializer;
 
-class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_oserializer : 
-    public basic_serializer
+class BOOST_ARCHIVE_DECL ( BOOST_PP_EMPTY() ) basic_oserializer :
+	public basic_serializer
 {
 private:
-    basic_pointer_oserializer *m_bpos;
+	basic_pointer_oserializer *m_bpos;
 protected:
-    explicit basic_oserializer(
-        const boost::serialization::extended_type_info & type_
-    );
-    // account for bogus gcc warning
-    #if defined(__GNUC__)
-    virtual
-    #endif
-    ~basic_oserializer();
+	explicit basic_oserializer (
+	    const boost::serialization::extended_type_info &type_
+	);
+	// account for bogus gcc warning
+#if defined(__GNUC__)
+	virtual
+#endif
+	~basic_oserializer();
 public:
-    bool serialized_as_pointer() const {
-        return m_bpos != NULL;
-    }
-    void set_bpos(basic_pointer_oserializer *bpos){
-        m_bpos = bpos;
-    }
-    const basic_pointer_oserializer * get_bpos() const {
-        return m_bpos;
-    }
-    virtual void save_object_data(
-        basic_oarchive & ar, const void * x
-    ) const = 0;
-    // returns true if class_info should be saved
-    virtual bool class_info() const = 0;
-    // returns true if objects should be tracked
-    virtual bool tracking(const unsigned int flags) const = 0;
-    // returns class version
-    virtual version_type version() const = 0;
-    // returns true if this class is polymorphic
-    virtual bool is_polymorphic() const = 0;
+	bool serialized_as_pointer() const
+	{
+		return m_bpos != NULL;
+	}
+	void set_bpos ( basic_pointer_oserializer *bpos )
+	{
+		m_bpos = bpos;
+	}
+	const basic_pointer_oserializer *get_bpos() const
+	{
+		return m_bpos;
+	}
+	virtual void save_object_data (
+	    basic_oarchive &ar, const void *x
+	) const = 0;
+	// returns true if class_info should be saved
+	virtual bool class_info() const = 0;
+	// returns true if objects should be tracked
+	virtual bool tracking ( const unsigned int flags ) const = 0;
+	// returns class version
+	virtual version_type version() const = 0;
+	// returns true if this class is polymorphic
+	virtual bool is_polymorphic() const = 0;
 };
 
 } // namespace detail

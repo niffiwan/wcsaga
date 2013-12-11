@@ -18,19 +18,21 @@
 #include "boost/pending/integer_log2.hpp"
 
 
-namespace boost {
+namespace boost
+{
 
-    template <typename T>
-    int lowest_bit(T x) {
+template <typename T>
+int lowest_bit ( T x )
+{
 
-        assert(x >= 1); // PRE
+	assert ( x >= 1 ); // PRE
 
-        // clear all bits on except the rightmost one,
-        // then calculate the logarithm base 2
-        //
-        return boost::integer_log2<T>( x - ( x & (x-1) ) );
+	// clear all bits on except the rightmost one,
+	// then calculate the logarithm base 2
+	//
+	return boost::integer_log2<T> ( x - ( x & ( x - 1 ) ) );
 
-    }
+}
 
 
 }

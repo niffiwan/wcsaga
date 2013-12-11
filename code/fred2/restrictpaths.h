@@ -14,37 +14,37 @@
 
 class restrict_paths : public CDialog
 {
-// Construction
-public:	
-	restrict_paths(CWnd* pParent = NULL);   // standard constructor
+	// Construction
+public:
+	restrict_paths ( CWnd *pParent = NULL ); // standard constructor
 
 	// parameters for the dialog
 	bool m_arrival;
-	int	m_ship_class;
+	int m_ship_class;
 	int *m_path_mask;
 
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(restrict_paths)
 	enum { IDD = IDD_RESTRICT_PATHS };
-	CCheckListBox		m_path_list;
+	CCheckListBox       m_path_list;
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(restrict_paths)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions
 	//{{AFX_MSG(restrict_paths)
 	virtual BOOL OnInitDialog();
-	void OnCancel();	
+	void OnCancel();
 	void OnOK();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()

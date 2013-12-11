@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -18,18 +18,22 @@
 
 // Julian year = 365.25 days exactly = 8766 hours exactly
 
-namespace boost {
-namespace units {
-namespace metric {
+namespace boost
+{
+namespace units
+{
+namespace metric
+{
 
 typedef scaled_base_unit<boost::units::si::second_base_unit, scale<31557600, static_rational<1> > > year_base_unit;
 
 }
 
 template<>
-struct base_unit_info<metric::year_base_unit> {
-    static const char* name()   { return("Julian year"); }
-    static const char* symbol() { return("yr"); }
+struct base_unit_info<metric::year_base_unit>
+{
+	static const char *name()   { return ( "Julian year" ); }
+	static const char *symbol() { return ( "yr" ); }
 };
 
 }

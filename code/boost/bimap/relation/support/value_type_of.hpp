@@ -38,10 +38,14 @@ See also member_at, get().
 \ingroup relation_group
                                                                     **/
 
-namespace boost {
-namespace bimaps {
-namespace relation {
-namespace support {
+namespace boost
+{
+namespace bimaps
+{
+namespace relation
+{
+namespace support
+{
 
 // Metafunction value_type_of
 /*
@@ -65,20 +69,20 @@ BOOST_BIMAP_SYMMETRIC_METADATA_ACCESS_BUILDER
 
 template< class Tag, class SymmetricType >
 struct value_type_of
-<
-    Tag, SymmetricType,
-    BOOST_DEDUCED_TYPENAME enable_if
-    <
-        ::boost::bimaps::relation::support::is_tag_of_member_at_info
-        <
-            Tag,
-            SymmetricType
-        >
+		<
+		Tag, SymmetricType,
+		BOOST_DEDUCED_TYPENAME enable_if
+		<
+		::boost::bimaps::relation::support::is_tag_of_member_at_info
+		<
+		Tag,
+		SymmetricType
+		>
 
-    >::type
->
+		>::type
+		>
 {
-    typedef BOOST_DEDUCED_TYPENAME SymmetricType::info_type type;
+	typedef BOOST_DEDUCED_TYPENAME SymmetricType::info_type type;
 };
 
 } // namespace support

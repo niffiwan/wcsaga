@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -16,14 +16,14 @@
 #include "osapi/osapi.h"
 
 
-#define TARGET_TAB			0
-#define SHIP_TAB				1
-#define WEAPON_TAB			2
-#define COMPUTER_TAB			3
+#define TARGET_TAB          0
+#define SHIP_TAB                1
+#define WEAPON_TAB          2
+#define COMPUTER_TAB            3
 
 int Failed_key_index;
 
-// assume control keys are used as modifiers until we find out 
+// assume control keys are used as modifiers until we find out
 int Shift_is_modifier;
 int Ctrl_is_modifier;
 int Alt_is_modifier;
@@ -689,7 +689,7 @@ config_item Control_config[CCFG_MAX + 1] =
 		true,
 		"Transfer Energy Shield->Laser"
 	},
-	//	{                           -1,					-1, -1,				true, "Show Damage Popup Window" },	
+	//  {                           -1,                 -1, -1,             true, "Show Damage Popup Window" },
 
 	{
 		-1,
@@ -963,7 +963,7 @@ config_item Control_config[CCFG_MAX + 1] =
 	}
 };
 
-char* Scan_code_text_german[] =
+char *Scan_code_text_german[] =
 {
 	"",
 	"Esc",
@@ -1230,7 +1230,7 @@ char* Scan_code_text_german[] =
 	"",
 };
 
-char* Joy_button_text_german[] =
+char *Joy_button_text_german[] =
 {
 	"Button 1",
 	"Button 2",
@@ -1270,7 +1270,7 @@ char* Joy_button_text_german[] =
 	"Hat Right"
 };
 
-char* Scan_code_text_french[] =
+char *Scan_code_text_french[] =
 {
 	"",
 	"Esc",
@@ -1537,7 +1537,7 @@ char* Scan_code_text_french[] =
 	"",
 };
 
-char* Joy_button_text_french[] =
+char *Joy_button_text_french[] =
 {
 	"Button 1",
 	"Button 2",
@@ -1577,8 +1577,8 @@ char* Joy_button_text_french[] =
 	"Hat Right"
 };
 
-//	This is the text that is displayed on the screen for the keys a player selects
-char* Scan_code_text_english[] =
+//  This is the text that is displayed on the screen for the keys a player selects
+char *Scan_code_text_english[] =
 {
 	"",
 	"Esc",
@@ -1845,7 +1845,7 @@ char* Scan_code_text_english[] =
 	"",
 };
 
-char* Joy_button_text_english[] =
+char *Joy_button_text_english[] =
 {
 	"Button 1",
 	"Button 2",
@@ -1885,8 +1885,8 @@ char* Joy_button_text_english[] =
 	"Hat Right"
 };
 
-char** Scan_code_text = Scan_code_text_english;
-char** Joy_button_text = Joy_button_text_english;
+char **Scan_code_text = Scan_code_text_english;
+char **Joy_button_text = Joy_button_text_english;
 
 void set_modifier_status()
 {
@@ -1896,59 +1896,59 @@ void set_modifier_status()
 	Shift_is_modifier = 0;
 	Ctrl_is_modifier = 0;
 
-	for (i = 0; i < CCFG_MAX; i++)
+	for ( i = 0; i < CCFG_MAX; i++ )
 	{
-		if (Control_config[i].key_id < 0)
+		if ( Control_config[i].key_id < 0 )
 			continue;
 
-		if (Control_config[i].key_id & KEY_ALTED)
+		if ( Control_config[i].key_id & KEY_ALTED )
 			Alt_is_modifier = 1;
 
-		if (Control_config[i].key_id & KEY_SHIFTED)
+		if ( Control_config[i].key_id & KEY_SHIFTED )
 			Shift_is_modifier = 1;
 
-		if (Control_config[i].key_id & KEY_CTRLED)
+		if ( Control_config[i].key_id & KEY_CTRLED )
 		{
-			Assert(0);  // get Alan
+			Assert ( 0 ); // get Alan
 			Ctrl_is_modifier = 1;
 		}
 	}
 }
 
-int translate_key_to_index(char* key)
+int translate_key_to_index ( char *key )
 {
 	int i, index = -1, alt = 0, shift = 0, max_scan_codes;
 
-	if (Lcl_gr)
+	if ( Lcl_gr )
 	{
-		max_scan_codes = sizeof(Scan_code_text_german) / sizeof(char*);
+		max_scan_codes = sizeof ( Scan_code_text_german ) / sizeof ( char * );
 	}
-	else if (Lcl_fr)
+	else if ( Lcl_fr )
 	{
-		max_scan_codes = sizeof(Scan_code_text_french) / sizeof(char*);
+		max_scan_codes = sizeof ( Scan_code_text_french ) / sizeof ( char * );
 	}
 	else
 	{
-		max_scan_codes = sizeof(Scan_code_text_english) / sizeof(char*);
+		max_scan_codes = sizeof ( Scan_code_text_english ) / sizeof ( char * );
 	}
 
 	// look for modifiers
-	Assert(key);
-	if (!strnicmp(key, "Alt", 3))
+	Assert ( key );
+	if ( !strnicmp ( key, "Alt", 3 ) )
 	{
 		alt = 1;
 		key += 3;
-		if (*key)
+		if ( *key )
 			key++;
 	}
 
-	char* translated_shift;
+	char *translated_shift;
 
-	if (Lcl_gr)
+	if ( Lcl_gr )
 	{
 		translated_shift = "Shift";
 	}
-	else if (Lcl_fr)
+	else if ( Lcl_fr )
 	{
 		translated_shift = "Maj.";
 	}
@@ -1957,43 +1957,43 @@ int translate_key_to_index(char* key)
 		translated_shift = "Shift";
 	}
 
-	if (!strnicmp(key, translated_shift, 5))
+	if ( !strnicmp ( key, translated_shift, 5 ) )
 	{
 		shift = 1;
 		key += 5;
-		if (*key)
+		if ( *key )
 			key++;
 	}
 
 	// look up index for default key
-	if (*key)
+	if ( *key )
 	{
-		for (i = 0; i < max_scan_codes; i++)
-			if (!stricmp(key, Scan_code_text_english[i]))
+		for ( i = 0; i < max_scan_codes; i++ )
+			if ( !stricmp ( key, Scan_code_text_english[i] ) )
 			{
 				index = i;
 				break;
 			}
 
-		if (i == max_scan_codes)
+		if ( i == max_scan_codes )
 			return -1;
 
-		if (shift)
+		if ( shift )
 			index |= KEY_SHIFTED;
-		if (alt)
+		if ( alt )
 			index |= KEY_ALTED;
 
 		// convert scancode to Control_config index
-		for (i = 0; i < CCFG_MAX; i++)
+		for ( i = 0; i < CCFG_MAX; i++ )
 		{
-			if (Control_config[i].key_default == index)
+			if ( Control_config[i].key_default == index )
 			{
 				index = i;
 				break;
 			}
 		}
 
-		if (i == CCFG_MAX)
+		if ( i == CCFG_MAX )
 			return -1;
 
 		return index;
@@ -2006,69 +2006,69 @@ int translate_key_to_index(char* key)
 // Both are 'key' and the return value are descriptive strings that can be displayed
 // directly to the user.  If 'key' isn't a real key or not normally bound to anything,
 // or there is no key current bound to the function, NULL is returned.
-char* translate_key(char* key)
+char *translate_key ( char *key )
 {
 	int index = -1, code = -1;
 
-	index = translate_key_to_index(key);
-	if (index < 0)
+	index = translate_key_to_index ( key );
+	if ( index < 0 )
 		return NULL;
 
 	code = Control_config[index].key_id;
 	Failed_key_index = index;
-	if (code < 0)
+	if ( code < 0 )
 	{
 		code = Control_config[index].joy_id;
-		if (code >= 0)
+		if ( code >= 0 )
 			return Joy_button_text[code];
 	}
 
-	return textify_scancode(code);
+	return textify_scancode ( code );
 }
 
-char* textify_scancode(int code)
+char *textify_scancode ( int code )
 {
 	static char text[40];
 
-	if (code < 0)
+	if ( code < 0 )
 		return "None";
 
 	int keycode = code & KEY_MASK;
 
 	*text = 0;
-	if (code & KEY_ALTED && !(keycode == KEY_LALT || keycode == KEY_RALT))
+	if ( code & KEY_ALTED && ! ( keycode == KEY_LALT || keycode == KEY_RALT ) )
 	{
-		if (Lcl_gr)
+		if ( Lcl_gr )
 		{
-			strcat_s(text, "Alt-");
+			strcat_s ( text, "Alt-" );
 		}
-		else if (Lcl_fr)
+		else if ( Lcl_fr )
 		{
-			strcat_s(text, "Alt-");
+			strcat_s ( text, "Alt-" );
 		}
 		else
 		{
-			strcat_s(text, "Alt-");
+			strcat_s ( text, "Alt-" );
 		}
 	}
 
-	if (code & KEY_SHIFTED && !(keycode == KEY_LSHIFT || keycode == KEY_RSHIFT))
+	if ( code & KEY_SHIFTED && ! ( keycode == KEY_LSHIFT || keycode == KEY_RSHIFT ) )
 	{
-		if (Lcl_gr)
+		if ( Lcl_gr )
 		{
-			strcat_s(text, "Shift-");
+			strcat_s ( text, "Shift-" );
 		}
-		else if (Lcl_fr)
+		else if ( Lcl_fr )
 		{
-			strcat_s(text, "Maj.-");
+			strcat_s ( text, "Maj.-" );
 		}
 		else
 		{
-			strcat_s(text, "Shift-");
+			strcat_s ( text, "Shift-" );
 		}
 	}
 
-	strcat_s(text, Scan_code_text[keycode]);
+	strcat_s ( text, Scan_code_text[keycode] );
 	return text;
 }
 //XSTR:ON
@@ -2078,7 +2078,7 @@ void control_config_common_init()
 {
 	int layout = get_keyboad_layout();
 
-	if (layout == LCL_GERMAN)
+	if ( layout == LCL_GERMAN )
 	{
 		Scan_code_text = Scan_code_text_german;
 		Joy_button_text = Joy_button_text_german;
@@ -2089,7 +2089,7 @@ void control_config_common_init()
 		Control_config[REVERSE_THRUST].key_default = KEY_Y;
 		Control_config[DISARM_MESSAGE].key_default = KEY_SHIFTED | KEY_Y;
 	}
-	else if (LCL_ENGLISH == LCL_FRENCH)
+	else if ( LCL_ENGLISH == LCL_FRENCH )
 	{
 		Scan_code_text = Scan_code_text_french;
 		Joy_button_text = Joy_button_text_french;

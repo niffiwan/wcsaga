@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2001-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -39,7 +39,7 @@
 
 #if !defined(BOOST_NO_STD_LOCALE) &&            \
     !BOOST_WORKAROUND(BOOST_MSVC, < 1310)  &&   \
-    !defined(__MWERKS__) 
+    !defined(__MWERKS__)
 #  define BOOST_TEST_USE_STD_LOCALE 1
 #endif
 

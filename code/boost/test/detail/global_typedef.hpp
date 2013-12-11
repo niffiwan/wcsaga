@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2001-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -24,9 +24,11 @@
 
 //____________________________________________________________________________//
 
-namespace boost {
+namespace boost
+{
 
-namespace unit_test {
+namespace unit_test
+{
 
 typedef unsigned long   counter_t;
 
@@ -54,26 +56,28 @@ const test_unit_id MIN_TEST_SUITE_ID = 0x00000001;
 
 //____________________________________________________________________________//
 
-namespace ut_detail {
+namespace ut_detail
+{
 
 inline test_unit_type
-test_id_2_unit_type( test_unit_id id )
+test_id_2_unit_type ( test_unit_id id )
 {
-    return (id & 0xFFFF0000) != 0 ? tut_case : tut_suite;
+	return ( id & 0xFFFF0000 ) != 0 ? tut_case : tut_suite;
 }
 
 //____________________________________________________________________________//
 
-// helper templates to prevent ODR violations 
-template<class T> 
-struct static_constant { 
-    static T value; 
-}; 
+// helper templates to prevent ODR violations
+template<class T>
+struct static_constant
+{
+	static T value;
+};
 
-template<class T> 
-T static_constant<T>::value; 
+template<class T>
+T static_constant<T>::value;
 
-//____________________________________________________________________________// 
+//____________________________________________________________________________//
 
 } // namespace ut_detail
 

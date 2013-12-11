@@ -25,44 +25,44 @@
 
 namespace BOOST_STD_EXTENSION_NAMESPACE
 {
-    template<
-        class Kty
-      , class Ty
-      , class Hash
-      , class Cmp
-      , class Alloc
+template <
+    class Kty
+    , class Ty
+    , class Hash
+    , class Cmp
+    , class Alloc
     >
-    class hash_map;
+class hash_map;
 
-    template<
-        class Kty
-      , class Ty
-      , class Hash
-      , class Cmp
-      , class Alloc
+template <
+    class Kty
+    , class Ty
+    , class Hash
+    , class Cmp
+    , class Alloc
     >
-    class hash_multimap;
+class hash_multimap;
 }
 
 #elif defined(BOOST_DINKUMWARE_STDLIB)
 
 namespace BOOST_STD_EXTENSION_NAMESPACE
 {
-    template<
-        class Kty
-      , class Ty
-      , class Tr
-      , class Alloc
+template <
+    class Kty
+    , class Ty
+    , class Tr
+    , class Alloc
     >
-    class hash_map;
+class hash_map;
 
-    template<
-        class Kty
-      , class Ty
-      , class Tr
-      , class Alloc
+template <
+    class Kty
+    , class Ty
+    , class Tr
+    , class Alloc
     >
-    class hash_multimap;
+class hash_multimap;
 }
 
 #endif

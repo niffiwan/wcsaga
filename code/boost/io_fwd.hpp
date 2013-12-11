@@ -26,19 +26,19 @@ class ios_width_saver;
 class ios_base_all_saver;
 
 template < typename Ch, class Tr = ::std::char_traits<Ch> >
-    class basic_ios_iostate_saver;
+class basic_ios_iostate_saver;
 template < typename Ch, class Tr = ::std::char_traits<Ch> >
-    class basic_ios_exception_saver;
+class basic_ios_exception_saver;
 template < typename Ch, class Tr = ::std::char_traits<Ch> >
-    class basic_ios_tie_saver;
+class basic_ios_tie_saver;
 template < typename Ch, class Tr = ::std::char_traits<Ch> >
-    class basic_ios_rdbuf_saver;
+class basic_ios_rdbuf_saver;
 template < typename Ch, class Tr = ::std::char_traits<Ch> >
-    class basic_ios_fill_saver;
+class basic_ios_fill_saver;
 template < typename Ch, class Tr = ::std::char_traits<Ch> >
-    class basic_ios_locale_saver;
+class basic_ios_locale_saver;
 template < typename Ch, class Tr = ::std::char_traits<Ch> >
-    class basic_ios_all_saver;
+class basic_ios_all_saver;
 
 typedef basic_ios_iostate_saver<char>        ios_iostate_saver;
 typedef basic_ios_iostate_saver<wchar_t>    wios_iostate_saver;

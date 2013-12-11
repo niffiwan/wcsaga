@@ -26,28 +26,31 @@
 #include <boost/asio/detail/noncopyable.hpp>
 #include <boost/asio/detail/socket_types.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 class local_free_on_block_exit
-  : private noncopyable
+	: private noncopyable
 {
 public:
-  // Constructor blocks all signals for the calling thread.
-  explicit local_free_on_block_exit(void* p)
-    : p_(p)
-  {
-  }
+	// Constructor blocks all signals for the calling thread.
+	explicit local_free_on_block_exit ( void *p )
+		: p_ ( p )
+	{
+	}
 
-  // Destructor restores the previous signal mask.
-  ~local_free_on_block_exit()
-  {
-    ::LocalFree(p_);
-  }
+	// Destructor restores the previous signal mask.
+	~local_free_on_block_exit()
+	{
+		::LocalFree ( p_ );
+	}
 
 private:
-  void* p_;
+	void *p_;
 };
 
 } // namespace detail

@@ -16,23 +16,23 @@
 
 namespace boost
 {
-    template< class T >
-    struct range_mutable_iterator<T*>
-    {
-        typedef T* type;
-    };
+template< class T >
+struct range_mutable_iterator<T *>
+{
+	typedef T *type;
+};
 
-    template< class T >
-    struct range_const_iterator<T*>
-    {
-        typedef const T* type;
-    };
+template< class T >
+struct range_const_iterator<T *>
+{
+	typedef const T *type;
+};
 
-    template< class T >
-    struct range_size<T*>
-    {
-       typedef std::size_t type;
-    };    
+template< class T >
+struct range_size<T *>
+{
+	typedef std::size_t type;
+};
 }
 
 #endif

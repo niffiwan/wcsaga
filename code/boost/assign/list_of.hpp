@@ -46,338 +46,338 @@ namespace boost
 
 // this here is necessary to avoid compiler error in <boost/array.hpp>
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    template< class T, std::size_t sz >
-    class array;
-#endif    
-    
+template< class T, std::size_t sz >
+class array;
+#endif
+
 namespace assign_detail
 {
-    /////////////////////////////////////////////////////////////////////////
-    // Part 0: common conversion code
-    /////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+// Part 0: common conversion code
+/////////////////////////////////////////////////////////////////////////
 
-    template< class T >
-    struct assign_decay
-    {
-        //
-        // Add constness to array parameters
-        // to support string literals properly
-        //
-        typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
-            ::boost::is_array<T>,
-            ::boost::decay<const T>,
-            ::boost::decay<T> >::type type;
-    };
-    
-    template< class T, std::size_t sz >
-    type_traits::yes_type assign_is_array( const array<T,sz>* );
-    type_traits::no_type assign_is_array( ... );
-    template< class T, class U >
-    type_traits::yes_type assign_is_pair( const std::pair<T,U>* );
-    type_traits::no_type assign_is_pair( ... ); 
+template< class T >
+struct assign_decay
+{
+	//
+	// Add constness to array parameters
+	// to support string literals properly
+	//
+	typedef BOOST_DEDUCED_TYPENAME mpl::eval_if <
+	::boost::is_array<T>,
+	::boost::decay<const T>,
+	::boost::decay<T> >::type type;
+};
 
-
-    
-    struct array_type_tag
-    {
-    #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    private:
-      char dummy_;  // BCB would by default use 8 bytes
-    #endif
-    };
-    struct adapter_type_tag
-    {
-    #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    private:
-      char dummy_;  // BCB would by default use 8 bytes
-    #endif
-    };
-    struct pair_type_tag
-    {
-    #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    private:
-      char dummy_;  // BCB would by default use 8 bytes
-    #endif
-    };
-    struct default_type_tag
-    {
-    #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    private:
-      char dummy_;  // BCB would by default use 8 bytes
-    #endif
-    };
+template< class T, std::size_t sz >
+type_traits::yes_type assign_is_array ( const array<T, sz> * );
+type_traits::no_type assign_is_array ( ... );
+template< class T, class U >
+type_traits::yes_type assign_is_pair ( const std::pair<T, U> * );
+type_traits::no_type assign_is_pair ( ... );
 
 
-    
-    template< class DerivedTAssign, class Iterator >
-    class converter
-    {
-    public: // Range operations
-        typedef Iterator iterator;
-        typedef Iterator const_iterator;
-        
-        iterator begin() const 
-        {
-            return static_cast<const DerivedTAssign*>(this)->begin();
-        }
 
-        iterator end() const
-        {
-            return static_cast<const DerivedTAssign*>(this)->end();
-        }
-        
-    public:
+struct array_type_tag
+{
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+private:
+	char dummy_;  // BCB would by default use 8 bytes
+#endif
+};
+struct adapter_type_tag
+{
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+private:
+	char dummy_;  // BCB would by default use 8 bytes
+#endif
+};
+struct pair_type_tag
+{
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+private:
+	char dummy_;  // BCB would by default use 8 bytes
+#endif
+};
+struct default_type_tag
+{
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+private:
+	char dummy_;  // BCB would by default use 8 bytes
+#endif
+};
 
-        template< class Container >
-        Container convert_to_container() const
-        {
-            static Container* c = 0;
-            BOOST_STATIC_CONSTANT( bool, is_array_flag = sizeof( assign_detail::assign_is_array( c ) ) 
-                                   == sizeof( type_traits::yes_type ) );
 
-            typedef BOOST_DEDUCED_TYPENAME mpl::if_c< is_array_flag,
-                                                      array_type_tag,
-                                             default_type_tag >::type tag_type;
 
-            return convert<Container>( c, tag_type() );
-        }
-        
-    private:
-        
-        template< class Container >
-        Container convert( const Container*, default_type_tag ) const
-        {
+template< class DerivedTAssign, class Iterator >
+class converter
+{
+public: // Range operations
+	typedef Iterator iterator;
+	typedef Iterator const_iterator;
+
+	iterator begin() const
+	{
+		return static_cast<const DerivedTAssign *> ( this )->begin();
+	}
+
+	iterator end() const
+	{
+		return static_cast<const DerivedTAssign *> ( this )->end();
+	}
+
+public:
+
+	template< class Container >
+	Container convert_to_container() const
+	{
+		static Container *c = 0;
+		BOOST_STATIC_CONSTANT ( bool, is_array_flag = sizeof ( assign_detail::assign_is_array ( c ) )
+		                        == sizeof ( type_traits::yes_type ) );
+
+		typedef BOOST_DEDUCED_TYPENAME mpl::if_c< is_array_flag,
+		        array_type_tag,
+		        default_type_tag >::type tag_type;
+
+		return convert<Container> ( c, tag_type() );
+	}
+
+private:
+
+	template< class Container >
+	Container convert ( const Container *, default_type_tag ) const
+	{
 
 #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)
-// old Dinkumware doesn't support iterator type as template
-            Container result;
-            iterator it  = begin(), 
-                     e   = end();
-            while( it != e )
-            {
-                result.insert( result.end(), *it );
-                ++it;
-            }
-            return result;
+		// old Dinkumware doesn't support iterator type as template
+		Container result;
+		iterator it  = begin(),
+		         e   = end();
+		while ( it != e )
+		{
+			result.insert ( result.end(), *it );
+			++it;
+		}
+		return result;
 #else
-            return Container( begin(), end() );
+		return Container ( begin(), end() );
 #endif
-        }
+	}
 
-        template< class Array >
-        Array convert( const Array*, array_type_tag ) const
-        {
-            typedef BOOST_DEDUCED_TYPENAME Array::value_type value_type;
+	template< class Array >
+	Array convert ( const Array *, array_type_tag ) const
+	{
+		typedef BOOST_DEDUCED_TYPENAME Array::value_type value_type;
 
 #if BOOST_WORKAROUND(BOOST_INTEL, <= 910 ) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580 )
-            BOOST_DEDUCED_TYPENAME remove_const<Array>::type ar;
+		BOOST_DEDUCED_TYPENAME remove_const<Array>::type ar;
 #else
-            Array ar;
-#endif            
-            const std::size_t sz = ar.size();
-            if( sz < static_cast<const DerivedTAssign*>(this)->size() )
-                throw assign::assignment_exception( "array initialized with too many elements" );
-            std::size_t n = 0; 
-            iterator i   = begin(), 
-                     e   = end();
-            for( ; i != e; ++i, ++n )
-                ar[n] = *i;
-            for( ; n < sz; ++n )
-                ar[n] = value_type();
-            return ar; 
-        }
+		Array ar;
+#endif
+		const std::size_t sz = ar.size();
+		if ( sz < static_cast<const DerivedTAssign *> ( this )->size() )
+			throw assign::assignment_exception ( "array initialized with too many elements" );
+		std::size_t n = 0;
+		iterator i   = begin(),
+		         e   = end();
+		for ( ; i != e; ++i, ++n )
+			ar[n] = *i;
+		for ( ; n < sz; ++n )
+			ar[n] = value_type();
+		return ar;
+	}
 
-        template< class Adapter >
-        Adapter convert_to_adapter( const Adapter* = 0 ) const
-        {
-            Adapter a;
-            iterator i   = begin(), 
-                     e   = end();
-            for( ; i != e; ++i )
-                a.push( *i );
-            return a;
-        }
+	template< class Adapter >
+	Adapter convert_to_adapter ( const Adapter * = 0 ) const
+	{
+		Adapter a;
+		iterator i   = begin(),
+		         e   = end();
+		for ( ; i != e; ++i )
+			a.push ( *i );
+		return a;
+	}
 
-    private:
-        struct adapter_converter;
-        friend struct adapter_converter;
+private:
+	struct adapter_converter;
+	friend struct adapter_converter;
 
-        struct adapter_converter
-        {
-            const converter& gl;
-            adapter_converter( const converter& this_ ) : gl( this_ )
-            {}
+	struct adapter_converter
+	{
+		const converter &gl;
+		adapter_converter ( const converter &this_ ) : gl ( this_ )
+		{}
 
-            adapter_converter( const adapter_converter& r ) 
-            : gl( r.gl )
-            { }
+		adapter_converter ( const adapter_converter &r )
+			: gl ( r.gl )
+		{ }
 
-            template< class Adapter >
-            operator Adapter() const
-            {
-                return gl.convert_to_adapter<Adapter>();
-            }
-        };
+		template< class Adapter >
+		operator Adapter() const
+		{
+			return gl.convert_to_adapter<Adapter>();
+		}
+	};
 
-    public: 
-        template< class Container >
-        Container to_container( Container& c ) const
-        {
-            return convert( &c, default_type_tag() ); 
-        }
+public:
+	template< class Container >
+	Container to_container ( Container &c ) const
+	{
+		return convert ( &c, default_type_tag() );
+	}
 
-        adapter_converter to_adapter() const
-        {
-            return adapter_converter( *this );
-        }
+	adapter_converter to_adapter() const
+	{
+		return adapter_converter ( *this );
+	}
 
-        template< class Adapter >
-        Adapter to_adapter( Adapter& a ) const
-        {
-            return this->convert_to_adapter( &a ); 
-        }
+	template< class Adapter >
+	Adapter to_adapter ( Adapter &a ) const
+	{
+		return this->convert_to_adapter ( &a );
+	}
 
-        template< class Array >
-        Array to_array( Array& a ) const
-        {
-            return convert( &a, array_type_tag() );
-        }
-    };
+	template< class Array >
+	Array to_array ( Array &a ) const
+	{
+		return convert ( &a, array_type_tag() );
+	}
+};
 
-    template< class T, class I, class Range >
-    inline bool operator==( const converter<T,I>& l, const Range& r )
-    {
-        return ::boost::iterator_range_detail::equal( l, r );
-    }
+template< class T, class I, class Range >
+inline bool operator== ( const converter<T, I> &l, const Range &r )
+{
+	return ::boost::iterator_range_detail::equal ( l, r );
+}
 
-    template< class T, class I, class Range >
-    inline bool operator==( const Range& l, const converter<T,I>& r )
-    {
-        return r == l;
-    }
+template< class T, class I, class Range >
+inline bool operator== ( const Range &l, const converter<T, I> &r )
+{
+	return r == l;
+}
 
-    template< class T, class I, class Range >
-    inline bool operator!=( const converter<T,I>& l, const Range& r )
-    {
-        return !( l == r );
-    }
-    
-    template< class T, class I, class Range >
-    inline bool operator!=( const Range& l, const converter<T,I>& r )
-    {
-        return !( l == r );
-    }
+template< class T, class I, class Range >
+inline bool operator!= ( const converter<T, I> &l, const Range &r )
+{
+	return ! ( l == r );
+}
 
-    template< class T, class I, class Range >
-    inline bool operator<( const converter<T,I>& l, const Range& r )
-    {
-        return ::boost::iterator_range_detail::less_than( l, r );
-    }
+template< class T, class I, class Range >
+inline bool operator!= ( const Range &l, const converter<T, I> &r )
+{
+	return ! ( l == r );
+}
 
-    template< class T, class I, class Range >
-    inline bool operator<( const Range& l, const converter<T,I>& r )
-    {
-        return ::boost::iterator_range_detail::less_than( l, r );
-    }
+template< class T, class I, class Range >
+inline bool operator< ( const converter<T, I> &l, const Range &r )
+{
+	return ::boost::iterator_range_detail::less_than ( l, r );
+}
 
-    template< class T, class I, class Range >
-    inline bool operator>( const converter<T,I>& l, const Range& r )
-    {
-        return r < l;
-    }
+template< class T, class I, class Range >
+inline bool operator< ( const Range &l, const converter<T, I> &r )
+{
+	return ::boost::iterator_range_detail::less_than ( l, r );
+}
 
-    template< class T, class I, class Range >
-    inline bool operator>( const Range& l, const converter<T,I>& r )
-    {
-        return r < l;
-    }
+template< class T, class I, class Range >
+inline bool operator> ( const converter<T, I> &l, const Range &r )
+{
+	return r < l;
+}
 
-    template< class T, class I, class Range >
-    inline bool operator<=( const converter<T,I>& l, const Range& r )
-    {
-        return !( l > r );
-    }
+template< class T, class I, class Range >
+inline bool operator> ( const Range &l, const converter<T, I> &r )
+{
+	return r < l;
+}
 
-    template< class T, class I, class Range >
-    inline bool operator<=( const Range& l, const converter<T,I>& r )
-    {
-        return !( l > r );
-    }
-    
-    template< class T, class I, class Range >
-    inline bool operator>=( const converter<T,I>& l, const Range& r )
-    {
-        return !( l < r );
-    }
+template< class T, class I, class Range >
+inline bool operator<= ( const converter<T, I> &l, const Range &r )
+{
+	return ! ( l > r );
+}
 
-    template< class T, class I, class Range >
-    inline bool operator>=( const Range& l, const converter<T,I>& r )
-    {
-        return !( l < r );
-    }
+template< class T, class I, class Range >
+inline bool operator<= ( const Range &l, const converter<T, I> &r )
+{
+	return ! ( l > r );
+}
 
-    template< class T, class I, class Elem, class Traits >
-    inline std::basic_ostream<Elem,Traits>& 
-    operator<<( std::basic_ostream<Elem, Traits>& Os,
-                const converter<T,I>& r )
-    {
-        return Os << ::boost::make_iterator_range( r.begin(), r.end() );
-    }
-    
-    /////////////////////////////////////////////////////////////////////////
-    // Part 1: flexible, but inefficient interface
-    /////////////////////////////////////////////////////////////////////////    
+template< class T, class I, class Range >
+inline bool operator>= ( const converter<T, I> &l, const Range &r )
+{
+	return ! ( l < r );
+}
 
-    template< class T > 
-    class generic_list : 
-        public converter< generic_list< BOOST_DEDUCED_TYPENAME assign_decay<T>::type >,
-                          BOOST_DEDUCED_TYPENAME std::deque<BOOST_DEDUCED_TYPENAME 
-                                                            assign_decay<T>::type>::iterator >
-    {
-        typedef BOOST_DEDUCED_TYPENAME assign_decay<T>::type Ty;
-        typedef std::deque<Ty>  impl_type;
-        mutable impl_type       values_;
-        
-    public:
-        typedef BOOST_DEDUCED_TYPENAME impl_type::iterator         iterator;
-        typedef iterator                                           const_iterator;
-        typedef BOOST_DEDUCED_TYPENAME impl_type::value_type       value_type;
-        typedef BOOST_DEDUCED_TYPENAME impl_type::size_type        size_type;
-        typedef BOOST_DEDUCED_TYPENAME impl_type::difference_type  difference_type;
-        
-    public:
-        iterator begin() const       { return values_.begin(); }
-        iterator end() const         { return values_.end(); }
-        bool empty() const           { return values_.empty(); }
-        size_type size() const       { return values_.size(); }
-        
-    private:
-        void push_back( value_type r ) { values_.push_back( r ); }
-        
-    public:
-        generic_list& operator,( const Ty& u )
-        {
-            this->push_back( u ); 
-            return *this;
-        }
+template< class T, class I, class Range >
+inline bool operator>= ( const Range &l, const converter<T, I> &r )
+{
+	return ! ( l < r );
+}
 
-        generic_list& operator()()
-        {
-            this->push_back( Ty() );
-            return *this;
-        }
+template< class T, class I, class Elem, class Traits >
+inline std::basic_ostream<Elem, Traits> &
+operator<< ( std::basic_ostream<Elem, Traits> &Os,
+             const converter<T, I> &r )
+{
+	return Os << ::boost::make_iterator_range ( r.begin(), r.end() );
+}
 
-        generic_list& operator()( const Ty& u )
-        {
-            this->push_back( u );
-            return *this;
-        }
-        
-       
+/////////////////////////////////////////////////////////////////////////
+// Part 1: flexible, but inefficient interface
+/////////////////////////////////////////////////////////////////////////
+
+template< class T >
+class generic_list :
+	public converter< generic_list< BOOST_DEDUCED_TYPENAME assign_decay<T>::type >,
+	BOOST_DEDUCED_TYPENAME std::deque<BOOST_DEDUCED_TYPENAME
+	assign_decay<T>::type>::iterator >
+{
+	typedef BOOST_DEDUCED_TYPENAME assign_decay<T>::type Ty;
+	typedef std::deque<Ty>  impl_type;
+	mutable impl_type       values_;
+
+public:
+	typedef BOOST_DEDUCED_TYPENAME impl_type::iterator         iterator;
+	typedef iterator                                           const_iterator;
+	typedef BOOST_DEDUCED_TYPENAME impl_type::value_type       value_type;
+	typedef BOOST_DEDUCED_TYPENAME impl_type::size_type        size_type;
+	typedef BOOST_DEDUCED_TYPENAME impl_type::difference_type  difference_type;
+
+public:
+	iterator begin() const       { return values_.begin(); }
+	iterator end() const         { return values_.end(); }
+	bool empty() const           { return values_.empty(); }
+	size_type size() const       { return values_.size(); }
+
+private:
+	void push_back ( value_type r ) { values_.push_back ( r ); }
+
+public:
+	generic_list &operator, ( const Ty &u )
+	{
+		this->push_back ( u );
+		return *this;
+	}
+
+	generic_list &operator() ()
+	{
+		this->push_back ( Ty() );
+		return *this;
+	}
+
+	generic_list &operator() ( const Ty &u )
+	{
+		this->push_back ( u );
+		return *this;
+	}
+
+
 #ifndef BOOST_ASSIGN_MAX_PARAMS // use user's value
 #define BOOST_ASSIGN_MAX_PARAMS 5
-#endif        
-#define BOOST_ASSIGN_MAX_PARAMETERS (BOOST_ASSIGN_MAX_PARAMS - 1) 
+#endif
+#define BOOST_ASSIGN_MAX_PARAMETERS (BOOST_ASSIGN_MAX_PARAMS - 1)
 #define BOOST_ASSIGN_PARAMS1(n) BOOST_PP_ENUM_PARAMS(n, class U)
 #define BOOST_ASSIGN_PARAMS2(n) BOOST_PP_ENUM_BINARY_PARAMS(n, U, const& u)
 #define BOOST_ASSIGN_PARAMS3(n) BOOST_PP_ENUM_PARAMS(n, u)
@@ -393,229 +393,229 @@ namespace assign_detail
         return *this; \
     } \
     /**/
-        
+
 #include BOOST_PP_LOCAL_ITERATE()
 
-        
-        template< class U >
-        generic_list& repeat( std::size_t sz, U u )
-        {
-            std::size_t i = 0;
-            while( i++ != sz )
-                this->push_back( u );
-            return *this;
-        }
-        
-        template< class Nullary_function >
-        generic_list& repeat_fun( std::size_t sz, Nullary_function fun )
-        {
-            std::size_t i = 0;
-            while( i++ != sz )
-                this->push_back( fun() );
-            return *this;
-        }
 
-        template< class SinglePassIterator >
-        generic_list& range( SinglePassIterator first, 
-                             SinglePassIterator last )
-        {
-            for( ; first != last; ++first )
-                this->push_back( *first );
-            return *this;
-        }
-        
-        template< class SinglePassRange >
-        generic_list& range( const SinglePassRange& r )
-        {
-            return range( boost::begin(r), boost::end(r) );
-        }
+	template< class U >
+	generic_list &repeat ( std::size_t sz, U u )
+	{
+		std::size_t i = 0;
+		while ( i++ != sz )
+			this->push_back ( u );
+		return *this;
+	}
 
-        template< class Container >
-        operator Container() const
-        {
-            return this-> BOOST_NESTED_TEMPLATE convert_to_container<Container>();
-        }
-    };
-    
-    /////////////////////////////////////////////////////////////////////////
-    // Part 2: efficient, but inconvenient interface
-    /////////////////////////////////////////////////////////////////////////
+	template< class Nullary_function >
+	generic_list &repeat_fun ( std::size_t sz, Nullary_function fun )
+	{
+		std::size_t i = 0;
+		while ( i++ != sz )
+			this->push_back ( fun() );
+		return *this;
+	}
 
-    template< class T >
-    struct assign_reference
-    {
-        assign_reference()
-        { /* intentionally empty */ }
+	template< class SinglePassIterator >
+	generic_list &range ( SinglePassIterator first,
+	                      SinglePassIterator last )
+	{
+		for ( ; first != last; ++first )
+			this->push_back ( *first );
+		return *this;
+	}
 
-        assign_reference( T& r ) : ref_(&r)
-        { }
+	template< class SinglePassRange >
+	generic_list &range ( const SinglePassRange &r )
+	{
+		return range ( boost::begin ( r ), boost::end ( r ) );
+	}
 
-        void operator=( T& r )
-        {
-            ref_ = &r;
-        }
+	template< class Container >
+	operator Container() const
+	{
+		return this-> BOOST_NESTED_TEMPLATE convert_to_container<Container>();
+	}
+};
 
-        operator T&() const
-        {
-            return *ref_;
-        }
+/////////////////////////////////////////////////////////////////////////
+// Part 2: efficient, but inconvenient interface
+/////////////////////////////////////////////////////////////////////////
 
-        void swap( assign_reference& r )
-        {
-            std::swap( *ref_, *r.ref_ );
-        }
+template< class T >
+struct assign_reference
+{
+	assign_reference()
+	{ /* intentionally empty */ }
 
-        T& get_ref() const
-        {
-            return *ref_;
-        }
-        
-    private:
-        T* ref_;
+	assign_reference ( T &r ) : ref_ ( &r )
+	{ }
 
-    };
+	void operator= ( T &r )
+	{
+		ref_ = &r;
+	}
 
-    template< class T >
-    inline bool operator<( const assign_reference<T>& l, 
-                           const assign_reference<T>& r )
-    {
-        return l.get_ref() < r.get_ref();
-    }
+	operator T &() const
+	{
+		return *ref_;
+	}
 
-    template< class T >
-    inline bool operator>( const assign_reference<T>& l,
-                           const assign_reference<T>& r )
-    {
-        return l.get_ref() > r.get_ref();
-    }
+	void swap ( assign_reference &r )
+	{
+		std::swap ( *ref_, *r.ref_ );
+	}
 
-    template< class T >
-    inline void swap( assign_reference<T>& l, 
-                      assign_reference<T>& r )
-    {
-        l.swap( r );
-    }
+	T &get_ref() const
+	{
+		return *ref_;
+	}
+
+private:
+	T *ref_;
+
+};
+
+template< class T >
+inline bool operator< ( const assign_reference<T> &l,
+                        const assign_reference<T> &r )
+{
+	return l.get_ref() < r.get_ref();
+}
+
+template< class T >
+inline bool operator> ( const assign_reference<T> &l,
+                        const assign_reference<T> &r )
+{
+	return l.get_ref() > r.get_ref();
+}
+
+template< class T >
+inline void swap ( assign_reference<T> &l,
+                   assign_reference<T> &r )
+{
+	l.swap ( r );
+}
 
 
-    
-    template< class T, int N >
-    struct static_generic_list : 
-        public converter< static_generic_list<T,N>, assign_reference<T>* >
-    {
-    private:
-        typedef T                                     internal_value_type;
 
-    public:
-        typedef assign_reference<internal_value_type> value_type;
-        typedef value_type*                           iterator;
-        typedef value_type*                           const_iterator;
-        typedef std::size_t                           size_type;
-        typedef std::ptrdiff_t                        difference_type;
+template< class T, int N >
+struct static_generic_list :
+		public converter< static_generic_list<T, N>, assign_reference<T>* >
+{
+private:
+	typedef T                                     internal_value_type;
 
-    
-        static_generic_list( T& r ) :
-            current_(1)
-        {
-            refs_[0] = r;
-        }
+public:
+	typedef assign_reference<internal_value_type> value_type;
+	typedef value_type                           *iterator;
+	typedef value_type                           *const_iterator;
+	typedef std::size_t                           size_type;
+	typedef std::ptrdiff_t                        difference_type;
 
-        static_generic_list& operator()( T& r )
-        {
-            insert( r );
-            return *this;
-        }
 
-        iterator begin() const 
-        {
-            return &refs_[0];
-        }
+	static_generic_list ( T &r ) :
+		current_ ( 1 )
+	{
+		refs_[0] = r;
+	}
 
-        iterator end() const
-        {
-            return &refs_[current_];
-        }
+	static_generic_list &operator() ( T &r )
+	{
+		insert ( r );
+		return *this;
+	}
 
-        size_type size() const
-        {
-            return static_cast<size_type>( current_ ); 
-        }
+	iterator begin() const
+	{
+		return &refs_[0];
+	}
 
-        bool empty() const
-        {
-            return false;
-        }
+	iterator end() const
+	{
+		return &refs_[current_];
+	}
 
-        template< class ForwardIterator >
-        static_generic_list& range( ForwardIterator first, 
-                                    ForwardIterator last )
-        {
-            for( ; first != last; ++first )
-                this->insert( *first );
-            return *this;
-        }
+	size_type size() const
+	{
+		return static_cast<size_type> ( current_ );
+	}
 
-        template< class ForwardRange >
-        static_generic_list& range( ForwardRange& r )
-        {
-            return range( boost::begin(r), boost::end(r) );
-        }
+	bool empty() const
+	{
+		return false;
+	}
 
-        template< class ForwardRange >
-        static_generic_list& range( const ForwardRange& r )
-        {
-            return range( boost::begin(r), boost::end(r) );
-        }
+	template< class ForwardIterator >
+	static_generic_list &range ( ForwardIterator first,
+	                             ForwardIterator last )
+	{
+		for ( ; first != last; ++first )
+			this->insert ( *first );
+		return *this;
+	}
 
-        template< class Container >
-        operator Container() const
-        {
-            return this-> BOOST_NESTED_TEMPLATE convert_to_container<Container>();
-        }
+	template< class ForwardRange >
+	static_generic_list &range ( ForwardRange &r )
+	{
+		return range ( boost::begin ( r ), boost::end ( r ) );
+	}
 
-    private:
-        void insert( T& r )
-        {
-            refs_[current_] = r;
-            ++current_;
-        }
-        
-        static_generic_list();
-        
-        mutable assign_reference<internal_value_type> refs_[N];
-        int current_;
-    };
+	template< class ForwardRange >
+	static_generic_list &range ( const ForwardRange &r )
+	{
+		return range ( boost::begin ( r ), boost::end ( r ) );
+	}
+
+	template< class Container >
+	operator Container() const
+	{
+		return this-> BOOST_NESTED_TEMPLATE convert_to_container<Container>();
+	}
+
+private:
+	void insert ( T &r )
+	{
+		refs_[current_] = r;
+		++current_;
+	}
+
+	static_generic_list();
+
+	mutable assign_reference<internal_value_type> refs_[N];
+	int current_;
+};
 
 } // namespace 'assign_detail'
 
 namespace assign
 {
-    template< class T >
-    inline assign_detail::generic_list<T>
-    list_of()
-    {
-        return assign_detail::generic_list<T>()( T() );
-    }
-    
-    template< class T >
-    inline assign_detail::generic_list<T> 
-    list_of( const T& t )
-    {
-        return assign_detail::generic_list<T>()( t );
-    }
+template< class T >
+inline assign_detail::generic_list<T>
+list_of()
+{
+	return assign_detail::generic_list<T>() ( T() );
+}
 
-    template< int N, class T >
-    inline assign_detail::static_generic_list< BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type,N>
-    ref_list_of( T& t )
-    {
-        return assign_detail::static_generic_list<BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type,N>( t );
-    }
-    
-    template< int N, class T >
-    inline assign_detail::static_generic_list<const BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type,N>
-    cref_list_of( const T& t )
-    {
-        return assign_detail::static_generic_list<const BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type,N>( t );
-    }
+template< class T >
+inline assign_detail::generic_list<T>
+list_of ( const T &t )
+{
+	return assign_detail::generic_list<T>() ( t );
+}
+
+template< int N, class T >
+inline assign_detail::static_generic_list< BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type, N>
+ref_list_of ( T &t )
+{
+	return assign_detail::static_generic_list<BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type, N> ( t );
+}
+
+template< int N, class T >
+inline assign_detail::static_generic_list<const BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type, N>
+cref_list_of ( const T &t )
+{
+	return assign_detail::static_generic_list<const BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type, N> ( t );
+}
 
 #define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
 #define BOOST_PP_LOCAL_MACRO(n) \
@@ -626,7 +626,7 @@ namespace assign
         return assign_detail::generic_list<T>()(u, BOOST_ASSIGN_PARAMS3(n)); \
     } \
     /**/
-    
+
 #include BOOST_PP_LOCAL_ITERATE()
 
 #define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
@@ -638,33 +638,33 @@ namespace assign
         return assign_detail::generic_list< tuple<U, BOOST_ASSIGN_PARAMS4(n)> >()( tuple<U,BOOST_ASSIGN_PARAMS4(n)>( u, BOOST_ASSIGN_PARAMS3(n) )); \
     } \
     /**/
-    
+
 #include BOOST_PP_LOCAL_ITERATE()
 
 
-    template< class Key, class T >
-    inline assign_detail::generic_list< std::pair
-        < 
-            BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<Key>::type, 
-            BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type
-        > >
-    map_list_of( const Key& k, const T& t )
-    {
-        typedef BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<Key>::type k_type;
-        typedef BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type   t_type;
-        return assign_detail::generic_list< std::pair<k_type,t_type> >()( k, t );
-    }
+template< class Key, class T >
+inline assign_detail::generic_list< std::pair
+<
+BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<Key>::type,
+                       BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type
+                       > >
+                       map_list_of ( const Key &k, const T &t )
+{
+	typedef BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<Key>::type k_type;
+	typedef BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type   t_type;
+	return assign_detail::generic_list< std::pair<k_type, t_type> >() ( k, t );
+}
 
-    template< class F, class S >
-    inline assign_detail::generic_list< std::pair
-        < 
-            BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<F>::type, 
-            BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<S>::type
-        > >
-    pair_list_of( const F& f, const S& s )
-    {
-        return map_list_of( f, s );
-    }
+template< class F, class S >
+inline assign_detail::generic_list< std::pair
+<
+BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<F>::type,
+                       BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<S>::type
+                       > >
+                       pair_list_of ( const F &f, const S &s )
+{
+	return map_list_of ( f, s );
+}
 
 
 } // namespace 'assign'

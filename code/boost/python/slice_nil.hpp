@@ -8,28 +8,33 @@
 # include <boost/python/detail/prefix.hpp>
 # include <boost/python/object_core.hpp>
 
-namespace boost { namespace python { namespace api {
+namespace boost
+{
+namespace python
+{
+namespace api
+{
 
 class slice_nil : public object
 {
- public:
-    slice_nil() : object() {}
+public:
+	slice_nil() : object() {}
 };
 
 # ifndef _ // Watch out for GNU gettext users, who #define _(x)
 static const slice_nil _ = slice_nil();
-# endif 
+# endif
 
 template <class T>
 struct slice_bound
 {
-    typedef object type;
+	typedef object type;
 };
 
 template <>
 struct slice_bound<slice_nil>
 {
-    typedef slice_nil type;
+	typedef slice_nil type;
 };
 
 }
@@ -37,8 +42,9 @@ struct slice_bound<slice_nil>
 using api::slice_nil;
 # ifndef _ // Watch out for GNU gettext users, who #define _(x)
 using api::_;
-# endif 
+# endif
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 #endif // SLICE_NIL_DWA2002620_HPP

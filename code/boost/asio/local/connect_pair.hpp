@@ -26,68 +26,71 @@
 #if defined(BOOST_ASIO_HAS_LOCAL_SOCKETS) \
   || defined(GENERATING_DOCUMENTATION)
 
-namespace boost {
-namespace asio {
-namespace local {
-
-/// Create a pair of connected sockets.
-template <typename Protocol, typename SocketService1, typename SocketService2>
-void connect_pair(
-    basic_socket<Protocol, SocketService1>& socket1,
-    basic_socket<Protocol, SocketService2>& socket2);
-
-/// Create a pair of connected sockets.
-template <typename Protocol, typename SocketService1, typename SocketService2>
-boost::system::error_code connect_pair(
-    basic_socket<Protocol, SocketService1>& socket1,
-    basic_socket<Protocol, SocketService2>& socket2,
-    boost::system::error_code& ec);
-
-template <typename Protocol, typename SocketService1, typename SocketService2>
-inline void connect_pair(
-    basic_socket<Protocol, SocketService1>& socket1,
-    basic_socket<Protocol, SocketService2>& socket2)
+namespace boost
 {
-  boost::system::error_code ec;
-  connect_pair(socket1, socket2, ec);
-  boost::asio::detail::throw_error(ec);
+namespace asio
+{
+namespace local
+{
+
+/// Create a pair of connected sockets.
+template <typename Protocol, typename SocketService1, typename SocketService2>
+void connect_pair (
+    basic_socket<Protocol, SocketService1> &socket1,
+    basic_socket<Protocol, SocketService2> &socket2 );
+
+/// Create a pair of connected sockets.
+template <typename Protocol, typename SocketService1, typename SocketService2>
+boost::system::error_code connect_pair (
+    basic_socket<Protocol, SocketService1> &socket1,
+    basic_socket<Protocol, SocketService2> &socket2,
+    boost::system::error_code &ec );
+
+template <typename Protocol, typename SocketService1, typename SocketService2>
+inline void connect_pair (
+    basic_socket<Protocol, SocketService1> &socket1,
+    basic_socket<Protocol, SocketService2> &socket2 )
+{
+	boost::system::error_code ec;
+	connect_pair ( socket1, socket2, ec );
+	boost::asio::detail::throw_error ( ec );
 }
 
 template <typename Protocol, typename SocketService1, typename SocketService2>
-inline boost::system::error_code connect_pair(
-    basic_socket<Protocol, SocketService1>& socket1,
-    basic_socket<Protocol, SocketService2>& socket2,
-    boost::system::error_code& ec)
+inline boost::system::error_code connect_pair (
+    basic_socket<Protocol, SocketService1> &socket1,
+    basic_socket<Protocol, SocketService2> &socket2,
+    boost::system::error_code &ec )
 {
-  // Check that this function is only being used with a UNIX domain socket.
-  boost::asio::local::basic_endpoint<Protocol>* tmp
-    = static_cast<typename Protocol::endpoint*>(0);
-  (void)tmp;
+	// Check that this function is only being used with a UNIX domain socket.
+	boost::asio::local::basic_endpoint<Protocol> *tmp
+	    = static_cast<typename Protocol::endpoint *> ( 0 );
+	( void ) tmp;
 
-  Protocol protocol;
-  boost::asio::detail::socket_type sv[2];
-  if (boost::asio::detail::socket_ops::socketpair(protocol.family(),
-        protocol.type(), protocol.protocol(), sv, ec)
-      == boost::asio::detail::socket_error_retval)
-    return ec;
+	Protocol protocol;
+	boost::asio::detail::socket_type sv[2];
+	if ( boost::asio::detail::socket_ops::socketpair ( protocol.family(),
+	        protocol.type(), protocol.protocol(), sv, ec )
+	        == boost::asio::detail::socket_error_retval )
+		return ec;
 
-  if (socket1.assign(protocol, sv[0], ec))
-  {
-    boost::system::error_code temp_ec;
-    boost::asio::detail::socket_ops::close(sv[0], temp_ec);
-    boost::asio::detail::socket_ops::close(sv[1], temp_ec);
-    return ec;
-  }
+	if ( socket1.assign ( protocol, sv[0], ec ) )
+	{
+		boost::system::error_code temp_ec;
+		boost::asio::detail::socket_ops::close ( sv[0], temp_ec );
+		boost::asio::detail::socket_ops::close ( sv[1], temp_ec );
+		return ec;
+	}
 
-  if (socket2.assign(protocol, sv[1], ec))
-  {
-    boost::system::error_code temp_ec;
-    socket1.close(temp_ec);
-    boost::asio::detail::socket_ops::close(sv[1], temp_ec);
-    return ec;
-  }
+	if ( socket2.assign ( protocol, sv[1], ec ) )
+	{
+		boost::system::error_code temp_ec;
+		socket1.close ( temp_ec );
+		boost::asio::detail::socket_ops::close ( sv[1], temp_ec );
+		return ec;
+	}
 
-  return ec;
+	return ec;
 }
 
 } // namespace local
@@ -95,7 +98,7 @@ inline boost::system::error_code connect_pair(
 } // namespace boost
 
 #endif // defined(BOOST_ASIO_HAS_LOCAL_SOCKETS)
-       //   || defined(GENERATING_DOCUMENTATION)
+//   || defined(GENERATING_DOCUMENTATION)
 
 #include <boost/asio/detail/pop_options.hpp>
 

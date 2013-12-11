@@ -4,7 +4,7 @@
 // (C) Copyright Ion Gaztanaga 2007-2009.
 //
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file LICENSE_1_0.txt or copy at 
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //    http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/container for documentation.
@@ -19,9 +19,12 @@
 #include <climits>
 #include <boost/static_assert.hpp>
 
-namespace boost {
-namespace container {
-namespace containers_detail {
+namespace boost
+{
+namespace container
+{
+namespace containers_detail
+{
 
 // Greatest common divisor and least common multiple
 
@@ -32,16 +35,17 @@ namespace containers_detail {
 // Pre: A > 0 && B > 0
 // Recommended: A > B
 template <typename Integer>
-inline Integer gcd(Integer A, Integer B)
+inline Integer gcd ( Integer A, Integer B )
 {
-   do
-   {
-      const Integer tmp(B);
-      B = A % B;
-      A = tmp;
-   } while (B != 0);
+	do
+	{
+		const Integer tmp ( B );
+		B = A % B;
+		A = tmp;
+	}
+	while ( B != 0 );
 
-   return A;
+	return A;
 }
 
 //
@@ -51,56 +55,59 @@ inline Integer gcd(Integer A, Integer B)
 // Pre: A > 0 && B > 0
 // Recommended: A > B
 template <typename Integer>
-inline Integer lcm(const Integer & A, const Integer & B)
+inline Integer lcm ( const Integer &A, const Integer &B )
 {
-   Integer ret = A;
-   ret /= gcd(A, B);
-   ret *= B;
-   return ret;
+	Integer ret = A;
+	ret /= gcd ( A, B );
+	ret *= B;
+	return ret;
 }
 
 template <typename Integer>
-inline Integer log2_ceil(const Integer & A)
+inline Integer log2_ceil ( const Integer &A )
 {
-   Integer i = 0;
-   Integer power_of_2 = 1;
+	Integer i = 0;
+	Integer power_of_2 = 1;
 
-   while(power_of_2 < A){
-      power_of_2 <<= 1;
-      ++i;
-   }
-   return i;
+	while ( power_of_2 < A )
+	{
+		power_of_2 <<= 1;
+		++i;
+	}
+	return i;
 }
 
 template <typename Integer>
-inline Integer upper_power_of_2(const Integer & A)
+inline Integer upper_power_of_2 ( const Integer &A )
 {
-   Integer power_of_2 = 1;
+	Integer power_of_2 = 1;
 
-   while(power_of_2 < A){
-      power_of_2 <<= 1;
-   }
-   return power_of_2;
+	while ( power_of_2 < A )
+	{
+		power_of_2 <<= 1;
+	}
+	return power_of_2;
 }
 
 //This function uses binary search to discover the
 //highest set bit of the integer
-inline std::size_t floor_log2 (std::size_t x)
+inline std::size_t floor_log2 ( std::size_t x )
 {
-   const std::size_t Bits = sizeof(std::size_t)*CHAR_BIT;
-   const bool Size_t_Bits_Power_2= !(Bits & (Bits-1));
-   BOOST_STATIC_ASSERT(((Size_t_Bits_Power_2)== true));
+	const std::size_t Bits = sizeof ( std::size_t ) * CHAR_BIT;
+	const bool Size_t_Bits_Power_2 = ! ( Bits & ( Bits - 1 ) );
+	BOOST_STATIC_ASSERT ( ( ( Size_t_Bits_Power_2 ) == true ) );
 
-   std::size_t n = x;
-   std::size_t log2 = 0;
-   
-   for(std::size_t shift = Bits >> 1; shift; shift >>= 1){
-      std::size_t tmp = n >> shift;
-      if (tmp)
-         log2 += shift, n = tmp;
-   }
+	std::size_t n = x;
+	std::size_t log2 = 0;
 
-   return log2;
+	for ( std::size_t shift = Bits >> 1; shift; shift >>= 1 )
+	{
+		std::size_t tmp = n >> shift;
+		if ( tmp )
+			log2 += shift, n = tmp;
+	}
+
+	return log2;
 }
 
 } // namespace containers_detail

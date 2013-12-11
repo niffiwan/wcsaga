@@ -27,41 +27,41 @@ class event_base;
 template< class Event >
 class custom_reaction
 {
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    // The following declarations should be private.
-    // They are only public because many compilers lack template friends.
-    //////////////////////////////////////////////////////////////////////////
-    template< class State, class EventBase, class IdType >
-    static detail::reaction_result react(
-      State & stt, const EventBase & evt, const IdType & eventType )
-    {
-      if ( eventType == Event::static_type() )
-      {
-        return detail::result_utility::get_result( 
-          stt.react( *polymorphic_downcast< const Event * >( &evt ) ) );
-      }
-      else
-      {
-        return detail::no_reaction;
-      }
-    }
+public:
+	//////////////////////////////////////////////////////////////////////////
+	// The following declarations should be private.
+	// They are only public because many compilers lack template friends.
+	//////////////////////////////////////////////////////////////////////////
+	template< class State, class EventBase, class IdType >
+	static detail::reaction_result react (
+	    State &stt, const EventBase &evt, const IdType &eventType )
+	{
+		if ( eventType == Event::static_type() )
+		{
+			return detail::result_utility::get_result (
+			           stt.react ( *polymorphic_downcast< const Event * > ( &evt ) ) );
+		}
+		else
+		{
+			return detail::no_reaction;
+		}
+	}
 };
 
 template<>
 class custom_reaction< event_base >
 {
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    // The following declarations should be private.
-    // They are only public because many compilers lack template friends.
-    //////////////////////////////////////////////////////////////////////////
-    template< class State, class EventBase, class IdType >
-    static detail::reaction_result react(
-      State & stt, const EventBase & evt, const IdType & )
-    {
-      return detail::result_utility::get_result( stt.react( evt ) );
-    }
+public:
+	//////////////////////////////////////////////////////////////////////////
+	// The following declarations should be private.
+	// They are only public because many compilers lack template friends.
+	//////////////////////////////////////////////////////////////////////////
+	template< class State, class EventBase, class IdType >
+	static detail::reaction_result react (
+	    State &stt, const EventBase &evt, const IdType & )
+	{
+		return detail::result_utility::get_result ( stt.react ( evt ) );
+	}
 };
 
 

@@ -21,7 +21,12 @@
 #  include <boost/preprocessor/enum_params.hpp>
 #  include <boost/preprocessor/repetition/enum_trailing_params.hpp>
 
-namespace boost { namespace python { namespace detail {
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
 // Defines a family of overloaded function which, given x, a function
 // pointer, member [function] pointer, or an AdaptableFunction object,
@@ -41,7 +46,7 @@ namespace boost { namespace python { namespace detail {
 #  include BOOST_PP_ITERATE()
 
 template <class R, class T>
-boost::type<R>* result(R (T::*), int = 0) { return 0; }
+boost::type<R> *result ( R ( T::* ), int = 0 ) { return 0; }
 
 #  if (defined(BOOST_MSVC) && _MSC_FULL_VER <= 13102140)  \
    || (defined(__GNUC__) && __GNUC__ < 3)                 \
@@ -50,38 +55,40 @@ boost::type<R>* result(R (T::*), int = 0) { return 0; }
 template <class T>
 struct get_result_type
 {
-    typedef boost::type<typename T::result_type> type;
+	typedef boost::type<typename T::result_type> type;
 };
 
 struct void_type
 {
-    typedef void type;
+	typedef void type;
 };
 
 template <class T>
 struct result_result
 {
-    typedef typename mpl::if_c<
-        is_class<T>::value
-        , get_result_type<T>
-        , void_type
-        >::type t1;
+	typedef typename mpl::if_c <
+	is_class<T>::value
+	, get_result_type<T>
+	, void_type
+	>::type t1;
 
-    typedef typename t1::type* type;
+	typedef typename t1::type *type;
 };
 
 template <class X>
 typename result_result<X>::type
-result(X const&, short) { return 0; }
+result ( X const &, short ) { return 0; }
 
 #  else // Simpler code for more-capable compilers
 template <class X>
-boost::type<typename X::result_type>*
-result(X const&, short = 0) { return 0; }
+boost::type<typename X::result_type> *
+result ( X const &, short = 0 ) { return 0; }
 
 #  endif
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 
 # endif // RESULT_DWA2002521_HPP
 
@@ -97,10 +104,10 @@ result(X const&, short = 0) { return 0; }
 
 # define N BOOST_PP_ITERATION()
 
-template <class R BOOST_PP_ENUM_TRAILING_PARAMS_Z(1, N, class A)>
-boost::type<R>* result(R (*)(BOOST_PP_ENUM_PARAMS_Z(1, N, A)), int = 0)
+template <class R BOOST_PP_ENUM_TRAILING_PARAMS_Z ( 1, N, class A ) >
+boost::type<R> *result ( R ( * ) ( BOOST_PP_ENUM_PARAMS_Z ( 1, N, A ) ), int = 0 )
 {
-    return 0;
+	return 0;
 }
 
 # undef N
@@ -116,16 +123,16 @@ boost::type<R>* result(R (*)(BOOST_PP_ENUM_PARAMS_Z(1, N, A)), int = 0)
 # if !(BOOST_WORKAROUND(__MWERKS__, > 0x3100)                      \
         && BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3201)))
 #  line BOOST_PP_LINE(__LINE__, result.hpp(pointers-to-members))
-# endif 
+# endif
 // Inner over arities
 
 # define N BOOST_PP_ITERATION()
 # define Q BOOST_PYTHON_CV_QUALIFIER(BOOST_PP_RELATIVE_ITERATION(1))
 
-template <class R, class T BOOST_PP_ENUM_TRAILING_PARAMS_Z(1, N, class A)>
-boost::type<R>* result(R (T::*)(BOOST_PP_ENUM_PARAMS_Z(1, N, A)) Q, int = 0)
+template <class R, class T BOOST_PP_ENUM_TRAILING_PARAMS_Z ( 1, N, class A ) >
+boost::type<R> *result ( R ( T::* ) ( BOOST_PP_ENUM_PARAMS_Z ( 1, N, A ) ) Q, int = 0 )
 {
-    return 0;
+	return 0;
 }
 
 # undef N

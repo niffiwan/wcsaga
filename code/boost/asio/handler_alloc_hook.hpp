@@ -22,8 +22,10 @@
 #include <boost/config.hpp>
 #include <boost/asio/detail/pop_options.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 /// Default allocation function for handlers.
 /**
@@ -59,9 +61,9 @@ namespace asio {
  * }
  * @endcode
  */
-inline void* asio_handler_allocate(std::size_t size, ...)
+inline void *asio_handler_allocate ( std::size_t size, ... )
 {
-  return ::operator new(size);
+	return ::operator new ( size );
 }
 
 /// Default deallocation function for handlers.
@@ -76,10 +78,10 @@ inline void* asio_handler_allocate(std::size_t size, ...)
  *
  * @sa asio_handler_allocate.
  */
-inline void asio_handler_deallocate(void* pointer, std::size_t size, ...)
+inline void asio_handler_deallocate ( void *pointer, std::size_t size, ... )
 {
-  (void)(size);
-  ::operator delete(pointer);
+	( void ) ( size );
+	::operator delete ( pointer );
 }
 
 } // namespace asio

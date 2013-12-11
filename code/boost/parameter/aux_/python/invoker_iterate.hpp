@@ -39,53 +39,53 @@ template <class M, class R, class T, class Args>
 struct member_invoker<N, M, R, T, Args>
 #endif
 {
-    typedef typename mpl::begin<Args>::type iter0;
-    typedef typename mpl::deref<iter0>::type spec0;
-    typedef typename mpl::if_<
-        mpl::and_<
-            mpl::not_<typename spec0::required>
-          , typename spec0::optimized_default
-        >
-      , parameter::aux::maybe<typename spec0::type>
-      , typename spec0::type
-    >::type arg0;
-    typedef typename spec0::keyword kw0;
+	typedef typename mpl::begin<Args>::type iter0;
+	typedef typename mpl::deref<iter0>::type spec0;
+	typedef typename mpl::if_ <
+	mpl::and_ <
+	mpl::not_<typename spec0::required>
+	, typename spec0::optimized_default
+	>
+	, parameter::aux::maybe<typename spec0::type>
+	, typename spec0::type
+	>::type arg0;
+	typedef typename spec0::keyword kw0;
 
-    BOOST_PP_REPEAT_FROM_TO(1, N, BOOST_PARAMETER_PY_ARG_TYPES, ~)
+	BOOST_PP_REPEAT_FROM_TO ( 1, N, BOOST_PARAMETER_PY_ARG_TYPES, ~ )
 
-    static
+	static
 #if BOOST_PP_ITERATION_FLAGS() == 3
-    T*
+	T *
 #else
-    R
-#endif 
-    execute(
+	R
+#endif
+	execute (
 #if BOOST_PP_ITERATION_FLAGS() == 2 || BOOST_PP_ITERATION_FLAGS() == 4
-        T& self
-      ,
+	    T &self
+	    ,
 #endif
-        BOOST_PP_ENUM_BINARY_PARAMS(N, arg, a)
-    )
-    {
-        return
+	    BOOST_PP_ENUM_BINARY_PARAMS ( N, arg, a )
+	)
+	{
+		return
 #if BOOST_PP_ITERATION_FLAGS() == 1 || BOOST_PP_ITERATION_FLAGS() == 4
-         M()(
-              boost::type<R>()
+		    M() (
+		        boost::type<R>()
 # if BOOST_PP_ITERATION_FLAGS() == 4
-            , self
+		        , self
 # endif
-            , BOOST_PP_ENUM_BINARY_PARAMS(N, parameter::keyword<kw, >::get() = a)
-         );
+		        , BOOST_PP_ENUM_BINARY_PARAMS ( N, parameter::keyword<kw, >::get() = a )
+		    );
 #elif BOOST_PP_ITERATION_FLAGS() == 2
-         self(
-            BOOST_PP_ENUM_BINARY_PARAMS(N, parameter::keyword<kw, >::get() = a)
-         );
+		    self (
+		        BOOST_PP_ENUM_BINARY_PARAMS ( N, parameter::keyword<kw, >::get() = a )
+		    );
 #elif BOOST_PP_ITERATION_FLAGS() == 3
-         new T(
-             BOOST_PP_ENUM_BINARY_PARAMS(N, parameter::keyword<kw, >::get() = a)
-         );
+		    new T (
+		        BOOST_PP_ENUM_BINARY_PARAMS ( N, parameter::keyword<kw, >::get() = a )
+		    );
 #endif
-    }
+	}
 };
 
 #undef BOOST_PARAMETER_PY_ARG_TYPES

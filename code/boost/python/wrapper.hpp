@@ -9,27 +9,31 @@
 # include <boost/python/converter/registered.hpp>
 # include <boost/python/detail/sfinae.hpp>
 
-namespace boost { namespace python { 
+namespace boost
+{
+namespace python
+{
 
 template <class T>
 class wrapper : public detail::wrapper_base
 {
- public:
-    // Do not touch this implementation detail!
-    typedef T _wrapper_wrapped_type_;
+public:
+	// Do not touch this implementation detail!
+	typedef T _wrapper_wrapped_type_;
 
- protected:
-    override get_override(char const* name) const
-    {
-        typedef detail::wrapper_base base;
-        converter::registration const& r
-            = converter::registered<T>::converters;
-        PyTypeObject* type = r.get_class_object();
-        
-        return this->base::get_override(name, type);
-    }
+protected:
+	override get_override ( char const *name ) const
+	{
+		typedef detail::wrapper_base base;
+		converter::registration const &r
+		    = converter::registered<T>::converters;
+		PyTypeObject *type = r.get_class_object();
+
+		return this->base::get_override ( name, type );
+	}
 };
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 #endif // WRAPPER_DWA2004720_HPP

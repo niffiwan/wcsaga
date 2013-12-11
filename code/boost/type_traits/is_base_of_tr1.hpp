@@ -5,7 +5,7 @@
 //  http://www.boost.org/LICENSE_1_0.txt).
 //
 //  See http://www.boost.org/libs/type_traits for most recent version including documentation.
- 
+
 #ifndef BOOST_TT_IS_BASE_OF_TR1_HPP_INCLUDED
 #define BOOST_TT_IS_BASE_OF_TR1_HPP_INCLUDED
 
@@ -17,33 +17,38 @@
 // should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
 
-namespace boost { namespace tr1{
+namespace boost
+{
+namespace tr1
+{
 
-   namespace detail{
-      template <class B, class D>
-      struct is_base_of_imp
-      {
-          typedef typename remove_cv<B>::type ncvB;
-          typedef typename remove_cv<D>::type ncvD;
-          BOOST_STATIC_CONSTANT(bool, value = (::boost::type_traits::ice_or<      
-            (::boost::detail::is_base_and_derived_impl<ncvB,ncvD>::value),
-            (::boost::is_same<ncvB,ncvD>::value)>::value));
-      };
-   }
+namespace detail
+{
+template <class B, class D>
+struct is_base_of_imp
+{
+	typedef typename remove_cv<B>::type ncvB;
+	typedef typename remove_cv<D>::type ncvD;
+	BOOST_STATIC_CONSTANT ( bool, value = ( ::boost::type_traits::ice_or <
+	                                        ( ::boost::detail::is_base_and_derived_impl<ncvB, ncvD>::value ),
+	                                        ( ::boost::is_same<ncvB, ncvD>::value ) >::value ) );
+};
+}
 
-BOOST_TT_AUX_BOOL_TRAIT_DEF2(
-      is_base_of
+BOOST_TT_AUX_BOOL_TRAIT_DEF2 (
+    is_base_of
     , Base
     , Derived
-    , (::boost::tr1::detail::is_base_of_imp<Base, Derived>::value))
+    , ( ::boost::tr1::detail::is_base_of_imp<Base, Derived>::value ) )
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_2(typename Base,typename Derived,is_base_of,Base&,Derived,false)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_2(typename Base,typename Derived,is_base_of,Base,Derived&,false)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_2(typename Base,typename Derived,is_base_of,Base&,Derived&,false)
+BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_2 ( typename Base, typename Derived, is_base_of, Base &, Derived, false )
+BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_2 ( typename Base, typename Derived, is_base_of, Base, Derived &, false )
+BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_2 ( typename Base, typename Derived, is_base_of, Base &, Derived &, false )
 #endif
 
-} } // namespace boost
+}
+} // namespace boost
 
 #include <boost/type_traits/detail/bool_trait_undef.hpp>
 

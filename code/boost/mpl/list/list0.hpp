@@ -4,8 +4,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -27,16 +27,20 @@
 #include <boost/mpl/list/aux_/begin_end.hpp>
 #include <boost/mpl/list/aux_/item.hpp>
 
-namespace boost { namespace mpl {
+namespace boost
+{
+namespace mpl
+{
 
 template< typename Dummy = na > struct list0;
 
 template<> struct list0<na>
-    : l_end
+		: l_end
 {
-    typedef l_end type;
+	typedef l_end type;
 };
 
-}}
+}
+}
 
 #endif // BOOST_MPL_LIST_LIST0_HPP_INCLUDED

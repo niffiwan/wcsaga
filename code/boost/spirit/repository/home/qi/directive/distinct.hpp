@@ -34,110 +34,134 @@
 #include <boost/fusion/include/vector.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit 
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
+namespace spirit
+{
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
 
-    // enables distinct(...)[...]
-    template <typename Tail>
-    struct use_directive<qi::domain
-          , terminal_ex<repository::tag::distinct, fusion::vector1<Tail> > >
-      : mpl::true_ {};
+// enables distinct(...)[...]
+template <typename Tail>
+struct use_directive<qi::domain
+		, terminal_ex<repository::tag::distinct, fusion::vector1<Tail> > >
+		: mpl::true_ {};
 
-    // enables *lazy* distinct(...)[...]
-    template <>
-    struct use_lazy_directive<qi::domain, repository::tag::distinct, 1> 
-      : mpl::true_ {};
+// enables *lazy* distinct(...)[...]
+template <>
+struct use_lazy_directive<qi::domain, repository::tag::distinct, 1>
+		: mpl::true_ {};
 
-}}
+}
+}
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit { namespace repository {namespace qi
+namespace boost
 {
-    using repository::distinct_type;
-    using repository::distinct;
+namespace spirit
+{
+namespace repository
+{
+namespace qi
+{
+using repository::distinct_type;
+using repository::distinct;
 
-    template <typename Subject, typename Tail, typename Modifier>
-    struct distinct_parser
-      : spirit::qi::unary_parser<distinct_parser<Subject, Tail, Modifier> >
-    {
-        template <typename Context, typename Iterator>
-        struct attribute 
-          : traits::attribute_of<Subject, Context, Iterator>
-        {};
+template <typename Subject, typename Tail, typename Modifier>
+struct distinct_parser
+		: spirit::qi::unary_parser<distinct_parser<Subject, Tail, Modifier> >
+{
+	template <typename Context, typename Iterator>
+	struct attribute
+			: traits::attribute_of<Subject, Context, Iterator>
+	{};
 
-        distinct_parser(Subject const& subject, Tail const& tail)
-          : subject(subject), tail(tail) {}
+	distinct_parser ( Subject const &subject, Tail const &tail )
+		: subject ( subject ), tail ( tail ) {}
 
-        template <typename Iterator, typename Context
-          , typename Skipper, typename Attribute>
-        bool parse(Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper, Attribute& attr) const
-        {
-            Iterator iter = first;
+	template <typename Iterator, typename Context
+	          , typename Skipper, typename Attribute>
+	bool parse ( Iterator &first, Iterator const &last
+	             , Context &context, Skipper const &skipper, Attribute &attr ) const
+	{
+		Iterator iter = first;
 
-            spirit::qi::skip_over(iter, last, skipper);
-            if (!subject.parse(iter, last, context
-              , spirit::qi::detail::unused_skipper<Skipper>(skipper), attr))
-                return false;
+		spirit::qi::skip_over ( iter, last, skipper );
+		if ( !subject.parse ( iter, last, context
+		                      , spirit::qi::detail::unused_skipper<Skipper> ( skipper ), attr ) )
+			return false;
 
-            Iterator i = iter;
-            if (tail.parse(i, last, context, unused, unused))
-                return false;
+		Iterator i = iter;
+		if ( tail.parse ( i, last, context, unused, unused ) )
+			return false;
 
-            first = iter;
-            return true;
-        }
+		first = iter;
+		return true;
+	}
 
-        template <typename Context>
-        info what(Context& /*ctx*/) const
-        {
-            return info("distinct");
-        }
+	template <typename Context>
+	info what ( Context & /*ctx*/ ) const
+	{
+		return info ( "distinct" );
+	}
 
-        Subject subject;
-        Tail tail;
-    };
+	Subject subject;
+	Tail tail;
+};
 
-}}}}
+}
+}
+}
+}
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit { namespace qi
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Tail, typename Subject, typename Modifiers>
-    struct make_directive<
-        terminal_ex<repository::tag::distinct, fusion::vector1<Tail> >
-      , Subject, Modifiers>
-    {
-        typedef typename result_of::compile<qi::domain, Tail, Modifiers>::type
-            tail_type;
-
-        typedef repository::qi::distinct_parser<
-            Subject, tail_type, Modifiers> result_type;
-
-        template <typename Terminal>
-        result_type operator()(Terminal const& term, Subject const& subject
-          , Modifiers const& modifiers) const
-        {
-            return result_type(subject
-              , compile<qi::domain>(fusion::at_c<0>(term.args), modifiers));
-        }
-    };
-
-}}}
-
-namespace boost { namespace spirit { namespace traits
+namespace spirit
 {
-    template <typename Subject, typename Tail, typename Modifier>
-    struct has_semantic_action<
-            repository::qi::distinct_parser<Subject, Tail, Modifier> >
-      : unary_has_semantic_action<Subject> {};
-}}}
+namespace qi
+{
+///////////////////////////////////////////////////////////////////////////
+// Parser generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+template <typename Tail, typename Subject, typename Modifiers>
+struct make_directive <
+		terminal_ex<repository::tag::distinct, fusion::vector1<Tail> >
+		, Subject, Modifiers >
+{
+	typedef typename result_of::compile<qi::domain, Tail, Modifiers>::type
+	tail_type;
+
+	typedef repository::qi::distinct_parser <
+	Subject, tail_type, Modifiers > result_type;
+
+	template <typename Terminal>
+	result_type operator() ( Terminal const &term, Subject const &subject
+	                         , Modifiers const &modifiers ) const
+	{
+		return result_type ( subject
+		                     , compile<qi::domain> ( fusion::at_c<0> ( term.args ), modifiers ) );
+	}
+};
+
+}
+}
+}
+
+namespace boost
+{
+namespace spirit
+{
+namespace traits
+{
+template <typename Subject, typename Tail, typename Modifier>
+struct has_semantic_action <
+		repository::qi::distinct_parser<Subject, Tail, Modifier> >
+		: unary_has_semantic_action<Subject> {};
+}
+}
+}
 
 #endif
 

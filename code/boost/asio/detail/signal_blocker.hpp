@@ -31,9 +31,12 @@
 # error Only Windows and POSIX are supported!
 #endif
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 #if !defined(BOOST_HAS_THREADS)
 typedef null_signal_blocker signal_blocker;

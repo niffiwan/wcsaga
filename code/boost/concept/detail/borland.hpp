@@ -6,15 +6,18 @@
 
 # include <boost/preprocessor/cat.hpp>
 
-namespace boost { namespace concept {
+namespace boost
+{
+namespace concept
+{
 
 template <class ModelFnPtr>
 struct require;
 
 template <class Model>
-struct require<void(*)(Model)>
+struct require<void ( * ) ( Model ) >
 {
-    enum { instantiate = sizeof((((Model*)0)->~Model()), 3) };
+    enum { instantiate = sizeof ( ( ( ( Model * ) 0 )->~Model() ), 3 ) };
 };
 
 #  define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )         \
@@ -24,6 +27,7 @@ struct require<void(*)(Model)>
       boost::concept::require<ModelFnPtr>::instantiate  \
   }
 
-}} // namespace boost::concept
+}
+} // namespace boost::concept
 
 #endif // BOOST_CONCEPT_DETAIL_BORLAND_DWA2006429_HPP

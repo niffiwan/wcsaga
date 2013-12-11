@@ -20,7 +20,7 @@
 #include <mpi.h>
 #include <boost/config.hpp>
 
-/** @brief Define this macro to avoid expensice MPI_Pack/Unpack calls on 
+/** @brief Define this macro to avoid expensice MPI_Pack/Unpack calls on
  *  homogeneous machines.
 */
 //#define BOOST_MPI_HOMOGENEOUS
@@ -39,13 +39,13 @@
  */
 #  define BOOST_MPI_HAS_MEMORY_ALLOCATION
 
-/** @brief Determine if the MPI implementation has supports initialization 
+/** @brief Determine if the MPI implementation has supports initialization
  *  without command-line arguments.
  *
  *  This macro will be defined when the underlying implementation
  *  supports initialization of MPI without passing along command-line
  *  arguments, e.g., @c MPI_Init(NULL, NULL). When defined, the @c
- *  environment class will provide a default constructor. This macro is 
+ *  environment class will provide a default constructor. This macro is
  *  always defined for MPI-2 implementations. */
 #  define BOOST_MPI_HAS_NOARG_INITIALIZATION
 #endif
@@ -54,7 +54,7 @@
 #  define BOOST_MPI_CALLING_CONVENTION MPIAPI
 #else
 /** @brief Specifies the calling convention that will be used for callbacks
- *  from the underlying C MPI. 
+ *  from the underlying C MPI.
  *
  *  This is a Windows-specific macro, which will be used internally to state
  *  the calling convention of any function that is to be used as a callback
@@ -76,7 +76,7 @@
 
 /*****************************************************************************
  *                                                                           *
- *  DLL import/export options                                                *  
+ *  DLL import/export options                                                *
  *                                                                           *
  *****************************************************************************/
 

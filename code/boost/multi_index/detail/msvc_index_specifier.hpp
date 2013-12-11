@@ -24,38 +24,41 @@
 
 #include <boost/mpl/aux_/msvc_never_true.hpp>
 
-namespace boost{
+namespace boost
+{
 
-namespace multi_index{
+namespace multi_index
+{
 
-namespace detail{
+namespace detail
+{
 
 template<typename IndexSpecifier>
 struct msvc_index_specifier
 {
-  template<bool> struct fake_index_type:IndexSpecifier{};
-  template<> struct fake_index_type<true>
-  {
-    template<typename Super>
-    struct node_class{};
+	template<bool> struct fake_index_type: IndexSpecifier {};
+	template<> struct fake_index_type<true>
+	{
+		template<typename Super>
+		struct node_class {};
 
-    template<typename Super>
-    struct index_class{};
-  };
+		template<typename Super>
+		struct index_class {};
+	};
 
-  template<typename Super>
-  struct result_node_class:
-    fake_index_type<mpl::aux::msvc_never_true<IndexSpecifier>::value>::
-      template node_class<Super>
-  {
-  };
+	template<typename Super>
+	struct result_node_class:
+			fake_index_type<mpl::aux::msvc_never_true<IndexSpecifier>::value>::
+			template node_class<Super>
+	{
+	};
 
-  template<typename Super>
-  struct result_index_class:
-    fake_index_type<mpl::aux::msvc_never_true<IndexSpecifier>::value>::
-      template index_class<Super>
-  {
-  };
+	template<typename Super>
+	struct result_index_class:
+			fake_index_type<mpl::aux::msvc_never_true<IndexSpecifier>::value>::
+			template index_class<Super>
+	{
+	};
 };
 
 } /* namespace multi_index::detail */

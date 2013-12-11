@@ -8,8 +8,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2008
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -52,7 +52,10 @@
 #   include <boost/preprocessor/iterate.hpp>
 
 
-namespace boost { namespace mpl {
+namespace boost
+{
+namespace mpl
+{
 
 // local macros, #undef-ined at the end of the header
 #   define AUX778076_APPLY_WRAP_PARAMS(n, param) \
@@ -72,7 +75,8 @@ namespace boost { namespace mpl {
 #   undef AUX778076_APPLY_WRAP_SPEC_PARAMS
 #   undef AUX778076_APPLY_WRAP_PARAMS
 
-}}
+}
+}
 
 #endif // BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
 #endif // BOOST_MPL_APPLY_WRAP_HPP_INCLUDED
@@ -94,67 +98,67 @@ namespace boost { namespace mpl {
 #define AUX778076_MSVC_DTW_ARITY i_
 #include <boost/mpl/aux_/msvc_dtw.hpp>
 
-template<
-      typename F BOOST_PP_COMMA_IF(i_) AUX778076_APPLY_WRAP_PARAMS(i_, typename T)
+template <
+    typename F BOOST_PP_COMMA_IF ( i_ ) AUX778076_APPLY_WRAP_PARAMS ( i_, typename T )
     >
-struct BOOST_PP_CAT(apply_wrap,i_)
+struct BOOST_PP_CAT ( apply_wrap, i_ )
 {
-    // Metafunction forwarding confuses vc6
-    typedef typename BOOST_PP_CAT(msvc_apply,i_)<F>::template result_<
-          AUX778076_APPLY_WRAP_PARAMS(i_, T)
-        >::type type;
+	// Metafunction forwarding confuses vc6
+	typedef typename BOOST_PP_CAT ( msvc_apply, i_ ) <F>::template result_ <
+	    AUX778076_APPLY_WRAP_PARAMS ( i_, T )
+	    >::type type;
 };
 
 #   elif defined(BOOST_MPL_CFG_BROKEN_DEFAULT_PARAMETERS_IN_NESTED_TEMPLATES)
 // MWCW/Borland version
 
-template<
-      int N, typename F BOOST_PP_COMMA_IF(i_) AUX778076_APPLY_WRAP_PARAMS(i_, typename T)
+template <
+    int N, typename F BOOST_PP_COMMA_IF ( i_ ) AUX778076_APPLY_WRAP_PARAMS ( i_, typename T )
     >
-struct BOOST_PP_CAT(apply_wrap_impl,i_);
+struct BOOST_PP_CAT ( apply_wrap_impl, i_ );
 
 #define BOOST_PP_ITERATION_PARAMS_2 \
     (3,(0, BOOST_MPL_LIMIT_METAFUNCTION_ARITY - i_, <boost/mpl/apply_wrap.hpp>))
 #include BOOST_PP_ITERATE()
 
-template<
-      typename F BOOST_PP_COMMA_IF(i_) AUX778076_APPLY_WRAP_PARAMS(i_, typename T)
+template <
+    typename F BOOST_PP_COMMA_IF ( i_ ) AUX778076_APPLY_WRAP_PARAMS ( i_, typename T )
     >
-struct BOOST_PP_CAT(apply_wrap,i_)
-    : BOOST_PP_CAT(apply_wrap_impl,i_)<
-          ::boost::mpl::aux::arity<F,i_>::value
-        , F
-        BOOST_PP_COMMA_IF(i_) AUX778076_APPLY_WRAP_PARAMS(i_, T)
-        >::type
+struct BOOST_PP_CAT ( apply_wrap, i_ )
+	: BOOST_PP_CAT ( apply_wrap_impl, i_ ) <
+	::boost::mpl::aux::arity<F, i_>::value
+	, F
+	BOOST_PP_COMMA_IF ( i_ ) AUX778076_APPLY_WRAP_PARAMS ( i_, T )
+	>::type
 {
 };
 
 #   else
 // ISO98 C++, with minor concession to vc7
 
-template<
-      typename F BOOST_PP_COMMA_IF(i_) AUX778076_APPLY_WRAP_PARAMS(i_, typename T)
+template <
+    typename F BOOST_PP_COMMA_IF ( i_ ) AUX778076_APPLY_WRAP_PARAMS ( i_, typename T )
 #if i_ == 0
     , typename has_apply_ = typename aux::has_apply<F>::type
 #endif
     >
-struct BOOST_PP_CAT(apply_wrap,i_)
+struct BOOST_PP_CAT ( apply_wrap, i_ )
 // metafunction forwarding confuses MSVC 7.0
 #if !BOOST_WORKAROUND(BOOST_MSVC, == 1300)
-    : F::template apply< AUX778076_APPLY_WRAP_PARAMS(i_, T) >
+	: F::template apply< AUX778076_APPLY_WRAP_PARAMS ( i_, T ) >
 {
 #else
-{    
-    typedef typename F::template apply<
-         AUX778076_APPLY_WRAP_PARAMS(i_, T)
-        >::type type;
+{
+	typedef typename F::template apply <
+	    AUX778076_APPLY_WRAP_PARAMS ( i_, T )
+	    >::type type;
 #endif
 };
 
 #if i_ == 0 && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 template< typename F >
-struct BOOST_PP_CAT(apply_wrap,i_)<F,true_>
-    : F::apply
+struct BOOST_PP_CAT ( apply_wrap, i_ ) <F, true_>
+: F::apply
 {
 };
 #endif
@@ -164,9 +168,9 @@ struct BOOST_PP_CAT(apply_wrap,i_)<F,true_>
 #if defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
 /// workaround for ETI bug
 template<>
-struct BOOST_PP_CAT(apply_wrap,i_)<AUX778076_APPLY_WRAP_SPEC_PARAMS(i_, int)>
+struct BOOST_PP_CAT ( apply_wrap, i_ ) <AUX778076_APPLY_WRAP_SPEC_PARAMS ( i_, int ) >
 {
-    typedef int type;
+	typedef int type;
 };
 #endif
 
@@ -183,47 +187,49 @@ struct BOOST_PP_CAT(apply_wrap,i_)<AUX778076_APPLY_WRAP_SPEC_PARAMS(i_, int)>
     && !defined(BOOST_MPL_CFG_NO_HAS_APPLY)
 
 template< typename F, bool F_has_apply >
-struct apply_wrap_impl0_bcb {
-    typedef typename F::template apply< na > type;
+struct apply_wrap_impl0_bcb
+{
+	typedef typename F::template apply< na > type;
 };
 
 template< typename F >
-struct apply_wrap_impl0_bcb< F, true > {
-    typedef typename F::apply type;
+struct apply_wrap_impl0_bcb< F, true >
+{
+	typedef typename F::apply type;
 };
 
-template<
-      typename F BOOST_PP_COMMA_IF(i_) AUX778076_APPLY_WRAP_PARAMS(i_, typename T)
+template <
+    typename F BOOST_PP_COMMA_IF ( i_ ) AUX778076_APPLY_WRAP_PARAMS ( i_, typename T )
     >
-struct BOOST_PP_CAT(apply_wrap_impl,i_)<
-          BOOST_MPL_PP_ADD(i_, j_)
-        , F
-        BOOST_PP_COMMA_IF(i_) AUX778076_APPLY_WRAP_PARAMS(i_, T)
-        >
+struct BOOST_PP_CAT ( apply_wrap_impl, i_ ) <
+BOOST_MPL_PP_ADD ( i_, j_ )
+, F
+BOOST_PP_COMMA_IF ( i_ ) AUX778076_APPLY_WRAP_PARAMS ( i_, T )
+>
 {
-    typedef apply_wrap_impl0_bcb< F, aux::has_apply< F >::value >::type type;
+	typedef apply_wrap_impl0_bcb< F, aux::has_apply< F >::value >::type type;
 };
 #else
 
-template<
-      typename F BOOST_PP_COMMA_IF(i_) AUX778076_APPLY_WRAP_PARAMS(i_, typename T)
+template <
+    typename F BOOST_PP_COMMA_IF ( i_ ) AUX778076_APPLY_WRAP_PARAMS ( i_, typename T )
     >
-struct BOOST_PP_CAT(apply_wrap_impl,i_)<
-          BOOST_MPL_PP_ADD(i_, j_)
-        , F
-        BOOST_PP_COMMA_IF(i_) AUX778076_APPLY_WRAP_PARAMS(i_, T)
-        >
+struct BOOST_PP_CAT ( apply_wrap_impl, i_ ) <
+BOOST_MPL_PP_ADD ( i_, j_ )
+, F
+BOOST_PP_COMMA_IF ( i_ ) AUX778076_APPLY_WRAP_PARAMS ( i_, T )
+>
 {
-    typedef typename F::template apply<
-          AUX778076_APPLY_WRAP_PARAMS(i_, T)
+	typedef typename F::template apply <
+	    AUX778076_APPLY_WRAP_PARAMS ( i_, T )
 #if i_ == 0 && j_ == 0
-/// since the defaults are "lost", we have to pass *something* even for nullary
-/// metafunction classes
-        na
+	    /// since the defaults are "lost", we have to pass *something* even for nullary
+	    /// metafunction classes
+	    na
 #else
-        BOOST_PP_COMMA_IF(BOOST_PP_AND(i_, j_)) BOOST_MPL_PP_ENUM(j_, na)
+	    BOOST_PP_COMMA_IF ( BOOST_PP_AND ( i_, j_ ) ) BOOST_MPL_PP_ENUM ( j_, na )
 #endif
-        > type;
+	    > type;
 };
 
 #endif

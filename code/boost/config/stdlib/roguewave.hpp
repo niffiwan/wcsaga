@@ -1,9 +1,9 @@
-//  (C) Copyright John Maddock 2001 - 2003. 
-//  (C) Copyright Jens Maurer 2001. 
-//  (C) Copyright David Abrahams 2003. 
-//  (C) Copyright Boris Gubenko 2007. 
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  (C) Copyright John Maddock 2001 - 2003.
+//  (C) Copyright Jens Maurer 2001.
+//  (C) Copyright David Abrahams 2003.
+//  (C) Copyright Boris Gubenko 2007.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
@@ -30,7 +30,7 @@
 #ifndef _RWSTD_VER
 #  define BOOST_STDLIB "Rogue Wave standard library version (Unknown version)"
 #elif _RWSTD_VER < 0x04010200
- #  define BOOST_STDLIB "Rogue Wave standard library version " BOOST_STRINGIZE(_RWSTD_VER)
+#  define BOOST_STDLIB "Rogue Wave standard library version " BOOST_STRINGIZE(_RWSTD_VER)
 #else
 #  ifdef _RWSTD_VER_STR
 #    define BOOST_STDLIB "Apache STDCXX standard library version " _RWSTD_VER_STR
@@ -115,7 +115,7 @@
 // partial specialization support:
 //
 #if (BOOST_RWSTD_VER < 0x020000) || defined(_RWSTD_NO_CLASS_PARTIAL_SPEC)
-    #define BOOST_NO_STD_DISTANCE
+#define BOOST_NO_STD_DISTANCE
 #endif
 
 //

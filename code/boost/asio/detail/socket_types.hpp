@@ -117,9 +117,12 @@
 #endif
 #include <boost/asio/detail/pop_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 #if defined(BOOST_WINDOWS) || defined(__CYGWIN__)
 typedef SOCKET socket_type;
@@ -174,8 +177,8 @@ typedef in_addr in4_addr_type;
 // HP-UX doesn't provide ip_mreq when _XOPEN_SOURCE_EXTENDED is defined.
 struct in4_mreq_type
 {
-  struct in_addr imr_multiaddr;
-  struct in_addr imr_interface;
+	struct in_addr imr_multiaddr;
+	struct in_addr imr_interface;
 };
 # else
 typedef ip_mreq in4_mreq_type;

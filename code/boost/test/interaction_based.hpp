@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -86,9 +86,11 @@
     return ::boost::itest::mock_object<>::prototype();  \
 /**/
 
-namespace boost {
+namespace boost
+{
 
-namespace itest { // interaction-based testing
+namespace itest   // interaction-based testing
+{
 
 using unit_test::const_string;
 
@@ -96,93 +98,96 @@ using unit_test::const_string;
 // **************                    manager                   ************** //
 // ************************************************************************** //
 
-class BOOST_TEST_DECL manager {
+class BOOST_TEST_DECL manager
+{
 public:
-    // instance access
-    static manager&     instance() { return *instance_ptr(); }
+	// instance access
+	static manager     &instance() { return *instance_ptr(); }
 
-    // Mock objects interface hooks
-    virtual void        exception_point( const_string /*file*/, 
-                                         std::size_t /*line_num*/, 
-                                         const_string /*descr*/ ){}
-    virtual bool        decision_point( const_string /*file*/, 
-                                        std::size_t /*line_num*/ )          { return true; }
-    virtual unsigned    enter_scope( const_string /*file*/, 
-                                     std::size_t /*line_num*/,
-                                     const_string /*scope_name*/){ return 0; }
-    virtual void        leave_scope( unsigned )                             {}
-    virtual void        allocated( const_string /*file*/, 
-                                   std::size_t /*line_num*/, 
-                                   void* /*p*/, std::size_t /*s*/ )         {}
-    virtual void        freed( void* /*p*/ )                                {}
-    virtual void        data_flow( const_string /*d*/ )                     {}
-    virtual std::string return_value( const_string /*default_value */ )     { return ""; }
+	// Mock objects interface hooks
+	virtual void        exception_point ( const_string /*file*/,
+	                                      std::size_t /*line_num*/,
+	                                      const_string /*descr*/ ) {}
+	virtual bool        decision_point ( const_string /*file*/,
+	                                     std::size_t /*line_num*/ )          { return true; }
+	virtual unsigned    enter_scope ( const_string /*file*/,
+	                                  std::size_t /*line_num*/,
+	                                  const_string /*scope_name*/ ) { return 0; }
+	virtual void        leave_scope ( unsigned )                             {}
+	virtual void        allocated ( const_string /*file*/,
+	                                std::size_t /*line_num*/,
+	                                void * /*p*/, std::size_t /*s*/ )         {}
+	virtual void        freed ( void * /*p*/ )                                {}
+	virtual void        data_flow ( const_string /*d*/ )                     {}
+	virtual std::string return_value ( const_string /*default_value */ )     { return ""; }
 
-    template<typename T>
-    void                generic_data_flow( T const& t )
-    {
-        wrap_stringstream ws;
+	template<typename T>
+	void                generic_data_flow ( T const &t )
+	{
+		wrap_stringstream ws;
 
-        data_flow( (ws << t).str() );
-    }
-    template<typename T, typename DefaultValueType>
-    T                   generic_return( DefaultValueType const& dv )
-    {
-        wrap_stringstream ws;
+		data_flow ( ( ws << t ).str() );
+	}
+	template<typename T, typename DefaultValueType>
+	T                   generic_return ( DefaultValueType const &dv )
+	{
+		wrap_stringstream ws;
 
-        std::string const& res = return_value( (ws << dv).str() );
+		std::string const &res = return_value ( ( ws << dv ).str() );
 
-        if( res.empty() )
-            return dv;
+		if ( res.empty() )
+			return dv;
 
-        return lexical_cast<T>( res );
-    }
+		return lexical_cast<T> ( res );
+	}
 
 protected:
-    manager();
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) 
+	manager();
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 public:
 #endif
-    BOOST_TEST_PROTECTED_VIRTUAL ~manager();
+	BOOST_TEST_PROTECTED_VIRTUAL ~manager();
 
 private:
-    struct dummy_constr{};
-    explicit manager( dummy_constr* ) {}
+	struct dummy_constr {};
+	explicit manager ( dummy_constr * ) {}
 
-    static manager*     instance_ptr( bool reset = false, manager* ptr = 0 );
+	static manager     *instance_ptr ( bool reset = false, manager *ptr = 0 );
 }; // manager
 
 // ************************************************************************** //
 // **************                  scope_guard                 ************** //
 // ************************************************************************** //
 
-class scope_guard {
+class scope_guard
+{
 public:
-    // Constructor
-    scope_guard( const_string file, std::size_t line_num, const_string scope_name )
-    {
-        m_scope_index = manager::instance().enter_scope( file, line_num, scope_name );
-    }
-    ~scope_guard()
-    {
-        manager::instance().leave_scope( m_scope_index );
-    }
+	// Constructor
+	scope_guard ( const_string file, std::size_t line_num, const_string scope_name )
+	{
+		m_scope_index = manager::instance().enter_scope ( file, line_num, scope_name );
+	}
+	~scope_guard()
+	{
+		manager::instance().leave_scope ( m_scope_index );
+	}
 
-    unsigned m_scope_index;
+	unsigned m_scope_index;
 };
 
 // ************************************************************************** //
 // **************                    location                  ************** //
 // ************************************************************************** //
 
-struct location {
-    location( const_string file, std::size_t line ) 
-    : m_file_name( file )
-    , m_line_num( line )
-    {}
+struct location
+{
+	location ( const_string file, std::size_t line )
+		: m_file_name ( file )
+		, m_line_num ( line )
+	{}
 
-    const_string    m_file_name;
-    std::size_t     m_line_num;
+	const_string    m_file_name;
+	std::size_t     m_line_num;
 };
 
 }  // namespace itest
@@ -205,52 +210,52 @@ namespace std { using ::malloc; using ::free; }
 namespace std { using ::_malloc_dbg; using ::_free_dbg; }
 # endif
 
-inline void*
-operator new( std::size_t s, ::boost::itest::location const& l )
+inline void *
+operator new ( std::size_t s, ::boost::itest::location const &l )
 {
-    void* res = std::malloc(s ? s : 1);
+	void *res = std::malloc ( s ? s : 1 );
 
-    if( res )
-        ::boost::itest::manager::instance().allocated( l.m_file_name, l.m_line_num, res, s );
-    else
-        throw std::bad_alloc();
-        
-    return res;
+	if ( res )
+		::boost::itest::manager::instance().allocated ( l.m_file_name, l.m_line_num, res, s );
+	else
+		throw std::bad_alloc();
+
+	return res;
 }
 
 //____________________________________________________________________________//
 
-inline void*
-operator new[]( std::size_t s, ::boost::itest::location const& l )
+inline void *
+operator new[] ( std::size_t s, ::boost::itest::location const &l )
 {
-    void* res = std::malloc(s ? s : 1);
+	void *res = std::malloc ( s ? s : 1 );
 
-    if( res )
-        ::boost::itest::manager::instance().allocated( l.m_file_name, l.m_line_num, res, s );
-    else
-        throw std::bad_alloc();
-        
-    return res;
-}
+	if ( res )
+		::boost::itest::manager::instance().allocated ( l.m_file_name, l.m_line_num, res, s );
+	else
+		throw std::bad_alloc();
 
-//____________________________________________________________________________//
-
-inline void
-operator delete( void* p, ::boost::itest::location const& )
-{
-    ::boost::itest::manager::instance().freed( p );
-
-    std::free( p );
+	return res;
 }
 
 //____________________________________________________________________________//
 
 inline void
-operator delete[]( void* p, ::boost::itest::location const& )
+operator delete ( void *p, ::boost::itest::location const & )
 {
-    ::boost::itest::manager::instance().freed( p );
+	::boost::itest::manager::instance().freed ( p );
 
-    std::free( p );
+	std::free ( p );
+}
+
+//____________________________________________________________________________//
+
+inline void
+operator delete[] ( void *p, ::boost::itest::location const & )
+{
+	::boost::itest::manager::instance().freed ( p );
+
+	std::free ( p );
 }
 
 //____________________________________________________________________________//

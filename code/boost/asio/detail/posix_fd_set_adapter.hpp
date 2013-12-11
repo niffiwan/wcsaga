@@ -25,51 +25,54 @@
 
 #if !defined(BOOST_WINDOWS) && !defined(__CYGWIN__)
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 // Adapts the FD_SET type to meet the Descriptor_Set concept's requirements.
 class posix_fd_set_adapter
 {
 public:
-  posix_fd_set_adapter()
-    : max_descriptor_(invalid_socket)
-  {
-    using namespace std; // Needed for memset on Solaris.
-    FD_ZERO(&fd_set_);
-  }
+	posix_fd_set_adapter()
+		: max_descriptor_ ( invalid_socket )
+	{
+		using namespace std; // Needed for memset on Solaris.
+		FD_ZERO ( &fd_set_ );
+	}
 
-  bool set(socket_type descriptor)
-  {
-    if (descriptor < (socket_type)FD_SETSIZE)
-    {
-      if (max_descriptor_ == invalid_socket || descriptor > max_descriptor_)
-        max_descriptor_ = descriptor;
-      FD_SET(descriptor, &fd_set_);
-      return true;
-    }
-    return false;
-  }
+	bool set ( socket_type descriptor )
+	{
+		if ( descriptor < ( socket_type ) FD_SETSIZE )
+		{
+			if ( max_descriptor_ == invalid_socket || descriptor > max_descriptor_ )
+				max_descriptor_ = descriptor;
+			FD_SET ( descriptor, &fd_set_ );
+			return true;
+		}
+		return false;
+	}
 
-  bool is_set(socket_type descriptor) const
-  {
-    return FD_ISSET(descriptor, &fd_set_) != 0;
-  }
+	bool is_set ( socket_type descriptor ) const
+	{
+		return FD_ISSET ( descriptor, &fd_set_ ) != 0;
+	}
 
-  operator fd_set*()
-  {
-    return &fd_set_;
-  }
+	operator fd_set *()
+	{
+		return &fd_set_;
+	}
 
-  socket_type max_descriptor() const
-  {
-    return max_descriptor_;
-  }
+	socket_type max_descriptor() const
+	{
+		return max_descriptor_;
+	}
 
 private:
-  mutable fd_set fd_set_;
-  socket_type max_descriptor_;
+	mutable fd_set fd_set_;
+	socket_type max_descriptor_;
 };
 
 } // namespace detail

@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -29,37 +29,40 @@
 // MISSION LOOP BRIEF DEFINES/VARS
 //
 
-char* Loop_brief_fname[GR_NUM_RESOLUTIONS] =
+char *Loop_brief_fname[GR_NUM_RESOLUTIONS] =
 {
-	"LoopBrief",		// GR_640
-	"2_LoopBrief",		// GR_1024
+	"LoopBrief",        // GR_640
+	"2_LoopBrief",      // GR_1024
 };
 
-char* Loop_brief_mask[GR_NUM_RESOLUTIONS] =
+char *Loop_brief_mask[GR_NUM_RESOLUTIONS] =
 {
-	"LoopBrief-m",		// GR_640
-	"2_Loopbrief-m",	// GR_1024
+	"LoopBrief-m",      // GR_640
+	"2_Loopbrief-m",    // GR_1024
 };
 
-#define NUM_LOOP_BRIEF_BUTTONS				2
-#define LOOP_BRIEF_DECLINE						0
-#define LOOP_BRIEF_ACCEPT						1
+#define NUM_LOOP_BRIEF_BUTTONS              2
+#define LOOP_BRIEF_DECLINE                      0
+#define LOOP_BRIEF_ACCEPT                       1
 ui_button_info Loop_buttons[GR_NUM_RESOLUTIONS][NUM_LOOP_BRIEF_BUTTONS] =
 {
-	{ // GR_640
-		ui_button_info("LBB_00", 529, 437, -1, -1, 0),
-		ui_button_info("LBB_01", 575, 433, -1, -1, 1),
+	{
+		// GR_640
+		ui_button_info ( "LBB_00", 529, 437, -1, -1, 0 ),
+		ui_button_info ( "LBB_01", 575, 433, -1, -1, 1 ),
 	},
-	{ // GR_1024
-		ui_button_info("2_LBB_00", 846, 699, -1, -1, 0),
-		ui_button_info("2_LBB_01", 920, 693, -1, -1, 1),
+	{
+		// GR_1024
+		ui_button_info ( "2_LBB_00", 846, 699, -1, -1, 0 ),
+		ui_button_info ( "2_LBB_01", 920, 693, -1, -1, 1 ),
 	}
 };
 
-#define NUM_LOOP_TEXT							2
+#define NUM_LOOP_TEXT                           2
 UI_XSTR Loop_text[GR_NUM_RESOLUTIONS][NUM_LOOP_TEXT] =
 {
-	{ // GR_640
+	{
+		// GR_640
 		{
 			"Decline",
 			1467,
@@ -79,7 +82,8 @@ UI_XSTR Loop_text[GR_NUM_RESOLUTIONS][NUM_LOOP_TEXT] =
 			&Loop_buttons[0][LOOP_BRIEF_ACCEPT].button
 		},
 	},
-	{ // GR_1024
+	{
+		// GR_1024
 		{
 			"Decline",
 			1467,
@@ -104,11 +108,13 @@ UI_XSTR Loop_text[GR_NUM_RESOLUTIONS][NUM_LOOP_TEXT] =
 // loop brief anim
 int Loop_brief_anim_coords[GR_NUM_RESOLUTIONS][2] =
 {
-	{ // GR_640
+	{
+		// GR_640
 		24,
 		267
 	},
-	{ // GR_640
+	{
+		// GR_640
 		167,
 		491
 	}
@@ -117,13 +123,15 @@ int Loop_brief_anim_coords[GR_NUM_RESOLUTIONS][2] =
 // text window coords
 int Loop_brief_text_coords[GR_NUM_RESOLUTIONS][4] =
 {
-	{ // GR_640
+	{
+		// GR_640
 		25,
 		107,
 		591,
 		143
 	},
-	{ // GR_1024
+	{
+		// GR_1024
 		40,
 		171,
 		945,
@@ -134,8 +142,8 @@ int Loop_brief_text_coords[GR_NUM_RESOLUTIONS][4] =
 UI_WINDOW Loop_brief_window;
 int Loop_brief_bitmap;
 
-anim* Loop_anim;
-anim_instance* Loop_anim_instance;
+anim *Loop_anim;
+anim_instance *Loop_anim_instance;
 
 int Loop_sound;
 
@@ -144,38 +152,38 @@ int Loop_sound;
 //
 
 // button press
-void loop_brief_button_pressed(int i)
+void loop_brief_button_pressed ( int i )
 {
-	switch (i)
+	switch ( i )
 	{
 	case LOOP_BRIEF_DECLINE:
 		// CD CHECK
-		if (game_do_cd_mission_check(Game_current_mission_filename))
+		if ( game_do_cd_mission_check ( Game_current_mission_filename ) )
 		{
-			gameseq_post_event(GS_EVENT_START_GAME);
-			gamesnd_play_iface(SND_USER_SELECT);
+			gameseq_post_event ( GS_EVENT_START_GAME );
+			gamesnd_play_iface ( SND_USER_SELECT );
 		}
 		else
 		{
-			gameseq_post_event(GS_EVENT_MAIN_MENU);
+			gameseq_post_event ( GS_EVENT_MAIN_MENU );
 		}
 		break;
 
 	case LOOP_BRIEF_ACCEPT:
-		// select the loop mission		
+		// select the loop mission
 		Campaign.loop_enabled = 1;
-		Campaign.loop_reentry = Campaign.next_mission;			// save reentry pt, so we can break out of loop
+		Campaign.loop_reentry = Campaign.next_mission;          // save reentry pt, so we can break out of loop
 		Campaign.next_mission = Campaign.loop_mission;
 
 		// CD CHECK
-		if (game_do_cd_mission_check(Game_current_mission_filename))
+		if ( game_do_cd_mission_check ( Game_current_mission_filename ) )
 		{
-			gameseq_post_event(GS_EVENT_START_GAME);
-			gamesnd_play_iface(SND_USER_SELECT);
+			gameseq_post_event ( GS_EVENT_START_GAME );
+			gamesnd_play_iface ( SND_USER_SELECT );
 		}
 		else
 		{
-			gameseq_post_event(GS_EVENT_MAIN_MENU);
+			gameseq_post_event ( GS_EVENT_MAIN_MENU );
 		}
 		break;
 	}
@@ -185,89 +193,89 @@ void loop_brief_button_pressed(int i)
 void loop_brief_init()
 {
 	int idx;
-	ui_button_info* b;
+	ui_button_info *b;
 
 	// load the background bitmap
-	Loop_brief_bitmap = bm_load(Loop_brief_fname[gr_screen.res]);
-	Assert(Loop_brief_bitmap != -1);
+	Loop_brief_bitmap = bm_load ( Loop_brief_fname[gr_screen.res] );
+	Assert ( Loop_brief_bitmap != -1 );
 
 	// window
-	Loop_brief_window.create(0, 0, gr_screen.max_w_unscaled, gr_screen.max_h_unscaled, 0);
-	Loop_brief_window.set_mask_bmap(Loop_brief_mask[gr_screen.res]);
+	Loop_brief_window.create ( 0, 0, gr_screen.max_w_unscaled, gr_screen.max_h_unscaled, 0 );
+	Loop_brief_window.set_mask_bmap ( Loop_brief_mask[gr_screen.res] );
 
 	// add the buttons
-	for (idx = 0; idx < NUM_LOOP_BRIEF_BUTTONS; idx++)
+	for ( idx = 0; idx < NUM_LOOP_BRIEF_BUTTONS; idx++ )
 	{
 		b = &Loop_buttons[gr_screen.res][idx];
 
-		b->button.create(&Loop_brief_window, "", b->x, b->y, 60, 30, 0, 1);
-		b->button.set_highlight_action(common_play_highlight_sound);
-		b->button.set_bmaps(b->filename);
-		b->button.link_hotspot(b->hotspot);
+		b->button.create ( &Loop_brief_window, "", b->x, b->y, 60, 30, 0, 1 );
+		b->button.set_highlight_action ( common_play_highlight_sound );
+		b->button.set_bmaps ( b->filename );
+		b->button.link_hotspot ( b->hotspot );
 	}
 
 	// add text
-	for (idx = 0; idx < NUM_LOOP_TEXT; idx++)
+	for ( idx = 0; idx < NUM_LOOP_TEXT; idx++ )
 	{
-		Loop_brief_window.add_XSTR(&Loop_text[gr_screen.res][idx]);
+		Loop_brief_window.add_XSTR ( &Loop_text[gr_screen.res][idx] );
 	}
 
 	// load animation if any
 	Loop_anim = NULL;
 	Loop_anim_instance = NULL;
-	if (Campaign.missions[Campaign.current_mission].mission_loop_brief_anim != NULL)
+	if ( Campaign.missions[Campaign.current_mission].mission_loop_brief_anim != NULL )
 	{
-		Loop_anim = anim_load(Campaign.missions[Campaign.current_mission].mission_loop_brief_anim);
+		Loop_anim = anim_load ( Campaign.missions[Campaign.current_mission].mission_loop_brief_anim );
 	}
 	else
 	{
-		Loop_anim = anim_load("CB_default");
+		Loop_anim = anim_load ( "CB_default" );
 	}
 
 	// fire up an anim instance
-	if (Loop_anim != NULL)
+	if ( Loop_anim != NULL )
 	{
 		anim_play_struct aps;
 
-		anim_play_init(&aps, Loop_anim, Loop_brief_anim_coords[gr_screen.res][0],
-			Loop_brief_anim_coords[gr_screen.res][1]);
+		anim_play_init ( &aps, Loop_anim, Loop_brief_anim_coords[gr_screen.res][0],
+		                 Loop_brief_anim_coords[gr_screen.res][1] );
 		aps.framerate_independent = 1;
 		aps.looped = 1;
 		aps.screen_id = GS_STATE_LOOP_BRIEF;
-		Loop_anim_instance = anim_play(&aps);
+		Loop_anim_instance = anim_play ( &aps );
 	}
 
 	// init brief text
-	if (Campaign.missions[Campaign.current_mission].mission_loop_desc != NULL)
+	if ( Campaign.missions[Campaign.current_mission].mission_loop_desc != NULL )
 	{
-		brief_color_text_init(Campaign.missions[Campaign.current_mission].mission_loop_desc,
-			Loop_brief_text_coords[gr_screen.res][2]);
+		brief_color_text_init ( Campaign.missions[Campaign.current_mission].mission_loop_desc,
+		                        Loop_brief_text_coords[gr_screen.res][2] );
 	}
 
 	bool sound_played = false;
 
 
 	// open sound
-	if (Campaign.missions[Campaign.current_mission].mission_loop_brief_sound != NULL)
+	if ( Campaign.missions[Campaign.current_mission].mission_loop_brief_sound != NULL )
 	{
-		Loop_sound = audiostream_open(Campaign.missions[Campaign.current_mission].mission_loop_brief_sound, ASF_VOICE);
+		Loop_sound = audiostream_open ( Campaign.missions[Campaign.current_mission].mission_loop_brief_sound, ASF_VOICE );
 
-		if (Loop_sound != -1)
+		if ( Loop_sound != -1 )
 		{
-			audiostream_play(Loop_sound, Master_voice_volume, 0);
+			audiostream_play ( Loop_sound, Master_voice_volume, 0 );
 			sound_played = true;
 		}
 	}
 
-	if (sound_played == false)
+	if ( sound_played == false )
 	{
-		fsspeech_play(FSSPEECH_FROM_BRIEFING,
-			Campaign.missions[Campaign.current_mission].mission_loop_desc);
+		fsspeech_play ( FSSPEECH_FROM_BRIEFING,
+		                Campaign.missions[Campaign.current_mission].mission_loop_desc );
 
 	}
 
 	// music
-	common_music_init(SCORE_BRIEFING);
+	common_music_init ( SCORE_BRIEFING );
 }
 
 // do
@@ -279,58 +287,58 @@ void loop_brief_do()
 	// process keys
 	k = Loop_brief_window.process();
 
-	switch (k)
+	switch ( k )
 	{
 	case KEY_ESC:
 		int do_loop = 0;
 
 		// this popup should be straight forward, and also not allow you to get out
 		// of it without actually picking one of the two options
-		do_loop = popup(PF_USE_NEGATIVE_ICON | PF_USE_AFFIRMATIVE_ICON | PF_IGNORE_ESC | PF_BODY_BIG, 2,
-			XSTR("Decline", 1467), XSTR("Accept", 1035),
-			XSTR("You must either Accept or Decline before returning to the Main Hall", -1));
+		do_loop = popup ( PF_USE_NEGATIVE_ICON | PF_USE_AFFIRMATIVE_ICON | PF_IGNORE_ESC | PF_BODY_BIG, 2,
+		                  XSTR ( "Decline", 1467 ), XSTR ( "Accept", 1035 ),
+		                  XSTR ( "You must either Accept or Decline before returning to the Main Hall", -1 ) );
 
 		// if we accepted moving into loop then set it up for the next time the user plays
-		if (do_loop == 1)
+		if ( do_loop == 1 )
 		{
-			// select the loop mission		
+			// select the loop mission
 			Campaign.loop_enabled = 1;
-			Campaign.loop_reentry = Campaign.next_mission;			// save reentry pt, so we can break out of loop
+			Campaign.loop_reentry = Campaign.next_mission;          // save reentry pt, so we can break out of loop
 			Campaign.next_mission = Campaign.loop_mission;
 		}
 
-		gameseq_post_event(GS_EVENT_MAIN_MENU);
+		gameseq_post_event ( GS_EVENT_MAIN_MENU );
 		return;
 	}
 
 	// process button presses
-	for (idx = 0; idx < NUM_LOOP_BRIEF_BUTTONS; idx++)
+	for ( idx = 0; idx < NUM_LOOP_BRIEF_BUTTONS; idx++ )
 	{
-		if (Loop_buttons[gr_screen.res][idx].button.pressed())
+		if ( Loop_buttons[gr_screen.res][idx].button.pressed() )
 		{
-			loop_brief_button_pressed(idx);
+			loop_brief_button_pressed ( idx );
 		}
 	}
 
 	common_music_do();
 
 	// clear
-	GR_MAYBE_CLEAR_RES(Loop_brief_bitmap);
-	if (Loop_brief_bitmap >= 0)
+	GR_MAYBE_CLEAR_RES ( Loop_brief_bitmap );
+	if ( Loop_brief_bitmap >= 0 )
 	{
-		gr_set_bitmap(Loop_brief_bitmap);
-		gr_bitmap(0, 0);
+		gr_set_bitmap ( Loop_brief_bitmap );
+		gr_bitmap ( 0, 0 );
 	}
 
 	// draw the window
 	Loop_brief_window.draw();
 
 	// render the briefing text
-	brief_render_text(0, Loop_brief_text_coords[gr_screen.res][0], Loop_brief_text_coords[gr_screen.res][1],
-		Loop_brief_text_coords[gr_screen.res][3], flFrametime);
+	brief_render_text ( 0, Loop_brief_text_coords[gr_screen.res][0], Loop_brief_text_coords[gr_screen.res][1],
+	                    Loop_brief_text_coords[gr_screen.res][3], flFrametime );
 
 	// render all anims
-	anim_render_all(GS_STATE_LOOP_BRIEF, flFrametime);
+	anim_render_all ( GS_STATE_LOOP_BRIEF, flFrametime );
 
 	gr_flip();
 }
@@ -342,9 +350,9 @@ void loop_brief_close()
 	mission_campaign_mission_over();
 
 	// free the bitmap
-	if (Loop_brief_bitmap >= 0)
+	if ( Loop_brief_bitmap >= 0 )
 	{
-		bm_release(Loop_brief_bitmap);
+		bm_release ( Loop_brief_bitmap );
 	}
 	Loop_brief_bitmap = -1;
 
@@ -352,22 +360,22 @@ void loop_brief_close()
 	Loop_brief_window.destroy();
 
 	// free up anim stuff
-	if (Loop_anim_instance != NULL)
+	if ( Loop_anim_instance != NULL )
 	{
-		anim_release_render_instance(Loop_anim_instance);
+		anim_release_render_instance ( Loop_anim_instance );
 		Loop_anim_instance = NULL;
 	}
-	if (Loop_anim != NULL)
+	if ( Loop_anim != NULL )
 	{
-		anim_free(Loop_anim);
+		anim_free ( Loop_anim );
 		Loop_anim = NULL;
 	}
 
 	// stop voice
-	if (Loop_sound != -1)
+	if ( Loop_sound != -1 )
 	{
-		audiostream_stop(Loop_sound, 1, 0);
-		audiostream_close_file(Loop_sound, 1);
+		audiostream_stop ( Loop_sound, 1, 0 );
+		audiostream_close_file ( Loop_sound, 1 );
 		Loop_sound = -1;
 	}
 

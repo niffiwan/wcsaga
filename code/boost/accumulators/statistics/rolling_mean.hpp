@@ -18,30 +18,32 @@
 #include <boost/accumulators/statistics/rolling_sum.hpp>
 #include <boost/accumulators/statistics/rolling_count.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 namespace impl
 {
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // rolling_mean_impl
-    //    returns the unshifted results from the shifted rolling window
-    template<typename Sample>
-    struct rolling_mean_impl
-      : accumulator_base
-    {
-        typedef typename numeric::functional::average<Sample, std::size_t>::result_type result_type;
+///////////////////////////////////////////////////////////////////////////////
+// rolling_mean_impl
+//    returns the unshifted results from the shifted rolling window
+template<typename Sample>
+struct rolling_mean_impl
+		: accumulator_base
+{
+	typedef typename numeric::functional::average<Sample, std::size_t>::result_type result_type;
 
-        rolling_mean_impl(dont_care)
-        {}
+	rolling_mean_impl ( dont_care )
+	{}
 
-        template<typename Args>
-        result_type result(Args const &args) const
-        {
-            return numeric::average(rolling_sum(args), rolling_count(args));
-        }
-    };
+	template<typename Args>
+	result_type result ( Args const &args ) const
+	{
+		return numeric::average ( rolling_sum ( args ), rolling_count ( args ) );
+	}
+};
 
 } // namespace impl
 
@@ -50,18 +52,18 @@ namespace impl
 //
 namespace tag
 {
-    struct rolling_mean
-      : depends_on< rolling_sum, rolling_count >
-    {
-        /// INTERNAL ONLY
-        ///
-        typedef accumulators::impl::rolling_mean_impl< mpl::_1 > impl;
+struct rolling_mean
+		: depends_on< rolling_sum, rolling_count >
+{
+	/// INTERNAL ONLY
+	///
+	typedef accumulators::impl::rolling_mean_impl< mpl::_1 > impl;
 
-        #ifdef BOOST_ACCUMULATORS_DOXYGEN_INVOKED
-        /// tag::rolling_window::window_size named parameter
-        static boost::parameter::keyword<tag::rolling_window_size> const window_size;
-        #endif
-    };
+#ifdef BOOST_ACCUMULATORS_DOXYGEN_INVOKED
+	/// tag::rolling_window::window_size named parameter
+	static boost::parameter::keyword<tag::rolling_window_size> const window_size;
+#endif
+};
 } // namespace tag
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -69,13 +71,14 @@ namespace tag
 //
 namespace extract
 {
-    extractor<tag::rolling_mean> const rolling_mean = {};
+extractor<tag::rolling_mean> const rolling_mean = {};
 
-    BOOST_ACCUMULATORS_IGNORE_GLOBAL(rolling_mean)
+BOOST_ACCUMULATORS_IGNORE_GLOBAL ( rolling_mean )
 }
 
 using extract::rolling_mean;
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

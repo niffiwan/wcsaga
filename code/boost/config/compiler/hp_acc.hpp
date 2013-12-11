@@ -1,11 +1,11 @@
-//  (C) Copyright John Maddock 2001 - 2003. 
-//  (C) Copyright Jens Maurer 2001 - 2003. 
-//  (C) Copyright Aleksey Gurtovoy 2002. 
-//  (C) Copyright David Abrahams 2002 - 2003. 
-//  (C) Copyright Toon Knapen 2003. 
+//  (C) Copyright John Maddock 2001 - 2003.
+//  (C) Copyright Jens Maurer 2001 - 2003.
+//  (C) Copyright Aleksey Gurtovoy 2002.
+//  (C) Copyright David Abrahams 2002 - 2003.
+//  (C) Copyright Toon Knapen 2003.
 //  (C) Copyright Boris Gubenko 2006 - 2007.
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
@@ -43,7 +43,7 @@
 #    define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
 #    define BOOST_NO_IS_ABSTRACT
 #    define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
-#endif 
+#endif
 
 // optional features rather than defects:
 #if (__HP_aCC >= 33900)
@@ -77,10 +77,10 @@
 // Extended checks for supporting aCC on PA-RISC
 #if __HP_aCC > 30000 && __HP_aCC < 50000
 #  if __HP_aCC < 38000
-      // versions prior to version A.03.80 not supported
+// versions prior to version A.03.80 not supported
 #     error "Compiler version not supported - version A.03.80 or higher is required"
 #  elif !defined(__hpxstd98)
-      // must compile using the option +hpxstd98 with version A.03.80 and above
+// must compile using the option +hpxstd98 with version A.03.80 and above
 #     error "Compiler option '+hpxstd98' is required for proper support"
 #  endif //PA-RISC
 #endif

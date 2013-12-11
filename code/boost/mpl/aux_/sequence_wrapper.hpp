@@ -7,8 +7,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2008
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -34,7 +34,10 @@
 #   undef LONG_MAX
 #endif
 
-namespace boost { namespace mpl {
+namespace boost
+{
+namespace mpl
+{
 
 #if !defined(AUX778076_SEQUENCE_BASE_NAME)
 #   define AUX778076_SEQUENCE_BASE_NAME AUX778076_SEQUENCE_NAME
@@ -148,14 +151,15 @@ namespace boost { namespace mpl {
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 // forward declaration
-template<
-      AUX778076_SEQUENCE_DEFAULT_PARAMS()
+template <
+    AUX778076_SEQUENCE_DEFAULT_PARAMS()
     >
 struct AUX778076_SEQUENCE_NAME;
 #else
-namespace aux {
-template< BOOST_MPL_AUX_NTTP_DECL(int, N) > 
-struct BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_chooser);
+namespace aux
+{
+template< BOOST_MPL_AUX_NTTP_DECL ( int, N ) >
+struct BOOST_PP_CAT ( AUX778076_SEQUENCE_NAME, _chooser );
 }
 #endif
 
@@ -166,7 +170,8 @@ struct BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_chooser);
 // real C++ version is already taken care of
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
-namespace aux {
+namespace aux
+{
 // ???_count_args
 #define AUX778076_COUNT_ARGS_PREFIX         AUX778076_SEQUENCE_NAME
 #define AUX778076_COUNT_ARGS_DEFAULT        AUX778076_SEQUENCE_DEFAULT
@@ -176,32 +181,32 @@ namespace aux {
 #define AUX778076_COUNT_ARGS_USE_STANDARD_PP_PRIMITIVES
 #include <boost/mpl/aux_/count_args.hpp>
 
-template<
-      AUX778076_SEQUENCE_PARAMS()
+template <
+    AUX778076_SEQUENCE_PARAMS()
     >
-struct BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_impl)
+struct BOOST_PP_CAT ( AUX778076_SEQUENCE_NAME, _impl )
 {
-    typedef aux::BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_count_args)<
-          BOOST_PP_ENUM_PARAMS(AUX778076_SEQUENCE_LIMIT, AUX778076_SEQUENCE_PARAM_NAME)
-        > arg_num_;
-    
-    typedef typename aux::BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_chooser)< arg_num_::value >
-        ::template result_< AUX778076_SEQUENCE_ARGS() >::type type;
+	typedef aux::BOOST_PP_CAT ( AUX778076_SEQUENCE_NAME, _count_args ) <
+	BOOST_PP_ENUM_PARAMS ( AUX778076_SEQUENCE_LIMIT, AUX778076_SEQUENCE_PARAM_NAME )
+	> arg_num_;
+
+	typedef typename aux::BOOST_PP_CAT ( AUX778076_SEQUENCE_NAME, _chooser ) < arg_num_::value >
+	::template result_< AUX778076_SEQUENCE_ARGS() >::type type;
 };
 
 } // namespace aux
 
-template<
-      AUX778076_SEQUENCE_DEFAULT_PARAMS()
+template <
+    AUX778076_SEQUENCE_DEFAULT_PARAMS()
     >
 struct AUX778076_SEQUENCE_NAME
-    : aux::BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_impl)<
-          AUX778076_SEQUENCE_ARGS()
-        >::type
+: aux::BOOST_PP_CAT ( AUX778076_SEQUENCE_NAME, _impl ) <
+AUX778076_SEQUENCE_ARGS()
+>::type
 {
-    typedef typename aux::BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_impl)<
-          AUX778076_SEQUENCE_ARGS()
-        >::type type;
+    typedef typename aux::BOOST_PP_CAT ( AUX778076_SEQUENCE_NAME, _impl ) <
+    AUX778076_SEQUENCE_ARGS()
+    >::type type;
 };
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -222,7 +227,8 @@ struct AUX778076_SEQUENCE_NAME
 #   undef AUX778076_SEQUENCE_NAME
 #   undef AUX778076_SEQUENCE_INTEGRAL_WRAPPER
 
-}}
+}
+}
 
 ///// iteration
 
@@ -234,27 +240,27 @@ struct AUX778076_SEQUENCE_NAME
 #if i_ == AUX778076_SEQUENCE_LIMIT
 
 /// primary template (not a specialization!)
-template<
-      AUX778076_SEQUENCE_N_PARAMS(i_)
+template <
+    AUX778076_SEQUENCE_N_PARAMS ( i_ )
     >
 struct AUX778076_SEQUENCE_NAME
-    : AUX778076_SEQUENCE_NAME_N(i_)< AUX778076_SEQUENCE_N_ARGS(i_) >
+: AUX778076_SEQUENCE_NAME_N ( i_ ) < AUX778076_SEQUENCE_N_ARGS ( i_ ) >
 {
-    typedef typename AUX778076_SEQUENCE_NAME_N(i_)< AUX778076_SEQUENCE_N_ARGS(i_) >::type type;
+	typedef typename AUX778076_SEQUENCE_NAME_N ( i_ ) < AUX778076_SEQUENCE_N_ARGS ( i_ ) >::type type;
 };
 
 #else
 
-template<
-      AUX778076_SEQUENCE_N_PARAMS(i_)
+template <
+    AUX778076_SEQUENCE_N_PARAMS ( i_ )
     >
-struct AUX778076_SEQUENCE_NAME< AUX778076_SEQUENCE_N_PARTIAL_SPEC_ARGS(i_) >
-    : AUX778076_SEQUENCE_NAME_N(i_)< AUX778076_SEQUENCE_N_ARGS(i_) >
+struct AUX778076_SEQUENCE_NAME< AUX778076_SEQUENCE_N_PARTIAL_SPEC_ARGS ( i_ ) >
+: AUX778076_SEQUENCE_NAME_N ( i_ ) < AUX778076_SEQUENCE_N_ARGS ( i_ ) >
 {
 #if i_ > 0 || defined(AUX778076_SEQUENCE_INTEGRAL_WRAPPER)
-    typedef typename AUX778076_SEQUENCE_NAME_N(i_)< AUX778076_SEQUENCE_N_ARGS(i_) >::type type;
+	typedef typename AUX778076_SEQUENCE_NAME_N ( i_ ) < AUX778076_SEQUENCE_N_ARGS ( i_ ) >::type type;
 #else
-    typedef AUX778076_SEQUENCE_NAME_N(i_)< AUX778076_SEQUENCE_N_ARGS(i_) >::type type;
+	typedef AUX778076_SEQUENCE_NAME_N ( i_ ) < AUX778076_SEQUENCE_N_ARGS ( i_ ) >::type type;
 #endif
 };
 
@@ -262,27 +268,28 @@ struct AUX778076_SEQUENCE_NAME< AUX778076_SEQUENCE_N_PARTIAL_SPEC_ARGS(i_) >
 
 #   else
 
-namespace aux {
+namespace aux
+{
 
 template<>
-struct BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_chooser)<i_>
+struct BOOST_PP_CAT ( AUX778076_SEQUENCE_NAME, _chooser ) <i_>
 {
-    template<
-          AUX778076_SEQUENCE_PARAMS()
+    template <
+        AUX778076_SEQUENCE_PARAMS()
         >
     struct result_
     {
 #if i_ > 0 || defined(AUX778076_SEQUENCE_INTEGRAL_WRAPPER)
-        typedef typename AUX778076_SEQUENCE_NAME_N(i_)<
-              AUX778076_SEQUENCE_N_ARGS(i_)
-            >::type type;
+        typedef typename AUX778076_SEQUENCE_NAME_N ( i_ ) <
+        AUX778076_SEQUENCE_N_ARGS ( i_ )
+        >::type type;
 #else
-        typedef AUX778076_SEQUENCE_NAME_N(i_)<
-              AUX778076_SEQUENCE_N_ARGS(i_)
-            >::type type;
+        typedef AUX778076_SEQUENCE_NAME_N ( i_ ) <
+        AUX778076_SEQUENCE_N_ARGS ( i_ )
+        >::type type;
 #endif
     };
-};
+    };
 
 } // namespace aux
 

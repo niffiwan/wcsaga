@@ -20,54 +20,60 @@
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/utility/traits_utils.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+namespace boost
+{
+namespace xpressive
+{
+namespace detail
 {
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // posix_charset_matcher
-    //
-    template<typename Traits>
-    struct posix_charset_matcher
-      : quant_style_fixed_width<1>
-    {
-        typedef Traits traits_type;
-        typedef typename Traits::char_class_type char_class_type;
+///////////////////////////////////////////////////////////////////////////////
+// posix_charset_matcher
+//
+template<typename Traits>
+struct posix_charset_matcher
+		: quant_style_fixed_width<1>
+{
+	typedef Traits traits_type;
+	typedef typename Traits::char_class_type char_class_type;
 
-        posix_charset_matcher(char_class_type m, bool no)
-          : not_(no)
-          , mask_(m)
-        {
-            BOOST_ASSERT(0 != this->mask_);
-        }
+	posix_charset_matcher ( char_class_type m, bool no )
+		: not_ ( no )
+		, mask_ ( m )
+	{
+		BOOST_ASSERT ( 0 != this->mask_ );
+	}
 
-        void inverse()
-        {
-            this->not_ = !this->not_;
-        }
+	void inverse()
+	{
+		this->not_ = !this->not_;
+	}
 
-        template<typename BidiIter, typename Next>
-        bool match(match_state<BidiIter> &state, Next const &next) const
-        {
-            if(state.eos() || this->not_ == traits_cast<Traits>(state).isctype(
-                *state.cur_, this->mask_))
-            {
-                return false;
-            }
+	template<typename BidiIter, typename Next>
+	bool match ( match_state<BidiIter> &state, Next const &next ) const
+	{
+		if ( state.eos() || this->not_ == traits_cast<Traits> ( state ).isctype (
+		            *state.cur_, this->mask_ ) )
+		{
+			return false;
+		}
 
-            ++state.cur_;
-            if(next.match(state))
-            {
-                return true;
-            }
+		++state.cur_;
+		if ( next.match ( state ) )
+		{
+			return true;
+		}
 
-            --state.cur_;
-            return false;
-        }
+		--state.cur_;
+		return false;
+	}
 
-        bool not_;
-        char_class_type mask_;
-    };
+	bool not_;
+	char_class_type mask_;
+};
 
-}}}
+}
+}
+}
 
 #endif

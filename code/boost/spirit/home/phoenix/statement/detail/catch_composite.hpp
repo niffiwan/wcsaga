@@ -13,50 +13,54 @@
 #include <boost/spirit/home/phoenix/core/composite.hpp>
 #include <boost/spirit/home/phoenix/core/compose.hpp>
 
-namespace boost { namespace phoenix {
+namespace boost
+{
+namespace phoenix
+{
 namespace detail
 {
-    struct catch_composite_eval
-    {
-        template<typename Env, typename Actor>
-        struct result :
-            eval_result<typename Actor::eval_type, Env> {};
+struct catch_composite_eval
+{
+	template<typename Env, typename Actor>
+	struct result :
+			eval_result<typename Actor::eval_type, Env> {};
 
-        template<typename Rt, typename Env, typename Actor>
-        static typename result<Env,Actor>::type
-        eval(const Env& env, Actor& actor)
-        {
-            return actor.eval(env);
-        }
-    };
+	template<typename Rt, typename Env, typename Actor>
+	static typename result<Env, Actor>::type
+	eval ( const Env &env, Actor &actor )
+	{
+		return actor.eval ( env );
+	}
+};
 
-    template<typename Exception, typename Actor>
-    struct catch_composite :
-        composite<catch_composite_eval, fusion::vector<Actor> >
-    {
-        catch_composite(const Actor& actor)
-            : composite<catch_composite_eval, fusion::vector<Actor> >(actor) { }
+template<typename Exception, typename Actor>
+struct catch_composite :
+		composite<catch_composite_eval, fusion::vector<Actor> >
+{
+	catch_composite ( const Actor &actor )
+		: composite<catch_composite_eval, fusion::vector<Actor> > ( actor ) { }
 
-        typedef Exception exception_type;
-    };
+	typedef Exception exception_type;
+};
 
-    template<typename Exception, typename Actor>
-    struct as_catch_actor
-    {
-        typedef catch_composite<
-            Exception,
-            Actor> comp;
+template<typename Exception, typename Actor>
+struct as_catch_actor
+{
+	typedef catch_composite <
+	Exception,
+	Actor > comp;
 
-        typedef actor<comp> type;
-    };
+	typedef actor<comp> type;
+};
 
-    template<typename Exception, typename Actor>
-    inline typename as_catch_actor<Exception, Actor>::type
-    catch_actor(const Actor& actor)
-    {
-        return catch_composite<Exception,Actor>(actor);
-    }
+template<typename Exception, typename Actor>
+inline typename as_catch_actor<Exception, Actor>::type
+catch_actor ( const Actor &actor )
+{
+	return catch_composite<Exception, Actor> ( actor );
 }
-}}
+}
+}
+}
 
 #endif

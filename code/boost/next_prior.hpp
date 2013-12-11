@@ -14,7 +14,8 @@
 
 #include <iterator>
 
-namespace boost {
+namespace boost
+{
 
 //  Helper functions for classes like bidirectional iterators not supporting
 //  operator+ and operator-
@@ -27,23 +28,23 @@ namespace boost {
 //  Contributed by Dave Abrahams
 
 template <class T>
-inline T next(T x) { return ++x; }
+inline T next ( T x ) { return ++x; }
 
 template <class T, class Distance>
-inline T next(T x, Distance n)
+inline T next ( T x, Distance n )
 {
-    std::advance(x, n);
-    return x;
+	std::advance ( x, n );
+	return x;
 }
 
 template <class T>
-inline T prior(T x) { return --x; }
+inline T prior ( T x ) { return --x; }
 
 template <class T, class Distance>
-inline T prior(T x, Distance n)
+inline T prior ( T x, Distance n )
 {
-    std::advance(x, -n);
-    return x;
+	std::advance ( x, -n );
+	return x;
 }
 
 } // namespace boost

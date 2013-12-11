@@ -18,56 +18,63 @@
 #include <boost/noncopyable.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/type_traits/aligned_storage.hpp>
-#include <boost/type_traits/alignment_of.hpp> 
+#include <boost/type_traits/alignment_of.hpp>
 
-namespace boost{
+namespace boost
+{
 
-namespace multi_index{
+namespace multi_index
+{
 
-namespace detail{
+namespace detail
+{
 
 /* constructs a stack-based object from a serialization archive */
 
 template<typename T>
-struct archive_constructed:private noncopyable
+struct archive_constructed: private noncopyable
 {
-  template<class Archive>
-  archive_constructed(Archive& ar,const unsigned int version)
-  {
-    serialization::load_construct_data_adl(ar,&get(),version);
-    BOOST_TRY{
-      ar>>get();
-    }
-    BOOST_CATCH(...){
-      (&get())->~T();
-      BOOST_RETHROW;
-    }
-    BOOST_CATCH_END
-  }
+	template<class Archive>
+	archive_constructed ( Archive &ar, const unsigned int version )
+	{
+		serialization::load_construct_data_adl ( ar, &get(), version );
+		BOOST_TRY
+		{
+			ar >> get();
+		}
+		BOOST_CATCH ( ... )
+		{
+			( &get() )->~T();
+			BOOST_RETHROW;
+		}
+		BOOST_CATCH_END
+	}
 
-  template<class Archive>
-  archive_constructed(const char* name,Archive& ar,const unsigned int version)
-  {
-    serialization::load_construct_data_adl(ar,&get(),version);
-    BOOST_TRY{
-      ar>>serialization::make_nvp(name,get());
-    }
-    BOOST_CATCH(...){
-      (&get())->~T();
-      BOOST_RETHROW;
-    }
-    BOOST_CATCH_END
-  }
+	template<class Archive>
+	archive_constructed ( const char *name, Archive &ar, const unsigned int version )
+	{
+		serialization::load_construct_data_adl ( ar, &get(), version );
+		BOOST_TRY
+		{
+			ar >> serialization::make_nvp ( name, get() );
+		}
+		BOOST_CATCH ( ... )
+		{
+			( &get() )->~T();
+			BOOST_RETHROW;
+		}
+		BOOST_CATCH_END
+	}
 
-  ~archive_constructed()
-  {
-    (&get())->~T();
-  }
+	~archive_constructed()
+	{
+		( &get() )->~T();
+	}
 
-  T& get(){return *static_cast<T*>(static_cast<void*>(&space));}
+	T &get() {return *static_cast<T *> ( static_cast<void *> ( &space ) );}
 
 private:
-  typename aligned_storage<sizeof(T),alignment_of<T>::value>::type space;
+	typename aligned_storage<sizeof ( T ), alignment_of<T>::value>::type space;
 };
 
 } /* namespace multi_index::detail */

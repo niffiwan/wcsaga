@@ -8,24 +8,30 @@
 
 # include <boost/mpl/bool.hpp>
 
-namespace boost { namespace python {
+namespace boost
+{
+namespace python
+{
 
 template <class T> class wrapper;
 
-namespace detail { 
+namespace detail
+{
 
 template <class T>
-inline type_info unwrap_type_id(T*, ...)
+inline type_info unwrap_type_id ( T *, ... )
 {
-    return type_id<T>();
+	return type_id<T>();
 }
 
 template <class U, class T>
-inline type_info unwrap_type_id(U*, wrapper<T>*)
+inline type_info unwrap_type_id ( U *, wrapper<T> * )
 {
-    return type_id<T>();
+	return type_id<T>();
 }
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 
 #endif // UNWRAP_TYPE_ID_DWA2004722_HPP

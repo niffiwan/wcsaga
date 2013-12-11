@@ -33,65 +33,68 @@
 #include <boost/throw_exception.hpp>
 #include <boost/asio/detail/pop_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 class win_event
-  : private noncopyable
+	: private noncopyable
 {
 public:
-  // Constructor.
-  win_event()
-    : event_(::CreateEvent(0, true, false, 0))
-  {
-    if (!event_)
-    {
-      DWORD last_error = ::GetLastError();
-      boost::system::system_error e(
-          boost::system::error_code(last_error,
-            boost::asio::error::get_system_category()),
-          "event");
-      boost::throw_exception(e);
-    }
-  }
+	// Constructor.
+	win_event()
+		: event_ ( ::CreateEvent ( 0, true, false, 0 ) )
+	{
+		if ( !event_ )
+		{
+			DWORD last_error = ::GetLastError();
+			boost::system::system_error e (
+			    boost::system::error_code ( last_error,
+			                                boost::asio::error::get_system_category() ),
+			    "event" );
+			boost::throw_exception ( e );
+		}
+	}
 
-  // Destructor.
-  ~win_event()
-  {
-    ::CloseHandle(event_);
-  }
+	// Destructor.
+	~win_event()
+	{
+		::CloseHandle ( event_ );
+	}
 
-  // Signal the event.
-  template <typename Lock>
-  void signal(Lock& lock)
-  {
-    BOOST_ASSERT(lock.locked());
-    (void)lock;
-    ::SetEvent(event_);
-  }
+	// Signal the event.
+	template <typename Lock>
+	void signal ( Lock &lock )
+	{
+		BOOST_ASSERT ( lock.locked() );
+		( void ) lock;
+		::SetEvent ( event_ );
+	}
 
-  // Reset the event.
-  template <typename Lock>
-  void clear(Lock& lock)
-  {
-    BOOST_ASSERT(lock.locked());
-    (void)lock;
-    ::ResetEvent(event_);
-  }
+	// Reset the event.
+	template <typename Lock>
+	void clear ( Lock &lock )
+	{
+		BOOST_ASSERT ( lock.locked() );
+		( void ) lock;
+		::ResetEvent ( event_ );
+	}
 
-  // Wait for the event to become signalled.
-  template <typename Lock>
-  void wait(Lock& lock)
-  {
-    BOOST_ASSERT(lock.locked());
-    lock.unlock();
-    ::WaitForSingleObject(event_, INFINITE);
-    lock.lock();
-  }
+	// Wait for the event to become signalled.
+	template <typename Lock>
+	void wait ( Lock &lock )
+	{
+		BOOST_ASSERT ( lock.locked() );
+		lock.unlock();
+		::WaitForSingleObject ( event_, INFINITE );
+		lock.lock();
+	}
 
 private:
-  HANDLE event_;
+	HANDLE event_;
 };
 
 } // namespace detail

@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -45,9 +45,9 @@ extern GLenum GL_texture_face;
 extern GLfloat GL_anisotropy;
 extern bool GL_rendering_to_framebuffer;
 
-void opengl_switch_arb(int unit, int state);
+void opengl_switch_arb ( int unit, int state );
 void opengl_tcache_init();
-void opengl_free_texture_slot(int n);
+void opengl_free_texture_slot ( int n );
 void opengl_tcache_flush();
 void opengl_tcache_shutdown();
 void opengl_tcache_frame();
@@ -56,17 +56,17 @@ void opengl_set_modulate_tex_env();
 void opengl_preload_init();
 GLfloat opengl_get_max_anisotropy();
 //void opengl_set_anisotropy(GLfloat aniso_value = GL_anisotropy);
-void opengl_kill_render_target(int slot);
-int opengl_make_render_target(int handle, int slot, int* w, int* h, ubyte* bpp, int* mm_lvl, int flags);
-int opengl_set_render_target(int slot, int face = -1, int is_static = 0);
-int opengl_export_image(int slot, int width, int height, int alpha, int num_mipmaps, ubyte* image_data = NULL);
-void opengl_set_texture_target(GLenum target = GL_TEXTURE_2D);
-void opengl_set_texture_face(GLenum face = GL_TEXTURE_2D);
+void opengl_kill_render_target ( int slot );
+int opengl_make_render_target ( int handle, int slot, int *w, int *h, ubyte *bpp, int *mm_lvl, int flags );
+int opengl_set_render_target ( int slot, int face = -1, int is_static = 0 );
+int opengl_export_image ( int slot, int width, int height, int alpha, int num_mipmaps, ubyte *image_data = NULL );
+void opengl_set_texture_target ( GLenum target = GL_TEXTURE_2D );
+void opengl_set_texture_face ( GLenum face = GL_TEXTURE_2D );
 
-int gr_opengl_tcache_set(int bitmap_handle, int bitmap_type, float* u_scale, float* v_scale, int stage = 0);
-int gr_opengl_preload(int bitmap_num, int is_aabitmap);
-void gr_opengl_set_texture_panning(float u, float v, bool enable);
-void gr_opengl_set_texture_addressing(int mode);
+int gr_opengl_tcache_set ( int bitmap_handle, int bitmap_type, float *u_scale, float *v_scale, int stage = 0 );
+int gr_opengl_preload ( int bitmap_num, int is_aabitmap );
+void gr_opengl_set_texture_panning ( float u, float v, bool enable );
+void gr_opengl_set_texture_addressing ( int mode );
 
 /* New code */
 namespace opengl
@@ -100,7 +100,7 @@ public:
 	 * @param h %texture height
 	 * @return pointer to the %texture object
 	 */
-	static texture* create(int w, int h);
+	static texture *create ( int w, int h );
 
 	/** Create new texture.
 	 * Creates @e w x @e h %texture.
@@ -109,7 +109,7 @@ public:
 	 * @param fmt %texture format
 	 * @return pointer to the %texture object
 	 */
-	static texture* create(int w, int h, format fmt);
+	static texture *create ( int w, int h, format fmt );
 
 	~texture();
 
@@ -135,7 +135,7 @@ public:
 	void bind() const
 	{
 		// This class currently supports only GL_TEXTURE_2D.
-		glBindTexture(GL_TEXTURE_2D, tex);
+		glBindTexture ( GL_TEXTURE_2D, tex );
 	}
 };
 
@@ -151,27 +151,27 @@ public:
 class texture_pool
 {
 private:
-	static SCP_multimap<std::pair<int, int>, texture*> pool;
+	static SCP_multimap<std::pair<int, int>, texture *> pool;
 public:
 	/** Acquire texture.
 	 * Get a %texture from the pool or create a new one if nothing appropriate in the cache.
 	 * @param w %texture width
 	 * @param h %texture height
 	 */
-	static texture* acquire(int w, int h)
+	static texture *acquire ( int w, int h )
 	{
-		Assert(w > 0 && h > 0);
-		SCP_multimap<std::pair<int, int>, texture*>::iterator itr = pool.find(std::pair<int, int>(w, h));
-		if (itr != pool.end())
+		Assert ( w > 0 && h > 0 );
+		SCP_multimap<std::pair<int, int>, texture *>::iterator itr = pool.find ( std::pair<int, int> ( w, h ) );
+		if ( itr != pool.end() )
 		{
-			texture* tex = (*itr).second;
-			pool.erase(itr);
+			texture *tex = ( *itr ).second;
+			pool.erase ( itr );
 			return tex;
 		}
 		else
 		{
-			mprintf(("texture_pool: creating new %dx%d texture\n", w, h));
-			return texture::create(w, h);
+			mprintf ( ( "texture_pool: creating new %dx%d texture\n", w, h ) );
+			return texture::create ( w, h );
 		}
 	}
 
@@ -179,12 +179,12 @@ public:
 	 * Put the %texture back in the pool.
 	 * @param tex released texture
 	 */
-	static void release(texture* tex)
+	static void release ( texture *tex )
 	{
-		if (tex)
+		if ( tex )
 		{
-			pool.insert(std::pair<std::pair<int, int>, texture*>(std::pair<int, int>(tex->get_width(),
-				tex->get_height()), tex));
+			pool.insert ( std::pair<std::pair<int, int>, texture *> ( std::pair<int, int> ( tex->get_width(),
+			              tex->get_height() ), tex ) );
 		}
 	}
 };
@@ -201,9 +201,9 @@ private:
 	GLuint rb;
 	int width, height;
 
-	render_buffer(int w, int h);
+	render_buffer ( int w, int h );
 
-	static SCP_multimap<std::pair<int, int>, render_buffer*> pool;
+	static SCP_multimap<std::pair<int, int>, render_buffer *> pool;
 public:
 	~render_buffer();
 
@@ -230,21 +230,21 @@ public:
 	 * @param w render buffer width
 	 * @param h render buffer height
 	 */
-	static render_buffer* acquire(int w, int h)
+	static render_buffer *acquire ( int w, int h )
 	{
-		Assert(w > 0 && h > 0);
+		Assert ( w > 0 && h > 0 );
 
-		SCP_multimap<std::pair<int, int>, render_buffer*>::iterator itr = pool.find(std::pair<int, int>(w, h));
-		if (itr != pool.end())
+		SCP_multimap<std::pair<int, int>, render_buffer *>::iterator itr = pool.find ( std::pair<int, int> ( w, h ) );
+		if ( itr != pool.end() )
 		{
-			render_buffer* rb = (*itr).second;
-			pool.erase(itr);
+			render_buffer *rb = ( *itr ).second;
+			pool.erase ( itr );
 			return rb;
 		}
 		else
 		{
-			mprintf(("render_buffer: creating new %dx%d render buffer\n", w, h));
-			return new render_buffer(w, h);
+			mprintf ( ( "render_buffer: creating new %dx%d render buffer\n", w, h ) );
+			return new render_buffer ( w, h );
 		}
 	}
 
@@ -252,11 +252,11 @@ public:
 	 * Put the %render buffer back in the pool.
 	 * @param tex released render buffer
 	 */
-	static void release(render_buffer* tex)
+	static void release ( render_buffer *tex )
 	{
-		Assert(tex);
-		pool.insert(std::pair<std::pair<int, int>, render_buffer*>(std::pair<int, int>(tex->get_width(),
-			tex->get_height()), tex));
+		Assert ( tex );
+		pool.insert ( std::pair<std::pair<int, int>, render_buffer *> ( std::pair<int, int> ( tex->get_width(),
+		              tex->get_height() ), tex ) );
 	}
 
 };
@@ -267,25 +267,25 @@ public:
  * Class methods provide render buffer object pool based on the same algorithm as texture_pool,
  * thus also O(log N).
  * @note Each rendering target has to be applied before invoking any other non-constant member function.
- * @note This class duplicates functionality of legacy rendering target management functions in 
+ * @note This class duplicates functionality of legacy rendering target management functions in
  * @c gropengltexture.h. They will be merged after @c bmpman overhaul.
  */
 class render_target
 {
 private:
-	render_buffer* depth_rb;
-	texture* depth_t;
+	render_buffer *depth_rb;
+	texture *depth_t;
 
 	bool use_rb;
 
 	GLuint target;
 	int width, height;
 
-	static render_target* current;
+	static render_target *current;
 
-	static SCP_multimap<std::pair<int, int>, render_target*> pool;
+	static SCP_multimap<std::pair<int, int>, render_target *> pool;
 
-	render_target(int w, int h);
+	render_target ( int w, int h );
 	~render_target();
 public:
 	/** Apply rendering target. */
@@ -299,36 +299,36 @@ public:
 	};
 
 	/** Clear buffers of the default rendering target.
-	 * @param flags buffers to clear 
+	 * @param flags buffers to clear
 	 * @param black determines whether explicitly set clear color to black
 	 * @see render_target::clr_buffers
 	 */
-	static inline void clear_default(int flags, bool black = true)
+	static inline void clear_default ( int flags, bool black = true )
 	{
-		if (black)
-			glClearColor(0, 0, 0, 0);
-		glClear(flags);
+		if ( black )
+			glClearColor ( 0, 0, 0, 0 );
+		glClear ( flags );
 	}
 
 	/** Clear buffers.
-	 * @param flags buffers to clear 
+	 * @param flags buffers to clear
 	 * @param black determines whether explicitly set clear color to black
 	 * @see render_target::clr_buffers
 	 */
-	inline void clear(int flags, bool black = true)
+	inline void clear ( int flags, bool black = true )
 	{
-		Assert(current == this);
+		Assert ( current == this );
 
-		if (black)
-			glClearColor(0, 0, 0, 0);
-		glClear(flags);
+		if ( black )
+			glClearColor ( 0, 0, 0, 0 );
+		glClear ( flags );
 	}
 
 	/** Apply default rendering target. */
 	static void apply_default();
 
 	/** Get depth texture. */
-	texture* get_depth() const
+	texture *get_depth() const
 	{
 		return depth_t;
 	}
@@ -336,32 +336,32 @@ public:
 	/** Use render buffer for depth buffer. */
 	void use_depth_rb()
 	{
-		Assert(current == this);
+		Assert ( current == this );
 
-		if (use_rb)
+		if ( use_rb )
 			return;
 
 		use_rb = true;
 
-		if (!depth_rb)
-			depth_rb = render_buffer::acquire(width, height);
-		vglFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT,
-			depth_rb->get_id());
+		if ( !depth_rb )
+			depth_rb = render_buffer::acquire ( width, height );
+		vglFramebufferRenderbufferEXT ( GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT,
+		                                depth_rb->get_id() );
 	}
 
 	/** Set depth texture. */
-	void set_depth(texture* tex)
+	void set_depth ( texture *tex )
 	{
-		Assert(current == this);
+		Assert ( current == this );
 
-		Assert(tex);
-		Assert(tex->get_width() == get_width());
-		Assert(tex->get_height() == get_height());
+		Assert ( tex );
+		Assert ( tex->get_width() == get_width() );
+		Assert ( tex->get_height() == get_height() );
 
 		use_rb = false;
 
 		depth_t = tex;
-		vglFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, depth_t->get_id(), 0);
+		vglFramebufferTexture2DEXT ( GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, depth_t->get_id(), 0 );
 	}
 
 	/** Get rendering target width. */
@@ -380,14 +380,14 @@ public:
 	 * @param x attachment number
 	 * @param tex texture to attach
 	 */
-	void attach_texture(unsigned int x, const texture* tex);
+	void attach_texture ( unsigned int x, const texture *tex );
 
 	/** Attach texture as the default attachment.
 	 * @param tex texture to attach
 	 */
-	void attach_texture(const texture* tex)
+	void attach_texture ( const texture *tex )
 	{
-		attach_texture(0, tex);
+		attach_texture ( 0, tex );
 	}
 
 	/** Check rendering target status.
@@ -400,21 +400,21 @@ public:
 	 * @param w rendering target width
 	 * @param h rendering target height
 	 */
-	static render_target* acquire(int w, int h)
+	static render_target *acquire ( int w, int h )
 	{
-		Assert(w > 0 && h > 0);
+		Assert ( w > 0 && h > 0 );
 
-		SCP_multimap<std::pair<int, int>, render_target*>::iterator itr = pool.find(std::pair<int, int>(w, h));
-		if (itr != pool.end())
+		SCP_multimap<std::pair<int, int>, render_target *>::iterator itr = pool.find ( std::pair<int, int> ( w, h ) );
+		if ( itr != pool.end() )
 		{
-			render_target* rt = (*itr).second;
-			pool.erase(itr);
+			render_target *rt = ( *itr ).second;
+			pool.erase ( itr );
 			return rt;
 		}
 		else
 		{
-			mprintf(("render_target: creating new %dx%d FBO\n", w, h));
-			return new render_target(w, h);
+			mprintf ( ( "render_target: creating new %dx%d FBO\n", w, h ) );
+			return new render_target ( w, h );
 		}
 	}
 
@@ -422,11 +422,11 @@ public:
 	 * Put the rendering target back in the pool.
 	 * @param rt released rendering target
 	 */
-	static void release(render_target* rt)
+	static void release ( render_target *rt )
 	{
-		Assert(rt);
-		pool.insert(std::pair<std::pair<int, int>, render_target*>(std::pair<int, int>(rt->get_width(),
-			rt->get_height()), rt));
+		Assert ( rt );
+		pool.insert ( std::pair<std::pair<int, int>, render_target *> ( std::pair<int, int> ( rt->get_width(),
+		              rt->get_height() ), rt ) );
 	}
 
 	/** Draw a quad. */
@@ -434,4 +434,4 @@ public:
 };
 }
 
-#endif	//_GROPENGLTEXTURE_H
+#endif  //_GROPENGLTEXTURE_H

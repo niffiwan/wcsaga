@@ -17,8 +17,10 @@
 
 #include <boost/asio/detail/push_options.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 template <typename Stream>
 class buffered_write_stream;

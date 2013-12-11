@@ -13,94 +13,99 @@
 #include <boost/numeric/interval/detail/interval_prototype.hpp>
 #include <boost/numeric/interval/detail/test_input.hpp>
 
-namespace boost {
-namespace numeric {
-namespace interval_lib {
-namespace compare {
-namespace certain {
+namespace boost
+{
+namespace numeric
+{
+namespace interval_lib
+{
+namespace compare
+{
+namespace certain
+{
 
 template<class T, class Policies1, class Policies2> inline
-bool operator<(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
+bool operator< ( const interval<T, Policies1> &x, const interval<T, Policies2> &y )
 {
-  if (detail::test_input(x, y)) throw comparison_error();
-  return x.upper() < y.lower();
+	if ( detail::test_input ( x, y ) ) throw comparison_error();
+	return x.upper() < y.lower();
 }
 
 template<class T, class Policies> inline
-bool operator<(const interval<T, Policies>& x, const T& y)
+bool operator< ( const interval<T, Policies> &x, const T &y )
 {
-  if (detail::test_input(x, y)) throw comparison_error();
-  return x.upper() < y;
+	if ( detail::test_input ( x, y ) ) throw comparison_error();
+	return x.upper() < y;
 }
 
 template<class T, class Policies1, class Policies2> inline
-bool operator<=(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
+bool operator<= ( const interval<T, Policies1> &x, const interval<T, Policies2> &y )
 {
-  if (detail::test_input(x, y)) throw comparison_error();
-  return x.upper() <= y.lower();
+	if ( detail::test_input ( x, y ) ) throw comparison_error();
+	return x.upper() <= y.lower();
 }
 
 template<class T, class Policies> inline
-bool operator<=(const interval<T, Policies>& x, const T& y)
+bool operator<= ( const interval<T, Policies> &x, const T &y )
 {
-  if (detail::test_input(x, y)) throw comparison_error();
-  return x.upper() <= y;
+	if ( detail::test_input ( x, y ) ) throw comparison_error();
+	return x.upper() <= y;
 }
 
 template<class T, class Policies1, class Policies2> inline
-bool operator>(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
+bool operator> ( const interval<T, Policies1> &x, const interval<T, Policies2> &y )
 {
-  if (detail::test_input(x, y)) throw comparison_error();
-  return x.lower() > y.upper();
+	if ( detail::test_input ( x, y ) ) throw comparison_error();
+	return x.lower() > y.upper();
 }
 
 template<class T, class Policies> inline
-bool operator>(const interval<T, Policies>& x, const T& y)
+bool operator> ( const interval<T, Policies> &x, const T &y )
 {
-  if (detail::test_input(x, y)) throw comparison_error();
-  return x.lower() > y;
+	if ( detail::test_input ( x, y ) ) throw comparison_error();
+	return x.lower() > y;
 }
 
 template<class T, class Policies1, class Policies2> inline
-bool operator>=(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
+bool operator>= ( const interval<T, Policies1> &x, const interval<T, Policies2> &y )
 {
-  if (detail::test_input(x, y)) throw comparison_error();
-  return x.lower() >= y.upper();
+	if ( detail::test_input ( x, y ) ) throw comparison_error();
+	return x.lower() >= y.upper();
 }
 
 template<class T, class Policies> inline
-bool operator>=(const interval<T, Policies>& x, const T& y)
+bool operator>= ( const interval<T, Policies> &x, const T &y )
 {
-  if (detail::test_input(x, y)) throw comparison_error();
-  return x.lower() >= y;
+	if ( detail::test_input ( x, y ) ) throw comparison_error();
+	return x.lower() >= y;
 }
 
 template<class T, class Policies1, class Policies2> inline
-bool operator==(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
+bool operator== ( const interval<T, Policies1> &x, const interval<T, Policies2> &y )
 {
-  if (detail::test_input(x, y)) throw comparison_error();
-  return x.upper() == y.lower() && x.lower() == y.upper();
+	if ( detail::test_input ( x, y ) ) throw comparison_error();
+	return x.upper() == y.lower() && x.lower() == y.upper();
 }
 
 template<class T, class Policies> inline
-bool operator==(const interval<T, Policies>& x, const T& y)
+bool operator== ( const interval<T, Policies> &x, const T &y )
 {
-  if (detail::test_input(x, y)) throw comparison_error();
-  return x.upper() == y && x.lower() == y;
+	if ( detail::test_input ( x, y ) ) throw comparison_error();
+	return x.upper() == y && x.lower() == y;
 }
 
 template<class T, class Policies1, class Policies2> inline
-bool operator!=(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
+bool operator!= ( const interval<T, Policies1> &x, const interval<T, Policies2> &y )
 {
-  if (detail::test_input(x, y)) throw comparison_error();
-  return x.upper() < y.lower() || x.lower() > y.upper();
+	if ( detail::test_input ( x, y ) ) throw comparison_error();
+	return x.upper() < y.lower() || x.lower() > y.upper();
 }
 
 template<class T, class Policies> inline
-bool operator!=(const interval<T, Policies>& x, const T& y)
+bool operator!= ( const interval<T, Policies> &x, const T &y )
 {
-  if (detail::test_input(x, y)) throw comparison_error();
-  return x.upper() < y || x.lower() > y;
+	if ( detail::test_input ( x, y ) ) throw comparison_error();
+	return x.upper() < y || x.lower() > y;
 }
 
 } // namespace certain

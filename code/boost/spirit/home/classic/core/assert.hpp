@@ -22,16 +22,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 #if !defined(BOOST_SPIRIT_ASSERT)
 #if defined(NDEBUG)
-    #define BOOST_SPIRIT_ASSERT(x)
+#define BOOST_SPIRIT_ASSERT(x)
 #elif defined (BOOST_SPIRIT_ASSERT_EXCEPTION)
-    #define BOOST_SPIRIT_ASSERT_AUX(f, l, x) BOOST_SPIRIT_ASSERT_AUX2(f, l, x)
-    #define BOOST_SPIRIT_ASSERT_AUX2(f, l, x)                                   \
+#define BOOST_SPIRIT_ASSERT_AUX(f, l, x) BOOST_SPIRIT_ASSERT_AUX2(f, l, x)
+#define BOOST_SPIRIT_ASSERT_AUX2(f, l, x)                                   \
     do{ if (!(x)) boost::throw_exception(                                       \
         BOOST_SPIRIT_ASSERT_EXCEPTION(f "(" #l "): " #x)); } while(0)
-    #define BOOST_SPIRIT_ASSERT(x) BOOST_SPIRIT_ASSERT_AUX(__FILE__, __LINE__, x)
+#define BOOST_SPIRIT_ASSERT(x) BOOST_SPIRIT_ASSERT_AUX(__FILE__, __LINE__, x)
 #else
-    #include <cassert>
-    #define BOOST_SPIRIT_ASSERT(x) assert(x)
+#include <cassert>
+#define BOOST_SPIRIT_ASSERT(x) assert(x)
 #endif
 #endif // !defined(BOOST_SPIRIT_ASSERT)
 

@@ -41,34 +41,39 @@
 
 #else // defined(BOOST_NO_VOID_RETURNS)
 
-namespace boost {
-namespace detail { namespace variant {
+namespace boost
+{
+namespace detail
+{
+namespace variant
+{
 
 struct fake_return_void
 {
-    fake_return_void()
-    {
-    }
+	fake_return_void()
+	{
+	}
 
-    template <typename T>
-    fake_return_void(const T&)
-    {
-    }
+	template <typename T>
+	fake_return_void ( const T & )
+	{
+	}
 };
 
 template <typename T>
 struct no_void_returns_helper
 {
-    typedef T type;
+	typedef T type;
 };
 
 template <>
 struct no_void_returns_helper<void>
 {
-    typedef fake_return_void type;
+	typedef fake_return_void type;
 };
 
-}} // namespace detail::variant
+}
+} // namespace detail::variant
 } // namespace boost
 
 #define BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T) \

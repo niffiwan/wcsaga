@@ -14,24 +14,24 @@
 
 namespace boost
 {
-  namespace signals2
-  {
-    namespace detail
-    {
-      template<typename ResultSlot, typename SlotIn, typename SlotFunction>
-        ResultSlot replace_slot_function(const SlotIn &slot_in, const SlotFunction &fun)
-      {
-        ResultSlot slot(fun);
-        slot_base::tracked_container_type tracked_objects = slot_in.tracked_objects();
-        slot_base::tracked_container_type::const_iterator it;
-        for(it = tracked_objects.begin(); it != tracked_objects.end(); ++it)
-        {
-          slot.track(*it);
-        }
-        return slot;
-      }
-    } // namespace detail
-  } // namespace signals2
+namespace signals2
+{
+namespace detail
+{
+template<typename ResultSlot, typename SlotIn, typename SlotFunction>
+ResultSlot replace_slot_function ( const SlotIn &slot_in, const SlotFunction &fun )
+{
+ResultSlot slot ( fun );
+slot_base::tracked_container_type tracked_objects = slot_in.tracked_objects();
+slot_base::tracked_container_type::const_iterator it;
+for ( it = tracked_objects.begin(); it != tracked_objects.end(); ++it )
+{
+	slot.track ( *it );
+}
+return slot;
+}
+} // namespace detail
+} // namespace signals2
 } // namespace boost
 
 #endif // BOOST_SIGNALS2_DETAIL_REPLACE_SLOT_FUNCTION_HPP

@@ -28,135 +28,135 @@ namespace boost
 namespace detail
 {
 
-inline int32_t compare_and_swap( int32_t * dest_, int32_t compare_, int32_t swap_ )
+inline int32_t compare_and_swap ( int32_t *dest_, int32_t compare_, int32_t swap_ )
 {
-    __asm__ __volatile__( "cas [%1], %2, %0"
-                        : "+r" (swap_)
-                        : "r" (dest_), "r" (compare_)
-                        : "memory" );
+	__asm__ __volatile__ ( "cas [%1], %2, %0"
+	                       : "+r" ( swap_ )
+	                       : "r" ( dest_ ), "r" ( compare_ )
+	                       : "memory" );
 
-    return swap_;
+	return swap_;
 }
 
-inline int32_t atomic_fetch_and_add( int32_t * pw, int32_t dv )
+inline int32_t atomic_fetch_and_add ( int32_t *pw, int32_t dv )
 {
-    // long r = *pw;
-    // *pw += dv;
-    // return r;
+	// long r = *pw;
+	// *pw += dv;
+	// return r;
 
-    for( ;; )
-    {
-        int32_t r = *pw;
+	for ( ;; )
+	{
+		int32_t r = *pw;
 
-        if( __builtin_expect((compare_and_swap(pw, r, r + dv) == r), 1) )
-        {
-            return r;
-        }
-    }
+		if ( __builtin_expect ( ( compare_and_swap ( pw, r, r + dv ) == r ), 1 ) )
+		{
+			return r;
+		}
+	}
 }
 
-inline void atomic_increment( int32_t * pw )
+inline void atomic_increment ( int32_t *pw )
 {
-    atomic_fetch_and_add( pw, 1 );
+	atomic_fetch_and_add ( pw, 1 );
 }
 
-inline int32_t atomic_decrement( int32_t * pw )
+inline int32_t atomic_decrement ( int32_t *pw )
 {
-    return atomic_fetch_and_add( pw, -1 );
+	return atomic_fetch_and_add ( pw, -1 );
 }
 
-inline int32_t atomic_conditional_increment( int32_t * pw )
+inline int32_t atomic_conditional_increment ( int32_t *pw )
 {
-    // long r = *pw;
-    // if( r != 0 ) ++*pw;
-    // return r;
+	// long r = *pw;
+	// if( r != 0 ) ++*pw;
+	// return r;
 
-    for( ;; )
-    {
-        int32_t r = *pw;
+	for ( ;; )
+	{
+		int32_t r = *pw;
 
-        if( r == 0 )
-        {
-            return r;
-        }
+		if ( r == 0 )
+		{
+			return r;
+		}
 
-        if( __builtin_expect( ( compare_and_swap( pw, r, r + 1 ) == r ), 1 ) )
-        {
-            return r;
-        }
-    }    
+		if ( __builtin_expect ( ( compare_and_swap ( pw, r, r + 1 ) == r ), 1 ) )
+		{
+			return r;
+		}
+	}
 }
 
 class sp_counted_base
 {
 private:
 
-    sp_counted_base( sp_counted_base const & );
-    sp_counted_base & operator= ( sp_counted_base const & );
+	sp_counted_base ( sp_counted_base const & );
+	sp_counted_base &operator= ( sp_counted_base const & );
 
-    int32_t use_count_;        // #shared
-    int32_t weak_count_;       // #weak + (#shared != 0)
+	int32_t use_count_;        // #shared
+	int32_t weak_count_;       // #weak + (#shared != 0)
 
 public:
 
-    sp_counted_base(): use_count_( 1 ), weak_count_( 1 )
-    {
-    }
+	sp_counted_base() : use_count_ ( 1 ), weak_count_ ( 1 )
+	{
+	}
 
-    virtual ~sp_counted_base() // nothrow
-    {
-    }
+	virtual ~sp_counted_base() // nothrow
+	{
+	}
 
-    // dispose() is called when use_count_ drops to zero, to release
-    // the resources managed by *this.
+	// dispose() is called when use_count_ drops to zero, to release
+	// the resources managed by *this.
 
-    virtual void dispose() = 0; // nothrow
+	virtual void dispose() = 0; // nothrow
 
-    // destroy() is called when weak_count_ drops to zero.
+	// destroy() is called when weak_count_ drops to zero.
 
-    virtual void destroy() // nothrow
-    {
-        delete this;
-    }
+	virtual void destroy() // nothrow
+	{
+		delete this;
+	}
 
-    virtual void * get_deleter( sp_typeinfo const & ti ) = 0;
+	virtual void *get_deleter ( sp_typeinfo const &ti ) = 0;
 
-    void add_ref_copy()
-    {
-        atomic_increment( &use_count_ );
-    }
+	void add_ref_copy()
+	{
+		atomic_increment ( &use_count_ );
+	}
 
-    bool add_ref_lock() // true on success
-    {
-        return atomic_conditional_increment( &use_count_ ) != 0;
-    }
+	bool add_ref_lock() // true on success
+	{
+		return atomic_conditional_increment ( &use_count_ ) != 0;
+	}
 
-    void release() // nothrow
-    {
-        if( atomic_decrement( &use_count_ ) == 1 )
-        {
-            dispose();
-            weak_release();
-        }
-    }
+	void release() // nothrow
+	{
+		if ( atomic_decrement ( &use_count_ ) == 1 )
+		{
+			dispose();
+			weak_release();
+		}
+	}
 
-    void weak_add_ref() // nothrow
-    {
-        atomic_increment( &weak_count_ );
-    }
+	void weak_add_ref() // nothrow
+	{
+		atomic_increment ( &weak_count_ );
+	}
 
-    void weak_release() // nothrow
-    {
-        if( atomic_decrement( &weak_count_ ) == 1 )
-        {
-            destroy();
-        }
-    }
+	void weak_release() // nothrow
+	{
+		if ( atomic_decrement ( &weak_count_ ) == 1 )
+		{
+			destroy();
+		}
+	}
 
-    long use_count() const // nothrow
-    {
-        return const_cast< int32_t const volatile & >( use_count_ );
-    }
+	long use_count() const // nothrow
+	{
+		return const_cast< int32_t const volatile & > ( use_count_ );
+	}
 };
 
 } // namespace detail

@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,18 +14,21 @@
 #include <boost/units/systems/si/base.hpp>
 #include <boost/units/physical_dimensions/volume.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace si {
+namespace si
+{
 
-typedef unit<volume_dimension,si::system>    volume;
-    
-BOOST_UNITS_STATIC_CONSTANT(cubic_meter,volume);    
-BOOST_UNITS_STATIC_CONSTANT(cubic_meters,volume);   
-BOOST_UNITS_STATIC_CONSTANT(cubic_metre,volume);    
-BOOST_UNITS_STATIC_CONSTANT(cubic_metres,volume);   
+typedef unit<volume_dimension, si::system>    volume;
+
+BOOST_UNITS_STATIC_CONSTANT ( cubic_meter, volume );
+BOOST_UNITS_STATIC_CONSTANT ( cubic_meters, volume );
+BOOST_UNITS_STATIC_CONSTANT ( cubic_metre, volume );
+BOOST_UNITS_STATIC_CONSTANT ( cubic_metres, volume );
 
 } // namespace si
 

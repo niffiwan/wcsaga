@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -27,14 +27,14 @@
 #include "localization/localize.h"
 #include "parse/scripting.h"
 
-#define THREADED	// to use the proper set of macros
+#define THREADED    // to use the proper set of macros
 #include "osapi/osapi.h"
 
 
 #define KEY_BUFFER_SIZE 16
 
 //-------- Variable accessed by outside functions ---------
-ubyte keyd_buffer_type;		// 0=No buffer, 1=buffer ASCII, 2=buffer scans
+ubyte keyd_buffer_type;     // 0=No buffer, 1=buffer ASCII, 2=buffer scans
 ubyte keyd_repeat;
 uint keyd_last_pressed;
 uint keyd_last_released;
@@ -60,13 +60,13 @@ int key_inited = 0;
 
 CRITICAL_SECTION key_lock;
 
-//int Backspace_debug=1;	// global flag that will enable/disable the backspace key from stopping execution
+//int Backspace_debug=1;    // global flag that will enable/disable the backspace key from stopping execution
 // This flag was created since the backspace key is also used to correct mistakes
 // when typing in your pilots callsign.  This global flag is checked before execution
 // is stopped.
 
 #ifdef SCP_UNIX
-	int SDLtoFS2[SDLK_LAST];
+int SDLtoFS2[SDLK_LAST];
 #endif
 
 int ascii_table[128] =
@@ -338,8 +338,8 @@ int shifted_ascii_table[128] =
 int Num_filter_keys;
 int Key_filter[MAX_FILTER_KEYS];
 
-static int Key_numlock_was_on = 0;	// Flag to indicate whether NumLock is on at start
-static int Key_running_NT = 0;		// NT is the OS
+static int Key_numlock_was_on = 0;  // Flag to indicate whether NumLock is on at start
+static int Key_running_NT = 0;      // NT is the OS
 
 int Cheats_enabled = 0;
 int Key_normal_game = 0;
@@ -385,7 +385,8 @@ void FillSDLArray ()
 	SDLtoFS2[SDLK_y] = KEY_Y;
 	SDLtoFS2[SDLK_z] = KEY_Z;
 
-	if (Lcl_gr) {
+	if ( Lcl_gr )
+	{
 		SDLtoFS2[SDLK_WORLD_63] = KEY_MINUS;
 		SDLtoFS2[SDLK_WORLD_20] = KEY_EQUAL;
 		SDLtoFS2[SDLK_MINUS] = KEY_DIVIDE;
@@ -399,7 +400,9 @@ void FillSDLArray ()
 
 		SDLtoFS2[SDLK_CARET] = KEY_LAPOSTRO;
 		SDLtoFS2[SDLK_WORLD_68] = KEY_RAPOSTRO;
-	} else {
+	}
+	else
+	{
 		SDLtoFS2[SDLK_MINUS] = KEY_MINUS;
 		SDLtoFS2[SDLK_EQUALS] = KEY_EQUAL;
 		SDLtoFS2[SDLK_SLASH] = KEY_DIVIDE; // No idea - DDOI
@@ -486,15 +489,16 @@ int key_numlock_is_on()
 {
 #ifdef _WIN32
 	unsigned char keys[256];
-	GetKeyboardState(keys);
-	if ( keys[VK_NUMLOCK]  ) {
+	GetKeyboardState ( keys );
+	if ( keys[VK_NUMLOCK]  )
+	{
 		return 1;
 	}
 	return 0;
 #else
 	int keys[SDLK_LAST];
-	SDL_GetKeyState(keys);
-	if (keys[SDLK_NUMLOCK])
+	SDL_GetKeyState ( keys );
+	if ( keys[SDLK_NUMLOCK] )
 	{
 		return 1;
 	}
@@ -506,9 +510,9 @@ void key_turn_off_numlock()
 {
 #ifdef _WIN32
 	unsigned char keys[256];
-	GetKeyboardState(keys);
+	GetKeyboardState ( keys );
 	keys[VK_NUMLOCK] = 0;
-	SetKeyboardState(keys);
+	SetKeyboardState ( keys );
 #endif
 }
 
@@ -516,50 +520,50 @@ void key_turn_on_numlock()
 {
 #ifdef _WIN32
 	unsigned char keys[256];
-	GetKeyboardState(keys);
+	GetKeyboardState ( keys );
 	keys[VK_NUMLOCK] = 1;
-	SetKeyboardState(keys);
+	SetKeyboardState ( keys );
 #endif
 }
 
-//	Convert a BIOS scancode to ASCII.
-//	If scancode >= 127, returns 255, meaning there is no corresponding ASCII code.
-//	Uses ascii_table and shifted_ascii_table to translate scancode to ASCII.
-int key_to_ascii(int keycode)
+//  Convert a BIOS scancode to ASCII.
+//  If scancode >= 127, returns 255, meaning there is no corresponding ASCII code.
+//  Uses ascii_table and shifted_ascii_table to translate scancode to ASCII.
+int key_to_ascii ( int keycode )
 {
 	int shifted;
 
-	if (!key_inited)
+	if ( !key_inited )
 		return 255;
 
 	shifted = keycode & KEY_SHIFTED;
 	keycode &= 0xFF;
 
-	if (keycode >= 127)
+	if ( keycode >= 127 )
 		return 255;
 
-	if (shifted)
+	if ( shifted )
 		return shifted_ascii_table[keycode];
 	else
 		return ascii_table[keycode];
 }
 
-//	Flush the keyboard buffer.
-//	Clear the keyboard array (keyd_pressed).
+//  Flush the keyboard buffer.
+//  Clear the keyboard array (keyd_pressed).
 void key_flush()
 {
 	int i;
 	uint CurTime;
 
-	if (!key_inited)
+	if ( !key_inited )
 		return;
 
-	ENTER_CRITICAL_SECTION(key_lock);
+	ENTER_CRITICAL_SECTION ( key_lock );
 
 	key_data.keyhead = key_data.keytail = 0;
 
 	//Clear the keyboard buffer
-	for (i = 0; i < KEY_BUFFER_SIZE; i++)
+	for ( i = 0; i < KEY_BUFFER_SIZE; i++ )
 	{
 		key_data.keybuffer[i] = 0;
 		key_data.time_pressed[i] = 0;
@@ -570,7 +574,7 @@ void key_flush()
 	CurTime = timer_get_milliseconds();
 
 
-	for (i = 0; i < NUM_KEYS; i++)
+	for ( i = 0; i < NUM_KEYS; i++ )
 	{
 		keyd_pressed[i] = 0;
 		key_data.TimeKeyDownChecked[i] = CurTime;
@@ -580,16 +584,16 @@ void key_flush()
 		key_data.NumUps[i] = 0;
 	}
 
-	LEAVE_CRITICAL_SECTION(key_lock);
+	LEAVE_CRITICAL_SECTION ( key_lock );
 }
 
-//	A nifty function which performs the function:
-//		n = (n+1) % KEY_BUFFER_SIZE
-//	(assuming positive values of n).
-int add_one(int n)
+//  A nifty function which performs the function:
+//      n = (n+1) % KEY_BUFFER_SIZE
+//  (assuming positive values of n).
+int add_one ( int n )
 {
 	n++;
-	if (n >= KEY_BUFFER_SIZE)
+	if ( n >= KEY_BUFFER_SIZE )
 		n = 0;
 	return n;
 }
@@ -599,24 +603,24 @@ int key_checkch()
 {
 	int is_one_waiting = 0;
 
-	if (!key_inited)
+	if ( !key_inited )
 		return 0;
 
-	ENTER_CRITICAL_SECTION(key_lock);
+	ENTER_CRITICAL_SECTION ( key_lock );
 
-	if (key_data.keytail != key_data.keyhead)
+	if ( key_data.keytail != key_data.keyhead )
 	{
 		is_one_waiting = 1;
 	}
 
-	LEAVE_CRITICAL_SECTION(key_lock);
+	LEAVE_CRITICAL_SECTION ( key_lock );
 
 	return is_one_waiting;
 }
 
-//	Return key scancode if a key has been pressed,
-//	else return 0.
-//	Reads keys out of the key buffer and updates keyhead.
+//  Return key scancode if a key has been pressed,
+//  else return 0.
+//  Reads keys out of the key buffer and updates keyhead.
 
 //WMC - Added so scripting can get at keys.
 int Current_key_down = 0;
@@ -624,109 +628,109 @@ int key_inkey()
 {
 	int key = 0;
 
-	if (!key_inited)
+	if ( !key_inited )
 		return 0;
 
-	ENTER_CRITICAL_SECTION(key_lock);
+	ENTER_CRITICAL_SECTION ( key_lock );
 
-	if (key_data.keytail != key_data.keyhead)
+	if ( key_data.keytail != key_data.keyhead )
 	{
 		key = key_data.keybuffer[key_data.keyhead];
-		key_data.keyhead = add_one(key_data.keyhead);
+		key_data.keyhead = add_one ( key_data.keyhead );
 	}
 
-	LEAVE_CRITICAL_SECTION(key_lock);
+	LEAVE_CRITICAL_SECTION ( key_lock );
 
 	Current_key_down = key;
 
 	return key;
 }
 
-//	Unget a key.  Puts it back in the input queue.
-void key_outkey(int key)
+//  Unget a key.  Puts it back in the input queue.
+void key_outkey ( int key )
 {
 	int bufp;
 
-	if (!key_inited)
+	if ( !key_inited )
 		return;
 
-	ENTER_CRITICAL_SECTION(key_lock);
+	ENTER_CRITICAL_SECTION ( key_lock );
 
 	bufp = key_data.keytail + 1;
 
-	if (bufp >= KEY_BUFFER_SIZE)
+	if ( bufp >= KEY_BUFFER_SIZE )
 	{
 		bufp = 0;
 	}
 
-	key_data.keybuffer[key_data.keytail] = (unsigned short)key;
+	key_data.keybuffer[key_data.keytail] = ( unsigned short ) key;
 
 	key_data.keytail = bufp;
 
-	LEAVE_CRITICAL_SECTION(key_lock);
+	LEAVE_CRITICAL_SECTION ( key_lock );
 }
 
 
 
-//	Return amount of time last key was held down.
-//	This is currently (July 17, 1996) bogus because our timing is
-//	not accurate.
-int key_inkey_time(uint* time)
+//  Return amount of time last key was held down.
+//  This is currently (July 17, 1996) bogus because our timing is
+//  not accurate.
+int key_inkey_time ( uint *time )
 {
 	int key = 0;
 
-	if (!key_inited)
+	if ( !key_inited )
 	{
 		*time = 0;
 		return 0;
 	}
 
-	ENTER_CRITICAL_SECTION(key_lock);
+	ENTER_CRITICAL_SECTION ( key_lock );
 
-	if (key_data.keytail != key_data.keyhead)
+	if ( key_data.keytail != key_data.keyhead )
 	{
 		key = key_data.keybuffer[key_data.keyhead];
 		*time = key_data.time_pressed[key_data.keyhead];
-		key_data.keyhead = add_one(key_data.keyhead);
+		key_data.keyhead = add_one ( key_data.keyhead );
 	}
 
-	LEAVE_CRITICAL_SECTION(key_lock);
+	LEAVE_CRITICAL_SECTION ( key_lock );
 
 	return key;
 }
 
 
-//	Returns scancode of last key pressed, if any (returns 0 if no key pressed)
-//	but does not update keyhead pointer.
+//  Returns scancode of last key pressed, if any (returns 0 if no key pressed)
+//  but does not update keyhead pointer.
 int key_peekkey()
 {
 	int key = 0;
 
-	if (!key_inited)
+	if ( !key_inited )
 		return 0;
 
-	ENTER_CRITICAL_SECTION(key_lock);
+	ENTER_CRITICAL_SECTION ( key_lock );
 
-	if (key_data.keytail != key_data.keyhead)
+	if ( key_data.keytail != key_data.keyhead )
 	{
 		key = key_data.keybuffer[key_data.keyhead];
 	}
-	LEAVE_CRITICAL_SECTION(key_lock);
+	LEAVE_CRITICAL_SECTION ( key_lock );
 
 	return key;
 }
 
 // If not installed, uses BIOS and returns getch();
-//	Else returns pending key (or waits for one if none waiting).
+//  Else returns pending key (or waits for one if none waiting).
 int key_getch()
 {
 	int dummy = 0;
 	int in;
 
-	if (!key_inited)
+	if ( !key_inited )
 		return 0;
 
-	while (!key_checkch())
+	while ( !key_checkch() )
 	{
 		os_poll();
 
@@ -737,81 +741,83 @@ int key_getch()
 	return in;
 }
 
-//	Set global shift_status with modifier results (shift, ctrl, alt).
+//  Set global shift_status with modifier results (shift, ctrl, alt).
 uint key_get_shift_status()
 {
 	unsigned int shift_status = 0;
 
-	if (!key_inited)
+	if ( !key_inited )
 		return 0;
 
-	ENTER_CRITICAL_SECTION(key_lock);
+	ENTER_CRITICAL_SECTION ( key_lock );
 
-	if (keyd_pressed[KEY_LSHIFT] || keyd_pressed[KEY_RSHIFT])
+	if ( keyd_pressed[KEY_LSHIFT] || keyd_pressed[KEY_RSHIFT] )
 		shift_status |= KEY_SHIFTED;
 
-	if (keyd_pressed[KEY_LALT] || keyd_pressed[KEY_RALT])
+	if ( keyd_pressed[KEY_LALT] || keyd_pressed[KEY_RALT] )
 		shift_status |= KEY_ALTED;
 
-	if (keyd_pressed[KEY_LCTRL] || keyd_pressed[KEY_RCTRL])
+	if ( keyd_pressed[KEY_LCTRL] || keyd_pressed[KEY_RCTRL] )
 		shift_status |= KEY_CTRLED;
 
 #ifndef NDEBUG
-	if (keyd_pressed[KEY_DEBUG_KEY])
+	if ( keyd_pressed[KEY_DEBUG_KEY] )
 		shift_status |= KEY_DEBUGGED;
 #else
-	if (keyd_pressed[KEY_DEBUG_KEY]) {
-		mprintf(("Cheats_enabled = %i, Key_normal_game = %i\n", Cheats_enabled, Key_normal_game));
-		if ((Cheats_enabled) && Key_normal_game) {
-			mprintf(("Debug key\n"));
+	if ( keyd_pressed[KEY_DEBUG_KEY] )
+	{
+		mprintf ( ( "Cheats_enabled = %i, Key_normal_game = %i\n", Cheats_enabled, Key_normal_game ) );
+		if ( ( Cheats_enabled ) && Key_normal_game )
+		{
+			mprintf ( ( "Debug key\n" ) );
 			shift_status |= KEY_DEBUGGED1;
 		}
 	}
 #endif
-	LEAVE_CRITICAL_SECTION(key_lock);
+	LEAVE_CRITICAL_SECTION ( key_lock );
 
 	return shift_status;
 }
 
-//	Returns amount of time key (specified by "code") has been down since last call.
-//	Returns float, unlike key_down_time() which returns a fix.
-float key_down_timef(uint scancode)
+//  Returns amount of time key (specified by "code") has been down since last call.
+//  Returns float, unlike key_down_time() which returns a fix.
+float key_down_timef ( uint scancode )
 {
 	uint time_down, time;
 	uint delta_time;
 
-	if (!key_inited)
+	if ( !key_inited )
 	{
 		return 0.0f;
 	}
 
-	if (scancode >= NUM_KEYS)
+	if ( scancode >= NUM_KEYS )
 	{
 		return 0.0f;
 	}
 
-	ENTER_CRITICAL_SECTION(key_lock);
+	ENTER_CRITICAL_SECTION ( key_lock );
 
 	time = timer_get_milliseconds();
 	delta_time = time - key_data.TimeKeyDownChecked[scancode];
 	key_data.TimeKeyDownChecked[scancode] = time;
 
-	if (delta_time <= 1)
+	if ( delta_time <= 1 )
 	{
 		key_data.TimeKeyWentDown[scancode] = time;
-		if (keyd_pressed[scancode])
+		if ( keyd_pressed[scancode] )
 		{
-			LEAVE_CRITICAL_SECTION(key_lock);
+			LEAVE_CRITICAL_SECTION ( key_lock );
 			return 1.0f;
 		}
 		else
 		{
-			LEAVE_CRITICAL_SECTION(key_lock);
+			LEAVE_CRITICAL_SECTION ( key_lock );
 			return 0.0f;
 		}
 	}
 
-	if (!keyd_pressed[scancode])
+	if ( !keyd_pressed[scancode] )
 	{
 		time_down = key_data.TimeKeyHeldDown[scancode];
 		key_data.TimeKeyHeldDown[scancode] = 0;
@@ -822,119 +828,119 @@ float key_down_timef(uint scancode)
 		key_data.TimeKeyWentDown[scancode] = time;
 	}
 
-	LEAVE_CRITICAL_SECTION(key_lock);
+	LEAVE_CRITICAL_SECTION ( key_lock );
 
-	return i2fl(time_down) / i2fl(delta_time);
+	return i2fl ( time_down ) / i2fl ( delta_time );
 }
 
 /*
-//	Returns amount of time key (specified by "code") has been down since last call.
-//	Returns float, unlike key_down_time() which returns a fix.
+//  Returns amount of time key (specified by "code") has been down since last call.
+//  Returns float, unlike key_down_time() which returns a fix.
 fix key_down_time( uint code )
 {
-	uint time_down, time;
-	uint delta_time;
+    uint time_down, time;
+    uint delta_time;
 
-	if ( !key_inited ) return 0.0f;
+    if ( !key_inited ) return 0.0f;
 
-	if ((scancode<0)|| (scancode>=NUM_KEYS)) return 0.0f;
+    if ((scancode<0)|| (scancode>=NUM_KEYS)) return 0.0f;
 
-	EnterCriticalSection( &key_lock );
+    EnterCriticalSection( &key_lock );
 
-	time = timer_get_milliseconds();
-	delta_time = time - TimeKeyDownChecked[scancode];
-	TimeKeyDownChecked[scancode] = time;
+    time = timer_get_milliseconds();
+    delta_time = time - TimeKeyDownChecked[scancode];
+    TimeKeyDownChecked[scancode] = time;
 
-	if ( delta_time <= 1 ) {
-		LeaveCriticalSection( &key_lock );
-		if (keyd_pressed[scancode])
-			return F1_0;
-		else
-			return 0;
-	}
+    if ( delta_time <= 1 ) {
+        LeaveCriticalSection( &key_lock );
+        if (keyd_pressed[scancode])
+            return F1_0;
+        else
+            return 0;
+    }
 
-	if ( !keyd_pressed[scancode] )	{
-		time_down = key_data.TimeKeyHeldDown[scancode];
-		key_data.TimeKeyHeldDown[scancode] = 0;
-	} else	{
-		time_down =  time - key_data.TimeKeyWentDown[scancode];
-		key_data.TimeKeyWentDown[scancode] = time;
-	}
+    if ( !keyd_pressed[scancode] )  {
+        time_down = key_data.TimeKeyHeldDown[scancode];
+        key_data.TimeKeyHeldDown[scancode] = 0;
+    } else  {
+        time_down =  time - key_data.TimeKeyWentDown[scancode];
+        key_data.TimeKeyWentDown[scancode] = time;
+    }
 
-	LeaveCriticalSection( &key_lock );
+    LeaveCriticalSection( &key_lock );
 
-	return fixmuldiv( time_down, F1_0, delta_time );
+    return fixmuldiv( time_down, F1_0, delta_time );
 }
 */
 
 
 // Returns number of times key has went from up to down since last call.
-int key_down_count(int scancode)
+int key_down_count ( int scancode )
 {
 	int n;
 
-	if (!key_inited)
+	if ( !key_inited )
 		return 0;
-	if ((scancode < 0) || (scancode >= NUM_KEYS))
+	if ( ( scancode < 0 ) || ( scancode >= NUM_KEYS ) )
 		return 0;
 
-	ENTER_CRITICAL_SECTION(key_lock);
+	ENTER_CRITICAL_SECTION ( key_lock );
 
 	n = key_data.NumDowns[scancode];
 	key_data.NumDowns[scancode] = 0;
 
-	LEAVE_CRITICAL_SECTION(key_lock);
+	LEAVE_CRITICAL_SECTION ( key_lock );
 
 	return n;
 }
 
 
 // Returns number of times key has went from down to up since last call.
-int key_up_count(int scancode)
+int key_up_count ( int scancode )
 {
 	int n;
 
-	if (!key_inited)
+	if ( !key_inited )
 		return 0;
-	if ((scancode < 0) || (scancode >= NUM_KEYS))
+	if ( ( scancode < 0 ) || ( scancode >= NUM_KEYS ) )
 		return 0;
 
-	ENTER_CRITICAL_SECTION(key_lock);
+	ENTER_CRITICAL_SECTION ( key_lock );
 
 	n = key_data.NumUps[scancode];
 	key_data.NumUps[scancode] = 0;
 
-	LEAVE_CRITICAL_SECTION(key_lock);
+	LEAVE_CRITICAL_SECTION ( key_lock );
 
 	return n;
 }
 
-int key_check(int key)
+int key_check ( int key )
 {
 	return key_data.down_check[key];
 }
 
-//	Add a key up or down code to the key buffer.  state=1 -> down, state=0 -> up
+//  Add a key up or down code to the key buffer.  state=1 -> down, state=0 -> up
 // latency => time difference in ms between when key was actually pressed and now
 //void key_mark( uint code, int state )
-void key_mark(uint code, int state, uint latency)
+void key_mark ( uint code, int state, uint latency )
 {
 	uint scancode, breakbit, temp, event_time;
 	ushort keycode;
 
-	if (!key_inited)
+	if ( !key_inited )
 		return;
 
-	ENTER_CRITICAL_SECTION(key_lock);
+	ENTER_CRITICAL_SECTION ( key_lock );
 
 	// If running in the UK, need to translate their wacky slash scancode to ours
 	//if ( code == KEY_SLASH_UK ) {
-	//	code = KEY_SLASH;
+	//  code = KEY_SLASH;
 	//}
 
-	if (Lcl_fr)
+	if ( Lcl_fr )
 	{
-		switch (code)
+		switch ( code )
 		{
 		case KEY_A:
 			code = KEY_Q;
@@ -965,8 +971,11 @@ void key_mark(uint code, int state, uint latency)
 			break;
 		}
 #if defined(SCP_UNIX) && !defined(__APPLE__)
-	} else if(Lcl_gr){
-		switch (code) {
+	}
+	else if ( Lcl_gr )
+	{
+		switch ( code )
+		{
 		case KEY_Y:
 			code = KEY_Z;
 			break;
@@ -978,59 +987,59 @@ void key_mark(uint code, int state, uint latency)
 #endif
 	}
 
-	if ((code == 0xc5) && !Key_running_NT)
+	if ( ( code == 0xc5 ) && !Key_running_NT )
 	{
 		key_turn_off_numlock();
 	}
 
-	Assert(code < NUM_KEYS);
+	Assert ( code < NUM_KEYS );
 
 	event_time = timer_get_milliseconds() - latency;
 	// event_time = timeGetTime() - latency;
 
 	// Read in scancode
-	scancode = code & (NUM_KEYS - 1);
+	scancode = code & ( NUM_KEYS - 1 );
 	breakbit = !state;
 
-	if (breakbit)
+	if ( breakbit )
 	{
 		// Key going up
 		keyd_last_released = scancode;
 		keyd_pressed[scancode] = 0;
 		key_data.NumUps[scancode]++;
 
-		//	What is the point of this code?  "temp" is never used!
+		//  What is the point of this code?  "temp" is never used!
 		temp = 0;
 		temp |= keyd_pressed[KEY_LSHIFT] || keyd_pressed[KEY_RSHIFT];
 		temp |= keyd_pressed[KEY_LALT] || keyd_pressed[KEY_RALT];
 		temp |= keyd_pressed[KEY_LCTRL] || keyd_pressed[KEY_RCTRL];
 		//#ifndef NDEBUG
 		temp |= keyd_pressed[KEY_DEBUG_KEY];
-		//#endif	
-		if (event_time < key_data.TimeKeyWentDown[scancode])
+		//#endif
+		if ( event_time < key_data.TimeKeyWentDown[scancode] )
 			key_data.TimeKeyHeldDown[scancode] = 0;
 		else
 			key_data.TimeKeyHeldDown[scancode] += event_time - key_data.TimeKeyWentDown[scancode];
 
 		Current_key_down = scancode;
-		if (keyd_pressed[KEY_LSHIFT] || keyd_pressed[KEY_RSHIFT])
+		if ( keyd_pressed[KEY_LSHIFT] || keyd_pressed[KEY_RSHIFT] )
 			Current_key_down |= KEY_SHIFTED;
 
-		if (keyd_pressed[KEY_LALT] || keyd_pressed[KEY_RALT])
+		if ( keyd_pressed[KEY_LALT] || keyd_pressed[KEY_RALT] )
 			Current_key_down |= KEY_ALTED;
 
-		if (keyd_pressed[KEY_LCTRL] || keyd_pressed[KEY_RCTRL])
+		if ( keyd_pressed[KEY_LCTRL] || keyd_pressed[KEY_RCTRL] )
 			Current_key_down |= KEY_CTRLED;
-		Script_system.SetHookVar("Key", 's', textify_scancode(Current_key_down));
-		Script_system.RunCondition(CHA_KEYRELEASED);
-		Script_system.RemHookVar("Key");
+		Script_system.SetHookVar ( "Key", 's', textify_scancode ( Current_key_down ) );
+		Script_system.RunCondition ( CHA_KEYRELEASED );
+		Script_system.RemHookVar ( "Key" );
 	}
 	else
 	{
 		// Key going down
 		keyd_last_pressed = scancode;
 		keyd_time_when_last_pressed = event_time;
-		if (!keyd_pressed[scancode])
+		if ( !keyd_pressed[scancode] )
 		{
 			// First time down
 			key_data.TimeKeyWentDown[scancode] = event_time;
@@ -1038,80 +1047,82 @@ void key_mark(uint code, int state, uint latency)
 			key_data.NumDowns[scancode]++;
 			key_data.down_check[scancode]++;
 
-			//			mprintf(( "Scancode = %x\n", scancode ));
+			//          mprintf(( "Scancode = %x\n", scancode ));
 
-			//			if ( scancode == KEY_BREAK )
-			//				Int3();
+			//          if ( scancode == KEY_BREAK )
+			//              Int3();
 
 
 			//WMC - For scripting
 			Current_key_down = scancode;
-			if (keyd_pressed[KEY_LSHIFT] || keyd_pressed[KEY_RSHIFT])
+			if ( keyd_pressed[KEY_LSHIFT] || keyd_pressed[KEY_RSHIFT] )
 				Current_key_down |= KEY_SHIFTED;
 
-			if (keyd_pressed[KEY_LALT] || keyd_pressed[KEY_RALT])
+			if ( keyd_pressed[KEY_LALT] || keyd_pressed[KEY_RALT] )
 				Current_key_down |= KEY_ALTED;
 
-			if (keyd_pressed[KEY_LCTRL] || keyd_pressed[KEY_RCTRL])
+			if ( keyd_pressed[KEY_LCTRL] || keyd_pressed[KEY_RCTRL] )
 				Current_key_down |= KEY_CTRLED;
-			Script_system.SetHookVar("Key", 's', textify_scancode(Current_key_down));
-			Script_system.RunCondition(CHA_KEYPRESSED);
-			Script_system.RemHookVar("Key");
+			Script_system.SetHookVar ( "Key", 's', textify_scancode ( Current_key_down ) );
+			Script_system.RunCondition ( CHA_KEYPRESSED );
+			Script_system.RemHookVar ( "Key" );
 		}
-		else if (!keyd_repeat)
+		else if ( !keyd_repeat )
 		{
 			// Don't buffer repeating key if repeat mode is off
 			scancode = 0xAA;
 		}
 
-		if (scancode != 0xAA)
+		if ( scancode != 0xAA )
 		{
-			keycode = (unsigned short)scancode;
+			keycode = ( unsigned short ) scancode;
 
-			if (keyd_pressed[KEY_LSHIFT] || keyd_pressed[KEY_RSHIFT])
+			if ( keyd_pressed[KEY_LSHIFT] || keyd_pressed[KEY_RSHIFT] )
 				keycode |= KEY_SHIFTED;
 
-			if (keyd_pressed[KEY_LALT] || keyd_pressed[KEY_RALT])
+			if ( keyd_pressed[KEY_LALT] || keyd_pressed[KEY_RALT] )
 				keycode |= KEY_ALTED;
 
-			if (keyd_pressed[KEY_LCTRL] || keyd_pressed[KEY_RCTRL])
+			if ( keyd_pressed[KEY_LCTRL] || keyd_pressed[KEY_RCTRL] )
 				keycode |= KEY_CTRLED;
 
 #ifndef NDEBUG
-			if (keyd_pressed[KEY_DEBUG_KEY])
+			if ( keyd_pressed[KEY_DEBUG_KEY] )
 				keycode |= KEY_DEBUGGED;
 #else
-			if ( keyd_pressed[KEY_DEBUG_KEY] ) {
-				mprintf(("Cheats_enabled = %i, Key_normal_game = %i\n", Cheats_enabled, Key_normal_game));
-				if (Cheats_enabled && Key_normal_game) {
+			if ( keyd_pressed[KEY_DEBUG_KEY] )
+			{
+				mprintf ( ( "Cheats_enabled = %i, Key_normal_game = %i\n", Cheats_enabled, Key_normal_game ) );
+				if ( Cheats_enabled && Key_normal_game )
+				{
 					keycode |= KEY_DEBUGGED1;
 				}
 			}
 
 #endif
 
-			if (keycode)
+			if ( keycode )
 			{
 				temp = key_data.keytail + 1;
-				if (temp >= KEY_BUFFER_SIZE)
+				if ( temp >= KEY_BUFFER_SIZE )
 					temp = 0;
 
-				if (temp != key_data.keyhead)
+				if ( temp != key_data.keyhead )
 				{
 					int i, accept_key = 1;
 					// Num_filter_keys will only be non-zero when a key filter has
 					// been explicity set up via key_set_filter()
-					for (i = 0; i < Num_filter_keys; i++)
+					for ( i = 0; i < Num_filter_keys; i++ )
 					{
 						accept_key = 0;
-						if (Key_filter[i] == keycode)
+						if ( Key_filter[i] == keycode )
 						{
 							accept_key = 1;
 							break;
 						}
 					}
 
-					if (accept_key)
+					if ( accept_key )
 					{
 						key_data.keybuffer[key_data.keytail] = keycode;
 						key_data.time_pressed[key_data.keytail] = keyd_time_when_last_pressed;
@@ -1122,7 +1133,7 @@ void key_mark(uint code, int state, uint latency)
 		}
 	}
 
-	LEAVE_CRITICAL_SECTION(key_lock);
+	LEAVE_CRITICAL_SECTION ( key_lock );
 }
 
 #ifdef USE_DIRECTINPUT
@@ -1133,14 +1144,14 @@ int di_init();
 
 void key_close()
 {
-	if (!key_inited)
+	if ( !key_inited )
 		return;
 
 #ifdef USE_DIRECTINPUT
-		di_cleanup();
-	#endif
+	di_cleanup();
+#endif
 
-	if (Key_numlock_was_on)
+	if ( Key_numlock_was_on )
 	{
 		key_turn_on_numlock();
 		Key_numlock_was_on = 0;
@@ -1148,19 +1159,19 @@ void key_close()
 
 	key_inited = 0;
 
-	DELETE_CRITICAL_SECTION(key_lock);
+	DELETE_CRITICAL_SECTION ( key_lock );
 }
 
 void key_init()
 {
 	// Initialize queue
-	if (key_inited)
+	if ( key_inited )
 		return;
 	key_inited = 1;
 
-	INITIALIZE_CRITICAL_SECTION(key_lock);
+	INITIALIZE_CRITICAL_SECTION ( key_lock );
 
-	ENTER_CRITICAL_SECTION(key_lock);
+	ENTER_CRITICAL_SECTION ( key_lock );
 
 #ifdef SCP_UNIX
 	FillSDLArray();
@@ -1176,41 +1187,45 @@ void key_init()
 	// Clear key filter
 	key_clear_filter();
 
-	LEAVE_CRITICAL_SECTION(key_lock);
+	LEAVE_CRITICAL_SECTION ( key_lock );
 
 #ifdef _WIN32
-	#ifdef USE_DIRECTINPUT
-		di_init();
-	#endif
+#ifdef USE_DIRECTINPUT
+	di_init();
+#endif
 
 	OSVERSIONINFO ver;
-	ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-	GetVersionEx(&ver);
-	if ( ver.dwPlatformId == VER_PLATFORM_WIN32_NT ) {
+	ver.dwOSVersionInfoSize = sizeof ( OSVERSIONINFO );
+	GetVersionEx ( &ver );
+	if ( ver.dwPlatformId == VER_PLATFORM_WIN32_NT )
+	{
 		Key_running_NT = 1;
-	} else {
+	}
+	else
+	{
 		Key_running_NT = 0;
-		if ( key_numlock_is_on() ) {
+		if ( key_numlock_is_on() )
+		{
 			Key_numlock_was_on = 1;
 			key_turn_off_numlock();
 		}
 	}
 #endif
 
-	atexit(key_close);
+	atexit ( key_close );
 }
 
 void key_level_init()
 {
 	int i;
 
-	for (i = 0; i < NUM_KEYS; i++)
+	for ( i = 0; i < NUM_KEYS; i++ )
 		key_data.down_check[i] = 0;
 }
 
 void key_lost_focus()
 {
-	if (!key_inited)
+	if ( !key_inited )
 		return;
 
 	key_flush();
@@ -1218,7 +1233,7 @@ void key_lost_focus()
 
 void key_got_focus()
 {
-	if (!key_inited)
+	if ( !key_inited )
 		return;
 
 	key_flush();
@@ -1226,14 +1241,14 @@ void key_got_focus()
 
 // Restricts the keys that are accepted from the keyboard
 //
-//	filter_array	=>		array of keys to act as a filter
-//	num				=>		number of keys in filter_array
+//  filter_array    =>      array of keys to act as a filter
+//  num             =>      number of keys in filter_array
 //
-void key_set_filter(int* filter_array, int num)
+void key_set_filter ( int *filter_array, int num )
 {
 	int i;
 
-	if (num >= MAX_FILTER_KEYS)
+	if ( num >= MAX_FILTER_KEYS )
 	{
 		Int3();
 		num = MAX_FILTER_KEYS;
@@ -1241,20 +1256,20 @@ void key_set_filter(int* filter_array, int num)
 
 	Num_filter_keys = num;
 
-	for (i = 0; i < num; i++)
+	for ( i = 0; i < num; i++ )
 	{
 		Key_filter[i] = filter_array[i];
 	}
 }
 
-// Clear the key filter, so all keypresses are accepted from keyboard 
+// Clear the key filter, so all keypresses are accepted from keyboard
 //
 void key_clear_filter()
 {
 	int i;
 
 	Num_filter_keys = 0;
-	for (i = 0; i < MAX_FILTER_KEYS; i++)
+	for ( i = 0; i < MAX_FILTER_KEYS; i++ )
 	{
 		Key_filter[i] = -1;
 	}
@@ -1268,7 +1283,7 @@ void key_clear_filter()
 // Under NT, Pause and Numlock report as identical keys.
 // Under 95, Pause is the same as pressing Ctrl then Numlock.  So the game fires each
 // time you hit it.
-// 
+//
 
 //============================================================================
 // Direct Input code
@@ -1284,16 +1299,18 @@ void key_clear_filter()
 
 #define MAX_BUFFERED_KEYBOARD_EVENTS 10
 
-static LPDIRECTINPUT			Di_object = NULL;
-static LPDIRECTINPUTDEVICE	Di_keyboard = NULL;
-static HANDLE					Di_thread = NULL;
-static DWORD					Di_thread_id = NULL;
-static HANDLE					Di_event = NULL;
+static LPDIRECTINPUT            Di_object = NULL;
+static LPDIRECTINPUTDEVICE  Di_keyboard = NULL;
+static HANDLE                   Di_thread = NULL;
+static DWORD                    Di_thread_id = NULL;
+static HANDLE                   Di_event = NULL;
 
-DWORD di_process(DWORD lparam)
+DWORD di_process ( DWORD lparam )
 {
-	while (1) {
-		if ( WaitForSingleObject( Di_event, INFINITE )==WAIT_OBJECT_0 )	{
+	while ( 1 )
+	{
+		if ( WaitForSingleObject ( Di_event, INFINITE ) == WAIT_OBJECT_0 )
+		{
 
 			//mprintf(( "Got event!\n" ));
 
@@ -1303,9 +1320,10 @@ DWORD di_process(DWORD lparam)
 			DWORD dwItems = MAX_BUFFERED_KEYBOARD_EVENTS;
 
 again:;
-			hr = Di_keyboard->GetDeviceData( sizeof(DIDEVICEOBJECTDATA), rgdod,  &dwItems, 0);
+			hr = Di_keyboard->GetDeviceData ( sizeof ( DIDEVICEOBJECTDATA ), rgdod,  &dwItems, 0 );
 
-			if (hr == DIERR_INPUTLOST) {
+			if ( hr == DIERR_INPUTLOST )
+			{
 				/*
 				*  DirectInput is telling us that the input stream has
 				*  been interrupted.  We aren't tracking any state
@@ -1313,39 +1331,43 @@ again:;
 				*  that needs to be done.  We just re-acquire and
 				*  try again.
 				*/
-				Sleep(1000);		// Pause a second...
+				Sleep ( 1000 );     // Pause a second...
 				hr = Di_keyboard->Acquire();
-				if (SUCCEEDED(hr)) {
+				if ( SUCCEEDED ( hr ) )
+				{
 					goto again;
 				}
 			}
 
-			if (SUCCEEDED(hr)) {
-				 // dwItems = number of elements read (could be zero)
-				 if (hr == DI_BUFFEROVERFLOW) {
-					// Buffer had overflowed. 
-					mprintf(( "Buffer overflowed!\n" ));
-				 }
-					int i;
+			if ( SUCCEEDED ( hr ) )
+			{
+				// dwItems = number of elements read (could be zero)
+				if ( hr == DI_BUFFEROVERFLOW )
+				{
+					// Buffer had overflowed.
+					mprintf ( ( "Buffer overflowed!\n" ) );
+				}
+				int i;
 
-					//mprintf(( "Got %d events\n", dwItems ));
+				//mprintf(( "Got %d events\n", dwItems ));
 
-					for (i=0; i<(int)dwItems; i++ )	{
-						int key = rgdod[i].dwOfs;
-						int state = rgdod[i].dwData;
-						int stamp = rgdod[i].dwTimeStamp;
+				for ( i = 0; i < ( int ) dwItems; i++ )
+				{
+					int key = rgdod[i].dwOfs;
+					int state = rgdod[i].dwData;
+					int stamp = rgdod[i].dwTimeStamp;
 
-						int latency;
-						latency = timeGetTime() - stamp;
-						if ( latency < 0 )
-							latency=0;
+					int latency;
+					latency = timeGetTime() - stamp;
+					if ( latency < 0 )
+						latency = 0;
 
-//						if ( key == KEY_PRINT_SCRN )	{
-//							key_mark( key, 1, latency );
-//						}
-//						key_mark( key, (state&0x80?1:0), latency );
-						mprintf(( "Key=%x, State=%x, Time=%d, Latency=%d\n", key, state, stamp, latency ));
-					}
+					//                      if ( key == KEY_PRINT_SCRN )    {
+					//                          key_mark( key, 1, latency );
+					//                      }
+					//                      key_mark( key, (state&0x80?1:0), latency );
+					mprintf ( ( "Key=%x, State=%x, Time=%d, Latency=%d\n", key, state, stamp, latency ) );
+				}
 
 			}
 		}
@@ -1358,150 +1380,156 @@ again:;
 
 int di_init()
 {
-    HRESULT hr;
+	HRESULT hr;
 
-	 return 0;
-
-
-    /*
-     *  Register with the DirectInput subsystem and get a pointer
-     *  to a IDirectInput interface we can use.
-     *
-     *  Parameters:
-     *
-     *      g_hinst
-     *
-     *          Instance handle to our application or DLL.
-     *
-     *      DIRECTINPUT_VERSION
-     *
-     *          The version of DirectInput we were designed for.
-     *          We take the value from the <dinput.h> header file.
-     *
-     *      &g_pdi
-     *
-     *          Receives pointer to the IDirectInput interface
-     *          that was created.
-     *
-     *      NULL
-     *
-     *          We do not use OLE aggregation, so this parameter
-     *          must be NULL.
-     *
-     */
-    hr = DirectInputCreate(GetModuleHandle(NULL), 0x300, &Di_object, NULL);
-
-    if (FAILED(hr)) {
-        mprintf(( "DirectInputCreate failed!\n" ));
-        return FALSE;
-    }
-
-    /*
-     *  Obtain an interface to the system keyboard device.
-     *
-     *  Parameters:
-     *
-     *      GUID_SysKeyboard
-     *
-     *          The instance GUID for the device we wish to access.
-     *          GUID_SysKeyboard is a predefined instance GUID that
-     *          always refers to the system keyboard device.
-     *
-     *      &g_pKeyboard
-     *
-     *          Receives pointer to the IDirectInputDevice interface
-     *          that was created.
-     *
-     *      NULL
-     *
-     *          We do not use OLE aggregation, so this parameter
-     *          must be NULL.
-     *
-     */
-    hr = Di_object->CreateDevice(GUID_SysKeyboard, &Di_keyboard, NULL);
-
-    if (FAILED(hr)) {
-        mprintf(( "CreateDevice failed!\n" ));
-        return FALSE;
-    }
-
-    /*
-     *  Set the data format to "keyboard format".
-     *
-     *  A data format specifies which controls on a device we
-     *  are interested in, and how they should be reported.
-     *
-     *  This tells DirectInput that we will be passing an array
-     *  of 256 bytes to IDirectInputDevice::GetDeviceState.
-     *
-     *  Parameters:
-     *
-     *      c_dfDIKeyboard
-     *
-     *          Predefined data format which describes
-     *          an array of 256 bytes, one per scancode.
-     */
-    hr = Di_keyboard->SetDataFormat(&c_dfDIKeyboard);
-
-    if (FAILED(hr)) {
-        mprintf(( "SetDataFormat failed!\n" ));
-        return FALSE;
-    }
+	return 0;
 
 
-    /*
-     *  Set the cooperativity level to let DirectInput know how
-     *  this device should interact with the system and with other
-     *  DirectInput applications.
-     *
-     *  Parameters:
-     *
-     *      DISCL_NONEXCLUSIVE
-     *
-     *          Retrieve keyboard data when acquired, not interfering
-     *          with any other applications which are reading keyboard
-     *          data.
-     *
-     *      DISCL_FOREGROUND
-     *
-     *          If the user switches away from our application,
-     *          automatically release the keyboard back to the system.
-     *
-     */
-	hr = Di_keyboard->SetCooperativeLevel((HWND)os_get_window(), DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+	/*
+	 *  Register with the DirectInput subsystem and get a pointer
+	 *  to a IDirectInput interface we can use.
+	 *
+	 *  Parameters:
+	 *
+	 *      g_hinst
+	 *
+	 *          Instance handle to our application or DLL.
+	 *
+	 *      DIRECTINPUT_VERSION
+	 *
+	 *          The version of DirectInput we were designed for.
+	 *          We take the value from the <dinput.h> header file.
+	 *
+	 *      &g_pdi
+	 *
+	 *          Receives pointer to the IDirectInput interface
+	 *          that was created.
+	 *
+	 *      NULL
+	 *
+	 *          We do not use OLE aggregation, so this parameter
+	 *          must be NULL.
+	 *
+	 */
+	hr = DirectInputCreate ( GetModuleHandle ( NULL ), 0x300, &Di_object, NULL );
 
-	if (FAILED(hr)) {
-		mprintf(( "SetCooperativeLevel failed!\n" ));
+	if ( FAILED ( hr ) )
+	{
+		mprintf ( ( "DirectInputCreate failed!\n" ) );
+		return FALSE;
+	}
+
+	/*
+	 *  Obtain an interface to the system keyboard device.
+	 *
+	 *  Parameters:
+	 *
+	 *      GUID_SysKeyboard
+	 *
+	 *          The instance GUID for the device we wish to access.
+	 *          GUID_SysKeyboard is a predefined instance GUID that
+	 *          always refers to the system keyboard device.
+	 *
+	 *      &g_pKeyboard
+	 *
+	 *          Receives pointer to the IDirectInputDevice interface
+	 *          that was created.
+	 *
+	 *      NULL
+	 *
+	 *          We do not use OLE aggregation, so this parameter
+	 *          must be NULL.
+	 *
+	 */
+	hr = Di_object->CreateDevice ( GUID_SysKeyboard, &Di_keyboard, NULL );
+
+	if ( FAILED ( hr ) )
+	{
+		mprintf ( ( "CreateDevice failed!\n" ) );
+		return FALSE;
+	}
+
+	/*
+	 *  Set the data format to "keyboard format".
+	 *
+	 *  A data format specifies which controls on a device we
+	 *  are interested in, and how they should be reported.
+	 *
+	 *  This tells DirectInput that we will be passing an array
+	 *  of 256 bytes to IDirectInputDevice::GetDeviceState.
+	 *
+	 *  Parameters:
+	 *
+	 *      c_dfDIKeyboard
+	 *
+	 *          Predefined data format which describes
+	 *          an array of 256 bytes, one per scancode.
+	 */
+	hr = Di_keyboard->SetDataFormat ( &c_dfDIKeyboard );
+
+	if ( FAILED ( hr ) )
+	{
+		mprintf ( ( "SetDataFormat failed!\n" ) );
+		return FALSE;
+	}
+
+
+	/*
+	 *  Set the cooperativity level to let DirectInput know how
+	 *  this device should interact with the system and with other
+	 *  DirectInput applications.
+	 *
+	 *  Parameters:
+	 *
+	 *      DISCL_NONEXCLUSIVE
+	 *
+	 *          Retrieve keyboard data when acquired, not interfering
+	 *          with any other applications which are reading keyboard
+	 *          data.
+	 *
+	 *      DISCL_FOREGROUND
+	 *
+	 *          If the user switches away from our application,
+	 *          automatically release the keyboard back to the system.
+	 *
+	 */
+	hr = Di_keyboard->SetCooperativeLevel ( ( HWND ) os_get_window(), DISCL_NONEXCLUSIVE | DISCL_FOREGROUND );
+
+	if ( FAILED ( hr ) )
+	{
+		mprintf ( ( "SetCooperativeLevel failed!\n" ) );
 		return FALSE;
 	}
 
 	DIPROPDWORD hdr;
 
 	// Turn on buffering
-	hdr.diph.dwSize = sizeof(DIPROPDWORD);
-	hdr.diph.dwHeaderSize = sizeof(DIPROPHEADER);
+	hdr.diph.dwSize = sizeof ( DIPROPDWORD );
+	hdr.diph.dwHeaderSize = sizeof ( DIPROPHEADER );
 	hdr.diph.dwObj = 0;
-	hdr.diph.dwHow = DIPH_DEVICE;	// Apply to entire device
-	hdr.dwData = 16;	//MAX_BUFFERED_KEYBOARD_EVENTS;
+	hdr.diph.dwHow = DIPH_DEVICE;   // Apply to entire device
+	hdr.dwData = 16;    //MAX_BUFFERED_KEYBOARD_EVENTS;
 
-	hr = Di_keyboard->SetProperty( DIPROP_BUFFERSIZE, &hdr.diph );
-	if (FAILED(hr)) {
-		mprintf(( "SetProperty DIPROP_BUFFERSIZE failed\n" ));
+	hr = Di_keyboard->SetProperty ( DIPROP_BUFFERSIZE, &hdr.diph );
+	if ( FAILED ( hr ) )
+	{
+		mprintf ( ( "SetProperty DIPROP_BUFFERSIZE failed\n" ) );
 		return FALSE;
 	}
 
 
-	Di_event = CreateEvent( NULL, FALSE, FALSE, NULL );
-	Assert(Di_event != NULL);
+	Di_event = CreateEvent ( NULL, FALSE, FALSE, NULL );
+	Assert ( Di_event != NULL );
 
-	Di_thread = CreateThread(NULL, 1024, (LPTHREAD_START_ROUTINE)di_process, NULL, 0, &Di_thread_id);
-	Assert( Di_thread != NULL );
+	Di_thread = CreateThread ( NULL, 1024, ( LPTHREAD_START_ROUTINE ) di_process, NULL, 0, &Di_thread_id );
+	Assert ( Di_thread != NULL );
 
-	SetThreadPriority(Di_thread, THREAD_PRIORITY_HIGHEST);
+	SetThreadPriority ( Di_thread, THREAD_PRIORITY_HIGHEST );
 
-	hr = Di_keyboard->SetEventNotification(Di_event);
-	if (FAILED(hr)) {
-		mprintf(( "SetEventNotification failed\n" ));
+	hr = Di_keyboard->SetEventNotification ( Di_event );
+	if ( FAILED ( hr ) )
+	{
+		mprintf ( ( "SetEventNotification failed\n" ) );
 		return FALSE;
 	}
 
@@ -1512,32 +1540,35 @@ int di_init()
 
 void di_cleanup()
 {
-    /*
-     *  Destroy any lingering IDirectInputDevice object.
-     */
-    if (Di_keyboard) {
+	/*
+	 *  Destroy any lingering IDirectInputDevice object.
+	 */
+	if ( Di_keyboard )
+	{
 
-        /*
-         *  Cleanliness is next to godliness.  Unacquire the device
-         *  one last time just in case we got really confused and tried
-         *  to exit while the device is still acquired.
-         */
-        Di_keyboard->Unacquire();
+		/*
+		 *  Cleanliness is next to godliness.  Unacquire the device
+		 *  one last time just in case we got really confused and tried
+		 *  to exit while the device is still acquired.
+		 */
+		Di_keyboard->Unacquire();
 
-        Di_keyboard->Release();
-        Di_keyboard = NULL;
-    }
+		Di_keyboard->Release();
+		Di_keyboard = NULL;
+	}
 
-    /*
-     *  Destroy any lingering IDirectInput object.
-     */
-    if (Di_object) {
-        Di_object->Release();
-        Di_object = NULL;
-    }
+	/*
+	 *  Destroy any lingering IDirectInput object.
+	 */
+	if ( Di_object )
+	{
+		Di_object->Release();
+		Di_object = NULL;
+	}
 
-	if ( Di_event )	{
-		CloseHandle(Di_event);
+	if ( Di_event )
+	{
+		CloseHandle ( Di_event );
 		Di_event = NULL;
 	}
 

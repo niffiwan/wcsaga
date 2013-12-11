@@ -13,14 +13,20 @@
 
 #include <boost/fusion/include/make_vector.hpp>
 
-namespace boost { namespace spirit { namespace detail
+namespace boost
 {
-    namespace result_of
-    {
-        using fusion::result_of::make_vector;
-    }
-    using fusion::make_vector;
-}}}
+namespace spirit
+{
+namespace detail
+{
+namespace result_of
+{
+using fusion::result_of::make_vector;
+}
+using fusion::make_vector;
+}
+}
+}
 
 #else
 
@@ -36,34 +42,41 @@ namespace boost { namespace spirit { namespace detail
 #include <boost/fusion/container/vector/vector.hpp>
 #include <boost/fusion/support/detail/as_fusion_element.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct void_;
-}}
-
-namespace boost { namespace spirit { namespace detail
+namespace fusion
 {
-    namespace result_of
-    {
-        template <
-            BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(
-                FUSION_MAX_VECTOR_SIZE, typename T, fusion::void_)
-          , typename Extra = fusion::void_
-        >
-        struct make_vector;
+struct void_;
+}
+}
 
-        template <>
-        struct make_vector<>
-        {
-            typedef fusion::vector0 type;
-        };
-    }
+namespace boost
+{
+namespace spirit
+{
+namespace detail
+{
+namespace result_of
+{
+template <
+    BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT (
+        FUSION_MAX_VECTOR_SIZE, typename T, fusion::void_ )
+    , typename Extra = fusion::void_
+    >
+struct make_vector;
 
-    inline fusion::vector0
-    make_vector()
-    {
-        return fusion::vector0();
-    }
+template <>
+struct make_vector<>
+{
+	typedef fusion::vector0 type;
+};
+}
+
+inline fusion::vector0
+make_vector()
+{
+	return fusion::vector0();
+}
 
 #define BOOST_FUSION_AS_FUSION_ELEMENT(z, n, data)                               \
     typename fusion::detail::as_fusion_element<BOOST_PP_CAT(T, n)>::type
@@ -74,7 +87,9 @@ namespace boost { namespace spirit { namespace detail
 
 #undef BOOST_FUSION_AS_FUSION_ELEMENT
 
-}}}
+}
+}
+}
 
 #endif
 #else // defined(BOOST_PP_IS_ITERATING)
@@ -86,28 +101,28 @@ namespace boost { namespace spirit { namespace detail
 
 #define N BOOST_PP_ITERATION()
 
-    namespace result_of
-    {
-        template <BOOST_PP_ENUM_PARAMS(N, typename T)>
+namespace result_of
+{
+template <BOOST_PP_ENUM_PARAMS ( N, typename T ) >
 #if defined(BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS)
-        #define TEXT(z, n, text) , text
-        struct make_vector< BOOST_PP_ENUM_PARAMS(N, T) BOOST_PP_REPEAT_FROM_TO(BOOST_PP_DEC(N), FUSION_MAX_VECTOR_SIZE, TEXT, fusion::void_) >
-        #undef TEXT
+#define TEXT(z, n, text) , text
+struct make_vector< BOOST_PP_ENUM_PARAMS ( N, T ) BOOST_PP_REPEAT_FROM_TO ( BOOST_PP_DEC ( N ), FUSION_MAX_VECTOR_SIZE, TEXT, fusion::void_ ) >
+#undef TEXT
 #else
-        struct make_vector<BOOST_PP_ENUM_PARAMS(N, T)>
+struct make_vector<BOOST_PP_ENUM_PARAMS ( N, T ) >
 #endif
-        {
-            typedef BOOST_PP_CAT(fusion::vector, N)<BOOST_PP_ENUM(N, BOOST_FUSION_AS_FUSION_ELEMENT, _)> type;
-        };
-    }
+{
+    typedef BOOST_PP_CAT ( fusion::vector, N ) <BOOST_PP_ENUM ( N, BOOST_FUSION_AS_FUSION_ELEMENT, _ ) > type;
+};
+}
 
-    template <BOOST_PP_ENUM_PARAMS(N, typename T)>
-    inline BOOST_PP_CAT(fusion::vector, N)<BOOST_PP_ENUM(N, BOOST_FUSION_AS_FUSION_ELEMENT, _)>
-    make_vector(BOOST_PP_ENUM_BINARY_PARAMS(N, T, const& _))
-    {
-        return BOOST_PP_CAT(fusion::vector, N)<BOOST_PP_ENUM(N, BOOST_FUSION_AS_FUSION_ELEMENT, _)>(
-            BOOST_PP_ENUM_PARAMS(N, _));
-    }
+template <BOOST_PP_ENUM_PARAMS ( N, typename T ) >
+inline BOOST_PP_CAT ( fusion::vector, N ) <BOOST_PP_ENUM ( N, BOOST_FUSION_AS_FUSION_ELEMENT, _ ) >
+make_vector ( BOOST_PP_ENUM_BINARY_PARAMS ( N, T, const &_ ) )
+{
+	return BOOST_PP_CAT ( fusion::vector, N ) <BOOST_PP_ENUM ( N, BOOST_FUSION_AS_FUSION_ELEMENT, _ ) > (
+	           BOOST_PP_ENUM_PARAMS ( N, _ ) );
+}
 
 #undef N
 #endif // defined(BOOST_PP_IS_ITERATING)

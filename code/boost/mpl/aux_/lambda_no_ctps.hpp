@@ -8,8 +8,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -55,37 +55,41 @@
 #   include <boost/preprocessor/inc.hpp>
 #   include <boost/preprocessor/cat.hpp>
 
-namespace boost { namespace mpl {
+namespace boost
+{
+namespace mpl
+{
 
 #   define AUX778076_LAMBDA_PARAMS(i_, param) \
     BOOST_MPL_PP_PARAMS(i_, param) \
     /**/
 
-namespace aux {
+namespace aux
+{
 
 #define n_ BOOST_MPL_LIMIT_METAFUNCTION_ARITY
-template<
-      BOOST_MPL_PP_DEFAULT_PARAMS(n_,bool C,false)
+template <
+    BOOST_MPL_PP_DEFAULT_PARAMS ( n_, bool C, false )
     >
 struct lambda_or
-    : true_
+		: true_
 {
 };
 
 template<>
-struct lambda_or< BOOST_MPL_PP_ENUM(n_,false) >
-    : false_
+struct lambda_or< BOOST_MPL_PP_ENUM ( n_, false ) >
+: false_
 {
 };
 #undef n_
 
 template< typename Arity > struct lambda_impl
 {
-    template< typename T, typename Tag, typename Protect > struct result_
-    {
-        typedef T type;
-        typedef is_placeholder<T> is_le;
-    };
+	template< typename T, typename Tag, typename Protect > struct result_
+	{
+		typedef T type;
+		typedef is_placeholder<T> is_le;
+	};
 };
 
 #define BOOST_PP_ITERATION_PARAMS_1 \
@@ -94,37 +98,38 @@ template< typename Arity > struct lambda_impl
 
 } // namespace aux
 
-template<
-      typename T
+template <
+    typename T
     , typename Tag
     , typename Protect
     >
 struct lambda
 {
-    /// Metafunction forwarding confuses MSVC 6.x
-    typedef typename aux::template_arity<T>::type arity_;
-    typedef typename aux::lambda_impl<arity_>
-        ::template result_< T,Tag,Protect > l_;
+	/// Metafunction forwarding confuses MSVC 6.x
+	typedef typename aux::template_arity<T>::type arity_;
+	typedef typename aux::lambda_impl<arity_>
+	::template result_< T, Tag, Protect > l_;
 
-    typedef typename l_::type type;
-    typedef typename l_::is_le is_le;
-    
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(3, lambda, (T, Tag, Protect))
+	typedef typename l_::type type;
+	typedef typename l_::is_le is_le;
+
+	BOOST_MPL_AUX_LAMBDA_SUPPORT ( 3, lambda, ( T, Tag, Protect ) )
 };
 
-BOOST_MPL_AUX_NA_SPEC2(1, 3, lambda)
+BOOST_MPL_AUX_NA_SPEC2 ( 1, 3, lambda )
 
-template<
-      typename T
+template <
+    typename T
     >
 struct is_lambda_expression
-    : lambda<T>::is_le
+		: lambda<T>::is_le
 {
 };
 
 #   undef AUX778076_LAMBDA_PARAMS
 
-}}
+}
+}
 
 #endif // BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
 #endif // BOOST_MPL_AUX_LAMBDA_NO_CTPS_HPP_INCLUDED
@@ -159,28 +164,28 @@ struct is_lambda_expression
 
 template<> struct lambda_impl< int_<i_> >
 {
-    template< typename F, typename Tag, typename Protect > struct result_
-    {
-        BOOST_MPL_PP_REPEAT(i_, AUX778076_LAMBDA_TYPEDEF, F)
-        BOOST_MPL_PP_REPEAT(i_, AUX778076_IS_LE_TYPEDEF, unused)
+	template< typename F, typename Tag, typename Protect > struct result_
+	{
+		BOOST_MPL_PP_REPEAT ( i_, AUX778076_LAMBDA_TYPEDEF, F )
+		BOOST_MPL_PP_REPEAT ( i_, AUX778076_IS_LE_TYPEDEF, unused )
 
-        typedef aux::lambda_or<
-              BOOST_MPL_PP_REPEAT(i_, AUX778076_IS_LAMBDA_EXPR, unused)
-            > is_le;
+		typedef aux::lambda_or <
+		BOOST_MPL_PP_REPEAT ( i_, AUX778076_IS_LAMBDA_EXPR, unused )
+		> is_le;
 
-        typedef BOOST_PP_CAT(bind,i_)<
-              typename F::rebind
-            BOOST_MPL_PP_REPEAT(i_, AUX778076_LAMBDA_RESULT, unused)
-            > bind_;
+		typedef BOOST_PP_CAT ( bind, i_ ) <
+		typename F::rebind
+		BOOST_MPL_PP_REPEAT ( i_, AUX778076_LAMBDA_RESULT, unused )
+		> bind_;
 
-        typedef typename if_<
-              is_le
-            , if_< Protect, mpl::protect<bind_>, bind_ >
-            , identity<F>
-            >::type type_;
-    
-        typedef typename type_::type type;
-    };
+		typedef typename if_ <
+		is_le
+		, if_< Protect, mpl::protect<bind_>, bind_ >
+		, identity<F>
+		>::type type_;
+
+		typedef typename type_::type type;
+	};
 };
 
 #   undef AUX778076_LAMBDA_RESULT

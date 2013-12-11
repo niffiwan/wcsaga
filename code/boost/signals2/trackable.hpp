@@ -19,31 +19,34 @@
 #include <boost/assert.hpp>
 #include <boost/shared_ptr.hpp>
 
-namespace boost {
-  namespace signals2 {
-    namespace detail
-    {
-        class tracked_objects_visitor;
-    }
-    class trackable {
-    protected:
-      trackable(): _tracked_ptr(static_cast<int*>(0)) {}
-      trackable(const trackable &): _tracked_ptr(static_cast<int*>(0)) {}
-      trackable& operator=(const trackable &)
-      {
-          return *this;
-      }
-      ~trackable() {}
-    private:
-      friend class detail::tracked_objects_visitor;
-      const shared_ptr<void>& get_shared_ptr() const
-      {
-          return _tracked_ptr;
-      }
+namespace boost
+{
+namespace signals2
+{
+namespace detail
+{
+class tracked_objects_visitor;
+}
+class trackable
+{
+protected:
+trackable() : _tracked_ptr ( static_cast<int *> ( 0 ) ) {}
+trackable ( const trackable & ) : _tracked_ptr ( static_cast<int *> ( 0 ) ) {}
+trackable &operator= ( const trackable & )
+{
+	return *this;
+}
+~trackable() {}
+private:
+friend class detail::tracked_objects_visitor;
+const shared_ptr<void> &get_shared_ptr() const
+{
+	return _tracked_ptr;
+}
 
-      shared_ptr<void> _tracked_ptr;
-    };
-  } // end namespace signals2
+shared_ptr<void> _tracked_ptr;
+};
+} // end namespace signals2
 } // end namespace boost
 
 #endif // BOOST_SIGNALS2_TRACKABLE_HPP

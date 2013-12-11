@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -16,13 +16,15 @@
 #include <boost/units/physical_dimensions/mass.hpp>
 #include <boost/units/physical_dimensions/time.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units {
+namespace units
+{
 
 /// derived dimension for surface tension : M T^-2
-typedef derived_dimension<mass_base_dimension,1,
-                          time_base_dimension,-2>::type surface_tension_dimension;                    
+typedef derived_dimension < mass_base_dimension, 1,
+        time_base_dimension, -2 >::type surface_tension_dimension;
 
 } // namespace units
 

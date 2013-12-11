@@ -51,9 +51,12 @@ See also member_at.
 \ingroup bimap_group
                                                                     **/
 
-namespace boost {
-namespace bimaps {
-namespace support {
+namespace boost
+{
+namespace bimaps
+{
+namespace support
+{
 
 // Implementation of data type of metafunction
 

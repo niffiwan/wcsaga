@@ -11,66 +11,70 @@
 #include <boost/spirit/home/classic/namespace.hpp>
 #include <boost/spirit/home/classic/core/parser.hpp>
 
-namespace boost { namespace spirit {
+namespace boost
+{
+namespace spirit
+{
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    //  rule_alias class
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename ParserT>
-    class rule_alias :
-        public parser<rule_alias<ParserT> >
-    {
-    public:
-    
-        typedef rule_alias<ParserT> self_t;
-    
-        template <typename ScannerT>
-        struct result 
-        { 
-            typedef typename parser_result<ParserT, ScannerT>::type type;
-        };
-    
-        rule_alias()
-        : ptr(0) {}
-        
-        rule_alias(ParserT const& p)
-        : ptr(&p) {}
-        
-        rule_alias&
-        operator=(ParserT const& p)
-        {
-            ptr = &p;
-            return *this;
-        }
-    
-        template <typename ScannerT>
-        typename parser_result<ParserT, ScannerT>::type
-        parse(ScannerT const& scan) const
-        { 
-            if (ptr)
-                return ptr->parse(scan);
-            else
-                return scan.no_match();
-        }
-        
-        ParserT const&
-        get() const
-        {
-            assert(ptr != 0);
-            return *ptr;
-        }
-    
-    private:
-    
-        ParserT const* ptr; // hold it by pointer
-    };
+///////////////////////////////////////////////////////////////////////////
+//
+//  rule_alias class
+//
+///////////////////////////////////////////////////////////////////////////
+template <typename ParserT>
+class rule_alias :
+	public parser<rule_alias<ParserT> >
+{
+public:
+
+	typedef rule_alias<ParserT> self_t;
+
+	template <typename ScannerT>
+	struct result
+	{
+		typedef typename parser_result<ParserT, ScannerT>::type type;
+	};
+
+	rule_alias()
+		: ptr ( 0 ) {}
+
+	rule_alias ( ParserT const &p )
+		: ptr ( &p ) {}
+
+	rule_alias &
+	operator= ( ParserT const &p )
+	{
+		ptr = &p;
+		return *this;
+	}
+
+	template <typename ScannerT>
+	typename parser_result<ParserT, ScannerT>::type
+	parse ( ScannerT const &scan ) const
+	{
+		if ( ptr )
+			return ptr->parse ( scan );
+		else
+			return scan.no_match();
+	}
+
+	ParserT const &
+	get() const
+	{
+		assert ( ptr != 0 );
+		return *ptr;
+	}
+
+private:
+
+	ParserT const *ptr; // hold it by pointer
+};
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}} // namespace BOOST_SPIRIT_CLASSIC_NS
+}
+} // namespace BOOST_SPIRIT_CLASSIC_NS
 
 #endif

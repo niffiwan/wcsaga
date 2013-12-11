@@ -18,7 +18,7 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/control/expr_if.hpp>
 #include <boost/preprocessor/repetition/enum.hpp>
-#include <boost/preprocessor/repetition/enum_params.hpp> 
+#include <boost/preprocessor/repetition/enum_params.hpp>
 
 /* An alias to mpl::vector used to hide MPL from the user.
  * indexed_by contains the index specifiers for instantiation
@@ -48,17 +48,19 @@
 #define BOOST_MULTI_INDEX_INDEXED_BY_TEMPLATE_PARM(z,n,var) \
   typename BOOST_PP_CAT(var,n) BOOST_PP_EXPR_IF(n,=mpl::na)
 
-namespace boost{
+namespace boost
+{
 
-namespace multi_index{
+namespace multi_index
+{
 
-template<
-  BOOST_PP_ENUM(
-    BOOST_MULTI_INDEX_INDEXED_BY_SIZE,
-    BOOST_MULTI_INDEX_INDEXED_BY_TEMPLATE_PARM,T)
->
+template <
+    BOOST_PP_ENUM (
+        BOOST_MULTI_INDEX_INDEXED_BY_SIZE,
+        BOOST_MULTI_INDEX_INDEXED_BY_TEMPLATE_PARM, T )
+    >
 struct indexed_by:
-  mpl::vector<BOOST_PP_ENUM_PARAMS(BOOST_MULTI_INDEX_INDEXED_BY_SIZE,T)>
+mpl::vector<BOOST_PP_ENUM_PARAMS ( BOOST_MULTI_INDEX_INDEXED_BY_SIZE, T ) >
 {
 };
 

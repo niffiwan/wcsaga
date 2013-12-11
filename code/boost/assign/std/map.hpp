@@ -25,19 +25,19 @@ namespace boost
 namespace assign
 {
 
-    template< class K, class V, class C, class A, class P >
-    inline list_inserter< assign_detail::call_insert< std::map<K,V,C,A> >, P >
-    operator+=( std::map<K,V,C,A>& m, const P& p )
-    {
-        return insert( m )( p );
-    }
-    
-    template< class K, class V, class C, class A, class P >
-    inline list_inserter< assign_detail::call_insert< std::multimap<K,V,C,A> >, P >
-    operator+=( std::multimap<K,V,C,A>& m, const P& p )
-    {
-        return insert( m )( p );
-    }
+template< class K, class V, class C, class A, class P >
+inline list_inserter< assign_detail::call_insert< std::map<K, V, C, A> >, P >
+operator+= ( std::map<K, V, C, A> &m, const P &p )
+{
+	return insert ( m ) ( p );
+}
+
+template< class K, class V, class C, class A, class P >
+inline list_inserter< assign_detail::call_insert< std::multimap<K, V, C, A> >, P >
+operator+= ( std::multimap<K, V, C, A> &m, const P &p )
+{
+	return insert ( m ) ( p );
+}
 
 }
 }

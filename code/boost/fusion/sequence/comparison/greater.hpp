@@ -2,7 +2,7 @@
     Copyright (c) 1999-2003 Jaakko Jarvi
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_GREATER_05052005_0432)
@@ -19,34 +19,37 @@
 #include <boost/fusion/sequence/comparison/less.hpp>
 #endif
 
-namespace boost { namespace fusion
+namespace boost
 {
-    template <typename Seq1, typename Seq2>
-    inline bool
-    greater(Seq1 const& a, Seq2 const& b)
-    {
+namespace fusion
+{
+template <typename Seq1, typename Seq2>
+inline bool
+greater ( Seq1 const &a, Seq2 const &b )
+{
 #if defined(FUSION_DIRECT_OPERATOR_USAGE)
-        return detail::sequence_greater<Seq1 const, Seq2 const>::
-            call(fusion::begin(a), fusion::begin(b));
+	return detail::sequence_greater<Seq1 const, Seq2 const>::
+	       call ( fusion::begin ( a ), fusion::begin ( b ) );
 #else
-        return (b < a);
+	return ( b < a );
 #endif
-    }
+}
 
-    namespace operators
-    {
-        template <typename Seq1, typename Seq2>
-        inline typename
-            enable_if<
-                detail::enable_comparison<Seq1, Seq2>
-              , bool
-            >::type
-        operator>(Seq1 const& a, Seq2 const& b)
-        {
-            return fusion::greater(a, b);
-        }
-    }
-    using operators::operator>;
-}}
+namespace operators
+{
+template <typename Seq1, typename Seq2>
+inline typename
+enable_if <
+detail::enable_comparison<Seq1, Seq2>
+, bool
+>::type
+operator> ( Seq1 const &a, Seq2 const &b )
+{
+	return fusion::greater ( a, b );
+}
+}
+using operators::operator>;
+}
+}
 
 #endif

@@ -21,9 +21,12 @@
 #include <string>
 #include <boost/asio/detail/pop_options.hpp>
 
-namespace boost {
-namespace asio {
-namespace ip {
+namespace boost
+{
+namespace asio
+{
+namespace ip
+{
 
 /// An entry produced by a resolver.
 /**
@@ -38,54 +41,54 @@ template <typename InternetProtocol>
 class basic_resolver_entry
 {
 public:
-  /// The protocol type associated with the endpoint entry.
-  typedef InternetProtocol protocol_type;
+	/// The protocol type associated with the endpoint entry.
+	typedef InternetProtocol protocol_type;
 
-  /// The endpoint type associated with the endpoint entry.
-  typedef typename InternetProtocol::endpoint endpoint_type;
+	/// The endpoint type associated with the endpoint entry.
+	typedef typename InternetProtocol::endpoint endpoint_type;
 
-  /// Default constructor.
-  basic_resolver_entry()
-  {
-  }
+	/// Default constructor.
+	basic_resolver_entry()
+	{
+	}
 
-  /// Construct with specified endpoint, host name and service name.
-  basic_resolver_entry(const endpoint_type& endpoint,
-      const std::string& host_name, const std::string& service_name)
-    : endpoint_(endpoint),
-      host_name_(host_name),
-      service_name_(service_name)
-  {
-  }
+	/// Construct with specified endpoint, host name and service name.
+	basic_resolver_entry ( const endpoint_type &endpoint,
+	                       const std::string &host_name, const std::string &service_name )
+		: endpoint_ ( endpoint ),
+		  host_name_ ( host_name ),
+		  service_name_ ( service_name )
+	{
+	}
 
-  /// Get the endpoint associated with the entry.
-  endpoint_type endpoint() const
-  {
-    return endpoint_;
-  }
+	/// Get the endpoint associated with the entry.
+	endpoint_type endpoint() const
+	{
+		return endpoint_;
+	}
 
-  /// Convert to the endpoint associated with the entry.
-  operator endpoint_type() const
-  {
-    return endpoint_;
-  }
+	/// Convert to the endpoint associated with the entry.
+	operator endpoint_type() const
+	{
+		return endpoint_;
+	}
 
-  /// Get the host name associated with the entry.
-  std::string host_name() const
-  {
-    return host_name_;
-  }
+	/// Get the host name associated with the entry.
+	std::string host_name() const
+	{
+		return host_name_;
+	}
 
-  /// Get the service name associated with the entry.
-  std::string service_name() const
-  {
-    return service_name_;
-  }
+	/// Get the service name associated with the entry.
+	std::string service_name() const
+	{
+		return service_name_;
+	}
 
 private:
-  endpoint_type endpoint_;
-  std::string host_name_;
-  std::string service_name_;
+	endpoint_type endpoint_;
+	std::string host_name_;
+	std::string service_name_;
 };
 
 } // namespace ip

@@ -1,6 +1,6 @@
 //  Copyright (c) 2001-2010 Hartmut Kaiser
-// 
-//  Distributed under the Boost Software License, Version 1.0. (See accompanying 
+//
+//  Distributed under the Boost Software License, Version 1.0. (See accompanying
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #if !defined(SPIRIT_LEX_SEQUENCE_MAR_28_2007_0610PM)
@@ -16,54 +16,63 @@
 #include <boost/spirit/home/lex/detail/sequence_function.hpp>
 #include <boost/fusion/include/any.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <>
-    struct use_operator<lex::domain, proto::tag::bitwise_or>  // enables |
-      : mpl::true_ {};
-
-    template <>
-    struct flatten_tree<lex::domain, proto::tag::bitwise_or>  // flattens |
-      : mpl::true_ {};
-
-}}
-
-namespace boost { namespace spirit { namespace lex
+namespace spirit
 {
-    template <typename Elements>
-    struct sequence : nary_lexer<sequence<Elements> >
-    {
-        sequence(Elements const& elements)
-          : elements(elements) {}
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
+template <>
+struct use_operator<lex::domain, proto::tag::bitwise_or>  // enables |
+		: mpl::true_ {};
 
-        template <typename LexerDef, typename String>
-        void collect(LexerDef& lexdef, String const& state) const
-        {
-            detail::sequence_collect_function<LexerDef, String> f (lexdef, state);
-            fusion::any(elements, f);
-        }
+template <>
+struct flatten_tree<lex::domain, proto::tag::bitwise_or>  // flattens |
+		: mpl::true_ {};
 
-        template <typename LexerDef>
-        void add_actions(LexerDef& lexdef) const 
-        {
-            detail::sequence_add_actions_function<LexerDef> f (lexdef);
-            fusion::any(elements, f);
-        }
+}
+}
 
-        Elements elements;
-    };
+namespace boost
+{
+namespace spirit
+{
+namespace lex
+{
+template <typename Elements>
+struct sequence : nary_lexer<sequence<Elements> >
+{
+	sequence ( Elements const &elements )
+		: elements ( elements ) {}
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Lexer generator: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Elements, typename Modifiers>
-    struct make_composite<proto::tag::bitwise_or, Elements, Modifiers>
-      : make_nary_composite<Elements, sequence>
-    {};
+	template <typename LexerDef, typename String>
+	void collect ( LexerDef &lexdef, String const &state ) const
+	{
+		detail::sequence_collect_function<LexerDef, String> f ( lexdef, state );
+		fusion::any ( elements, f );
+	}
 
-}}} // namespace boost::spirit::lex
+	template <typename LexerDef>
+	void add_actions ( LexerDef &lexdef ) const
+	{
+		detail::sequence_add_actions_function<LexerDef> f ( lexdef );
+		fusion::any ( elements, f );
+	}
+
+	Elements elements;
+};
+
+///////////////////////////////////////////////////////////////////////////
+// Lexer generator: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+template <typename Elements, typename Modifiers>
+struct make_composite<proto::tag::bitwise_or, Elements, Modifiers>
+		: make_nary_composite<Elements, sequence>
+{};
+
+}
+}
+} // namespace boost::spirit::lex
 
 #endif

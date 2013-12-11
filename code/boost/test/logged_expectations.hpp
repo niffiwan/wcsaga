@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -52,18 +52,20 @@ BOOST_AUTO_TU_REGISTRAR( test_name )(                                   \
 void test_name::test_method()                                           \
 /**/
 
-namespace boost {
+namespace boost
+{
 
-namespace itest {
+namespace itest
+{
 
 // ************************************************************************** //
 // **************           logged expectations test           ************** //
 // ************************************************************************** //
 
 void    BOOST_TEST_DECL
-logged_expectations( unit_test::callback0<> const&  F, 
-                     unit_test::const_string        log_file_name, 
-                     bool                           test_or_log = true );
+logged_expectations ( unit_test::callback0<> const  &F,
+                      unit_test::const_string        log_file_name,
+                      bool                           test_or_log = true );
 
 } // namespace itest
 

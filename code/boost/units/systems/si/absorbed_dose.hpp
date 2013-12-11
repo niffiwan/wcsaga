@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,16 +14,19 @@
 #include <boost/units/systems/si/base.hpp>
 #include <boost/units/physical_dimensions/absorbed_dose.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace si {
+namespace si
+{
 
-typedef unit<absorbed_dose_dimension,si::system>     absorbed_dose;
-    
-BOOST_UNITS_STATIC_CONSTANT(gray,absorbed_dose);  
-BOOST_UNITS_STATIC_CONSTANT(grays,absorbed_dose); 
+typedef unit<absorbed_dose_dimension, si::system>     absorbed_dose;
+
+BOOST_UNITS_STATIC_CONSTANT ( gray, absorbed_dose );
+BOOST_UNITS_STATIC_CONSTANT ( grays, absorbed_dose );
 
 } // namespace si
 

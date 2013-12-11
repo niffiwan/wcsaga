@@ -17,11 +17,14 @@
 #include <boost/parameter/parameters.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 
-namespace boost{
+namespace boost
+{
 
-namespace flyweights{
+namespace flyweights
+{
 
-namespace detail{
+namespace detail
+{
 
 /* Three ways to indicate that a given class T is a value policy:
  *   1. Make it derived from value_marker.
@@ -31,14 +34,14 @@ namespace detail{
  * For the time being the interface of value policies is not public.
  */
 
-struct value_marker{};
+struct value_marker {};
 
 template<typename T>
-struct is_value:is_base_and_derived<value_marker,T>
+struct is_value: is_base_and_derived<value_marker, T>
 {};
 
-template<typename T=parameter::void_>
-struct value:parameter::template_keyword<value<>,T>
+template<typename T = parameter::void_>
+struct value: parameter::template_keyword<value<>, T>
 {};
 
 } /* namespace flyweights::detail */

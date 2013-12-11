@@ -34,23 +34,23 @@ namespace signals2
 
 struct critical_section
 {
-    struct critical_section_debug * DebugInfo;
-    long LockCount;
-    long RecursionCount;
-    void * OwningThread;
-    void * LockSemaphore;
+struct critical_section_debug *DebugInfo;
+long LockCount;
+long RecursionCount;
+void *OwningThread;
+void *LockSemaphore;
 #if defined(_WIN64)
-    unsigned __int64 SpinCount;
+unsigned __int64 SpinCount;
 #else
-    unsigned long SpinCount;
+unsigned long SpinCount;
 #endif
 };
 
-extern "C" __declspec(dllimport) void __stdcall InitializeCriticalSection(critical_section *);
-extern "C" __declspec(dllimport) void __stdcall EnterCriticalSection(critical_section *);
-extern "C" __declspec(dllimport) bool __stdcall TryEnterCriticalSection(critical_section *);
-extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(critical_section *);
-extern "C" __declspec(dllimport) void __stdcall DeleteCriticalSection(critical_section *);
+extern "C" __declspec ( dllimport ) void __stdcall InitializeCriticalSection ( critical_section * );
+extern "C" __declspec ( dllimport ) void __stdcall EnterCriticalSection ( critical_section * );
+extern "C" __declspec ( dllimport ) bool __stdcall TryEnterCriticalSection ( critical_section * );
+extern "C" __declspec ( dllimport ) void __stdcall LeaveCriticalSection ( critical_section * );
+extern "C" __declspec ( dllimport ) void __stdcall DeleteCriticalSection ( critical_section * );
 
 #else
 
@@ -62,44 +62,44 @@ class mutex
 {
 private:
 
-    critical_section cs_;
+critical_section cs_;
 
-    mutex(mutex const &);
-    mutex & operator=(mutex const &);
+mutex ( mutex const & );
+mutex &operator= ( mutex const & );
 
 public:
 
-    mutex()
-    {
-        InitializeCriticalSection(&cs_);
-    }
+mutex()
+{
+	InitializeCriticalSection ( &cs_ );
+}
 
-    ~mutex()
-    {
-        DeleteCriticalSection(&cs_);
-    }
+~mutex()
+{
+	DeleteCriticalSection ( &cs_ );
+}
 
-    void lock()
-    {
-        EnterCriticalSection(&cs_);
-    }
+void lock()
+{
+	EnterCriticalSection ( &cs_ );
+}
 // TryEnterCriticalSection only exists on Windows NT 4.0 and later
 #if (defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0400))
-    bool try_lock()
-    {
-        return TryEnterCriticalSection(&cs_) != 0;
-    }
+bool try_lock()
+{
+	return TryEnterCriticalSection ( &cs_ ) != 0;
+}
 #else
-    bool try_lock()
-    {
-        BOOST_ASSERT(false);
-        return false;
-    }
+bool try_lock()
+{
+	BOOST_ASSERT ( false );
+	return false;
+}
 #endif
-    void unlock()
-    {
-        LeaveCriticalSection(&cs_);
-    }
+void unlock()
+{
+	LeaveCriticalSection ( &cs_ );
+}
 };
 
 } // namespace signals2

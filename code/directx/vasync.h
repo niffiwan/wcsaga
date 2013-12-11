@@ -17,79 +17,79 @@ extern "C"
 {
 #endif /* __cplusplus */
 
-	/*
-	 * GUIDS used by DPAsyncData objects
-	 */
+/*
+ * GUIDS used by DPAsyncData objects
+ */
 
-	// {47BCD7E0-2E89-11d0-A889-00A0C905433C}
-DEFINE_GUID(IID_IDPAsyncData, 0x47bcd7e0, 0x2e89, 0x11d0, 0xa8, 0x89, 0x0, 0xa0, 0xc9, 0x5, 0x43, 0x3c);
+// {47BCD7E0-2E89-11d0-A889-00A0C905433C}
+DEFINE_GUID ( IID_IDPAsyncData, 0x47bcd7e0, 0x2e89, 0x11d0, 0xa8, 0x89, 0x0, 0xa0, 0xc9, 0x5, 0x43, 0x3c );
 
 
-	/****************************************************************************
-	 *
-	 * IDPAsyncData Structures
-	 *
-	 * Various structures used to invoke DPAsyncData.
-	 *
-	 ****************************************************************************/
+/****************************************************************************
+ *
+ * IDPAsyncData Structures
+ *
+ * Various structures used to invoke DPAsyncData.
+ *
+ ****************************************************************************/
 
 typedef struct IDPAsyncData
-	FAR* LPDPASYNCDATA;
+		FAR *LPDPASYNCDATA;
 
 
-	/****************************************************************************
-	 *
-	 * IDPAsyncData Interface
-	 *
-	 ****************************************************************************/
+/****************************************************************************
+ *
+ * IDPAsyncData Interface
+ *
+ ****************************************************************************/
 
 #undef INTERFACE
 #define INTERFACE IDPAsyncData
-DECLARE_INTERFACE_(IDPAsyncData, IUnknown)
+DECLARE_INTERFACE_ ( IDPAsyncData, IUnknown )
 {
-	/*  IUnknown Methods	*/
-    STDMETHOD(QueryInterface)       (THIS_ REFIID riid, LPVOID * ppvObj)
+	/*  IUnknown Methods    */
+	STDMETHOD ( QueryInterface )       ( THIS_ REFIID riid, LPVOID * ppvObj )
 	PURE;
-    STDMETHOD_(ULONG,AddRef)
-	(THIS)PURE;
-    STDMETHOD_(ULONG,Release)
-	(THIS)PURE;
+	STDMETHOD_ ( ULONG, AddRef )
+	( THIS ) PURE;
+	STDMETHOD_ ( ULONG, Release )
+	( THIS ) PURE;
 
-	/*  IDPAsyncData Methods	*/
-    STDMETHOD(AddItem)              (THIS_ LPDWORD, LPVOID, DWORD)
+	/*  IDPAsyncData Methods    */
+	STDMETHOD ( AddItem )              ( THIS_ LPDWORD, LPVOID, DWORD )
 	PURE;
-    STDMETHOD
-	(Cancel)(THIS)PURE;
-    STDMETHOD
-	(GetFlags)(THIS_ LPDWORD)PURE;
-    STDMETHOD(GetItem)              (THIS_ DWORD, LPVOID *)
+	STDMETHOD
+	( Cancel ) ( THIS ) PURE;
+	STDMETHOD
+	( GetFlags ) ( THIS_ LPDWORD ) PURE;
+	STDMETHOD ( GetItem )              ( THIS_ DWORD, LPVOID * )
 	PURE;
-    STDMETHOD
-	(GetItemCount)(THIS_ LPDWORD)PURE;
-    STDMETHOD(GetStatus)            (THIS_ LPDWORD, LPDWORD, HRESULT *)
+	STDMETHOD
+	( GetItemCount ) ( THIS_ LPDWORD ) PURE;
+	STDMETHOD ( GetStatus )            ( THIS_ LPDWORD, LPDWORD, HRESULT * )
 	PURE;
-    STDMETHOD
-	(IsSnapshotCurrent)(THIS)PURE;
-    STDMETHOD
-	(RefreshSnapshot)(THIS)PURE;
-    STDMETHOD
-	(RemoveItem)(THIS_ DWORD)PURE;
-    STDMETHOD
-	(SetFlags)(THIS_ DWORD)PURE;
-    STDMETHOD(SetItem)              (THIS_ DWORD, LPVOID, DWORD)
+	STDMETHOD
+	( IsSnapshotCurrent ) ( THIS ) PURE;
+	STDMETHOD
+	( RefreshSnapshot ) ( THIS ) PURE;
+	STDMETHOD
+	( RemoveItem ) ( THIS_ DWORD ) PURE;
+	STDMETHOD
+	( SetFlags ) ( THIS_ DWORD ) PURE;
+	STDMETHOD ( SetItem )              ( THIS_ DWORD, LPVOID, DWORD )
 	PURE;
-    STDMETHOD
-	(SetStatus)(THIS_ DWORD)PURE;
-    STDMETHOD(SetStatusEvent)       (THIS_ DWORD, HANDLE)
+	STDMETHOD
+	( SetStatus ) ( THIS_ DWORD ) PURE;
+	STDMETHOD ( SetStatusEvent )       ( THIS_ DWORD, HANDLE )
 	PURE;
 };
 
 
-	/****************************************************************************
-	 *
-	 * IDPAsyncData interface macros
-	 *
-	 ****************************************************************************/
+/****************************************************************************
+ *
+ * IDPAsyncData interface macros
+ *
+ ****************************************************************************/
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 
@@ -130,17 +130,17 @@ DECLARE_INTERFACE_(IDPAsyncData, IUnknown)
 #endif
 
 
-	/****************************************************************************
-	 *
-	 * AsyncData Flags
-	 *
-	 ****************************************************************************/
+/****************************************************************************
+ *
+ * AsyncData Flags
+ *
+ ****************************************************************************/
 
-	/*
-	 *	This flag is set if the ItemData is ANSI.  If it is not set, the ItemData
-	 *	is either Unicode or doesn't contain any string information.
-	 */
-#define DPASYNCDATA_ANSI			(0x00000001)
+/*
+ *  This flag is set if the ItemData is ANSI.  If it is not set, the ItemData
+ *  is either Unicode or doesn't contain any string information.
+ */
+#define DPASYNCDATA_ANSI            (0x00000001)
 
 
 #ifdef __cplusplus

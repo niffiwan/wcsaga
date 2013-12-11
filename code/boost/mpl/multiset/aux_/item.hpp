@@ -4,8 +4,8 @@
 
 // Copyright Aleksey Gurtovoy 2003-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -31,59 +31,63 @@
 #endif
 
 
-namespace boost { namespace mpl {
+namespace boost
+{
+namespace mpl
+{
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
 template< typename T, typename Base >
 struct ms_item
 {
-    typedef aux::multiset_tag tag;
+	typedef aux::multiset_tag tag;
 
-    template< typename U > struct prior_count
-    {
-        enum { msvc70_wknd_ = sizeof(Base::key_count(BOOST_MPL_AUX_STATIC_CAST(U*,0))) };
-        typedef int_< msvc70_wknd_ > count_;
-        typedef typename eval_if< is_same<T,U>, next<count_>, count_ >::type c_;
+	template< typename U > struct prior_count
+	{
+		enum { msvc70_wknd_ = sizeof ( Base::key_count ( BOOST_MPL_AUX_STATIC_CAST ( U *, 0 ) ) ) };
+		typedef int_< msvc70_wknd_ > count_;
+		typedef typename eval_if< is_same<T, U>, next<count_>, count_ >::type c_;
 #if defined(BOOST_MPL_CFG_NO_DEPENDENT_ARRAY_TYPES)
-        typedef typename aux::weighted_tag<BOOST_MPL_AUX_MSVC_VALUE_WKND(c_)::value>::type type;
+		typedef typename aux::weighted_tag<BOOST_MPL_AUX_MSVC_VALUE_WKND ( c_ ) ::value>::type type;
 #else
-        typedef char (&type)[BOOST_MPL_AUX_MSVC_VALUE_WKND(c_)::value];
+		typedef char ( &type ) [BOOST_MPL_AUX_MSVC_VALUE_WKND ( c_ ) ::value];
 #endif
-    };
+	};
 
-    template< typename U > struct prior_ref_count
-    {
-        typedef U (* u_)();
-        enum { msvc70_wknd_ = sizeof(Base::ref_key_count(BOOST_MPL_AUX_STATIC_CAST(u_,0))) }; 
-        typedef int_< msvc70_wknd_ > count_;
-        typedef typename eval_if< is_same<T,U>, next<count_>, count_ >::type c_;
+	template< typename U > struct prior_ref_count
+	{
+		typedef U ( * u_ ) ();
+		enum { msvc70_wknd_ = sizeof ( Base::ref_key_count ( BOOST_MPL_AUX_STATIC_CAST ( u_, 0 ) ) ) };
+		typedef int_< msvc70_wknd_ > count_;
+		typedef typename eval_if< is_same<T, U>, next<count_>, count_ >::type c_;
 #if defined(BOOST_MPL_CFG_NO_DEPENDENT_ARRAY_TYPES)
-        typedef typename aux::weighted_tag<BOOST_MPL_AUX_MSVC_VALUE_WKND(c_)::value>::type type;
+		typedef typename aux::weighted_tag<BOOST_MPL_AUX_MSVC_VALUE_WKND ( c_ ) ::value>::type type;
 #else
-        typedef char (&type)[BOOST_MPL_AUX_MSVC_VALUE_WKND(c_)::value];
+		typedef char ( &type ) [BOOST_MPL_AUX_MSVC_VALUE_WKND ( c_ ) ::value];
 #endif
-    };
+	};
 
-    template< typename U >
-    static typename prior_count<U>::type key_count(U*);
+	template< typename U >
+	static typename prior_count<U>::type key_count ( U * );
 
-    template< typename U >
-    static typename prior_ref_count<U>::type ref_key_count(U (*)());
+	template< typename U >
+	static typename prior_ref_count<U>::type ref_key_count ( U ( * ) () );
 };
 
 #else // BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
-namespace aux {
+namespace aux
+{
 template< typename U, typename Base >
 struct prior_key_count
 {
-    enum { msvc71_wknd_ = sizeof(Base::key_count(BOOST_MPL_AUX_STATIC_CAST(aux::type_wrapper<U>*,0))) }; 
-    typedef int_< msvc71_wknd_ > count_;
+	enum { msvc71_wknd_ = sizeof ( Base::key_count ( BOOST_MPL_AUX_STATIC_CAST ( aux::type_wrapper<U> *, 0 ) ) ) };
+	typedef int_< msvc71_wknd_ > count_;
 #if defined(BOOST_MPL_CFG_NO_DEPENDENT_ARRAY_TYPES)
-    typedef typename aux::weighted_tag< BOOST_MPL_AUX_VALUE_WKND(count_)::value >::type type;
+	typedef typename aux::weighted_tag< BOOST_MPL_AUX_VALUE_WKND ( count_ ) ::value >::type type;
 #else
-    typedef char (&type)[count_::value];
+	typedef char ( &type ) [count_::value];
 #endif
 };
 }
@@ -91,24 +95,25 @@ struct prior_key_count
 template< typename T, typename Base >
 struct ms_item
 {
-    typedef aux::multiset_tag tag;
+	typedef aux::multiset_tag tag;
 
-    enum { msvc71_wknd_ = sizeof(Base::key_count(BOOST_MPL_AUX_STATIC_CAST(aux::type_wrapper<T>*,0))) + 1 };
-    typedef int_< msvc71_wknd_ > count_;
+	enum { msvc71_wknd_ = sizeof ( Base::key_count ( BOOST_MPL_AUX_STATIC_CAST ( aux::type_wrapper<T> *, 0 ) ) ) + 1 };
+	typedef int_< msvc71_wknd_ > count_;
 #if defined(BOOST_MPL_CFG_NO_DEPENDENT_ARRAY_TYPES)
-    static 
-    typename aux::weighted_tag< BOOST_MPL_AUX_VALUE_WKND(count_)::value >::type
-        key_count(aux::type_wrapper<T>*);
+	static
+	typename aux::weighted_tag< BOOST_MPL_AUX_VALUE_WKND ( count_ ) ::value >::type
+	key_count ( aux::type_wrapper<T> * );
 #else
-    static char (& key_count(aux::type_wrapper<T>*) )[count_::value];
+	static char ( & key_count ( aux::type_wrapper<T> * ) ) [count_::value];
 #endif
 
-    template< typename U >
-    static typename aux::prior_key_count<U,Base>::type key_count(aux::type_wrapper<U>*);
+	template< typename U >
+	static typename aux::prior_key_count<U, Base>::type key_count ( aux::type_wrapper<U> * );
 };
 
 #endif // BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
-}}
+}
+}
 
 #endif // BOOST_MPL_MULTISET_AUX_ITEM_HPP_INCLUDED

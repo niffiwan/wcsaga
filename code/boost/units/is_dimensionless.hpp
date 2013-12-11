@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,25 +14,27 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/units/units_fwd.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units {
+namespace units
+{
 
 template<class T>
 struct is_dimensionless :
-    public mpl::false_
+		public mpl::false_
 { };
 
 /// check if a unit is dimensionless
 template<class System>
-struct is_dimensionless< unit<dimensionless_type,System> > :
-    public mpl::true_
+struct is_dimensionless< unit<dimensionless_type, System> > :
+		public mpl::true_
 { };
 
 /// check if a quantity is dimensionless
-template<class Unit,class Y>
-struct is_dimensionless< quantity<Unit,Y> > :
-    public is_dimensionless<Unit>
+template<class Unit, class Y>
+struct is_dimensionless< quantity<Unit, Y> > :
+		public is_dimensionless<Unit>
 { };
 
 } // namespace units

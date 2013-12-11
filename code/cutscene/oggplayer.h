@@ -15,7 +15,7 @@ struct CFILE;
 // structure for maintaining info on a THEORAFILE stream
 typedef struct THEORAFILE
 {
-	OggReader* reader;
+	OggReader *reader;
 	ubyte theora_p;
 	ubyte vorbis_p;
 
@@ -35,8 +35,8 @@ typedef struct THEORAFILE
 	vorbis_comment vcomment;
 } THEORAFILE;
 
-void theora_play(THEORAFILE* movie);
-THEORAFILE* theora_open(char* filename);
-void theora_close(THEORAFILE* movie);
+void theora_play ( THEORAFILE *movie );
+THEORAFILE *theora_open ( char *filename );
+void theora_close ( THEORAFILE *movie );
 
 #endif

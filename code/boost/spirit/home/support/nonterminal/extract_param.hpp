@@ -31,82 +31,88 @@
 #include <boost/mpl/placeholders.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-namespace boost { namespace spirit { namespace detail
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Helpers to extract params (locals, attributes, ...) from nonterminal
-    // template arguments
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Types, typename Pred, typename Default>
-    struct extract_param
-    {
-        typedef typename mpl::find_if<Types, Pred>::type pos;
+namespace spirit
+{
+namespace detail
+{
+///////////////////////////////////////////////////////////////////////////
+// Helpers to extract params (locals, attributes, ...) from nonterminal
+// template arguments
+///////////////////////////////////////////////////////////////////////////
+template <typename Types, typename Pred, typename Default>
+struct extract_param
+{
+	typedef typename mpl::find_if<Types, Pred>::type pos;
 
-        typedef typename
-            mpl::eval_if<
-                is_same<pos, typename mpl::end<Types>::type>
-              , mpl::identity<Default>
-              , mpl::deref<pos>
-            >::type
-        type;
-    };
+	typedef typename
+	mpl::eval_if <
+	is_same<pos, typename mpl::end<Types>::type>
+	, mpl::identity<Default>
+	, mpl::deref<pos>
+	>::type
+	type;
+};
 
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Types>
-    struct extract_locals
-      : fusion::result_of::as_vector<
-            typename extract_param<
-                Types
-              , is_locals<mpl::_>
-              , locals<>
-            >::type
-        >
-    {};
+///////////////////////////////////////////////////////////////////////////
+template <typename Types>
+struct extract_locals
+		: fusion::result_of::as_vector <
+		typename extract_param <
+		Types
+		, is_locals<mpl::_>
+		, locals<>
+		>::type
+		>
+{};
 
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Domain, typename Types>
-    struct extract_component
-      : spirit::result_of::compile<
-            Domain
-          , typename extract_param<
-                Types
-              , traits::matches<Domain, mpl::_>
-              , unused_type
-            >::type
-        >
-    {};
+///////////////////////////////////////////////////////////////////////////
+template <typename Domain, typename Types>
+struct extract_component
+		: spirit::result_of::compile <
+		Domain
+		, typename extract_param <
+		Types
+		, traits::matches<Domain, mpl::_>
+		, unused_type
+		>::type
+		>
+{};
 
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Types>
-    struct extract_sig
-      : extract_param<
-            Types
-          , function_types::is_function<mpl::_>
-          , void()
-        >
-    {};
+///////////////////////////////////////////////////////////////////////////
+template <typename Types>
+struct extract_sig
+		: extract_param <
+		Types
+		, function_types::is_function<mpl::_>
+, void()
+>
+{};
 
-    template <typename Sig>
-    struct attr_from_sig
-    {
-        typedef typename function_types::result_type<Sig>::type attr;
+template <typename Sig>
+struct attr_from_sig
+{
+	typedef typename function_types::result_type<Sig>::type attr;
 
-        typedef typename
-            mpl::if_<
-                is_same<attr, void>
-              , unused_type
-              , attr
-            >::type
-        type;
-    };
+	typedef typename
+	mpl::if_ <
+	is_same<attr, void>
+	, unused_type
+	, attr
+	>::type
+	type;
+};
 
-    template <typename Sig>
-    struct params_from_sig
-    {
-        typedef typename function_types::parameter_types<Sig>::type params;
+template <typename Sig>
+struct params_from_sig
+{
+	typedef typename function_types::parameter_types<Sig>::type params;
 
-        typedef typename fusion::result_of::as_list<params>::type type;
-    };
-}}}
+	typedef typename fusion::result_of::as_list<params>::type type;
+};
+}
+}
+}
 
 #endif

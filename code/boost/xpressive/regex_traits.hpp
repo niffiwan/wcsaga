@@ -24,7 +24,9 @@
 # include <boost/xpressive/traits/cpp_regex_traits.hpp>
 #endif
 
-namespace boost { namespace xpressive
+namespace boost
+{
+namespace xpressive
 {
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,7 +42,7 @@ struct regex_traits_version_1_tag
 /// Tag used to denote that a traits class conforms to the version 2 traits
 /// interface.
 struct regex_traits_version_2_tag
-  : regex_traits_version_1_tag
+		: regex_traits_version_1_tag
 {
 };
 
@@ -49,7 +51,7 @@ struct regex_traits_version_2_tag
 /// INTERNAL ONLY
 ///
 struct regex_traits_version_1_case_fold_tag
-  : regex_traits_version_1_tag
+		: regex_traits_version_1_tag
 {
 };
 
@@ -58,10 +60,10 @@ struct regex_traits_version_1_case_fold_tag
 /// Trait used to denote that a traits class has the fold_case member function.
 template<typename Traits>
 struct has_fold_case
-  : is_convertible<
-        typename Traits::version_tag *
-      , regex_traits_version_1_case_fold_tag *
-    >
+		: is_convertible <
+		typename Traits::version_tag *
+		, regex_traits_version_1_case_fold_tag *
+		>
 {
 };
 
@@ -72,19 +74,19 @@ struct has_fold_case
 ///
 template<typename Char, typename Impl>
 struct regex_traits
-  : Impl
+		: Impl
 {
-    typedef typename Impl::locale_type locale_type;
+	typedef typename Impl::locale_type locale_type;
 
-    regex_traits()
-      : Impl()
-    {
-    }
+	regex_traits()
+		: Impl()
+	{
+	}
 
-    explicit regex_traits(locale_type const &loc)
-      : Impl(loc)
-    {
-    }
+	explicit regex_traits ( locale_type const &loc )
+		: Impl ( loc )
+	{
+	}
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -92,16 +94,17 @@ struct regex_traits
 /// INTERNAL ONLY
 template<typename Traits, std::size_t N>
 inline typename Traits::char_class_type
-lookup_classname(Traits const &traits, char const (&cname)[N], bool icase)
+lookup_classname ( Traits const &traits, char const ( &cname ) [N], bool icase )
 {
-    typename Traits::char_type name[N] = {0};
-    for(std::size_t j = 0; j < N-1; ++j)
-    {
-        name[j] = traits.widen(cname[j]);
-    }
-    return traits.lookup_classname(name, name + N - 1, icase);
+	typename Traits::char_type name[N] = {0};
+	for ( std::size_t j = 0; j < N - 1; ++j )
+	{
+		name[j] = traits.widen ( cname[j] );
+	}
+	return traits.lookup_classname ( name, name + N - 1, icase );
 }
 
-}}
+}
+}
 
 #endif

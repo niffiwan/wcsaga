@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2006-2007 Tobias Schwinger
-  
-    Use modification and distribution are subject to the Boost Software 
+
+    Use modification and distribution are subject to the Boost Software
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt).
 ==============================================================================*/
@@ -22,7 +22,7 @@
 
 #   define  BOOST_PP_FILENAME_2 \
         <boost/fusion/functional/adapter/detail/pow2_explode.hpp>
-#   define  BOOST_PP_VALUE (1 << N) >> 4 
+#   define  BOOST_PP_VALUE (1 << N) >> 4
 #   if BOOST_PP_VALUE > BOOST_PP_LIMIT_ITERATION
 #       error "Preprocessor limit exceeded."
 #   endif

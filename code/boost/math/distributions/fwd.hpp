@@ -9,7 +9,10 @@
 #ifndef BOOST_MATH_DISTRIBUTIONS_FWD_HPP
 #define BOOST_MATH_DISTRIBUTIONS_FWD_HPP
 
-namespace boost{ namespace math{
+namespace boost
+{
+namespace math
+{
 
 template <class RealType, class Policy>
 class bernoulli_distribution;
@@ -89,7 +92,8 @@ class uniform_distribution;
 template <class RealType, class Policy>
 class weibull_distribution;
 
-}} // namespaces
+}
+} // namespaces
 
 #define BOOST_MATH_DECLARE_DISTRIBUTIONS(Type, Policy)\
    typedef boost::math::bernoulli_distribution<Type, Policy> bernoulli;\
@@ -118,5 +122,5 @@ class weibull_distribution;
    typedef boost::math::non_central_f_distribution<Type, Policy> non_central_f;\
    typedef boost::math::non_central_t_distribution<Type, Policy> non_central_t;\
    typedef boost::math::hypergeometric_distribution<Type, Policy> hypergeometric;\
-
+ 
 #endif // BOOST_MATH_DISTRIBUTIONS_FWD_HPP

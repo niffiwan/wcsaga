@@ -12,52 +12,55 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/int.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct struct_tag;
+namespace fusion
+{
+struct struct_tag;
 
-    namespace extension
-    {
-        template<typename T>
-        struct at_impl;
+namespace extension
+{
+template<typename T>
+struct at_impl;
 
-        template <typename Struct, int N>
-        struct struct_member;
+template <typename Struct, int N>
+struct struct_member;
 
-        template <typename Struct>
-        struct struct_size;
+template <typename Struct>
+struct struct_size;
 
-        template <>
-        struct at_impl<struct_tag>
-        {
-            template <typename Sequence, typename N>
-            struct apply
-            {
-                static int const n_value = N::value;
-                BOOST_MPL_ASSERT_RELATION(
-                    n_value, <=, extension::struct_size<Sequence>::value);
+template <>
+struct at_impl<struct_tag>
+{
+	template <typename Sequence, typename N>
+	struct apply
+	{
+		static int const n_value = N::value;
+		BOOST_MPL_ASSERT_RELATION (
+		    n_value, <=, extension::struct_size<Sequence>::value );
 
-                typedef typename
-                    extension::struct_member<Sequence, N::value>
-                element;
+		typedef typename
+		extension::struct_member<Sequence, N::value>
+		element;
 
-                typedef typename
-                    mpl::eval_if<
-                        is_const<Sequence>
-                      , detail::cref_result<element>
-                      , detail::ref_result<element>
-                    >::type
-                type;
+		typedef typename
+		mpl::eval_if <
+		is_const<Sequence>
+		, detail::cref_result<element>
+		, detail::ref_result<element>
+		>::type
+		type;
 
-                static type
-                call(Sequence& seq)
-                {
-                    return extension::
-                        struct_member<Sequence, N::value>::call(seq);
-                }
-            };
-        };
-    }
-}}
+		static type
+		call ( Sequence &seq )
+		{
+			return extension::
+			       struct_member<Sequence, N::value>::call ( seq );
+		}
+	};
+};
+}
+}
+}
 
 #endif

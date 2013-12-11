@@ -34,8 +34,8 @@
 #  define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
 #  define BOOST_NO_PRIVATE_IN_AGGREGATE
 #  define BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
-   // we shouldn't really need this - but too many things choke
-   // without it, this needs more investigation:
+// we shouldn't really need this - but too many things choke
+// without it, this needs more investigation:
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #  define BOOST_SP_NO_SP_CONVERTIBLE
 #endif
@@ -52,11 +52,11 @@
 #  define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
 
 #  ifdef NDEBUG
-      // fix broken <cstring> so that Boost.test works:
+// fix broken <cstring> so that Boost.test works:
 #     include <cstring>
 #     undef strcmp
 #  endif
-   // fix broken errno declaration:
+// fix broken errno declaration:
 #  include <errno.h>
 #  ifndef errno
 #     define errno errno

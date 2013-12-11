@@ -22,88 +22,89 @@
 namespace boost
 {
 
-    template
-    < 
-        class T, 
-        class CloneAllocator = heap_clone_allocator,
-        class Allocator      = std::allocator<void*>
+template
+<
+    class T,
+    class CloneAllocator = heap_clone_allocator,
+    class Allocator      = std::allocator<void *>
     >
-    class ptr_list : public 
-        ptr_sequence_adapter< T, 
-                              std::list<void*,Allocator>, 
-                              CloneAllocator >
-    {
-        typedef    ptr_sequence_adapter< T, 
-                                         std::list<void*,Allocator>, 
-                                         CloneAllocator >
-            base_class;
+class ptr_list : public
+	ptr_sequence_adapter< T,
+	std::list<void *, Allocator>,
+	CloneAllocator >
+{
+	typedef    ptr_sequence_adapter< T,
+	           std::list<void *, Allocator>,
+	           CloneAllocator >
+	           base_class;
 
-        typedef ptr_list<T,CloneAllocator,Allocator>  this_type;
-        
-    public:
-        BOOST_PTR_CONTAINER_DEFINE_SEQEUENCE_MEMBERS( ptr_list, 
-                                                      base_class,
-                                                      this_type )
+	typedef ptr_list<T, CloneAllocator, Allocator>  this_type;
 
-        typedef BOOST_DEDUCED_TYPENAME base_class::value_type value_type;
-        
-    public:
-        using base_class::merge;
-        
-        void merge( ptr_list& x )                                 
-        {
-            merge( x, std::less<T>() );
-        }
+public:
+	BOOST_PTR_CONTAINER_DEFINE_SEQEUENCE_MEMBERS ( ptr_list,
+	        base_class,
+	        this_type )
 
-        template< typename Compare > 
-        void merge( ptr_list& x, Compare comp )                   
-        {
-            this->base().merge( x.base(), void_ptr_indirect_fun<Compare,T>( comp ) ); }
+	typedef BOOST_DEDUCED_TYPENAME base_class::value_type value_type;
 
-        void sort()                                                    
-        { 
-            sort( std::less<T>() ); 
-        };
+public:
+	using base_class::merge;
 
-        template< typename Compare > 
-        void sort( Compare comp )                             
-        {
-            this->base().sort( void_ptr_indirect_fun<Compare,T>( comp ) );
-        }
+	void merge ( ptr_list &x )
+	{
+		merge ( x, std::less<T>() );
+	}
 
-        template< class Pred >
-        void erase_if( iterator first, iterator last, Pred pred )
-        {
-            base_class::erase_if( first, last, pred );
-        }
-        
-        template< class Pred >
-        void erase_if( Pred pred )
-        {
-            this->base().remove_if( BOOST_DEDUCED_TYPENAME base_class:: 
-                    BOOST_NESTED_TEMPLATE void_ptr_delete_if<Pred,value_type>
-                                    (pred) );
-        } 
+	template< typename Compare >
+	void merge ( ptr_list &x, Compare comp )
+	{
+		this->base().merge ( x.base(), void_ptr_indirect_fun<Compare, T> ( comp ) );
+	}
 
-    }; // class 'ptr_list'
+	void sort()
+	{
+		sort ( std::less<T>() );
+	};
 
-    //////////////////////////////////////////////////////////////////////////////
-    // clonability
+	template< typename Compare >
+	void sort ( Compare comp )
+	{
+		this->base().sort ( void_ptr_indirect_fun<Compare, T> ( comp ) );
+	}
 
-    template< typename T, typename CA, typename A >
-    inline ptr_list<T,CA,A>* new_clone( const ptr_list<T,CA,A>& r )
-    {
-        return r.clone().release();
-    }
-    
-    /////////////////////////////////////////////////////////////////////////
-    // swap
+	template< class Pred >
+	void erase_if ( iterator first, iterator last, Pred pred )
+	{
+		base_class::erase_if ( first, last, pred );
+	}
 
-    template< typename T, typename CA, typename A >
-    inline void swap( ptr_list<T,CA,A>& l, ptr_list<T,CA,A>& r )
-    {
-        l.swap(r);
-    }
+	template< class Pred >
+	void erase_if ( Pred pred )
+	{
+		this->base().remove_if ( BOOST_DEDUCED_TYPENAME base_class::
+		                         BOOST_NESTED_TEMPLATE void_ptr_delete_if<Pred, value_type>
+		                         ( pred ) );
+	}
+
+}; // class 'ptr_list'
+
+//////////////////////////////////////////////////////////////////////////////
+// clonability
+
+template< typename T, typename CA, typename A >
+inline ptr_list<T, CA, A> *new_clone ( const ptr_list<T, CA, A> &r )
+{
+	return r.clone().release();
+}
+
+/////////////////////////////////////////////////////////////////////////
+// swap
+
+template< typename T, typename CA, typename A >
+inline void swap ( ptr_list<T, CA, A> &l, ptr_list<T, CA, A> &r )
+{
+	l.swap ( r );
+}
 }
 
 

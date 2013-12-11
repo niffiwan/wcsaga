@@ -18,8 +18,8 @@
 //
 
 #if __GNUC__ * 100 + __GNUC_MINOR__ >= 402
-# include <ext/atomicity.h> 
-#else 
+# include <ext/atomicity.h>
+#else
 # include <bits/atomicity.h>
 #endif
 
@@ -40,29 +40,29 @@ class atomic_count
 {
 public:
 
-    explicit atomic_count( long v ) : value_( v ) {}
+explicit atomic_count ( long v ) : value_ ( v ) {}
 
-    long operator++()
-    {
-        return __exchange_and_add( &value_, +1 ) + 1;
-    }
+long operator++()
+{
+	return __exchange_and_add ( &value_, +1 ) + 1;
+}
 
-    long operator--()
-    {
-        return __exchange_and_add( &value_, -1 ) - 1;
-    }
+long operator--()
+{
+	return __exchange_and_add ( &value_, -1 ) - 1;
+}
 
-    operator long() const
-    {
-        return __exchange_and_add( &value_, 0 );
-    }
+operator long() const
+{
+	return __exchange_and_add ( &value_, 0 );
+}
 
 private:
 
-    atomic_count(atomic_count const &);
-    atomic_count & operator=(atomic_count const &);
+atomic_count ( atomic_count const & );
+atomic_count &operator= ( atomic_count const & );
 
-    mutable _Atomic_word value_;
+mutable _Atomic_word value_;
 };
 
 } // namespace detail

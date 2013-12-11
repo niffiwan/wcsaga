@@ -17,40 +17,42 @@
 #include <boost/accumulators/framework/depends_on.hpp>
 #include <boost/accumulators/statistics_fwd.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 namespace impl
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    // min_impl
-    template<typename Sample>
-    struct min_impl
-      : accumulator_base
-    {
-        // for boost::result_of
-        typedef Sample result_type;
+///////////////////////////////////////////////////////////////////////////////
+// min_impl
+template<typename Sample>
+struct min_impl
+		: accumulator_base
+{
+	// for boost::result_of
+	typedef Sample result_type;
 
-        template<typename Args>
-        min_impl(Args const &args)
-          : min_(numeric::as_max(args[sample | Sample()]))
-        {
-        }
+	template<typename Args>
+	min_impl ( Args const &args )
+		: min_ ( numeric::as_max ( args[sample | Sample()] ) )
+	{
+	}
 
-        template<typename Args>
-        void operator ()(Args const &args)
-        {
-            numeric::min_assign(this->min_, args[sample]);
-        }
+	template<typename Args>
+	void operator () ( Args const &args )
+	{
+		numeric::min_assign ( this->min_, args[sample] );
+	}
 
-        result_type result(dont_care) const
-        {
-            return this->min_;
-        }
+	result_type result ( dont_care ) const
+	{
+		return this->min_;
+	}
 
-    private:
-        Sample min_;
-    };
+private:
+	Sample min_;
+};
 
 } // namespace impl
 
@@ -59,13 +61,13 @@ namespace impl
 //
 namespace tag
 {
-    struct min
-      : depends_on<>
-    {
-        /// INTERNAL ONLY
-        ///
-        typedef accumulators::impl::min_impl<mpl::_1> impl;
-    };
+struct min
+		: depends_on<>
+{
+	/// INTERNAL ONLY
+	///
+	typedef accumulators::impl::min_impl<mpl::_1> impl;
+};
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -73,13 +75,14 @@ namespace tag
 //
 namespace extract
 {
-    extractor<tag::min> const min = {};
+extractor<tag::min> const min = {};
 
-    BOOST_ACCUMULATORS_IGNORE_GLOBAL(min)
+BOOST_ACCUMULATORS_IGNORE_GLOBAL ( min )
 }
 
 using extract::min;
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -30,25 +30,25 @@
 #include "radar/radarsetup.h"
 
 //function pointers for assorted radar functions
-void (*radar_stuff_blip_info)(object* objp, int is_bright, color** blip_color, int* blip_type) = NULL;
-void (*radar_blip_draw_distorted)(blip* b) = NULL;
-void (*radar_blip_draw_flicker)(blip* b) = NULL;
-void (*radar_blit_gauge)() = NULL;
-void (*radar_draw_blips_sorted)(int distort) = NULL;
-void (*radar_draw_circle)(int x, int y, int rad) = NULL;
-void (*radar_draw_range)() = NULL;
-void (*radar_frame_init)() = NULL;
-void (*radar_frame_render)(float frametime) = NULL;
-void (*radar_init)() = NULL;
-void (*radar_mission_init)() = NULL;
-void (*radar_null_nblips)() = NULL;
-void (*radar_page_in)() = NULL;
-void (*radar_plot_object)(object* objp) = NULL;
+void ( *radar_stuff_blip_info ) ( object *objp, int is_bright, color **blip_color, int *blip_type ) = NULL;
+void ( *radar_blip_draw_distorted ) ( blip *b ) = NULL;
+void ( *radar_blip_draw_flicker ) ( blip *b ) = NULL;
+void ( *radar_blit_gauge ) () = NULL;
+void ( *radar_draw_blips_sorted ) ( int distort ) = NULL;
+void ( *radar_draw_circle ) ( int x, int y, int rad ) = NULL;
+void ( *radar_draw_range ) () = NULL;
+void ( *radar_frame_init ) () = NULL;
+void ( *radar_frame_render ) ( float frametime ) = NULL;
+void ( *radar_init ) () = NULL;
+void ( *radar_mission_init ) () = NULL;
+void ( *radar_null_nblips ) () = NULL;
+void ( *radar_page_in ) () = NULL;
+void ( *radar_plot_object ) ( object *objp ) = NULL;
 
 int Radar_static_looping = -1;
 
 radar_globals Radar_globals[MAX_RADAR_MODES];
-radar_globals* Current_radar_global;
+radar_globals *Current_radar_global;
 
 rcol Radar_color_rgb[MAX_RADAR_COLORS][MAX_RADAR_LEVELS] =
 {
@@ -58,12 +58,12 @@ rcol Radar_color_rgb[MAX_RADAR_COLORS][MAX_RADAR_LEVELS] =
 			0x40,
 			0x40,
 			0x00
-		},		// dim
+		},      // dim
 		{
 			0x7f,
 			0x7f,
 			0x00
-		},		// bright
+		},      // bright
 	},
 
 	// navbuoy or cargo (gray)
@@ -72,12 +72,12 @@ rcol Radar_color_rgb[MAX_RADAR_COLORS][MAX_RADAR_LEVELS] =
 			0x40,
 			0x40,
 			0x40
-		},		// dim
+		},      // dim
 		{
 			0x7f,
 			0x7f,
 			0x7f
-		},		// bright
+		},      // bright
 	},
 
 	// warping ship (blue)
@@ -86,12 +86,12 @@ rcol Radar_color_rgb[MAX_RADAR_COLORS][MAX_RADAR_LEVELS] =
 			0x00,
 			0x00,
 			0x7f
-		},		// dim
+		},      // dim
 		{
 			0x00,
 			0x00,
 			0xff
-		},		// bright
+		},      // bright
 	},
 
 	// jump node (gray)
@@ -100,12 +100,12 @@ rcol Radar_color_rgb[MAX_RADAR_COLORS][MAX_RADAR_LEVELS] =
 			0x40,
 			0x40,
 			0x40
-		},		// dim
+		},      // dim
 		{
 			0x7f,
 			0x7f,
 			0x7f
-		},		// bright
+		},      // bright
 	},
 
 	// tagged (yellow)
@@ -114,12 +114,12 @@ rcol Radar_color_rgb[MAX_RADAR_COLORS][MAX_RADAR_LEVELS] =
 			0x7f,
 			0x7f,
 			0x00
-		},		// dim
+		},      // dim
 		{
 			0xff,
 			0xff,
 			0x00
-		},		// bright
+		},      // bright
 	},
 };
 
@@ -127,31 +127,31 @@ int radar_target_id_flags = 0;
 
 color Radar_colors[MAX_RADAR_COLORS][MAX_RADAR_LEVELS];
 
-blip Blip_bright_list[MAX_BLIP_TYPES];		// linked list of bright blips
-blip Blip_dim_list[MAX_BLIP_TYPES];			// linked list of dim blips
+blip Blip_bright_list[MAX_BLIP_TYPES];      // linked list of bright blips
+blip Blip_dim_list[MAX_BLIP_TYPES];         // linked list of dim blips
 
-blip Blips[MAX_BLIPS];								// blips pool
-int N_blips;											// next blip index to take from pool
+blip Blips[MAX_BLIPS];                              // blips pool
+int N_blips;                                            // next blip index to take from pool
 
 float Radar_farthest_dist = 1000.0f;
 int Blip_mutate_id;
 
-int Radar_static_playing;			// is static currently playing on the radar?
-int Radar_static_next;				// next time to toggle static on radar
-int Radar_avail_prev_frame;		// was radar active last frame?
-int Radar_death_timer;				// timestamp used to play static on radar
+int Radar_static_playing;           // is static currently playing on the radar?
+int Radar_static_next;              // next time to toggle static on radar
+int Radar_avail_prev_frame;     // was radar active last frame?
+int Radar_death_timer;              // timestamp used to play static on radar
 
 hud_frames Radar_gauge;
 
 float radx, rady;
-float Radar_bright_range;					// range at which we start dimming the radar blips
-int Radar_calc_bright_dist_timer;		// timestamp at which we recalc Radar_bright_range
-int Radar_flicker_timer[NUM_FLICKER_TIMERS];					// timestamp used to flicker blips on and off
+float Radar_bright_range;                   // range at which we start dimming the radar blips
+int Radar_calc_bright_dist_timer;       // timestamp at which we recalc Radar_bright_range
+int Radar_flicker_timer[NUM_FLICKER_TIMERS];                    // timestamp used to flicker blips on and off
 int Radar_flicker_on[NUM_FLICKER_TIMERS];
 
 int See_all = 0;
 
-DCF_BOOL(see_all, See_all)
+DCF_BOOL ( see_all, See_all )
 
 static const char radar_default_filenames[2][16] =
 {
@@ -163,7 +163,7 @@ static const char radar_default_filenames[2][16] =
 //if a table is going to be loaded, the code will go here to get the various values
 void create_radar_global_vars()
 {
-	for (int i = 0; i < MAX_RADAR_MODES; i++)
+	for ( int i = 0; i < MAX_RADAR_MODES; i++ )
 	{
 		Radar_globals[i].Radar_radius[0][0] = 120;
 		Radar_globals[i].Radar_radius[0][1] = 100;
@@ -180,8 +180,8 @@ void create_radar_global_vars()
 		Radar_globals[i].Radar_coords[1][0] = 411;
 		Radar_globals[i].Radar_coords[1][1] = 590;
 
-		strcpy_s(Radar_globals[i].Radar_fname[0], radar_default_filenames[0]);
-		strcpy_s(Radar_globals[i].Radar_fname[1], radar_default_filenames[1]);
+		strcpy_s ( Radar_globals[i].Radar_fname[0], radar_default_filenames[0] );
+		strcpy_s ( Radar_globals[i].Radar_fname[1], radar_default_filenames[1] );
 
 		Radar_globals[i].Radar_blip_radius_normal[0] = 2;
 		Radar_globals[i].Radar_blip_radius_normal[1] = 4;
@@ -208,62 +208,62 @@ void create_radar_global_vars()
 	}
 }
 
-void select_radar_mode(int radar_mode)
+void select_radar_mode ( int radar_mode )
 {
 	static int radar_globals_inited = 0;
 
-	if (!radar_globals_inited)
+	if ( !radar_globals_inited )
 	{
 		radar_globals_inited = 1;
 		create_radar_global_vars();
 	}
 
-	switch (radar_mode)
+	switch ( radar_mode )
 	{
-		//selected normal radar mode.  thats the only one implemented now
+	//selected normal radar mode.  thats the only one implemented now
 	case RADAR_MODE_STANDARD:
-		{
-			radar_stuff_blip_info = radar_stuff_blip_info_std;
-			radar_blip_draw_distorted = radar_blip_draw_distorted_std;
-			radar_blip_draw_flicker = radar_blip_draw_flicker_std;
-			radar_blit_gauge = radar_blit_gauge_std;
-			radar_draw_blips_sorted = radar_draw_blips_sorted_std;
-			radar_draw_circle = radar_draw_circle_std;
-			radar_draw_range = radar_draw_range_std;
-			radar_frame_init = radar_frame_init_std;
-			radar_frame_render = radar_frame_render_std;
-			radar_init = radar_init_std;
-			radar_mission_init = radar_mission_init_std;
-			radar_null_nblips = radar_null_nblips_std;
-			radar_page_in = radar_page_in_std;
-			radar_plot_object = radar_plot_object_std;
-			Current_radar_global = &Radar_globals[RADAR_MODE_STANDARD];
-			radar_init();
-		}
-		break;
+	{
+		radar_stuff_blip_info = radar_stuff_blip_info_std;
+		radar_blip_draw_distorted = radar_blip_draw_distorted_std;
+		radar_blip_draw_flicker = radar_blip_draw_flicker_std;
+		radar_blit_gauge = radar_blit_gauge_std;
+		radar_draw_blips_sorted = radar_draw_blips_sorted_std;
+		radar_draw_circle = radar_draw_circle_std;
+		radar_draw_range = radar_draw_range_std;
+		radar_frame_init = radar_frame_init_std;
+		radar_frame_render = radar_frame_render_std;
+		radar_init = radar_init_std;
+		radar_mission_init = radar_mission_init_std;
+		radar_null_nblips = radar_null_nblips_std;
+		radar_page_in = radar_page_in_std;
+		radar_plot_object = radar_plot_object_std;
+		Current_radar_global = &Radar_globals[RADAR_MODE_STANDARD];
+		radar_init();
+	}
+	break;
 
 	case RADAR_MODE_ORB:
-		{
-			radar_stuff_blip_info = radar_stuff_blip_info_orb;
-			radar_blip_draw_distorted = radar_blip_draw_distorted_orb;
-			radar_blip_draw_flicker = radar_blip_draw_flicker_orb;
-			radar_blit_gauge = radar_blit_gauge_orb;
-			radar_draw_blips_sorted = radar_draw_blips_sorted_orb;
-			radar_draw_circle = radar_draw_circle_orb;
-			radar_draw_range = radar_draw_range_orb;
-			radar_frame_init = radar_frame_init_orb;
-			radar_frame_render = radar_frame_render_orb;
-			radar_init = radar_init_orb;
-			radar_mission_init = radar_mission_init_orb;
-			radar_null_nblips = radar_null_nblips_orb;
-			radar_page_in = radar_page_in_orb;
-			radar_plot_object = radar_plot_object_orb;
-			Current_radar_global = &Radar_globals[RADAR_MODE_ORB];
-			radar_init();
-		}
-		break;
+	{
+		radar_stuff_blip_info = radar_stuff_blip_info_orb;
+		radar_blip_draw_distorted = radar_blip_draw_distorted_orb;
+		radar_blip_draw_flicker = radar_blip_draw_flicker_orb;
+		radar_blit_gauge = radar_blit_gauge_orb;
+		radar_draw_blips_sorted = radar_draw_blips_sorted_orb;
+		radar_draw_circle = radar_draw_circle_orb;
+		radar_draw_range = radar_draw_range_orb;
+		radar_frame_init = radar_frame_init_orb;
+		radar_frame_render = radar_frame_render_orb;
+		radar_init = radar_init_orb;
+		radar_mission_init = radar_mission_init_orb;
+		radar_null_nblips = radar_null_nblips_orb;
+		radar_page_in = radar_page_in_orb;
+		radar_plot_object = radar_plot_object_orb;
+		Current_radar_global = &Radar_globals[RADAR_MODE_ORB];
+		radar_init();
+	}
+	break;
 
 	default:
-		Error(LOCATION, "unknown radar mode specified");
+		Error ( LOCATION, "unknown radar mode specified" );
 	}
 }

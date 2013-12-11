@@ -53,87 +53,88 @@
  * details about concept checks.
  */
 
-namespace boost {
+namespace boost
+{
 
-    //! Check if a type T models the SinglePassRange range concept.
-    template<typename T>
-    struct SinglePassRangeConcept 
-    {
-        typedef typename range_iterator<T const>::type  range_const_iterator;
-        typedef typename range_iterator<T>::type        range_iterator;
+//! Check if a type T models the SinglePassRange range concept.
+template<typename T>
+struct SinglePassRangeConcept
+{
+	typedef typename range_iterator<T const>::type  range_const_iterator;
+	typedef typename range_iterator<T>::type        range_iterator;
 
-        void constraints()
-        {
-            function_requires<
-                boost_concepts::SinglePassIteratorConcept<
-                    range_iterator
-                >
-            >();
-            i = boost::begin(a);
-            i = boost::end(a);
-            const_constraints(a);
-        }
-        
-        void const_constraints(const T& a)
-        {
-            ci = boost::begin(a);
-            ci = boost::end(a);
-        }
-        T a;
-        range_iterator i;
-        range_const_iterator ci;
-    };
+	void constraints()
+	{
+		function_requires <
+		boost_concepts::SinglePassIteratorConcept <
+		range_iterator
+		>
+		> ();
+		i = boost::begin ( a );
+		i = boost::end ( a );
+		const_constraints ( a );
+	}
 
-    //! Check if a type T models the ForwardRange range concept.
-    template<typename T>
-    struct ForwardRangeConcept 
-    {
-        void constraints()
-        {
-            function_requires<
-                SinglePassRangeConcept<T>
-            >();        
-            function_requires<
-                boost_concepts::ForwardTraversalConcept<
-                    typename range_iterator<T>::type
-                >
-            >();
-        }
-    };
+	void const_constraints ( const T &a )
+	{
+		ci = boost::begin ( a );
+		ci = boost::end ( a );
+	}
+	T a;
+	range_iterator i;
+	range_const_iterator ci;
+};
 
-    //! Check if a type T models the BidirectionalRange range concept.
-    template<typename T>
-    struct BidirectionalRangeConcept 
-    {
-        void constraints()
-        {
-            function_requires<
-                    ForwardRangeConcept<T>
-            >();        
-            function_requires<
-                boost_concepts::BidirectionalTraversalConcept<
-                    typename range_iterator<T>::type
-                >
-            >();
-        }
-    };
+//! Check if a type T models the ForwardRange range concept.
+template<typename T>
+struct ForwardRangeConcept
+{
+	void constraints()
+	{
+		function_requires <
+		SinglePassRangeConcept<T>
+		> ();
+		function_requires <
+		boost_concepts::ForwardTraversalConcept <
+		typename range_iterator<T>::type
+		>
+		> ();
+	}
+};
 
-    //! Check if a type T models the RandomAccessRange range concept.
-    template<typename T>
-    struct RandomAccessRangeConcept 
-    {
-        void constraints()
-        {
-            function_requires<
-                BidirectionalRangeConcept<T>
-            >();        
-            function_requires<
-                boost_concepts::RandomAccessTraversalConcept<
-                    typename range_iterator<T>::type
-                >
-            >();
-         }
-    };
+//! Check if a type T models the BidirectionalRange range concept.
+template<typename T>
+struct BidirectionalRangeConcept
+{
+	void constraints()
+	{
+		function_requires <
+		ForwardRangeConcept<T>
+		> ();
+		function_requires <
+		boost_concepts::BidirectionalTraversalConcept <
+		typename range_iterator<T>::type
+		>
+		> ();
+	}
+};
+
+//! Check if a type T models the RandomAccessRange range concept.
+template<typename T>
+struct RandomAccessRangeConcept
+{
+	void constraints()
+	{
+		function_requires <
+		BidirectionalRangeConcept<T>
+		> ();
+		function_requires <
+		boost_concepts::RandomAccessTraversalConcept <
+		typename range_iterator<T>::type
+		>
+		> ();
+	}
+};
 
 } // namespace boost
 

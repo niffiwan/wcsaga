@@ -14,9 +14,11 @@
 // should be the last #include
 #include <boost/type_traits/detail/type_trait_def.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace detail {
+namespace detail
+{
 
 #if defined(__BORLANDC__) && (__BORLANDC__ < 0x5A0)
 //
@@ -27,27 +29,27 @@ namespace detail {
 template <typename T>
 struct add_pointer_impl
 {
-    typedef T* type;
+	typedef T *type;
 };
 template <typename T>
-struct add_pointer_impl<T&>
+struct add_pointer_impl<T &>
 {
-    typedef T* type;
+	typedef T *type;
 };
 template <typename T>
-struct add_pointer_impl<T&const>
+struct add_pointer_impl<T &const>
 {
-    typedef T* type;
+	typedef T *type;
 };
 template <typename T>
-struct add_pointer_impl<T&volatile>
+struct add_pointer_impl<T &volatile>
 {
-    typedef T* type;
+	typedef T *type;
 };
 template <typename T>
-struct add_pointer_impl<T&const volatile>
+struct add_pointer_impl<T &const volatile>
 {
-    typedef T* type;
+	typedef T *type;
 };
 
 #else
@@ -55,15 +57,15 @@ struct add_pointer_impl<T&const volatile>
 template <typename T>
 struct add_pointer_impl
 {
-    typedef typename remove_reference<T>::type no_ref_type;
-    typedef no_ref_type* type;
+	typedef typename remove_reference<T>::type no_ref_type;
+	typedef no_ref_type *type;
 };
 
 #endif
 
 } // namespace detail
 
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(add_pointer,T,typename boost::detail::add_pointer_impl<T>::type)
+BOOST_TT_AUX_TYPE_TRAIT_DEF1 ( add_pointer, T, typename boost::detail::add_pointer_impl<T>::type )
 
 } // namespace boost
 

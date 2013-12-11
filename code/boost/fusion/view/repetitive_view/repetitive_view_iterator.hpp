@@ -18,34 +18,37 @@
 #include <boost/fusion/view/repetitive_view/detail/next_impl.hpp>
 #include <boost/fusion/view/repetitive_view/detail/value_of_impl.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct repetitive_view_iterator_tag;
+namespace fusion
+{
+struct repetitive_view_iterator_tag;
 
-    template<typename Sequence, typename Pos =
-        typename result_of::begin<Sequence>::type>
-    struct repetitive_view_iterator
-        : iterator_base< repetitive_view_iterator<Sequence,Pos> >
-    {
-        typedef repetitive_view_iterator_tag fusion_tag;
+template<typename Sequence, typename Pos =
+         typename result_of::begin<Sequence>::type>
+struct repetitive_view_iterator
+		: iterator_base< repetitive_view_iterator<Sequence, Pos> >
+{
+	typedef repetitive_view_iterator_tag fusion_tag;
 
-        typedef Sequence sequence_type;
-        typedef typename convert_iterator<Pos>::type pos_type;
-        typedef typename convert_iterator<typename result_of::begin<Sequence>::type>::type first_type;
-        typedef typename convert_iterator<typename result_of::end<Sequence>::type>::type end_type;
-        typedef single_pass_traversal_tag category;
+	typedef Sequence sequence_type;
+	typedef typename convert_iterator<Pos>::type pos_type;
+	typedef typename convert_iterator<typename result_of::begin<Sequence>::type>::type first_type;
+	typedef typename convert_iterator<typename result_of::end<Sequence>::type>::type end_type;
+	typedef single_pass_traversal_tag category;
 
-        explicit repetitive_view_iterator(Sequence& seq)
-            : seq(seq), pos(begin(seq)) {}
+	explicit repetitive_view_iterator ( Sequence &seq )
+		: seq ( seq ), pos ( begin ( seq ) ) {}
 
-        repetitive_view_iterator(Sequence& seq, pos_type const& pos)
-            : seq(seq), pos(pos) {}
+	repetitive_view_iterator ( Sequence &seq, pos_type const &pos )
+		: seq ( seq ), pos ( pos ) {}
 
-        Sequence& seq;
-        pos_type pos;
+	Sequence &seq;
+	pos_type pos;
 
-    };
-}}
+};
+}
+}
 
 #endif
 

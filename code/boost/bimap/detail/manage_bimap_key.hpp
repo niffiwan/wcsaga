@@ -25,9 +25,12 @@
 
 #include <boost/bimap/set_of.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace detail {
+namespace boost
+{
+namespace bimaps
+{
+namespace detail
+{
 
 /** \struct boost::bimaps::detail::manage_bimap_key
 \brief Metafunction to manage the set types of a bimap.
@@ -49,25 +52,25 @@ template< class Type >
 struct manage_bimap_key
 {
 
-typedef BOOST_DEDUCED_TYPENAME
+	typedef BOOST_DEDUCED_TYPENAME
 
-    mpl::eval_if< BOOST_DEDUCED_TYPENAME is_set_type_of< Type >::type,
-    // {
-            mpl::identity< Type >,
-    // }
-    // else
-    // {
-            // Default it to a set
-            mpl::identity< set_of< Type > >
-    // }
+	mpl::eval_if< BOOST_DEDUCED_TYPENAME is_set_type_of< Type >::type,
+	    // {
+	    mpl::identity< Type >,
+	    // }
+	    // else
+	    // {
+	    // Default it to a set
+	    mpl::identity< set_of< Type > >
+	    // }
 
-    >::type set_type;
+	    >::type set_type;
 
-    // Returns set_type and evaluate the concept_checked_type
+	// Returns set_type and evaluate the concept_checked_type
 
-    typedef BOOST_DEDUCED_TYPENAME mpl::if_c< true, set_type, 
-        BOOST_DEDUCED_TYPENAME set_type::lazy_concept_checked::type
-    >::type type;
+	typedef BOOST_DEDUCED_TYPENAME mpl::if_c< true, set_type,
+	        BOOST_DEDUCED_TYPENAME set_type::lazy_concept_checked::type
+	        >::type type;
 };
 
 

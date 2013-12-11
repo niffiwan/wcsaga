@@ -25,54 +25,56 @@
 /* Particularization of assoc_container_factory_class using a set.
  */
 
-namespace boost{
+namespace boost
+{
 
-namespace flyweights{
+namespace flyweights
+{
 
-template<
-  typename Entry,typename Key,
-  typename Compare,typename Allocator
->
-class set_factory_class:
-  public assoc_container_factory_class<
-    std::set<
-      Entry,
-      typename boost::mpl::if_<
-        mpl::is_na<Compare>,
-        std::less<Key>,
-        Compare
-      >::type,
-      typename boost::mpl::if_<
-        mpl::is_na<Allocator>,
-        std::allocator<Entry>,
-        Allocator
-      >::type
+template <
+    typename Entry, typename Key,
+    typename Compare, typename Allocator
     >
-  >
+class set_factory_class:
+	public assoc_container_factory_class <
+	std::set <
+	Entry,
+	typename boost::mpl::if_ <
+	mpl::is_na<Compare>,
+	std::less<Key>,
+	Compare
+	>::type,
+	typename boost::mpl::if_ <
+	mpl::is_na<Allocator>,
+	std::allocator<Entry>,
+	Allocator
+	>::type
+	>
+	>
 {
 public:
-  typedef set_factory_class type;
-  BOOST_MPL_AUX_LAMBDA_SUPPORT(
-    4,set_factory_class,(Entry,Key,Compare,Allocator))
+	typedef set_factory_class type;
+	BOOST_MPL_AUX_LAMBDA_SUPPORT (
+	    4, set_factory_class, ( Entry, Key, Compare, Allocator ) )
 };
 
 /* set_factory_class specifier */
 
-template<
-  typename Compare,typename Allocator
-  BOOST_FLYWEIGHT_NOT_A_PLACEHOLDER_EXPRESSION_DEF
->
-struct set_factory:factory_marker
-{
-  template<typename Entry,typename Key>
-  struct apply:
-    mpl::apply2<
-      set_factory_class<
-        boost::mpl::_1,boost::mpl::_2,Compare,Allocator
-      >,
-      Entry,Key
+template <
+    typename Compare, typename Allocator
+    BOOST_FLYWEIGHT_NOT_A_PLACEHOLDER_EXPRESSION_DEF
     >
-  {};
+struct set_factory: factory_marker
+{
+	template<typename Entry, typename Key>
+	struct apply:
+			mpl::apply2 <
+			set_factory_class <
+			boost::mpl::_1, boost::mpl::_2, Compare, Allocator
+			>,
+			Entry, Key
+			>
+	{};
 };
 
 } /* namespace flyweights */

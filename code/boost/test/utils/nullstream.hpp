@@ -1,7 +1,7 @@
 //  (C) Copyright Gennadiy Rozental 2002-2008.
-//  (C) Copyright Daryle Walker 2000-2001. 
+//  (C) Copyright Daryle Walker 2000-2001.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -26,7 +26,8 @@
 
 //____________________________________________________________________________//
 
-namespace boost {
+namespace boost
+{
 
 // ************************************************************************** //
 // **************                 basic_nullbuf                ************** //
@@ -36,29 +37,30 @@ namespace boost {
 //  27 Oct 2000 14:06:21 GMT on comp.lang.c++.
 
 template<typename CharType, class CharTraits = ::std::char_traits<CharType> >
-class basic_nullbuf : public ::std::basic_streambuf<CharType, CharTraits> {
-    typedef ::std::basic_streambuf<CharType, CharTraits>  base_type;
+class basic_nullbuf : public ::std::basic_streambuf<CharType, CharTraits>
+{
+	typedef ::std::basic_streambuf<CharType, CharTraits>  base_type;
 public:
-    // Types
-    typedef typename base_type::char_type    char_type;
-    typedef typename base_type::traits_type  traits_type;
-    typedef typename base_type::int_type     int_type;
-    typedef typename base_type::pos_type     pos_type;
-    typedef typename base_type::off_type     off_type;
+	// Types
+	typedef typename base_type::char_type    char_type;
+	typedef typename base_type::traits_type  traits_type;
+	typedef typename base_type::int_type     int_type;
+	typedef typename base_type::pos_type     pos_type;
+	typedef typename base_type::off_type     off_type;
 
-    // Use automatic default constructor and destructor
+	// Use automatic default constructor and destructor
 
 protected:
-    // The default implementations of the miscellaneous virtual
-    // member functions are sufficient.
+	// The default implementations of the miscellaneous virtual
+	// member functions are sufficient.
 
-    // The default implementations of the input & putback virtual
-    // member functions, being nowhere but EOF, are sufficient.
+	// The default implementations of the input & putback virtual
+	// member functions, being nowhere but EOF, are sufficient.
 
-    // The output virtual member functions need to be changed to
-    // accept anything without any problems, instead of being at EOF.
-    virtual  ::std::streamsize  xsputn( char_type const* /*s*/, ::std::streamsize n )   { return n; } // "s" is unused
-    virtual  int_type           overflow( int_type c = traits_type::eof() )         { return traits_type::not_eof( c ); }
+	// The output virtual member functions need to be changed to
+	// accept anything without any problems, instead of being at EOF.
+	virtual  ::std::streamsize  xsputn ( char_type const * /*s*/, ::std::streamsize n )   { return n; } // "s" is unused
+	virtual  int_type           overflow ( int_type c = traits_type::eof() )         { return traits_type::not_eof ( c ); }
 };
 
 typedef basic_nullbuf<char>      nullbuf;
@@ -76,12 +78,13 @@ typedef basic_nullbuf<wchar_t>  wnullbuf;
 
 template< typename CharType, class CharTraits = ::std::char_traits<CharType> >
 class basic_onullstream : private boost::base_from_member<basic_nullbuf<CharType, CharTraits> >
-                        , public ::std::basic_ostream<CharType, CharTraits> {
-    typedef boost::base_from_member<basic_nullbuf<CharType, CharTraits> >   pbase_type;
-    typedef ::std::basic_ostream<CharType, CharTraits>                      base_type;
+	, public ::std::basic_ostream<CharType, CharTraits>
+{
+	typedef boost::base_from_member<basic_nullbuf<CharType, CharTraits> >   pbase_type;
+	typedef ::std::basic_ostream<CharType, CharTraits>                      base_type;
 public:
-    // Constructor
-    basic_onullstream() : pbase_type(), base_type( &this->pbase_type::member ) {}
+	// Constructor
+	basic_onullstream() : pbase_type(), base_type ( &this->pbase_type::member ) {}
 };
 
 #ifdef BOOST_MSVC

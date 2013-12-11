@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2007 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #ifndef BOOST_PP_IS_ITERATING
@@ -12,39 +12,39 @@
 #include <boost/preprocessor/repetition/enum.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 
-    namespace detail
-    {
-        template <int N>
-        struct composite_eval;
+namespace detail
+{
+template <int N>
+struct composite_eval;
 
-        template <>
-        struct composite_eval<0>
-        {
-            template <typename Composite, typename Env>
-            struct result
-            {
-                typedef typename Composite::eval_policy_type::
-                    template result<Env>::type
-                type;
-            };
+template <>
+struct composite_eval<0>
+{
+	template <typename Composite, typename Env>
+	struct result
+	{
+		typedef typename Composite::eval_policy_type::
+		template result<Env>::type
+		type;
+	};
 
-            template <typename RT, typename Composite, typename Env>
-            static RT
-            call(Composite const& /*composite*/, Env const& env)
-            {
-                typedef typename Composite::eval_policy_type eval_policy_type;
-                return eval_policy_type::template eval<RT>(env);
-            }
-        };
+	template <typename RT, typename Composite, typename Env>
+	static RT
+	call ( Composite const & /*composite*/, Env const &env )
+	{
+		typedef typename Composite::eval_policy_type eval_policy_type;
+		return eval_policy_type::template eval<RT> ( env );
+	}
+};
 
-        template <typename Actor, typename Env>
-        struct eval_is_actor
-            : is_actor<typename Actor::template result<Env>::type> {};
+template <typename Actor, typename Env>
+struct eval_is_actor
+		: is_actor<typename Actor::template result<Env>::type> {};
 
-        template <typename Actor, typename Env>
-        struct eval_is_void
-            : is_same<typename Actor::template result<Env>::type, fusion::void_> {};
-    }
+template <typename Actor, typename Env>
+struct eval_is_void
+		: is_same<typename Actor::template result<Env>::type, fusion::void_> {};
+}
 
 #define PHOENIX_GET_ACTOR_TYPE(z, n, data)                                      \
     typedef                                                                     \
@@ -72,33 +72,33 @@
 
 #define N BOOST_PP_ITERATION()
 
-    namespace detail
-    {
-        template <>
-        struct composite_eval<N>
-        {
-            template <typename Composite, typename Env>
-            struct result
-            {
-                BOOST_PP_REPEAT(N, PHOENIX_GET_ACTOR_TYPE, _)
+namespace detail
+{
+template <>
+struct composite_eval<N>
+{
+	template <typename Composite, typename Env>
+	struct result
+	{
+		BOOST_PP_REPEAT ( N, PHOENIX_GET_ACTOR_TYPE, _ )
 
-                typedef typename
-                    Composite::eval_policy_type::template result<
-                        Env, BOOST_PP_ENUM_PARAMS(N, actor)
-                    >::type
-                type;
-            };
+		typedef typename
+		Composite::eval_policy_type::template result <
+		    Env, BOOST_PP_ENUM_PARAMS ( N, actor )
+		    >::type
+		type;
+	};
 
-            template <typename RT, typename Composite, typename Env>
-            static RT
-            call(Composite const& composite, Env const& env)
-            {
-                typedef typename Composite::eval_policy_type eval_policy_type;
-                return eval_policy_type::template eval<RT>(
-                    env, BOOST_PP_ENUM(N, PHOENIX_GET_ACTOR, _));
-            }
-        };
-    }
+	template <typename RT, typename Composite, typename Env>
+	static RT
+	call ( Composite const &composite, Env const &env )
+	{
+		typedef typename Composite::eval_policy_type eval_policy_type;
+		return eval_policy_type::template eval<RT> (
+		    env, BOOST_PP_ENUM ( N, PHOENIX_GET_ACTOR, _ ) );
+	}
+};
+}
 
 #undef N
 #endif // defined(BOOST_PP_IS_ITERATING)

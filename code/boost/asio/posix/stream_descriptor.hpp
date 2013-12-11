@@ -22,9 +22,12 @@
 #if defined(BOOST_ASIO_HAS_POSIX_STREAM_DESCRIPTOR) \
   || defined(GENERATING_DOCUMENTATION)
 
-namespace boost {
-namespace asio {
-namespace posix {
+namespace boost
+{
+namespace asio
+{
+namespace posix
+{
 
 /// Typedef for the typical usage of a stream-oriented descriptor.
 typedef basic_stream_descriptor<> stream_descriptor;
@@ -34,7 +37,7 @@ typedef basic_stream_descriptor<> stream_descriptor;
 } // namespace boost
 
 #endif // defined(BOOST_ASIO_HAS_POSIX_STREAM_DESCRIPTOR)
-       //   || defined(GENERATING_DOCUMENTATION)
+//   || defined(GENERATING_DOCUMENTATION)
 
 #include <boost/asio/detail/pop_options.hpp>
 

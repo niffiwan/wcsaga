@@ -14,85 +14,92 @@
 # include <boost/type_traits/remove_cv.hpp>
 # include <boost/type_traits/add_const.hpp>
 
-namespace boost { namespace parameter { namespace aux {
+namespace boost
+{
+namespace parameter
+{
+namespace aux
+{
 
 struct maybe_base {};
 
 template <class T>
 struct maybe : maybe_base
 {
-    typedef typename add_reference<
+	typedef typename add_reference <
 # if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-        T const
-# else 
-        typename add_const<T>::type
-# endif 
-    >::type reference;
-    
-    typedef typename remove_cv<
-        BOOST_DEDUCED_TYPENAME remove_reference<reference>::type
-    >::type non_cv_value;
-        
-    explicit maybe(T value)
-      : value(value)
-      , constructed(false)
-    {}
+	T const
+# else
+	typename add_const<T>::type
+# endif
+	>::type reference;
 
-    maybe()
-      : constructed(false)
-    {}
+	typedef typename remove_cv <
+	BOOST_DEDUCED_TYPENAME remove_reference<reference>::type
+	>::type non_cv_value;
 
-    ~maybe()
-    {
-        if (constructed)
-            this->destroy();
-    }
+	explicit maybe ( T value )
+		: value ( value )
+		, constructed ( false )
+	{}
 
-    reference construct(reference value) const
-    {
-        return value;
-    }
+	maybe()
+		: constructed ( false )
+	{}
 
-    template <class U>
-    reference construct2(U const& value) const
-    {
-        new (m_storage.bytes) non_cv_value(value);
-        constructed = true;
-        return *(non_cv_value*)m_storage.bytes;
-    }
+	~maybe()
+	{
+		if ( constructed )
+			this->destroy();
+	}
 
-    template <class U>
-    reference construct(U const& value) const
-    {
-        return this->construct2(value);
-    }
+	reference construct ( reference value ) const
+	{
+		return value;
+	}
 
-    void destroy()
-    {
-        ((non_cv_value*)m_storage.bytes)->~non_cv_value();
-    }
+	template <class U>
+	reference construct2 ( U const &value ) const
+	{
+		new ( m_storage.bytes ) non_cv_value ( value );
+		constructed = true;
+		return * ( non_cv_value * ) m_storage.bytes;
+	}
 
-    typedef reference(maybe<T>::*safe_bool)() const;
+	template <class U>
+	reference construct ( U const &value ) const
+	{
+		return this->construct2 ( value );
+	}
 
-    operator safe_bool() const
-    {
-        return value ? &maybe<T>::get : 0 ;
-    }
+	void destroy()
+	{
+		( ( non_cv_value * ) m_storage.bytes )->~non_cv_value();
+	}
 
-    reference get() const
-    {
-        return value.get();
-    }
+	typedef reference ( maybe<T>::*safe_bool ) () const;
+
+	operator safe_bool() const
+	{
+		return value ? &maybe<T>::get : 0 ;
+	}
+
+	reference get() const
+	{
+		return value.get();
+	}
 
 private:
-    boost::optional<T> value;
-    mutable bool constructed;
-    mutable typename boost::python::detail::referent_storage<
-        reference
-    >::type m_storage;
+	boost::optional<T> value;
+	mutable bool constructed;
+	mutable typename boost::python::detail::referent_storage <
+	reference
+	>::type m_storage;
 };
 
-}}} // namespace boost::parameter::aux
+}
+}
+} // namespace boost::parameter::aux
 
 #endif // BOOST_PARAMETER_MAYBE_060211_HPP
 

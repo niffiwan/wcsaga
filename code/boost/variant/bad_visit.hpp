@@ -15,7 +15,8 @@
 
 #include <exception>
 
-namespace boost {
+namespace boost
+{
 
 //////////////////////////////////////////////////////////////////////////
 // class bad_visit
@@ -24,15 +25,15 @@ namespace boost {
 // to invalid visited subtype or contents.
 //
 struct bad_visit
-    : std::exception
+		: std::exception
 {
 public: // std::exception interface
 
-    virtual const char * what() const throw()
-    {
-        return "boost::bad_visit: "
-               "failed visitation using boost::apply_visitor";
-    }
+	virtual const char *what() const throw()
+	{
+		return "boost::bad_visit: "
+		       "failed visitation using boost::apply_visitor";
+	}
 
 };
 

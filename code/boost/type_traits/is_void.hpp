@@ -14,19 +14,20 @@
 // should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
 
-namespace boost {
+namespace boost
+{
 
 //* is a type T void - is_void<T>
 #if defined( __CODEGEARC__ )
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_void,T,__is_void(T))
+BOOST_TT_AUX_BOOL_TRAIT_DEF1 ( is_void, T, __is_void ( T ) )
 #else
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_void,T,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_void,void,true)
+BOOST_TT_AUX_BOOL_TRAIT_DEF1 ( is_void, T, false )
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1 ( is_void, void, true )
 
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_void,void const,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_void,void volatile,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_void,void const volatile,true)
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1 ( is_void, void const, true )
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1 ( is_void, void volatile, true )
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1 ( is_void, void const volatile, true )
 #endif
 
 #endif  // non-CodeGear implementation

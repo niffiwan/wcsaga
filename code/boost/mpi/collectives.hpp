@@ -21,7 +21,10 @@
 #include <boost/mpi/communicator.hpp>
 #include <vector>
 
-namespace boost { namespace mpi {
+namespace boost
+{
+namespace mpi
+{
 
 /**
  *  @brief Gather the values stored at every process into vectors of
@@ -49,30 +52,30 @@ namespace boost { namespace mpi {
  */
 template<typename T>
 void
-all_gather(const communicator& comm, const T& in_value, 
-           std::vector<T>& out_values);
+all_gather ( const communicator &comm, const T &in_value,
+             std::vector<T> &out_values );
 
 /**
  * \overload
  */
 template<typename T>
 void
-all_gather(const communicator& comm, const T& in_value, T* out_values);
+all_gather ( const communicator &comm, const T &in_value, T *out_values );
 
 /**
  * \overload
  */
 template<typename T>
 void
-all_gather(const communicator& comm, const T* in_values, int n,
-           std::vector<T>& out_values);
+all_gather ( const communicator &comm, const T *in_values, int n,
+             std::vector<T> &out_values );
 
 /**
  * \overload
  */
 template<typename T>
 void
-all_gather(const communicator& comm, const T* in_values, int n, T* out_values);
+all_gather ( const communicator &comm, const T *in_values, int n, T *out_values );
 
 /**
  *  @brief Combine the values stored by each process into a single
@@ -121,21 +124,21 @@ all_gather(const communicator& comm, const T* in_values, int n, T* out_values);
  */
 template<typename T, typename Op>
 void
-all_reduce(const communicator& comm, const T& in_value, T& out_value, Op op);
+all_reduce ( const communicator &comm, const T &in_value, T &out_value, Op op );
 
 /**
  * \overload
  */
 template<typename T, typename Op>
-T all_reduce(const communicator& comm, const T& in_value, Op op);
+T all_reduce ( const communicator &comm, const T &in_value, Op op );
 
 /**
  * \overload
  */
 template<typename T, typename Op>
 void
-all_reduce(const communicator& comm, const T* in_values, int n, T* out_values, 
-           Op op);
+all_reduce ( const communicator &comm, const T *in_values, int n, T *out_values,
+             Op op );
 
 /**
  *  @brief Send data from every process to every other process.
@@ -164,29 +167,29 @@ all_reduce(const communicator& comm, const T* in_values, int n, T* out_values,
  */
 template<typename T>
 void
-all_to_all(const communicator& comm, const std::vector<T>& in_values,
-           std::vector<T>& out_values);
+all_to_all ( const communicator &comm, const std::vector<T> &in_values,
+             std::vector<T> &out_values );
 
 /**
  * \overload
  */
 template<typename T>
-void all_to_all(const communicator& comm, const T* in_values, T* out_values);
+void all_to_all ( const communicator &comm, const T *in_values, T *out_values );
 
 /**
  * \overload
  */
 template<typename T>
 void
-all_to_all(const communicator& comm, const std::vector<T>& in_values, int n,
-           std::vector<T>& out_values);
+all_to_all ( const communicator &comm, const std::vector<T> &in_values, int n,
+             std::vector<T> &out_values );
 
 /**
  * \overload
  */
 template<typename T>
-void 
-all_to_all(const communicator& comm, const T* in_values, int n, T* out_values);
+void
+all_to_all ( const communicator &comm, const T *in_values, int n, T *out_values );
 
 /**
  * @brief Broadcast a value from a root process to all other
@@ -227,26 +230,26 @@ all_to_all(const communicator& comm, const T* in_values, int n, T* out_values);
  *   transmitting the value.
  */
 template<typename T>
-void broadcast(const communicator& comm, T& value, int root);
+void broadcast ( const communicator &comm, T &value, int root );
 
 /**
  * \overload
  */
 template<typename T>
-void broadcast(const communicator& comm, T* values, int n, int root);
+void broadcast ( const communicator &comm, T *values, int n, int root );
 
 /**
  * \overload
  */
 template<typename T>
-void broadcast(const communicator& comm, skeleton_proxy<T>& value, int root);
+void broadcast ( const communicator &comm, skeleton_proxy<T> &value, int root );
 
 /**
  * \overload
  */
 template<typename T>
 void
-broadcast(const communicator& comm, const skeleton_proxy<T>& value, int root);
+broadcast ( const communicator &comm, const skeleton_proxy<T> &value, int root );
 
 /**
  *  @brief Gather the values stored at every process into a vector at
@@ -278,43 +281,43 @@ broadcast(const communicator& comm, const skeleton_proxy<T>& value, int root);
  */
 template<typename T>
 void
-gather(const communicator& comm, const T& in_value, std::vector<T>& out_values,
-       int root);
+gather ( const communicator &comm, const T &in_value, std::vector<T> &out_values,
+         int root );
 
 /**
  * \overload
  */
 template<typename T>
 void
-gather(const communicator& comm, const T& in_value, T* out_values, int root);
+gather ( const communicator &comm, const T &in_value, T *out_values, int root );
 
 /**
  * \overload
  */
 template<typename T>
-void gather(const communicator& comm, const T& in_value, int root);
-
-/**
- * \overload
- */
-template<typename T>
-void
-gather(const communicator& comm, const T* in_values, int n, 
-       std::vector<T>& out_values, int root);
+void gather ( const communicator &comm, const T &in_value, int root );
 
 /**
  * \overload
  */
 template<typename T>
 void
-gather(const communicator& comm, const T* in_values, int n, T* out_values, 
-       int root);
+gather ( const communicator &comm, const T *in_values, int n,
+         std::vector<T> &out_values, int root );
 
 /**
  * \overload
  */
 template<typename T>
-void gather(const communicator& comm, const T* in_values, int n, int root);
+void
+gather ( const communicator &comm, const T *in_values, int n, T *out_values,
+         int root );
+
+/**
+ * \overload
+ */
+template<typename T>
+void gather ( const communicator &comm, const T *in_values, int n, int root );
 
 /**
  *  @brief Scatter the values stored at the root to all processes
@@ -347,43 +350,43 @@ void gather(const communicator& comm, const T* in_values, int n, int root);
  */
 template<typename T>
 void
-scatter(const communicator& comm, const std::vector<T>& in_values, T& out_value,
-        int root);
+scatter ( const communicator &comm, const std::vector<T> &in_values, T &out_value,
+          int root );
 
 /**
  * \overload
  */
 template<typename T>
 void
-scatter(const communicator& comm, const T* in_values, T& out_value, int root);
+scatter ( const communicator &comm, const T *in_values, T &out_value, int root );
 
 /**
  * \overload
  */
 template<typename T>
-void scatter(const communicator& comm, T& out_value, int root);
-
-/**
- * \overload
- */
-template<typename T>
-void
-scatter(const communicator& comm, const std::vector<T>& in_values, 
-        T* out_values, int n, int root);
+void scatter ( const communicator &comm, T &out_value, int root );
 
 /**
  * \overload
  */
 template<typename T>
 void
-scatter(const communicator& comm, const T* in_values, T* out_values, int n,
-        int root);
+scatter ( const communicator &comm, const std::vector<T> &in_values,
+          T *out_values, int n, int root );
 
 /**
  * \overload
  */
 template<typename T>
-void scatter(const communicator& comm, T* out_values, int n, int root);
+void
+scatter ( const communicator &comm, const T *in_values, T *out_values, int n,
+          int root );
+
+/**
+ * \overload
+ */
+template<typename T>
+void scatter ( const communicator &comm, T *out_values, int n, int root );
 
 /**
  *  @brief Combine the values stored by each process into a single
@@ -396,7 +399,7 @@ void scatter(const communicator& comm, T* out_values, int n, int root);
  *  serializable or has an associated MPI data type. One can think of
  *  this operation as a @c gather to the @p root, followed by an @c
  *  std::accumulate() over the gathered values and using the operation
- *  @c op. 
+ *  @c op.
  *
  *  When the type @c T has an associated MPI data type, this routine
  *  invokes @c MPI_Reduce to perform the reduction. If possible,
@@ -438,29 +441,29 @@ void scatter(const communicator& comm, T* out_values, int n, int root);
  */
 template<typename T, typename Op>
 void
-reduce(const communicator& comm, const T& in_value, T& out_value, Op op,
-       int root);
+reduce ( const communicator &comm, const T &in_value, T &out_value, Op op,
+         int root );
 
 /**
  * \overload
  */
 template<typename T, typename Op>
-void reduce(const communicator& comm, const T& in_value, Op op, int root);
+void reduce ( const communicator &comm, const T &in_value, Op op, int root );
 
 /**
  * \overload
  */
 template<typename T, typename Op>
 void
-reduce(const communicator& comm, const T* in_values, int n, T* out_values, 
-       Op op, int root);
+reduce ( const communicator &comm, const T *in_values, int n, T *out_values,
+         Op op, int root );
 
 /**
  * \overload
  */
 template<typename T, typename Op>
-void 
-reduce(const communicator& comm, const T* in_values, int n, Op op, int root);
+void
+reduce ( const communicator &comm, const T *in_values, int n, Op op, int root );
 
 /**
  *  @brief Compute a prefix reduction of values from all processes in
@@ -512,23 +515,24 @@ reduce(const communicator& comm, const T* in_values, int n, Op op, int root);
  */
 template<typename T, typename Op>
 void
-scan(const communicator& comm, const T& in_value, T& out_value, Op op);
+scan ( const communicator &comm, const T &in_value, T &out_value, Op op );
 
 /**
  * \overload
  */
 template<typename T, typename Op>
 T
-scan(const communicator& comm, const T& in_value, Op op);
+scan ( const communicator &comm, const T &in_value, Op op );
 
 /**
  * \overload
  */
 template<typename T, typename Op>
 void
-scan(const communicator& comm, const T* in_values, int n, T* out_values, Op op);
+scan ( const communicator &comm, const T *in_values, int n, T *out_values, Op op );
 
-} } // end namespace boost::mpi
+}
+} // end namespace boost::mpi
 #endif // BOOST_MPI_COLLECTIVES_HPP
 
 #ifndef BOOST_MPI_COLLECTIVES_FORWARD_ONLY

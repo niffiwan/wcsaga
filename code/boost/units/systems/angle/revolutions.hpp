@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -20,19 +20,22 @@
 #include <boost/units/make_system.hpp>
 #include <boost/units/base_units/angle/revolution.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units {
+namespace units
+{
 
-namespace revolution {
+namespace revolution
+{
 
 typedef make_system<boost::units::angle::revolution_base_unit>::type system;
 
-typedef unit<dimensionless_type,system>         dimensionless;
-typedef unit<plane_angle_dimension,system>      plane_angle;          ///< angle revolution unit constant
+typedef unit<dimensionless_type, system>         dimensionless;
+typedef unit<plane_angle_dimension, system>      plane_angle;         ///< angle revolution unit constant
 
-BOOST_UNITS_STATIC_CONSTANT(revolution,plane_angle);
-BOOST_UNITS_STATIC_CONSTANT(revolutions,plane_angle);
+BOOST_UNITS_STATIC_CONSTANT ( revolution, plane_angle );
+BOOST_UNITS_STATIC_CONSTANT ( revolutions, plane_angle );
 
 } // namespace revolution
 

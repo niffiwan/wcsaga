@@ -14,7 +14,7 @@ namespace statechart
 {
 
 
-  
+
 class event_base;
 
 
@@ -23,58 +23,58 @@ class event_base;
 template< class Scheduler >
 class event_processor
 {
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    virtual ~event_processor() {}
+public:
+	//////////////////////////////////////////////////////////////////////////
+	virtual ~event_processor() {}
 
-    Scheduler & my_scheduler() const
-    {
-      return myScheduler_;
-    }
+	Scheduler &my_scheduler() const
+	{
+		return myScheduler_;
+	}
 
-    typedef typename Scheduler::processor_handle processor_handle;
+	typedef typename Scheduler::processor_handle processor_handle;
 
-    processor_handle my_handle() const
-    {
-      return myHandle_;
-    }
+	processor_handle my_handle() const
+	{
+		return myHandle_;
+	}
 
-    void initiate()
-    {
-      initiate_impl();
-    }
+	void initiate()
+	{
+		initiate_impl();
+	}
 
-    void process_event( const event_base & evt )
-    {
-      process_event_impl( evt );
-    }
+	void process_event ( const event_base &evt )
+	{
+		process_event_impl ( evt );
+	}
 
-    void terminate()
-    {
-      terminate_impl();
-    }
+	void terminate()
+	{
+		terminate_impl();
+	}
 
-  protected:
-    //////////////////////////////////////////////////////////////////////////
-    typedef const typename Scheduler::processor_context & my_context;
+protected:
+	//////////////////////////////////////////////////////////////////////////
+	typedef const typename Scheduler::processor_context &my_context;
 
-    event_processor( my_context ctx ) :
-      myScheduler_( ctx.my_scheduler() ),
-      myHandle_( ctx.my_handle() )
-    {
-    }
+	event_processor ( my_context ctx ) :
+		myScheduler_ ( ctx.my_scheduler() ),
+		myHandle_ ( ctx.my_handle() )
+	{
+	}
 
-  private:
-    //////////////////////////////////////////////////////////////////////////
-    virtual void initiate_impl() = 0;
-    virtual void process_event_impl( const event_base & evt ) = 0;
-    virtual void terminate_impl() = 0;
+private:
+	//////////////////////////////////////////////////////////////////////////
+	virtual void initiate_impl() = 0;
+	virtual void process_event_impl ( const event_base &evt ) = 0;
+	virtual void terminate_impl() = 0;
 
-    // avoids C4512 (assignment operator could not be generated)
-    event_processor & operator=( const event_processor & );
+	// avoids C4512 (assignment operator could not be generated)
+	event_processor &operator= ( const event_processor & );
 
-    Scheduler & myScheduler_;
-    const processor_handle myHandle_;
+	Scheduler &myScheduler_;
+	const processor_handle myHandle_;
 };
 
 

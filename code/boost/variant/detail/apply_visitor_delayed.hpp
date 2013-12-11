@@ -18,7 +18,8 @@
 #include "boost/variant/detail/apply_visitor_unary.hpp"
 #include "boost/variant/detail/apply_visitor_binary.hpp"
 
-namespace boost {
+namespace boost
+{
 
 //////////////////////////////////////////////////////////////////////////
 // function template apply_visitor(visitor)
@@ -40,44 +41,44 @@ class apply_visitor_delayed_t
 {
 public: // visitor typedefs
 
-    typedef typename Visitor::result_type
-        result_type;
+	typedef typename Visitor::result_type
+	result_type;
 
 private: // representation
 
-    Visitor& visitor_;
+	Visitor &visitor_;
 
 public: // structors
 
-    explicit apply_visitor_delayed_t(Visitor& visitor)
-      : visitor_(visitor)
-    {
-    }
+	explicit apply_visitor_delayed_t ( Visitor &visitor )
+		: visitor_ ( visitor )
+	{
+	}
 
 public: // unary visitor interface
 
-    template <typename Visitable>
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(Visitable& visitable)
-    {
-        return apply_visitor(visitor_, visitable);
-    }
+	template <typename Visitable>
+	BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE ( result_type )
+	operator() ( Visitable &visitable )
+	{
+		return apply_visitor ( visitor_, visitable );
+	}
 
 public: // binary visitor interface
 
-    template <typename Visitable1, typename Visitable2>
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(Visitable1& visitable1, Visitable2& visitable2)
-    {
-        return apply_visitor(visitor_, visitable1, visitable2);
-    }
+	template <typename Visitable1, typename Visitable2>
+	BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE ( result_type )
+	operator() ( Visitable1 &visitable1, Visitable2 &visitable2 )
+	{
+		return apply_visitor ( visitor_, visitable1, visitable2 );
+	}
 
 };
 
 template <typename Visitor>
-inline apply_visitor_delayed_t<Visitor> apply_visitor(Visitor& visitor)
+inline apply_visitor_delayed_t<Visitor> apply_visitor ( Visitor &visitor )
 {
-    return apply_visitor_delayed_t<Visitor>(visitor);
+	return apply_visitor_delayed_t<Visitor> ( visitor );
 }
 
 } // namespace boost

@@ -26,20 +26,24 @@
 #define BOOST_SERIALIZATION_ASSUME_ABSTRACT(T)
 
 // but forward to the "official" is_abstract
-namespace boost {
-namespace serialization {
-    template<class T>
-    struct is_abstract : boost::is_abstract<T> {} ;
+namespace boost
+{
+namespace serialization
+{
+template<class T>
+struct is_abstract : boost::is_abstract<T> {} ;
 } // namespace serialization
 } // namespace boost
 
 #else
 // we have to "make" one
 
-namespace boost {
-namespace serialization {
-    template<class T>
-    struct is_abstract : boost::false_type {};
+namespace boost
+{
+namespace serialization
+{
+template<class T>
+struct is_abstract : boost::false_type {};
 } // namespace serialization
 } // namespace boost
 

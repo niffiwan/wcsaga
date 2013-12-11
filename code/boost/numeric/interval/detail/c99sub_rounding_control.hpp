@@ -13,26 +13,30 @@
 
 #include <fenv.h>      // ISO C 99 rounding mode control
 
-namespace boost {
-namespace numeric {
-namespace interval_lib {
-namespace detail {
+namespace boost
+{
+namespace numeric
+{
+namespace interval_lib
+{
+namespace detail
+{
 
-extern "C" { double rint(double); }
+extern "C" { double rint ( double ); }
 
 struct c99_rounding
 {
-  typedef int rounding_mode;
+	typedef int rounding_mode;
 
-  static void set_rounding_mode(const rounding_mode mode) { fesetround(mode); }
-  static void get_rounding_mode(rounding_mode &mode) { mode = fegetround(); }
-  static void downward()    { set_rounding_mode(FE_DOWNWARD);   }
-  static void upward()      { set_rounding_mode(FE_UPWARD);     }
-  static void to_nearest()  { set_rounding_mode(FE_TONEAREST);  }
-  static void toward_zero() { set_rounding_mode(FE_TOWARDZERO); }
+	static void set_rounding_mode ( const rounding_mode mode ) { fesetround ( mode ); }
+	static void get_rounding_mode ( rounding_mode &mode ) { mode = fegetround(); }
+	static void downward()    { set_rounding_mode ( FE_DOWNWARD );   }
+	static void upward()      { set_rounding_mode ( FE_UPWARD );     }
+	static void to_nearest()  { set_rounding_mode ( FE_TONEAREST );  }
+	static void toward_zero() { set_rounding_mode ( FE_TOWARDZERO ); }
 
-  template<class T>
-  static T to_int(const T& r) { return rint(r); }
+	template<class T>
+	static T to_int ( const T &r ) { return rint ( r ); }
 };
 
 } // namespace detail

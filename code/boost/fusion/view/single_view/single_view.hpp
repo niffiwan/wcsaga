@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_SINGLE_VIEW_05052005_0335)
@@ -16,38 +16,41 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/int.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct single_view_tag;
-    struct forward_traversal_tag;
-    struct fusion_sequence_tag;
+namespace fusion
+{
+struct single_view_tag;
+struct forward_traversal_tag;
+struct fusion_sequence_tag;
 
-    template <typename T>
-    struct single_view : sequence_base<single_view<T> >
-    {
-        typedef single_view_tag fusion_tag;
-        typedef fusion_sequence_tag tag; // this gets picked up by MPL
-        typedef forward_traversal_tag category;
-        typedef mpl::true_ is_view;
-        typedef mpl::int_<1> size;
-        typedef T value_type;
+template <typename T>
+struct single_view : sequence_base<single_view<T> >
+{
+	typedef single_view_tag fusion_tag;
+	typedef fusion_sequence_tag tag; // this gets picked up by MPL
+	typedef forward_traversal_tag category;
+	typedef mpl::true_ is_view;
+	typedef mpl::int_<1> size;
+	typedef T value_type;
 
-        single_view()
-            : val() {}
+	single_view()
+		: val() {}
 
-        explicit single_view(typename detail::call_param<T>::type val)
-            : val(val) {}
+	explicit single_view ( typename detail::call_param<T>::type val )
+		: val ( val ) {}
 
-        value_type val;
-    };
-    
-    template <typename T>
-    inline single_view<typename detail::as_fusion_element<T>::type>
-    make_single_view(T const& v)
-    {
-        return single_view<typename detail::as_fusion_element<T>::type>(v);
-    }
-}}
+	value_type val;
+};
+
+template <typename T>
+inline single_view<typename detail::as_fusion_element<T>::type>
+make_single_view ( T const &v )
+{
+	return single_view<typename detail::as_fusion_element<T>::type> ( v );
+}
+}
+}
 
 #endif
 

@@ -10,7 +10,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif      
+#endif
 
 #include <boost/config.hpp>                    // BOOST_MSVC, template friends.
 #include <boost/detail/workaround.hpp>
@@ -23,7 +23,12 @@
 #include <boost/iostreams/traits.hpp>
 #include <boost/noncopyable.hpp>
 
-namespace boost { namespace iostreams { namespace detail {
+namespace boost
+{
+namespace iostreams
+{
+namespace detail
+{
 
 //--------------Definition of chainbuf----------------------------------------//
 
@@ -36,81 +41,84 @@ namespace boost { namespace iostreams { namespace detail {
 //
 template<typename Chain, typename Mode, typename Access>
 class chainbuf
-    : public BOOST_IOSTREAMS_BASIC_STREAMBUF(
-                 typename Chain::char_type,
-                 typename Chain::traits_type
-             ),
-      public access_control<typename Chain::client_type, Access>,
-      private noncopyable
+	: public BOOST_IOSTREAMS_BASIC_STREAMBUF (
+	    typename Chain::char_type,
+	    typename Chain::traits_type
+	),
+	public access_control<typename Chain::client_type, Access>,
+	private noncopyable
 {
 private:
-    typedef access_control<chain_client<Chain>, Access>      client_type;
+	typedef access_control<chain_client<Chain>, Access>      client_type;
 public:
-    typedef typename Chain::char_type                        char_type;
-    BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(typename Chain::traits_type)
+	typedef typename Chain::char_type                        char_type;
+	BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS ( typename Chain::traits_type )
 protected:
-    typedef linked_streambuf<char_type, traits_type>         delegate_type;
-    chainbuf() { client_type::set_chain(&chain_); }
-    int_type underflow() 
-        { sentry t(this); return translate(delegate().underflow()); }
-    int_type pbackfail(int_type c)
-        { sentry t(this); return translate(delegate().pbackfail(c)); }
-    std::streamsize xsgetn(char_type* s, std::streamsize n)
-        { sentry t(this); return delegate().xsgetn(s, n); }
-    int_type overflow(int_type c)
-        { sentry t(this); return translate(delegate().overflow(c)); }
-    std::streamsize xsputn(const char_type* s, std::streamsize n)
-        { sentry t(this); return delegate().xsputn(s, n); }
-    int sync() { sentry t(this); return delegate().sync(); }
-    pos_type seekoff( off_type off, BOOST_IOS::seekdir way,
-                      BOOST_IOS::openmode which =
-                          BOOST_IOS::in | BOOST_IOS::out )
-        { sentry t(this); return delegate().seekoff(off, way, which); }
-    pos_type seekpos( pos_type sp,
-                      BOOST_IOS::openmode which =
-                          BOOST_IOS::in | BOOST_IOS::out )
-        { sentry t(this); return delegate().seekpos(sp, which); }
+	typedef linked_streambuf<char_type, traits_type>         delegate_type;
+	chainbuf() { client_type::set_chain ( &chain_ ); }
+	int_type underflow()
+	{ sentry t ( this ); return translate ( delegate().underflow() ); }
+	int_type pbackfail ( int_type c )
+	{ sentry t ( this ); return translate ( delegate().pbackfail ( c ) ); }
+	std::streamsize xsgetn ( char_type *s, std::streamsize n )
+	{ sentry t ( this ); return delegate().xsgetn ( s, n ); }
+	int_type overflow ( int_type c )
+	{ sentry t ( this ); return translate ( delegate().overflow ( c ) ); }
+	std::streamsize xsputn ( const char_type *s, std::streamsize n )
+	{ sentry t ( this ); return delegate().xsputn ( s, n ); }
+	int sync() { sentry t ( this ); return delegate().sync(); }
+	pos_type seekoff ( off_type off, BOOST_IOS::seekdir way,
+	                   BOOST_IOS::openmode which =
+	                       BOOST_IOS::in | BOOST_IOS::out )
+	{ sentry t ( this ); return delegate().seekoff ( off, way, which ); }
+	pos_type seekpos ( pos_type sp,
+	                   BOOST_IOS::openmode which =
+	                       BOOST_IOS::in | BOOST_IOS::out )
+	{ sentry t ( this ); return delegate().seekpos ( sp, which ); }
 protected:
-    typedef BOOST_IOSTREAMS_BASIC_STREAMBUF(
-                 typename Chain::char_type,
-                 typename Chain::traits_type
-             )                                               base_type;
-//#if !BOOST_WORKAROUND(__GNUC__, == 2)                                 
-//    BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base_type)
-//#endif
+	typedef BOOST_IOSTREAMS_BASIC_STREAMBUF (
+	    typename Chain::char_type,
+	    typename Chain::traits_type
+	)                                               base_type;
+	//#if !BOOST_WORKAROUND(__GNUC__, == 2)
+	//    BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base_type)
+	//#endif
 private:
 
-    // Translate from std int_type to chain's int_type.
-    typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)           std_traits;
-    typedef typename Chain::traits_type                      chain_traits;
-    static typename chain_traits::int_type 
-    translate(typename std_traits::int_type c)
-        { return translate_int_type<std_traits, chain_traits>(c); }
+	// Translate from std int_type to chain's int_type.
+	typedef BOOST_IOSTREAMS_CHAR_TRAITS ( char_type )           std_traits;
+	typedef typename Chain::traits_type                      chain_traits;
+	static typename chain_traits::int_type
+	translate ( typename std_traits::int_type c )
+	{ return translate_int_type<std_traits, chain_traits> ( c ); }
 
-    delegate_type& delegate() 
-        { return static_cast<delegate_type&>(chain_.front()); }
-    void get_pointers()
-        {
-            this->setg(delegate().eback(), delegate().gptr(), delegate().egptr());
-            this->setp(delegate().pbase(), delegate().epptr());
-            this->pbump((int) (delegate().pptr() - delegate().pbase()));
-        }
-    void set_pointers()
-        {
-            delegate().setg(this->eback(), this->gptr(), this->egptr());
-            delegate().setp(this->pbase(), this->epptr());
-            delegate().pbump((int) (this->pptr() - this->pbase()));
-        }
-    struct sentry {
-        sentry(chainbuf<Chain, Mode, Access>* buf) : buf_(buf)
-            { buf_->set_pointers(); }
-        ~sentry() { buf_->get_pointers(); }
-        chainbuf<Chain, Mode, Access>* buf_;
-    };
-    friend struct sentry;
-    Chain chain_;
+	delegate_type &delegate()
+	{ return static_cast<delegate_type &> ( chain_.front() ); }
+	void get_pointers()
+	{
+		this->setg ( delegate().eback(), delegate().gptr(), delegate().egptr() );
+		this->setp ( delegate().pbase(), delegate().epptr() );
+		this->pbump ( ( int ) ( delegate().pptr() - delegate().pbase() ) );
+	}
+	void set_pointers()
+	{
+		delegate().setg ( this->eback(), this->gptr(), this->egptr() );
+		delegate().setp ( this->pbase(), this->epptr() );
+		delegate().pbump ( ( int ) ( this->pptr() - this->pbase() ) );
+	}
+	struct sentry
+	{
+		sentry ( chainbuf<Chain, Mode, Access> *buf ) : buf_ ( buf )
+		{ buf_->set_pointers(); }
+		~sentry() { buf_->get_pointers(); }
+		chainbuf<Chain, Mode, Access> *buf_;
+	};
+	friend struct sentry;
+	Chain chain_;
 };
 
-} } } // End namespaces detail, iostreams, boost.
+}
+}
+} // End namespaces detail, iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_CHAINBUF_HPP_INCLUDED

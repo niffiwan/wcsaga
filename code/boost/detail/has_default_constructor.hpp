@@ -11,7 +11,10 @@
 
 #include <boost/type_traits/has_trivial_constructor.hpp>
 
-namespace boost { namespace detail {
+namespace boost
+{
+namespace detail
+{
 
 /// type trait to check for a default constructor
 ///
@@ -20,10 +23,11 @@ namespace boost { namespace detail {
 
 template <class T>
 struct has_default_constructor
- : public has_trivial_constructor<T>
+	: public has_trivial_constructor<T>
 {};
 
-} } // namespace boost::detail
+}
+} // namespace boost::detail
 
 
 #endif // BOOST_DETAIL_HAS_DEFAULT_CONSTRUCTOR_HPP_INCLUDED

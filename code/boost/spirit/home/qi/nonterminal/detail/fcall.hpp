@@ -24,28 +24,28 @@
 
 #define N BOOST_PP_ITERATION()
 
-    template <BOOST_PP_ENUM_PARAMS(N, typename A)>
-    typename lazy_enable_if_c<
-        (params_size == N)
-      , proto::terminal<
-            spirit::qi::parameterized_nonterminal<
-                parameterized_subject_type
-              , fusion::vector<BOOST_PP_ENUM_PARAMS(N, A)> >
-        >
-    >::type
-    operator()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const& f)) const
-    {
-        typedef fusion::vector<BOOST_PP_ENUM_PARAMS(N, A)> vector_type;
-        typedef spirit::qi::parameterized_nonterminal<
-            parameterized_subject_type, vector_type> parameterized_type;
-        typedef typename proto::terminal<parameterized_type>::type result_type;
+template <BOOST_PP_ENUM_PARAMS ( N, typename A ) >
+typename lazy_enable_if_c <
+( params_size == N )
+, proto::terminal <
+spirit::qi::parameterized_nonterminal <
+parameterized_subject_type
+, fusion::vector<BOOST_PP_ENUM_PARAMS ( N, A ) > >
+>
+>::type
+operator() ( BOOST_PP_ENUM_BINARY_PARAMS ( N, A, const &f ) ) const
+{
+	typedef fusion::vector<BOOST_PP_ENUM_PARAMS ( N, A ) > vector_type;
+	typedef spirit::qi::parameterized_nonterminal <
+	parameterized_subject_type, vector_type > parameterized_type;
+	typedef typename proto::terminal<parameterized_type>::type result_type;
 
-        return result_type::make(
-            parameterized_type(
-                this->get_parameterized_subject()
-              , fusion::make_vector(BOOST_PP_ENUM_PARAMS(N, f)))
-        );
-    }
+	return result_type::make (
+	           parameterized_type (
+	               this->get_parameterized_subject()
+	               , fusion::make_vector ( BOOST_PP_ENUM_PARAMS ( N, f ) ) )
+	       );
+}
 
 #undef N
 #endif // defined(BOOST_PP_IS_ITERATING)

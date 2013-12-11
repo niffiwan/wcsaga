@@ -4,8 +4,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -22,42 +22,46 @@
 #include <boost/mpl/aux_/config/integral.hpp>
 #include <boost/mpl/aux_/config/static_constant.hpp>
 
-namespace boost { namespace mpl {
+namespace boost
+{
+namespace mpl
+{
 
 template< typename Tag > struct negate_impl;
 
 template< typename T > struct negate_tag
 {
-    typedef typename T::tag type;
+	typedef typename T::tag type;
 };
 
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(N)
+template <
+    typename BOOST_MPL_AUX_NA_PARAM ( N )
     >
 struct negate
 #if !defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
-    : negate_impl<
-          typename negate_tag<N>::type
-        >::template apply<N>::type
+		: negate_impl <
+		typename negate_tag<N>::type
+		>::template apply<N>::type
 #else
-    : aux::msvc_eti_base< typename apply_wrap1<
-          negate_impl< typename negate_tag<N>::type >
-        , N
-        >::type >::type
+		: aux::msvc_eti_base< typename apply_wrap1<
+		negate_impl< typename negate_tag<N>::type >
+		, N
+		>::type >::type
 #endif
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(1, negate, (N))
+    BOOST_MPL_AUX_LAMBDA_SUPPORT ( 1, negate, ( N ) )
 };
 
-BOOST_MPL_AUX_NA_SPEC(1, negate)
+BOOST_MPL_AUX_NA_SPEC ( 1, negate )
 
 
 #if defined(BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC)
-namespace aux {
+namespace aux
+{
 template< typename T, T n > struct negate_wknd
 {
-    BOOST_STATIC_CONSTANT(T, value = -n);
-    typedef integral_c<T,value> type;
+	BOOST_STATIC_CONSTANT ( T, value = -n );
+	typedef integral_c<T, value> type;
 };
 }
 #endif
@@ -66,16 +70,17 @@ template<>
 struct negate_impl<integral_c_tag>
 {
 #if defined(BOOST_MPL_CFG_NO_NESTED_VALUE_ARITHMETIC)
-    template< typename N > struct apply
-        : aux::negate_wknd< typename N::value_type, N::value >
+	template< typename N > struct apply
+			: aux::negate_wknd< typename N::value_type, N::value >
 #else
-    template< typename N > struct apply
-        : integral_c< typename N::value_type, (-N::value) >
-#endif    
-    {
-    };
+	template< typename N > struct apply
+	: integral_c < typename N::value_type, ( -N::value ) >
+#endif
+	{
+	};
 };
 
-}}
+}
+}
 
 #endif // BOOST_MPL_NEGATE_HPP_INCLUDED

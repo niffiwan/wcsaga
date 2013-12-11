@@ -25,34 +25,37 @@
 
 #include <boost/asio/detail/noncopyable.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 class timer_queue_base
-  : private noncopyable
+	: private noncopyable
 {
 public:
-  // Destructor.
-  virtual ~timer_queue_base() {}
+	// Destructor.
+	virtual ~timer_queue_base() {}
 
-  // Whether there are no timers in the queue.
-  virtual bool empty() const = 0;
+	// Whether there are no timers in the queue.
+	virtual bool empty() const = 0;
 
-  // Get the time to wait until the next timer.
-  virtual boost::posix_time::time_duration wait_duration() const = 0;
+	// Get the time to wait until the next timer.
+	virtual boost::posix_time::time_duration wait_duration() const = 0;
 
-  // Dispatch all ready timers.
-  virtual void dispatch_timers() = 0;
+	// Dispatch all ready timers.
+	virtual void dispatch_timers() = 0;
 
-  // Dispatch any pending cancels for timers.
-  virtual void dispatch_cancellations() = 0;
+	// Dispatch any pending cancels for timers.
+	virtual void dispatch_cancellations() = 0;
 
-  // Complete all timers that are waiting to be completed.
-  virtual void complete_timers() = 0;
+	// Complete all timers that are waiting to be completed.
+	virtual void complete_timers() = 0;
 
-  // Destroy all timers.
-  virtual void destroy_timers() = 0;
+	// Destroy all timers.
+	virtual void destroy_timers() = 0;
 };
 
 } // namespace detail

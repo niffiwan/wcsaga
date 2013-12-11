@@ -42,9 +42,12 @@ See also member_at.
                                                                     **/
 
 
-namespace boost {
-namespace bimaps {
-namespace support {
+namespace boost
+{
+namespace bimaps
+{
+namespace support
+{
 
 // Implementation of key type type of metafunction
 

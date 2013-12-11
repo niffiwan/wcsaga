@@ -25,9 +25,11 @@
 
 #include "boost/mpl/void.hpp"
 
-namespace boost {
+namespace boost
+{
 
-namespace detail {
+namespace detail
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) class template reference_content
@@ -39,34 +41,34 @@ class reference_content
 {
 private: // representation
 
-    RefT content_;
+	RefT content_;
 
 public: // structors
 
-    ~reference_content()
-    {
-    }
+	~reference_content()
+	{
+	}
 
-    reference_content(RefT r)
-        : content_( r )
-    {
-    }
+	reference_content ( RefT r )
+		: content_ ( r )
+	{
+	}
 
-    reference_content(const reference_content& operand)
-        : content_( operand.content_ )
-    {
-    }
+	reference_content ( const reference_content &operand )
+		: content_ ( operand.content_ )
+	{
+	}
 
 private: // non-Assignable
 
-    reference_content& operator=(const reference_content&);
+	reference_content &operator= ( const reference_content & );
 
 public: // queries
 
-    RefT get() const
-    {
-        return content_;
-    }
+	RefT get() const
+	{
+		return content_;
+	}
 
 };
 
@@ -83,24 +85,24 @@ template <typename T = mpl::void_> struct make_reference_content;
 template <typename T>
 struct make_reference_content
 {
-    typedef T type;
+	typedef T type;
 };
 
 template <typename T>
-struct make_reference_content< T& >
+struct make_reference_content< T & >
 {
-    typedef reference_content<T&> type;
+	typedef reference_content<T &> type;
 };
 
 #else // defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template <typename T>
 struct make_reference_content
-    : mpl::if_<
-          is_reference<T>
-        , reference_content<T>
-        , T
-        >
+		: mpl::if_ <
+		is_reference<T>
+		, reference_content<T>
+		, T
+		>
 {
 };
 
@@ -109,13 +111,13 @@ struct make_reference_content
 template <>
 struct make_reference_content< mpl::void_ >
 {
-    template <typename T>
-    struct apply
-        : make_reference_content<T>
-    {
-    };
+	template <typename T>
+	struct apply
+			: make_reference_content<T>
+	{
+	};
 
-    typedef mpl::void_ type;
+	typedef mpl::void_ type;
 };
 
 } // namespace detail
@@ -127,10 +129,10 @@ struct make_reference_content< mpl::void_ >
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template <typename T>
-struct has_nothrow_copy<
-      ::boost::detail::reference_content< T& >
-    >
-    : mpl::true_
+struct has_nothrow_copy <
+		::boost::detail::reference_content< T & >
+		>
+		: mpl::true_
 {
 };
 

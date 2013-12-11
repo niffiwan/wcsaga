@@ -11,31 +11,35 @@
 #include <boost/spirit/home/classic/namespace.hpp>
 #include <boost/spirit/home/classic/core/nil.hpp>
 
-namespace boost { namespace spirit {
+namespace boost
+{
+namespace spirit
+{
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-    template <typename ErrorDescrT, typename IteratorT = char const*>
-    struct parser_error;
+template <typename ErrorDescrT, typename IteratorT = char const *>
+struct parser_error;
 
-    template <typename ErrorDescrT, typename ParserT>
-    struct assertive_parser;
+template <typename ErrorDescrT, typename ParserT>
+struct assertive_parser;
 
-    template <typename ErrorDescrT>
-    struct assertion;
+template <typename ErrorDescrT>
+struct assertion;
 
-    template <typename T = nil_t>
-    struct error_status;
+template <typename T = nil_t>
+struct error_status;
 
-    template <typename ErrorDescrT, typename ParserT, typename HandlerT>
-    struct fallback_parser;
+template <typename ErrorDescrT, typename ParserT, typename HandlerT>
+struct fallback_parser;
 
-    template <typename ErrorDescrT>
-    struct guard;
+template <typename ErrorDescrT>
+struct guard;
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}} // namespace BOOST_SPIRIT_CLASSIC_NS
+}
+} // namespace BOOST_SPIRIT_CLASSIC_NS
 
 #endif
 

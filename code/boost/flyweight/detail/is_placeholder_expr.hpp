@@ -20,11 +20,14 @@
 #include <boost/preprocessor/facilities/intercept.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 
-namespace boost{
+namespace boost
+{
 
-namespace flyweights{
+namespace flyweights
+{
 
-namespace detail{
+namespace detail
+{
 
 /* is_placeholder_expression<T> indicates whether T is an
  * MPL placeholder expression.
@@ -33,27 +36,28 @@ namespace detail{
 template<typename T>
 struct is_placeholder_expression_helper
 {
-  template<
-    BOOST_PP_ENUM_PARAMS(
-      BOOST_MPL_LIMIT_METAFUNCTION_ARITY,typename BOOST_PP_INTERCEPT)
-  >
-  struct apply{
-    typedef int type;
-  };
+	template <
+	    BOOST_PP_ENUM_PARAMS (
+	        BOOST_MPL_LIMIT_METAFUNCTION_ARITY, typename BOOST_PP_INTERCEPT )
+	    >
+	struct apply
+	{
+		typedef int type;
+	};
 
-  BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_placeholder_expression_helper,(T))
+	BOOST_MPL_AUX_LAMBDA_SUPPORT ( 1, is_placeholder_expression_helper, ( T ) )
 };
 
 template<typename T>
 struct is_placeholder_expression:
-  mpl::not_<is_same<
-    typename mpl::apply<
-      is_placeholder_expression_helper<T>,
-      BOOST_PP_ENUM_PARAMS(
-        BOOST_MPL_LIMIT_METAFUNCTION_ARITY,int BOOST_PP_INTERCEPT)
-    >::type,
-    int
-  > >
+		mpl::not_<is_same<
+		typename mpl::apply<
+		is_placeholder_expression_helper<T>,
+BOOST_PP_ENUM_PARAMS (
+    BOOST_MPL_LIMIT_METAFUNCTION_ARITY, int BOOST_PP_INTERCEPT )
+>::type,
+int
+> >
 {};
 
 } /* namespace flyweights::detail */

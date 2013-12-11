@@ -17,40 +17,42 @@
 #include <boost/accumulators/framework/depends_on.hpp>
 #include <boost/accumulators/statistics_fwd.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 namespace impl
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    // max_impl
-    template<typename Sample>
-    struct max_impl
-      : accumulator_base
-    {
-        // for boost::result_of
-        typedef Sample result_type;
+///////////////////////////////////////////////////////////////////////////////
+// max_impl
+template<typename Sample>
+struct max_impl
+		: accumulator_base
+{
+	// for boost::result_of
+	typedef Sample result_type;
 
-        template<typename Args>
-        max_impl(Args const &args)
-          : max_(numeric::as_min(args[sample | Sample()]))
-        {
-        }
+	template<typename Args>
+	max_impl ( Args const &args )
+		: max_ ( numeric::as_min ( args[sample | Sample()] ) )
+	{
+	}
 
-        template<typename Args>
-        void operator ()(Args const &args)
-        {
-            numeric::max_assign(this->max_, args[sample]);
-        }
+	template<typename Args>
+	void operator () ( Args const &args )
+	{
+		numeric::max_assign ( this->max_, args[sample] );
+	}
 
-        result_type result(dont_care) const
-        {
-            return this->max_;
-        }
+	result_type result ( dont_care ) const
+	{
+		return this->max_;
+	}
 
-    private:
-        Sample max_;
-    };
+private:
+	Sample max_;
+};
 
 } // namespace impl
 
@@ -59,13 +61,13 @@ namespace impl
 //
 namespace tag
 {
-    struct max
-      : depends_on<>
-    {
-        /// INTERNAL ONLY
-        ///
-        typedef accumulators::impl::max_impl<mpl::_1> impl;
-    };
+struct max
+		: depends_on<>
+{
+	/// INTERNAL ONLY
+	///
+	typedef accumulators::impl::max_impl<mpl::_1> impl;
+};
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -73,13 +75,14 @@ namespace tag
 //
 namespace extract
 {
-    extractor<tag::max> const max = {};
+extractor<tag::max> const max = {};
 
-    BOOST_ACCUMULATORS_IGNORE_GLOBAL(max)
+BOOST_ACCUMULATORS_IGNORE_GLOBAL ( max )
 }
 
 using extract::max;
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

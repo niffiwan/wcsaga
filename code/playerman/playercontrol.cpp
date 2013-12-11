@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -48,7 +48,7 @@
 player Players[MAX_PLAYERS];
 
 int Player_num;
-player* Player = NULL;
+player *Player = NULL;
 
 // Goober5000
 int Player_use_ai = 0;
@@ -57,7 +57,7 @@ int Press_glide = 0;
 
 int lua_game_control = 0;
 
-physics_info Descent_physics;			// used when we want to control the player like the descent ship
+physics_info Descent_physics;           // used when we want to control the player like the descent ship
 
 angles chase_slew_angles;
 int view_centering = 0;
@@ -67,42 +67,42 @@ bool Lock_controls = false;
 ////////////////////////////////////////////////////////////
 // Module data
 ////////////////////////////////////////////////////////////
-static int Player_all_alone_msg_inited = 0;	// flag used for initializing a player-specific voice msg
+static int Player_all_alone_msg_inited = 0; // flag used for initializing a player-specific voice msg
 
 #ifndef NDEBUG
-	int Show_killer_weapon = 0;
-	DCF_BOOL(show_killer_weapon, Show_killer_weapon)
+int Show_killer_weapon = 0;
+DCF_BOOL ( show_killer_weapon, Show_killer_weapon )
 #endif
 
-void playercontrol_read_stick(int* axis, float frame_time);
-void playercontrol_read_mouse_as_stick(int* axis);
+void playercontrol_read_stick ( int *axis, float frame_time );
+void playercontrol_read_mouse_as_stick ( int *axis );
 void player_set_padlock_state();
 
-//	Slew angles chase towards a value like they're on a spring.
-//	When furthest away, move fastest.
-//	Minimum speed set so that doesn't take too long.
-//	When gets close, clamps to the value.
-void chase_angles_to_value(angles* ap, angles* bp, int scale)
+//  Slew angles chase towards a value like they're on a spring.
+//  When furthest away, move fastest.
+//  Minimum speed set so that doesn't take too long.
+//  When gets close, clamps to the value.
+void chase_angles_to_value ( angles *ap, angles *bp, int scale )
 {
 	float sk;
 	angles delta;
 
-	//	Make sure we actually need to do all this math.
-	if ((ap->p == bp->p) && (ap->h == bp->h))
+	//  Make sure we actually need to do all this math.
+	if ( ( ap->p == bp->p ) && ( ap->h == bp->h ) )
 		return;
 
 	sk = 1.0f - scale * flRealframetime;
 
-	CLAMP(sk, 0.0f, 1.0f);
+	CLAMP ( sk, 0.0f, 1.0f );
 
 	delta.p = ap->p - bp->p;
 	delta.h = ap->h - bp->h;
 
-	ap->p = ap->p - delta.p * (1.0f - sk);
-	ap->h = ap->h - delta.h * (1.0f - sk);
+	ap->p = ap->p - delta.p * ( 1.0f - sk );
+	ap->h = ap->h - delta.h * ( 1.0f - sk );
 
-	//	If we're very close, put ourselves at goal.
-	if ((fl_abs(delta.p) < 0.005f) && (fl_abs(delta.h) < 0.005f))
+	//  If we're very close, put ourselves at goal.
+	if ( ( fl_abs ( delta.p ) < 0.005f ) && ( fl_abs ( delta.h ) < 0.005f ) )
 	{
 		ap->p = bp->p;
 		ap->h = bp->h;
@@ -112,39 +112,39 @@ void chase_angles_to_value(angles* ap, angles* bp, int scale)
 angles Viewer_slew_angles_delta;
 angles Viewer_external_angles_delta;
 
-void view_modify(angles* ma, angles* da, float max_p, float max_h, float frame_time)
+void view_modify ( angles *ma, angles *da, float max_p, float max_h, float frame_time )
 {
 	int axis[NUM_JOY_AXIS_ACTIONS];
 	float t = 0;
 	float u = 0;
 	vec3d trans = ZERO_VECTOR;
 
-	if (Viewer_mode & VM_EXTERNAL)
+	if ( Viewer_mode & VM_EXTERNAL )
 	{
-		if (!(Viewer_mode & VM_EXTERNAL_CAMERA_LOCKED))
+		if ( ! ( Viewer_mode & VM_EXTERNAL_CAMERA_LOCKED ) )
 		{
-			t = t + (check_control_timef(YAW_LEFT) - check_control_timef(YAW_RIGHT));
-			u = u + (check_control_timef(PITCH_BACK) - check_control_timef(PITCH_FORWARD));
+			t = t + ( check_control_timef ( YAW_LEFT ) - check_control_timef ( YAW_RIGHT ) );
+			u = u + ( check_control_timef ( PITCH_BACK ) - check_control_timef ( PITCH_FORWARD ) );
 		}
 		else
 		{
 			return;
 		}
 	}
-	else if (gTirDll_TrackIR.Enabled())
+	else if ( gTirDll_TrackIR.Enabled() )
 	{
 		gTirDll_TrackIR.Query();
-		ma->h = -PI2 * (gTirDll_TrackIR.GetYaw());
-		ma->p = PI2 * (gTirDll_TrackIR.GetPitch());
+		ma->h = -PI2 * ( gTirDll_TrackIR.GetYaw() );
+		ma->p = PI2 * ( gTirDll_TrackIR.GetPitch() );
 
 		trans.xyz.x = -0.4f * gTirDll_TrackIR.GetX();
 		trans.xyz.y = 0.4f * gTirDll_TrackIR.GetY();
 		trans.xyz.z = -gTirDll_TrackIR.GetZ();
 
-		if (trans.xyz.z < 0)
+		if ( trans.xyz.z < 0 )
 			trans.xyz.z = 0.0f;
 
-		vm_vec_unrotate(&leaning_position, &trans, &Eye_matrix);
+		vm_vec_unrotate ( &leaning_position, &trans, &Eye_matrix );
 	}
 	else
 	{
@@ -154,38 +154,38 @@ void view_modify(angles* ma, angles* da, float max_p, float max_h, float frame_t
 		u = (check_control_timef(VIEW_DOWN) - check_control_timef(VIEW_UP)) / 16.0f;*/
 	}
 
-	if (t != 0.0f)
+	if ( t != 0.0f )
 		da->h += t;
 	else
 		da->h = 0.0f;
 
-	if (u != 0.0f)
+	if ( u != 0.0f )
 		da->p += u;
 	else
 		da->p = 0.0f;
 
 	da->b = 0.0f;
 
-	playercontrol_read_stick(axis, frame_time);
+	playercontrol_read_stick ( axis, frame_time );
 
-	if ((Viewer_mode & VM_EXTERNAL) && !(Viewer_mode & VM_EXTERNAL_CAMERA_LOCKED))
+	if ( ( Viewer_mode & VM_EXTERNAL ) && ! ( Viewer_mode & VM_EXTERNAL_CAMERA_LOCKED ) )
 	{
 		// check the heading on the x and y axes
-		da->h -= f2fl(axis[0]);
-		da->p -= f2fl(axis[1]);
+		da->h -= f2fl ( axis[0] );
+		da->p -= f2fl ( axis[1] );
 	}
 
-	if (da->h > 1.0f)
+	if ( da->h > 1.0f )
 		da->h = 1.0f;
-	else if (da->h < -1.0f)
+	else if ( da->h < -1.0f )
 		da->h = -1.0f;
 
-	if (da->p > 1.0f)
+	if ( da->p > 1.0f )
 		da->p = 1.0f;
-	else if (da->p < -1.0f)
+	else if ( da->p < -1.0f )
 		da->p = -1.0f;
 
-	if ((Game_time_compression >= F1_0) && !(Viewer_mode & VM_EXTERNAL))
+	if ( ( Game_time_compression >= F1_0 ) && ! ( Viewer_mode & VM_EXTERNAL ) )
 	{
 		ma->p += 2 * da->p * flFrametime;
 		ma->b += 2 * da->b * flFrametime;
@@ -200,18 +200,18 @@ void view_modify(angles* ma, angles* da, float max_p, float max_h, float frame_t
 		ma->h += da->h * flRealframetime;
 	}
 
-	if (ma->p > max_p)
+	if ( ma->p > max_p )
 		ma->p = max_p;
-	else if (ma->p < -max_p)
+	else if ( ma->p < -max_p )
 		ma->p = -max_p;
 
-	if (ma->h > max_h)
+	if ( ma->h > max_h )
 		ma->h = max_h;
-	else if (ma->h < -max_h)
+	else if ( ma->h < -max_h )
 		ma->h = -max_h;
 }
 
-void do_view_track_target(float frame_time)
+void do_view_track_target ( float frame_time )
 {
 	vec3d view_vector;
 	vec3d targetpos_rotated;
@@ -221,7 +221,7 @@ void do_view_track_target(float frame_time)
 	angles view_angles;
 	angles forward_angles;
 
-	if ((Player_ai->target_objnum == -1) || (Viewer_mode & VM_OTHER_SHIP))
+	if ( ( Player_ai->target_objnum == -1 ) || ( Viewer_mode & VM_OTHER_SHIP ) )
 	{
 		// If the object isn't targeted or we're viewing from the target's perspective, center the view and turn off target padlock
 		// because the target won't be at the angle we've calculated from the player's perspective.
@@ -231,12 +231,12 @@ void do_view_track_target(float frame_time)
 		return;
 	}
 
-	object* targetp = &Objects[Player_ai->target_objnum];
+	object *targetp = &Objects[Player_ai->target_objnum];
 
-	// check to see if there is even a current target. if not, switch off the 
+	// check to see if there is even a current target. if not, switch off the
 	// target padlock tracking flag, make the camera slew to the center,
 	// and exit the procedure
-	if (targetp == &obj_used_list)
+	if ( targetp == &obj_used_list )
 	{
 		Viewer_mode ^= VM_TRACK;
 		chase_slew_angles.p = 0.0f;
@@ -245,9 +245,9 @@ void do_view_track_target(float frame_time)
 	}
 
 	// look at a subsystem if there is one.
-	if (Player_ai->targeted_subsys != NULL)
+	if ( Player_ai->targeted_subsys != NULL )
 	{
-		get_subsystem_world_pos(targetp, Player_ai->targeted_subsys, &target_pos);
+		get_subsystem_world_pos ( targetp, Player_ai->targeted_subsys, &target_pos );
 
 	}
 	else
@@ -256,116 +256,116 @@ void do_view_track_target(float frame_time)
 	}
 
 	//vm_vec_normalized_dir(&dir_to_target, &targetp->pos, &Player_obj->pos);
-	vm_vec_rotate(&targetpos_rotated, &target_pos, &Player_obj->orient);
-	vm_vec_rotate(&playerpos_rotated, &Player_obj->pos, &Player_obj->orient);
-	vm_vec_rotate(&forwardvec_rotated, &Player_obj->orient.vec.fvec, &Player_obj->orient);
+	vm_vec_rotate ( &targetpos_rotated, &target_pos, &Player_obj->orient );
+	vm_vec_rotate ( &playerpos_rotated, &Player_obj->pos, &Player_obj->orient );
+	vm_vec_rotate ( &forwardvec_rotated, &Player_obj->orient.vec.fvec, &Player_obj->orient );
 
-	vm_vec_normalized_dir(&view_vector, &targetpos_rotated, &playerpos_rotated);
-	vm_extract_angles_vector(&view_angles, &view_vector);
-	vm_extract_angles_vector(&forward_angles, &forwardvec_rotated);
+	vm_vec_normalized_dir ( &view_vector, &targetpos_rotated, &playerpos_rotated );
+	vm_extract_angles_vector ( &view_angles, &view_vector );
+	vm_extract_angles_vector ( &forward_angles, &forwardvec_rotated );
 	chase_slew_angles.h = forward_angles.h - view_angles.h;
-	chase_slew_angles.p = -(forward_angles.p - view_angles.p);
+	chase_slew_angles.p = - ( forward_angles.p - view_angles.p );
 
 	// the gimbal limits of the player's virtual neck.
-	// These nested ifs prevent the player from looking up and 
+	// These nested ifs prevent the player from looking up and
 	// down beyond 90 degree angles.
-	if (chase_slew_angles.p > PI_2)
+	if ( chase_slew_angles.p > PI_2 )
 		chase_slew_angles.p = PI_2;
-	else if (chase_slew_angles.p < -PI_2)
+	else if ( chase_slew_angles.p < -PI_2 )
 		chase_slew_angles.p = -PI_2;
 
 	// prevents the player from looking completely behind himself; just over his shoulder
-	if (chase_slew_angles.h > PI2 / 3)
+	if ( chase_slew_angles.h > PI2 / 3 )
 		chase_slew_angles.h = PI2 / 3;
-	else if (chase_slew_angles.h < -PI2 / 3)
+	else if ( chase_slew_angles.h < -PI2 / 3 )
 		chase_slew_angles.h = -PI2 / 3;
 }
 
 
-//	When PAD0 is pressed, keypad controls viewer direction slewing.
-void do_view_slew(float frame_time)
+//  When PAD0 is pressed, keypad controls viewer direction slewing.
+void do_view_slew ( float frame_time )
 {
 	//angles view_slew_angles;
-	view_modify(&chase_slew_angles, &Viewer_slew_angles_delta, PI_2, PI2 / 3, frame_time);
+	view_modify ( &chase_slew_angles, &Viewer_slew_angles_delta, PI_2, PI2 / 3, frame_time );
 	//chase_angles_to_value(&Viewer_slew_angles, &chase_slew_angles, 15);
 }
 
-void do_view_chase(float frame_time)
+void do_view_chase ( float frame_time )
 {
 	float t;
 
-	//	Process centering key.
-	if (check_control_timef(VIEW_CENTER))
+	//  Process centering key.
+	if ( check_control_timef ( VIEW_CENTER ) )
 	{
 		Viewer_chase_info.distance = 0.0f;
 	}
 
-	t = check_control_timef(VIEW_DIST_INCREASE) - check_control_timef(VIEW_DIST_DECREASE);
+	t = check_control_timef ( VIEW_DIST_INCREASE ) - check_control_timef ( VIEW_DIST_DECREASE );
 	Viewer_chase_info.distance += t * 4;
-	if (Viewer_chase_info.distance < 0.0f)
+	if ( Viewer_chase_info.distance < 0.0f )
 		Viewer_chase_info.distance = 0.0f;
 }
 
 float camera_zoom_scale = 1.0f;
 
-DCF(camera_speed, "")
+DCF ( camera_speed, "" )
 {
-	dc_get_arg(ARG_FLOAT);
+	dc_get_arg ( ARG_FLOAT );
 	camera_zoom_scale = Dc_arg_float;
 }
 
-void do_view_external(float frame_time)
+void do_view_external ( float frame_time )
 {
 	float t;
 
-	view_modify(&Viewer_external_info.angles, &Viewer_external_angles_delta, PI2, PI2, frame_time);
+	view_modify ( &Viewer_external_info.angles, &Viewer_external_angles_delta, PI2, PI2, frame_time );
 
-	//	Process centering key.
-	if (check_control_timef(VIEW_CENTER))
+	//  Process centering key.
+	if ( check_control_timef ( VIEW_CENTER ) )
 	{
 		Viewer_external_info.angles.p = 0.0f;
 		Viewer_external_info.angles.h = 0.0f;
 		Viewer_external_info.distance = 0.0f;
 	}
 
-	t = check_control_timef(VIEW_DIST_INCREASE) - check_control_timef(VIEW_DIST_DECREASE);
+	t = check_control_timef ( VIEW_DIST_INCREASE ) - check_control_timef ( VIEW_DIST_DECREASE );
 	Viewer_external_info.distance += t * 4 * camera_zoom_scale;
-	if (Viewer_external_info.distance < 0.0f)
+	if ( Viewer_external_info.distance < 0.0f )
 	{
 		Viewer_external_info.distance = 0.0f;
 	}
 
-	//	Do over-the-top correction.
+	//  Do over-the-top correction.
 
-	if (Viewer_external_info.angles.p > PI)
+	if ( Viewer_external_info.angles.p > PI )
 		Viewer_external_info.angles.p = -PI2 + Viewer_external_info.angles.p;
-	else if (Viewer_external_info.angles.p < -PI)
+	else if ( Viewer_external_info.angles.p < -PI )
 		Viewer_external_info.angles.p = PI2 + Viewer_external_info.angles.p;
 
-	if (Viewer_external_info.angles.h > PI)
+	if ( Viewer_external_info.angles.h > PI )
 		Viewer_external_info.angles.h = -PI2 + Viewer_external_info.angles.h;
-	else if (Viewer_external_info.angles.h < -PI)
+	else if ( Viewer_external_info.angles.h < -PI )
 		Viewer_external_info.angles.h = PI2 + Viewer_external_info.angles.h;
 }
 
 // separate out the reading of thrust keys, so we can call this from external
 // view as well as from normal view
-void do_thrust_keys(control_info* ci)
+void do_thrust_keys ( control_info *ci )
 {
-	ci->forward = check_control_timef(FORWARD_THRUST) - check_control_timef(REVERSE_THRUST);
-	ci->sideways = (check_control_timef(RIGHT_SLIDE_THRUST) - check_control_timef(LEFT_SLIDE_THRUST));//for slideing-Bobboau
-	ci->vertical = (check_control_timef(UP_SLIDE_THRUST) - check_control_timef(DOWN_SLIDE_THRUST));//for slideing-Bobboau
+	ci->forward = check_control_timef ( FORWARD_THRUST ) - check_control_timef ( REVERSE_THRUST );
+	ci->sideways = ( check_control_timef ( RIGHT_SLIDE_THRUST ) - check_control_timef ( LEFT_SLIDE_THRUST ) ); //for slideing-Bobboau
+	ci->vertical = ( check_control_timef ( UP_SLIDE_THRUST ) - check_control_timef ( DOWN_SLIDE_THRUST ) ); //for slideing-Bobboau
 }
 
 // called by single and multiplayer modes to reset information inside of control info structure
-void player_control_reset_ci(control_info* ci)
+void player_control_reset_ci ( control_info *ci )
 {
 	float t1, t2, oldspeed;
 
 	t1 = ci->heading;
 	t2 = ci->pitch;
 	oldspeed = ci->forward_cruise_percent;
-	memset(ci, 0, sizeof(control_info));
+	memset ( ci, 0, sizeof ( control_info ) );
 	ci->heading = t1;
 	ci->pitch = t2;
 	ci->forward_cruise_percent = oldspeed;
@@ -378,92 +378,95 @@ void player_control_reset_ci(control_info* ci)
 static int Joystick_saved_reading[JOY_NUM_AXES];
 static int Joystick_last_reading = -1;
 
-void playercontrol_read_stick(int* axis, float frame_time)
+void playercontrol_read_stick ( int *axis, float frame_time )
 {
 	int i;
 
 #ifndef NDEBUG
 	// Make sure things get reset properly between missions.
-	if ((Joystick_last_reading != -1) && (timestamp_until(Joystick_last_reading) > 1000))
+	if ( ( Joystick_last_reading != -1 ) && ( timestamp_until ( Joystick_last_reading ) > 1000 ) )
 	{
-		Int3();		// Get John!  John, the joystick last reading didn't get reset btwn levels.
+		Int3();     // Get John!  John, the joystick last reading didn't get reset btwn levels.
 		Joystick_last_reading = -1;
 	}
 #endif
 
-	if ((Joystick_last_reading == -1) || timestamp_elapsed(Joystick_last_reading))
+	if ( ( Joystick_last_reading == -1 ) || timestamp_elapsed ( Joystick_last_reading ) )
 	{
 		// Read the stick
-		control_get_axes_readings(&Joystick_saved_reading[0], &Joystick_saved_reading[1], &Joystick_saved_reading[2],
-			&Joystick_saved_reading[3], &Joystick_saved_reading[4]);
-		Joystick_last_reading = timestamp(1000 / 10);	// Read 10x per second, like we did in Descent.
+		control_get_axes_readings ( &Joystick_saved_reading[0], &Joystick_saved_reading[1], &Joystick_saved_reading[2],
+		                            &Joystick_saved_reading[3], &Joystick_saved_reading[4] );
+		Joystick_last_reading = timestamp ( 1000 / 10 ); // Read 10x per second, like we did in Descent.
 	}
 
-	for (i = 0; i < NUM_JOY_AXIS_ACTIONS; i++)
+	for ( i = 0; i < NUM_JOY_AXIS_ACTIONS; i++ )
 	{
 		axis[i] = 0;
 	}
 
-	if (Use_mouse_to_fly == 1)
+	if ( Use_mouse_to_fly == 1 )
 	{
-		playercontrol_read_mouse_as_stick(axis);
+		playercontrol_read_mouse_as_stick ( axis );
 	}
-	else if (Use_mouse_to_fly == 2)
+	else if ( Use_mouse_to_fly == 2 )
 	{
 		int dx, dy, dz;
 		float factor;
 
-		factor = (float) Mouse_sensitivity + 1.77f;
+		factor = ( float ) Mouse_sensitivity + 1.77f;
 		factor = factor * factor / frame_time / 0.6f;
 
-		mouse_get_delta(&dx, &dy, &dz);
+		mouse_get_delta ( &dx, &dy, &dz );
 
-		if ( Invert_axis[0] ) {
+		if ( Invert_axis[0] )
+		{
 			dx = -dx;
 		}
 
-		if ( Invert_axis[1] ) {
+		if ( Invert_axis[1] )
+		{
 			dy = -dy;
 		}
 
-		if ( Invert_axis[3] ) {
+		if ( Invert_axis[3] )
+		{
 			dz = -dz;
 		}
 
-		axis[0] += (int) ((float) dx * factor);
-		axis[1] += (int) ((float) dy * factor);
-		axis[3] += (int) ((float) dz * factor);
+		axis[0] += ( int ) ( ( float ) dx * factor );
+		axis[1] += ( int ) ( ( float ) dy * factor );
+		axis[3] += ( int ) ( ( float ) dz * factor );
 	}
 	else
 	{
-		for (i = 0; i < NUM_JOY_AXIS_ACTIONS; i++)
+		for ( i = 0; i < NUM_JOY_AXIS_ACTIONS; i++ )
 		{
 			axis[i] = Joystick_saved_reading[i];
 		}
 	}
 }
 
-void playercontrol_read_mouse_as_stick(int* axis)
+void playercontrol_read_mouse_as_stick ( int *axis )
 {
 	int raw[2], dead_zone[2], rng[2], d[2], axis_center[2];
 	float percent[2];
 
-	axis_center[0] = (gr_screen.max_w_unscaled / 2);
-	axis_center[1] = (gr_screen.max_h_unscaled / 2);
+	axis_center[0] = ( gr_screen.max_w_unscaled / 2 );
+	axis_center[1] = ( gr_screen.max_h_unscaled / 2 );
 
-	mouse_get_pos_unscaled(&raw[0], &raw[1]);
+	mouse_get_pos_unscaled ( &raw[0], &raw[1] );
 
-	for (int axn = 0; axn < 2; ++axn)
+	for ( int axn = 0; axn < 2; ++axn )
 	{
 		raw[axn] -= axis_center[axn];
-		dead_zone[axn] = (axis_center[axn])*Dead_zone_size / 100;
+		dead_zone[axn] = ( axis_center[axn] ) * Dead_zone_size / 100;
 
-		if (raw[axn] < -dead_zone[axn])
+		if ( raw[axn] < -dead_zone[axn] )
 		{
 			rng[axn] = axis_center[axn] - dead_zone[axn];
 			d[axn] = -raw[axn] - dead_zone[axn];
 		}
-		else if (raw[axn] > dead_zone[axn])
+		else if ( raw[axn] > dead_zone[axn] )
 		{
 			rng[axn] = axis_center[axn] - dead_zone[axn];
 			d[axn] = raw[axn] - dead_zone[axn];
@@ -474,96 +477,97 @@ void playercontrol_read_mouse_as_stick(int* axis)
 			d[axn] = 0;
 		}
 
-		if (d[axn] > rng[axn])
+		if ( d[axn] > rng[axn] )
 		{
 			d[axn] = rng[axn];
 		}
 
-		Assert(Mouse_sensitivity >= 0 && Mouse_sensitivity <= 9);
+		Assert ( Mouse_sensitivity >= 0 && Mouse_sensitivity <= 9 );
 
-		percent[axn] = (float)d[axn] / (float)rng[axn];
+		percent[axn] = ( float ) d[axn] / ( float ) rng[axn];
 
-		if (Mouse_sensitivity <= 4)
+		if ( Mouse_sensitivity <= 4 )
 		{
-			percent[axn] = pow(percent[axn], (3.0f - ((float)Mouse_sensitivity / 2.0f)));
+			percent[axn] = pow ( percent[axn], ( 3.0f - ( ( float ) Mouse_sensitivity / 2.0f ) ) );
 		}
 		else
 		{
-			percent[axn] = MIN(1.0f, percent[axn] * Mouse_sensitivity * 0.25f);
+			percent[axn] = MIN ( 1.0f, percent[axn] * Mouse_sensitivity * 0.25f );
 		}
 
-		axis[axn] = (int)((float)F1_0 * percent[axn]);
+		axis[axn] = ( int ) ( ( float ) F1_0 * percent[axn] );
 
-		if (raw[axn] < 0)
+		if ( raw[axn] < 0 )
 		{
 			axis[axn] = -axis[axn];
 		}
 
-		if (axn == 1)
+		if ( axn == 1 )
 		{
 			axis[axn] = -axis[axn];
 		}
 	}
 }
 
-void read_keyboard_controls(control_info* ctrl_info, float frame_time, physics_info* pi)
+void read_keyboard_controls ( control_info *ctrl_info, float frame_time, physics_info *pi )
 {
 	float kh = 0.0f, scaled, newspeed, delta, oldspeed;
 	int axis[NUM_JOY_AXIS_ACTIONS], ignore_pitch, slew_active = 1;
 	static int afterburner_last = 0;
 	static float analog_throttle_last = 9e9f;
 	static int override_analog_throttle = 0;
-	static float savedspeed = ctrl_info->forward_cruise_percent;	//Backslash
+	static float savedspeed = ctrl_info->forward_cruise_percent;    //Backslash
 	int ok_to_read_ci_pitch_yaw = 1;
 	int centering_speed = 7; // the scale speed in which the camera will smoothly center when the player presses Center View
 
 	oldspeed = ctrl_info->forward_cruise_percent;
-	player_control_reset_ci(ctrl_info);
+	player_control_reset_ci ( ctrl_info );
 
-	if (Viewer_mode & VM_EXTERNAL)
+	if ( Viewer_mode & VM_EXTERNAL )
 	{
-		control_used(VIEW_EXTERNAL);
-		if (!(Viewer_mode & VM_EXTERNAL_CAMERA_LOCKED))
+		control_used ( VIEW_EXTERNAL );
+		if ( ! ( Viewer_mode & VM_EXTERNAL_CAMERA_LOCKED ) )
 		{
 			ok_to_read_ci_pitch_yaw = 0;
 		}
 
-		do_view_external(frame_time);
-		do_thrust_keys(ctrl_info);
+		do_view_external ( frame_time );
+		do_thrust_keys ( ctrl_info );
 		slew_active = 0;
 	}
-	else if (Viewer_mode & VM_CHASE)
+	else if ( Viewer_mode & VM_CHASE )
 	{
-		do_view_chase(frame_time);
+		do_view_chase ( frame_time );
 		slew_active = 0;
 	}
 	else
 	{
-		// We're in the cockpit. 
-		if (view_centering)
+		// We're in the cockpit.
+		if ( view_centering )
 		{
 			// If we're centering the view, check to see if we're actually centered and bypass any view modifications
 			// until the view has finally been centered.
-			if ((Viewer_slew_angles.h == 0.0f) && (Viewer_slew_angles.p == 0.0f))
+			if ( ( Viewer_slew_angles.h == 0.0f ) && ( Viewer_slew_angles.p == 0.0f ) )
 			{
 				view_centering = 0; // if the view has been centered, allow the player to freelook again.
 			}
 			slew_active = 0;
 		}
-		else if (Viewer_mode & VM_TRACK)
-		{ // Player's vision will track current target.
-			do_view_track_target(frame_time);
+		else if ( Viewer_mode & VM_TRACK )
+		{
+			// Player's vision will track current target.
+			do_view_track_target ( frame_time );
 		}
 		else
 		{
-			// The Center View command check is here because 
+			// The Center View command check is here because
 			// we don't want the player centering the view in target padlock mode
-			if (check_control_timef(VIEW_CENTER) && !view_centering)
+			if ( check_control_timef ( VIEW_CENTER ) && !view_centering )
 			{
 				view_centering = 1;
 				slew_active = 0;
 			}
-			do_view_slew(frame_time);
+			do_view_slew ( frame_time );
 
 			// Orthogonal padlock views moved here in order to get the springy chase effect when transitioning.
 			player_set_padlock_state();
@@ -571,143 +575,145 @@ void read_keyboard_controls(control_info* ctrl_info, float frame_time, physics_i
 		}
 	}
 
-	if (ok_to_read_ci_pitch_yaw)
+	if ( ok_to_read_ci_pitch_yaw )
 	{
 		// From keyboard...
-		do_thrust_keys(ctrl_info);
-		if (check_control(BANK_WHEN_PRESSED))
+		do_thrust_keys ( ctrl_info );
+		if ( check_control ( BANK_WHEN_PRESSED ) )
 		{
-			ctrl_info->bank = check_control_timef(BANK_LEFT) + check_control_timef(YAW_LEFT) -
-				check_control_timef(YAW_RIGHT) - check_control_timef(BANK_RIGHT);
+			ctrl_info->bank = check_control_timef ( BANK_LEFT ) + check_control_timef ( YAW_LEFT ) -
+			                  check_control_timef ( YAW_RIGHT ) - check_control_timef ( BANK_RIGHT );
 			ctrl_info->heading = 0.0f;
 		}
 		else
 		{
-			kh = (check_control_timef(YAW_RIGHT) - check_control_timef(YAW_LEFT)) / 8.0f;
-			if (kh == 0.0f)
+			kh = ( check_control_timef ( YAW_RIGHT ) - check_control_timef ( YAW_LEFT ) ) / 8.0f;
+			if ( kh == 0.0f )
 			{
 				ctrl_info->heading = 0.0f;
 
 			}
-			else if (kh > 0.0f)
+			else if ( kh > 0.0f )
 			{
-				if (ctrl_info->heading < 0.0f)
+				if ( ctrl_info->heading < 0.0f )
 					ctrl_info->heading = 0.0f;
 
 			}
 			else
-			{  // kh < 0
-				if (ctrl_info->heading > 0.0f)
+			{
+				// kh < 0
+				if ( ctrl_info->heading > 0.0f )
 					ctrl_info->heading = 0.0f;
 			}
 
-			ctrl_info->bank = check_control_timef(BANK_LEFT) - check_control_timef(BANK_RIGHT);
+			ctrl_info->bank = check_control_timef ( BANK_LEFT ) - check_control_timef ( BANK_RIGHT );
 		}
 
 		ctrl_info->heading += kh;
-		kh = (check_control_timef(PITCH_FORWARD) - check_control_timef(PITCH_BACK)) / 8.0f;
-		if (kh == 0.0f)
+		kh = ( check_control_timef ( PITCH_FORWARD ) - check_control_timef ( PITCH_BACK ) ) / 8.0f;
+		if ( kh == 0.0f )
 		{
 			ctrl_info->pitch = 0.0f;
 		}
-		else if (kh > 0.0f)
+		else if ( kh > 0.0f )
 		{
-			if (ctrl_info->pitch < 0.0f)
+			if ( ctrl_info->pitch < 0.0f )
 				ctrl_info->pitch = 0.0f;
 
 		}
 		else
-		{  // kh < 0
-			if (ctrl_info->pitch > 0.0f)
+		{
+			// kh < 0
+			if ( ctrl_info->pitch > 0.0f )
 				ctrl_info->pitch = 0.0f;
 		}
 
 		ctrl_info->pitch += kh;
 	}
 
-	if (!slew_active)
+	if ( !slew_active )
 	{
 		// If we're not in a view that slews (ie, not a cockpit view), make the viewer slew angles spring to the center.
 		chase_slew_angles.h = 0.0f;
 		chase_slew_angles.p = 0.0f;
 	}
 
-	chase_angles_to_value(&Viewer_slew_angles, &chase_slew_angles, centering_speed);
+	chase_angles_to_value ( &Viewer_slew_angles, &chase_slew_angles, centering_speed );
 
-	if (!(Game_mode & GM_DEAD))
+	if ( ! ( Game_mode & GM_DEAD ) )
 	{
-		if (button_info_query(&Player->bi, ONE_THIRD_THROTTLE) && !object_get_gliding(Player_obj))
+		if ( button_info_query ( &Player->bi, ONE_THIRD_THROTTLE ) && !object_get_gliding ( Player_obj ) )
 		{
-			control_used(ONE_THIRD_THROTTLE);
+			control_used ( ONE_THIRD_THROTTLE );
 			player_clear_speed_matching();
-			if (Player->ci.forward_cruise_percent < 33.3f)
+			if ( Player->ci.forward_cruise_percent < 33.3f )
 			{
-				snd_play(&Snds[SND_THROTTLE_UP], 0.0f);
+				snd_play ( &Snds[SND_THROTTLE_UP], 0.0f );
 
 			}
-			else if (Player->ci.forward_cruise_percent > 33.3f)
+			else if ( Player->ci.forward_cruise_percent > 33.3f )
 			{
-				snd_play(&Snds[SND_THROTTLE_DOWN], 0.0f);
+				snd_play ( &Snds[SND_THROTTLE_DOWN], 0.0f );
 			}
 
 			Player->ci.forward_cruise_percent = 33.3f;
 			override_analog_throttle = 1;
 		}
 
-		if (button_info_query(&Player->bi, TWO_THIRDS_THROTTLE) && !object_get_gliding(Player_obj))
+		if ( button_info_query ( &Player->bi, TWO_THIRDS_THROTTLE ) && !object_get_gliding ( Player_obj ) )
 		{
-			control_used(TWO_THIRDS_THROTTLE);
+			control_used ( TWO_THIRDS_THROTTLE );
 			player_clear_speed_matching();
-			if (Player->ci.forward_cruise_percent < 66.6f)
+			if ( Player->ci.forward_cruise_percent < 66.6f )
 			{
-				snd_play(&Snds[SND_THROTTLE_UP], 0.0f);
+				snd_play ( &Snds[SND_THROTTLE_UP], 0.0f );
 
 			}
-			else if (Player->ci.forward_cruise_percent > 66.6f)
+			else if ( Player->ci.forward_cruise_percent > 66.6f )
 			{
-				snd_play(&Snds[SND_THROTTLE_DOWN], 0.0f);
+				snd_play ( &Snds[SND_THROTTLE_DOWN], 0.0f );
 			}
 
 			Player->ci.forward_cruise_percent = 66.6f;
 			override_analog_throttle = 1;
 		}
 
-		if (button_info_query(&Player->bi, PLUS_5_PERCENT_THROTTLE) && !object_get_gliding(Player_obj))
+		if ( button_info_query ( &Player->bi, PLUS_5_PERCENT_THROTTLE ) && !object_get_gliding ( Player_obj ) )
 		{
-			control_used(PLUS_5_PERCENT_THROTTLE);
+			control_used ( PLUS_5_PERCENT_THROTTLE );
 			Player->ci.forward_cruise_percent += 5.0f;
-			if (Player->ci.forward_cruise_percent > 100.0f)
+			if ( Player->ci.forward_cruise_percent > 100.0f )
 				Player->ci.forward_cruise_percent = 100.0f;
 		}
 
-		if (button_info_query(&Player->bi, MINUS_5_PERCENT_THROTTLE) && !object_get_gliding(Player_obj))
+		if ( button_info_query ( &Player->bi, MINUS_5_PERCENT_THROTTLE ) && !object_get_gliding ( Player_obj ) )
 		{
-			control_used(MINUS_5_PERCENT_THROTTLE);
+			control_used ( MINUS_5_PERCENT_THROTTLE );
 			Player->ci.forward_cruise_percent -= 5.0f;
-			if (Player->ci.forward_cruise_percent < 0.0f)
+			if ( Player->ci.forward_cruise_percent < 0.0f )
 				Player->ci.forward_cruise_percent = 0.0f;
 		}
 
-		if (button_info_query(&Player->bi, ZERO_THROTTLE) && !object_get_gliding(Player_obj))
+		if ( button_info_query ( &Player->bi, ZERO_THROTTLE ) && !object_get_gliding ( Player_obj ) )
 		{
-			control_used(ZERO_THROTTLE);
+			control_used ( ZERO_THROTTLE );
 			player_clear_speed_matching();
-			if (ctrl_info->forward_cruise_percent > 0.0f && Player_obj->phys_info.fspeed > 0.5)
+			if ( ctrl_info->forward_cruise_percent > 0.0f && Player_obj->phys_info.fspeed > 0.5 )
 			{
-				snd_play(&Snds[SND_ZERO_THROTTLE], 0.0f);
+				snd_play ( &Snds[SND_ZERO_THROTTLE], 0.0f );
 			}
 
 			ctrl_info->forward_cruise_percent = 0.0f;
 			override_analog_throttle = 1;
 		}
 
-		if (button_info_query(&Player->bi, MAX_THROTTLE) && !object_get_gliding(Player_obj))
+		if ( button_info_query ( &Player->bi, MAX_THROTTLE ) && !object_get_gliding ( Player_obj ) )
 		{
-			control_used(MAX_THROTTLE);
+			control_used ( MAX_THROTTLE );
 			player_clear_speed_matching();
-			if (ctrl_info->forward_cruise_percent < 100.0f)
+			if ( ctrl_info->forward_cruise_percent < 100.0f )
 			{
-				snd_play(&Snds[SND_FULL_THROTTLE], 0.0f);
+				snd_play ( &Snds[SND_FULL_THROTTLE], 0.0f );
 			}
 
 			ctrl_info->forward_cruise_percent = 100.0f;
@@ -715,54 +721,54 @@ void read_keyboard_controls(control_info* ctrl_info, float frame_time, physics_i
 		}
 
 		// AL 12-29-97: If afterburner key is down, player should have full forward thrust (even if afterburners run out)
-		if (check_control(AFTERBURNER) && !object_get_gliding(Player_obj))
+		if ( check_control ( AFTERBURNER ) && !object_get_gliding ( Player_obj ) )
 		{
 			ctrl_info->forward = 1.0f;
 		}
 
-		if (check_control(REVERSE_THRUST) && check_control(AFTERBURNER) && !object_get_gliding(Player_obj))
+		if ( check_control ( REVERSE_THRUST ) && check_control ( AFTERBURNER ) && !object_get_gliding ( Player_obj ) )
 		{
 			ctrl_info->forward = -pi->max_rear_vel * 1.0f;
 		}
 
-		if ((Player->flags & PLAYER_FLAGS_MATCH_TARGET) && !object_get_gliding(Player_obj))
+		if ( ( Player->flags & PLAYER_FLAGS_MATCH_TARGET ) && !object_get_gliding ( Player_obj ) )
 		{
-			if ((Player_ai->last_target == Player_ai->target_objnum) && (Player_ai->target_objnum != -1) &&
-				(ctrl_info->forward_cruise_percent == oldspeed))
+			if ( ( Player_ai->last_target == Player_ai->target_objnum ) && ( Player_ai->target_objnum != -1 ) &&
+			        ( ctrl_info->forward_cruise_percent == oldspeed ) )
 			{
 				float tspeed, pmax_speed;
-				object* targeted_objp = &Objects[Player_ai->target_objnum];
+				object *targeted_objp = &Objects[Player_ai->target_objnum];
 
-				tspeed = targeted_objp->phys_info.speed;	//changed from fspeed. If target is reversing, sliding, or gliding we still want to keep up. -- Backslash
+				tspeed = targeted_objp->phys_info.speed;    //changed from fspeed. If target is reversing, sliding, or gliding we still want to keep up. -- Backslash
 
 				// maybe need to get speed from docked partner
-				if (tspeed < MATCH_SPEED_THRESHOLD)
+				if ( tspeed < MATCH_SPEED_THRESHOLD )
 				{
-					Assert(targeted_objp->type == OBJ_SHIP);
+					Assert ( targeted_objp->type == OBJ_SHIP );
 
 					// Goober5000
-					if (object_is_docked(targeted_objp))
+					if ( object_is_docked ( targeted_objp ) )
 					{
-						tspeed = dock_calc_docked_speed(targeted_objp);	//changed from fspeed
+						tspeed = dock_calc_docked_speed ( targeted_objp ); //changed from fspeed
 					}
 				}
 
-				//	Note, if closer than 100 units, scale down speed a bit.  Prevents repeated collisions. -- MK, 12/17/97
-				float dist = vm_vec_dist(&Player_obj->pos, &targeted_objp->pos);
+				//  Note, if closer than 100 units, scale down speed a bit.  Prevents repeated collisions. -- MK, 12/17/97
+				float dist = vm_vec_dist ( &Player_obj->pos, &targeted_objp->pos );
 
-				if (dist < 100.0f)
+				if ( dist < 100.0f )
 				{
-					tspeed = tspeed * (0.5f + dist / 200.0f);
+					tspeed = tspeed * ( 0.5f + dist / 200.0f );
 				}
 
 				//SUSHI: If gliding, don't do anything for speed matching
-				if (!(Objects[Player->objnum].phys_info.flags & PF_GLIDING))
+				if ( ! ( Objects[Player->objnum].phys_info.flags & PF_GLIDING ) )
 				{
 					//pmax_speed = Ship_info[Ships[Player_obj->instance].ship_info_index].max_speed;
 					pmax_speed = Ships[Player_obj->instance].current_max_speed;
-					if (pmax_speed > 0.0f)
+					if ( pmax_speed > 0.0f )
 					{
-						ctrl_info->forward_cruise_percent = (tspeed / pmax_speed) * 100.0f;
+						ctrl_info->forward_cruise_percent = ( tspeed / pmax_speed ) * 100.0f;
 					}
 					else
 					{
@@ -778,9 +784,9 @@ void read_keyboard_controls(control_info* ctrl_info, float frame_time, physics_i
 
 		// code to read joystick axis for pitch/heading.  Code to read joystick buttons
 		// for bank.
-		if (!(Game_mode & GM_DEAD))
+		if ( ! ( Game_mode & GM_DEAD ) )
 		{
-			playercontrol_read_stick(axis, frame_time);
+			playercontrol_read_stick ( axis, frame_time );
 		}
 		else
 		{
@@ -789,13 +795,13 @@ void read_keyboard_controls(control_info* ctrl_info, float frame_time, physics_i
 
 		ignore_pitch = FALSE;
 
-		if (Axis_map_to[JOY_HEADING_AXIS] >= 0)
+		if ( Axis_map_to[JOY_HEADING_AXIS] >= 0 )
 		{
 			// check the heading on the x axis
-			if (check_control(BANK_WHEN_PRESSED))
+			if ( check_control ( BANK_WHEN_PRESSED ) )
 			{
-				delta = f2fl(axis[JOY_HEADING_AXIS]);
-				if ((delta > 0.05f) || (delta < -0.05f))
+				delta = f2fl ( axis[JOY_HEADING_AXIS] );
+				if ( ( delta > 0.05f ) || ( delta < -0.05f ) )
 				{
 					ctrl_info->bank -= delta;
 					ignore_pitch = TRUE;
@@ -803,31 +809,31 @@ void read_keyboard_controls(control_info* ctrl_info, float frame_time, physics_i
 			}
 			else
 			{
-				ctrl_info->heading += f2fl(axis[JOY_HEADING_AXIS]);
+				ctrl_info->heading += f2fl ( axis[JOY_HEADING_AXIS] );
 			}
 		}
 
 		// check the pitch on the y axis
-		if (Axis_map_to[JOY_PITCH_AXIS] >= 0)
+		if ( Axis_map_to[JOY_PITCH_AXIS] >= 0 )
 		{
-			ctrl_info->pitch -= f2fl(axis[JOY_PITCH_AXIS]);
+			ctrl_info->pitch -= f2fl ( axis[JOY_PITCH_AXIS] );
 		}
 
-		if (Axis_map_to[JOY_BANK_AXIS] >= 0)
+		if ( Axis_map_to[JOY_BANK_AXIS] >= 0 )
 		{
-			ctrl_info->bank -= f2fl(axis[JOY_BANK_AXIS]) * 1.5f;
+			ctrl_info->bank -= f2fl ( axis[JOY_BANK_AXIS] ) * 1.5f;
 		}
 
 		// axis 2 is for throttle
-		if ((Axis_map_to[JOY_ABS_THROTTLE_AXIS] >= 0) && !object_get_gliding(Player_obj))
+		if ( ( Axis_map_to[JOY_ABS_THROTTLE_AXIS] >= 0 ) && !object_get_gliding ( Player_obj ) )
 		{
-			scaled = (float)axis[JOY_ABS_THROTTLE_AXIS] * 1.2f / (float)F1_0 - 0.1f;  // convert to -0.1 - 1.1 range
+			scaled = ( float ) axis[JOY_ABS_THROTTLE_AXIS] * 1.2f / ( float ) F1_0 - 0.1f; // convert to -0.1 - 1.1 range
 			oldspeed = ctrl_info->forward_cruise_percent;
 
-			newspeed = (1.0f - scaled) * 100.0f;
+			newspeed = ( 1.0f - scaled ) * 100.0f;
 
 			delta = analog_throttle_last - newspeed;
-			if (!override_analog_throttle || (delta < -1.5f) || (delta > 1.5f))
+			if ( !override_analog_throttle || ( delta < -1.5f ) || ( delta > 1.5f ) )
 			{
 				ctrl_info->forward_cruise_percent = newspeed;
 				analog_throttle_last = newspeed;
@@ -835,26 +841,26 @@ void read_keyboard_controls(control_info* ctrl_info, float frame_time, physics_i
 			}
 		}
 
-		if ((Axis_map_to[JOY_REL_THROTTLE_AXIS] >= 0) && !object_get_gliding(Player_obj))
-			ctrl_info->forward_cruise_percent += f2fl(axis[JOY_REL_THROTTLE_AXIS]) * 100.0f * frame_time;
+		if ( ( Axis_map_to[JOY_REL_THROTTLE_AXIS] >= 0 ) && !object_get_gliding ( Player_obj ) )
+			ctrl_info->forward_cruise_percent += f2fl ( axis[JOY_REL_THROTTLE_AXIS] ) * 100.0f * frame_time;
 
-		if (ctrl_info->forward_cruise_percent > 100.0f)
+		if ( ctrl_info->forward_cruise_percent > 100.0f )
 			ctrl_info->forward_cruise_percent = 100.0f;
-		if (ctrl_info->forward_cruise_percent < 0.0f)
+		if ( ctrl_info->forward_cruise_percent < 0.0f )
 			ctrl_info->forward_cruise_percent = 0.0f;
 
 		// set up the firing stuff.  Read into control info ala Descent so that weapons will be
 		// created during the object simulation phase, and not immediately as was happening before.
 
 		// keyboard: fire the current primary weapon
-		if (check_control(FIRE_PRIMARY))
+		if ( check_control ( FIRE_PRIMARY ) )
 		{
 			ctrl_info->fire_primary_count++;
 		}
 
 		// for debugging, check to see if the debug key is down -- if so, make fire the debug laser instead
 #ifndef NDEBUG
-		if (keyd_pressed[KEY_DEBUG_KEY])
+		if ( keyd_pressed[KEY_DEBUG_KEY] )
 		{
 			ctrl_info->fire_debug_count = ctrl_info->fire_primary_count;
 			ctrl_info->fire_primary_count = 0;
@@ -862,12 +868,12 @@ void read_keyboard_controls(control_info* ctrl_info, float frame_time, physics_i
 #endif
 
 		// keyboard: fire the current secondary weapon
-		if (check_control(FIRE_SECONDARY))
+		if ( check_control ( FIRE_SECONDARY ) )
 		{
 			ctrl_info->fire_secondary_count++;
 
 			// if we're a multiplayer client, set our accum bits now
-			if ((Game_mode & GM_MULTIPLAYER) && (Net_player != NULL) && !(Net_player->flags & NETINFO_FLAG_AM_MASTER))
+			if ( ( Game_mode & GM_MULTIPLAYER ) && ( Net_player != NULL ) && ! ( Net_player->flags & NETINFO_FLAG_AM_MASTER ) )
 			{
 				Net_player->s_info.accum_buttons |= OOC_FIRE_SECONDARY;
 			}
@@ -875,20 +881,20 @@ void read_keyboard_controls(control_info* ctrl_info, float frame_time, physics_i
 
 
 		// keyboard: launch countermeasures
-		if (button_info_query(&Player->bi, LAUNCH_COUNTERMEASURE))
+		if ( button_info_query ( &Player->bi, LAUNCH_COUNTERMEASURE ) )
 		{
-			control_used(LAUNCH_COUNTERMEASURE);
+			control_used ( LAUNCH_COUNTERMEASURE );
 			ctrl_info->fire_countermeasure_count++;
-			hud_gauge_popup_start(HUD_CMEASURE_GAUGE);
+			hud_gauge_popup_start ( HUD_CMEASURE_GAUGE );
 		}
 
 		// see if the afterburner has been started (keyboard + joystick)
-		if (check_control(AFTERBURNER) && !Player_use_ai && !object_get_gliding(Player_obj))
+		if ( check_control ( AFTERBURNER ) && !Player_use_ai && !object_get_gliding ( Player_obj ) )
 		{
-			if (!afterburner_last)
+			if ( !afterburner_last )
 			{
-				Assert(Player_ship);
-				if (!(Ship_info[Player_ship->ship_info_index].flags & SIF_AFTERBURNER))
+				Assert ( Player_ship );
+				if ( ! ( Ship_info[Player_ship->ship_info_index].flags & SIF_AFTERBURNER ) )
 				{
 					gamesnd_play_error_beep();
 				}
@@ -903,7 +909,7 @@ void read_keyboard_controls(control_info* ctrl_info, float frame_time, physics_i
 		}
 		else
 		{
-			if (afterburner_last)
+			if ( afterburner_last )
 				ctrl_info->afterburner_stop = 1;
 
 			afterburner_last = 0;
@@ -914,20 +920,20 @@ void read_keyboard_controls(control_info* ctrl_info, float frame_time, physics_i
 		// Make these static so that we keep them from frame to frame.
 
 		// Check for toggle button pressed.
-		if (button_info_query(&Player->bi, TOGGLE_GLIDING))
+		if ( button_info_query ( &Player->bi, TOGGLE_GLIDING ) )
 		{
-			control_used(TOGGLE_GLIDING);
-			if (Player_obj != NULL && Ship_info[Player_ship->ship_info_index].can_glide)
+			control_used ( TOGGLE_GLIDING );
+			if ( Player_obj != NULL && Ship_info[Player_ship->ship_info_index].can_glide )
 			{
 				Toggle_glide = !Toggle_glide;
 			}
 		}
 		// This logic is a bit tricky. It checks to see if the glide_when_pressed button is in a different state
 		// than press_glide. Since it sets press_glide equal to glide_when_pressed inside of this if statement,
-		//  this only evaluates to true when the state of the button is different than it was last time. 
-		if (check_control(GLIDE_WHEN_PRESSED) != Press_glide)
+		//  this only evaluates to true when the state of the button is different than it was last time.
+		if ( check_control ( GLIDE_WHEN_PRESSED ) != Press_glide )
 		{
-			if (Player_obj != NULL && Ship_info[Player_ship->ship_info_index].can_glide)
+			if ( Player_obj != NULL && Ship_info[Player_ship->ship_info_index].can_glide )
 			{
 				// This only works if check_control returns only 1 or 0. Shouldn't be a problem,
 				// but this comment's here just in case it is.
@@ -936,60 +942,60 @@ void read_keyboard_controls(control_info* ctrl_info, float frame_time, physics_i
 		}
 
 		// if the player is warping out, cancel gliding
-		if (Player_ship->flags & SF_DEPART_WARP)
+		if ( Player_ship->flags & SF_DEPART_WARP )
 		{
 			Toggle_glide = 0;
 			Press_glide = 0;
 		}
 
 		// Do we want to be gliding?
-		if (Toggle_glide || Press_glide)
+		if ( Toggle_glide || Press_glide )
 		{
 			// Probably don't need to do this check, but just in case...
-			if (Player_obj != NULL && Ship_info[Player_ship->ship_info_index].can_glide)
+			if ( Player_obj != NULL && Ship_info[Player_ship->ship_info_index].can_glide )
 			{
 				// Only bother doing this if we need to.
-				if (Toggle_glide && Press_glide)
+				if ( Toggle_glide && Press_glide )
 				{
 					// Overkill -- if gliding is toggled on and glide_when_pressed is pressed, turn glide off
-					if (object_get_gliding(Player_obj))
+					if ( object_get_gliding ( Player_obj ) )
 					{
-						object_set_gliding(Player_obj, false);
+						object_set_gliding ( Player_obj, false );
 						ctrl_info->forward_cruise_percent = savedspeed;
 						Press_glide = !Press_glide;
-						snd_play(&Snds[SND_THROTTLE_UP], 0.0f);
+						snd_play ( &Snds[SND_THROTTLE_UP], 0.0f );
 					}
 				}
-				else if (!object_get_gliding(Player_obj))
+				else if ( !object_get_gliding ( Player_obj ) )
 				{
-					object_set_gliding(Player_obj, true);
+					object_set_gliding ( Player_obj, true );
 					savedspeed = ctrl_info->forward_cruise_percent;
 					ctrl_info->forward_cruise_percent = 0.0f;
 					override_analog_throttle = 1;
-					snd_play(&Snds[SND_THROTTLE_DOWN], 0.0f);
+					snd_play ( &Snds[SND_THROTTLE_DOWN], 0.0f );
 				}
 			}
 		}
 		else
 		{
 			// Probably don't need to do the second half of this check, but just in case...
-			if (Player_obj != NULL && Ship_info[Player_ship->ship_info_index].can_glide)
+			if ( Player_obj != NULL && Ship_info[Player_ship->ship_info_index].can_glide )
 			{
 				// Only bother doing this if we need to.
-				if (object_get_gliding(Player_obj))
+				if ( object_get_gliding ( Player_obj ) )
 				{
-					object_set_gliding(Player_obj, false);
+					object_set_gliding ( Player_obj, false );
 					ctrl_info->forward_cruise_percent = savedspeed;
-					snd_play(&Snds[SND_THROTTLE_UP], 0.0f);
+					snd_play ( &Snds[SND_THROTTLE_UP], 0.0f );
 				}
 			}
 		}
 
 	}
 
-	if ((Viewer_mode & VM_EXTERNAL))
+	if ( ( Viewer_mode & VM_EXTERNAL ) )
 	{
-		if (!(Viewer_mode & VM_EXTERNAL_CAMERA_LOCKED))
+		if ( ! ( Viewer_mode & VM_EXTERNAL_CAMERA_LOCKED ) )
 		{
 			ctrl_info->heading = 0.0f;
 			ctrl_info->pitch = 0.0f;
@@ -998,12 +1004,12 @@ void read_keyboard_controls(control_info* ctrl_info, float frame_time, physics_i
 	}
 }
 
-void copy_control_info(control_info* dest_ci, control_info* src_ci)
+void copy_control_info ( control_info *dest_ci, control_info *src_ci )
 {
-	if (dest_ci == NULL)
+	if ( dest_ci == NULL )
 		return;
 
-	if (src_ci == NULL)
+	if ( src_ci == NULL )
 	{
 		dest_ci->pitch = 0.0f;
 		dest_ci->vertical = 0.0f;
@@ -1027,9 +1033,9 @@ void copy_control_info(control_info* dest_ci, control_info* src_ci)
 	}
 }
 
-void lock_player_controls(bool lock_controls)
+void lock_player_controls ( bool lock_controls )
 {
-	if (lock_controls && !Lock_controls)
+	if ( lock_controls && !Lock_controls )
 	{
 		afterburner_stop_sounds();
 		Player_obj->phys_info.desired_rotvel = vmd_zero_vector;
@@ -1043,9 +1049,9 @@ void lock_player_controls(bool lock_controls)
 		joy_flush();
 		key_flush();
 		mouse_flush();
-		player_control_reset_ci(&(Player->ci));
+		player_control_reset_ci ( & ( Player->ci ) );
 	}
-	else if (!lock_controls && Lock_controls)
+	else if ( !lock_controls && Lock_controls )
 	{
 		Player_obj->phys_info.desired_rotvel = vmd_zero_vector;
 		Player_obj->phys_info.desired_vel = Player_obj->phys_info.vel;
@@ -1053,43 +1059,43 @@ void lock_player_controls(bool lock_controls)
 		joy_flush();
 		key_flush();
 		mouse_flush();
-		player_control_reset_ci(&(Player->ci));
+		player_control_reset_ci ( & ( Player->ci ) );
 	}
 
 	Lock_controls = lock_controls;
 }
 
-void read_player_controls(object* objp, float frametime)
+void read_player_controls ( object *objp, float frametime )
 {
-	if (Lock_controls)
+	if ( Lock_controls )
 		return;
 
 	float diff;
 	int can_warp = 0, warp_failed = 0;
 	float target_warpout_speed;
 
-	joy_ff_adjust_handling((int)objp->phys_info.speed);
+	joy_ff_adjust_handling ( ( int ) objp->phys_info.speed );
 
-	switch (Player->control_mode)
+	switch ( Player->control_mode )
 	{
 	case PCM_SUPERNOVA:
 		break;
 
 	case PCM_NORMAL:
-		read_keyboard_controls(&(Player->ci), frametime, &objp->phys_info);
+		read_keyboard_controls ( & ( Player->ci ), frametime, &objp->phys_info );
 
-		if (lua_game_control & LGC_STEERING)
+		if ( lua_game_control & LGC_STEERING )
 		{
 			// make sure to copy the control before reseting it
 			Player->lua_ci = Player->ci;
-			copy_control_info(&(Player->ci), NULL);
+			copy_control_info ( & ( Player->ci ), NULL );
 		}
-		else if (lua_game_control & LGC_FULL)
+		else if ( lua_game_control & LGC_FULL )
 		{
 			control_info temp;
 			// first copy over the new values, then reset
 			temp = Player->ci;
-			copy_control_info(&(Player->ci), &(Player->lua_ci));
+			copy_control_info ( & ( Player->ci ), & ( Player->lua_ci ) );
 			Player->lua_ci = temp;
 		}
 		else
@@ -1100,120 +1106,120 @@ void read_player_controls(object* objp, float frametime)
 
 		break;
 
-	case PCM_WARPOUT_STAGE1:	// Accelerate to 40 km/s
-	case PCM_WARPOUT_STAGE2:	// Go 40 km/s steady up to the effect
-	case PCM_WARPOUT_STAGE3:	// Go 40 km/s steady through the effect
-		{
-			memset(&(Player->ci), 0, sizeof(control_info));		// set the controls to 0
-
-			if ((objp->type == OBJ_SHIP) && (!(Game_mode & GM_DEAD)))
-			{
-				Warpout_time += flFrametime;
-
-				target_warpout_speed = ship_get_warpout_speed(objp);
-
-				if (Warpout_forced)
-				{
-					Ships[objp->instance].current_max_speed = target_warpout_speed * 2.0f;
-
-					diff = target_warpout_speed - objp->phys_info.fspeed;
-
-					if (diff < 0.0f)
-						diff = 0.0f;
-
-					Player->ci.forward = ((target_warpout_speed + diff) / Ships[objp->instance].current_max_speed);
-				}
-				else
-				{
-					// check if warp ability has been disabled
-					if (Ships[objp->instance].flags & (SF_WARP_BROKEN | SF_WARP_NEVER))
-					{
-						HUD_sourced_printf(HUD_SOURCE_HIDDEN, XSTR("Cannot warp out at this time.", 81));
-						warp_failed = 1;
-					}
-					else
-					{
-						if ((!warp_failed) && (Ships[objp->instance].current_max_speed >= target_warpout_speed))
-						{
-							can_warp = 1;
-						}
-						else
-						{
-							Ships[objp->instance].current_max_speed = target_warpout_speed + 5.0f;
-							can_warp = 1;
-						}
-
-						if (can_warp)
-						{
-							diff = target_warpout_speed - objp->phys_info.fspeed;
-
-							if (diff < 0.0f)
-								diff = 0.0f;
-
-							Player->ci.forward = ((target_warpout_speed + diff) /
-												  Ships[objp->instance].current_max_speed);
-						}
-					}
-
-					if (warp_failed)
-					{
-						snd_play(&Snds[SND_PLAYER_WARP_FAIL]);
-						gameseq_post_event(GS_EVENT_PLAYER_WARPOUT_STOP);
-					}
-				}
-
-				if (Player->control_mode == PCM_WARPOUT_STAGE1)
-				{
-					// Wait at least 3 seconds before making sure warp speed is set.
-					if (Warpout_time > MINIMUM_PLAYER_WARPOUT_TIME)
-					{
-						// If we are going around 5% of the target speed, progress to next stage
-						float diffSpeed = objp->phys_info.fspeed;
-						if (target_warpout_speed != 0.0f)
-						{
-							diffSpeed = fl_abs(objp->phys_info.fspeed - target_warpout_speed) / target_warpout_speed;
-						}
-						if (diffSpeed < TARGET_WARPOUT_MATCH_PERCENT)
-						{
-							gameseq_post_event(GS_EVENT_PLAYER_WARPOUT_DONE_STAGE1);
-						}
-					}
-				}
-			}
-
-			break;
-		}
-	}
-
-	// the ships maximum velocity now depends on the energy flowing to engines
-	if (objp->type != OBJ_OBSERVER)
+	case PCM_WARPOUT_STAGE1:    // Accelerate to 40 km/s
+	case PCM_WARPOUT_STAGE2:    // Go 40 km/s steady up to the effect
+	case PCM_WARPOUT_STAGE3:    // Go 40 km/s steady through the effect
 	{
-		objp->phys_info.max_vel.xyz.z = Ships[objp->instance].current_max_speed;
-	}
-	if (Player_obj->type == OBJ_SHIP && !Player_use_ai)
-	{
-		// only read player control info if player ship is not dead
-		// or if Player_use_ai is disabed
-		if (!(Ships[Player_obj->instance].flags & SF_DYING))
+		memset ( & ( Player->ci ), 0, sizeof ( control_info ) ); // set the controls to 0
+
+		if ( ( objp->type == OBJ_SHIP ) && ( ! ( Game_mode & GM_DEAD ) ) )
 		{
-			vec3d wash_rot;
-			if ((Ships[objp->instance].wash_intensity > 0) && !((Player->control_mode == PCM_WARPOUT_STAGE1) ||
-																(Player->control_mode == PCM_WARPOUT_STAGE2) ||
-																(Player->control_mode == PCM_WARPOUT_STAGE3)))
+			Warpout_time += flFrametime;
+
+			target_warpout_speed = ship_get_warpout_speed ( objp );
+
+			if ( Warpout_forced )
 			{
-				float intensity = 0.3f * MIN(Ships[objp->instance].wash_intensity, 1.0f);
-				vm_vec_copy_scale(&wash_rot, &Ships[objp->instance].wash_rot_axis, intensity);
-				physics_read_flying_controls(&objp->orient, &objp->phys_info, &(Player->ci), flFrametime, &wash_rot);
+				Ships[objp->instance].current_max_speed = target_warpout_speed * 2.0f;
+
+				diff = target_warpout_speed - objp->phys_info.fspeed;
+
+				if ( diff < 0.0f )
+					diff = 0.0f;
+
+				Player->ci.forward = ( ( target_warpout_speed + diff ) / Ships[objp->instance].current_max_speed );
 			}
 			else
 			{
-				physics_read_flying_controls(&objp->orient, &objp->phys_info, &(Player->ci), flFrametime);
+				// check if warp ability has been disabled
+				if ( Ships[objp->instance].flags & ( SF_WARP_BROKEN | SF_WARP_NEVER ) )
+				{
+					HUD_sourced_printf ( HUD_SOURCE_HIDDEN, XSTR ( "Cannot warp out at this time.", 81 ) );
+					warp_failed = 1;
+				}
+				else
+				{
+					if ( ( !warp_failed ) && ( Ships[objp->instance].current_max_speed >= target_warpout_speed ) )
+					{
+						can_warp = 1;
+					}
+					else
+					{
+						Ships[objp->instance].current_max_speed = target_warpout_speed + 5.0f;
+						can_warp = 1;
+					}
+
+					if ( can_warp )
+					{
+						diff = target_warpout_speed - objp->phys_info.fspeed;
+
+						if ( diff < 0.0f )
+							diff = 0.0f;
+
+						Player->ci.forward = ( ( target_warpout_speed + diff ) /
+						                       Ships[objp->instance].current_max_speed );
+					}
+				}
+
+				if ( warp_failed )
+				{
+					snd_play ( &Snds[SND_PLAYER_WARP_FAIL] );
+					gameseq_post_event ( GS_EVENT_PLAYER_WARPOUT_STOP );
+				}
+			}
+
+			if ( Player->control_mode == PCM_WARPOUT_STAGE1 )
+			{
+				// Wait at least 3 seconds before making sure warp speed is set.
+				if ( Warpout_time > MINIMUM_PLAYER_WARPOUT_TIME )
+				{
+					// If we are going around 5% of the target speed, progress to next stage
+					float diffSpeed = objp->phys_info.fspeed;
+					if ( target_warpout_speed != 0.0f )
+					{
+						diffSpeed = fl_abs ( objp->phys_info.fspeed - target_warpout_speed ) / target_warpout_speed;
+					}
+					if ( diffSpeed < TARGET_WARPOUT_MATCH_PERCENT )
+					{
+						gameseq_post_event ( GS_EVENT_PLAYER_WARPOUT_DONE_STAGE1 );
+					}
+				}
+			}
+		}
+
+		break;
+	}
+	}
+
+	// the ships maximum velocity now depends on the energy flowing to engines
+	if ( objp->type != OBJ_OBSERVER )
+	{
+		objp->phys_info.max_vel.xyz.z = Ships[objp->instance].current_max_speed;
+	}
+	if ( Player_obj->type == OBJ_SHIP && !Player_use_ai )
+	{
+		// only read player control info if player ship is not dead
+		// or if Player_use_ai is disabed
+		if ( ! ( Ships[Player_obj->instance].flags & SF_DYING ) )
+		{
+			vec3d wash_rot;
+			if ( ( Ships[objp->instance].wash_intensity > 0 ) && ! ( ( Player->control_mode == PCM_WARPOUT_STAGE1 ) ||
+			        ( Player->control_mode == PCM_WARPOUT_STAGE2 ) ||
+			        ( Player->control_mode == PCM_WARPOUT_STAGE3 ) ) )
+			{
+				float intensity = 0.3f * MIN ( Ships[objp->instance].wash_intensity, 1.0f );
+				vm_vec_copy_scale ( &wash_rot, &Ships[objp->instance].wash_rot_axis, intensity );
+				physics_read_flying_controls ( &objp->orient, &objp->phys_info, & ( Player->ci ), flFrametime, &wash_rot );
+			}
+			else
+			{
+				physics_read_flying_controls ( &objp->orient, &objp->phys_info, & ( Player->ci ), flFrametime );
 			}
 		}
 	}
-	else if (Player_obj->type == OBJ_OBSERVER)
+	else if ( Player_obj->type == OBJ_OBSERVER )
 	{
-		physics_read_flying_controls(&objp->orient, &objp->phys_info, &(Player->ci), flFrametime);
+		physics_read_flying_controls ( &objp->orient, &objp->phys_info, & ( Player->ci ), flFrametime );
 	}
 }
 
@@ -1221,11 +1227,11 @@ void player_controls_init()
 {
 	static int initted = 0;
 
-	if (initted)
+	if ( initted )
 		return;
 
 	initted = 1;
-	physics_init(&Descent_physics);
+	physics_init ( &Descent_physics );
 	Descent_physics.flags |= PF_ACCELERATES | PF_SLIDE_ENABLED;
 
 	Viewer_slew_angles_delta.p = 0.0f;
@@ -1236,9 +1242,9 @@ void player_controls_init()
 // Clear current speed matching and auto-speed matching flags
 void player_clear_speed_matching()
 {
-	if (!Player)
+	if ( !Player )
 	{
-		Int3();	// why is Player NULL?
+		Int3(); // why is Player NULL?
 		return;
 	}
 
@@ -1248,46 +1254,46 @@ void player_clear_speed_matching()
 
 // function which computes the forward_thrust_time needed for the player ship to match
 // velocities with the currently selected target
-// input:	no_target_text	=> default parm (NULL), used to override HUD output when no target exists
-//				match_off_text	=>	default parm (NULL), used to overide HUD output when matching toggled off
-//				match_on_text	=>	default parm (NULL), used to overide HUD output when matching toggled on
-void player_match_target_speed(char* no_target_text, char* match_off_text, char* match_on_text)
+// input:   no_target_text  => default parm (NULL), used to override HUD output when no target exists
+//              match_off_text  =>  default parm (NULL), used to overide HUD output when matching toggled off
+//              match_on_text   =>  default parm (NULL), used to overide HUD output when matching toggled on
+void player_match_target_speed ( char *no_target_text, char *match_off_text, char *match_on_text )
 {
 	// multiplayer observers can't match target speed
-	if ((Game_mode & GM_MULTIPLAYER) && (Net_player != NULL) && ((Net_player->flags & NETINFO_FLAG_OBSERVER) ||
-																 (Player_obj->type == OBJ_OBSERVER)))
+	if ( ( Game_mode & GM_MULTIPLAYER ) && ( Net_player != NULL ) && ( ( Net_player->flags & NETINFO_FLAG_OBSERVER ) ||
+	        ( Player_obj->type == OBJ_OBSERVER ) ) )
 	{
 		return;
 	}
 
-	if (Player_ai->target_objnum == -1)
+	if ( Player_ai->target_objnum == -1 )
 	{
-		if (no_target_text)
+		if ( no_target_text )
 		{
-			if (no_target_text[0])
+			if ( no_target_text[0] )
 			{
-				HUD_sourced_printf(HUD_SOURCE_HIDDEN, no_target_text);
+				HUD_sourced_printf ( HUD_SOURCE_HIDDEN, no_target_text );
 			}
 		}
 
 		return;
 	}
 
-	object* targeted_objp = &Objects[Player_ai->target_objnum];
+	object *targeted_objp = &Objects[Player_ai->target_objnum];
 
-	if (targeted_objp->type != OBJ_SHIP)
+	if ( targeted_objp->type != OBJ_SHIP )
 	{
 		return;
 	}
 
-	if (Player->flags & PLAYER_FLAGS_MATCH_TARGET)
+	if ( Player->flags & PLAYER_FLAGS_MATCH_TARGET )
 	{
 		Player->flags &= ~PLAYER_FLAGS_MATCH_TARGET;
-		if (match_off_text)
+		if ( match_off_text )
 		{
-			if (match_off_text[0])
+			if ( match_off_text[0] )
 			{
-				HUD_sourced_printf(HUD_SOURCE_HIDDEN, match_off_text);
+				HUD_sourced_printf ( HUD_SOURCE_HIDDEN, match_off_text );
 			}
 		}
 	}
@@ -1295,30 +1301,30 @@ void player_match_target_speed(char* no_target_text, char* match_off_text, char*
 	{
 		int can_match = 0;
 
-		if (targeted_objp->phys_info.fspeed >= MATCH_SPEED_THRESHOLD)
+		if ( targeted_objp->phys_info.fspeed >= MATCH_SPEED_THRESHOLD )
 		{
 			can_match = 1;
 		}
 		else
 		{
-			// account for case of matching speed with docked ship 
-			if (object_is_docked(targeted_objp))
+			// account for case of matching speed with docked ship
+			if ( object_is_docked ( targeted_objp ) )
 			{
-				if (dock_calc_docked_fspeed(targeted_objp) >= MATCH_SPEED_THRESHOLD)
+				if ( dock_calc_docked_fspeed ( targeted_objp ) >= MATCH_SPEED_THRESHOLD )
 				{
 					can_match = 1;
 				}
 			}
 		}
 
-		if (can_match)
+		if ( can_match )
 		{
 			Player->flags |= PLAYER_FLAGS_MATCH_TARGET;
-			if (match_on_text)
+			if ( match_on_text )
 			{
-				if (match_on_text[0])
+				if ( match_on_text[0] )
 				{
-					HUD_sourced_printf(HUD_SOURCE_HIDDEN, match_on_text);
+					HUD_sourced_printf ( HUD_SOURCE_HIDDEN, match_on_text );
 				}
 			}
 		}
@@ -1335,42 +1341,42 @@ physics_info phys_save;
 
 void toggle_player_object()
 {
-	if (use_descent)
+	if ( use_descent )
 	{
-		memcpy(&Player_obj->phys_info, &phys_save, sizeof(physics_info));
+		memcpy ( &Player_obj->phys_info, &phys_save, sizeof ( physics_info ) );
 	}
 	else
 	{
-		memcpy(&phys_save, &Player_obj->phys_info, sizeof(physics_info));
-		memcpy(&Player_obj->phys_info, &Descent_physics, sizeof(physics_info));
+		memcpy ( &phys_save, &Player_obj->phys_info, sizeof ( physics_info ) );
+		memcpy ( &Player_obj->phys_info, &Descent_physics, sizeof ( physics_info ) );
 	}
 	use_descent = !use_descent;
 
-	HUD_sourced_printf(HUD_SOURCE_HIDDEN, NOX("Using %s style physics for player ship."),
-		use_descent ? NOX("DESCENT") : NOX("FreeSpace"));
+	HUD_sourced_printf ( HUD_SOURCE_HIDDEN, NOX ( "Using %s style physics for player ship." ),
+	                     use_descent ? NOX ( "DESCENT" ) : NOX ( "FreeSpace" ) );
 }
 
 // Init the data required for determining whether 'all alone' message should play
 void player_init_all_alone_msg()
 {
-	ship_obj* so;
-	object* objp;
+	ship_obj *so;
+	object *objp;
 
-	Player->check_for_all_alone_msg = timestamp(0);
+	Player->check_for_all_alone_msg = timestamp ( 0 );
 
 	// See if there are any friendly ships present, if so return without preventing msg
-	for (so = GET_FIRST(&Ship_obj_list); so != END_OF_LIST(&Ship_obj_list); so = GET_NEXT(so))
+	for ( so = GET_FIRST ( &Ship_obj_list ); so != END_OF_LIST ( &Ship_obj_list ); so = GET_NEXT ( so ) )
 	{
 		objp = &Objects[so->objnum];
-		if (objp == Player_obj)
+		if ( objp == Player_obj )
 		{
 			continue;
 		}
 
-		if (Ships[objp->instance].team == Player_ship->team)
+		if ( Ships[objp->instance].team == Player_ship->team )
 		{
 			int ship_type = Ship_info[Ships[objp->instance].ship_info_index].class_type;
-			if (ship_type != -1 && (Ship_types[ship_type].message_bools & STI_MSG_COUNTS_FOR_ALONE))
+			if ( ship_type != -1 && ( Ship_types[ship_type].message_bools & STI_MSG_COUNTS_FOR_ALONE ) )
 			{
 				return;
 			}
@@ -1382,7 +1388,7 @@ void player_init_all_alone_msg()
 }
 
 // Called when a new pilot is created
-void player_set_pilot_defaults(player* p)
+void player_set_pilot_defaults ( player *p )
 {
 	// Enable auto-targeting by default for all new pilots
 	p->flags |= PLAYER_FLAGS_AUTO_TARGETING;
@@ -1395,26 +1401,26 @@ void player_set_pilot_defaults(player* p)
 void player_save_target_and_weapon_link_prefs()
 {
 	Player->save_flags = 0;
-	if (Player->flags & PLAYER_FLAGS_AUTO_TARGETING)
+	if ( Player->flags & PLAYER_FLAGS_AUTO_TARGETING )
 	{
 		Player->save_flags |= PLAYER_FLAGS_AUTO_TARGETING;
 	}
 
 
-	if (Player->flags & PLAYER_FLAGS_AUTO_MATCH_SPEED)
+	if ( Player->flags & PLAYER_FLAGS_AUTO_MATCH_SPEED )
 	{
 		// multiplayer observers can't match target speed
-		if (!((Game_mode & GM_MULTIPLAYER) && (Net_player != NULL) && ((Net_player->flags & NETINFO_FLAG_OBSERVER) ||
-																	   (Player_obj->type == OBJ_OBSERVER))))
+		if ( ! ( ( Game_mode & GM_MULTIPLAYER ) && ( Net_player != NULL ) && ( ( Net_player->flags & NETINFO_FLAG_OBSERVER ) ||
+		         ( Player_obj->type == OBJ_OBSERVER ) ) ) )
 		{
 			Player->save_flags |= PLAYER_FLAGS_AUTO_MATCH_SPEED;
 		}
 	}
 
 	// if we're in multiplayer mode don't do this because we will desync ourselves with the server
-	if (!(Game_mode & GM_MULTIPLAYER))
+	if ( ! ( Game_mode & GM_MULTIPLAYER ) )
 	{
-		if (Player_ship->flags & SF_PRIMARY_LINKED)
+		if ( Player_ship->flags & SF_PRIMARY_LINKED )
 		{
 			Player->save_flags |= PLAYER_FLAGS_LINK_PRIMARY;
 		}
@@ -1422,7 +1428,7 @@ void player_save_target_and_weapon_link_prefs()
 		{
 			Player->flags &= ~PLAYER_FLAGS_LINK_PRIMARY;
 		}
-		if (Player_ship->flags & SF_SECONDARY_DUAL_FIRE)
+		if ( Player_ship->flags & SF_SECONDARY_DUAL_FIRE )
 		{
 			Player->save_flags |= PLAYER_FLAGS_LINK_SECONDARY;
 		}
@@ -1436,24 +1442,24 @@ void player_save_target_and_weapon_link_prefs()
 // Store some player preferences to Player->save_flags
 void player_restore_target_and_weapon_link_prefs()
 {
-	ship_info* player_sip;
+	ship_info *player_sip;
 	player_sip = &Ship_info[Player_ship->ship_info_index];
 
-	//	Don't restores the save flags in training, as we must ensure certain things are off, such as speed matching.
-	if (!(The_mission.game_type & MISSION_TYPE_TRAINING))
+	//  Don't restores the save flags in training, as we must ensure certain things are off, such as speed matching.
+	if ( ! ( The_mission.game_type & MISSION_TYPE_TRAINING ) )
 	{
 		Player->flags |= Player->save_flags;
 	}
 
-	if (Player->flags & PLAYER_FLAGS_LINK_PRIMARY && !(player_sip->flags2 & SIF2_NO_PRIMARY_LINKING))
+	if ( Player->flags & PLAYER_FLAGS_LINK_PRIMARY && ! ( player_sip->flags2 & SIF2_NO_PRIMARY_LINKING ) )
 	{
-		if (Player_ship->weapons.num_primary_banks > 1)
+		if ( Player_ship->weapons.num_primary_banks > 1 )
 		{
 			Player_ship->flags |= SF_PRIMARY_LINKED;
 		}
 	}
 
-	if (Player->flags & PLAYER_FLAGS_LINK_SECONDARY)
+	if ( Player->flags & PLAYER_FLAGS_LINK_SECONDARY )
 	{
 		Player_ship->flags |= SF_SECONDARY_DUAL_FIRE;
 	}
@@ -1462,7 +1468,7 @@ void player_restore_target_and_weapon_link_prefs()
 // initialize player statistics on a per mission basis
 void player_level_init()
 {
-	memset(&(Player->ci), 0, sizeof(control_info));		// set the controls to 0
+	memset ( & ( Player->ci ), 0, sizeof ( control_info ) ); // set the controls to 0
 
 	Viewer_slew_angles.p = 0.0f;
 	Viewer_slew_angles.b = 0.0f;
@@ -1489,14 +1495,14 @@ void player_level_init()
 	// Make the joystick read right away.
 	Joystick_last_reading = -1;
 
-	if (Player == NULL)
+	if ( Player == NULL )
 		return;
 
 	// reset the player flags
 	Player->flags = PLAYER_FLAGS_STRUCTURE_IN_USE;
 	Player->flags |= Player->save_flags;
 
-	//	Init variables for friendly fire monitoring.
+	//  Init variables for friendly fire monitoring.
 	Player->friendly_last_hit_time = 0;
 	Player->friendly_hits = 0;
 	Player->friendly_damage = 0.0f;
@@ -1504,43 +1510,43 @@ void player_level_init()
 
 	Player->control_mode = PCM_NORMAL;
 
-	Player->allow_warn_timestamp = 1;		// init timestamp that is used for managing attack warnings sent to player
+	Player->allow_warn_timestamp = 1;       // init timestamp that is used for managing attack warnings sent to player
 	Player->check_warn_timestamp = 1;
-	Player->warn_count = 0;					// number of attack warnings player has received this mission
+	Player->warn_count = 0;                 // number of attack warnings player has received this mission
 
-	Player->distance_warning_count = 0;		// Number of warning too far from origin
-	Player->distance_warning_time = 0;		// Time at which last warning was given
+	Player->distance_warning_count = 0;     // Number of warning too far from origin
+	Player->distance_warning_time = 0;      // Time at which last warning was given
 
-	Player->praise_count = 0;				// number of praises player has received this mission
-	Player->allow_praise_timestamp = 1;		// timestamp until next praise is allowed
-	Player->praise_delay_timestamp = 0;		// timestamp used to delay praises given to the player
+	Player->praise_count = 0;               // number of praises player has received this mission
+	Player->allow_praise_timestamp = 1;     // timestamp until next praise is allowed
+	Player->praise_delay_timestamp = 0;     // timestamp used to delay praises given to the player
 
-	Player->ask_help_count = 0;				// number of times player has been asked for help by wingmen
-	Player->allow_ask_help_timestamp = 1;	// timestamp until next ask_help is allowed
+	Player->ask_help_count = 0;             // number of times player has been asked for help by wingmen
+	Player->allow_ask_help_timestamp = 1;   // timestamp until next ask_help is allowed
 
-	Player->scream_count = 0;				// number of times player has heard wingman screams this mission
-	Player->allow_scream_timestamp = 1;		// timestamp until next wingman scream is allowed
+	Player->scream_count = 0;               // number of times player has heard wingman screams this mission
+	Player->allow_scream_timestamp = 1;     // timestamp until next wingman scream is allowed
 
-	Player->low_ammo_complaint_count = 0;	// number of complaints about low ammo received in this mission
-	Player->allow_ammo_timestamp = 1;		// timestamp until next 'Ammo low' message can be played
+	Player->low_ammo_complaint_count = 0;   // number of complaints about low ammo received in this mission
+	Player->allow_ammo_timestamp = 1;       // timestamp until next 'Ammo low' message can be played
 
-	Player->request_repair_timestamp = 1;	// timestamp until next 'requesting repair sir' message can be played
+	Player->request_repair_timestamp = 1;   // timestamp until next 'requesting repair sir' message can be played
 
 	Player->repair_sound_loop = -1;
 	Player->cargo_scan_loop = -1;
-	Player->cargo_inspect_time = 0;			// time that current target's cargo has been inspected for
+	Player->cargo_inspect_time = 0;         // time that current target's cargo has been inspected for
 
-	Player->target_is_dying = -1;			// The player target is dying, set to -1 if no target
-	Player->current_target_sx = -1;			// Screen x-pos of current target (or subsystem if applicable)
-	Player->current_target_sy = -1;			// Screen y-pos of current target (or subsystem if applicable)
-	Player->target_in_lock_cone = -1;		// Is the current target in secondary weapon lock cone?
-	Player->locking_subsys = NULL;			// Subsystem pointer that missile lock is trying to seek
-	Player->locking_on_center = 0;			// boolean, whether missile lock is trying for center of ship or not
+	Player->target_is_dying = -1;           // The player target is dying, set to -1 if no target
+	Player->current_target_sx = -1;         // Screen x-pos of current target (or subsystem if applicable)
+	Player->current_target_sy = -1;         // Screen y-pos of current target (or subsystem if applicable)
+	Player->target_in_lock_cone = -1;       // Is the current target in secondary weapon lock cone?
+	Player->locking_subsys = NULL;          // Subsystem pointer that missile lock is trying to seek
+	Player->locking_on_center = 0;          // boolean, whether missile lock is trying for center of ship or not
 	Player->locking_subsys_parent = -1;
 
-	Player->killer_objtype = -1;				// type of object that killed player
-	Player->killer_weapon_index = -1;		// weapon used to kill player (if applicable)
-	Player->killer_parent_name[0] = 0;		// name of parent object that killed the player
+	Player->killer_objtype = -1;                // type of object that killed player
+	Player->killer_weapon_index = -1;       // weapon used to kill player (if applicable)
+	Player->killer_parent_name[0] = 0;      // name of parent object that killed the player
 
 	Player_all_alone_msg_inited = 0;
 	Player->flags &= ~PLAYER_FLAGS_NO_CHECK_ALL_ALONE_MSG;
@@ -1557,21 +1563,21 @@ void player_init()
 	Player->num_campaigns = 0;
 	Player->flags |= PLAYER_FLAGS_STRUCTURE_IN_USE;
 	Player->failures_this_session = 0;
-	Player->show_skip_popup = (ubyte)1;
+	Player->show_skip_popup = ( ubyte ) 1;
 }
 
 // stop any looping sounds associated with the Player, called from game_stop_looped_sounds().
 void player_stop_looped_sounds()
 {
-	Assert(Player);
-	if (Player->repair_sound_loop > -1)
+	Assert ( Player );
+	if ( Player->repair_sound_loop > -1 )
 	{
-		snd_stop(Player->repair_sound_loop);
+		snd_stop ( Player->repair_sound_loop );
 		Player->repair_sound_loop = -1;
 	}
-	if (Player->cargo_scan_loop > -1)
+	if ( Player->cargo_scan_loop > -1 )
 	{
-		snd_stop(Player->cargo_scan_loop);
+		snd_stop ( Player->cargo_scan_loop );
 		Player->cargo_scan_loop = -1;
 	}
 }
@@ -1580,20 +1586,20 @@ void player_stop_looped_sounds()
 // repaired by a support ship
 void player_maybe_start_repair_sound()
 {
-	Assert(Player);
-	if (Player->repair_sound_loop == -1)
+	Assert ( Player );
+	if ( Player->repair_sound_loop == -1 )
 	{
-		Player->repair_sound_loop = snd_play_looping(&Snds[SND_SHIP_REPAIR]);
+		Player->repair_sound_loop = snd_play_looping ( &Snds[SND_SHIP_REPAIR] );
 	}
 }
 
 // stop the player repair sound if it is already playing
 void player_stop_repair_sound()
 {
-	Assert(Player);
-	if (Player->repair_sound_loop != -1)
+	Assert ( Player );
+	if ( Player->repair_sound_loop != -1 )
 	{
-		snd_stop(Player->repair_sound_loop);
+		snd_stop ( Player->repair_sound_loop );
 		Player->repair_sound_loop = -1;
 	}
 }
@@ -1601,20 +1607,20 @@ void player_stop_repair_sound()
 // start the cargo scanning sound if it hasn't already been started
 void player_maybe_start_cargo_scan_sound()
 {
-	Assert(Player);
-	if (Player->cargo_scan_loop == -1)
+	Assert ( Player );
+	if ( Player->cargo_scan_loop == -1 )
 	{
-		Player->cargo_scan_loop = snd_play_looping(&Snds[SND_CARGO_SCAN]);
+		Player->cargo_scan_loop = snd_play_looping ( &Snds[SND_CARGO_SCAN] );
 	}
 }
 
 // stop the player repair sound if it is already playing
 void player_stop_cargo_scan_sound()
 {
-	Assert(Player);
-	if (Player->cargo_scan_loop != -1)
+	Assert ( Player );
+	if ( Player->cargo_scan_loop != -1 )
 	{
-		snd_stop(Player->cargo_scan_loop);
+		snd_stop ( Player->cargo_scan_loop );
 		Player->cargo_scan_loop = -1;
 	}
 }
@@ -1622,49 +1628,50 @@ void player_stop_cargo_scan_sound()
 // See if there is a praise message to deliver to the player.  We want to delay the praise messages
 // a bit, to make them more realistic
 //
-// exit:	1	=>	a praise message was delivered to the player, or a praise is pending
-//			0	=> no praise is pending
+// exit:    1   =>  a praise message was delivered to the player, or a praise is pending
+//          0   => no praise is pending
 
-#define PLAYER_ALLOW_PRAISE_INTERVAL	60000		// minimum time between praises
+#define PLAYER_ALLOW_PRAISE_INTERVAL    60000       // minimum time between praises
 
 int player_process_pending_praise()
 {
 	// in multiplayer, never praise
-	if (Game_mode & GM_MULTIPLAYER)
+	if ( Game_mode & GM_MULTIPLAYER )
 	{
 		return 0;
 	}
 
-	if (timestamp_elapsed(Player->praise_delay_timestamp))
+	if ( timestamp_elapsed ( Player->praise_delay_timestamp ) )
 	{
 		int ship_index;
 
 		Player->praise_delay_timestamp = 0;
-		ship_index = ship_get_random_player_wing_ship(SHIP_GET_UNSILENCED, 1000.0f);
-		if (ship_index >= 0)
+		ship_index = ship_get_random_player_wing_ship ( SHIP_GET_UNSILENCED, 1000.0f );
+		if ( ship_index >= 0 )
 		{
 			// Only praise if above 50% integrity
-			if (get_hull_pct(&Objects[Ships[ship_index].objnum]) > 0.5f)
+			if ( get_hull_pct ( &Objects[Ships[ship_index].objnum] ) > 0.5f )
 			{
-				if (Player->stats.m_kill_count_ok > 10)
-				{	// this number should probably be in the AI profile or mission file rather than hardcoded
-					message_send_builtin_to_player(MESSAGE_HIGH_PRAISE, &Ships[ship_index], MESSAGE_PRIORITY_HIGH,
-						MESSAGE_TIME_SOON, 0, 0, -1, -1);
+				if ( Player->stats.m_kill_count_ok > 10 )
+				{
+					// this number should probably be in the AI profile or mission file rather than hardcoded
+					message_send_builtin_to_player ( MESSAGE_HIGH_PRAISE, &Ships[ship_index], MESSAGE_PRIORITY_HIGH,
+					                                 MESSAGE_TIME_SOON, 0, 0, -1, -1 );
 				}
 				else
 				{
-					message_send_builtin_to_player(MESSAGE_PRAISE, &Ships[ship_index], MESSAGE_PRIORITY_HIGH,
-						MESSAGE_TIME_SOON, 0, 0, -1, -1);
+					message_send_builtin_to_player ( MESSAGE_PRAISE, &Ships[ship_index], MESSAGE_PRIORITY_HIGH,
+					                                 MESSAGE_TIME_SOON, 0, 0, -1, -1 );
 				}
-				Player->allow_praise_timestamp = timestamp(PLAYER_ALLOW_PRAISE_INTERVAL * (Game_skill_level + 1));
-				Player->allow_scream_timestamp = timestamp(20000);		// prevent death scream following praise
+				Player->allow_praise_timestamp = timestamp ( PLAYER_ALLOW_PRAISE_INTERVAL * ( Game_skill_level + 1 ) );
+				Player->allow_scream_timestamp = timestamp ( 20000 );   // prevent death scream following praise
 				Player->praise_count++;
 				return 1;
 			}
 		}
 	}
 
-	if (Player->praise_delay_timestamp == 0)
+	if ( Player->praise_delay_timestamp == 0 )
 	{
 		return 0;
 	}
@@ -1672,59 +1679,59 @@ int player_process_pending_praise()
 	return 1;
 }
 
-int player_inspect_cap_subsys_cargo(float frametime, char* outstr);
+int player_inspect_cap_subsys_cargo ( float frametime, char *outstr );
 // See if the player should be inspecting cargo, and update progress.
-// input:	frametime	=>		time since last frame in seconds
-// input:	outstr		=>		(output parm) holds string that HUD should display
+// input:   frametime   =>      time since last frame in seconds
+// input:   outstr      =>      (output parm) holds string that HUD should display
 //
-//	exit:		1				=>		player should display outstr on HUD
-//				0				=>		don't display cargo on HUD
-int player_inspect_cargo(float frametime, char* outstr)
+//  exit:       1               =>      player should display outstr on HUD
+//              0               =>      don't display cargo on HUD
+int player_inspect_cargo ( float frametime, char *outstr )
 {
-	object* cargo_objp;
-	ship* cargo_sp;
-	ship_info* cargo_sip;
+	object *cargo_objp;
+	ship *cargo_sp;
+	ship_info *cargo_sip;
 	vec3d vec_to_cargo;
 	float dot;
 
 	outstr[0] = 0;
 
-	if (Player_ai->target_objnum < 0)
+	if ( Player_ai->target_objnum < 0 )
 	{
 		return 0;
 	}
 
 	cargo_objp = &Objects[Player_ai->target_objnum];
-	Assert(cargo_objp->type == OBJ_SHIP);
+	Assert ( cargo_objp->type == OBJ_SHIP );
 	cargo_sp = &Ships[cargo_objp->instance];
 	cargo_sip = &Ship_info[cargo_sp->ship_info_index];
 
-	if (cargo_sp->flags2 & SF2_TOGGLE_SUBSYSTEM_SCANNING)
-		return player_inspect_cap_subsys_cargo(frametime, outstr);
+	if ( cargo_sp->flags2 & SF2_TOGGLE_SUBSYSTEM_SCANNING )
+		return player_inspect_cap_subsys_cargo ( frametime, outstr );
 
-	if (!(cargo_sp->flags & SF_SCANNABLE))
+	if ( ! ( cargo_sp->flags & SF_SCANNABLE ) )
 	{
-		if (!(cargo_sip->flags & (SIF_CARGO | SIF_TRANSPORT)))
+		if ( ! ( cargo_sip->flags & ( SIF_CARGO | SIF_TRANSPORT ) ) )
 		{
 			return 0;
 		}
 	}
 
 	// if cargo is already revealed
-	if (cargo_sp->flags & SF_CARGO_REVEALED)
+	if ( cargo_sp->flags & SF_CARGO_REVEALED )
 	{
 
-		char* cargo_name;
+		char *cargo_name;
 		cargo_name = Cargo_names[cargo_sp->cargo1 & CARGO_INDEX_MASK];
-		Assert(cargo_name);
+		Assert ( cargo_name );
 
-		if (cargo_name[0] == '#')
+		if ( cargo_name[0] == '#' )
 		{
-			sprintf(outstr, XSTR("passengers:\n   %s", 83), cargo_name + 1);
+			sprintf ( outstr, XSTR ( "passengers:\n   %s", 83 ), cargo_name + 1 );
 		}
 		else
 		{
-			sprintf(outstr, XSTR("cargo: %s", 84), cargo_name);
+			sprintf ( outstr, XSTR ( "cargo: %s", 84 ), cargo_name );
 		}
 
 		// always bash cargo_inspect_time to 0 since AI ships can reveal cargo that we
@@ -1735,102 +1742,102 @@ int player_inspect_cargo(float frametime, char* outstr)
 	}
 
 	// see if player is within inspection range
-	if (Player_ai->current_target_distance < MAX(CARGO_REVEAL_MIN_DIST, (cargo_objp->radius + CARGO_RADIUS_DELTA)))
+	if ( Player_ai->current_target_distance < MAX ( CARGO_REVEAL_MIN_DIST, ( cargo_objp->radius + CARGO_RADIUS_DELTA ) ) )
 	{
 
 		// check if player is facing cargo, do not proceed with inspection if not
-		vm_vec_normalized_dir(&vec_to_cargo, &cargo_objp->pos, &Player_obj->pos);
-		dot = vm_vec_dot(&vec_to_cargo, &Player_obj->orient.vec.fvec);
-		if (dot < CARGO_MIN_DOT_TO_REVEAL)
+		vm_vec_normalized_dir ( &vec_to_cargo, &cargo_objp->pos, &Player_obj->pos );
+		dot = vm_vec_dot ( &vec_to_cargo, &Player_obj->orient.vec.fvec );
+		if ( dot < CARGO_MIN_DOT_TO_REVEAL )
 		{
-			if (!(cargo_sp->flags & SF_SCANNABLE))
-				sprintf(outstr, XSTR("cargo: <unknown>", 86));
+			if ( ! ( cargo_sp->flags & SF_SCANNABLE ) )
+				sprintf ( outstr, XSTR ( "cargo: <unknown>", 86 ) );
 			else
-				sprintf(outstr, XSTR("not scanned", 87));
-			hud_targetbox_end_flash(TBOX_FLASH_CARGO);
+				sprintf ( outstr, XSTR ( "not scanned", 87 ) );
+			hud_targetbox_end_flash ( TBOX_FLASH_CARGO );
 			Player->cargo_inspect_time = 0;
 			return 1;
 		}
 
 		// player is facing the cargo, and withing range, so proceed with inspection
-		if (hud_sensors_ok(Player_ship, 0))
+		if ( hud_sensors_ok ( Player_ship, 0 ) )
 		{
-			Player->cargo_inspect_time += fl2i(frametime * 1000 + 0.5f);
+			Player->cargo_inspect_time += fl2i ( frametime * 1000 + 0.5f );
 		}
 
-		if (!(cargo_sp->flags & SF_SCANNABLE))
-			sprintf(outstr, XSTR("cargo: inspecting", 88));
+		if ( ! ( cargo_sp->flags & SF_SCANNABLE ) )
+			sprintf ( outstr, XSTR ( "cargo: inspecting", 88 ) );
 		else
-			sprintf(outstr, XSTR("scanning", 89));
+			sprintf ( outstr, XSTR ( "scanning", 89 ) );
 
-		if (Player->cargo_inspect_time > cargo_sip->scan_time)
+		if ( Player->cargo_inspect_time > cargo_sip->scan_time )
 		{
-			ship_do_cargo_revealed(cargo_sp);
-			snd_play(&Snds[SND_CARGO_REVEAL], 0.0f);
+			ship_do_cargo_revealed ( cargo_sp );
+			snd_play ( &Snds[SND_CARGO_REVEAL], 0.0f );
 			Player->cargo_inspect_time = 0;
 		}
 	}
 	else
 	{
-		if (!(cargo_sp->flags & SF_SCANNABLE))
-			sprintf(outstr, XSTR("cargo: <unknown>", 86));
+		if ( ! ( cargo_sp->flags & SF_SCANNABLE ) )
+			sprintf ( outstr, XSTR ( "cargo: <unknown>", 86 ) );
 		else
-			sprintf(outstr, XSTR("not scanned", 87));
+			sprintf ( outstr, XSTR ( "not scanned", 87 ) );
 	}
 
 	return 1;
 }
 
-//	exit:		1				=>		player should display outstr on HUD
-//				0				=>		don't display cargo on HUD
-int player_inspect_cap_subsys_cargo(float frametime, char* outstr)
+//  exit:       1               =>      player should display outstr on HUD
+//              0               =>      don't display cargo on HUD
+int player_inspect_cap_subsys_cargo ( float frametime, char *outstr )
 {
-	object* cargo_objp;
-	ship* cargo_sp;
-	ship_info* cargo_sip;
+	object *cargo_objp;
+	ship *cargo_sp;
+	ship_info *cargo_sip;
 	vec3d vec_to_cargo;
 	float dot;
-	ship_subsys* subsys;
+	ship_subsys *subsys;
 
 	outstr[0] = 0;
 	subsys = Player_ai->targeted_subsys;
 
-	if (subsys == NULL)
+	if ( subsys == NULL )
 	{
 		return 0;
 	}
 
 	cargo_objp = &Objects[Player_ai->target_objnum];
-	Assert(cargo_objp->type == OBJ_SHIP);
+	Assert ( cargo_objp->type == OBJ_SHIP );
 	cargo_sp = &Ships[cargo_objp->instance];
 	cargo_sip = &Ship_info[cargo_sp->ship_info_index];
 
-	if (!(cargo_sp->flags & SF_SCANNABLE))
+	if ( ! ( cargo_sp->flags & SF_SCANNABLE ) )
 	{
 		return 0;
 	}
 
 	// don't scan cargo on turrets, radar, etc.  only the majors: fighterbay, sensor, engines, weapons, nav, comm
-	if (!valid_cap_subsys_cargo_list(subsys->system_info->subobj_name))
+	if ( !valid_cap_subsys_cargo_list ( subsys->system_info->subobj_name ) )
 	{
 		return 0;
 	}
 
 	// if cargo is already revealed
-	if (subsys->flags & SSF_CARGO_REVEALED)
+	if ( subsys->flags & SSF_CARGO_REVEALED )
 	{
-		char* cargo_name;
-		if (subsys->subsys_cargo_name == -1)
+		char *cargo_name;
+		if ( subsys->subsys_cargo_name == -1 )
 		{
-			cargo_name = XSTR("Nothing", 1493);
+			cargo_name = XSTR ( "Nothing", 1493 );
 		}
 		else
 		{
 			cargo_name = Cargo_names[subsys->subsys_cargo_name];
 		}
-		Assert(cargo_name);
+		Assert ( cargo_name );
 
-		sprintf(outstr, XSTR("cargo: %s", 84), cargo_name);
+		sprintf ( outstr, XSTR ( "cargo: %s", 84 ), cargo_name );
 
 		// always bash cargo_inspect_time to 0 since AI ships can reveal cargo that we
 		// are in the process of scanning
@@ -1845,54 +1852,54 @@ int player_inspect_cap_subsys_cargo(float frametime, char* outstr)
 	int subsys_in_view, x, y;
 	float scan_dist;
 
-	get_subsystem_world_pos(cargo_objp, Player_ai->targeted_subsys, &subsys_pos);
+	get_subsystem_world_pos ( cargo_objp, Player_ai->targeted_subsys, &subsys_pos );
 	subsys_rad = subsys->system_info->radius;
 
 	// Goober5000
-	if (cargo_sip->flags & SIF_HUGE_SHIP)
+	if ( cargo_sip->flags & SIF_HUGE_SHIP )
 	{
-		scan_dist = MAX(CAP_CARGO_REVEAL_MIN_DIST, (subsys_rad + CAPITAL_CARGO_RADIUS_DELTA));
+		scan_dist = MAX ( CAP_CARGO_REVEAL_MIN_DIST, ( subsys_rad + CAPITAL_CARGO_RADIUS_DELTA ) );
 	}
 	else
 	{
-		scan_dist = MAX(CARGO_REVEAL_MIN_DIST, (subsys_rad + CARGO_RADIUS_DELTA));
+		scan_dist = MAX ( CARGO_REVEAL_MIN_DIST, ( subsys_rad + CARGO_RADIUS_DELTA ) );
 	}
 
-	if (Player_ai->current_target_distance < scan_dist)
+	if ( Player_ai->current_target_distance < scan_dist )
 	{
 
 		// check if player is facing cargo, do not proceed with inspection if not
-		vm_vec_normalized_dir(&vec_to_cargo, &subsys_pos, &Player_obj->pos);
-		dot = vm_vec_dot(&vec_to_cargo, &Player_obj->orient.vec.fvec);
-		int hud_targetbox_subsystem_in_view(object* target_objp, int* sx, int* sy);
-		subsys_in_view = hud_targetbox_subsystem_in_view(cargo_objp, &x, &y);
+		vm_vec_normalized_dir ( &vec_to_cargo, &subsys_pos, &Player_obj->pos );
+		dot = vm_vec_dot ( &vec_to_cargo, &Player_obj->orient.vec.fvec );
+		int hud_targetbox_subsystem_in_view ( object * target_objp, int *sx, int *sy );
+		subsys_in_view = hud_targetbox_subsystem_in_view ( cargo_objp, &x, &y );
 
-		if ((dot < CARGO_MIN_DOT_TO_REVEAL) || (!subsys_in_view))
+		if ( ( dot < CARGO_MIN_DOT_TO_REVEAL ) || ( !subsys_in_view ) )
 		{
-			sprintf(outstr, XSTR("cargo: <unknown>", 86));
-			hud_targetbox_end_flash(TBOX_FLASH_CARGO);
+			sprintf ( outstr, XSTR ( "cargo: <unknown>", 86 ) );
+			hud_targetbox_end_flash ( TBOX_FLASH_CARGO );
 			Player->cargo_inspect_time = 0;
 			return 1;
 		}
 
 		// player is facing the cargo, and withing range, so proceed with inspection
-		if (hud_sensors_ok(Player_ship, 0))
+		if ( hud_sensors_ok ( Player_ship, 0 ) )
 		{
-			Player->cargo_inspect_time += fl2i(frametime * 1000 + 0.5f);
+			Player->cargo_inspect_time += fl2i ( frametime * 1000 + 0.5f );
 		}
 
-		sprintf(outstr, XSTR("cargo: inspecting", 88));
+		sprintf ( outstr, XSTR ( "cargo: inspecting", 88 ) );
 
-		if (Player->cargo_inspect_time > cargo_sip->scan_time)
+		if ( Player->cargo_inspect_time > cargo_sip->scan_time )
 		{
-			ship_do_cap_subsys_cargo_revealed(cargo_sp, subsys, 0);
-			snd_play(&Snds[SND_CARGO_REVEAL], 0.0f);
+			ship_do_cap_subsys_cargo_revealed ( cargo_sp, subsys, 0 );
+			snd_play ( &Snds[SND_CARGO_REVEAL], 0.0f );
 			Player->cargo_inspect_time = 0;
 		}
 	}
 	else
 	{
-		sprintf(outstr, XSTR("cargo: <unknown>", 86));
+		sprintf ( outstr, XSTR ( "cargo: <unknown>", 86 ) );
 	}
 
 	return 1;
@@ -1904,157 +1911,158 @@ float player_farthest_weapon_range()
 {
 	float prange, srange;
 
-	hud_get_best_primary_bank(&prange);
-	srange = ship_get_secondary_weapon_range(Player_ship);
+	hud_get_best_primary_bank ( &prange );
+	srange = ship_get_secondary_weapon_range ( Player_ship );
 
-	return MAX(prange, srange);
+	return MAX ( prange, srange );
 }
 
 // Determine text name for the weapon that killed the player.
-// input:	weapon_info_index	=>		weapon type that killed the player (can be -1 if no weapon involved)
-//				killer_species		=>		species of ship that fired weapon
-//				weapon_name			=>		output parameter... stores weapon name generated in this function	
-void player_generate_killer_weapon_name(int weapon_info_index, int killer_species, char* weapon_name)
+// input:   weapon_info_index   =>      weapon type that killed the player (can be -1 if no weapon involved)
+//              killer_species      =>      species of ship that fired weapon
+//              weapon_name         =>      output parameter... stores weapon name generated in this function
+void player_generate_killer_weapon_name ( int weapon_info_index, int killer_species, char *weapon_name )
 {
-	if (weapon_info_index < 0)
+	if ( weapon_info_index < 0 )
 	{
 		return;
 	}
 
 #ifndef NDEBUG
-	if (Show_killer_weapon || (killer_species == Ship_info[Player_ship->ship_info_index].species))
+	if ( Show_killer_weapon || ( killer_species == Ship_info[Player_ship->ship_info_index].species ) )
 	{
 #else
-	if (killer_species == Ship_info[Player_ship->ship_info_index].species) {
+	if ( killer_species == Ship_info[Player_ship->ship_info_index].species )
+	{
 #endif
-		strcpy(weapon_name, Weapon_info[weapon_info_index].name);
+		strcpy ( weapon_name, Weapon_info[weapon_info_index].name );
 	}
 	else
 	{
-		if (Weapon_info[weapon_info_index].subtype == WP_MISSILE)
+		if ( Weapon_info[weapon_info_index].subtype == WP_MISSILE )
 		{
-			strcpy(weapon_name, XSTR("missile", 90));
+			strcpy ( weapon_name, XSTR ( "missile", 90 ) );
 		}
 		else
 		{
-			strcpy(weapon_name, XSTR("laser fire", 91));
+			strcpy ( weapon_name, XSTR ( "laser fire", 91 ) );
 		}
 	}
 }
 
 // function to generate the message for death of a player given the information stored in the player object.
-void player_generate_death_message(player* player_p)
+void player_generate_death_message ( player *player_p )
 {
 	char weapon_name[NAME_LENGTH];
 	char killer_parent_name[NAME_LENGTH];
-	char* msg = player_p->death_message;
+	char *msg = player_p->death_message;
 	weapon_name[0] = 0;
 	killer_parent_name[0] = 0;
 
-	strncpy(killer_parent_name, player_p->killer_parent_name, NAME_LENGTH);
-	int ship_index = ship_name_lookup(player_p->killer_parent_name, 1);
+	strncpy ( killer_parent_name, player_p->killer_parent_name, NAME_LENGTH );
+	int ship_index = ship_name_lookup ( player_p->killer_parent_name, 1 );
 
 	// if this is a ship, do we use name or callsign or ship class?
-	if (ship_index >= 0)
+	if ( ship_index >= 0 )
 	{
-		ship* shipp = &Ships[ship_index];
+		ship *shipp = &Ships[ship_index];
 
-		if (shipp->callsign_index >= 0)
+		if ( shipp->callsign_index >= 0 )
 		{
-			hud_stuff_ship_callsign(killer_parent_name, shipp);
+			hud_stuff_ship_callsign ( killer_parent_name, shipp );
 		}
-		else if (((Iff_info[shipp->team].flags & IFFF_WING_NAME_HIDDEN) && (shipp->wingnum != -1)) || (shipp->flags2 &
-																									   SF2_HIDE_SHIP_NAME))
+		else if ( ( ( Iff_info[shipp->team].flags & IFFF_WING_NAME_HIDDEN ) && ( shipp->wingnum != -1 ) ) || ( shipp->flags2 &
+		          SF2_HIDE_SHIP_NAME ) )
 		{
-			hud_stuff_ship_class(killer_parent_name, shipp);
+			hud_stuff_ship_class ( killer_parent_name, shipp );
 		}
 		else
 		{
-			end_string_at_first_hash_symbol(killer_parent_name, (shipp->wingnum != -1));
+			end_string_at_first_hash_symbol ( killer_parent_name, ( shipp->wingnum != -1 ) );
 		}
 	}
 	else
 	{
-		sprintf(msg, XSTR("%s was killed", 99), player_p->callsign);
+		sprintf ( msg, XSTR ( "%s was killed", 99 ), player_p->callsign );
 		return;
 	}
 
-	player_generate_killer_weapon_name(player_p->killer_weapon_index, player_p->killer_species, weapon_name);
+	player_generate_killer_weapon_name ( player_p->killer_weapon_index, player_p->killer_species, weapon_name );
 
-	switch (player_p->killer_objtype)
+	switch ( player_p->killer_objtype )
 	{
 	case OBJ_SHOCKWAVE:
-		if (weapon_name[0])
+		if ( weapon_name[0] )
 		{
-			sprintf(msg, XSTR("%s was killed by a missile shockwave", 92), player_p->callsign);
+			sprintf ( msg, XSTR ( "%s was killed by a missile shockwave", 92 ), player_p->callsign );
 		}
 		else
 		{
-			sprintf(msg, XSTR("%s was killed by a shockwave from %s exploding", 93), player_p->callsign,
-				player_p->killer_parent_name);
+			sprintf ( msg, XSTR ( "%s was killed by a shockwave from %s exploding", 93 ), player_p->callsign,
+			          player_p->killer_parent_name );
 		}
 		break;
 
 	case OBJ_WEAPON:
-		Assert(weapon_name[0]);
+		Assert ( weapon_name[0] );
 
 		// is this from a friendly ship?
-		if ((ship_index >= 0) && (Player_ship != NULL) && (Player_ship->team == Ships[ship_index].team))
+		if ( ( ship_index >= 0 ) && ( Player_ship != NULL ) && ( Player_ship->team == Ships[ship_index].team ) )
 		{
-			sprintf(msg, XSTR("%s was killed by friendly fire from %s", 1338), player_p->callsign, killer_parent_name);
+			sprintf ( msg, XSTR ( "%s was killed by friendly fire from %s", 1338 ), player_p->callsign, killer_parent_name );
 		}
 		else
 		{
-			sprintf(msg, XSTR("%s was killed by %s", 94), player_p->callsign, killer_parent_name);
+			sprintf ( msg, XSTR ( "%s was killed by %s", 94 ), player_p->callsign, killer_parent_name );
 		}
 		break;
 
 	case OBJ_SHIP:
-		if (player_p->flags & PLAYER_FLAGS_KILLED_BY_EXPLOSION)
+		if ( player_p->flags & PLAYER_FLAGS_KILLED_BY_EXPLOSION )
 		{
-			sprintf(msg, XSTR("%s was killed by a blast from %s exploding", 95), player_p->callsign,
-				killer_parent_name);
+			sprintf ( msg, XSTR ( "%s was killed by a blast from %s exploding", 95 ), player_p->callsign,
+			          killer_parent_name );
 		}
-		else if (player_p->flags & PLAYER_FLAGS_KILLED_BY_ENGINE_WASH)
+		else if ( player_p->flags & PLAYER_FLAGS_KILLED_BY_ENGINE_WASH )
 		{
-			sprintf(msg, XSTR("%s was killed by engine wash from %s", 1494), player_p->callsign, killer_parent_name);
+			sprintf ( msg, XSTR ( "%s was killed by engine wash from %s", 1494 ), player_p->callsign, killer_parent_name );
 		}
 		else
 		{
-			sprintf(msg, XSTR("%s was killed by a collision with %s", 96), player_p->callsign, killer_parent_name);
+			sprintf ( msg, XSTR ( "%s was killed by a collision with %s", 96 ), player_p->callsign, killer_parent_name );
 		}
 		break;
 
 	case OBJ_DEBRIS:
-		sprintf(msg, XSTR("%s was killed by a collision with debris", 97), player_p->callsign);
+		sprintf ( msg, XSTR ( "%s was killed by a collision with debris", 97 ), player_p->callsign );
 		break;
 
 	case OBJ_ASTEROID:
-		sprintf(msg, XSTR("%s was killed by a collision with an asteroid", 98), player_p->callsign);
+		sprintf ( msg, XSTR ( "%s was killed by a collision with an asteroid", 98 ), player_p->callsign );
 		break;
 
 	case OBJ_BEAM:
-		if (strlen(player_p->killer_parent_name) <= 0)
+		if ( strlen ( player_p->killer_parent_name ) <= 0 )
 		{
 			Int3();
-			sprintf(msg, XSTR("%s was killed by a beam from an unknown source", 1081), player_p->callsign);
+			sprintf ( msg, XSTR ( "%s was killed by a beam from an unknown source", 1081 ), player_p->callsign );
 		}
 		else
 		{
-			if ((ship_index >= 0) && (Player_ship != NULL) && (Player_ship->team == Ships[ship_index].team))
+			if ( ( ship_index >= 0 ) && ( Player_ship != NULL ) && ( Player_ship->team == Ships[ship_index].team ) )
 			{
-				sprintf(msg, XSTR("%s was destroyed by friendly beam fire from %s", 1339), player_p->callsign,
-					killer_parent_name);
+				sprintf ( msg, XSTR ( "%s was destroyed by friendly beam fire from %s", 1339 ), player_p->callsign,
+				          killer_parent_name );
 			}
 			else
 			{
-				sprintf(msg, XSTR("%s was destroyed by a beam from %s", 1082), player_p->callsign, killer_parent_name);
+				sprintf ( msg, XSTR ( "%s was destroyed by a beam from %s", 1082 ), player_p->callsign, killer_parent_name );
 			}
 		}
 		break;
 
 	default:
-		sprintf(msg, XSTR("%s was killed", 99), player_p->callsign);
+		sprintf ( msg, XSTR ( "%s was killed", 99 ), player_p->callsign );
 		break;
 	}
 }
@@ -2062,67 +2070,67 @@ void player_generate_death_message(player* player_p)
 // display what/who killed the player
 void player_show_death_message()
 {
-	char* msg = Player->death_message;
+	char *msg = Player->death_message;
 
 	// make sure we don't already have a death message
-	if (!strlen(msg))
+	if ( !strlen ( msg ) )
 	{
 		// check if player killed self
-		if (Player->flags & PLAYER_KILLED_SELF)
+		if ( Player->flags & PLAYER_KILLED_SELF )
 		{
 			// reasons he killed himself
-			if (Player->flags & PLAYER_FLAGS_KILLED_SELF_SHOCKWAVE)
+			if ( Player->flags & PLAYER_FLAGS_KILLED_SELF_SHOCKWAVE )
 			{
-				sprintf(msg, XSTR("You have killed yourself with a shockwave from your own weapon", 1421));
+				sprintf ( msg, XSTR ( "You have killed yourself with a shockwave from your own weapon", 1421 ) );
 			}
-			else if (Player->flags & PLAYER_FLAGS_KILLED_SELF_MISSILES)
+			else if ( Player->flags & PLAYER_FLAGS_KILLED_SELF_MISSILES )
 			{
-				sprintf(msg, XSTR("You have killed yourself with your own missiles", 1422));
+				sprintf ( msg, XSTR ( "You have killed yourself with your own missiles", 1422 ) );
 			}
 			else
 			{
-				sprintf(msg, XSTR("You have killed yourself", 100));
+				sprintf ( msg, XSTR ( "You have killed yourself", 100 ) );
 			}
 
 			Player->flags &= ~PLAYER_KILLED_SELF;
 		}
 		else
 		{
-			player_generate_death_message(Player);
+			player_generate_death_message ( Player );
 		}
 	}
 
 	// display the message
-	HUD_fixed_printf(30.0f, msg);
+	HUD_fixed_printf ( 30.0f, msg );
 }
 
 void player_set_next_all_alone_msg_timestamp()
 {
-	Player->check_for_all_alone_msg = timestamp(30000);
+	Player->check_for_all_alone_msg = timestamp ( 30000 );
 }
 
 // maybe play message from Terran Command 'You're all alone now, pilot'
 void player_maybe_play_all_alone_msg()
 {
-	if (Game_mode & GM_MULTIPLAYER)
+	if ( Game_mode & GM_MULTIPLAYER )
 	{
 		return;
 	}
 
-	if (!Player_all_alone_msg_inited)
+	if ( !Player_all_alone_msg_inited )
 	{
 		player_init_all_alone_msg();
 		Player_all_alone_msg_inited = 1;
 		return;
 	}
 
-	if (Player->flags & PLAYER_FLAGS_NO_CHECK_ALL_ALONE_MSG)
+	if ( Player->flags & PLAYER_FLAGS_NO_CHECK_ALL_ALONE_MSG )
 	{
 		return;
 	}
 
 	// only check every N seconds
-	if (!timestamp_elapsed(Player->check_for_all_alone_msg))
+	if ( !timestamp_elapsed ( Player->check_for_all_alone_msg ) )
 	{
 		return;
 	}
@@ -2130,35 +2138,35 @@ void player_maybe_play_all_alone_msg()
 	player_set_next_all_alone_msg_timestamp();
 
 	// at least one primary objective must be not complete (but not failed)
-	if (!mission_goals_incomplete(PRIMARY_GOAL))
+	if ( !mission_goals_incomplete ( PRIMARY_GOAL ) )
 	{
 		Player->flags |= PLAYER_FLAGS_NO_CHECK_ALL_ALONE_MSG;
 		return;
 	}
 
 	// there must be no reinforcements available, hold off on message
-	if ((Player_ship != NULL) && hud_squadmsg_reinforcements_available(Player_ship->team))
+	if ( ( Player_ship != NULL ) && hud_squadmsg_reinforcements_available ( Player_ship->team ) )
 	{
 		return;
 	}
 
 	// there must be no ships present that are on the same team as the player
-	ship_obj* so;
-	object* objp;
+	ship_obj *so;
+	object *objp;
 
-	for (so = GET_FIRST(&Ship_obj_list); so != END_OF_LIST(&Ship_obj_list); so = GET_NEXT(so))
+	for ( so = GET_FIRST ( &Ship_obj_list ); so != END_OF_LIST ( &Ship_obj_list ); so = GET_NEXT ( so ) )
 	{
 		objp = &Objects[so->objnum];
 
-		if (objp == Player_obj)
+		if ( objp == Player_obj )
 		{
 			continue;
 		}
 
-		if (Ships[objp->instance].team == Player_ship->team)
+		if ( Ships[objp->instance].team == Player_ship->team )
 		{
 			int ship_type = Ship_info[Ships[objp->instance].ship_info_index].class_type;
-			if (ship_type != -1 && (Ship_types[ship_type].message_bools & STI_MSG_COUNTS_FOR_ALONE))
+			if ( ship_type != -1 && ( Ship_types[ship_type].message_bools & STI_MSG_COUNTS_FOR_ALONE ) )
 			{
 				return;
 			}
@@ -2166,10 +2174,10 @@ void player_maybe_play_all_alone_msg()
 	}
 
 	// met all the requirements, now only play 50% of the time :)
-	if (rand() & 1)
+	if ( rand() & 1 )
 	{
-		message_send_builtin_to_player(MESSAGE_ALL_ALONE, NULL, MESSAGE_PRIORITY_HIGH, MESSAGE_TIME_ANYTIME, 0,
-			0, -1, -1);
+		message_send_builtin_to_player ( MESSAGE_ALL_ALONE, NULL, MESSAGE_PRIORITY_HIGH, MESSAGE_TIME_ANYTIME, 0,
+		                                 0, -1, -1 );
 	}
 	Player->flags |= PLAYER_FLAGS_NO_CHECK_ALL_ALONE_MSG;
 }
@@ -2177,14 +2185,14 @@ void player_maybe_play_all_alone_msg()
 
 void player_set_padlock_state()
 {
-	if (check_control_timef(PADLOCK_UP))
+	if ( check_control_timef ( PADLOCK_UP ) )
 	{
 		chase_slew_angles.h = 0.0f;
 		chase_slew_angles.p = -PI_2;
 		Viewer_mode |= VM_PADLOCK_UP;
 		return;
 	}
-	if (check_control_timef(PADLOCK_DOWN))
+	if ( check_control_timef ( PADLOCK_DOWN ) )
 	{
 		chase_slew_angles.h = -PI;
 		chase_slew_angles.p = 0.0f;
@@ -2192,7 +2200,7 @@ void player_set_padlock_state()
 		return;
 	}
 
-	if (check_control_timef(PADLOCK_RIGHT))
+	if ( check_control_timef ( PADLOCK_RIGHT ) )
 	{
 		chase_slew_angles.h = PI_2;
 		chase_slew_angles.p = 0.0f;
@@ -2200,7 +2208,7 @@ void player_set_padlock_state()
 		return;
 	}
 
-	if (check_control_timef(PADLOCK_LEFT))
+	if ( check_control_timef ( PADLOCK_LEFT ) )
 	{
 		chase_slew_angles.h = -PI_2;
 		chase_slew_angles.p = 0.0f;
@@ -2208,42 +2216,42 @@ void player_set_padlock_state()
 		return;
 	}
 
-	if (Viewer_mode & VM_PADLOCK_ANY)
+	if ( Viewer_mode & VM_PADLOCK_ANY )
 	{
-		// clear padlock views and center the view once 
+		// clear padlock views and center the view once
 		// the player lets go of an orthogonal padlock command
-		Viewer_mode &= ~(VM_PADLOCK_ANY);
+		Viewer_mode &= ~ ( VM_PADLOCK_ANY );
 		chase_slew_angles.h = 0.0f;
 		chase_slew_angles.p = 0.0f;
 	}
 }
 
-void player_get_padlock_orient(matrix* eye_orient)
+void player_get_padlock_orient ( matrix *eye_orient )
 {
-	Assert(Viewer_mode & VM_PADLOCK_ANY);
+	Assert ( Viewer_mode & VM_PADLOCK_ANY );
 
 	matrix old_eye_orient;
 	old_eye_orient = *eye_orient;
 
-	if (Viewer_mode & VM_PADLOCK_UP)
+	if ( Viewer_mode & VM_PADLOCK_UP )
 	{
 		eye_orient->vec.fvec = old_eye_orient.vec.uvec;
-		vm_vec_copy_scale(&eye_orient->vec.uvec, &old_eye_orient.vec.fvec, -1.0f);
+		vm_vec_copy_scale ( &eye_orient->vec.uvec, &old_eye_orient.vec.fvec, -1.0f );
 	}
-	else if (Viewer_mode & VM_PADLOCK_REAR)
+	else if ( Viewer_mode & VM_PADLOCK_REAR )
 	{
-		vm_vec_negate(&eye_orient->vec.fvec);
-		vm_vec_negate(&eye_orient->vec.rvec);
+		vm_vec_negate ( &eye_orient->vec.fvec );
+		vm_vec_negate ( &eye_orient->vec.rvec );
 	}
-	else if (Viewer_mode & VM_PADLOCK_LEFT)
+	else if ( Viewer_mode & VM_PADLOCK_LEFT )
 	{
-		vm_vec_copy_scale(&eye_orient->vec.fvec, &old_eye_orient.vec.rvec, -1.0f);
+		vm_vec_copy_scale ( &eye_orient->vec.fvec, &old_eye_orient.vec.rvec, -1.0f );
 		eye_orient->vec.rvec = old_eye_orient.vec.fvec;
 	}
-	else if (Viewer_mode & VM_PADLOCK_RIGHT)
+	else if ( Viewer_mode & VM_PADLOCK_RIGHT )
 	{
 		eye_orient->vec.fvec = old_eye_orient.vec.rvec;
-		vm_vec_copy_scale(&eye_orient->vec.rvec, &old_eye_orient.vec.fvec, -1.0f);
+		vm_vec_copy_scale ( &eye_orient->vec.rvec, &old_eye_orient.vec.fvec, -1.0f );
 	}
 	else
 	{
@@ -2255,19 +2263,19 @@ void player_display_packlock_view()
 {
 	int padlock_view_index = 0;
 
-	if (Viewer_mode & VM_PADLOCK_UP)
+	if ( Viewer_mode & VM_PADLOCK_UP )
 	{
 		padlock_view_index = 0;
 	}
-	else if (Viewer_mode & VM_PADLOCK_REAR)
+	else if ( Viewer_mode & VM_PADLOCK_REAR )
 	{
 		padlock_view_index = 1;
 	}
-	else if (Viewer_mode & VM_PADLOCK_LEFT)
+	else if ( Viewer_mode & VM_PADLOCK_LEFT )
 	{
 		padlock_view_index = 2;
 	}
-	else if (Viewer_mode & VM_PADLOCK_RIGHT)
+	else if ( Viewer_mode & VM_PADLOCK_RIGHT )
 	{
 		padlock_view_index = 3;
 	}
@@ -2279,25 +2287,25 @@ void player_display_packlock_view()
 
 	char str[128];
 
-	if (!(Viewer_mode & (VM_CHASE | VM_EXTERNAL)))
+	if ( ! ( Viewer_mode & ( VM_CHASE | VM_EXTERNAL ) ) )
 	{
-		switch (padlock_view_index)
+		switch ( padlock_view_index )
 		{
 		case 0:
-			strcpy_s(str, XSTR("top view", 101));
+			strcpy_s ( str, XSTR ( "top view", 101 ) );
 			break;
 		case 1:
-			strcpy_s(str, XSTR("rear view", 102));
+			strcpy_s ( str, XSTR ( "rear view", 102 ) );
 			break;
 		case 2:
-			strcpy_s(str, XSTR("left view", 103));
+			strcpy_s ( str, XSTR ( "left view", 103 ) );
 			break;
 		case 3:
-			strcpy_s(str, XSTR("right view", 104));
+			strcpy_s ( str, XSTR ( "right view", 104 ) );
 			break;
 		}
 
-		HUD_fixed_printf(0.01f, str);
+		HUD_fixed_printf ( 0.01f, str );
 	}
 }
 
@@ -2306,161 +2314,161 @@ void player_display_packlock_view()
 extern vec3d Dead_camera_pos;
 extern vec3d Dead_player_last_vel;
 
-#define	MIN_DIST_TO_DEAD_CAMERA			50.0f
+#define MIN_DIST_TO_DEAD_CAMERA         50.0f
 camid player_get_cam()
 {
 	static camid player_camera;
-	if (!player_camera.isValid())
+	if ( !player_camera.isValid() )
 	{
-		player_camera = cam_create("Player camera");
+		player_camera = cam_create ( "Player camera" );
 	}
 
-	object* viewer_obj = NULL;
+	object *viewer_obj = NULL;
 	vec3d eye_pos = vmd_zero_vector;
 	matrix eye_orient = vmd_identity_matrix;
 	vec3d tmp_dir;
 
 	// if the player object is NULL, return
-	if (Player_obj == NULL)
+	if ( Player_obj == NULL )
 	{
 		return camid();
 	}
 
 	// standalone servers can bail here
-	if (Game_mode & GM_STANDALONE_SERVER)
+	if ( Game_mode & GM_STANDALONE_SERVER )
 	{
 		return camid();
 	}
 
 	// if we're not in-mission, don't do this
-	if (!(Game_mode & GM_IN_MISSION))
+	if ( ! ( Game_mode & GM_IN_MISSION ) )
 	{
 		return camid();
 	}
 
-	if (Game_mode & GM_DEAD)
+	if ( Game_mode & GM_DEAD )
 	{
 		vec3d vec_to_deader, view_pos;
 		float dist;
-		if (Player_ai->target_objnum != -1)
+		if ( Player_ai->target_objnum != -1 )
 		{
 			int view_from_player = 1;
 
-			if (Viewer_mode & VM_OTHER_SHIP)
+			if ( Viewer_mode & VM_OTHER_SHIP )
 			{
-				//	View from target.
+				//  View from target.
 				viewer_obj = &Objects[Player_ai->target_objnum];
-				if (viewer_obj->type == OBJ_SHIP)
+				if ( viewer_obj->type == OBJ_SHIP )
 				{
-					ship_get_eye(&eye_pos, &eye_orient, viewer_obj);
+					ship_get_eye ( &eye_pos, &eye_orient, viewer_obj );
 					view_from_player = 0;
 				}
 			}
 
-			if (view_from_player)
+			if ( view_from_player )
 			{
-				//	View target from player ship.
+				//  View target from player ship.
 				viewer_obj = NULL;
 				//rtn_cid = ship_get_followtarget_eye( Player_obj );
 				eye_pos = Player_obj->pos;
 
-				vm_vec_normalized_dir(&tmp_dir, &Objects[Player_ai->target_objnum].pos, &eye_pos);
-				vm_vector_2_matrix(&eye_orient, &tmp_dir, NULL, NULL);
+				vm_vec_normalized_dir ( &tmp_dir, &Objects[Player_ai->target_objnum].pos, &eye_pos );
+				vm_vector_2_matrix ( &eye_orient, &tmp_dir, NULL, NULL );
 			}
 		}
 		else
 		{
-			dist = vm_vec_normalized_dir(&vec_to_deader, &Player_obj->pos, &Dead_camera_pos);
+			dist = vm_vec_normalized_dir ( &vec_to_deader, &Player_obj->pos, &Dead_camera_pos );
 
-			if (dist < MIN_DIST_TO_DEAD_CAMERA)
+			if ( dist < MIN_DIST_TO_DEAD_CAMERA )
 			{
 				dist += flFrametime * 16.0f;
 			}
 
-			vm_vec_scale(&vec_to_deader, -dist);
-			vm_vec_add(&Dead_camera_pos, &Player_obj->pos, &vec_to_deader);
+			vm_vec_scale ( &vec_to_deader, -dist );
+			vm_vec_add ( &Dead_camera_pos, &Player_obj->pos, &vec_to_deader );
 
 			view_pos = Player_obj->pos;
 
-			if (!(Game_mode & GM_DEAD_BLEW_UP))
+			if ( ! ( Game_mode & GM_DEAD_BLEW_UP ) )
 			{
 			}
-			else if (Player_ai->target_objnum != -1)
+			else if ( Player_ai->target_objnum != -1 )
 			{
 				view_pos = Objects[Player_ai->target_objnum].pos;
 			}
 			else
 			{
-				//	Make camera follow explosion, but gradually slow down.
-				vm_vec_scale_add2(&Player_obj->pos, &Dead_player_last_vel, flFrametime);
+				//  Make camera follow explosion, but gradually slow down.
+				vm_vec_scale_add2 ( &Player_obj->pos, &Dead_player_last_vel, flFrametime );
 				view_pos = Player_obj->pos;
 			}
 
 			eye_pos = Dead_camera_pos;
 
-			vm_vec_normalized_dir(&tmp_dir, &Player_obj->pos, &eye_pos);
+			vm_vec_normalized_dir ( &tmp_dir, &Player_obj->pos, &eye_pos );
 
-			vm_vector_2_matrix(&eye_orient, &tmp_dir, NULL, NULL);
+			vm_vector_2_matrix ( &eye_orient, &tmp_dir, NULL, NULL );
 			viewer_obj = NULL;
 		}
 	}
 
-	//	If already blown up, these other modes can override.
-	if (!(Game_mode & (GM_DEAD | GM_DEAD_BLEW_UP)))
+	//  If already blown up, these other modes can override.
+	if ( ! ( Game_mode & ( GM_DEAD | GM_DEAD_BLEW_UP ) ) )
 	{
-		if (!(Viewer_mode & VM_FREECAMERA))
+		if ( ! ( Viewer_mode & VM_FREECAMERA ) )
 			viewer_obj = Player_obj;
 
-		if (Viewer_mode & VM_OTHER_SHIP)
+		if ( Viewer_mode & VM_OTHER_SHIP )
 		{
-			if (Player_ai->target_objnum != -1)
+			if ( Player_ai->target_objnum != -1 )
 			{
 				viewer_obj = &Objects[Player_ai->target_objnum];
 			}
 		}
-		if (Viewer_mode & VM_FREECAMERA)
+		if ( Viewer_mode & VM_FREECAMERA )
 		{
 			Viewer_obj = NULL;
 			return cam_get_current();
 		}
-		else if (Viewer_mode & VM_EXTERNAL)
+		else if ( Viewer_mode & VM_EXTERNAL )
 		{
-			Assert(viewer_obj != NULL);
+			Assert ( viewer_obj != NULL );
 			matrix tm, tm2;
 
-			vm_angles_2_matrix(&tm2, &Viewer_external_info.angles);
-			vm_matrix_x_matrix(&tm, &viewer_obj->orient, &tm2);
+			vm_angles_2_matrix ( &tm2, &Viewer_external_info.angles );
+			vm_matrix_x_matrix ( &tm, &viewer_obj->orient, &tm2 );
 
-			vm_vec_scale_add(&eye_pos, &viewer_obj->pos, &tm.vec.fvec, 2.0f * viewer_obj->radius +
-				Viewer_external_info.distance);
+			vm_vec_scale_add ( &eye_pos, &viewer_obj->pos, &tm.vec.fvec, 2.0f * viewer_obj->radius +
+			                   Viewer_external_info.distance );
 
-			vm_vec_sub(&tmp_dir, &viewer_obj->pos, &eye_pos);
-			vm_vec_normalize(&tmp_dir);
-			vm_vector_2_matrix(&eye_orient, &tmp_dir, &viewer_obj->orient.vec.uvec, NULL);
+			vm_vec_sub ( &tmp_dir, &viewer_obj->pos, &eye_pos );
+			vm_vec_normalize ( &tmp_dir );
+			vm_vector_2_matrix ( &eye_orient, &tmp_dir, &viewer_obj->orient.vec.uvec, NULL );
 			viewer_obj = NULL;
 
-			//	Modify the orientation based on head orientation.
-			compute_slew_matrix(&eye_orient, &Viewer_slew_angles);
+			//  Modify the orientation based on head orientation.
+			compute_slew_matrix ( &eye_orient, &Viewer_slew_angles );
 		}
-		else if (Viewer_mode & VM_CHASE)
+		else if ( Viewer_mode & VM_CHASE )
 		{
 			vec3d move_dir;
 
-			if (viewer_obj->phys_info.speed < 0.1)
+			if ( viewer_obj->phys_info.speed < 0.1 )
 			{
 				move_dir = viewer_obj->orient.vec.fvec;
 			}
 			else
 			{
 				move_dir = viewer_obj->phys_info.vel;
-				vm_vec_normalize_safe(&move_dir);
+				vm_vec_normalize_safe ( &move_dir );
 			}
 
-			vm_vec_scale_add(&eye_pos, &viewer_obj->pos, &move_dir, -3.0f * viewer_obj->radius -
-				Viewer_chase_info.distance);
-			vm_vec_scale_add2(&eye_pos, &viewer_obj->orient.vec.uvec, 0.75f * viewer_obj->radius);
-			vm_vec_sub(&tmp_dir, &viewer_obj->pos, &eye_pos);
-			vm_vec_normalize(&tmp_dir);
+			vm_vec_scale_add ( &eye_pos, &viewer_obj->pos, &move_dir, -3.0f * viewer_obj->radius -
+			                   Viewer_chase_info.distance );
+			vm_vec_scale_add2 ( &eye_pos, &viewer_obj->orient.vec.uvec, 0.75f * viewer_obj->radius );
+			vm_vec_sub ( &tmp_dir, &viewer_obj->pos, &eye_pos );
+			vm_vec_normalize ( &tmp_dir );
 
 			// JAS: I added the following code because if you slew up using
 			// Descent-style physics, eye_dir and Viewer_obj->orient.vec.uvec are
@@ -2469,40 +2477,40 @@ camid player_get_cam()
 			// it by adding in a fraction of the right vector all the time to the
 			// up vector.
 			vec3d tmp_up = viewer_obj->orient.vec.uvec;
-			vm_vec_scale_add2(&tmp_up, &viewer_obj->orient.vec.rvec, 0.00001f);
+			vm_vec_scale_add2 ( &tmp_up, &viewer_obj->orient.vec.rvec, 0.00001f );
 
-			vm_vector_2_matrix(&eye_orient, &tmp_dir, &tmp_up, NULL);
+			vm_vector_2_matrix ( &eye_orient, &tmp_dir, &tmp_up, NULL );
 			viewer_obj = NULL;
 
-			//	Modify the orientation based on head orientation.
-			compute_slew_matrix(&eye_orient, &Viewer_slew_angles);
+			//  Modify the orientation based on head orientation.
+			compute_slew_matrix ( &eye_orient, &Viewer_slew_angles );
 		}
-		else if (Viewer_mode & VM_WARP_CHASE)
+		else if ( Viewer_mode & VM_WARP_CHASE )
 		{
-			Warp_camera.get_info(&eye_pos, NULL);
+			Warp_camera.get_info ( &eye_pos, NULL );
 
-			ship* shipp = &Ships[Player_obj->instance];
+			ship *shipp = &Ships[Player_obj->instance];
 
 
 			vec3d warp_pos = Player_obj->pos;
-			shipp->warpout_effect->getWarpPosition(&warp_pos);
-			vm_vec_sub(&tmp_dir, &warp_pos, &eye_pos);
-			vm_vec_normalize(&tmp_dir);
-			vm_vector_2_matrix(&eye_orient, &tmp_dir, &Player_obj->orient.vec.uvec, NULL);
+			shipp->warpout_effect->getWarpPosition ( &warp_pos );
+			vm_vec_sub ( &tmp_dir, &warp_pos, &eye_pos );
+			vm_vec_normalize ( &tmp_dir );
+			vm_vector_2_matrix ( &eye_orient, &tmp_dir, &Player_obj->orient.vec.uvec, NULL );
 			viewer_obj = NULL;
 		}
 		else
 		{
 			// get an eye position based upon the correct type of object
-			switch (viewer_obj->type)
+			switch ( viewer_obj->type )
 			{
 			case OBJ_SHIP:
 				// make a call to get the eye point for the player object
-				ship_get_eye(&eye_pos, &eye_orient, viewer_obj);
+				ship_get_eye ( &eye_pos, &eye_orient, viewer_obj );
 				break;
 			case OBJ_OBSERVER:
 				// make a call to get the eye point for the player object
-				observer_get_eye(&eye_pos, &eye_orient, viewer_obj);
+				observer_get_eye ( &eye_pos, &eye_orient, viewer_obj );
 				break;
 			default :
 				Int3();
@@ -2510,8 +2518,8 @@ camid player_get_cam()
 		}
 	}
 
-	player_camera.getCamera()->set_position(&eye_pos);
-	player_camera.getCamera()->set_rotation(&eye_orient);
+	player_camera.getCamera()->set_position ( &eye_pos );
+	player_camera.getCamera()->set_rotation ( &eye_orient );
 
 	return player_camera;
 }

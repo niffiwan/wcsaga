@@ -4,8 +4,8 @@
 
 // Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
@@ -32,13 +32,17 @@
 #   include <boost/mpl/aux_/config/ctps.hpp>
 #   include <boost/preprocessor/iterate.hpp>
 
-namespace boost { namespace mpl {
+namespace boost
+{
+namespace mpl
+{
 
 #   define BOOST_PP_ITERATION_PARAMS_1 \
     (3,(0, 10, <boost/mpl/vector/aux_/numbered.hpp>))
 #   include BOOST_PP_ITERATE()
 
-}}
+}
+}
 
 #endif // BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
 

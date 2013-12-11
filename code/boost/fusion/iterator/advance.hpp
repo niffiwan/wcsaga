@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_ADVANCE_09172005_1146)
@@ -15,78 +15,81 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/fusion/support/tag_of.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct random_access_traversal_tag;
-        
-    // Special tags:
-    struct iterator_facade_tag; // iterator facade tag
-    struct array_iterator_tag; // boost::array iterator tag
-    struct mpl_iterator_tag; // mpl sequence iterator tag
-    struct std_pair_iterator_tag; // std::pair iterator tag
+namespace fusion
+{
+struct random_access_traversal_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct advance_impl
-        {
-            // default implementation
-            template <typename Iterator, typename N>
-            struct apply :
-                mpl::if_c<
-                    (N::value > 0)
-                  , advance_detail::forward<Iterator, N::value>
-                  , advance_detail::backward<Iterator, N::value>
-                >::type
-            {
-                BOOST_MPL_ASSERT_NOT((traits::is_random_access<Iterator>));
-            };
-        };
+// Special tags:
+struct iterator_facade_tag; // iterator facade tag
+struct array_iterator_tag; // boost::array iterator tag
+struct mpl_iterator_tag; // mpl sequence iterator tag
+struct std_pair_iterator_tag; // std::pair iterator tag
 
-        template <>
-        struct advance_impl<iterator_facade_tag>
-        {
-            template <typename Iterator, typename N>
-            struct apply : Iterator::template advance<Iterator, N> {};
-        };
+namespace extension
+{
+template <typename Tag>
+struct advance_impl
+{
+	// default implementation
+	template <typename Iterator, typename N>
+	struct apply :
+			mpl::if_c <
+	( N::value > 0 )
+	, advance_detail::forward<Iterator, N::value>
+	, advance_detail::backward<Iterator, N::value>
+	>::type
+	{
+	    BOOST_MPL_ASSERT_NOT ( ( traits::is_random_access<Iterator> ) );
+	};
+};
 
-        template <>
-        struct advance_impl<array_iterator_tag>;
+template <>
+struct advance_impl<iterator_facade_tag>
+{
+	template <typename Iterator, typename N>
+	struct apply : Iterator::template advance<Iterator, N> {};
+};
 
-        template <>
-        struct advance_impl<mpl_iterator_tag>;
+template <>
+struct advance_impl<array_iterator_tag>;
 
-        template <>
-        struct advance_impl<std_pair_iterator_tag>;
-    }
-    
-    namespace result_of
-    {
-        template <typename Iterator, int N>
-        struct advance_c
-            : extension::advance_impl<typename detail::tag_of<Iterator>::type>::template apply<Iterator, mpl::int_<N> >
-        {};
+template <>
+struct advance_impl<mpl_iterator_tag>;
 
-        template <typename Iterator, typename N>
-        struct advance
-            : extension::advance_impl<typename detail::tag_of<Iterator>::type>::template apply<Iterator, N>
-        {};
-    }
+template <>
+struct advance_impl<std_pair_iterator_tag>;
+}
 
-    template <int N, typename Iterator>
-    inline typename result_of::advance_c<Iterator, N>::type const
-    advance_c(Iterator const& i)
-    {
-        return result_of::advance_c<Iterator, N>::call(i);
-    }
+namespace result_of
+{
+template <typename Iterator, int N>
+struct advance_c
+		: extension::advance_impl<typename detail::tag_of<Iterator>::type>::template apply<Iterator, mpl::int_<N> >
+{};
 
-    template<typename N, typename Iterator>
-    inline typename result_of::advance<Iterator, N>::type const
-    advance(Iterator const& i)
-    {
-        return result_of::advance<Iterator, N>::call(i);
-    }
+template <typename Iterator, typename N>
+struct advance
+		: extension::advance_impl<typename detail::tag_of<Iterator>::type>::template apply<Iterator, N>
+{};
+}
 
-}} // namespace boost::fusion
+template <int N, typename Iterator>
+inline typename result_of::advance_c<Iterator, N>::type const
+advance_c ( Iterator const &i )
+{
+	return result_of::advance_c<Iterator, N>::call ( i );
+}
+
+template<typename N, typename Iterator>
+inline typename result_of::advance<Iterator, N>::type const
+advance ( Iterator const &i )
+{
+	return result_of::advance<Iterator, N>::call ( i );
+}
+
+}
+} // namespace boost::fusion
 
 #endif

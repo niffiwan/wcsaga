@@ -34,51 +34,60 @@ namespace std { using ::strlen; }
 # include <string.h>
 #endif
 
-namespace boost { namespace iostreams { namespace detail {
-
-inline BOOST_IOSTREAMS_FAILURE system_failure(const char* msg)
+namespace boost
 {
-    std::string result;
+namespace iostreams
+{
+namespace detail
+{
+
+inline BOOST_IOSTREAMS_FAILURE system_failure ( const char *msg )
+{
+	std::string result;
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    DWORD err;
-    LPVOID lpMsgBuf;
-    if ( (err = ::GetLastError()) != NO_ERROR &&
-         ::FormatMessageA( FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                           FORMAT_MESSAGE_FROM_SYSTEM,
-                           NULL,
-                           err,
-                           MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                           (LPSTR) &lpMsgBuf,
-                           0,
-                           NULL ) != 0 )
-    {
-        result.reserve(std::strlen(msg) + 2 + std::strlen((LPSTR)lpMsgBuf));
-        result.append(msg);
-        result.append(": ");
-        result.append((LPSTR) lpMsgBuf);
-        ::LocalFree(lpMsgBuf);
-    } else {
-        result += msg;
-    }
+	DWORD err;
+	LPVOID lpMsgBuf;
+	if ( ( err = ::GetLastError() ) != NO_ERROR &&
+	        ::FormatMessageA ( FORMAT_MESSAGE_ALLOCATE_BUFFER |
+	                           FORMAT_MESSAGE_FROM_SYSTEM,
+	                           NULL,
+	                           err,
+	                           MAKELANGID ( LANG_NEUTRAL, SUBLANG_DEFAULT ),
+	                           ( LPSTR ) &lpMsgBuf,
+	                           0,
+	                           NULL ) != 0 )
+	{
+		result.reserve ( std::strlen ( msg ) + 2 + std::strlen ( ( LPSTR ) lpMsgBuf ) );
+		result.append ( msg );
+		result.append ( ": " );
+		result.append ( ( LPSTR ) lpMsgBuf );
+		::LocalFree ( lpMsgBuf );
+	}
+	else
+	{
+		result += msg;
+	}
 #else
-    const char* system_msg = errno ? strerror(errno) : "";
-    result.reserve(std::strlen(msg) + 2 + std::strlen(system_msg));
-    result.append(msg);
-    result.append(": ");
-    result.append(system_msg);
+	const char *system_msg = errno ? strerror ( errno ) : "";
+	result.reserve ( std::strlen ( msg ) + 2 + std::strlen ( system_msg ) );
+	result.append ( msg );
+	result.append ( ": " );
+	result.append ( system_msg );
 #endif
-    return BOOST_IOSTREAMS_FAILURE(result);
+	return BOOST_IOSTREAMS_FAILURE ( result );
 }
 
-inline BOOST_IOSTREAMS_FAILURE system_failure(const std::string& msg)
-{ return system_failure(msg.c_str()); }
+inline BOOST_IOSTREAMS_FAILURE system_failure ( const std::string &msg )
+{ return system_failure ( msg.c_str() ); }
 
-inline void throw_system_failure(const char* msg)
-{ boost::throw_exception(system_failure(msg)); }
+inline void throw_system_failure ( const char *msg )
+{ boost::throw_exception ( system_failure ( msg ) ); }
 
-inline void throw_system_failure(const std::string& msg)
-{ boost::throw_exception(system_failure(msg)); }
+inline void throw_system_failure ( const std::string &msg )
+{ boost::throw_exception ( system_failure ( msg ) ); }
 
-} } } // End namespaces detail, iostreams, boost.
+}
+}
+} // End namespaces detail, iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_SYSTEM_FAILURE_HPP_INCLUDED

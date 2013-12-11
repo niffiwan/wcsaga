@@ -1,6 +1,6 @@
 /*
     Copyright 2005-2007 Adobe Systems Incorporated
-   
+
     Use, modification and distribution are subject to the Boost Software License,
     Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt).
@@ -37,12 +37,15 @@
 
 /*************************************************************************************************/
 
-namespace boost {
-namespace unordered_detail {
+namespace boost
+{
+namespace unordered_detail
+{
 
 /*************************************************************************************************/
 
-namespace move_detail {
+namespace move_detail
+{
 
 /*************************************************************************************************/
 
@@ -50,21 +53,23 @@ namespace move_detail {
 
 /*************************************************************************************************/
 
-template <typename T>  
-struct class_has_move_assign {  
-    class type {
-        typedef T& (T::*E)(T t);  
-        typedef char (&no_type)[1];  
-        typedef char (&yes_type)[2];  
-        template <E e> struct sfinae { typedef yes_type type; };  
-        template <class U>  
-        static typename sfinae<&U::operator=>::type test(int);  
-        template <class U>  
-        static no_type test(...);  
-    public:  
-        enum {value = sizeof(test<T>(1)) == sizeof(yes_type)};  
-    };
- };  
+template <typename T>
+struct class_has_move_assign
+{
+	class type
+	{
+		typedef T & ( T::*E ) ( T t );
+		typedef char ( &no_type ) [1];
+		typedef char ( &yes_type ) [2];
+		template <E e> struct sfinae { typedef yes_type type; };
+		template <class U>
+		static typename sfinae<&U::operator =>::type test ( int );
+		template <class U>
+		static no_type test ( ... );
+	public:
+		enum {value = sizeof ( test<T> ( 1 ) ) == sizeof ( yes_type ) };
+	};
+};
 
 /*************************************************************************************************/
 
@@ -87,10 +92,10 @@ class test_can_convert_anything { };
 */
 
 template <typename T, typename U>
-struct is_convertible : boost::mpl::or_<
-    boost::is_same<T, U>,
-    boost::is_convertible<T, U>
-> { };
+struct is_convertible : boost::mpl::or_ <
+		boost::is_same<T, U>,
+		boost::is_convertible<T, U>
+		> { };
 
 /*************************************************************************************************/
 
@@ -107,10 +112,10 @@ struct is_convertible : boost::mpl::or_<
 template <typename T>
 struct move_from
 {
-    explicit move_from(T& x) : source(x) { }
-    T& source;
+	explicit move_from ( T &x ) : source ( x ) { }
+	T &source;
 private:
-    move_from& operator=(move_from const&);
+	move_from &operator= ( move_from const & );
 };
 
 /*************************************************************************************************/
@@ -124,11 +129,11 @@ private:
 \brief The is_movable trait can be used to identify movable types.
 */
 template <typename T>
-struct is_movable : boost::mpl::and_<
-                        boost::is_convertible<move_from<T>, T>,
-                        move_detail::has_move_assign<T>,
-                        boost::mpl::not_<boost::is_convertible<move_detail::test_can_convert_anything, T> >
-                    > { };
+struct is_movable : boost::mpl::and_ <
+		boost::is_convertible<move_from<T>, T>,
+		move_detail::has_move_assign<T>,
+		boost::mpl::not_<boost::is_convertible<move_detail::test_can_convert_anything, T> >
+		> { };
 
 /*************************************************************************************************/
 
@@ -157,14 +162,14 @@ struct is_movable : boost::mpl::false_ { };
 
 template <typename T,
           typename U = T,
-          typename R = void*>
-struct copy_sink : boost::enable_if<
-                        boost::mpl::and_<
-                            boost::unordered_detail::move_detail::is_convertible<T, U>,                           
-                            boost::mpl::not_<is_movable<T> >
-                        >,
-                        R
-                    >
+          typename R = void *>
+struct copy_sink : boost::enable_if <
+		boost::mpl::and_ <
+		boost::unordered_detail::move_detail::is_convertible<T, U>,
+		boost::mpl::not_<is_movable<T> >
+		>,
+		R
+		>
 { };
 
 /*************************************************************************************************/
@@ -178,14 +183,14 @@ struct copy_sink : boost::enable_if<
 
 template <typename T,
           typename U = T,
-          typename R = void*>
-struct move_sink : boost::enable_if<
-                        boost::mpl::and_<
-                            boost::unordered_detail::move_detail::is_convertible<T, U>,                            
-                            is_movable<T>
-                        >,
-                        R
-                    >
+          typename R = void *>
+struct move_sink : boost::enable_if <
+		boost::mpl::and_ <
+		boost::unordered_detail::move_detail::is_convertible<T, U>,
+		is_movable<T>
+		>,
+		R
+		>
 { };
 
 /*************************************************************************************************/
@@ -198,7 +203,7 @@ instead of copied to its destination. See adobe/test/move/main.cpp for examples.
 
 */
 template <typename T>
-T move(T& x, typename move_sink<T>::type = 0) { return T(move_from<T>(x)); }
+T move ( T &x, typename move_sink<T>::type = 0 ) { return T ( move_from<T> ( x ) ); }
 
 /*************************************************************************************************/
 
@@ -208,7 +213,7 @@ T move(T& x, typename move_sink<T>::type = 0) { return T(move_from<T>(x)); }
 x gets copied.
 */
 template <typename T>
-T& move(T& x, typename copy_sink<T>::type = 0) { return x; }
+T &move ( T &x, typename copy_sink<T>::type = 0 ) { return x; }
 
 /*************************************************************************************************/
 
@@ -218,17 +223,18 @@ T& move(T& x, typename copy_sink<T>::type = 0) { return x; }
 
 template <typename T,
           typename U = T,
-          typename R = void*>
+          typename R = void *>
 struct copy_sink
 {
-    typedef R type;
+	typedef R type;
 };
 
 // Always copy the element unless this is overloaded.
 
 template <typename T>
-T& move(T& x) {
-    return x;
+T &move ( T &x )
+{
+	return x;
 }
 
 #endif // BOOST_NO_SFINAE

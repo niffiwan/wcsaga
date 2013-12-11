@@ -15,50 +15,55 @@
 #include <boost/interprocess/detail/type_traits.hpp>
 #include <boost/interprocess/detail/mpl.hpp>
 
-namespace boost {
-namespace interprocess {
-namespace detail {
+namespace boost
+{
+namespace interprocess
+{
+namespace detail
+{
 
-struct named_creation_functor_no_arg{};
+struct named_creation_functor_no_arg {};
 
 template <class T, class Arg = named_creation_functor_no_arg>
 class named_creation_functor
 {
-   typedef named_creation_functor_no_arg no_arg_t;
-   public:
-   named_creation_functor(detail::create_enum_t type, Arg arg = Arg())
-      :  m_creation_type(type), m_arg(arg){}
+	typedef named_creation_functor_no_arg no_arg_t;
+public:
+	named_creation_functor ( detail::create_enum_t type, Arg arg = Arg() )
+		:  m_creation_type ( type ), m_arg ( arg ) {}
 
-   template<class ArgType>
-   void construct(void *address, typename enable_if_c<is_same<ArgType, no_arg_t>::value>::type * = 0) const
-   {  new(address)T; }
+	template<class ArgType>
+	void construct ( void *address, typename enable_if_c<is_same<ArgType, no_arg_t>::value>::type * = 0 ) const
+	{  new ( address ) T; }
 
-   template<class ArgType>
-   void construct(void *address, typename enable_if_c<!is_same<ArgType, no_arg_t>::value>::type * = 0) const
-   {  new(address)T(m_arg); }
+	template<class ArgType>
+	void construct ( void *address, typename enable_if_c < !is_same<ArgType, no_arg_t>::value >::type * = 0 ) const
+	{  new ( address ) T ( m_arg ); }
 
-   bool operator()(void *address, std::size_t, bool created) const
-   {   
-      switch(m_creation_type){
-         case detail::DoOpen:
-            return true;
-         break;
-         case detail::DoCreate:
-         case detail::DoOpenOrCreate:
-            if(created){
-               construct<Arg>(address);
-            }
-            return true;
-         break;
+	bool operator() ( void *address, std::size_t, bool created ) const
+	{
+		switch ( m_creation_type )
+		{
+		case detail::DoOpen:
+			return true;
+			break;
+		case detail::DoCreate:
+		case detail::DoOpenOrCreate:
+			if ( created )
+			{
+				construct<Arg> ( address );
+			}
+			return true;
+			break;
 
-         default:
-            return false;
-         break;
-      }
-   }
-   private:
-   detail::create_enum_t m_creation_type;
-   Arg m_arg;
+		default:
+			return false;
+			break;
+		}
+	}
+private:
+	detail::create_enum_t m_creation_type;
+	Arg m_arg;
 };
 
 }  //namespace detail {

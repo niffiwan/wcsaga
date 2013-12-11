@@ -21,62 +21,65 @@
 
 #if defined(BOOST_WINDOWS) || defined(__CYGWIN__)
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 // Adapts the FD_SET type to meet the Descriptor_Set concept's requirements.
 class win_fd_set_adapter
 {
 public:
-  enum { win_fd_set_size = 1024 };
+	enum { win_fd_set_size = 1024 };
 
-  win_fd_set_adapter()
-    : max_descriptor_(invalid_socket)
-  {
-    fd_set_.fd_count = 0;
-  }
+	win_fd_set_adapter()
+		: max_descriptor_ ( invalid_socket )
+	{
+		fd_set_.fd_count = 0;
+	}
 
-  bool set(socket_type descriptor)
-  {
-    for (u_int i = 0; i < fd_set_.fd_count; ++i)
-      if (fd_set_.fd_array[i] == descriptor)
-        return true;
-    if (fd_set_.fd_count < win_fd_set_size)
-    {
-      fd_set_.fd_array[fd_set_.fd_count++] = descriptor;
-      return true;
-    }
-    return false;
-  }
+	bool set ( socket_type descriptor )
+	{
+		for ( u_int i = 0; i < fd_set_.fd_count; ++i )
+			if ( fd_set_.fd_array[i] == descriptor )
+				return true;
+		if ( fd_set_.fd_count < win_fd_set_size )
+		{
+			fd_set_.fd_array[fd_set_.fd_count++] = descriptor;
+			return true;
+		}
+		return false;
+	}
 
-  bool is_set(socket_type descriptor) const
-  {
-    return !!__WSAFDIsSet(descriptor,
-        const_cast<fd_set*>(reinterpret_cast<const fd_set*>(&fd_set_)));
-  }
+	bool is_set ( socket_type descriptor ) const
+	{
+		return !!__WSAFDIsSet ( descriptor,
+		                        const_cast<fd_set *> ( reinterpret_cast<const fd_set *> ( &fd_set_ ) ) );
+	}
 
-  operator fd_set*()
-  {
-    return reinterpret_cast<fd_set*>(&fd_set_);
-  }
+	operator fd_set *()
+	{
+		return reinterpret_cast<fd_set *> ( &fd_set_ );
+	}
 
-  socket_type max_descriptor() const
-  {
-    return max_descriptor_;
-  }
+	socket_type max_descriptor() const
+	{
+		return max_descriptor_;
+	}
 
 private:
-  // This structure is defined to be compatible with the Windows API fd_set
-  // structure, but without being dependent on the value of FD_SETSIZE.
-  struct win_fd_set
-  {
-    u_int fd_count;
-    SOCKET fd_array[win_fd_set_size];
-  };
+	// This structure is defined to be compatible with the Windows API fd_set
+	// structure, but without being dependent on the value of FD_SETSIZE.
+	struct win_fd_set
+	{
+		u_int fd_count;
+		SOCKET fd_array[win_fd_set_size];
+	};
 
-  win_fd_set fd_set_;
-  socket_type max_descriptor_;
+	win_fd_set fd_set_;
+	socket_type max_descriptor_;
 };
 
 } // namespace detail

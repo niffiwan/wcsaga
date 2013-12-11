@@ -17,7 +17,7 @@
 // old compilers. The original date_time IO system remains for those
 // compilers. They must define this macro to use the legacy IO.
 //     (defined(__BORLANDC__) && (__BORLANDC__ <= 0x0581) ) )   &&
- #if(  BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x581) ) \
+#if(  BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x581) ) \
     || BOOST_WORKAROUND( __GNUC__, < 3)                         \
     || (BOOST_WORKAROUND( _MSC_VER, <= 1300) )                  \
     )                                                           \
@@ -30,7 +30,7 @@
 
 #include <boost/date_time/locale_config.hpp> //set up locale configurations
 
-//Set up a configuration parameter for platforms that have 
+//Set up a configuration parameter for platforms that have
 //GetTimeOfDay
 #if defined(BOOST_HAS_GETTIMEOFDAY) || defined(BOOST_HAS_FTIME)
 #define BOOST_DATE_TIME_HAS_HIGH_PRECISION_CLOCK
@@ -68,18 +68,19 @@
 // Borland v5.64 does not have the following in std namespace; v5.5.1 does
 #if defined(__BORLANDC__) && defined(BOOST_BCB_WITH_STLPORT)
 #include <locale>
-namespace std {
-  using stlport::tolower;
-  using stlport::ctype;
-  using stlport::use_facet;
+namespace std
+{
+using stlport::tolower;
+using stlport::ctype;
+using stlport::use_facet;
 }
 #endif
 
-// workaround for errors associated with output for date classes 
-// modifications and input streaming for time classes. 
+// workaround for errors associated with output for date classes
+// modifications and input streaming for time classes.
 // Compilers affected are:
 // gcc295, msvc (neither with STLPort), any borland
-// 
+//
 #if (((defined(__GNUC__) && (__GNUC__ < 3)) || \
       (defined(_MSC_VER) && (_MSC_VER < 1300)) ) && \
       !defined(_STLP_OWN_IOSTREAMS) ) || \
@@ -97,8 +98,9 @@ namespace std {
 #elif !defined(BOOST_NO_UNREACHABLE_RETURN_DETECTION)
 // Call to a non-returning function should suppress the warning
 #  if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std {
-    using ::abort;
+namespace std
+{
+using ::abort;
 }
 #  endif // defined(BOOST_NO_STDC_NAMESPACE)
 #  define BOOST_DATE_TIME_UNREACHABLE_EXPRESSION(x) std::abort()
@@ -109,22 +111,22 @@ namespace std {
 
 /* The following handles the definition of the necessary macros
  * for dll building on Win32 platforms.
- * 
- * For code that will be placed in the date_time .dll, 
+ *
+ * For code that will be placed in the date_time .dll,
  * it must be properly prefixed with BOOST_DATE_TIME_DECL.
  * The corresponding .cpp file must have BOOST_DATE_TIME_SOURCE
  * defined before including its header. For examples see:
  * greg_month.hpp & greg_month.cpp
- * 
+ *
  */
 
 #ifdef BOOST_HAS_DECLSPEC // defined in config system
-   // we need to import/export our code only if the user has specifically
-   // asked for it by defining either BOOST_ALL_DYN_LINK if they want all boost
-   // libraries to be dynamically linked, or BOOST_DATE_TIME_DYN_LINK
-   // if they want just this one to be dynamically liked:
+// we need to import/export our code only if the user has specifically
+// asked for it by defining either BOOST_ALL_DYN_LINK if they want all boost
+// libraries to be dynamically linked, or BOOST_DATE_TIME_DYN_LINK
+// if they want just this one to be dynamically liked:
 #  if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_DATE_TIME_DYN_LINK)
-      // export if this is our own source, otherwise import:
+// export if this is our own source, otherwise import:
 #     ifdef BOOST_DATE_TIME_SOURCE
 #       define BOOST_DATE_TIME_DECL __declspec(dllexport)
 #     else
@@ -139,8 +141,8 @@ namespace std {
 #endif
 
 //
-// Automatically link to the correct build variant where possible. 
-// 
+// Automatically link to the correct build variant where possible.
+//
 #if !defined(BOOST_ALL_NO_LIB) && !defined(BOOST_DATE_TIME_NO_LIB) && !defined(BOOST_DATE_TIME_SOURCE)
 //
 // Set the name of our library, this will get undef'ed by auto_link.hpp
@@ -159,9 +161,9 @@ namespace std {
 #include <boost/config/auto_link.hpp>
 #endif  // auto-linking disabled
 
-#if defined(BOOST_HAS_THREADS) 
+#if defined(BOOST_HAS_THREADS)
 #  if defined(_MSC_VER) || defined(__MWERKS__) || defined(__MINGW32__) ||  defined(__BORLANDC__)
-     //no reentrant posix functions (eg: localtime_r)
+//no reentrant posix functions (eg: localtime_r)
 #  elif (!defined(__hpux) || (defined(__hpux) && defined(_REENTRANT)))
 #   define BOOST_DATE_TIME_HAS_REENTRANT_STD_FUNCTIONS
 #  endif

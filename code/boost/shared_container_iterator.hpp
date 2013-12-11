@@ -12,49 +12,53 @@
 #include "boost/shared_ptr.hpp"
 #include <utility>
 
-namespace boost {
+namespace boost
+{
 
 template <typename Container>
-class shared_container_iterator : public iterator_adaptor<
-                                    shared_container_iterator<Container>,
-                                    typename Container::iterator> {
+class shared_container_iterator : public iterator_adaptor <
+shared_container_iterator<Container>,
+typename Container::iterator >
+{
 
-  typedef iterator_adaptor<
-    shared_container_iterator<Container>,
-    typename Container::iterator> super_t;
+typedef iterator_adaptor <
+shared_container_iterator<Container>,
+                          typename Container::iterator > super_t;
 
-  typedef typename Container::iterator iterator_t;
-  typedef boost::shared_ptr<Container> container_ref_t;
+typedef typename Container::iterator iterator_t;
+typedef boost::shared_ptr<Container> container_ref_t;
 
-  container_ref_t container_ref;
+container_ref_t container_ref;
 public:
-  shared_container_iterator() { }
+shared_container_iterator() { }
 
-  shared_container_iterator(iterator_t const& x,container_ref_t const& c) :
-    super_t(x), container_ref(c) { }
+shared_container_iterator ( iterator_t const &x, container_ref_t const &c ) :
+	super_t ( x ), container_ref ( c ) { }
 
 
 };
 
 template <typename Container>
 shared_container_iterator<Container>
-make_shared_container_iterator(typename Container::iterator iter,
-                               boost::shared_ptr<Container> const& container) {
-  typedef shared_container_iterator<Container> iterator;
-  return iterator(iter,container);
+make_shared_container_iterator ( typename Container::iterator iter,
+                                 boost::shared_ptr<Container> const &container )
+{
+typedef shared_container_iterator<Container> iterator;
+return iterator ( iter, container );
 }
 
 
 
 template <typename Container>
-std::pair<
-  shared_container_iterator<Container>,
-  shared_container_iterator<Container> >
-make_shared_container_range(boost::shared_ptr<Container> const& container) {
-  return
-    std::make_pair(
-      make_shared_container_iterator(container->begin(),container),
-      make_shared_container_iterator(container->end(),container));
+std::pair <
+shared_container_iterator<Container>,
+                          shared_container_iterator<Container> >
+                          make_shared_container_range ( boost::shared_ptr<Container> const &container )
+{
+return
+    std::make_pair (
+        make_shared_container_iterator ( container->begin(), container ),
+        make_shared_container_iterator ( container->end(), container ) );
 }
 
 

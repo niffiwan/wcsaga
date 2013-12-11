@@ -16,40 +16,46 @@
 #include <boost/spirit/home/support/info.hpp>
 #include <boost/ref.hpp>
 
-namespace boost { namespace spirit { namespace qi
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // reference is a parser that references another parser (its Subject)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Subject>
-    struct reference : parser<reference<Subject> >
-    {
-        typedef Subject subject_type;
+namespace spirit
+{
+namespace qi
+{
+///////////////////////////////////////////////////////////////////////////
+// reference is a parser that references another parser (its Subject)
+///////////////////////////////////////////////////////////////////////////
+template <typename Subject>
+struct reference : parser<reference<Subject> >
+{
+	typedef Subject subject_type;
 
-        reference(Subject& subject)
-          : ref(subject) {}
+	reference ( Subject &subject )
+		: ref ( subject ) {}
 
-        template <typename Context, typename Iterator>
-        struct attribute : Subject::template attribute<Context, Iterator> {};
+	template <typename Context, typename Iterator>
+	struct attribute : Subject::template attribute<Context, Iterator> {};
 
-        template <typename Iterator, typename Context
-          , typename Skipper, typename Attribute>
-        bool parse(Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper
-          , Attribute& attr) const
-        {
-            return ref.get().parse(first, last, context, skipper, attr);
-        }
+	template <typename Iterator, typename Context
+	          , typename Skipper, typename Attribute>
+	bool parse ( Iterator &first, Iterator const &last
+	             , Context &context, Skipper const &skipper
+	             , Attribute &attr ) const
+	{
+		return ref.get().parse ( first, last, context, skipper, attr );
+	}
 
-        template <typename Context>
-        info what(Context& context) const
-        {
-            // the reference is transparent (does not add any info)
-            return ref.get().what(context);
-        }
+	template <typename Context>
+	info what ( Context &context ) const
+	{
+		// the reference is transparent (does not add any info)
+		return ref.get().what ( context );
+	}
 
-        boost::reference_wrapper<Subject> ref;
-    };
-}}}
+	boost::reference_wrapper<Subject> ref;
+};
+}
+}
+}
 
 #endif

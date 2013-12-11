@@ -9,12 +9,12 @@
  *
  */
 
- /*
-  *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         config.hpp
-  *   VERSION      see <boost/version.hpp>
-  *   DESCRIPTION: regex extended config setup.
-  */
+/*
+ *   LOCATION:    see http://www.boost.org for most recent version.
+ *   FILE         config.hpp
+ *   VERSION      see <boost/version.hpp>
+ *   DESCRIPTION: regex extended config setup.
+ */
 
 #ifndef BOOST_REGEX_CONFIG_HPP
 #define BOOST_REGEX_CONFIG_HPP
@@ -43,11 +43,11 @@
 #  include <boost/config.hpp>
 
 #else
-   /*
-    * C build,
-    * don't include <boost/config.hpp> because that may
-    * do C++ specific things in future...
-    */
+/*
+ * C build,
+ * don't include <boost/config.hpp> because that may
+ * do C++ specific things in future...
+ */
 #  include <stdlib.h>
 #  include <stddef.h>
 #  ifdef _MSC_VER
@@ -109,9 +109,9 @@
 #  endif
 #else
 #  if defined(__sgi) && (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
-      /* STLPort on IRIX is misconfigured: <cwctype> does not compile
-       * as a temporary fix include <wctype.h> instead and prevent inclusion
-       * of STLPort version of <cwctype> */
+/* STLPort on IRIX is misconfigured: <cwctype> does not compile
+ * as a temporary fix include <wctype.h> instead and prevent inclusion
+ * of STLPort version of <cwctype> */
 #     include <wctype.h>
 #     define __STLPORT_CWCTYPE
 #     define _STLP_CWCTYPE
@@ -172,7 +172,7 @@
 #  endif
 #  if defined(_DLL) && defined(BOOST_MSVC) && (BOOST_MSVC < 1600)
 #     include <string>
-      extern template class __declspec(dllimport) std::basic_string<unsigned short>;
+extern template class __declspec ( dllimport ) std::basic_string<unsigned short>;
 #  endif
 #  ifdef BOOST_MSVC
 #     pragma warning(pop)
@@ -321,8 +321,10 @@ if(0 == (x))\
 
 #if defined(__cplusplus) && defined(BOOST_REGEX_HAS_MS_STACK_GUARD)
 
-namespace boost{
-namespace re_detail{
+namespace boost
+{
+namespace re_detail
+{
 
 BOOST_REGEX_DECL void BOOST_REGEX_CALL reset_stack_guard_page();
 
@@ -375,12 +377,16 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL reset_stack_guard_page();
  ****************************************************************************/
 
 #if defined(__cplusplus) && defined(BOOST_REGEX_NON_RECURSIVE)
-namespace boost{ namespace re_detail{
+namespace boost
+{
+namespace re_detail
+{
 
-BOOST_REGEX_DECL void* BOOST_REGEX_CALL get_mem_block();
-BOOST_REGEX_DECL void BOOST_REGEX_CALL put_mem_block(void*);
+BOOST_REGEX_DECL void *BOOST_REGEX_CALL get_mem_block();
+BOOST_REGEX_DECL void BOOST_REGEX_CALL put_mem_block ( void * );
 
-}} /* namespaces */
+}
+} /* namespaces */
 #endif
 
 /*****************************************************************************

@@ -22,207 +22,207 @@
 
 namespace boost
 {
-        template
-        < 
-            class VoidIter, 
-            class T
-        >
-        class void_ptr_iterator
-        {
-        public:
-            typedef BOOST_DEDUCED_TYPENAME boost::remove_const<T>::type        
-                             value_type;
-            typedef T&       reference;
-            typedef T*       pointer;
+template
+<
+    class VoidIter,
+    class T
+    >
+class void_ptr_iterator
+{
+public:
+	typedef BOOST_DEDUCED_TYPENAME boost::remove_const<T>::type
+	value_type;
+	typedef T       &reference;
+	typedef T       *pointer;
 
-            typedef  BOOST_DEDUCED_TYPENAME iterator_difference<VoidIter>::type
-                             difference_type;           
-            typedef  BOOST_DEDUCED_TYPENAME iterator_category<VoidIter>::type
-                             iterator_category;           
-        private:
+	typedef  BOOST_DEDUCED_TYPENAME iterator_difference<VoidIter>::type
+	difference_type;
+	typedef  BOOST_DEDUCED_TYPENAME iterator_category<VoidIter>::type
+	iterator_category;
+private:
 
-            VoidIter iter_;
+	VoidIter iter_;
 
-        public:
-            void_ptr_iterator() : iter_()
-            { }
+public:
+	void_ptr_iterator() : iter_()
+	{ }
 
-            void_ptr_iterator( VoidIter r ) : iter_(r)
-            { }
+	void_ptr_iterator ( VoidIter r ) : iter_ ( r )
+	{ }
 
-            //
-            // Remark: passing by value breaks vc7.1 
-            //
-            template< class MutableIterator, class MutableT >
-            void_ptr_iterator( const void_ptr_iterator<MutableIterator,MutableT>& r )
+	//
+	// Remark: passing by value breaks vc7.1
+	//
+	template< class MutableIterator, class MutableT >
+	void_ptr_iterator ( const void_ptr_iterator<MutableIterator, MutableT> &r )
 #ifdef BOOST_NO_SFINAE
-                         : iter_( VoidIter(const_cast<void**>(&*r.base())) )
+		: iter_ ( VoidIter ( const_cast<void **> ( &*r.base() ) ) )
 #else
 
-             : iter_(r.base())
+		: iter_ ( r.base() )
 #endif
-            { }
+	{ }
 
-            T& operator*() const
-            {
-                return *static_cast<T*>( *iter_ );
-            }
+	T &operator*() const
+	{
+		return *static_cast<T *> ( *iter_ );
+	}
 
-            T* operator->() const
-            {
-                return static_cast<T*>( *iter_ );
-            }
-            
-            void_ptr_iterator& operator++()
-            {
-                ++iter_;
-                return *this;
-            }
+	T *operator->() const
+	{
+		return static_cast<T *> ( *iter_ );
+	}
 
-            void_ptr_iterator operator++(int)
-            {
-                void_ptr_iterator res = *this;
-                ++iter_;
-                return res;
-            }
+	void_ptr_iterator &operator++()
+	{
+		++iter_;
+		return *this;
+	}
 
-            void_ptr_iterator& operator--()
-            {
-                --iter_;
-                return *this;
-            }
+	void_ptr_iterator operator++ ( int )
+	{
+		void_ptr_iterator res = *this;
+		++iter_;
+		return res;
+	}
 
-            void_ptr_iterator operator--(int)
-            {
-                void_ptr_iterator res = *this;
-                --iter_;
-                return res;
-            }
+	void_ptr_iterator &operator--()
+	{
+		--iter_;
+		return *this;
+	}
 
-            void_ptr_iterator& operator+=( difference_type n )
-            {
-                iter_ += n;
-                return *this;
-            }
+	void_ptr_iterator operator-- ( int )
+	{
+		void_ptr_iterator res = *this;
+		--iter_;
+		return res;
+	}
 
-            void_ptr_iterator& operator-=( difference_type n )
-            {
-                iter_ -= n;
-                return *this;
-            }
+	void_ptr_iterator &operator+= ( difference_type n )
+	{
+		iter_ += n;
+		return *this;
+	}
 
-            T& operator[]( difference_type n ) const
-            {
-                return *static_cast<T*>( *(iter_ + n) );
-            }
+	void_ptr_iterator &operator-= ( difference_type n )
+	{
+		iter_ -= n;
+		return *this;
+	}
 
-            VoidIter base() const
-            {
-                return iter_;
-            }
+	T &operator[] ( difference_type n ) const
+	{
+		return *static_cast<T *> ( * ( iter_ + n ) );
+	}
 
-        }; // class 'void_ptr_iterator'
+	VoidIter base() const
+	{
+		return iter_;
+	}
 
-        template< class VoidIter, class T >
-        inline void_ptr_iterator<VoidIter,T> 
-        operator+( void_ptr_iterator<VoidIter,T> l, 
-                   BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter,T>::difference_type n )
-        {
-            l += n;
-            return l;
-        }
+}; // class 'void_ptr_iterator'
 
-        template< class VoidIter, class T >
-        inline void_ptr_iterator<VoidIter,T> 
-        operator+( BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter,T>::difference_type n, 
-                   void_ptr_iterator<VoidIter,T> r ) 
+template< class VoidIter, class T >
+inline void_ptr_iterator<VoidIter, T>
+operator+ ( void_ptr_iterator<VoidIter, T> l,
+            BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter, T>::difference_type n )
+{
+	l += n;
+	return l;
+}
 
-        {
-            r += n;
-            return r;
-        }
+template< class VoidIter, class T >
+inline void_ptr_iterator<VoidIter, T>
+operator+ ( BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter, T>::difference_type n,
+            void_ptr_iterator<VoidIter, T> r )
 
-        template< class VoidIter, class T >
-        inline void_ptr_iterator<VoidIter,T> 
-        operator-( void_ptr_iterator<VoidIter,T> l, 
-                   BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter,T>::difference_type n )
-        {
-            l -= n;
-            return l;
-        }
+{
+	r += n;
+	return r;
+}
 
-        template< class VoidIter, class T >
-        inline void_ptr_iterator<VoidIter,T> 
-        operator-( BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter,T>::difference_type n, 
-                   void_ptr_iterator<VoidIter,T> r ) 
+template< class VoidIter, class T >
+inline void_ptr_iterator<VoidIter, T>
+operator- ( void_ptr_iterator<VoidIter, T> l,
+            BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter, T>::difference_type n )
+{
+	l -= n;
+	return l;
+}
 
-        {
-            r -= n;
-            return r;
-        }
+template< class VoidIter, class T >
+inline void_ptr_iterator<VoidIter, T>
+operator- ( BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter, T>::difference_type n,
+            void_ptr_iterator<VoidIter, T> r )
 
-        template< class VoidIter, class T, class VoidIterU, class U >
-        inline BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter,T>::difference_type
-        operator-( void_ptr_iterator<VoidIter,T> l,
-                   void_ptr_iterator<VoidIterU,U> r ) 
+{
+	r -= n;
+	return r;
+}
 
-        {
-            return l.base() - r.base();
-        }
+template< class VoidIter, class T, class VoidIterU, class U >
+inline BOOST_DEDUCED_TYPENAME void_ptr_iterator<VoidIter, T>::difference_type
+operator- ( void_ptr_iterator<VoidIter, T> l,
+            void_ptr_iterator<VoidIterU, U> r )
 
-
-
-        template< class VoidIterT, class T, class VoidIterU, class U >
-        inline bool operator==( const void_ptr_iterator<VoidIterT,T>& l,
-                                const void_ptr_iterator<VoidIterU,U>& r )
-        {
-            return l.base() == r.base();
-        }
-
-
-        
-        template< class VoidIterT, class T, class VoidIterU, class U >
-        inline bool operator!=( const void_ptr_iterator<VoidIterT,T>& l,
-                                const void_ptr_iterator<VoidIterU,U>& r )
-        {
-            return l.base() != r.base();
-        }
+{
+	return l.base() - r.base();
+}
 
 
 
-        template< class VoidIterT, class T, class VoidIterU, class U >
-        inline bool operator<( const void_ptr_iterator<VoidIterT,T>& l,
-                               const void_ptr_iterator<VoidIterU,U>& r )
-        {
-            return l.base() < r.base();
-        }
+template< class VoidIterT, class T, class VoidIterU, class U >
+inline bool operator== ( const void_ptr_iterator<VoidIterT, T> &l,
+                         const void_ptr_iterator<VoidIterU, U> &r )
+{
+	return l.base() == r.base();
+}
 
 
-        
-        template< class VoidIterT, class T, class VoidIterU, class U >
-        inline bool operator<=( const void_ptr_iterator<VoidIterT,T>& l,
-                               const void_ptr_iterator<VoidIterU,U>& r )
-        {
-            return l.base() <= r.base();
-        }
+
+template< class VoidIterT, class T, class VoidIterU, class U >
+inline bool operator!= ( const void_ptr_iterator<VoidIterT, T> &l,
+                         const void_ptr_iterator<VoidIterU, U> &r )
+{
+	return l.base() != r.base();
+}
 
 
-        
-        template< class VoidIterT, class T, class VoidIterU, class U >
-        inline bool operator>( const void_ptr_iterator<VoidIterT,T>& l,
-                               const void_ptr_iterator<VoidIterU,U>& r )
-        {
-            return l.base() > r.base();
-        }
+
+template< class VoidIterT, class T, class VoidIterU, class U >
+inline bool operator< ( const void_ptr_iterator<VoidIterT, T> &l,
+                        const void_ptr_iterator<VoidIterU, U> &r )
+{
+	return l.base() < r.base();
+}
 
 
-        
-        template< class VoidIterT, class T, class VoidIterU, class U >
-        inline bool operator>=( const void_ptr_iterator<VoidIterT,T>& l,
-                               const void_ptr_iterator<VoidIterU,U>& r )
-        {
-            return l.base() >= r.base();
-        }
+
+template< class VoidIterT, class T, class VoidIterU, class U >
+inline bool operator<= ( const void_ptr_iterator<VoidIterT, T> &l,
+                         const void_ptr_iterator<VoidIterU, U> &r )
+{
+	return l.base() <= r.base();
+}
+
+
+
+template< class VoidIterT, class T, class VoidIterU, class U >
+inline bool operator> ( const void_ptr_iterator<VoidIterT, T> &l,
+                        const void_ptr_iterator<VoidIterU, U> &r )
+{
+	return l.base() > r.base();
+}
+
+
+
+template< class VoidIterT, class T, class VoidIterU, class U >
+inline bool operator>= ( const void_ptr_iterator<VoidIterT, T> &l,
+                         const void_ptr_iterator<VoidIterU, U> &r )
+{
+	return l.base() >= r.base();
+}
 
 }
 

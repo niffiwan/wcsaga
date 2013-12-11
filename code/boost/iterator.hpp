@@ -21,38 +21,39 @@
 namespace boost
 {
 # if defined(BOOST_NO_STD_ITERATOR) && !defined(BOOST_MSVC_STD_ITERATOR)
-  template <class Category, class T,
-    class Distance = std::ptrdiff_t,
-    class Pointer = T*, class Reference = T&>
-  struct iterator
-  {
-    typedef T         value_type;
-    typedef Distance  difference_type;
-    typedef Pointer   pointer;
-    typedef Reference reference;
-    typedef Category  iterator_category;
-  };
+template <class Category, class T,
+          class Distance = std::ptrdiff_t,
+          class Pointer = T *, class Reference = T &>
+struct iterator
+{
+	typedef T         value_type;
+	typedef Distance  difference_type;
+	typedef Pointer   pointer;
+	typedef Reference reference;
+	typedef Category  iterator_category;
+};
 # else
 
-  // declare iterator_base in namespace detail to work around MSVC bugs which
-  // prevent derivation from an identically-named class in a different namespace.
-  namespace detail {
-   template <class Category, class T, class Distance, class Pointer, class Reference>
+// declare iterator_base in namespace detail to work around MSVC bugs which
+// prevent derivation from an identically-named class in a different namespace.
+namespace detail
+{
+template <class Category, class T, class Distance, class Pointer, class Reference>
 #  if !defined(BOOST_MSVC_STD_ITERATOR)
-   struct iterator_base : std::iterator<Category, T, Distance, Pointer, Reference> {};
+struct iterator_base : std::iterator<Category, T, Distance, Pointer, Reference> {};
 #  else
-   struct iterator_base : std::iterator<Category, T, Distance>
-   {
-     typedef Reference reference;
-     typedef Pointer pointer;
-     typedef Distance difference_type;
-   };
+struct iterator_base : std::iterator<Category, T, Distance>
+{
+	typedef Reference reference;
+	typedef Pointer pointer;
+	typedef Distance difference_type;
+};
 #  endif
-  }
+}
 
-  template <class Category, class T, class Distance = std::ptrdiff_t,
-            class Pointer = T*, class Reference = T&>
-  struct iterator : boost::detail::iterator_base<Category, T, Distance, Pointer, Reference> {};
+template <class Category, class T, class Distance = std::ptrdiff_t,
+          class Pointer = T *, class Reference = T &>
+struct iterator : boost::detail::iterator_base<Category, T, Distance, Pointer, Reference> {};
 # endif
 } // namespace boost
 

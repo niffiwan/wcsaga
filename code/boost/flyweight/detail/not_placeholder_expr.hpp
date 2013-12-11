@@ -17,7 +17,7 @@
  * of a class template parameter declaration:
  *   template<
  *     typename X0,...,typename Xn
- *     BOOST_FLYWEIGHT_NOT_A_PLACEHOLDER_EXPRESSION  
+ *     BOOST_FLYWEIGHT_NOT_A_PLACEHOLDER_EXPRESSION
  *   >
  *   struct foo...
  * to prevent instantiations from being treated as MPL placeholder

@@ -16,9 +16,12 @@
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <cstddef>
 
-namespace boost {
-namespace intrusive {
-namespace detail {
+namespace boost
+{
+namespace intrusive
+{
+namespace detail
+{
 
 typedef char one;
 struct two {one _[2];};
@@ -26,7 +29,7 @@ struct two {one _[2];};
 template< bool C_ >
 struct bool_
 {
-   static const bool value = C_;
+	static const bool value = C_;
 };
 
 typedef bool_<true>        true_;
@@ -38,96 +41,97 @@ typedef false_ false_type;
 typedef char yes_type;
 struct no_type
 {
-   char padding[8];
+	char padding[8];
 };
 
 template <bool B, class T = void>
-struct enable_if_c {
-  typedef T type;
+struct enable_if_c
+{
+	typedef T type;
 };
 
 template <class T>
 struct enable_if_c<false, T> {};
 
 template <class Cond, class T = void>
-struct enable_if : public enable_if_c<Cond::value, T>{};
+struct enable_if : public enable_if_c<Cond::value, T> {};
 
 template<class F, class Param>
 struct apply
 {
-   typedef typename F::template apply<Param>::type type;
+	typedef typename F::template apply<Param>::type type;
 };
 
 template <class T, class U>
 class is_convertible
 {
-   typedef char true_t;
-   class false_t { char dummy[2]; };
-   static true_t dispatch(U);
-   static false_t dispatch(...);
-   static const T &trigger();
-   public:
-   static const bool value = sizeof(dispatch(trigger())) == sizeof(true_t);
+	typedef char true_t;
+	class false_t { char dummy[2]; };
+	static true_t dispatch ( U );
+	static false_t dispatch ( ... );
+	static const T &trigger();
+public:
+	static const bool value = sizeof ( dispatch ( trigger() ) ) == sizeof ( true_t );
 };
 
-template<
-      bool C
+template <
+    bool C
     , typename T1
     , typename T2
     >
 struct if_c
 {
-    typedef T1 type;
+	typedef T1 type;
 };
 
-template<
-      typename T1
+template <
+    typename T1
     , typename T2
     >
-struct if_c<false,T1,T2>
+struct if_c<false, T1, T2>
 {
-    typedef T2 type;
+	typedef T2 type;
 };
 
-template<
-      typename C
+template <
+    typename C
     , typename T1
     , typename T2
     >
 struct if_
 {
-   typedef typename if_c<0 != C::value, T1, T2>::type type;
+	typedef typename if_c < 0 != C::value, T1, T2 >::type type;
 };
 
-template<
-      bool C
+template <
+    bool C
     , typename F1
     , typename F2
     >
 struct eval_if_c
-    : if_c<C,F1,F2>::type
+		: if_c<C, F1, F2>::type
 {};
 
-template<
-      typename C
+template <
+    typename C
     , typename T1
     , typename T2
     >
 struct eval_if
-    : if_<C,T1,T2>::type
+		: if_<C, T1, T2>::type
 {};
 
 // identity is an extension: it is not part of the standard.
 template <class T>
 struct identity
 {
-   typedef T type;
+	typedef T type;
 };
 
 #if defined(BOOST_MSVC) || defined(__BORLANDC_)
 #define BOOST_INTRUSIVE_TT_DECL __cdecl
 #else
-#define BOOST_INTRUSIVE_TT_DECL 
+#define BOOST_INTRUSIVE_TT_DECL
 #endif
 
 #if defined(_MSC_EXTENSIONS) && !defined(__BORLAND__) && !defined(_WIN64)
@@ -139,11 +143,11 @@ struct is_unary_or_binary_function_impl
 {  static const bool value = false; };
 
 template <typename R>
-struct is_unary_or_binary_function_impl<R (*)()>
+struct is_unary_or_binary_function_impl<R ( * ) () >
 {  static const bool value = true;  };
 
 template <typename R>
-struct is_unary_or_binary_function_impl<R (*)(...)>
+struct is_unary_or_binary_function_impl<R ( * ) ( ... ) >
 {  static const bool value = true;  };
 /*
 #ifdef BOOST_INTRUSIVE_TT_TEST_MSC_FUNC_SIGS
@@ -178,17 +182,17 @@ struct is_unary_or_binary_function_impl<R (__cdecl*)(...)>
 #endif
 */
 template <typename R, class T0>
-struct is_unary_or_binary_function_impl<R (*)(T0)>
+struct is_unary_or_binary_function_impl<R ( * ) ( T0 ) >
 {  static const bool value = true;  };
 
 template <typename R, class T0>
-struct is_unary_or_binary_function_impl<R (*)(T0...)>
+struct is_unary_or_binary_function_impl<R ( * ) ( T0... ) >
 {  static const bool value = true;  };
 
 #ifdef BOOST_INTRUSIVE_TT_TEST_MSC_FUNC_SIGS
 
 template <typename R, class T0>
-struct is_unary_or_binary_function_impl<R (__stdcall*)(T0)>
+struct is_unary_or_binary_function_impl<R ( __stdcall * ) ( T0 ) >
 {  static const bool value = true;  };
 /*
 template <typename R, class T0>
@@ -214,11 +218,11 @@ struct is_unary_or_binary_function_impl<R (__cdecl*)(T0...)>
 #endif
 
 template <typename R, class T0, class T1>
-struct is_unary_or_binary_function_impl<R (*)(T0, T1)>
+struct is_unary_or_binary_function_impl<R ( * ) ( T0, T1 ) >
 {  static const bool value = true;  };
 
 template <typename R, class T0, class T1>
-struct is_unary_or_binary_function_impl<R (*)(T0, T1...)>
+struct is_unary_or_binary_function_impl<R ( * ) ( T0, T1... ) >
 {  static const bool value = true;  };
 /*
 #ifdef BOOST_INTRUSIVE_TT_TEST_MSC_FUNC_SIGS
@@ -249,7 +253,7 @@ struct is_unary_or_binary_function_impl<R (__cdecl*)(T0, T1...)>
 #endif
 */
 template <typename T>
-struct is_unary_or_binary_function_impl<T&>
+struct is_unary_or_binary_function_impl<T &>
 {  static const bool value = false; };
 
 template<typename T>
@@ -263,43 +267,43 @@ template <typename T> struct alignment_of;
 template <typename T>
 struct alignment_of_hack
 {
-    char c;
-    T t;
-    alignment_of_hack();
+	char c;
+	T t;
+	alignment_of_hack();
 };
 
 template <unsigned A, unsigned S>
 struct alignment_logic
 {
-   static const std::size_t value = A < S ? A : S;
+	static const std::size_t value = A < S ? A : S;
 };
 
 template< typename T >
 struct alignment_of
 {
-   static const std::size_t value = alignment_logic
-            < sizeof(alignment_of_hack<T>) - sizeof(T)
-            , sizeof(T)
-            >::value;
+	static const std::size_t value = alignment_logic
+	                                 < sizeof ( alignment_of_hack<T> ) - sizeof ( T )
+	                                 , sizeof ( T )
+	                                 >::value;
 };
 
 template <typename T, typename U>
 struct is_same
 {
-   typedef char yes_type;
-   struct no_type
-   {
-      char padding[8];
-   };
+	typedef char yes_type;
+	struct no_type
+	{
+		char padding[8];
+	};
 
-   template <typename V>
-   static yes_type is_same_tester(V*, V*);
-   static no_type is_same_tester(...);
+	template <typename V>
+	static yes_type is_same_tester ( V *, V * );
+	static no_type is_same_tester ( ... );
 
-   static T *t;
-   static U *u;
+	static T *t;
+	static U *u;
 
-   static const bool value = sizeof(yes_type) == sizeof(is_same_tester(t,u));
+	static const bool value = sizeof ( yes_type ) == sizeof ( is_same_tester ( t, u ) );
 };
 
 template<typename T>
@@ -317,53 +321,53 @@ struct remove_const<const T>
 template<class T>
 struct remove_reference
 {
-   typedef T type;
+	typedef T type;
 };
 
 template<class T>
-struct remove_reference<T&>
+struct remove_reference<T &>
 {
-   typedef T type;
+	typedef T type;
 };
 
 template<class Class>
 class is_empty_class
 {
-   template <typename T>
-   struct empty_helper_t1 : public T
-   {
-      empty_helper_t1();
-      int i[256];
-   };
+	template <typename T>
+	struct empty_helper_t1 : public T
+	{
+		empty_helper_t1();
+		int i[256];
+	};
 
-   struct empty_helper_t2
-   { int i[256]; };
+	struct empty_helper_t2
+	{ int i[256]; };
 
-   public:
-   static const bool value = sizeof(empty_helper_t1<Class>) == sizeof(empty_helper_t2);
+public:
+	static const bool value = sizeof ( empty_helper_t1<Class> ) == sizeof ( empty_helper_t2 );
 };
 
 template<std::size_t S>
 struct ls_zeros
 {
-   static const std::size_t value = (S & std::size_t(1)) ? 0 : (1 + ls_zeros<(S>>1u)>::value);
+	static const std::size_t value = ( S & std::size_t ( 1 ) ) ? 0 : ( 1 + ls_zeros < ( S >> 1u ) >::value );
 };
 
 template<>
 struct ls_zeros<0>
 {
-   static const std::size_t value = 0;
+	static const std::size_t value = 0;
 };
 
 template<>
 struct ls_zeros<1>
 {
-   static const std::size_t value = 0;
+	static const std::size_t value = 0;
 };
 
-} //namespace detail 
-} //namespace intrusive 
-} //namespace boost 
+} //namespace detail
+} //namespace intrusive
+} //namespace boost
 
 #include <boost/intrusive/detail/config_end.hpp>
 

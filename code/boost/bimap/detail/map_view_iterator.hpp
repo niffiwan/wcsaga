@@ -24,9 +24,12 @@
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/bimap/relation/support/pair_by.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace detail {
+namespace boost
+{
+namespace bimaps
+{
+namespace detail
+{
 
 #ifndef BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
 
@@ -35,14 +38,14 @@ template< class Tag, class Relation, class CoreIterator > struct map_view_iterat
 template< class Tag, class Relation, class CoreIterator >
 struct map_view_iterator_base
 {
-    typedef iterator_adaptor
-    <
-        map_view_iterator< Tag, Relation, CoreIterator >,
-        CoreIterator,
-        BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-            pair_type_by<Tag,Relation>::type
+	typedef iterator_adaptor
+	<
+	map_view_iterator< Tag, Relation, CoreIterator >,
+	                   CoreIterator,
+	                   BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
+	                   pair_type_by<Tag, Relation>::type
 
-    > type;
+	                   > type;
 };
 
 #endif // BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
@@ -56,57 +59,57 @@ library, and EBO optimization was applied to the functor.
                                                                       **/
 
 template< class Tag, class Relation, class CoreIterator >
-struct map_view_iterator : public map_view_iterator_base<Tag,Relation,CoreIterator>::type
+struct map_view_iterator : public map_view_iterator_base<Tag, Relation, CoreIterator>::type
 {
-    typedef BOOST_DEDUCED_TYPENAME
-        map_view_iterator_base<Tag,Relation,CoreIterator>::type base_;
+	typedef BOOST_DEDUCED_TYPENAME
+	map_view_iterator_base<Tag, Relation, CoreIterator>::type base_;
 
-    public:
+public:
 
-    map_view_iterator() {}
+	map_view_iterator() {}
 
-    map_view_iterator(CoreIterator const& iter)
-      : base_(iter) {}
+	map_view_iterator ( CoreIterator const &iter )
+		: base_ ( iter ) {}
 
-    map_view_iterator(map_view_iterator const & iter)
-      : base_(iter.base()) {}
+	map_view_iterator ( map_view_iterator const &iter )
+		: base_ ( iter.base() ) {}
 
-    BOOST_DEDUCED_TYPENAME base_::reference dereference() const
-    {
-        return ::boost::bimaps::relation::support::pair_by<Tag>(
-            *const_cast<BOOST_DEDUCED_TYPENAME base_::base_type::value_type*>(
-                &(*this->base())
-            )
-        );
-    }
+	BOOST_DEDUCED_TYPENAME base_::reference dereference() const
+	{
+		return ::boost::bimaps::relation::support::pair_by<Tag> (
+		           *const_cast<BOOST_DEDUCED_TYPENAME base_::base_type::value_type *> (
+		               & ( *this->base() )
+		           )
+		       );
+	}
 
-    private:
+private:
 
-    friend class iterator_core_access;
+	friend class iterator_core_access;
 
-    #ifndef BOOST_BIMAP_DISABLE_SERIALIZATION
+#ifndef BOOST_BIMAP_DISABLE_SERIALIZATION
 
-    // Serialization support
+	// Serialization support
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+	BOOST_SERIALIZATION_SPLIT_MEMBER()
 
-    friend class ::boost::serialization::access;
+	friend class ::boost::serialization::access;
 
-    template< class Archive >
-    void save(Archive & ar, const unsigned int version) const
-    {
-        ar << ::boost::serialization::make_nvp("mi_iterator",this->base());
-    }
+	template< class Archive >
+	void save ( Archive &ar, const unsigned int version ) const
+	{
+		ar << ::boost::serialization::make_nvp ( "mi_iterator", this->base() );
+	}
 
-    template< class Archive >
-    void load(Archive & ar, const unsigned int version)
-    {
-        CoreIterator iter;
-        ar >> ::boost::serialization::make_nvp("mi_iterator",iter);
-        this->base_reference() = iter;
-    }
+	template< class Archive >
+	void load ( Archive &ar, const unsigned int version )
+	{
+		CoreIterator iter;
+		ar >> ::boost::serialization::make_nvp ( "mi_iterator", iter );
+		this->base_reference() = iter;
+	}
 
-    #endif // BOOST_BIMAP_DISABLE_SERIALIZATION
+#endif // BOOST_BIMAP_DISABLE_SERIALIZATION
 };
 
 
@@ -117,14 +120,14 @@ template< class Tag, class Relation, class CoreIterator > struct const_map_view_
 template< class Tag, class Relation, class CoreIterator >
 struct const_map_view_iterator_base
 {
-    typedef iterator_adaptor
-    <
-        const_map_view_iterator< Tag, Relation, CoreIterator >,
-        CoreIterator,
-        const BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-             pair_type_by<Tag,Relation>::type
+	typedef iterator_adaptor
+	<
+	const_map_view_iterator< Tag, Relation, CoreIterator >,
+	                         CoreIterator,
+	                         const BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
+	                         pair_type_by<Tag, Relation>::type
 
-    > type;
+	                         > type;
 };
 
 #endif // BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
@@ -138,56 +141,56 @@ See also map_view_iterator.
 template< class Tag, class Relation, class CoreIterator >
 struct const_map_view_iterator :
 
-    public const_map_view_iterator_base<Tag,Relation,CoreIterator>::type
+		public const_map_view_iterator_base<Tag, Relation, CoreIterator>::type
 {
-    typedef BOOST_DEDUCED_TYPENAME
-        const_map_view_iterator_base<Tag,Relation,CoreIterator>::type base_;
+	typedef BOOST_DEDUCED_TYPENAME
+	const_map_view_iterator_base<Tag, Relation, CoreIterator>::type base_;
 
-    public:
+public:
 
-    const_map_view_iterator() {}
+	const_map_view_iterator() {}
 
-    const_map_view_iterator(CoreIterator const& iter)
-      : base_(iter) {}
+	const_map_view_iterator ( CoreIterator const &iter )
+		: base_ ( iter ) {}
 
-    const_map_view_iterator(const_map_view_iterator const & iter)
-      : base_(iter.base()) {}
+	const_map_view_iterator ( const_map_view_iterator const &iter )
+		: base_ ( iter.base() ) {}
 
-    const_map_view_iterator(map_view_iterator<Tag,Relation,CoreIterator> i)
-      : base_(i.base()) {}
+	const_map_view_iterator ( map_view_iterator<Tag, Relation, CoreIterator> i )
+		: base_ ( i.base() ) {}
 
-    BOOST_DEDUCED_TYPENAME base_::reference dereference() const
-    {
-        return ::boost::bimaps::relation::support::pair_by<Tag>(*this->base());
-    }
+	BOOST_DEDUCED_TYPENAME base_::reference dereference() const
+	{
+		return ::boost::bimaps::relation::support::pair_by<Tag> ( *this->base() );
+	}
 
-    private:
+private:
 
-    friend class iterator_core_access;
+	friend class iterator_core_access;
 
-    #ifndef BOOST_BIMAP_DISABLE_SERIALIZATION
+#ifndef BOOST_BIMAP_DISABLE_SERIALIZATION
 
-    // Serialization support
+	// Serialization support
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+	BOOST_SERIALIZATION_SPLIT_MEMBER()
 
-    friend class ::boost::serialization::access;
+	friend class ::boost::serialization::access;
 
-    template< class Archive >
-    void save(Archive & ar, const unsigned int version) const
-    {
-        ar << ::boost::serialization::make_nvp("mi_iterator",this->base());
-    }
+	template< class Archive >
+	void save ( Archive &ar, const unsigned int version ) const
+	{
+		ar << ::boost::serialization::make_nvp ( "mi_iterator", this->base() );
+	}
 
-    template< class Archive >
-    void load(Archive & ar, const unsigned int version)
-    {
-        CoreIterator iter;
-        ar >> ::boost::serialization::make_nvp("mi_iterator",iter);
-        this->base_reference() = iter;
-    }
+	template< class Archive >
+	void load ( Archive &ar, const unsigned int version )
+	{
+		CoreIterator iter;
+		ar >> ::boost::serialization::make_nvp ( "mi_iterator", iter );
+		this->base_reference() = iter;
+	}
 
-    #endif // BOOST_BIMAP_DISABLE_SERIALIZATION
+#endif // BOOST_BIMAP_DISABLE_SERIALIZATION
 };
 
 

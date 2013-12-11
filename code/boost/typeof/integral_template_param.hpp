@@ -59,7 +59,7 @@
         BOOST_PP_CAT(V, n),\
         BOOST_TYPEOF_INTEGRAL_PARAM_GETTYPE(This),\
         BOOST_PP_CAT(P, n)\
-    >::type BOOST_PP_CAT(V, BOOST_PP_INC(n)); 
+    >::type BOOST_PP_CAT(V, BOOST_PP_INC(n));
 
 #define BOOST_TYPEOF_INTEGRAL_PARAM_DECODE(This, n)\
     typedef boost::type_of::decode_integral<BOOST_TYPEOF_INTEGRAL_PARAM_GETTYPE(This), BOOST_PP_CAT(iter, n)> BOOST_PP_CAT(d, n);\

@@ -26,18 +26,18 @@ struct player;
 struct netgame_info;
 
 
-int FS2NetD_CheckSingleMission(const char* m_name, uint crc32, bool do_send);
+int FS2NetD_CheckSingleMission ( const char *m_name, uint crc32, bool do_send );
 
-int FS2NetD_SendPlayerData(const char* player_name, player* pl, bool do_send);
-int FS2NetD_GetPlayerData(const char* player_name, player* pl, bool can_create, bool do_send);
+int FS2NetD_SendPlayerData ( const char *player_name, player *pl, bool do_send );
+int FS2NetD_GetPlayerData ( const char *player_name, player *pl, bool can_create, bool do_send );
 
-int FS2NetD_GetBanList(SCP_vector<std::string>& mask_list, bool do_send);
+int FS2NetD_GetBanList ( SCP_vector<std::string> &mask_list, bool do_send );
 
-int FS2NetD_GetMissionsList(SCP_vector<file_record>& m_list, bool do_send);
+int FS2NetD_GetMissionsList ( SCP_vector<file_record> &m_list, bool do_send );
 
-int FS2NetD_ValidateTableList(bool do_send);
+int FS2NetD_ValidateTableList ( bool do_send );
 
-int FS2NetD_Login(const char* username, const char* password, bool do_send);
+int FS2NetD_Login ( const char *username, const char *password, bool do_send );
 int FS2NetD_CheckValidID();
 void FS2NetD_CheckDuplicateLogin();
 
@@ -47,15 +47,15 @@ void FS2NetD_SendServerDisconnect();
 
 void FS2NetD_RequestServerList();
 
-void FS2NetD_GameCountUpdate(char* chan_name);
+void FS2NetD_GameCountUpdate ( char *chan_name );
 
 void FS2NetD_Ping();
-void FS2NetD_Pong(int tstamp);
+void FS2NetD_Pong ( int tstamp );
 
 
 
 // Some easy to use macros for handling the packet data
-#define BASE_PACKET_SIZE	(int)(sizeof(ubyte) + sizeof(int))
+#define BASE_PACKET_SIZE    (int)(sizeof(ubyte) + sizeof(int))
 
 #define PXO_ADD_DATA(d) do { Assert(buffer_size+sizeof(d) <= sizeof(buffer)); memcpy(buffer+buffer_size, &d, sizeof(d)); buffer_size += sizeof(d); } while (0)
 #define PXO_ADD_SHORT(d) do { Assert(buffer_size+sizeof(short) <= sizeof(buffer)); short swap = INTEL_SHORT(d); memcpy(buffer+buffer_size, &swap, sizeof(short)); buffer_size += sizeof(short); } while (0)

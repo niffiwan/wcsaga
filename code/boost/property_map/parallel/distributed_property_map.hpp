@@ -45,114 +45,119 @@
 // Serialization functions for constructs we use
 #include <boost/serialization/utility.hpp>
 
-namespace boost { namespace parallel {
+namespace boost
+{
+namespace parallel
+{
 
 using boost::graph::parallel::trigger_receive_context;
 
-namespace detail {
-  /**************************************************************************
-   * Metafunction that degrades an Lvalue Property Map category tag to
-   * a Read Write Property Map category tag.
-   **************************************************************************/
-  template<bool IsLvaluePropertyMap>
-  struct make_nonlvalue_property_map
-  {
-    template<typename T> struct apply { typedef T type; };
-  };
+namespace detail
+{
+/**************************************************************************
+ * Metafunction that degrades an Lvalue Property Map category tag to
+ * a Read Write Property Map category tag.
+ **************************************************************************/
+template<bool IsLvaluePropertyMap>
+struct make_nonlvalue_property_map
+{
+	template<typename T> struct apply { typedef T type; };
+};
 
-  template<>
-  struct make_nonlvalue_property_map<true>
-  {
-    template<typename>
-    struct apply
-    {
-      typedef read_write_property_map_tag type;
-    };
-  };
+template<>
+struct make_nonlvalue_property_map<true>
+{
+	template<typename>
+	struct apply
+	{
+		typedef read_write_property_map_tag type;
+	};
+};
 
-  /**************************************************************************
-   * Performs a "put" on a property map so long as the property map is
-   * a Writable Property Map or a mutable Lvalue Property Map. This
-   * is required because the distributed property map's message
-   * handler handles "put" messages even for a const property map,
-   * although receipt of a "put" message is ill-formed.
-   **************************************************************************/
-  template<bool IsLvaluePropertyMap>
-  struct maybe_put_in_lvalue_pm
-  {
-    template<typename PropertyMap, typename Key, typename Value>
-    static inline void
-    do_put(PropertyMap, const Key&, const Value&)
-    { assert(false); }
-  };
+/**************************************************************************
+ * Performs a "put" on a property map so long as the property map is
+ * a Writable Property Map or a mutable Lvalue Property Map. This
+ * is required because the distributed property map's message
+ * handler handles "put" messages even for a const property map,
+ * although receipt of a "put" message is ill-formed.
+ **************************************************************************/
+template<bool IsLvaluePropertyMap>
+struct maybe_put_in_lvalue_pm
+{
+	template<typename PropertyMap, typename Key, typename Value>
+	static inline void
+	do_put ( PropertyMap, const Key &, const Value & )
+	{ assert ( false ); }
+};
 
-  template<>
-  struct maybe_put_in_lvalue_pm<true>
-  {
-    template<typename PropertyMap, typename Key, typename Value>
-    static inline void
-    do_put(PropertyMap pm, const Key& key, const Value& value)
-    { 
-      using boost::put;
+template<>
+struct maybe_put_in_lvalue_pm<true>
+{
+	template<typename PropertyMap, typename Key, typename Value>
+	static inline void
+	do_put ( PropertyMap pm, const Key &key, const Value &value )
+	{
+		using boost::put;
 
-      put(pm, key, value); 
-    }
-  };
+		put ( pm, key, value );
+	}
+};
 
-  template<typename PropertyMap, typename Key, typename Value>
-  inline void
-  maybe_put_impl(PropertyMap pm, const Key& key, const Value& value,
-                 writable_property_map_tag)
-  {
-    using boost::put;
+template<typename PropertyMap, typename Key, typename Value>
+inline void
+maybe_put_impl ( PropertyMap pm, const Key &key, const Value &value,
+                 writable_property_map_tag )
+{
+	using boost::put;
 
-    put(pm, key, value);
-  }
+	put ( pm, key, value );
+}
 
-  template<typename PropertyMap, typename Key, typename Value>
-  inline void
-  maybe_put_impl(PropertyMap pm, const Key& key, const Value& value,
-                 lvalue_property_map_tag)
-  {
-    typedef typename property_traits<PropertyMap>::value_type value_type;
-    typedef typename property_traits<PropertyMap>::reference reference;
-    // DPG TBD: Some property maps are improperly characterized as
-    // lvalue_property_maps, when in fact they do not provide true
-    // references. The most typical example is those property maps
-    // built from vector<bool> and its iterators, which deal with
-    // proxies. We don't want to mischaracterize these as not having a
-    // "put" operation, so we only consider an lvalue_property_map as
-    // constant if its reference is const value_type&. In fact, this
-    // isn't even quite correct (think of a
-    // vector<bool>::const_iterator), but at present C++ doesn't
-    // provide us with any alternatives.
-    typedef is_same<const value_type&, reference> is_constant;
+template<typename PropertyMap, typename Key, typename Value>
+inline void
+maybe_put_impl ( PropertyMap pm, const Key &key, const Value &value,
+                 lvalue_property_map_tag )
+{
+	typedef typename property_traits<PropertyMap>::value_type value_type;
+	typedef typename property_traits<PropertyMap>::reference reference;
+	// DPG TBD: Some property maps are improperly characterized as
+	// lvalue_property_maps, when in fact they do not provide true
+	// references. The most typical example is those property maps
+	// built from vector<bool> and its iterators, which deal with
+	// proxies. We don't want to mischaracterize these as not having a
+	// "put" operation, so we only consider an lvalue_property_map as
+	// constant if its reference is const value_type&. In fact, this
+	// isn't even quite correct (think of a
+	// vector<bool>::const_iterator), but at present C++ doesn't
+	// provide us with any alternatives.
+	typedef is_same<const value_type &, reference> is_constant;
 
-    maybe_put_in_lvalue_pm<(!is_constant::value)>::do_put(pm, key, value);
-  }
+	maybe_put_in_lvalue_pm < ( !is_constant::value ) >::do_put ( pm, key, value );
+}
 
-  template<typename PropertyMap, typename Key, typename Value>
-  inline void
-  maybe_put_impl(PropertyMap, const Key&, const Value&, ...)
-  { assert(false); }
+template<typename PropertyMap, typename Key, typename Value>
+inline void
+maybe_put_impl ( PropertyMap, const Key &, const Value &, ... )
+{ assert ( false ); }
 
-  template<typename PropertyMap, typename Key, typename Value>
-  inline void
-  maybe_put(PropertyMap pm, const Key& key, const Value& value)
-  {
-    maybe_put_impl(pm, key, value,
-                   typename property_traits<PropertyMap>::category());
-  }
+template<typename PropertyMap, typename Key, typename Value>
+inline void
+maybe_put ( PropertyMap pm, const Key &key, const Value &value )
+{
+	maybe_put_impl ( pm, key, value,
+	                 typename property_traits<PropertyMap>::category() );
+}
 } // end namespace detail
 
 /** The consistency model used by the distributed property map. */
-enum consistency_model {
-  cm_forward = 1 << 0,
-  cm_backward = 1 << 1,
-  cm_bidirectional = cm_forward | cm_backward,
-  cm_flush = 1 << 2,
-  cm_reset = 1 << 3,
-  cm_clear = 1 << 4
+enum consistency_model
+{
+	cm_forward = 1 << 0,
+	cm_backward = 1 << 1,
+	cm_bidirectional = cm_forward | cm_backward,
+	cm_flush = 1 << 2,
+	cm_reset = 1 << 3,
+	cm_clear = 1 << 4
 };
 
 /** Distributed property map adaptor.
@@ -216,318 +221,322 @@ enum consistency_model {
 template<typename ProcessGroup, typename GlobalMap, typename StorageMap>
 class distributed_property_map
 {
- public:
-  /// The key type of the property map.
-  typedef typename property_traits<GlobalMap>::key_type key_type;
+public:
+	/// The key type of the property map.
+	typedef typename property_traits<GlobalMap>::key_type key_type;
 
-  /// The value type of the property map.
-  typedef typename property_traits<StorageMap>::value_type value_type;
-  typedef typename property_traits<StorageMap>::reference  reference;
-  typedef ProcessGroup                        process_group_type;
+	/// The value type of the property map.
+	typedef typename property_traits<StorageMap>::value_type value_type;
+	typedef typename property_traits<StorageMap>::reference  reference;
+	typedef ProcessGroup                        process_group_type;
 
- private:
-  typedef distributed_property_map            self_type;
-  typedef typename property_traits<StorageMap>::category local_category;
-  typedef typename property_traits<StorageMap>::key_type local_key_type;
-  typedef typename property_traits<GlobalMap>::value_type owner_local_pair;
-  typedef typename ProcessGroup::process_id_type process_id_type;
+private:
+	typedef distributed_property_map            self_type;
+	typedef typename property_traits<StorageMap>::category local_category;
+	typedef typename property_traits<StorageMap>::key_type local_key_type;
+	typedef typename property_traits<GlobalMap>::value_type owner_local_pair;
+	typedef typename ProcessGroup::process_id_type process_id_type;
 
-  enum property_map_messages {
-    /** A request to store a value in a property map. The message
-     * contains a std::pair<key, data>.
-     */
-    property_map_put,
+	enum property_map_messages
+	{
+		/** A request to store a value in a property map. The message
+		 * contains a std::pair<key, data>.
+		 */
+		property_map_put,
 
-    /** A request to retrieve a particular value in a property
-     *  map. The message contains a key. The owner of that key will 
-     *  reply with a value.
-     */
-    property_map_get,
+		/** A request to retrieve a particular value in a property
+		 *  map. The message contains a key. The owner of that key will
+		 *  reply with a value.
+		 */
+		property_map_get,
 
-    /** A request to update values stored on a remote processor. The
-     * message contains a vector of keys for which the source
-     * requests updated values. This message will only be transmitted
-     * during synchronization.
-     */
-    property_map_multiget,
+		/** A request to update values stored on a remote processor. The
+		 * message contains a vector of keys for which the source
+		 * requests updated values. This message will only be transmitted
+		 * during synchronization.
+		 */
+		property_map_multiget,
 
-    /** A request to store values in a ghost cell. This message
-     * contains a vector of key/value pairs corresponding to the
-     * sequence of keys sent to the source processor.
-     */
-    property_map_multiget_reply,
+		/** A request to store values in a ghost cell. This message
+		 * contains a vector of key/value pairs corresponding to the
+		 * sequence of keys sent to the source processor.
+		 */
+		property_map_multiget_reply,
 
-    /** The payload containing a vector of local key-value pairs to be
-     * put into the remote property map. A key-value std::pair will be
-     * used to store each local key-value pair.
-     */
-    property_map_multiput
-  };
+		/** The payload containing a vector of local key-value pairs to be
+		 * put into the remote property map. A key-value std::pair will be
+		 * used to store each local key-value pair.
+		 */
+		property_map_multiput
+	};
 
- public:
-  /// The type of the ghost cells
-  typedef multi_index::multi_index_container<
-            std::pair<key_type, value_type>,
-            multi_index::indexed_by<
-              multi_index::sequenced<>,
-              multi_index::hashed_unique<
-                multi_index::member<std::pair<key_type, value_type>,
-                                    key_type,
-                                    &std::pair<key_type, value_type>::first>
-              >
-            >
-          > ghost_cells_type;
+public:
+	/// The type of the ghost cells
+	typedef multi_index::multi_index_container <
+	std::pair<key_type, value_type>,
+	    multi_index::indexed_by <
+	    multi_index::sequenced<>,
+	    multi_index::hashed_unique <
+	    multi_index::member<std::pair<key_type, value_type>,
+	    key_type,
+	    &std::pair<key_type, value_type>::first>
+	    >
+	    >
+	    > ghost_cells_type;
 
-  /// Iterator into the ghost cells
-  typedef typename ghost_cells_type::iterator iterator;
+	/// Iterator into the ghost cells
+	typedef typename ghost_cells_type::iterator iterator;
 
-  /// Key-based index into the ghost cells
-  typedef typename ghost_cells_type::template nth_index<1>::type
-    ghost_cells_key_index_type;
+	/// Key-based index into the ghost cells
+	typedef typename ghost_cells_type::template nth_index<1>::type
+	ghost_cells_key_index_type;
 
-  /// Iterator into the ghost cells (by key)
-  typedef typename ghost_cells_key_index_type::iterator key_iterator;
+	/// Iterator into the ghost cells (by key)
+	typedef typename ghost_cells_key_index_type::iterator key_iterator;
 
-  /** The property map category.  A distributed property map cannot be
-   * an Lvalue Property Map, because values on remote processes cannot
-   * be addresses.
-   */
-  typedef typename detail::make_nonlvalue_property_map<
-    (is_base_and_derived<lvalue_property_map_tag, local_category>::value
-     || is_same<lvalue_property_map_tag, local_category>::value)>
-    ::template apply<local_category>::type category;
+	/** The property map category.  A distributed property map cannot be
+	 * an Lvalue Property Map, because values on remote processes cannot
+	 * be addresses.
+	 */
+	typedef typename detail::make_nonlvalue_property_map <
+	( is_base_and_derived<lvalue_property_map_tag, local_category>::value
+	  || is_same<lvalue_property_map_tag, local_category>::value ) >
+	::template apply<local_category>::type category;
 
-  /** Default-construct a distributed property map.  This function
-   * creates an initialized property map that must be assigned to a
-   * valid value before being used. It is only provided here because
-   * property maps must be Default Constructible.
-   */
-  distributed_property_map() {}
+	/** Default-construct a distributed property map.  This function
+	 * creates an initialized property map that must be assigned to a
+	 * valid value before being used. It is only provided here because
+	 * property maps must be Default Constructible.
+	 */
+	distributed_property_map() {}
 
-  /** Construct a distributed property map.  Builds a distributed
-   * property map communicating over the given process group and using
-   * the given local property map for storage. Since no reduction
-   * operation is provided, the default reduction operation @c
-   * basic_reduce<value_type> is used.
-   */
-  distributed_property_map(const ProcessGroup& pg, const GlobalMap& global,
-                           const StorageMap& pm)
-    : data(new data_t(pg, global, pm, basic_reduce<value_type>(), false))
-  {
-    typedef handle_message<basic_reduce<value_type> > Handler;
+	/** Construct a distributed property map.  Builds a distributed
+	 * property map communicating over the given process group and using
+	 * the given local property map for storage. Since no reduction
+	 * operation is provided, the default reduction operation @c
+	 * basic_reduce<value_type> is used.
+	 */
+	distributed_property_map ( const ProcessGroup &pg, const GlobalMap &global,
+	                           const StorageMap &pm )
+		: data ( new data_t ( pg, global, pm, basic_reduce<value_type>(), false ) )
+	{
+		typedef handle_message<basic_reduce<value_type> > Handler;
 
-    data->ghost_cells.reset(new ghost_cells_type());
-    Handler handler(data);
-    data->process_group.replace_handler(handler, true);
-    data->process_group.template get_receiver<Handler>()
-      ->setup_triggers(data->process_group);
-  }
+		data->ghost_cells.reset ( new ghost_cells_type() );
+		Handler handler ( data );
+		data->process_group.replace_handler ( handler, true );
+		data->process_group.template get_receiver<Handler>()
+		->setup_triggers ( data->process_group );
+	}
 
-  /** Construct a distributed property map.  Builds a distributed
-   * property map communicating over the given process group and using
-   * the given local property map for storage. The given @p reduce
-   * parameter is used as the reduction operation.
-   */
-  template<typename Reduce>
-  distributed_property_map(const ProcessGroup& pg, const GlobalMap& global,
-                           const StorageMap& pm,
-                           const Reduce& reduce);
+	/** Construct a distributed property map.  Builds a distributed
+	 * property map communicating over the given process group and using
+	 * the given local property map for storage. The given @p reduce
+	 * parameter is used as the reduction operation.
+	 */
+	template<typename Reduce>
+	distributed_property_map ( const ProcessGroup &pg, const GlobalMap &global,
+	                           const StorageMap &pm,
+	                           const Reduce &reduce );
 
-  ~distributed_property_map();
+	~distributed_property_map();
 
-  /// Set the reduce operation of the distributed property map.
-  template<typename Reduce>
-  void set_reduce(const Reduce& reduce);
+	/// Set the reduce operation of the distributed property map.
+	template<typename Reduce>
+	void set_reduce ( const Reduce &reduce );
 
-  // Set the consistency model for the distributed property map
-  void set_consistency_model(int model);
+	// Set the consistency model for the distributed property map
+	void set_consistency_model ( int model );
 
-  // Get the consistency model
-  int get_consistency_model() const { return data->model; }
+	// Get the consistency model
+	int get_consistency_model() const { return data->model; }
 
-  // Set the maximum number of ghost cells that we are allowed to
-  // maintain. If 0, all ghost cells will be retained.
-  void set_max_ghost_cells(std::size_t max_ghost_cells);
+	// Set the maximum number of ghost cells that we are allowed to
+	// maintain. If 0, all ghost cells will be retained.
+	void set_max_ghost_cells ( std::size_t max_ghost_cells );
 
-  // Clear out all ghost cells
-  void clear();
+	// Clear out all ghost cells
+	void clear();
 
-  // Reset the values in all ghost cells to the default value
-  void reset();
+	// Reset the values in all ghost cells to the default value
+	void reset();
 
-  // Flush all values destined for remote processors
-  void flush();
+	// Flush all values destined for remote processors
+	void flush();
 
-  reference operator[](const key_type& key) const
-  {
-    owner_local_pair p = get(data->global, key);
-    
-    if (p.first == process_id(data->process_group)) {
-      return data->storage[p.second];
-    } else {
-      return cell(key);
-    }
-  }
+	reference operator[] ( const key_type &key ) const
+	{
+		owner_local_pair p = get ( data->global, key );
 
-  process_group_type process_group() const
-  {
-    return data->process_group.base();
-  }
+		if ( p.first == process_id ( data->process_group ) )
+		{
+			return data->storage[p.second];
+		}
+		else
+		{
+			return cell ( key );
+		}
+	}
 
-  StorageMap&       base()       { return data->storage; }
-  const StorageMap& base() const { return data->storage; }
+	process_group_type process_group() const
+	{
+		return data->process_group.base();
+	}
 
-  /** Sends a "put" request.
-   * \internal
-   *
-   */
-  void 
-  request_put(process_id_type p, const key_type& k, const value_type& v) const
-  { 
-    send(data->process_group, p, property_map_put, 
-         boost::parallel::detail::make_untracked_pair(k, v)); 
-  }
+	StorageMap       &base()       { return data->storage; }
+	const StorageMap &base() const { return data->storage; }
 
-  /** Access the ghost cell for the given key.
-   * \internal
-   */
-  value_type& cell(const key_type& k, bool request_if_missing = true) const;
+	/** Sends a "put" request.
+	 * \internal
+	 *
+	 */
+	void
+	request_put ( process_id_type p, const key_type &k, const value_type &v ) const
+	{
+		send ( data->process_group, p, property_map_put,
+		       boost::parallel::detail::make_untracked_pair ( k, v ) );
+	}
 
-  /** Perform synchronization
-   * \internal
-   */
-  void do_synchronize();
+	/** Access the ghost cell for the given key.
+	 * \internal
+	 */
+	value_type &cell ( const key_type &k, bool request_if_missing = true ) const;
 
-  const GlobalMap& global() const { return data->global; }
-  GlobalMap&       global()       { return data->global; }
+	/** Perform synchronization
+	 * \internal
+	 */
+	void do_synchronize();
 
-  struct data_t
-  {
-    data_t(const ProcessGroup& pg, const GlobalMap& global, 
-           const StorageMap& pm, const function1<value_type, key_type>& dv,
-           bool has_default_resolver)
-      : process_group(pg), global(global), storage(pm), 
-        ghost_cells(), max_ghost_cells(1000000), get_default_value(dv), 
-        has_default_resolver(has_default_resolver), model(cm_forward) { }
+	const GlobalMap &global() const { return data->global; }
+	GlobalMap       &global()       { return data->global; }
 
-    /// The process group
-    ProcessGroup process_group;
+	struct data_t
+	{
+		data_t ( const ProcessGroup &pg, const GlobalMap &global,
+		         const StorageMap &pm, const function1<value_type, key_type> &dv,
+		         bool has_default_resolver )
+			: process_group ( pg ), global ( global ), storage ( pm ),
+			  ghost_cells(), max_ghost_cells ( 1000000 ), get_default_value ( dv ),
+			  has_default_resolver ( has_default_resolver ), model ( cm_forward ) { }
 
-    /// A mapping from the keys of this property map to the global
-    /// descriptor.
-    GlobalMap global;
+		/// The process group
+		ProcessGroup process_group;
 
-    /// Local property map
-    StorageMap storage;
+		/// A mapping from the keys of this property map to the global
+		/// descriptor.
+		GlobalMap global;
 
-    /// The ghost cells
-    shared_ptr<ghost_cells_type> ghost_cells;
+		/// Local property map
+		StorageMap storage;
 
-    /// The maximum number of ghost cells we are permitted to hold. If
-    /// zero, we are permitted to have an infinite number of ghost
-    /// cells.
-    std::size_t max_ghost_cells;
+		/// The ghost cells
+		shared_ptr<ghost_cells_type> ghost_cells;
 
-    /// Default value for remote ghost cells, as defined by the
-    /// reduction operation.
-    function1<value_type, key_type> get_default_value;
+		/// The maximum number of ghost cells we are permitted to hold. If
+		/// zero, we are permitted to have an infinite number of ghost
+		/// cells.
+		std::size_t max_ghost_cells;
 
-    /// True if this resolver is the "default" resolver, meaning that
-    /// we should not be able to get() a default value; it needs to be
-    /// request()ed first.
-    bool has_default_resolver;
+		/// Default value for remote ghost cells, as defined by the
+		/// reduction operation.
+		function1<value_type, key_type> get_default_value;
 
-    // Current consistency model
-    int model;
+		/// True if this resolver is the "default" resolver, meaning that
+		/// we should not be able to get() a default value; it needs to be
+		/// request()ed first.
+		bool has_default_resolver;
 
-    // Function that resets all of the ghost cells to their default
-    // values. It knows the type of the resolver, so we can eliminate
-    // a large number of calls through function pointers.
-    void (data_t::*reset)();
+		// Current consistency model
+		int model;
 
-    // Clear out all ghost cells
-    void clear();
+		// Function that resets all of the ghost cells to their default
+		// values. It knows the type of the resolver, so we can eliminate
+		// a large number of calls through function pointers.
+		void ( data_t::*reset ) ();
 
-    // Flush all values destined for remote processors
-    void flush();
+		// Clear out all ghost cells
+		void clear();
 
-    // Send out requests to "refresh" the values of ghost cells that
-    // we're holding.
-    void refresh_ghost_cells();
+		// Flush all values destined for remote processors
+		void flush();
 
-  private:
-    template<typename Resolver> void do_reset();
+		// Send out requests to "refresh" the values of ghost cells that
+		// we're holding.
+		void refresh_ghost_cells();
 
-    friend class distributed_property_map;
-  };
-  friend struct data_t;
+	private:
+		template<typename Resolver> void do_reset();
 
-  shared_ptr<data_t> data;
+		friend class distributed_property_map;
+	};
+	friend struct data_t;
 
- private:
-  // Prunes the least recently used ghost cells until we have @c
-  // max_ghost_cells or fewer ghost cells.
-  void prune_ghost_cells() const;
+	shared_ptr<data_t> data;
 
-  /** Handles incoming messages.
-   *
-   * This function object is responsible for handling all incoming
-   * messages for the distributed property map.
-   */
-  template<typename Reduce>
-  struct handle_message
-  {
-    explicit handle_message(const shared_ptr<data_t>& data,
-                            const Reduce& reduce = Reduce())
-      : data_ptr(data), reduce(reduce) { }
+private:
+	// Prunes the least recently used ghost cells until we have @c
+	// max_ghost_cells or fewer ghost cells.
+	void prune_ghost_cells() const;
 
-    void operator()(process_id_type source, int tag);
+	/** Handles incoming messages.
+	 *
+	 * This function object is responsible for handling all incoming
+	 * messages for the distributed property map.
+	 */
+	template<typename Reduce>
+	struct handle_message
+	{
+		explicit handle_message ( const shared_ptr<data_t> &data,
+		                          const Reduce &reduce = Reduce() )
+			: data_ptr ( data ), reduce ( reduce ) { }
 
-    /// Individual message handlers
-    void 
-    handle_put(int source, int tag, 
-               const boost::parallel::detail::untracked_pair<key_type, value_type>& data, 
-               trigger_receive_context);
+		void operator() ( process_id_type source, int tag );
 
-    value_type
-    handle_get(int source, int tag, const key_type& data, 
-               trigger_receive_context);
+		/// Individual message handlers
+		void
+		handle_put ( int source, int tag,
+		             const boost::parallel::detail::untracked_pair<key_type, value_type> &data,
+		             trigger_receive_context );
 
-    void
-    handle_multiget(int source, int tag, 
-                    const std::vector<key_type>& data,
-                    trigger_receive_context);
+		value_type
+		handle_get ( int source, int tag, const key_type &data,
+		             trigger_receive_context );
 
-    void
-    handle_multiget_reply
-      (int source, int tag, 
-       const std::vector<boost::parallel::detail::untracked_pair<key_type, value_type> >& msg,
-       trigger_receive_context);
+		void
+		handle_multiget ( int source, int tag,
+		                  const std::vector<key_type> &data,
+		                  trigger_receive_context );
 
-    void
-    handle_multiput
-      (int source, int tag, 
-       const std::vector<unsafe_pair<local_key_type, value_type> >& data,
-       trigger_receive_context);
+		void
+		handle_multiget_reply
+		( int source, int tag,
+		  const std::vector<boost::parallel::detail::untracked_pair<key_type, value_type> > &msg,
+		  trigger_receive_context );
 
-    void setup_triggers(process_group_type& pg);
+		void
+		handle_multiput
+		( int source, int tag,
+		  const std::vector<unsafe_pair<local_key_type, value_type> > &data,
+		  trigger_receive_context );
 
-  private:
-    weak_ptr<data_t> data_ptr;
-    Reduce reduce;
-  };
+		void setup_triggers ( process_group_type &pg );
 
-  /* Sets up the next stage in a multi-stage synchronization, for
-     bidirectional consistency. */
-  struct on_synchronize
-  {
-    explicit on_synchronize(const shared_ptr<data_t>& data) : data_ptr(data) { }
+	private:
+		weak_ptr<data_t> data_ptr;
+		Reduce reduce;
+	};
 
-    void operator()();
+	/* Sets up the next stage in a multi-stage synchronization, for
+	   bidirectional consistency. */
+	struct on_synchronize
+	{
+		explicit on_synchronize ( const shared_ptr<data_t> &data ) : data_ptr ( data ) { }
 
-  private:
-    weak_ptr<data_t> data_ptr;
-  };
+		void operator() ();
+
+	private:
+		weak_ptr<data_t> data_ptr;
+	};
 };
 
 /* An implementation helper macro for the common case of naming
@@ -540,11 +549,11 @@ class distributed_property_map
    the next synchronization round. */
 template<typename ProcessGroup, typename GlobalMap, typename StorageMap>
 inline void
-request(const PBGL_DISTRIB_PMAP& pm,
-        typename PBGL_DISTRIB_PMAP::key_type const& key)
+request ( const PBGL_DISTRIB_PMAP &pm,
+          typename PBGL_DISTRIB_PMAP::key_type const &key )
 {
-  if (get(pm.data->global, key).first != process_id(pm.data->process_group))
-    pm.cell(key, false);
+	if ( get ( pm.data->global, key ).first != process_id ( pm.data->process_group ) )
+		pm.cell ( key, false );
 }
 
 /** Get the value associated with a particular key.  Retrieves the
@@ -560,19 +569,22 @@ request(const PBGL_DISTRIB_PMAP& pm,
 template<typename ProcessGroup, typename GlobalMap, typename StorageMap>
 inline
 typename PBGL_DISTRIB_PMAP::value_type
-get(const PBGL_DISTRIB_PMAP& pm,
-    typename PBGL_DISTRIB_PMAP::key_type const& key)
+get ( const PBGL_DISTRIB_PMAP &pm,
+      typename PBGL_DISTRIB_PMAP::key_type const &key )
 {
-  using boost::get;
+	using boost::get;
 
-  typename property_traits<GlobalMap>::value_type p = 
-    get(pm.data->global, key);
+	typename property_traits<GlobalMap>::value_type p =
+	    get ( pm.data->global, key );
 
-  if (p.first == process_id(pm.data->process_group)) {
-    return get(pm.data->storage, p.second);
-  } else {
-    return pm.cell(key);
-  }
+	if ( p.first == process_id ( pm.data->process_group ) )
+	{
+		return get ( pm.data->storage, p.second );
+	}
+	else
+	{
+		return pm.cell ( key );
+	}
 }
 
 /** Put a value associated with the given key into the property map.
@@ -587,23 +599,26 @@ get(const PBGL_DISTRIB_PMAP& pm,
  */
 template<typename ProcessGroup, typename GlobalMap, typename StorageMap>
 void
-put(const PBGL_DISTRIB_PMAP& pm,
-    typename PBGL_DISTRIB_PMAP::key_type const & key,
-    typename PBGL_DISTRIB_PMAP::value_type const & value)
+put ( const PBGL_DISTRIB_PMAP &pm,
+      typename PBGL_DISTRIB_PMAP::key_type const &key,
+      typename PBGL_DISTRIB_PMAP::value_type const &value )
 {
-  using boost::put;
+	using boost::put;
 
-  typename property_traits<GlobalMap>::value_type p = 
-    get(pm.data->global, key);
+	typename property_traits<GlobalMap>::value_type p =
+	    get ( pm.data->global, key );
 
-  if (p.first == process_id(pm.data->process_group)) {
-    put(pm.data->storage, p.second, value);
-  } else {
-    if (pm.data->model & cm_forward) 
-      pm.request_put(p.first, key, value);
+	if ( p.first == process_id ( pm.data->process_group ) )
+	{
+		put ( pm.data->storage, p.second, value );
+	}
+	else
+	{
+		if ( pm.data->model & cm_forward )
+			pm.request_put ( p.first, key, value );
 
-    pm.cell(key, false) = value;
-  }
+		pm.cell ( key, false ) = value;
+	}
 }
 
 /** Put a value associated with a given key into the local view of the
@@ -615,76 +630,78 @@ put(const PBGL_DISTRIB_PMAP& pm,
  */
 template<typename ProcessGroup, typename GlobalMap, typename StorageMap>
 void
-local_put(const PBGL_DISTRIB_PMAP& pm,
-          typename PBGL_DISTRIB_PMAP::key_type const & key,
-          typename PBGL_DISTRIB_PMAP::value_type const & value)
+local_put ( const PBGL_DISTRIB_PMAP &pm,
+            typename PBGL_DISTRIB_PMAP::key_type const &key,
+            typename PBGL_DISTRIB_PMAP::value_type const &value )
 {
-  using boost::put;
+	using boost::put;
 
-  typename property_traits<GlobalMap>::value_type p = 
-    get(pm.data->global, key);
+	typename property_traits<GlobalMap>::value_type p =
+	    get ( pm.data->global, key );
 
-  if (p.first == process_id(pm.data->process_group))
-    put(pm.data->storage, p.second, value);
-  else pm.cell(key, false) = value;
+	if ( p.first == process_id ( pm.data->process_group ) )
+		put ( pm.data->storage, p.second, value );
+	else pm.cell ( key, false ) = value;
 }
 
 /** Cache the value associated with the given remote key. If the key
  *  is local, ignore the operation. */
 template<typename ProcessGroup, typename GlobalMap, typename StorageMap>
 inline void
-cache(const PBGL_DISTRIB_PMAP& pm,
-      typename PBGL_DISTRIB_PMAP::key_type const & key,
-      typename PBGL_DISTRIB_PMAP::value_type const & value)
+cache ( const PBGL_DISTRIB_PMAP &pm,
+        typename PBGL_DISTRIB_PMAP::key_type const &key,
+        typename PBGL_DISTRIB_PMAP::value_type const &value )
 {
-  typename ProcessGroup::process_id_type id = get(pm.data->global, key).first;
+	typename ProcessGroup::process_id_type id = get ( pm.data->global, key ).first;
 
-  if (id != process_id(pm.data->process_group)) pm.cell(key, false) = value;
+	if ( id != process_id ( pm.data->process_group ) ) pm.cell ( key, false ) = value;
 }
 
 /// Synchronize the property map.
 template<typename ProcessGroup, typename GlobalMap, typename StorageMap>
 void
-synchronize(PBGL_DISTRIB_PMAP& pm)
+synchronize ( PBGL_DISTRIB_PMAP &pm )
 {
-  pm.do_synchronize();
+	pm.do_synchronize();
 }
 
 /// Create a distributed property map.
 template<typename ProcessGroup, typename GlobalMap, typename StorageMap>
 inline distributed_property_map<ProcessGroup, GlobalMap, StorageMap>
-make_distributed_property_map(const ProcessGroup& pg, GlobalMap global, 
-                              StorageMap storage)
+make_distributed_property_map ( const ProcessGroup &pg, GlobalMap global,
+                                StorageMap storage )
 {
-  typedef distributed_property_map<ProcessGroup, GlobalMap, StorageMap>
-    result_type;
-  return result_type(pg, global, storage);
+	typedef distributed_property_map<ProcessGroup, GlobalMap, StorageMap>
+	result_type;
+	return result_type ( pg, global, storage );
 }
 
 /**
  * \overload
  */
-template<typename ProcessGroup, typename GlobalMap, typename StorageMap, 
+template<typename ProcessGroup, typename GlobalMap, typename StorageMap,
          typename Reduce>
 inline distributed_property_map<ProcessGroup, GlobalMap, StorageMap>
-make_distributed_property_map(const ProcessGroup& pg, GlobalMap global, 
-                              StorageMap storage, Reduce reduce)
+make_distributed_property_map ( const ProcessGroup &pg, GlobalMap global,
+                                StorageMap storage, Reduce reduce )
 {
-  typedef distributed_property_map<ProcessGroup, GlobalMap, StorageMap>
-    result_type;
-  return result_type(pg, global, storage, reduce);
+	typedef distributed_property_map<ProcessGroup, GlobalMap, StorageMap>
+	result_type;
+	return result_type ( pg, global, storage, reduce );
 }
 
-} } // end namespace boost::parallel
+}
+} // end namespace boost::parallel
 
 // Boost's functional/hash
-namespace boost {
-  template<typename D, typename V>
-  struct hash<boost::detail::edge_desc_impl<D, V> >
-  {
-    std::size_t operator()(const boost::detail::edge_desc_impl<D, V> & x) const
-    { return hash_value(x.get_property()); }
-  };
+namespace boost
+{
+template<typename D, typename V>
+struct hash<boost::detail::edge_desc_impl<D, V> >
+{
+	std::size_t operator() ( const boost::detail::edge_desc_impl<D, V> &x ) const
+	{ return hash_value ( x.get_property() ); }
+};
 }
 
 #include <boost/property_map/parallel/impl/distributed_property_map.ipp>

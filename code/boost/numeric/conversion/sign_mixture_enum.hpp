@@ -6,21 +6,24 @@
 //  See library home page at http://www.boost.org/libs/numeric/conversion
 //
 // Contact the author at: fernando_cacciola@hotmail.com
-// 
+//
 #ifndef BOOST_NUMERIC_CONVERSION_SIGN_MIXTURE_ENUM_FLC_12NOV2002_HPP
 #define BOOST_NUMERIC_CONVERSION_SIGN_MIXTURE_ENUM_FLC_12NOV2002_HPP
 
-namespace boost { namespace numeric
+namespace boost
 {
-  enum sign_mixture_enum
-  {
-     unsigned_to_unsigned
-    ,signed_to_signed
-    ,signed_to_unsigned
-    ,unsigned_to_signed
-  } ;
+namespace numeric
+{
+enum sign_mixture_enum
+{
+	unsigned_to_unsigned
+	, signed_to_signed
+	, signed_to_unsigned
+	, unsigned_to_signed
+} ;
 
-} } // namespace boost::numeric
+}
+} // namespace boost::numeric
 
 #endif
 //

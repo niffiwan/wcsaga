@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,14 +14,17 @@
 #include <boost/units/systems/si/base.hpp>
 #include <boost/units/physical_dimensions/angular_momentum.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace si {
+namespace si
+{
 
-typedef unit<angular_momentum_dimension,si::system>      angular_momentum;
-    
+typedef unit<angular_momentum_dimension, si::system>      angular_momentum;
+
 } // namespace si
 
 } // namespace units

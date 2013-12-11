@@ -31,31 +31,34 @@
 # error Only Windows and POSIX are supported!
 #endif
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 template <typename T>
 class tss_ptr
 #if !defined(BOOST_HAS_THREADS)
-  : public null_tss_ptr<T>
+	: public null_tss_ptr<T>
 #elif defined(BOOST_WINDOWS)
-  : public win_tss_ptr<T>
+	: public win_tss_ptr<T>
 #elif defined(BOOST_HAS_PTHREADS)
-  : public posix_tss_ptr<T>
+	: public posix_tss_ptr<T>
 #endif
 {
 public:
-  void operator=(T* value)
-  {
+	void operator= ( T *value )
+	{
 #if !defined(BOOST_HAS_THREADS)
-    null_tss_ptr<T>::operator=(value);
+		null_tss_ptr<T>::operator= ( value );
 #elif defined(BOOST_WINDOWS)
-    win_tss_ptr<T>::operator=(value);
+		win_tss_ptr<T>::operator= ( value );
 #elif defined(BOOST_HAS_PTHREADS)
-    posix_tss_ptr<T>::operator=(value);
+		posix_tss_ptr<T>::operator= ( value );
 #endif
-  }
+	}
 };
 
 } // namespace detail

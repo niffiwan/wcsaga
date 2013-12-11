@@ -17,68 +17,69 @@ class SCP_vm_allocator
 {
 public:
 	typedef size_t size_type;
-	typedef T* pointer;
-	typedef const T* const_pointer;
+	typedef T *pointer;
+	typedef const T *const_pointer;
 	typedef T value_type;
 	typedef ptrdiff_t difference_type;
-	typedef value_type& reference;
-	typedef const value_type& const_reference;
+	typedef value_type &reference;
+	typedef const value_type &const_reference;
 
 	/* portej05 does not like this particular function. */
-	void construct(pointer p, const T& value)
+	void construct ( pointer p, const T &value )
 	{
-		::new (p) T(value);
+		::new ( p ) T ( value );
 	}
 
-	void destroy(pointer p)
+	void destroy ( pointer p )
 	{
-		DESTROY( T, p );
+		DESTROY ( T, p );
 	}
 
-	pointer allocate(size_type n)
+	pointer allocate ( size_type n )
 	{
-		if (n == 0)
+		if ( n == 0 )
 			return NULL;
-		return (pointer)vm_malloc(n * sizeof(T));
+		return ( pointer ) vm_malloc ( n * sizeof ( T ) );
 	}
 
 	template<class Other>
-pointer allocate(size_type n, const Other* hint = NULL)
-{
-	(hint);
-	return allocate(n);
-}
-
-	void deallocate(pointer p, size_type)
+	pointer allocate ( size_type n, const Other *hint = NULL )
 	{
-		if (p)
-			vm_free(p);
+		( hint );
+		return allocate ( n );
+	}
+
+	void deallocate ( pointer p, size_type )
+	{
+		if ( p )
+			vm_free ( p );
 	}
 
 	template<class U>
-			 struct rebind
+	struct rebind
 	{
 		typedef SCP_vm_allocator<U> other;
 	};
 
 	size_type max_size() const
-	{	// Estimate process used by MS STL
-		size_type _Count = (size_type)(-1) / sizeof (T);
-		return (0 < _Count ? _Count : 1);
+	{
+		// Estimate process used by MS STL
+		size_type _Count = ( size_type ) ( -1 ) / sizeof ( T );
+		return ( 0 < _Count ? _Count : 1 );
 	}
 
 	template<class T2>
-SCP_vm_allocator<T>& operator=(const SCP_vm_allocator<T2>&)
-{
-	return (*this);
-}
+	SCP_vm_allocator<T> &operator= ( const SCP_vm_allocator<T2> & )
+	{
+		return ( *this );
+	}
 
 	SCP_vm_allocator() {}
 
-	SCP_vm_allocator(const SCP_vm_allocator<T>&) {}
+	SCP_vm_allocator ( const SCP_vm_allocator<T> & ) {}
 
 	template<class T2>
-SCP_vm_allocator(const SCP_vm_allocator<T2>&) {}
+	SCP_vm_allocator ( const SCP_vm_allocator<T2> & ) {}
 };
 
 template<typename T>
@@ -106,14 +107,14 @@ class SCP_queue : public std::queue<T, std::deque<T, SCP_vm_allocator<T> > >
 };
 
 template <class T1, class T2>
-bool operator==(const SCP_vm_allocator<T1>&, const SCP_vm_allocator<T2>&)
+bool operator== ( const SCP_vm_allocator<T1> &, const SCP_vm_allocator<T2> & )
 throw()
 {
 	return true;
 }
 
 template <class T1, class T2>
-bool operator!=(const SCP_vm_allocator<T1>&, const SCP_vm_allocator<T2>&)
+bool operator!= ( const SCP_vm_allocator<T1> &, const SCP_vm_allocator<T2> & )
 throw()
 {
 	return false;

@@ -15,59 +15,74 @@
 #include <boost/spirit/home/qi/detail/fail_function.hpp>
 #include <boost/spirit/home/qi/meta_compiler.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <>
-    struct use_operator<qi::domain, proto::tag::shift_right> // enables >>
-      : mpl::true_ {};
-
-    template <>
-    struct flatten_tree<qi::domain, proto::tag::shift_right> // flattens >>
-      : mpl::true_ {};
-}}
-
-namespace boost { namespace spirit { namespace qi
+namespace spirit
 {
-    template <typename Elements>
-    struct sequence : sequence_base<sequence<Elements>, Elements>
-    {
-        friend struct sequence_base<sequence<Elements>, Elements>;
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
+template <>
+struct use_operator<qi::domain, proto::tag::shift_right> // enables >>
+		: mpl::true_ {};
 
-        sequence(Elements const& elements)
-          : sequence_base<sequence<Elements>, Elements>(elements) {}
+template <>
+struct flatten_tree<qi::domain, proto::tag::shift_right> // flattens >>
+		: mpl::true_ {};
+}
+}
 
-    private:
-
-        template <typename Iterator, typename Context, typename Skipper>
-        static detail::fail_function<Iterator, Context, Skipper>
-        fail_function(
-            Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper)
-        {
-            return detail::fail_function<Iterator, Context, Skipper>
-                (first, last, context, skipper);
-        }
-
-        std::string id() const { return "sequence"; }
-    };
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Elements, typename Modifiers>
-    struct make_composite<proto::tag::shift_right, Elements, Modifiers>
-      : make_nary_composite<Elements, sequence>
-    {};
-}}}
-
-namespace boost { namespace spirit { namespace traits
+namespace boost
 {
-    template <typename Elements>
-    struct has_semantic_action<qi::sequence<Elements> >
-      : nary_has_semantic_action<Elements> {};
-}}}
+namespace spirit
+{
+namespace qi
+{
+template <typename Elements>
+struct sequence : sequence_base<sequence<Elements>, Elements>
+{
+	friend struct sequence_base<sequence<Elements>, Elements>;
+
+	sequence ( Elements const &elements )
+		: sequence_base<sequence<Elements>, Elements> ( elements ) {}
+
+private:
+
+	template <typename Iterator, typename Context, typename Skipper>
+	static detail::fail_function<Iterator, Context, Skipper>
+	fail_function (
+	    Iterator &first, Iterator const &last
+	    , Context &context, Skipper const &skipper )
+	{
+		return detail::fail_function<Iterator, Context, Skipper>
+		       ( first, last, context, skipper );
+	}
+
+	std::string id() const { return "sequence"; }
+};
+
+///////////////////////////////////////////////////////////////////////////
+// Parser generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+template <typename Elements, typename Modifiers>
+struct make_composite<proto::tag::shift_right, Elements, Modifiers>
+		: make_nary_composite<Elements, sequence>
+{};
+}
+}
+}
+
+namespace boost
+{
+namespace spirit
+{
+namespace traits
+{
+template <typename Elements>
+struct has_semantic_action<qi::sequence<Elements> >
+		: nary_has_semantic_action<Elements> {};
+}
+}
+}
 
 #endif

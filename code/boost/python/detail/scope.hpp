@@ -7,10 +7,17 @@
 
 # include <boost/python/detail/config.hpp>
 
-namespace boost { namespace python { namespace detail {
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
-void BOOST_PYTHON_DECL scope_setattr_doc(char const* name, object const& obj, char const* doc);
+void BOOST_PYTHON_DECL scope_setattr_doc ( char const *name, object const &obj, char const *doc );
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 
 #endif // SCOPE_DWA2002927_HPP

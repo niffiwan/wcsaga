@@ -31,7 +31,7 @@
 
 # ifndef BOOST_PYTHON_MAX_BASES
 #  define BOOST_PYTHON_MAX_BASES 10
-# endif 
+# endif
 
 # define BOOST_PYTHON_CV_QUALIFIER(i)                          \
     BOOST_PYTHON_APPLY(                                        \

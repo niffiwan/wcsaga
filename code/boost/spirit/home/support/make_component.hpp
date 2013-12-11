@@ -16,349 +16,358 @@
 #include <boost/spirit/home/support/detail/make_cons.hpp>
 #include <boost/spirit/home/support/modify.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    // There is no real "component" class. Each domain is responsible
-    // for creating its own components. You need to specialize this for
-    // each component in your domain. Use this as a guide.
-
-    template <typename Domain, typename Tag, typename Enable = void>
-    struct make_component
-    {
-        template <typename Sig>
-        struct result;
-
-        template <typename This, typename Elements, typename Modifiers>
-        struct result<This(Elements, Modifiers)>;
-
-        template <typename Elements, typename Modifiers>
-        typename result<make_component(Elements, Modifiers)>::type
-        operator()(Elements const& elements, Modifiers const& modifiers) const;
-    };
-
-    namespace tag
-    {
-        // Normally, we use proto tags as-is to distinguish operators.
-        // The special case is proto::tag::subscript. Spirit uses this
-        // as either sementic actions or directives. To distinguish between
-        // the two, we use these special tags below.
-
-        struct directive;
-        struct action;
-    }
-
-    template <typename Domain, typename T, typename Enable = void>
-    struct flatten_tree;
-}}
-
-namespace boost { namespace spirit { namespace detail
+namespace spirit
 {
-    template <typename Domain>
-    struct make_terminal : proto::transform<make_terminal<Domain> >
-    {
-        template<typename Expr, typename State, typename Data>
-        struct impl : proto::transform_impl<Expr, State, Data>
-        {
-            typedef typename
-                proto::result_of::value<Expr>::type 
-            value;
+// There is no real "component" class. Each domain is responsible
+// for creating its own components. You need to specialize this for
+// each component in your domain. Use this as a guide.
 
-            typedef typename result_of::make_cons<value>::type elements;
+template <typename Domain, typename Tag, typename Enable = void>
+struct make_component
+{
+	template <typename Sig>
+	struct result;
 
-            typedef
-                make_component<Domain, proto::tag::terminal>
-            make_component_;
+	template <typename This, typename Elements, typename Modifiers>
+	struct result<This ( Elements, Modifiers ) >;
 
-            typedef typename
-                make_component_::template
-                    result<make_component_(elements, Data)>::type
-            result_type;
+	template <typename Elements, typename Modifiers>
+	typename result<make_component ( Elements, Modifiers ) >::type
+	operator() ( Elements const &elements, Modifiers const &modifiers ) const;
+};
 
-            result_type operator()(
-                typename impl::expr_param expr
-              , typename impl::state_param /*state*/
-              , typename impl::data_param data
-            ) const
-            {
-                return typename impl::make_component_()(
-                    detail::make_cons(proto::value(expr))
-                  , data
-                );
-            }
-        };
-    };
+namespace tag
+{
+// Normally, we use proto tags as-is to distinguish operators.
+// The special case is proto::tag::subscript. Spirit uses this
+// as either sementic actions or directives. To distinguish between
+// the two, we use these special tags below.
 
-    template <typename Domain, typename Tag, typename Grammar>
-    struct make_unary : proto::transform<make_unary<Domain, Tag, Grammar> >
-    {
-        template<typename Expr, typename State, typename Data>
-        struct impl : proto::transform_impl<Expr, State, Data>
-        {
-            typedef typename
-                proto::result_of::child_c<Expr, 0>::type
-            child;
+struct directive;
+struct action;
+}
 
-            typedef typename Grammar::
-                template result<Grammar(child, State, Data)>::type
-            child_component;
+template <typename Domain, typename T, typename Enable = void>
+struct flatten_tree;
+}
+}
 
-            typedef typename
-                result_of::make_cons<child_component>::type
-            elements;
+namespace boost
+{
+namespace spirit
+{
+namespace detail
+{
+template <typename Domain>
+struct make_terminal : proto::transform<make_terminal<Domain> >
+{
+	template<typename Expr, typename State, typename Data>
+	struct impl : proto::transform_impl<Expr, State, Data>
+	{
+		typedef typename
+		proto::result_of::value<Expr>::type
+		value;
 
-            typedef make_component<Domain, Tag> make_component_;
+		typedef typename result_of::make_cons<value>::type elements;
 
-            typedef typename
-                make_component_::template
-                    result<make_component_(elements, Data)>::type
-            result_type;
+		typedef
+		make_component<Domain, proto::tag::terminal>
+		make_component_;
 
-            result_type operator()(
-                typename impl::expr_param expr
-              , typename impl::state_param state
-              , typename impl::data_param data
-            ) const
-            {
-                return typename impl::make_component_()(
-                    detail::make_cons(
-                        Grammar()(proto::child(expr), state, data))
-                  , data
-                );
-            }
-        };
-    };
+		typedef typename
+		make_component_::template
+		result<make_component_ ( elements, Data ) >::type
+		result_type;
 
-    // un-flattened version
-    template <typename Domain, typename Tag, typename Grammar,
-        bool flatten = flatten_tree<Domain, Tag>::value>
-    struct make_binary
-    {
-        template<typename Expr, typename State, typename Data>
-        struct impl : proto::transform_impl<Expr, State, Data>
-        {
-            typedef typename Grammar::
-                template result<Grammar(
-                    typename proto::result_of::child_c<Expr, 0>::type
-                  , State, Data)>::type
-            lhs_component;
+		result_type operator() (
+		    typename impl::expr_param expr
+		    , typename impl::state_param /*state*/
+		    , typename impl::data_param data
+		) const
+		{
+			return typename impl::make_component_() (
+			           detail::make_cons ( proto::value ( expr ) )
+			           , data
+			       );
+		}
+	};
+};
 
-            typedef typename Grammar::
-                template result<Grammar(
-                    typename proto::result_of::child_c<Expr, 1>::type
-                  , State, Data)>::type
-            rhs_component;
+template <typename Domain, typename Tag, typename Grammar>
+struct make_unary : proto::transform<make_unary<Domain, Tag, Grammar> >
+{
+	template<typename Expr, typename State, typename Data>
+	struct impl : proto::transform_impl<Expr, State, Data>
+	{
+		typedef typename
+		proto::result_of::child_c<Expr, 0>::type
+		child;
 
-            typedef typename
-                result_of::make_cons<
-                    lhs_component
-                  , typename result_of::make_cons<rhs_component>::type
-                >::type
-            elements_type;
+		typedef typename Grammar::
+		template result<Grammar ( child, State, Data ) >::type
+		child_component;
 
-            typedef make_component<Domain, Tag> make_component_;
+		typedef typename
+		result_of::make_cons<child_component>::type
+		elements;
 
-            typedef typename
-                make_component_::template
-                    result<make_component_(elements_type, Data)>::type
-            result_type;
+		typedef make_component<Domain, Tag> make_component_;
 
-            result_type operator()(
-                typename impl::expr_param expr
-              , typename impl::state_param state
-              , typename impl::data_param data
-            ) const
-            {
-                elements_type elements =
-                    detail::make_cons(
-                        Grammar()(
-                            proto::child_c<0>(expr), state, data)       // LHS
-                      , detail::make_cons(
-                            Grammar()(
-                                proto::child_c<1>(expr), state, data)   // RHS
-                        )
-                    );
+		typedef typename
+		make_component_::template
+		result<make_component_ ( elements, Data ) >::type
+		result_type;
 
-                return make_component_()(elements, data);
-            }
-        };
-    };
+		result_type operator() (
+		    typename impl::expr_param expr
+		    , typename impl::state_param state
+		    , typename impl::data_param data
+		) const
+		{
+			return typename impl::make_component_() (
+			           detail::make_cons (
+			               Grammar() ( proto::child ( expr ), state, data ) )
+			           , data
+			       );
+		}
+	};
+};
 
-    template <typename Grammar>
-    struct make_binary_helper : proto::transform<make_binary_helper<Grammar> >
-    {
-        template<typename Expr, typename State, typename Data>
-        struct impl : proto::transform_impl<Expr, State, Data>
-        {
-            typedef typename Grammar::
-                template result<Grammar(Expr, State, Data)>::type
-            lhs;
+// un-flattened version
+template <typename Domain, typename Tag, typename Grammar,
+          bool flatten = flatten_tree<Domain, Tag>::value>
+struct make_binary
+{
+	template<typename Expr, typename State, typename Data>
+	struct impl : proto::transform_impl<Expr, State, Data>
+	{
+		typedef typename Grammar::
+		template result<Grammar (
+		                    typename proto::result_of::child_c<Expr, 0>::type
+		                    , State, Data ) >::type
+		lhs_component;
 
-            typedef typename result_of::make_cons<lhs, State>::type result_type;
+		typedef typename Grammar::
+		template result<Grammar (
+		                    typename proto::result_of::child_c<Expr, 1>::type
+		                    , State, Data ) >::type
+		rhs_component;
 
-            result_type operator()(
-                typename impl::expr_param expr
-              , typename impl::state_param state
-              , typename impl::data_param data
-            ) const
-            {
-                return detail::make_cons(Grammar()(expr, state, data), state);
-            }
-        };
-    };
+		typedef typename
+		result_of::make_cons <
+		lhs_component
+		, typename result_of::make_cons<rhs_component>::type
+		>::type
+		elements_type;
 
-    // Flattened version
-    template <typename Domain, typename Tag, typename Grammar>
-    struct make_binary<Domain, Tag, Grammar, true>
-      : proto::transform<make_binary<Domain, Tag, Grammar> >
-    {
-        template<typename Expr, typename State, typename Data>
-        struct impl : proto::transform_impl<Expr, State, Data>
-        {
-            typedef typename
-                proto::reverse_fold_tree<
-                    proto::_
-                  , proto::make<fusion::nil>
-                  , make_binary_helper<Grammar>
-                >::template impl<Expr, State, Data>
-            reverse_fold_tree;
+		typedef make_component<Domain, Tag> make_component_;
 
-            typedef typename reverse_fold_tree::result_type elements;
-            typedef make_component<Domain, Tag> make_component_;
+		typedef typename
+		make_component_::template
+		result<make_component_ ( elements_type, Data ) >::type
+		result_type;
 
-            typedef typename
-                make_component_::template
-                    result<make_component_(elements, Data)>::type
-            result_type;
+		result_type operator() (
+		    typename impl::expr_param expr
+		    , typename impl::state_param state
+		    , typename impl::data_param data
+		) const
+		{
+			elements_type elements =
+			    detail::make_cons (
+			        Grammar() (
+			            proto::child_c<0> ( expr ), state, data )   // LHS
+			        , detail::make_cons (
+			            Grammar() (
+			                proto::child_c<1> ( expr ), state, data ) // RHS
+			        )
+			    );
 
-            result_type operator()(
-                typename impl::expr_param expr
-              , typename impl::state_param state
-              , typename impl::data_param data
-            ) const
-            {
-                return make_component_()(
-                    reverse_fold_tree()(expr, state, data), data);
-            }
-        };
-    };
+			return make_component_() ( elements, data );
+		}
+	};
+};
 
-    template <typename Domain, typename Grammar>
-    struct make_directive : proto::transform<make_directive<Domain, Grammar> >
-    {
-        template<typename Expr, typename State, typename Data>
-        struct impl : proto::transform_impl<Expr, State, Data>
-        {
-            typedef typename
-                proto::result_of::child_c<Expr, 0>::type
-            lhs;
+template <typename Grammar>
+struct make_binary_helper : proto::transform<make_binary_helper<Grammar> >
+{
+	template<typename Expr, typename State, typename Data>
+	struct impl : proto::transform_impl<Expr, State, Data>
+	{
+		typedef typename Grammar::
+		template result<Grammar ( Expr, State, Data ) >::type
+		lhs;
 
-            typedef typename
-                proto::result_of::value<lhs>::type
-            tag_type;
+		typedef typename result_of::make_cons<lhs, State>::type result_type;
 
-            typedef typename modify<Domain>::
-                template result<modify<Domain>(tag_type, Data)>::type
-            modifier_type;
+		result_type operator() (
+		    typename impl::expr_param expr
+		    , typename impl::state_param state
+		    , typename impl::data_param data
+		) const
+		{
+			return detail::make_cons ( Grammar() ( expr, state, data ), state );
+		}
+	};
+};
 
-            typedef typename Grammar::
-                template result<Grammar(
-                    typename proto::result_of::child_c<Expr, 1>::type
-                  , State
-                  , modifier_type
-                )>::type
-            rhs_component;
+// Flattened version
+template <typename Domain, typename Tag, typename Grammar>
+struct make_binary<Domain, Tag, Grammar, true>
+		: proto::transform<make_binary<Domain, Tag, Grammar> >
+{
+	template<typename Expr, typename State, typename Data>
+	struct impl : proto::transform_impl<Expr, State, Data>
+	{
+		typedef typename
+		proto::reverse_fold_tree <
+		proto::_
+		, proto::make<fusion::nil>
+		, make_binary_helper<Grammar>
+		>::template impl<Expr, State, Data>
+		reverse_fold_tree;
 
-            typedef typename
-                result_of::make_cons<
-                    tag_type
-                  , typename result_of::make_cons<rhs_component>::type
-                >::type
-            elements_type;
+		typedef typename reverse_fold_tree::result_type elements;
+		typedef make_component<Domain, Tag> make_component_;
 
-            typedef make_component<Domain, tag::directive> make_component_;
+		typedef typename
+		make_component_::template
+		result<make_component_ ( elements, Data ) >::type
+		result_type;
 
-            typedef typename
-                make_component_::template
-                    result<make_component_(elements_type, Data)>::type
-            result_type;
+		result_type operator() (
+		    typename impl::expr_param expr
+		    , typename impl::state_param state
+		    , typename impl::data_param data
+		) const
+		{
+			return make_component_() (
+			           reverse_fold_tree() ( expr, state, data ), data );
+		}
+	};
+};
 
-            result_type operator()(
-                typename impl::expr_param expr
-              , typename impl::state_param state
-              , typename impl::data_param data
-            ) const
-            {
-                tag_type tag = proto::value(proto::child_c<0>(expr));
-                typename remove_reference<modifier_type>::type
-                    modifier = modify<Domain>()(tag, data);
+template <typename Domain, typename Grammar>
+struct make_directive : proto::transform<make_directive<Domain, Grammar> >
+{
+	template<typename Expr, typename State, typename Data>
+	struct impl : proto::transform_impl<Expr, State, Data>
+	{
+		typedef typename
+		proto::result_of::child_c<Expr, 0>::type
+		lhs;
 
-                elements_type elements =
-                    detail::make_cons(
-                        tag                                 // LHS
-                      , detail::make_cons(
-                            Grammar()(
-                                proto::child_c<1>(expr)     // RHS
-                              , state, modifier)
-                        )
-                    );
+		typedef typename
+		proto::result_of::value<lhs>::type
+		tag_type;
 
-                return make_component_()(elements, data);
-            }
-        };
-    };
+		typedef typename modify<Domain>::
+		template result<modify<Domain> ( tag_type, Data ) >::type
+		modifier_type;
 
-    template <typename Domain, typename Grammar>
-    struct make_action : proto::transform<make_action<Domain, Grammar> >
-    {
-        template<typename Expr, typename State, typename Data>
-        struct impl : proto::transform_impl<Expr, State, Data>
-        {
-            typedef typename Grammar::
-                template result<Grammar(
-                    typename proto::result_of::child_c<Expr, 0>::type
-                  , State
-                  , Data
-                )>::type
-            lhs_component;
+		typedef typename Grammar::
+		template result<Grammar (
+		                    typename proto::result_of::child_c<Expr, 1>::type
+		                    , State
+		                    , modifier_type
+		                                                      ) >::type
+		rhs_component;
 
-            typedef typename
-                proto::result_of::value<
-                    typename proto::result_of::child_c<Expr, 1>::type
-                >::type
-            rhs_component;
+		typedef typename
+		result_of::make_cons <
+		tag_type
+		, typename result_of::make_cons<rhs_component>::type
+		>::type
+		elements_type;
 
-            typedef typename
-                result_of::make_cons<
-                    lhs_component
-                  , typename result_of::make_cons<rhs_component>::type
-                >::type
-            elements_type;
+		typedef make_component<Domain, tag::directive> make_component_;
 
-            typedef make_component<Domain, tag::action> make_component_;
+		typedef typename
+		make_component_::template
+		result<make_component_ ( elements_type, Data ) >::type
+		result_type;
 
-            typedef typename
-                make_component_::template
-                    result<make_component_(elements_type, Data)>::type
-            result_type;
+		result_type operator() (
+		    typename impl::expr_param expr
+		    , typename impl::state_param state
+		    , typename impl::data_param data
+		) const
+		{
+			tag_type tag = proto::value ( proto::child_c<0> ( expr ) );
+			typename remove_reference<modifier_type>::type
+			modifier = modify<Domain>() ( tag, data );
 
-            result_type operator()(
-                typename impl::expr_param expr
-              , typename impl::state_param state
-              , typename impl::data_param data
-            ) const
-            {
-                elements_type elements =
-                    detail::make_cons(
-                        Grammar()(
-                            proto::child_c<0>(expr), state, data)   // LHS
-                      , detail::make_cons(
-                            proto::value(proto::child_c<1>(expr)))  // RHS
-                    );
+			elements_type elements =
+			    detail::make_cons (
+			        tag                                 // LHS
+			        , detail::make_cons (
+			            Grammar() (
+			                proto::child_c<1> ( expr )  // RHS
+			                , state, modifier )
+			        )
+			    );
 
-                return make_component_()(elements, data);
-            }
-        };
-    };
-}}}
+			return make_component_() ( elements, data );
+		}
+	};
+};
+
+template <typename Domain, typename Grammar>
+struct make_action : proto::transform<make_action<Domain, Grammar> >
+{
+	template<typename Expr, typename State, typename Data>
+	struct impl : proto::transform_impl<Expr, State, Data>
+	{
+		typedef typename Grammar::
+		template result<Grammar (
+		                    typename proto::result_of::child_c<Expr, 0>::type
+		                    , State
+		                    , Data
+		                                                      ) >::type
+		lhs_component;
+
+		typedef typename
+		proto::result_of::value <
+		typename proto::result_of::child_c<Expr, 1>::type
+		>::type
+		rhs_component;
+
+		typedef typename
+		result_of::make_cons <
+		lhs_component
+		, typename result_of::make_cons<rhs_component>::type
+		>::type
+		elements_type;
+
+		typedef make_component<Domain, tag::action> make_component_;
+
+		typedef typename
+		make_component_::template
+		result<make_component_ ( elements_type, Data ) >::type
+		result_type;
+
+		result_type operator() (
+		    typename impl::expr_param expr
+		    , typename impl::state_param state
+		    , typename impl::data_param data
+		) const
+		{
+			elements_type elements =
+			    detail::make_cons (
+			        Grammar() (
+			            proto::child_c<0> ( expr ), state, data ) // LHS
+			        , detail::make_cons (
+			            proto::value ( proto::child_c<1> ( expr ) ) ) // RHS
+			    );
+
+			return make_component_() ( elements, data );
+		}
+	};
+};
+}
+}
+}
 
 #endif

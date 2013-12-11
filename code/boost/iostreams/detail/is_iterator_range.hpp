@@ -6,8 +6,8 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 #ifndef BOOST_IOSTREAMS_DETAIL_IS_ITERATOR_RANGE_HPP_INCLUDED
-#define BOOST_IOSTREAMS_DETAIL_IS_ITERATOR_RANGE_HPP_INCLUDED       
- 
+#define BOOST_IOSTREAMS_DETAIL_IS_ITERATOR_RANGE_HPP_INCLUDED
+
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/bool_trait_def.hpp>
@@ -15,28 +15,32 @@
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp>
 
-namespace boost { 
+namespace boost
+{
 
 # if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------------//
 
 // We avoid dependence on Boost.Range by using a forward declaration.
 template<typename Iterator>
 class iterator_range;
-    
-namespace iostreams {
 
-BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_iterator_range, boost::iterator_range, 1)
+namespace iostreams
+{
+
+BOOST_IOSTREAMS_BOOL_TRAIT_DEF ( is_iterator_range, boost::iterator_range, 1 )
 
 } // End namespace iostreams.
 
 # else // # if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //-----------------------//
 
-namespace iostreams {    
+namespace iostreams
+{
 
-    template<typename T>
-    struct is_iterator_range {
-        BOOST_STATIC_CONSTANT(bool, value = false);
-    };
+template<typename T>
+struct is_iterator_range
+{
+	BOOST_STATIC_CONSTANT ( bool, value = false );
+};
 
 } // End namespace iostreams.
 

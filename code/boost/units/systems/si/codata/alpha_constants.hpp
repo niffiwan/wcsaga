@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -31,30 +31,35 @@
 /// CODATA recommended values of fundamental atomic and nuclear constants
 /// CODATA 2006 values as of 2007/03/30
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace si {
-                            
-namespace constants {
+namespace si
+{
 
-namespace codata {
+namespace constants
+{
+
+namespace codata
+{
 
 /// CODATA recommended values of the fundamental physical constants: NIST SP 961
 
 /// alpha particle mass
-BOOST_UNITS_PHYSICAL_CONSTANT(m_alpha,quantity<mass>,6.64465620e-27*kilograms,3.3e-34*kilograms);
+BOOST_UNITS_PHYSICAL_CONSTANT ( m_alpha, quantity<mass>, 6.64465620e-27 * kilograms, 3.3e-34 * kilograms );
 /// alpha-electron mass ratio
-BOOST_UNITS_PHYSICAL_CONSTANT(m_alpha_over_m_e,quantity<dimensionless>,7294.2995365*dimensionless(),3.1e-6*dimensionless());
+BOOST_UNITS_PHYSICAL_CONSTANT ( m_alpha_over_m_e, quantity<dimensionless>, 7294.2995365 * dimensionless(), 3.1e-6 * dimensionless() );
 /// alpha-proton mass ratio
-BOOST_UNITS_PHYSICAL_CONSTANT(m_alpha_over_m_p,quantity<dimensionless>,3.97259968951*dimensionless(),4.1e-10*dimensionless());
+BOOST_UNITS_PHYSICAL_CONSTANT ( m_alpha_over_m_p, quantity<dimensionless>, 3.97259968951 * dimensionless(), 4.1e-10 * dimensionless() );
 /// alpha molar mass
-BOOST_UNITS_PHYSICAL_CONSTANT(M_alpha,quantity<mass_over_amount>,4.001506179127e-3*kilograms/mole,6.2e-14*kilograms/mole);
+BOOST_UNITS_PHYSICAL_CONSTANT ( M_alpha, quantity<mass_over_amount>, 4.001506179127e-3 * kilograms / mole, 6.2e-14 * kilograms / mole );
 
 } // namespace codata
 
-} // namespace constants    
+} // namespace constants
 
 } // namespace si
 

@@ -33,15 +33,15 @@
 
 namespace boost
 {
-  template<typename Target, typename Source>
-  inline
-  Target numeric_cast ( Source arg )
-  {
-    typedef boost::numeric::converter<Target,Source> Converter ;
-    return Converter::convert(arg);
-  }
+template<typename Target, typename Source>
+inline
+Target numeric_cast ( Source arg )
+{
+	typedef boost::numeric::converter<Target, Source> Converter ;
+	return Converter::convert ( arg );
+}
 
-  using numeric::bad_numeric_cast;
+using numeric::bad_numeric_cast;
 
 } // namespace boost
 

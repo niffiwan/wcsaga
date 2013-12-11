@@ -12,18 +12,22 @@
 #include <boost/mpl/aux_/lambda_support.hpp>
 #include <boost/config.hpp>
 
-// these are needed regardless of BOOST_TT_NO_BROKEN_COMPILER_SPEC 
+// these are needed regardless of BOOST_TT_NO_BROKEN_COMPILER_SPEC
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-namespace boost { namespace detail {
+namespace boost
+{
+namespace detail
+{
 template< typename T > struct remove_const_impl     { typedef T type; };
 template< typename T > struct remove_volatile_impl  { typedef T type; };
 template< typename T > struct remove_pointer_impl   { typedef T type; };
 template< typename T > struct remove_reference_impl { typedef T type; };
 typedef int invoke_BOOST_TT_BROKEN_COMPILER_SPEC_outside_all_namespaces;
-}}
+}
+}
 #endif
 
-// agurt, 27/jun/03: disable the workaround if user defined 
+// agurt, 27/jun/03: disable the workaround if user defined
 // BOOST_TT_NO_BROKEN_COMPILER_SPEC
 #if    !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
     || defined(BOOST_TT_NO_BROKEN_COMPILER_SPEC)
@@ -92,21 +96,21 @@ template<> struct trait##_impl<spec> \
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-BOOST_TT_BROKEN_COMPILER_SPEC(bool)
-BOOST_TT_BROKEN_COMPILER_SPEC(char)
+BOOST_TT_BROKEN_COMPILER_SPEC ( bool )
+BOOST_TT_BROKEN_COMPILER_SPEC ( char )
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-BOOST_TT_BROKEN_COMPILER_SPEC(wchar_t)
+BOOST_TT_BROKEN_COMPILER_SPEC ( wchar_t )
 #endif
-BOOST_TT_BROKEN_COMPILER_SPEC(signed char)
-BOOST_TT_BROKEN_COMPILER_SPEC(unsigned char)
-BOOST_TT_BROKEN_COMPILER_SPEC(signed short)
-BOOST_TT_BROKEN_COMPILER_SPEC(unsigned short)
-BOOST_TT_BROKEN_COMPILER_SPEC(signed int)
-BOOST_TT_BROKEN_COMPILER_SPEC(unsigned int)
-BOOST_TT_BROKEN_COMPILER_SPEC(signed long)
-BOOST_TT_BROKEN_COMPILER_SPEC(unsigned long)
-BOOST_TT_BROKEN_COMPILER_SPEC(float)
-BOOST_TT_BROKEN_COMPILER_SPEC(double)
+BOOST_TT_BROKEN_COMPILER_SPEC ( signed char )
+BOOST_TT_BROKEN_COMPILER_SPEC ( unsigned char )
+BOOST_TT_BROKEN_COMPILER_SPEC ( signed short )
+BOOST_TT_BROKEN_COMPILER_SPEC ( unsigned short )
+BOOST_TT_BROKEN_COMPILER_SPEC ( signed int )
+BOOST_TT_BROKEN_COMPILER_SPEC ( unsigned int )
+BOOST_TT_BROKEN_COMPILER_SPEC ( signed long )
+BOOST_TT_BROKEN_COMPILER_SPEC ( unsigned long )
+BOOST_TT_BROKEN_COMPILER_SPEC ( float )
+BOOST_TT_BROKEN_COMPILER_SPEC ( double )
 //BOOST_TT_BROKEN_COMPILER_SPEC(long double)
 
 // for backward compatibility

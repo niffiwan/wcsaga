@@ -20,22 +20,25 @@
 #include <boost/interprocess/containers/container/detail/config_begin.hpp>
 #include <boost/interprocess/containers/container/detail/workaround.hpp>
 
-namespace boost {
-namespace container { 
-namespace containers_detail {
+namespace boost
+{
+namespace container
+{
+namespace containers_detail
+{
 
 template<class T>
 struct value_init
 {
-   value_init()
-      : m_t()
-   {}
+	value_init()
+		: m_t()
+	{}
 
-   T m_t;
+	T m_t;
 };
 
-}  //namespace containers_detail { 
-}  //namespace container { 
+}  //namespace containers_detail {
+}  //namespace container {
 }  //namespace boost {
 
 #include <boost/interprocess/containers/container/detail/config_end.hpp>

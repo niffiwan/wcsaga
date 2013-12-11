@@ -30,493 +30,502 @@
 #pragma once
 #endif
 
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename CharEncoding>
-    struct use_terminal<qi::domain
-      , terminal<
-            tag::char_code<tag::char_, CharEncoding>    // enables char_
-        >
-    > : mpl::true_ {};
-
-    template <typename CharEncoding, typename A0>
-    struct use_terminal<qi::domain
-      , terminal_ex<
-            tag::char_code<tag::char_, CharEncoding>    // enables char_('x'), char_("x")
-          , fusion::vector1<A0>                         // and char_("a-z0-9")
-        >
-    > : mpl::true_ {};
-
-    template <typename CharEncoding, typename A0, typename A1>
-    struct use_terminal<qi::domain
-      , terminal_ex<
-            tag::char_code<tag::char_, CharEncoding>    // enables char_('a','z')
-          , fusion::vector2<A0, A1>
-        >
-    > : mpl::true_ {};
-
-    template <typename CharEncoding>                    // enables *lazy* char_('x'), char_("x")
-    struct use_lazy_terminal<                           // and char_("a-z0-9")
-        qi::domain
-      , tag::char_code<tag::char_, CharEncoding>
-      , 1 // arity
-    > : mpl::true_ {};
-
-    template <typename CharEncoding>                    // enables *lazy* char_('a','z')
-    struct use_lazy_terminal<
-        qi::domain
-      , tag::char_code<tag::char_, CharEncoding>
-      , 2 // arity
-    > : mpl::true_ {};
-
-    template <>
-    struct use_terminal<qi::domain, char>               // enables 'x'
-      : mpl::true_ {};
-
-    template <>
-    struct use_terminal<qi::domain, char[2]>            // enables "x"
-      : mpl::true_ {};
-
-    template <>
-    struct use_terminal<qi::domain, wchar_t>            // enables wchar_t
-      : mpl::true_ {};
-
-    template <>
-    struct use_terminal<qi::domain, wchar_t[2]>         // enables L"x"
-      : mpl::true_ {};
-}}
-
-namespace boost { namespace spirit { namespace qi
+namespace spirit
 {
-    using spirit::lit; // lit('x') is equivalent to 'x'
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
+template <typename CharEncoding>
+struct use_terminal<qi::domain
+		, terminal<
+		tag::char_code<tag::char_, CharEncoding>    // enables char_
+		>
+		> : mpl::true_ {};
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser for a single character
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename CharEncoding, bool no_attribute, bool no_case = false>
-    struct literal_char
-      : char_parser<
-            literal_char<CharEncoding, no_attribute, false>
-          , typename CharEncoding::char_type
-          , typename mpl::if_c<no_attribute, unused_type
-              , typename CharEncoding::char_type>::type>
-    {
-        typedef typename CharEncoding::char_type char_type;
-        typedef CharEncoding char_encoding;
+template <typename CharEncoding, typename A0>
+struct use_terminal<qi::domain
+		, terminal_ex<
+		tag::char_code<tag::char_, CharEncoding>    // enables char_('x'), char_("x")
+		, fusion::vector1<A0>                         // and char_("a-z0-9")
+		>
+		> : mpl::true_ {};
 
-        template <typename Char>
-        literal_char(Char ch)
-          : ch(static_cast<char_type>(ch)) {}
+template <typename CharEncoding, typename A0, typename A1>
+struct use_terminal<qi::domain
+		, terminal_ex<
+		tag::char_code<tag::char_, CharEncoding>    // enables char_('a','z')
+		, fusion::vector2<A0, A1>
+		>
+		> : mpl::true_ {};
 
-        template <typename Context, typename Iterator>
-        struct attribute
-        {
-            typedef typename mpl::if_c<
-                no_attribute, unused_type, char_type>::type
-            type;
-        };
+template <typename CharEncoding>                    // enables *lazy* char_('x'), char_("x")
+struct use_lazy_terminal<                           // and char_("a-z0-9")
+		qi::domain
+		, tag::char_code<tag::char_, CharEncoding>
+		, 1 // arity
+		> : mpl::true_ {};
 
-        template <typename CharParam, typename Context>
-        bool test(CharParam ch_, Context&) const
-        {
-            return traits::ischar<CharParam, char_encoding>::call(ch_) && 
-                   ch == char_type(ch_);
-        }
+template <typename CharEncoding>                    // enables *lazy* char_('a','z')
+struct use_lazy_terminal <
+		qi::domain
+		, tag::char_code<tag::char_, CharEncoding>
+		, 2 // arity
+		> : mpl::true_ {};
 
-        template <typename Context>
-        info what(Context& /*context*/) const
-        {
-            return info("literal-char", char_encoding::toucs4(ch));
-        }
+template <>
+struct use_terminal<qi::domain, char>               // enables 'x'
+		: mpl::true_ {};
 
-        char_type ch;
-    };
+template <>
+struct use_terminal<qi::domain, char[2]>            // enables "x"
+		: mpl::true_ {};
 
-    template <typename CharEncoding, bool no_attribute>
-    struct literal_char<CharEncoding, no_attribute, true> // case insensitive
-      : char_parser<
-            literal_char<CharEncoding, no_attribute, true>
-          , typename mpl::if_c<no_attribute, unused_type
-              , typename CharEncoding::char_type>::type>
-    {
-        typedef typename CharEncoding::char_type char_type;
-        typedef CharEncoding char_encoding;
+template <>
+struct use_terminal<qi::domain, wchar_t>            // enables wchar_t
+		: mpl::true_ {};
 
-        literal_char(char_type ch)
-          : lo(static_cast<char_type>(char_encoding::tolower(ch)))
-          , hi(static_cast<char_type>(char_encoding::toupper(ch))) {}
+template <>
+struct use_terminal<qi::domain, wchar_t[2]>         // enables L"x"
+		: mpl::true_ {};
+}
+}
 
-        template <typename Context, typename Iterator>
-        struct attribute
-        {
-            typedef typename mpl::if_c<
-                no_attribute, unused_type, char_type>::type
-            type;
-        };
+namespace boost
+{
+namespace spirit
+{
+namespace qi
+{
+using spirit::lit; // lit('x') is equivalent to 'x'
 
-        template <typename CharParam, typename Context>
-        bool test(CharParam ch_, Context&) const
-        {
-            if (!traits::ischar<CharParam, char_encoding>::call(ch_))
-                return false;
+///////////////////////////////////////////////////////////////////////////
+// Parser for a single character
+///////////////////////////////////////////////////////////////////////////
+template <typename CharEncoding, bool no_attribute, bool no_case = false>
+struct literal_char
+		: char_parser <
+		literal_char<CharEncoding, no_attribute, false>
+		, typename CharEncoding::char_type
+		, typename mpl::if_c<no_attribute, unused_type
+		, typename CharEncoding::char_type>::type >
+{
+	typedef typename CharEncoding::char_type char_type;
+	typedef CharEncoding char_encoding;
 
-            char_type ch = char_type(ch_);  // optimize for token based parsing
-            return this->lo == ch || this->hi == ch;
-        }
+	template <typename Char>
+	literal_char ( Char ch )
+		: ch ( static_cast<char_type> ( ch ) ) {}
 
-        template <typename Context>
-        info what(Context& /*context*/) const
-        {
-            return info("no-case-literal-char", char_encoding::toucs4(lo));
-        }
+	template <typename Context, typename Iterator>
+	struct attribute
+	{
+		typedef typename mpl::if_c <
+		no_attribute, unused_type, char_type >::type
+		type;
+	};
 
-        char_type lo, hi;
-    };
+	template <typename CharParam, typename Context>
+	bool test ( CharParam ch_, Context & ) const
+	{
+		return traits::ischar<CharParam, char_encoding>::call ( ch_ ) &&
+		       ch == char_type ( ch_ );
+	}
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser for a character range
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename CharEncoding, bool no_case = false>
-    struct char_range
-      : char_parser<char_range<CharEncoding, false>, typename CharEncoding::char_type>
-    {
-        typedef typename CharEncoding::char_type char_type;
-        typedef CharEncoding char_encoding;
+	template <typename Context>
+	info what ( Context & /*context*/ ) const
+	{
+		return info ( "literal-char", char_encoding::toucs4 ( ch ) );
+	}
 
-        char_range(char_type from, char_type to)
-          : from(from), to(to) {}
+	char_type ch;
+};
 
-        template <typename CharParam, typename Context>
-        bool test(CharParam ch_, Context&) const
-        {
-            if (!traits::ischar<CharParam, char_encoding>::call(ch_))
-                return false;
+template <typename CharEncoding, bool no_attribute>
+struct literal_char<CharEncoding, no_attribute, true> // case insensitive
+		: char_parser <
+		literal_char<CharEncoding, no_attribute, true>
+		, typename mpl::if_c<no_attribute, unused_type
+		, typename CharEncoding::char_type>::type >
+{
+	typedef typename CharEncoding::char_type char_type;
+	typedef CharEncoding char_encoding;
 
-            char_type ch = char_type(ch_);  // optimize for token based parsing
-            return !(ch < from) && !(to < ch);
-        }
+	literal_char ( char_type ch )
+		: lo ( static_cast<char_type> ( char_encoding::tolower ( ch ) ) )
+		, hi ( static_cast<char_type> ( char_encoding::toupper ( ch ) ) ) {}
 
-        template <typename Context>
-        info what(Context& /*context*/) const
-        {
-            info result("char-range", char_encoding::toucs4(from));
-            boost::get<std::string>(result.value) += '-';
-            boost::get<std::string>(result.value) += to_utf8(char_encoding::toucs4(to));
-            return result;
-        }
+	template <typename Context, typename Iterator>
+	struct attribute
+	{
+		typedef typename mpl::if_c <
+		no_attribute, unused_type, char_type >::type
+		type;
+	};
 
-        char_type from, to;
-    };
+	template <typename CharParam, typename Context>
+	bool test ( CharParam ch_, Context & ) const
+	{
+		if ( !traits::ischar<CharParam, char_encoding>::call ( ch_ ) )
+			return false;
 
-    template <typename CharEncoding>
-    struct char_range<CharEncoding, true> // case insensitive
-      : char_parser<char_range<CharEncoding, true>, typename CharEncoding::char_type>
-    {
-        typedef typename CharEncoding::char_type char_type;
-        typedef CharEncoding char_encoding;
+		char_type ch = char_type ( ch_ ); // optimize for token based parsing
+		return this->lo == ch || this->hi == ch;
+	}
 
-        char_range(char_type from, char_type to)
-          : from_lo(static_cast<char_type>(char_encoding::tolower(from)))
-          , to_lo(static_cast<char_type>(char_encoding::tolower(to)))
-          , from_hi(static_cast<char_type>(char_encoding::toupper(from)))
-          , to_hi(static_cast<char_type>(char_encoding::toupper(to)))
-        {}
+	template <typename Context>
+	info what ( Context & /*context*/ ) const
+	{
+		return info ( "no-case-literal-char", char_encoding::toucs4 ( lo ) );
+	}
 
-        template <typename CharParam, typename Context>
-        bool test(CharParam ch_, Context&) const
-        {
-            if (!traits::ischar<CharParam, char_encoding>::call(ch_))
-                return false;
+	char_type lo, hi;
+};
 
-            char_type ch = char_type(ch_);  // optimize for token based parsing
-            return (!(ch < from_lo) && !(to_lo < ch))
-                || (!(ch < from_hi) && !(to_hi < ch))
-            ;
-        }
+///////////////////////////////////////////////////////////////////////////
+// Parser for a character range
+///////////////////////////////////////////////////////////////////////////
+template <typename CharEncoding, bool no_case = false>
+struct char_range
+		: char_parser<char_range<CharEncoding, false>, typename CharEncoding::char_type>
+{
+	typedef typename CharEncoding::char_type char_type;
+	typedef CharEncoding char_encoding;
 
-        template <typename Context>
-        info what(Context& /*context*/) const
-        {
-            info result("no-case-char-range", char_encoding::toucs4(from_lo));
-            boost::get<std::string>(result.value) += '-';
-            boost::get<std::string>(result.value) += to_utf8(char_encoding::toucs4(to_lo));
-            return result;
-        }
+	char_range ( char_type from, char_type to )
+		: from ( from ), to ( to ) {}
 
-        char_type from_lo, to_lo, from_hi, to_hi;
-    };
+	template <typename CharParam, typename Context>
+	bool test ( CharParam ch_, Context & ) const
+	{
+		if ( !traits::ischar<CharParam, char_encoding>::call ( ch_ ) )
+			return false;
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser for a character set
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename CharEncoding, bool no_case = false>
-    struct char_set
-      : char_parser<char_set<CharEncoding, false>, typename CharEncoding::char_type>
-    {
-        typedef typename CharEncoding::char_type char_type;
-        typedef CharEncoding char_encoding;
+		char_type ch = char_type ( ch_ ); // optimize for token based parsing
+		return ! ( ch < from ) && ! ( to < ch );
+	}
 
-        template <typename String>
-        char_set(String const& str)
-        {
-            typedef typename traits::char_type_of<String>::type in_type;
+	template <typename Context>
+	info what ( Context & /*context*/ ) const
+	{
+		info result ( "char-range", char_encoding::toucs4 ( from ) );
+		boost::get<std::string> ( result.value ) += '-';
+		boost::get<std::string> ( result.value ) += to_utf8 ( char_encoding::toucs4 ( to ) );
+		return result;
+	}
 
-            BOOST_SPIRIT_ASSERT_MSG((
-                (sizeof(char_type) == sizeof(in_type))
-            ), cannot_convert_string, (String));
+	char_type from, to;
+};
 
-            char_type const* definition =
-                (char_type const*)traits::get_c_string(str);
-            char_type ch = *definition++;
-            while (ch)
-            {
-                char_type next = *definition++;
-                if (next == '-')
-                {
-                    next = *definition++;
-                    if (next == 0)
-                    {
-                        chset.set(ch);
-                        chset.set('-');
-                        break;
-                    }
-                    chset.set(ch, next);
-                }
-                else
-                {
-                    chset.set(ch);
-                }
-                ch = next;
-            }
-        }
+template <typename CharEncoding>
+struct char_range<CharEncoding, true> // case insensitive
+		: char_parser<char_range<CharEncoding, true>, typename CharEncoding::char_type>
+{
+	typedef typename CharEncoding::char_type char_type;
+	typedef CharEncoding char_encoding;
 
-        template <typename CharParam, typename Context>
-        bool test(CharParam ch, Context&) const
-        {
-            return traits::ischar<CharParam, char_encoding>::call(ch) && 
-                   chset.test(char_type(ch));
-        }
+	char_range ( char_type from, char_type to )
+		: from_lo ( static_cast<char_type> ( char_encoding::tolower ( from ) ) )
+		, to_lo ( static_cast<char_type> ( char_encoding::tolower ( to ) ) )
+		, from_hi ( static_cast<char_type> ( char_encoding::toupper ( from ) ) )
+		, to_hi ( static_cast<char_type> ( char_encoding::toupper ( to ) ) )
+	{}
 
-        template <typename Context>
-        info what(Context& /*context*/) const
-        {
-            return info("char-set");
-        }
+	template <typename CharParam, typename Context>
+	bool test ( CharParam ch_, Context & ) const
+	{
+		if ( !traits::ischar<CharParam, char_encoding>::call ( ch_ ) )
+			return false;
 
-        support::detail::basic_chset<char_type> chset;
-    };
+		char_type ch = char_type ( ch_ ); // optimize for token based parsing
+		return ( ! ( ch < from_lo ) && ! ( to_lo < ch ) )
+		       || ( ! ( ch < from_hi ) && ! ( to_hi < ch ) )
+		       ;
+	}
 
-    template <typename CharEncoding>
-    struct char_set<CharEncoding, true> // case insensitive
-      : char_parser<char_set<CharEncoding, true>, typename CharEncoding::char_type>
-    {
-        typedef typename CharEncoding::char_type char_type;
-        typedef CharEncoding char_encoding;
+	template <typename Context>
+	info what ( Context & /*context*/ ) const
+	{
+		info result ( "no-case-char-range", char_encoding::toucs4 ( from_lo ) );
+		boost::get<std::string> ( result.value ) += '-';
+		boost::get<std::string> ( result.value ) += to_utf8 ( char_encoding::toucs4 ( to_lo ) );
+		return result;
+	}
 
-        template <typename String>
-        char_set(String const& str)
-        {
-            typedef typename traits::char_type_of<String>::type in_type;
+	char_type from_lo, to_lo, from_hi, to_hi;
+};
 
-            BOOST_SPIRIT_ASSERT_MSG((
-                (sizeof(char_type) == sizeof(in_type))
-            ), cannot_convert_string, (String));
+///////////////////////////////////////////////////////////////////////////
+// Parser for a character set
+///////////////////////////////////////////////////////////////////////////
+template <typename CharEncoding, bool no_case = false>
+struct char_set
+		: char_parser<char_set<CharEncoding, false>, typename CharEncoding::char_type>
+{
+	typedef typename CharEncoding::char_type char_type;
+	typedef CharEncoding char_encoding;
 
-            char_type const* definition =
-                (char_type const*)traits::get_c_string(str);
-            char_type ch = *definition++;
-            while (ch)
-            {
-                char_type next = *definition++;
-                if (next == '-')
-                {
-                    next = *definition++;
-                    if (next == 0)
-                    {
-                        chset.set(static_cast<char_type>(CharEncoding::tolower(ch)));
-                        chset.set(static_cast<char_type>(CharEncoding::toupper(ch)));
-                        chset.set('-');
-                        break;
-                    }
-                    chset.set(static_cast<char_type>(CharEncoding::tolower(ch))
-                      , static_cast<char_type>(CharEncoding::tolower(next)));
-                    chset.set(static_cast<char_type>(CharEncoding::toupper(ch))
-                      , static_cast<char_type>(CharEncoding::toupper(next)));
-                }
-                else
-                {
-                    chset.set(static_cast<char_type>(CharEncoding::tolower(ch)));
-                    chset.set(static_cast<char_type>(CharEncoding::toupper(ch)));
-                }
-                ch = next;
-            }
-        }
+	template <typename String>
+	char_set ( String const &str )
+	{
+		typedef typename traits::char_type_of<String>::type in_type;
 
-        template <typename CharParam, typename Context>
-        bool test(CharParam ch, Context&) const
-        {
-            return traits::ischar<CharParam, char_encoding>::call(ch) && 
-                   chset.test(char_type(ch));
-        }
+		BOOST_SPIRIT_ASSERT_MSG ( (
+		                              ( sizeof ( char_type ) == sizeof ( in_type ) )
+		                          ), cannot_convert_string, ( String ) );
 
-        template <typename Context>
-        info what(Context& /*context*/) const
-        {
-            return info("no-case-char-set");
-        }
+		char_type const *definition =
+		    ( char_type const * ) traits::get_c_string ( str );
+		char_type ch = *definition++;
+		while ( ch )
+		{
+			char_type next = *definition++;
+			if ( next == '-' )
+			{
+				next = *definition++;
+				if ( next == 0 )
+				{
+					chset.set ( ch );
+					chset.set ( '-' );
+					break;
+				}
+				chset.set ( ch, next );
+			}
+			else
+			{
+				chset.set ( ch );
+			}
+			ch = next;
+		}
+	}
 
-        support::detail::basic_chset<char_type> chset;
-    };
+	template <typename CharParam, typename Context>
+	bool test ( CharParam ch, Context & ) const
+	{
+		return traits::ischar<CharParam, char_encoding>::call ( ch ) &&
+		       chset.test ( char_type ( ch ) );
+	}
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Parser generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    namespace detail
-    {
-        template <typename Modifiers, typename Encoding>
-        struct basic_literal
-        {
-            static bool const no_case =
-                has_modifier<
-                    Modifiers
-                  , tag::char_code_base<tag::no_case>
-                >::value;
+	template <typename Context>
+	info what ( Context & /*context*/ ) const
+	{
+		return info ( "char-set" );
+	}
 
-            static bool const no_attr =
-                !has_modifier<
-                    Modifiers
-                  , tag::lazy_eval
-                >::value;
+	support::detail::basic_chset<char_type> chset;
+};
 
-            typedef literal_char<
-                typename spirit::detail::get_encoding<
-                    Modifiers, Encoding, no_case>::type
-              , no_attr
-              , no_case>
-            result_type;
+template <typename CharEncoding>
+struct char_set<CharEncoding, true> // case insensitive
+		: char_parser<char_set<CharEncoding, true>, typename CharEncoding::char_type>
+{
+	typedef typename CharEncoding::char_type char_type;
+	typedef CharEncoding char_encoding;
 
-            template <typename Char>
-            result_type operator()(Char ch, unused_type) const
-            {
-                return result_type(ch);
-            }
+	template <typename String>
+	char_set ( String const &str )
+	{
+		typedef typename traits::char_type_of<String>::type in_type;
 
-            template <typename Char>
-            result_type operator()(Char const* str, unused_type) const
-            {
-                return result_type(str[0]);
-            }
-        };
-    }
+		BOOST_SPIRIT_ASSERT_MSG ( (
+		                              ( sizeof ( char_type ) == sizeof ( in_type ) )
+		                          ), cannot_convert_string, ( String ) );
 
-    template <typename Modifiers>
-    struct make_primitive<char, Modifiers>
-      : detail::basic_literal<Modifiers, char_encoding::standard> {};
+		char_type const *definition =
+		    ( char_type const * ) traits::get_c_string ( str );
+		char_type ch = *definition++;
+		while ( ch )
+		{
+			char_type next = *definition++;
+			if ( next == '-' )
+			{
+				next = *definition++;
+				if ( next == 0 )
+				{
+					chset.set ( static_cast<char_type> ( CharEncoding::tolower ( ch ) ) );
+					chset.set ( static_cast<char_type> ( CharEncoding::toupper ( ch ) ) );
+					chset.set ( '-' );
+					break;
+				}
+				chset.set ( static_cast<char_type> ( CharEncoding::tolower ( ch ) )
+				            , static_cast<char_type> ( CharEncoding::tolower ( next ) ) );
+				chset.set ( static_cast<char_type> ( CharEncoding::toupper ( ch ) )
+				            , static_cast<char_type> ( CharEncoding::toupper ( next ) ) );
+			}
+			else
+			{
+				chset.set ( static_cast<char_type> ( CharEncoding::tolower ( ch ) ) );
+				chset.set ( static_cast<char_type> ( CharEncoding::toupper ( ch ) ) );
+			}
+			ch = next;
+		}
+	}
 
-    template <typename Modifiers>
-    struct make_primitive<char const(&)[2], Modifiers>
-      : detail::basic_literal<Modifiers, char_encoding::standard> {};
+	template <typename CharParam, typename Context>
+	bool test ( CharParam ch, Context & ) const
+	{
+		return traits::ischar<CharParam, char_encoding>::call ( ch ) &&
+		       chset.test ( char_type ( ch ) );
+	}
 
-    template <typename Modifiers>
-    struct make_primitive<wchar_t, Modifiers>
-      : detail::basic_literal<Modifiers, char_encoding::standard_wide> {};
+	template <typename Context>
+	info what ( Context & /*context*/ ) const
+	{
+		return info ( "no-case-char-set" );
+	}
 
-    template <typename Modifiers>
-    struct make_primitive<wchar_t const(&)[2], Modifiers>
-      : detail::basic_literal<Modifiers, char_encoding::standard_wide> {};
+	support::detail::basic_chset<char_type> chset;
+};
 
-    template <typename CharEncoding, typename Modifiers>
-    struct make_primitive<
-        terminal<tag::char_code<tag::char_, CharEncoding> >, Modifiers>
-    {
-        typedef tag::char_code<tag::char_, CharEncoding> tag;
-        typedef char_class<tag> result_type;
-        result_type operator()(unused_type, unused_type) const
-        {
-            return result_type();
-        }
-    };
+///////////////////////////////////////////////////////////////////////////
+// Parser generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+namespace detail
+{
+template <typename Modifiers, typename Encoding>
+struct basic_literal
+{
+	static bool const no_case =
+	    has_modifier <
+	    Modifiers
+	    , tag::char_code_base<tag::no_case>
+	    >::value;
 
-    template <typename CharEncoding, typename Modifiers, typename A0>
-    struct make_primitive<
-        terminal_ex<
-            tag::char_code<tag::char_, CharEncoding>
-          , fusion::vector1<A0>
-        >
-      , Modifiers>
-    {
-        static bool const no_case =
-            has_modifier<
-                Modifiers
-              , tag::char_code<tag::no_case, CharEncoding>
-            >::value;
+	static bool const no_attr =
+	    !has_modifier <
+	    Modifiers
+	    , tag::lazy_eval
+	    >::value;
 
-        typedef typename
-            mpl::if_<
-                traits::is_string<A0>
-              , char_set<CharEncoding, no_case>
-              , literal_char<CharEncoding, false, no_case>
-            >::type
-        result_type;
+	typedef literal_char <
+	typename spirit::detail::get_encoding <
+	Modifiers, Encoding, no_case >::type
+	, no_attr
+	, no_case >
+	result_type;
 
-        template <typename Terminal>
-        result_type operator()(Terminal const& term, unused_type) const
-        {
-            return result_type(fusion::at_c<0>(term.args));
-        }
-    };
+	template <typename Char>
+	result_type operator() ( Char ch, unused_type ) const
+	{
+		return result_type ( ch );
+	}
 
-    template <typename CharEncoding, typename Modifiers, typename Char>
-    struct make_primitive<
-        terminal_ex<
-            tag::char_code<tag::char_, CharEncoding>
-          , fusion::vector1<Char(&)[2]> // For single char strings
-        >
-      , Modifiers>
-    {
-        static bool const no_case =
-            has_modifier<
-                Modifiers
-              , tag::char_code<tag::no_case, CharEncoding>
-            >::value;
+	template <typename Char>
+	result_type operator() ( Char const *str, unused_type ) const
+	{
+		return result_type ( str[0] );
+	}
+};
+}
 
-        typedef literal_char<CharEncoding, false, no_case> result_type;
+template <typename Modifiers>
+struct make_primitive<char, Modifiers>
+		: detail::basic_literal<Modifiers, char_encoding::standard> {};
 
-        template <typename Terminal>
-        result_type operator()(Terminal const& term, unused_type) const
-        {
-            return result_type(fusion::at_c<0>(term.args)[0]);
-        }
-    };
+template <typename Modifiers>
+struct make_primitive<char const ( & ) [2], Modifiers>
+: detail::basic_literal<Modifiers, char_encoding::standard> {};
 
-    template <typename CharEncoding, typename Modifiers, typename A0, typename A1>
-    struct make_primitive<
-        terminal_ex<
-            tag::char_code<tag::char_, CharEncoding>
-          , fusion::vector2<A0, A1>
-        >
-      , Modifiers>
-    {
-        static bool const no_case =
-            has_modifier<
-                Modifiers
-              , tag::char_code<tag::no_case, CharEncoding>
-            >::value;
+template <typename Modifiers>
+struct make_primitive<wchar_t, Modifiers>
+		: detail::basic_literal<Modifiers, char_encoding::standard_wide> {};
 
-        typedef char_range<CharEncoding, no_case> result_type;
+template <typename Modifiers>
+struct make_primitive<wchar_t const ( & ) [2], Modifiers>
+: detail::basic_literal<Modifiers, char_encoding::standard_wide> {};
 
-        template <typename Terminal>
-        result_type operator()(Terminal const& term, unused_type) const
-        {
-            return result_type(
-                fusion::at_c<0>(term.args)
-              , fusion::at_c<1>(term.args)
-            );
-        }
-    };
-}}}
+template <typename CharEncoding, typename Modifiers>
+struct make_primitive <
+		terminal<tag::char_code<tag::char_, CharEncoding> >, Modifiers >
+{
+	typedef tag::char_code<tag::char_, CharEncoding> tag;
+	typedef char_class<tag> result_type;
+	result_type operator() ( unused_type, unused_type ) const
+	{
+		return result_type();
+	}
+};
+
+template <typename CharEncoding, typename Modifiers, typename A0>
+struct make_primitive <
+		terminal_ex <
+		tag::char_code<tag::char_, CharEncoding>
+		, fusion::vector1<A0>
+		>
+		, Modifiers >
+{
+	static bool const no_case =
+	    has_modifier <
+	    Modifiers
+	    , tag::char_code<tag::no_case, CharEncoding>
+	    >::value;
+
+	typedef typename
+	mpl::if_ <
+	traits::is_string<A0>
+	, char_set<CharEncoding, no_case>
+	, literal_char<CharEncoding, false, no_case>
+	>::type
+	result_type;
+
+	template <typename Terminal>
+	result_type operator() ( Terminal const &term, unused_type ) const
+	{
+		return result_type ( fusion::at_c<0> ( term.args ) );
+	}
+};
+
+template <typename CharEncoding, typename Modifiers, typename Char>
+struct make_primitive <
+		terminal_ex <
+		tag::char_code<tag::char_, CharEncoding>
+, fusion::vector1<Char ( & ) [2]> // For single char strings
+>
+, Modifiers >
+{
+    static bool const no_case =
+        has_modifier <
+        Modifiers
+        , tag::char_code<tag::no_case, CharEncoding>
+    >::value;
+
+    typedef literal_char<CharEncoding, false, no_case> result_type;
+
+    template <typename Terminal>
+    result_type operator() ( Terminal const &term, unused_type ) const
+{
+	return result_type ( fusion::at_c<0> ( term.args ) [0] );
+}
+             };
+
+template <typename CharEncoding, typename Modifiers, typename A0, typename A1>
+struct make_primitive <
+		terminal_ex <
+		tag::char_code<tag::char_, CharEncoding>
+		, fusion::vector2<A0, A1>
+		>
+		, Modifiers >
+{
+	static bool const no_case =
+	    has_modifier <
+	    Modifiers
+	    , tag::char_code<tag::no_case, CharEncoding>
+	    >::value;
+
+	typedef char_range<CharEncoding, no_case> result_type;
+
+	template <typename Terminal>
+	result_type operator() ( Terminal const &term, unused_type ) const
+	{
+		return result_type (
+		           fusion::at_c<0> ( term.args )
+		           , fusion::at_c<1> ( term.args )
+		       );
+	}
+};
+}
+}
+}
 
 #endif

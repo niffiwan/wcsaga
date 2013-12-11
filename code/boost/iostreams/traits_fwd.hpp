@@ -12,11 +12,14 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <iosfwd> // stream types, char_traits.
 
-namespace boost { namespace iostreams {      
+namespace boost
+{
+namespace iostreams
+{
 
 template<typename T>
 struct is_istream;
@@ -84,7 +87,8 @@ struct is_filter;
 template<typename T>
 struct is_direct;
 
-namespace detail {
+namespace detail
+{
 
 template<typename T>
 struct is_boost_stream;
@@ -106,6 +110,7 @@ struct is_boost;
 
 } // End namespace detail.
 
-} } // End namespaces iostreams, boost.
+}
+} // End namespaces iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_IO_TRAITS_FWD_HPP_INCLUDED

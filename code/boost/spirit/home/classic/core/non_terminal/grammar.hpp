@@ -21,7 +21,10 @@
 #include <boost/spirit/home/classic/core/non_terminal/impl/grammar.ipp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit {
+namespace boost
+{
+namespace spirit
+{
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
@@ -32,51 +35,52 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 ///////////////////////////////////////////////////////////////////////////////
 template <typename DerivedT, typename ContextT = parser_context<> >
 struct grammar
-    : public parser<DerivedT>
-    , public ContextT::base_t
-    , public context_aux<ContextT, DerivedT>
-    BOOST_SPIRIT_GRAMMAR_ID
+		: public parser<DerivedT>
+		, public ContextT::base_t
+		, public context_aux<ContextT, DerivedT>
+		BOOST_SPIRIT_GRAMMAR_ID
 {
-    typedef grammar<DerivedT, ContextT>         self_t;
-    typedef DerivedT const&                     embed_t;
-    typedef typename ContextT::context_linker_t context_t;
-    typedef typename context_t::attr_t          attr_t;
+	typedef grammar<DerivedT, ContextT>         self_t;
+	typedef DerivedT const                     &embed_t;
+	typedef typename ContextT::context_linker_t context_t;
+	typedef typename context_t::attr_t          attr_t;
 
-    template <typename ScannerT>
-    struct result
-    {
-        typedef typename match_result<ScannerT, attr_t>::type type;
-    };
+	template <typename ScannerT>
+	struct result
+	{
+		typedef typename match_result<ScannerT, attr_t>::type type;
+	};
 
-    grammar() {}
-    ~grammar() { impl::grammar_destruct(this); }
+	grammar() {}
+	~grammar() { impl::grammar_destruct ( this ); }
 
-    template <typename ScannerT>
-    typename parser_result<self_t, ScannerT>::type
-    parse_main(ScannerT const& scan) const
-    { return impl::grammar_parser_parse<0>(this, scan); }
+	template <typename ScannerT>
+	typename parser_result<self_t, ScannerT>::type
+	parse_main ( ScannerT const &scan ) const
+	{ return impl::grammar_parser_parse<0> ( this, scan ); }
 
-    template <typename ScannerT>
-    typename parser_result<self_t, ScannerT>::type
-    parse(ScannerT const& scan) const
-    {
-        typedef typename parser_result<self_t, ScannerT>::type result_t;
-        typedef parser_scanner_linker<ScannerT> scanner_t;
-        BOOST_SPIRIT_CONTEXT_PARSE(scan, *this, scanner_t, context_t, result_t)
-    }
+	template <typename ScannerT>
+	typename parser_result<self_t, ScannerT>::type
+	parse ( ScannerT const &scan ) const
+	{
+		typedef typename parser_result<self_t, ScannerT>::type result_t;
+		typedef parser_scanner_linker<ScannerT> scanner_t;
+		BOOST_SPIRIT_CONTEXT_PARSE ( scan, *this, scanner_t, context_t, result_t )
+	}
 
-    template <int N>
-    impl::entry_grammar<DerivedT, N, ContextT>
-    use_parser() const
-    { return impl::entry_grammar<DerivedT, N, ContextT>( this->derived()); }
+	template <int N>
+	impl::entry_grammar<DerivedT, N, ContextT>
+	use_parser() const
+	{ return impl::entry_grammar<DerivedT, N, ContextT> ( this->derived() ); }
 
-    BOOST_SPIRIT_GRAMMAR_STATE
+	BOOST_SPIRIT_GRAMMAR_STATE
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}} // namespace BOOST_SPIRIT_CLASSIC_NS
+}
+} // namespace BOOST_SPIRIT_CLASSIC_NS
 
 #undef BOOST_SPIRIT_GRAMMAR_ID
 #undef BOOST_SPIRIT_GRAMMAR_ACCESS

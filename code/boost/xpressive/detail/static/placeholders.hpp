@@ -21,7 +21,11 @@
 #include <boost/xpressive/detail/core/quant_style.hpp>
 #include <boost/xpressive/detail/core/regex_impl.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+namespace boost
+{
+namespace xpressive
+{
+namespace detail
 {
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -29,9 +33,9 @@ namespace boost { namespace xpressive { namespace detail
 //
 struct mark_placeholder
 {
-    BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, true)
+	BOOST_XPR_QUANT_STYLE ( quant_variable_width, unknown_width::value, true )
 
-    int mark_number_;
+	int mark_number_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -39,10 +43,10 @@ struct mark_placeholder
 //
 struct posix_charset_placeholder
 {
-    BOOST_XPR_QUANT_STYLE(quant_fixed_width, 1, true)
+	BOOST_XPR_QUANT_STYLE ( quant_fixed_width, 1, true )
 
-    char const *name_;
-    bool not_;
+	char const *name_;
+	bool not_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -51,7 +55,7 @@ struct posix_charset_placeholder
 template<typename Cond>
 struct assert_word_placeholder
 {
-    BOOST_XPR_QUANT_STYLE(quant_none, 0, true)
+	BOOST_XPR_QUANT_STYLE ( quant_none, 0, true )
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -60,11 +64,11 @@ struct assert_word_placeholder
 template<typename Char>
 struct range_placeholder
 {
-    BOOST_XPR_QUANT_STYLE(quant_fixed_width, 1, true)
+	BOOST_XPR_QUANT_STYLE ( quant_fixed_width, 1, true )
 
-    Char ch_min_;
-    Char ch_max_;
-    bool not_;
+	Char ch_min_;
+	Char ch_max_;
+	bool not_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -72,7 +76,7 @@ struct range_placeholder
 //
 struct assert_bol_placeholder
 {
-    BOOST_XPR_QUANT_STYLE(quant_none, 0, true)
+	BOOST_XPR_QUANT_STYLE ( quant_none, 0, true )
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -80,7 +84,7 @@ struct assert_bol_placeholder
 //
 struct assert_eol_placeholder
 {
-    BOOST_XPR_QUANT_STYLE(quant_none, 0, true)
+	BOOST_XPR_QUANT_STYLE ( quant_none, 0, true )
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -88,7 +92,7 @@ struct assert_eol_placeholder
 //
 struct logical_newline_placeholder
 {
-    BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, true)
+	BOOST_XPR_QUANT_STYLE ( quant_variable_width, unknown_width::value, true )
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -96,7 +100,7 @@ struct logical_newline_placeholder
 //
 struct self_placeholder
 {
-    BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, false)
+	BOOST_XPR_QUANT_STYLE ( quant_variable_width, unknown_width::value, false )
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -105,13 +109,15 @@ struct self_placeholder
 template<typename Nbr>
 struct attribute_placeholder
 {
-    BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, false)
+	BOOST_XPR_QUANT_STYLE ( quant_variable_width, unknown_width::value, false )
 
-    typedef Nbr nbr_type;
-    static Nbr nbr() { return Nbr(); }
+	typedef Nbr nbr_type;
+	static Nbr nbr() { return Nbr(); }
 };
 
-}}} // namespace boost::xpressive::detail
+}
+}
+} // namespace boost::xpressive::detail
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma warning(pop)

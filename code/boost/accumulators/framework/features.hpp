@@ -12,18 +12,21 @@
 #include <boost/mpl/vector.hpp>
 #include <boost/accumulators/accumulators_fwd.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 ///////////////////////////////////////////////////////////////////////////////
 // features
 //
-template<BOOST_PP_ENUM_PARAMS(BOOST_ACCUMULATORS_MAX_FEATURES, typename Feature)>
+template<BOOST_PP_ENUM_PARAMS ( BOOST_ACCUMULATORS_MAX_FEATURES, typename Feature ) >
 struct features
-  : mpl::vector<BOOST_PP_ENUM_PARAMS(BOOST_ACCUMULATORS_MAX_FEATURES, Feature)>
+: mpl::vector<BOOST_PP_ENUM_PARAMS ( BOOST_ACCUMULATORS_MAX_FEATURES, Feature ) >
 {
 };
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

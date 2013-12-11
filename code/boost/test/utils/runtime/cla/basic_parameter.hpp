@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2005-2008.
-//  Use, modification, and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  Use, modification, and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -26,35 +26,39 @@
 // Boost
 #include <boost/utility/base_from_member.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace BOOST_RT_PARAM_NAMESPACE {
+namespace BOOST_RT_PARAM_NAMESPACE
+{
 
-namespace cla {
+namespace cla
+{
 
 // ************************************************************************** //
 // **************         runtime::cla::basic_parameter        ************** //
 // ************************************************************************** //
 
 template<typename T, typename IdPolicy>
-class basic_parameter : private base_from_member<IdPolicy>, public typed_parameter<T> {
+class basic_parameter : private base_from_member<IdPolicy>, public typed_parameter<T>
+{
 public:
-    // Constructors
-    explicit    basic_parameter( cstring n ) 
-    : base_from_member<IdPolicy>()
-    , typed_parameter<T>( base_from_member<IdPolicy>::member )
-    {
-        this->accept_modifier( name = n );
-    }
+	// Constructors
+	explicit    basic_parameter ( cstring n )
+		: base_from_member<IdPolicy>()
+		, typed_parameter<T> ( base_from_member<IdPolicy>::member )
+	{
+		this->accept_modifier ( name = n );
+	}
 
-    // parameter properties modification
-    template<typename Modifier>
-    void        accept_modifier( Modifier const& m )
-    {
-        typed_parameter<T>::accept_modifier( m );
+	// parameter properties modification
+	template<typename Modifier>
+	void        accept_modifier ( Modifier const &m )
+	{
+		typed_parameter<T>::accept_modifier ( m );
 
-        base_from_member<IdPolicy>::member.accept_modifier( m );
-    }
+		base_from_member<IdPolicy>::member.accept_modifier ( m );
+	}
 };
 
 //____________________________________________________________________________//

@@ -18,148 +18,157 @@
 #include <boost/range/detail/remove_extent.hpp>
 #include <iterator>
 
-namespace boost 
+namespace boost
 {
-    namespace range_detail
-    {
-        template< typename T >
-        struct range_size_;
+namespace range_detail
+{
+template< typename T >
+struct range_size_;
 
-        //////////////////////////////////////////////////////////////////////
-        // default
-        //////////////////////////////////////////////////////////////////////
-        
-        template<>
-        struct range_size_<std_container_>
-        {
-            template< typename C >
-            struct inner {
-                static BOOST_RANGE_DEDUCED_TYPENAME C::size_type fun( const C& c )
-                {
-                    return c.size();
-                };
-            };
-        };
-                    
-        //////////////////////////////////////////////////////////////////////
-        // pair
-        //////////////////////////////////////////////////////////////////////
-        
-        template<>
-        struct range_size_<std_pair_>
-        {
-            template< typename P >
-            struct inner {
-                static BOOST_RANGE_DEDUCED_TYPENAME range_size<P>::type 
-                fun( const P& p )
-                {
-                    return std::distance( p.first, p.second );
-                }
-            };
-        };
- 
-        //////////////////////////////////////////////////////////////////////
-        // array
-        //////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+// default
+//////////////////////////////////////////////////////////////////////
 
-        template<>
-        struct range_size_<array_>
-        {
-            template<typename T>
-            struct inner {
-                static std::size_t fun(T& t)
-                {
-                    return remove_extent<T>::size;
-                }
-            };
-        };
-        
-        template<>
-        struct range_size_<char_array_>
-        {
-            template<typename T>
-            struct inner {
-                static std::size_t fun(T& t)
-                {
-                    return sizeof(T) / sizeof(T[0]);
-                }
-            };
-        };
-        
-        template<>
-        struct range_size_<wchar_t_array_>
-        {
-            template<typename T>
-            struct inner {
-                static std::size_t fun(T& t)
-                {
-                    return sizeof(T) / sizeof(T[0]);
-                }
-            };
-        };
+template<>
+struct range_size_<std_container_>
+{
+	template< typename C >
+	struct inner
+	{
+		static BOOST_RANGE_DEDUCED_TYPENAME C::size_type fun ( const C &c )
+		{
+			return c.size();
+		};
+	};
+};
 
-        //////////////////////////////////////////////////////////////////////
-        // string
-        //////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+// pair
+//////////////////////////////////////////////////////////////////////
 
-        template<>
-        struct range_size_<char_ptr_>
-        {
-            template<typename T>
-            struct inner {
-                static std::size_t fun( const char* s )
-                {
-                    return boost::range_detail::str_size( s );
-                }
-            };
-        };
+template<>
+struct range_size_<std_pair_>
+{
+	template< typename P >
+	struct inner
+	{
+		static BOOST_RANGE_DEDUCED_TYPENAME range_size<P>::type
+		fun ( const P &p )
+		{
+			return std::distance ( p.first, p.second );
+		}
+	};
+};
 
-        template<>
-        struct range_size_<const_char_ptr_>
-        {
-            template<typename T>
-            struct inner {
-                static std::size_t fun( const char* s )
-                {
-                    return boost::range_detail::str_size( s );
-                }
-            };
-        };
-        
-        template<>
-        struct range_size_<wchar_t_ptr_>
-        {
-            template<typename T>
-            struct inner {
-                static std::size_t fun( const wchar_t* s )
-                {
-                    return boost::range_detail::str_size( s );
-                }
-            };
-        };
+//////////////////////////////////////////////////////////////////////
+// array
+//////////////////////////////////////////////////////////////////////
 
-        template<>
-        struct range_size_<const_wchar_t_ptr_>
-        {
-            template<typename T>
-            struct inner {
-                static std::size_t fun( const wchar_t* s )
-                {
-                    return boost::range_detail::str_size( s );
-                }
-            };
-        };
-  
-    } // namespace 'range_detail'
-    
+template<>
+struct range_size_<array_>
+{
+	template<typename T>
+	struct inner
+	{
+		static std::size_t fun ( T &t )
+		{
+			return remove_extent<T>::size;
+		}
+	};
+};
 
-    template< typename C >
-    BOOST_RANGE_DEDUCED_TYPENAME range_size<C>::type 
-    size( const C& c )
-    {
-        return range_detail::range_size_<range_detail::range<C>::type>::inner<C>::fun( c );
-    }
-    
+template<>
+struct range_size_<char_array_>
+{
+	template<typename T>
+	struct inner
+	{
+		static std::size_t fun ( T &t )
+		{
+			return sizeof ( T ) / sizeof ( T[0] );
+		}
+	};
+};
+
+template<>
+struct range_size_<wchar_t_array_>
+{
+	template<typename T>
+	struct inner
+	{
+		static std::size_t fun ( T &t )
+		{
+			return sizeof ( T ) / sizeof ( T[0] );
+		}
+	};
+};
+
+//////////////////////////////////////////////////////////////////////
+// string
+//////////////////////////////////////////////////////////////////////
+
+template<>
+struct range_size_<char_ptr_>
+{
+	template<typename T>
+	struct inner
+	{
+		static std::size_t fun ( const char *s )
+		{
+			return boost::range_detail::str_size ( s );
+		}
+	};
+};
+
+template<>
+struct range_size_<const_char_ptr_>
+{
+	template<typename T>
+	struct inner
+	{
+		static std::size_t fun ( const char *s )
+		{
+			return boost::range_detail::str_size ( s );
+		}
+	};
+};
+
+template<>
+struct range_size_<wchar_t_ptr_>
+{
+	template<typename T>
+	struct inner
+	{
+		static std::size_t fun ( const wchar_t *s )
+		{
+			return boost::range_detail::str_size ( s );
+		}
+	};
+};
+
+template<>
+struct range_size_<const_wchar_t_ptr_>
+{
+	template<typename T>
+	struct inner
+	{
+		static std::size_t fun ( const wchar_t *s )
+		{
+			return boost::range_detail::str_size ( s );
+		}
+	};
+};
+
+} // namespace 'range_detail'
+
+
+template< typename C >
+BOOST_RANGE_DEDUCED_TYPENAME range_size<C>::type
+size ( const C &c )
+{
+	return range_detail::range_size_<range_detail::range<C>::type>::inner<C>::fun ( c );
+}
+
 } // namespace 'boost'
 
 

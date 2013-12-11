@@ -49,8 +49,8 @@
 //
 // Intel compiler prior to version 10 has sporadic problems
 // calling the long double overloads of the std lib math functions:
-// calling ::powl is OK, but std::pow(long double, long double) 
-// may segfault depending upon the value of the arguments passed 
+// calling ::powl is OK, but std::pow(long double, long double)
+// may segfault depending upon the value of the arguments passed
 // and the specific Linux distribution.
 //
 // We'll be conservative and disable long double support for this compiler.
@@ -70,7 +70,7 @@
 #endif
 
 #if defined(BOOST_MSVC) && !defined(_WIN32_WCE)
-   // Better safe than sorry, our tests don't support hardware exceptions:
+// Better safe than sorry, our tests don't support hardware exceptions:
 #  define BOOST_MATH_CONTROL_FP _control87(MCW_EM,MCW_EM)
 #endif
 
@@ -170,21 +170,21 @@
 #endif
 
 //
-// The maximum order of polynomial that will be evaluated 
+// The maximum order of polynomial that will be evaluated
 // via an unrolled specialisation:
 //
 #ifndef BOOST_MATH_MAX_POLY_ORDER
 #  define BOOST_MATH_MAX_POLY_ORDER 17
-#endif 
+#endif
 //
 // Set the method used to evaluate polynomials and rationals:
 //
 #ifndef BOOST_MATH_POLY_METHOD
 #  define BOOST_MATH_POLY_METHOD 1
-#endif 
+#endif
 #ifndef BOOST_MATH_RATIONAL_METHOD
 #  define BOOST_MATH_RATIONAL_METHOD 0
-#endif 
+#endif
 //
 // decide whether to store constants as integers or reals:
 //
@@ -237,51 +237,59 @@
    using boost::math::modf;
 
 
-namespace boost{ namespace math{
+namespace boost
+{
+namespace math
+{
 namespace tools
 {
 
 template <class T>
-inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c)
+inline T max BOOST_PREVENT_MACRO_SUBSTITUTION ( T a, T b, T c )
 {
-   return (std::max)((std::max)(a, b), c);
+	return ( std::max ) ( ( std::max ) ( a, b ), c );
 }
 
 template <class T>
-inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d)
+inline T max BOOST_PREVENT_MACRO_SUBSTITUTION ( T a, T b, T c, T d )
 {
-   return (std::max)((std::max)(a, b), (std::max)(c, d));
+	return ( std::max ) ( ( std::max ) ( a, b ), ( std::max ) ( c, d ) );
 }
 } // namespace tools
-}} // namespace boost namespace math
+}
+} // namespace boost namespace math
 
 #if (defined(__linux__) && !defined(__UCLIBC__)) || defined(__QNX__) || defined(__IBMCPP__)
 
-   #include <fenv.h>
+#include <fenv.h>
 
-   namespace boost{ namespace math{
-   namespace detail
-   {
-   struct fpu_guard
-   {
-      fpu_guard()
-      {
-         fegetexceptflag(&m_flags, FE_ALL_EXCEPT);
-         feclearexcept(FE_ALL_EXCEPT);
-      }
-      ~fpu_guard()
-      {
-         fesetexceptflag(&m_flags, FE_ALL_EXCEPT);
-      }
-   private:
-      fexcept_t m_flags;
-   };
+namespace boost
+{
+namespace math
+{
+namespace detail
+{
+struct fpu_guard
+{
+	fpu_guard()
+	{
+		fegetexceptflag ( &m_flags, FE_ALL_EXCEPT );
+		feclearexcept ( FE_ALL_EXCEPT );
+	}
+	~fpu_guard()
+	{
+		fesetexceptflag ( &m_flags, FE_ALL_EXCEPT );
+	}
+private:
+	fexcept_t m_flags;
+};
 
-   } // namespace detail
-   }} // namespaces
+} // namespace detail
+}
+} // namespaces
 
 #  define BOOST_FPU_EXCEPTION_GUARD boost::math::detail::fpu_guard local_guard_object;
-#  define BOOST_MATH_INSTRUMENT_FPU do{ fexcept_t cpu_flags; fegetexceptflag(&cpu_flags, FE_ALL_EXCEPT); BOOST_MATH_INSTRUMENT_VARIABLE(cpu_flags); } while(0); 
+#  define BOOST_MATH_INSTRUMENT_FPU do{ fexcept_t cpu_flags; fegetexceptflag(&cpu_flags, FE_ALL_EXCEPT); BOOST_MATH_INSTRUMENT_VARIABLE(cpu_flags); } while(0);
 #else // All other platforms.
 #  define BOOST_FPU_EXCEPTION_GUARD
 #  define BOOST_MATH_INSTRUMENT_FPU

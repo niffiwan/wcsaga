@@ -10,27 +10,31 @@
 
 #include <boost/spirit/home/classic/namespace.hpp>
 
-namespace boost { namespace spirit {
+namespace boost
+{
+namespace spirit
+{
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-    template<typename CharT> class chset;
+template<typename CharT> class chset;
 
-    template <typename CharT = char, typename TailT = chset<CharT> >
-    class distinct_parser;
+template <typename CharT = char, typename TailT = chset<CharT> >
+class distinct_parser;
 
-    template <typename CharT = char, typename TailT = chset<CharT> >
-    class distinct_directive;
+template <typename CharT = char, typename TailT = chset<CharT> >
+class distinct_directive;
 
-    template <typename ScannerT = scanner<> >
-    class dynamic_distinct_parser;
+template <typename ScannerT = scanner<> >
+class dynamic_distinct_parser;
 
-    template <typename ScannerT = scanner<> >
-    class dynamic_distinct_directive;
+template <typename ScannerT = scanner<> >
+class dynamic_distinct_directive;
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}} // namespace BOOST_SPIRIT_CLASSIC_NS
+}
+} // namespace BOOST_SPIRIT_CLASSIC_NS
 
 #endif
 

@@ -10,11 +10,16 @@
 #  include <memory>
 # endif
 
-namespace boost { namespace python { namespace detail { 
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
 # if !defined(BOOST_NO_AUTO_PTR)
 
-BOOST_PYTHON_IS_XXX_DEF(auto_ptr, std::auto_ptr, 1)
+BOOST_PYTHON_IS_XXX_DEF ( auto_ptr, std::auto_ptr, 1 )
 
 # else
 
@@ -24,7 +29,9 @@ struct is_auto_ptr : mpl::false_
 };
 
 # endif
-    
-}}} // namespace boost::python::detail
+
+}
+}
+} // namespace boost::python::detail
 
 #endif // IS_AUTO_PTR_DWA2003224_HPP

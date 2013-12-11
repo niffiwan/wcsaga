@@ -30,84 +30,84 @@ namespace detail
 template< class Event >
 struct no_context
 {
-  void no_function( const Event & );
+	void no_function ( const Event & );
 };
 
 //////////////////////////////////////////////////////////////////////////////
-template<
-  class Reactions, class State, class EventBase, class Event,
-  class ActionContext, class IdType >
+template <
+    class Reactions, class State, class EventBase, class Event,
+    class ActionContext, class IdType >
 class reaction_dispatcher
 {
-  private:
-    struct without_action
-    {
-      static result react( State & stt, const EventBase & )
-      {
-        return Reactions::react_without_action( stt );
-      }
-    };
+private:
+	struct without_action
+	{
+		static result react ( State &stt, const EventBase & )
+		{
+			return Reactions::react_without_action ( stt );
+		}
+	};
 
-    struct base_with_action
-    {
-      static result react( State & stt, const EventBase & evt )
-      {
-        return Reactions::react_with_action( stt, evt );
-      }
-    };
+	struct base_with_action
+	{
+		static result react ( State &stt, const EventBase &evt )
+		{
+			return Reactions::react_with_action ( stt, evt );
+		}
+	};
 
-    struct base
-    {
-      static result react(
-        State & stt, const EventBase & evt, const IdType & )
-      {
-        typedef typename mpl::if_<
-          is_same< ActionContext, detail::no_context< Event > >,
-          without_action, base_with_action
-        >::type reaction;
-        return reaction::react( stt, evt );
-      }
-    };
+	struct base
+	{
+		static result react (
+		    State &stt, const EventBase &evt, const IdType & )
+		{
+			typedef typename mpl::if_ <
+			is_same< ActionContext, detail::no_context< Event > >,
+			         without_action, base_with_action
+			         >::type reaction;
+			return reaction::react ( stt, evt );
+		}
+	};
 
-    struct derived_with_action
-    {
-      static result react( State & stt, const EventBase & evt )
-      {
-        return Reactions::react_with_action(
-          stt, *polymorphic_downcast< const Event * >( &evt ) );
-      }
-    };
+	struct derived_with_action
+	{
+		static result react ( State &stt, const EventBase &evt )
+		{
+			return Reactions::react_with_action (
+			           stt, *polymorphic_downcast< const Event * > ( &evt ) );
+		}
+	};
 
-    struct derived
-    {
-      static result react(
-        State & stt, const EventBase & evt, const IdType & eventType )
-      {
-        if ( eventType == Event::static_type() )
-        {
-          typedef typename mpl::if_<
-            is_same< ActionContext, detail::no_context< Event > >,
-            without_action, derived_with_action
-          >::type reaction;
-          return reaction::react( stt, evt );
-        }
-        else
-        {
-          return detail::result_utility::make_result( detail::no_reaction );
-        }
-      }
-    };
+	struct derived
+	{
+		static result react (
+		    State &stt, const EventBase &evt, const IdType &eventType )
+		{
+			if ( eventType == Event::static_type() )
+			{
+				typedef typename mpl::if_ <
+				is_same< ActionContext, detail::no_context< Event > >,
+				         without_action, derived_with_action
+				         >::type reaction;
+				return reaction::react ( stt, evt );
+			}
+			else
+			{
+				return detail::result_utility::make_result ( detail::no_reaction );
+			}
+		}
+	};
 
-  public:
-    static reaction_result react(
-      State & stt, const EventBase & evt, const IdType & eventType )
-    {
-      typedef typename mpl::if_<
-        is_same< Event, EventBase >, base, derived
-      >::type reaction;
-      return result_utility::get_result(
-        reaction::react( stt, evt, eventType ) );
-    }
+public:
+	static reaction_result react (
+	    State &stt, const EventBase &evt, const IdType &eventType )
+	{
+		typedef typename mpl::if_ <
+		is_same< Event, EventBase >, base, derived
+		>::type reaction;
+		return result_utility::get_result (
+		           reaction::react ( stt, evt, eventType ) );
+	}
 };
 
 

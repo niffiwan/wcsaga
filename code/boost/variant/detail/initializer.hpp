@@ -36,8 +36,12 @@
 #   include "boost/preprocessor/repeat.hpp"
 #endif
 
-namespace boost {
-namespace detail { namespace variant {
+namespace boost
+{
+namespace detail
+{
+namespace variant
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) support to simulate standard overload resolution rules
@@ -60,54 +64,54 @@ namespace detail { namespace variant {
 //
 struct make_initializer_node
 {
-    template <typename BaseIndexPair, typename Iterator>
-    struct apply
-    {
-    private: // helpers, for metafunction result (below)
+	template <typename BaseIndexPair, typename Iterator>
+	struct apply
+	{
+	private: // helpers, for metafunction result (below)
 
-        typedef typename BaseIndexPair::first
-            base;
-        typedef typename BaseIndexPair::second
-            index;
+		typedef typename BaseIndexPair::first
+		base;
+		typedef typename BaseIndexPair::second
+		index;
 
-        class initializer_node
-            : public base
-        {
-        private: // helpers, for static functions (below)
+		class initializer_node
+			: public base
+		{
+		private: // helpers, for static functions (below)
 
-            typedef typename mpl::deref<Iterator>::type
-                recursive_enabled_T;
-            typedef typename unwrap_recursive<recursive_enabled_T>::type
-                public_T;
-            typedef typename call_traits<public_T>::param_type
-                param_T;
+			typedef typename mpl::deref<Iterator>::type
+			recursive_enabled_T;
+			typedef typename unwrap_recursive<recursive_enabled_T>::type
+			public_T;
+			typedef typename call_traits<public_T>::param_type
+			param_T;
 
-        public: // static functions
+		public: // static functions
 
-            using base::initialize;
+			using base::initialize;
 
-            static int initialize(void* dest, param_T operand)
-            {
-                typedef typename boost::detail::make_reference_content<
-                      recursive_enabled_T
-                    >::type internal_T;
+			static int initialize ( void *dest, param_T operand )
+			{
+				typedef typename boost::detail::make_reference_content <
+				recursive_enabled_T
+				>::type internal_T;
 
-                new(dest) internal_T(operand);
-                return BOOST_MPL_AUX_VALUE_WKND(index)::value; // which
-            }
+				new ( dest ) internal_T ( operand );
+				return BOOST_MPL_AUX_VALUE_WKND ( index ) ::value; // which
+			}
 
-        };
+		};
 
-        friend class initializer_node;
+		friend class initializer_node;
 
-    public: // metafunction result
+	public: // metafunction result
 
-        typedef mpl::pair<
-              initializer_node
-            , typename mpl::next< index >::type
-            > type;
+		typedef mpl::pair <
+		initializer_node
+		, typename mpl::next< index >::type
+		> type;
 
-    };
+	};
 };
 
 // (detail) class initializer_root
@@ -119,19 +123,19 @@ class initializer_root
 {
 public: // static functions
 
-    static void initialize();
+	static void initialize();
 
 };
 
 #else // defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 
-#   if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) 
+#   if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
-    #define BOOST_VARIANT_AUX_PP_INITIALIZER_TEMPLATE_PARAMS \
+#define BOOST_VARIANT_AUX_PP_INITIALIZER_TEMPLATE_PARAMS \
           BOOST_VARIANT_ENUM_PARAMS(typename recursive_enabled_T) \
     /**/
 
-    #define BOOST_VARIANT_AUX_PP_INITIALIZER_DEFINE_PARAM_T(N) \
+#define BOOST_VARIANT_AUX_PP_INITIALIZER_DEFINE_PARAM_T(N) \
         typedef typename unwrap_recursive< \
               BOOST_PP_CAT(recursive_enabled_T,N) \
             >::type BOOST_PP_CAT(public_T,N); \
@@ -142,12 +146,12 @@ public: // static functions
 
 #   else // MSVC7 and below
 
-    #define BOOST_VARIANT_AUX_PP_INITIALIZER_TEMPLATE_PARAMS \
+#define BOOST_VARIANT_AUX_PP_INITIALIZER_TEMPLATE_PARAMS \
           BOOST_VARIANT_ENUM_PARAMS(typename recursive_enabled_T) \
         , BOOST_VARIANT_ENUM_PARAMS(typename param_T) \
     /**/
 
-    #define BOOST_VARIANT_AUX_PP_INITIALIZER_DEFINE_PARAM_T(N) \
+#define BOOST_VARIANT_AUX_PP_INITIALIZER_DEFINE_PARAM_T(N) \
     /**/
 
 #   endif // MSVC7 and below workaround
@@ -157,7 +161,7 @@ struct preprocessor_list_initializer
 {
 public: // static functions
 
-    #define BOOST_VARIANT_AUX_PP_INITIALIZE_FUNCTION(z,N,_) \
+#define BOOST_VARIANT_AUX_PP_INITIALIZE_FUNCTION(z,N,_) \
         BOOST_VARIANT_AUX_PP_INITIALIZER_DEFINE_PARAM_T(N) \
         static int initialize( \
               void* dest \
@@ -173,13 +177,13 @@ public: // static functions
         } \
         /**/
 
-    BOOST_PP_REPEAT(
-          BOOST_VARIANT_LIMIT_TYPES
-        , BOOST_VARIANT_AUX_PP_INITIALIZE_FUNCTION
-        , _
-        )
+	BOOST_PP_REPEAT (
+	    BOOST_VARIANT_LIMIT_TYPES
+	    , BOOST_VARIANT_AUX_PP_INITIALIZE_FUNCTION
+	    , _
+	)
 
-    #undef BOOST_VARIANT_AUX_PP_INITIALIZE_FUNCTION
+#undef BOOST_VARIANT_AUX_PP_INITIALIZE_FUNCTION
 
 };
 
@@ -190,10 +194,10 @@ public: // static functions
 #endif
 
 template <>
-struct preprocessor_list_initializer<
-      BOOST_PP_ENUM(BOOST_VARIANT_LIMIT_TYPES, BOOST_VARIANT_AUX_ECHO, int)
-    , BOOST_PP_ENUM(BOOST_VARIANT_LIMIT_TYPES, BOOST_VARIANT_AUX_ECHO, const int)
-    >
+struct preprocessor_list_initializer <
+BOOST_PP_ENUM ( BOOST_VARIANT_LIMIT_TYPES, BOOST_VARIANT_AUX_ECHO, int )
+, BOOST_PP_ENUM ( BOOST_VARIANT_LIMIT_TYPES, BOOST_VARIANT_AUX_ECHO, const int )
+>
 {
 };
 
@@ -201,7 +205,8 @@ struct preprocessor_list_initializer<
 
 #endif // BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE workaround
 
-}} // namespace detail::variant
+}
+} // namespace detail::variant
 } // namespace boost
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -231,19 +236,19 @@ struct preprocessor_list_initializer<
 
 #   if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
-    #define BOOST_VARIANT_AUX_PP_INITIALIZER_TEMPLATE_ARGS(typename_base) \
+#define BOOST_VARIANT_AUX_PP_INITIALIZER_TEMPLATE_ARGS(typename_base) \
           BOOST_VARIANT_ENUM_PARAMS(typename_base) \
         /**/
 
 #   else // MSVC7 and below
 
-    #define BOOST_VARIANT_AUX_PP_INITIALIZER_ENUM_PARAM_TYPE(z,N,T) \
+#define BOOST_VARIANT_AUX_PP_INITIALIZER_ENUM_PARAM_TYPE(z,N,T) \
         ::boost::call_traits< \
               ::boost::unwrap_recursive<BOOST_PP_CAT(T,N)>::type \
             >::param_type \
         /**/
 
-    #define BOOST_VARIANT_AUX_PP_INITIALIZER_TEMPLATE_ARGS(typename_base) \
+#define BOOST_VARIANT_AUX_PP_INITIALIZER_TEMPLATE_ARGS(typename_base) \
           BOOST_VARIANT_ENUM_PARAMS(typename_base) \
         , BOOST_PP_ENUM( \
               BOOST_VARIANT_LIMIT_TYPES \

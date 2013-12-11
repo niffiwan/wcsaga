@@ -21,7 +21,8 @@
 #include <boost/random/detail/config.hpp>
 #include <boost/random/uniform_01.hpp>
 
-namespace boost {
+namespace boost
+{
 
 // triangle distribution, with a smallest, b most probable, and c largest
 // value.
@@ -29,72 +30,72 @@ template<class RealType = double>
 class triangle_distribution
 {
 public:
-  typedef RealType input_type;
-  typedef RealType result_type;
+	typedef RealType input_type;
+	typedef RealType result_type;
 
-  explicit triangle_distribution(result_type a_arg = result_type(0),
-                                 result_type b_arg = result_type(0.5),
-                                 result_type c_arg = result_type(1))
-    : _a(a_arg), _b(b_arg), _c(c_arg)
-  {
-    assert(_a <= _b && _b <= _c);
-    init();
-  }
+	explicit triangle_distribution ( result_type a_arg = result_type ( 0 ),
+	                                 result_type b_arg = result_type ( 0.5 ),
+	                                 result_type c_arg = result_type ( 1 ) )
+		: _a ( a_arg ), _b ( b_arg ), _c ( c_arg )
+	{
+		assert ( _a <= _b && _b <= _c );
+		init();
+	}
 
-  // compiler-generated copy ctor and assignment operator are fine
-  result_type a() const { return _a; }
-  result_type b() const { return _b; }
-  result_type c() const { return _c; }
+	// compiler-generated copy ctor and assignment operator are fine
+	result_type a() const { return _a; }
+	result_type b() const { return _b; }
+	result_type c() const { return _c; }
 
-  void reset() { }
+	void reset() { }
 
-  template<class Engine>
-  result_type operator()(Engine& eng)
-  {
+	template<class Engine>
+	result_type operator() ( Engine &eng )
+	{
 #ifndef BOOST_NO_STDC_NAMESPACE
-    using std::sqrt;
+		using std::sqrt;
 #endif
-    result_type u = eng();
-    if( u <= q1 )
-      return _a + p1*sqrt(u);
-    else
-      return _c - d3*sqrt(d2*u-d1);
-  }
+		result_type u = eng();
+		if ( u <= q1 )
+			return _a + p1 * sqrt ( u );
+		else
+			return _c - d3 * sqrt ( d2 * u - d1 );
+	}
 
 #ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
-  template<class CharT, class Traits>
-  friend std::basic_ostream<CharT,Traits>&
-  operator<<(std::basic_ostream<CharT,Traits>& os, const triangle_distribution& td)
-  {
-    os << td._a << " " << td._b << " " << td._c;
-    return os;
-  }
+	template<class CharT, class Traits>
+	friend std::basic_ostream<CharT, Traits> &
+	operator<< ( std::basic_ostream<CharT, Traits> &os, const triangle_distribution &td )
+	{
+		os << td._a << " " << td._b << " " << td._c;
+		return os;
+	}
 
-  template<class CharT, class Traits>
-  friend std::basic_istream<CharT,Traits>&
-  operator>>(std::basic_istream<CharT,Traits>& is, triangle_distribution& td)
-  {
-    is >> std::ws >> td._a >> std::ws >> td._b >> std::ws >> td._c;
-    td.init();
-    return is;
-  }
+	template<class CharT, class Traits>
+	friend std::basic_istream<CharT, Traits> &
+	operator>> ( std::basic_istream<CharT, Traits> &is, triangle_distribution &td )
+	{
+		is >> std::ws >> td._a >> std::ws >> td._b >> std::ws >> td._c;
+		td.init();
+		return is;
+	}
 #endif
 
 private:
-  void init()
-  {
+	void init()
+	{
 #ifndef BOOST_NO_STDC_NAMESPACE
-    using std::sqrt;
+		using std::sqrt;
 #endif
-    d1 = _b - _a;
-    d2 = _c - _a;
-    d3 = sqrt(_c - _b);
-    q1 = d1 / d2;
-    p1 = sqrt(d1 * d2);
-  }
+		d1 = _b - _a;
+		d2 = _c - _a;
+		d3 = sqrt ( _c - _b );
+		q1 = d1 / d2;
+		p1 = sqrt ( d1 * d2 );
+	}
 
-  result_type _a, _b, _c;
-  result_type d1, d2, d3, q1, p1;
+	result_type _a, _b, _c;
+	result_type d1, d2, d3, q1, p1;
 };
 
 } // namespace boost

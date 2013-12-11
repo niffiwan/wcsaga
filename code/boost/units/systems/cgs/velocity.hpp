@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -14,18 +14,21 @@
 #include <boost/units/systems/cgs/base.hpp>
 #include <boost/units/physical_dimensions/velocity.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units { 
+namespace units
+{
 
-namespace cgs {
+namespace cgs
+{
 
-typedef unit<velocity_dimension,cgs::system>     velocity;
-    
-BOOST_UNITS_STATIC_CONSTANT(centimeter_per_second,velocity);    
-BOOST_UNITS_STATIC_CONSTANT(centimeters_per_second,velocity);   
-BOOST_UNITS_STATIC_CONSTANT(centimetre_per_second,velocity);    
-BOOST_UNITS_STATIC_CONSTANT(centimetres_per_second,velocity);   
+typedef unit<velocity_dimension, cgs::system>     velocity;
+
+BOOST_UNITS_STATIC_CONSTANT ( centimeter_per_second, velocity );
+BOOST_UNITS_STATIC_CONSTANT ( centimeters_per_second, velocity );
+BOOST_UNITS_STATIC_CONSTANT ( centimetre_per_second, velocity );
+BOOST_UNITS_STATIC_CONSTANT ( centimetres_per_second, velocity );
 
 } // namespace cgs
 

@@ -24,19 +24,22 @@
 #include <boost/asio/buffered_read_stream_fwd.hpp>
 #include <boost/asio/buffered_stream_fwd.hpp>
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
-namespace detail {
+namespace detail
+{
 
 template <typename Stream>
-char is_read_buffered_helper(buffered_stream<Stream>* s);
+char is_read_buffered_helper ( buffered_stream<Stream> *s );
 
 template <typename Stream>
-char is_read_buffered_helper(buffered_read_stream<Stream>* s);
+char is_read_buffered_helper ( buffered_read_stream<Stream> *s );
 
 struct is_read_buffered_big_type { char data[10]; };
-is_read_buffered_big_type is_read_buffered_helper(...);
+is_read_buffered_big_type is_read_buffered_helper ( ... );
 
 } // namespace detail
 
@@ -47,12 +50,12 @@ class is_read_buffered
 {
 public:
 #if defined(GENERATING_DOCUMENTATION)
-  /// The value member is true only if the Stream type supports buffering of
-  /// read data.
-  static const bool value;
+	/// The value member is true only if the Stream type supports buffering of
+	/// read data.
+	static const bool value;
 #else
-  BOOST_STATIC_CONSTANT(bool,
-      value = sizeof(detail::is_read_buffered_helper((Stream*)0)) == 1);
+	BOOST_STATIC_CONSTANT ( bool,
+	                        value = sizeof ( detail::is_read_buffered_helper ( ( Stream * ) 0 ) ) == 1 );
 #endif
 };
 

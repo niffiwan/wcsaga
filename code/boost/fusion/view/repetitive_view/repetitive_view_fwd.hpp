@@ -8,12 +8,15 @@
 #if !defined(BOOST_FUSION_REPETITIVE_VIEW_FWD_HPP_INCLUDED)
 #define BOOST_FUSION_REPETITIVE_VIEW_FWD_HPP_INCLUDED
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct repetitive_view_tag;
+namespace fusion
+{
+struct repetitive_view_tag;
 
-    template<typename Sequence> struct repetitive_view;
-}}
+template<typename Sequence> struct repetitive_view;
+}
+}
 
 #endif
 

@@ -1,6 +1,6 @@
 //  Boost compiler configuration selection header file
 
-//  (C) Copyright John Maddock 2001 - 2003. 
+//  (C) Copyright John Maddock 2001 - 2003.
 //  (C) Copyright Martin Wille 2003.
 //  (C) Copyright Guillaume Melquiond 2003.
 //
@@ -34,7 +34,7 @@
 
 
 // locate which compiler we are using and define
-// BOOST_COMPILER_CONFIG as needed: 
+// BOOST_COMPILER_CONFIG as needed:
 
 #if defined(__GCCXML__)
 // GCC-XML emulates other compilers, it has to appear first here!

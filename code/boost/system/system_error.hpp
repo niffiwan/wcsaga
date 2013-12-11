@@ -15,65 +15,65 @@
 
 namespace boost
 {
-  namespace system
-  {
-    //  class system_error  --------------------------------------------------//
+namespace system
+{
+//  class system_error  --------------------------------------------------//
 
-    class system_error : public std::runtime_error
-    {
-    public:
-      system_error( error_code ec )
-          : std::runtime_error(""), m_error_code(ec) {}
+class system_error : public std::runtime_error
+{
+public:
+	system_error ( error_code ec )
+		: std::runtime_error ( "" ), m_error_code ( ec ) {}
 
-      system_error( error_code ec, const std::string & what_arg )
-          : std::runtime_error(what_arg), m_error_code(ec) {}
+	system_error ( error_code ec, const std::string &what_arg )
+		: std::runtime_error ( what_arg ), m_error_code ( ec ) {}
 
-      system_error( error_code ec, const char* what_arg )
-          : std::runtime_error(what_arg), m_error_code(ec) {}
+	system_error ( error_code ec, const char *what_arg )
+		: std::runtime_error ( what_arg ), m_error_code ( ec ) {}
 
-      system_error( int ev, const error_category & ecat )
-          : std::runtime_error(""), m_error_code(ev,ecat) {}
+	system_error ( int ev, const error_category &ecat )
+		: std::runtime_error ( "" ), m_error_code ( ev, ecat ) {}
 
-      system_error( int ev, const error_category & ecat,
-        const std::string & what_arg )
-          : std::runtime_error(what_arg), m_error_code(ev,ecat) {}
+	system_error ( int ev, const error_category &ecat,
+	               const std::string &what_arg )
+		: std::runtime_error ( what_arg ), m_error_code ( ev, ecat ) {}
 
-      system_error( int ev, const error_category & ecat,
-        const char * what_arg )
-          : std::runtime_error(what_arg), m_error_code(ev,ecat) {}
+	system_error ( int ev, const error_category &ecat,
+	               const char *what_arg )
+		: std::runtime_error ( what_arg ), m_error_code ( ev, ecat ) {}
 
-      virtual ~system_error() throw() {}
+	virtual ~system_error() throw() {}
 
-      const error_code &  code() const throw() { return m_error_code; }
-      const char *        what() const throw();
+	const error_code   &code() const throw() { return m_error_code; }
+	const char         *what() const throw();
 
-    private:
-      error_code           m_error_code;
-      mutable std::string  m_what;
-    };
+private:
+	error_code           m_error_code;
+	mutable std::string  m_what;
+};
 
-    //  implementation  ------------------------------------------------------//
+//  implementation  ------------------------------------------------------//
 
-    inline const char * system_error::what() const throw()
-    // see http://www.boost.org/more/error_handling.html for lazy build rationale
-    {
-      if ( m_what.empty() )
-      {
-        try
-        {
-          m_what = this->std::runtime_error::what();
-          if ( m_error_code )
-          {
-            if ( !m_what.empty() ) m_what += ": ";
-            m_what += m_error_code.message();
-          }
-        }
-        catch (...) { return std::runtime_error::what(); }
-      }
-      return m_what.c_str();
-    }
+inline const char *system_error::what() const throw()
+// see http://www.boost.org/more/error_handling.html for lazy build rationale
+{
+	if ( m_what.empty() )
+	{
+		try
+		{
+			m_what = this->std::runtime_error::what();
+			if ( m_error_code )
+			{
+				if ( !m_what.empty() ) m_what += ": ";
+				m_what += m_error_code.message();
+			}
+		}
+		catch ( ... ) { return std::runtime_error::what(); }
+	}
+	return m_what.c_str();
+}
 
-  } // namespace system
+} // namespace system
 } // namespace boost
 
 #endif // BOOST_SYSTEM_ERROR_HPP

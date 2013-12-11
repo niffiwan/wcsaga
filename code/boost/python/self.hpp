@@ -7,7 +7,10 @@
 
 # include <boost/python/detail/prefix.hpp>
 
-namespace boost { namespace python {
+namespace boost
+{
+namespace python
+{
 
 #define BOOST_PYTHON_SELF_IS_CLASS
 
@@ -18,16 +21,17 @@ namespace boost { namespace python {
 namespace self_ns
 {
 # ifndef BOOST_PYTHON_SELF_IS_CLASS
-  enum self_t { self };
-# else 
-  struct self_t {};
-  extern BOOST_PYTHON_DECL self_t self;
+enum self_t { self };
+# else
+struct self_t {};
+extern BOOST_PYTHON_DECL self_t self;
 # endif
 }
 
 using self_ns::self_t;
 using self_ns::self;
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 #endif // SELF_DWA2002531_HPP

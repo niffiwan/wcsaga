@@ -17,9 +17,11 @@
 #include <boost/parameter/parameters.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 
-namespace boost{
+namespace boost
+{
 
-namespace flyweights{
+namespace flyweights
+{
 
 /* Three ways to indicate that a given class T is a locking policy:
  *   1. Make it derived from locking_marker.
@@ -27,14 +29,14 @@ namespace flyweights{
  *   3. Pass it as locking<T> when defining a flyweight type.
  */
 
-struct locking_marker{};
+struct locking_marker {};
 
 template<typename T>
-struct is_locking:is_base_and_derived<locking_marker,T>
+struct is_locking: is_base_and_derived<locking_marker, T>
 {};
 
-template<typename T=parameter::void_>
-struct locking:parameter::template_keyword<locking<>,T>
+template<typename T = parameter::void_>
+struct locking: parameter::template_keyword<locking<>, T>
 {};
 
 } /* namespace flyweights */

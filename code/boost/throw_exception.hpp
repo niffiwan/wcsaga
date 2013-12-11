@@ -49,22 +49,22 @@ namespace boost
 
 #ifdef BOOST_NO_EXCEPTIONS
 
-void throw_exception( std::exception const & e ); // user defined
+void throw_exception ( std::exception const &e ); // user defined
 
 #else
 
-inline void throw_exception_assert_compatibility( std::exception const & ) { }
+inline void throw_exception_assert_compatibility ( std::exception const & ) { }
 
-template<class E> BOOST_ATTRIBUTE_NORETURN inline void throw_exception( E const & e )
+template<class E> BOOST_ATTRIBUTE_NORETURN inline void throw_exception ( E const &e )
 {
-    //All boost exceptions are required to derive from std::exception,
-    //to ensure compatibility with BOOST_NO_EXCEPTIONS.
-    throw_exception_assert_compatibility(e);
+	//All boost exceptions are required to derive from std::exception,
+	//to ensure compatibility with BOOST_NO_EXCEPTIONS.
+	throw_exception_assert_compatibility ( e );
 
 #ifndef BOOST_EXCEPTION_DISABLE
-    throw enable_current_exception(enable_error_info(e));
+	throw enable_current_exception ( enable_error_info ( e ) );
 #else
-    throw e;
+	throw e;
 #endif
 }
 

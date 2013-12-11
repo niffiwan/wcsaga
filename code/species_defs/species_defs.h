@@ -86,11 +86,11 @@ typedef struct species_info
 
 	// constructor to initialize everything to 0
 	species_info()
-		: default_iff(0),
-		  awacs_multiplier(0)
+		: default_iff ( 0 ),
+		  awacs_multiplier ( 0 )
 	{
 		species_name[ 0 ] = NULL;
-		memset(fred_color.a1d, 0, sizeof(fred_color.a1d));
+		memset ( fred_color.a1d, 0, sizeof ( fred_color.a1d ) );
 	}
 
 } species_info;

@@ -47,97 +47,97 @@ template<class T> class shared_array
 {
 private:
 
-    // Borland 5.5.1 specific workarounds
-    typedef checked_array_deleter<T> deleter;
-    typedef shared_array<T> this_type;
+	// Borland 5.5.1 specific workarounds
+	typedef checked_array_deleter<T> deleter;
+	typedef shared_array<T> this_type;
 
 public:
 
-    typedef T element_type;
+	typedef T element_type;
 
-    explicit shared_array(T * p = 0): px(p), pn(p, deleter())
-    {
-    }
+	explicit shared_array ( T *p = 0 ) : px ( p ), pn ( p, deleter() )
+	{
+	}
 
-    //
-    // Requirements: D's copy constructor must not throw
-    //
-    // shared_array will release p by calling d(p)
-    //
+	//
+	// Requirements: D's copy constructor must not throw
+	//
+	// shared_array will release p by calling d(p)
+	//
 
-    template<class D> shared_array(T * p, D d): px(p), pn(p, d)
-    {
-    }
+	template<class D> shared_array ( T *p, D d ) : px ( p ), pn ( p, d )
+	{
+	}
 
-//  generated copy constructor, assignment, destructor are fine
+	//  generated copy constructor, assignment, destructor are fine
 
-    void reset(T * p = 0)
-    {
-        BOOST_ASSERT(p == 0 || p != px);
-        this_type(p).swap(*this);
-    }
+	void reset ( T *p = 0 )
+	{
+		BOOST_ASSERT ( p == 0 || p != px );
+		this_type ( p ).swap ( *this );
+	}
 
-    template <class D> void reset(T * p, D d)
-    {
-        this_type(p, d).swap(*this);
-    }
+	template <class D> void reset ( T *p, D d )
+	{
+		this_type ( p, d ).swap ( *this );
+	}
 
-    T & operator[] (std::ptrdiff_t i) const // never throws
-    {
-        BOOST_ASSERT(px != 0);
-        BOOST_ASSERT(i >= 0);
-        return px[i];
-    }
-    
-    T * get() const // never throws
-    {
-        return px;
-    }
+	T &operator[] ( std::ptrdiff_t i ) const // never throws
+	{
+		BOOST_ASSERT ( px != 0 );
+		BOOST_ASSERT ( i >= 0 );
+		return px[i];
+	}
 
-// implicit conversion to "bool"
+	T *get() const  // never throws
+	{
+		return px;
+	}
+
+	// implicit conversion to "bool"
 #include <boost/smart_ptr/detail/operator_bool.hpp>
 
-    bool unique() const // never throws
-    {
-        return pn.unique();
-    }
+	bool unique() const // never throws
+	{
+		return pn.unique();
+	}
 
-    long use_count() const // never throws
-    {
-        return pn.use_count();
-    }
+	long use_count() const // never throws
+	{
+		return pn.use_count();
+	}
 
-    void swap(shared_array<T> & other) // never throws
-    {
-        std::swap(px, other.px);
-        pn.swap(other.pn);
-    }
+	void swap ( shared_array<T> &other ) // never throws
+	{
+		std::swap ( px, other.px );
+		pn.swap ( other.pn );
+	}
 
 private:
 
-    T * px;                     // contained pointer
-    detail::shared_count pn;    // reference counter
+	T *px;                      // contained pointer
+	detail::shared_count pn;    // reference counter
 
 };  // shared_array
 
-template<class T> inline bool operator==(shared_array<T> const & a, shared_array<T> const & b) // never throws
+template<class T> inline bool operator== ( shared_array<T> const &a, shared_array<T> const &b ) // never throws
 {
-    return a.get() == b.get();
+	return a.get() == b.get();
 }
 
-template<class T> inline bool operator!=(shared_array<T> const & a, shared_array<T> const & b) // never throws
+template<class T> inline bool operator!= ( shared_array<T> const &a, shared_array<T> const &b ) // never throws
 {
-    return a.get() != b.get();
+	return a.get() != b.get();
 }
 
-template<class T> inline bool operator<(shared_array<T> const & a, shared_array<T> const & b) // never throws
+template<class T> inline bool operator< ( shared_array<T> const &a, shared_array<T> const &b ) // never throws
 {
-    return std::less<T*>()(a.get(), b.get());
+	return std::less<T *>() ( a.get(), b.get() );
 }
 
-template<class T> void swap(shared_array<T> & a, shared_array<T> & b) // never throws
+template<class T> void swap ( shared_array<T> &a, shared_array<T> &b ) // never throws
 {
-    a.swap(b);
+	a.swap ( b );
 }
 
 } // namespace boost

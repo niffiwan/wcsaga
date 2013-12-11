@@ -15,40 +15,43 @@
 
 #include <boost/multi_index/detail/hash_index_args.hpp>
 
-namespace boost{
+namespace boost
+{
 
-namespace multi_index{
+namespace multi_index
+{
 
-namespace detail{
+namespace detail
+{
 
-template<
-  typename KeyFromValue,typename Hash,typename Pred,
-  typename SuperMeta,typename TagList,typename Category
->
+template <
+    typename KeyFromValue, typename Hash, typename Pred,
+    typename SuperMeta, typename TagList, typename Category
+    >
 class hashed_index;
 
-template<
-  typename KeyFromValue,typename Hash,typename Pred,
-  typename SuperMeta,typename TagList,typename Category
->
-void swap(
-  hashed_index<KeyFromValue,Hash,Pred,SuperMeta,TagList,Category>& x,
-  hashed_index<KeyFromValue,Hash,Pred,SuperMeta,TagList,Category>& y);
+template <
+    typename KeyFromValue, typename Hash, typename Pred,
+    typename SuperMeta, typename TagList, typename Category
+    >
+void swap (
+    hashed_index<KeyFromValue, Hash, Pred, SuperMeta, TagList, Category> &x,
+    hashed_index<KeyFromValue, Hash, Pred, SuperMeta, TagList, Category> &y );
 
 } /* namespace multi_index::detail */
 
 /* hashed_index specifiers */
 
-template<
-  typename Arg1,typename Arg2=mpl::na,
-  typename Arg3=mpl::na,typename Arg4=mpl::na
->
+template <
+    typename Arg1, typename Arg2 = mpl::na,
+    typename Arg3 = mpl::na, typename Arg4 = mpl::na
+    >
 struct hashed_unique;
 
-template<
-  typename Arg1,typename Arg2=mpl::na,
-  typename Arg3=mpl::na,typename Arg4=mpl::na
->
+template <
+    typename Arg1, typename Arg2 = mpl::na,
+    typename Arg3 = mpl::na, typename Arg4 = mpl::na
+    >
 struct hashed_non_unique;
 
 } /* namespace multi_index */

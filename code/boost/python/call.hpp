@@ -24,7 +24,10 @@
 #  include <boost/preprocessor/repetition/enum_trailing_params.hpp>
 #  include <boost/preprocessor/repetition/enum_binary_params.hpp>
 
-namespace boost { namespace python {
+namespace boost
+{
+namespace python
+{
 
 # define BOOST_PYTHON_FAST_ARG_TO_PYTHON_GET(z, n, _) \
     , converter::arg_to_python<A##n>(a##n).get()
@@ -34,7 +37,8 @@ namespace boost { namespace python {
 
 #  undef BOOST_PYTHON_FAST_ARG_TO_PYTHON_GET
 
-}} // namespace boost::python
+}
+} // namespace boost::python
 
 # endif // CALL_DWA2002411_HPP
 
@@ -51,30 +55,30 @@ namespace boost { namespace python {
 
 template <
     class R
-    BOOST_PP_ENUM_TRAILING_PARAMS_Z(1, N, class A)
+    BOOST_PP_ENUM_TRAILING_PARAMS_Z ( 1, N, class A )
     >
 typename detail::returnable<R>::type
-call(PyObject* callable
-    BOOST_PP_COMMA_IF(N) BOOST_PP_ENUM_BINARY_PARAMS_Z(1, N, A, const& a)
-    , boost::type<R>* = 0
-    )
+call ( PyObject *callable
+       BOOST_PP_COMMA_IF ( N ) BOOST_PP_ENUM_BINARY_PARAMS_Z ( 1, N, A, const &a )
+       , boost::type<R> * = 0
+     )
 {
-    PyObject* const result = 
-        PyEval_CallFunction(
-            callable
-            , const_cast<char*>("(" BOOST_PP_REPEAT_1ST(N, BOOST_PYTHON_FIXED, "O") ")")
-            BOOST_PP_REPEAT_1ST(N, BOOST_PYTHON_FAST_ARG_TO_PYTHON_GET, nil)
-            );
-    
-    // This conversion *must not* be done in the same expression as
-    // the call, because, in the special case where the result is a
-    // reference a Python object which was created by converting a C++
-    // argument for passing to PyEval_CallFunction, its reference
-    // count will be 2 until the end of the full expression containing
-    // the conversion, and that interferes with dangling
-    // pointer/reference detection.
-    converter::return_from_python<R> converter;
-    return converter(result);
+	PyObject *const result =
+	    PyEval_CallFunction (
+	        callable
+	        , const_cast<char *> ( "(" BOOST_PP_REPEAT_1ST ( N, BOOST_PYTHON_FIXED, "O" ) ")" )
+	        BOOST_PP_REPEAT_1ST ( N, BOOST_PYTHON_FAST_ARG_TO_PYTHON_GET, nil )
+	    );
+
+	// This conversion *must not* be done in the same expression as
+	// the call, because, in the special case where the result is a
+	// reference a Python object which was created by converting a C++
+	// argument for passing to PyEval_CallFunction, its reference
+	// count will be 2 until the end of the full expression containing
+	// the conversion, and that interferes with dangling
+	// pointer/reference detection.
+	converter::return_from_python<R> converter;
+	return converter ( result );
 }
 
 # undef N

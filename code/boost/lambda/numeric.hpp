@@ -15,98 +15,109 @@
 
 #include <numeric>
 
-namespace boost {
-  namespace lambda {
+namespace boost
+{
+namespace lambda
+{
 
-namespace ll {
+namespace ll
+{
 
 // accumulate ---------------------------------
 
-struct accumulate {
-  
-  template <class Args>
-  struct sig { 
-    typedef typename boost::remove_const<
-        typename boost::tuples::element<3, Args>::type 
-     >::type type; 
-  };
+struct accumulate
+{
 
-  template <class A, class B, class C>
-  C
-  operator()(A a, B b, C c) const
-  { return ::std::accumulate(a, b, c); }
+	template <class Args>
+	struct sig
+	{
+		typedef typename boost::remove_const <
+		typename boost::tuples::element<3, Args>::type
+		>::type type;
+	};
 
-  template <class A, class B, class C, class D>
-  C
-  operator()(A a, B b, C c, D d) const
-  { return ::std::accumulate(a, b, c, d); }
+	template <class A, class B, class C>
+	C
+	operator() ( A a, B b, C c ) const
+	{ return ::std::accumulate ( a, b, c ); }
+
+	template <class A, class B, class C, class D>
+	C
+	operator() ( A a, B b, C c, D d ) const
+	{ return ::std::accumulate ( a, b, c, d ); }
 };
 
 // inner_product ---------------------------------
 
-struct inner_product {
-  
-  template <class Args>
-  struct sig { 
-    typedef typename boost::remove_const<
-        typename boost::tuples::element<4, Args>::type 
-     >::type type; 
-  };
+struct inner_product
+{
 
-  template <class A, class B, class C, class D>
-  D
-  operator()(A a, B b, C c, D d) const
-  { return ::std::inner_product(a, b, c, d); }
+	template <class Args>
+	struct sig
+	{
+		typedef typename boost::remove_const <
+		typename boost::tuples::element<4, Args>::type
+		>::type type;
+	};
 
-  template <class A, class B, class C, class D, class E, class F>
-  D
-  operator()(A a, B b, C c, D d, E e, F f) const
-  { return ::std::inner_product(a, b, c, d, e, f); }
+	template <class A, class B, class C, class D>
+	D
+	operator() ( A a, B b, C c, D d ) const
+	{ return ::std::inner_product ( a, b, c, d ); }
+
+	template <class A, class B, class C, class D, class E, class F>
+	D
+	operator() ( A a, B b, C c, D d, E e, F f ) const
+	{ return ::std::inner_product ( a, b, c, d, e, f ); }
 };
 
 
 // partial_sum ---------------------------------
 
-struct partial_sum {
-  
-  template <class Args>
-  struct sig { 
-    typedef typename boost::remove_const<
-        typename boost::tuples::element<3, Args>::type 
-     >::type type; 
-  };
+struct partial_sum
+{
 
-  template <class A, class B, class C>
-  C
-  operator()(A a, B b, C c) const
-  { return ::std::partial_sum(a, b, c); }
+	template <class Args>
+	struct sig
+	{
+		typedef typename boost::remove_const <
+		typename boost::tuples::element<3, Args>::type
+		>::type type;
+	};
 
-  template <class A, class B, class C, class D>
-  C
-  operator()(A a, B b, C c, D d) const
-  { return ::std::partial_sum(a, b, c, d); }
+	template <class A, class B, class C>
+	C
+	operator() ( A a, B b, C c ) const
+	{ return ::std::partial_sum ( a, b, c ); }
+
+	template <class A, class B, class C, class D>
+	C
+	operator() ( A a, B b, C c, D d ) const
+	{ return ::std::partial_sum ( a, b, c, d ); }
 };
 
 // adjacent_difference ---------------------------------
 
-struct adjacent_difference {
-  
-  template <class Args>
-  struct sig { 
-    typedef typename boost::remove_const<
-        typename boost::tuples::element<3, Args>::type 
-     >::type type; 
-  };
+struct adjacent_difference
+{
 
-  template <class A, class B, class C>
-  C
-  operator()(A a, B b, C c) const
-  { return ::std::adjacent_difference(a, b, c); }
+	template <class Args>
+	struct sig
+	{
+		typedef typename boost::remove_const <
+		typename boost::tuples::element<3, Args>::type
+		>::type type;
+	};
 
-  template <class A, class B, class C, class D>
-  C
-  operator()(A a, B b, C c, D d) const
-  { return ::std::adjacent_difference(a, b, c, d); }
+	template <class A, class B, class C>
+	C
+	operator() ( A a, B b, C c ) const
+	{ return ::std::adjacent_difference ( a, b, c ); }
+
+	template <class A, class B, class C, class D>
+	C
+	operator() ( A a, B b, C c, D d ) const
+	{ return ::std::adjacent_difference ( a, b, c, d ); }
 };
 
 } // end of ll namespace

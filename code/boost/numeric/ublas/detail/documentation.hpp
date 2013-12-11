@@ -20,14 +20,14 @@
         \todo expand this section
  */
 
-/** \defgroup blas1 Level 1 BLAS 
+/** \defgroup blas1 Level 1 BLAS
         \brief level 1 basic linear algebra subroutines
 */
 
 /** \defgroup blas2 Level 2 BLAS
-        \brief level 2 basic linear algebra subroutines 
+        \brief level 2 basic linear algebra subroutines
 */
 
 /** \defgroup blas3 Level 3 BLAS
-        \brief level 3 basic linear algebra subroutines 
+        \brief level 3 basic linear algebra subroutines
 */

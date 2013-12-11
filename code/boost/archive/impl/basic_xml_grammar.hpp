@@ -9,7 +9,7 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // basic_xml_grammar.hpp
 
-// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
+// (C) Copyright 2002 Robert Ramey - http://www.rrsd.com .
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -66,7 +66,7 @@
 
 // spirit stuff
 #if (defined __BORLANDC__) && (__BORLANDC__ < 0x593) \
-    || (defined _MSC_VER) && (_MSC_VER <= 1300) 
+    || (defined _MSC_VER) && (_MSC_VER <= 1300)
 #include <boost/spirit/utility/chset.hpp>
 #else
 #include <boost/spirit/include/classic_chset.hpp>
@@ -80,111 +80,115 @@
 #include <boost/serialization/tracking.hpp>
 #include <boost/serialization/version.hpp>
 
-namespace boost {
-namespace archive {
+namespace boost
+{
+namespace archive
+{
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // XML grammar parsing
 
 template<class CharType>
-class basic_xml_grammar {
+class basic_xml_grammar
+{
 public:
-    // The following is not necessary according to DR45, but at least
-    // one compiler (Compaq C++ 6.5 in strict_ansi mode) chokes otherwise.
-    struct return_values;
-    friend struct return_values;
-    
+	// The following is not necessary according to DR45, but at least
+	// one compiler (Compaq C++ 6.5 in strict_ansi mode) chokes otherwise.
+	struct return_values;
+	friend struct return_values;
+
 private:
-    typedef BOOST_DEDUCED_TYPENAME std::basic_istream<CharType> IStream;
-    typedef BOOST_DEDUCED_TYPENAME std::basic_string<CharType> StringType;
-    typedef BOOST_DEDUCED_TYPENAME boost::spirit::chset<CharType> chset_t;
-    typedef BOOST_DEDUCED_TYPENAME boost::spirit::chlit<CharType> chlit_t;
-    typedef BOOST_DEDUCED_TYPENAME boost::spirit::scanner<
-        BOOST_DEDUCED_TYPENAME  std::basic_string<CharType>::iterator
-    > scanner_t;
-    typedef BOOST_DEDUCED_TYPENAME boost::spirit::rule<scanner_t> rule_t;
-    // Start grammar definition
-    rule_t    
-        Reference,
-        Eq, 
-        STag,
-        ETag,
-        LetterOrUnderscoreOrColon,
-        AttValue, 
-        CharRef1, 
-        CharRef2, 
-        CharRef, 
-        AmpRef,
-        LTRef,
-        GTRef,
-        AposRef,
-        QuoteRef,
-        CharData,
-        CharDataChars,
-        content,
-        AmpName,
-        LTName,
-        GTName,
-        ClassNameChar,
-        ClassName,
-        Name,
-        XMLDecl,
-        XMLDeclChars,
-        DocTypeDecl,
-        DocTypeDeclChars,
-        ClassIDAttribute,
-        ObjectIDAttribute,
-        ClassNameAttribute,
-        TrackingAttribute,
-        VersionAttribute,
-        UnusedAttribute,
-        Attribute,
-        SignatureAttribute,
-        SerializationWrapper,
-        NameHead,
-        NameTail,
-        AttributeList,
-        S;
+	typedef BOOST_DEDUCED_TYPENAME std::basic_istream<CharType> IStream;
+	typedef BOOST_DEDUCED_TYPENAME std::basic_string<CharType> StringType;
+	typedef BOOST_DEDUCED_TYPENAME boost::spirit::chset<CharType> chset_t;
+	typedef BOOST_DEDUCED_TYPENAME boost::spirit::chlit<CharType> chlit_t;
+	typedef BOOST_DEDUCED_TYPENAME boost::spirit::scanner <
+	BOOST_DEDUCED_TYPENAME  std::basic_string<CharType>::iterator
+	> scanner_t;
+	typedef BOOST_DEDUCED_TYPENAME boost::spirit::rule<scanner_t> rule_t;
+	// Start grammar definition
+	rule_t
+	Reference,
+	Eq,
+	STag,
+	ETag,
+	LetterOrUnderscoreOrColon,
+	AttValue,
+	CharRef1,
+	CharRef2,
+	CharRef,
+	AmpRef,
+	LTRef,
+	GTRef,
+	AposRef,
+	QuoteRef,
+	CharData,
+	CharDataChars,
+	content,
+	AmpName,
+	LTName,
+	GTName,
+	ClassNameChar,
+	ClassName,
+	Name,
+	XMLDecl,
+	XMLDeclChars,
+	DocTypeDecl,
+	DocTypeDeclChars,
+	ClassIDAttribute,
+	ObjectIDAttribute,
+	ClassNameAttribute,
+	TrackingAttribute,
+	VersionAttribute,
+	UnusedAttribute,
+	Attribute,
+	SignatureAttribute,
+	SerializationWrapper,
+	NameHead,
+	NameTail,
+	AttributeList,
+	S;
 
-    // XML Character classes
-    chset_t
-        BaseChar,
-        Ideographic,
-        Char, 
-        Letter, 
-        Digit,
-        CombiningChar,
-        Extender, 
-        Sch,
-        NameChar;
+	// XML Character classes
+	chset_t
+	BaseChar,
+	Ideographic,
+	Char,
+	Letter,
+	Digit,
+	CombiningChar,
+	Extender,
+	Sch,
+	NameChar;
 
-    void init_chset();
+	void init_chset();
 
-    bool my_parse(
-        IStream & is,
-        const rule_t &rule_, 
-        const CharType delimiter = L'>'
-    ) const ;
+	bool my_parse (
+	    IStream &is,
+	    const rule_t &rule_,
+	    const CharType delimiter = L'>'
+	) const ;
 public:
-    struct return_values {
-        StringType object_name;
-        StringType contents;
-        class_id_type class_id;
-        object_id_type object_id;
-        version_type version;
-        tracking_type tracking_level;
-        StringType class_name;
-        return_values() :
-            version(0),
-            tracking_level(false)
-        {}
-    } rv;
-    bool parse_start_tag(IStream & is) /*const*/;
-    bool parse_end_tag(IStream & is) const;
-    bool parse_string(IStream & is, StringType & s) /*const*/;
-    void init(IStream & is);
-    void windup(IStream & is);
-    basic_xml_grammar();
+	struct return_values
+	{
+		StringType object_name;
+		StringType contents;
+		class_id_type class_id;
+		object_id_type object_id;
+		version_type version;
+		tracking_type tracking_level;
+		StringType class_name;
+		return_values() :
+			version ( 0 ),
+			tracking_level ( false )
+		{}
+	} rv;
+	bool parse_start_tag ( IStream &is ) /*const*/;
+	bool parse_end_tag ( IStream &is ) const;
+	bool parse_string ( IStream &is, StringType &s ) /*const*/;
+	void init ( IStream &is );
+	void windup ( IStream &is );
+	basic_xml_grammar();
 };
 
 } // namespace archive

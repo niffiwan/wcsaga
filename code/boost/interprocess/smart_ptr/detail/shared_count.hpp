@@ -31,9 +31,12 @@
 #include <boost/detail/no_exceptions_support.hpp>
 #include <functional>       // std::less
 
-namespace boost {
-namespace interprocess {
-namespace detail{
+namespace boost
+{
+namespace interprocess
+{
+namespace detail
+{
 
 template<class T, class VoidAllocator, class Deleter>
 class weak_count;
@@ -41,274 +44,280 @@ class weak_count;
 template<class T, class VoidAllocator, class Deleter>
 class shared_count
 {
-   public:
-   typedef typename boost::pointer_to_other
-      <typename VoidAllocator::pointer, T>::type               pointer;
+public:
+	typedef typename boost::pointer_to_other
+	<typename VoidAllocator::pointer, T>::type               pointer;
 
-   private:
-   typedef sp_counted_impl_pd<VoidAllocator, Deleter>       counted_impl;
-   typedef typename boost::pointer_to_other
-      <typename VoidAllocator::pointer, counted_impl>::type    counted_impl_ptr;
-   typedef typename boost::pointer_to_other
-      <typename VoidAllocator::pointer, sp_counted_base>::type counted_base_ptr;
-   typedef typename VoidAllocator::template rebind
-      <counted_impl>::other                        counted_impl_allocator;
-   typedef typename boost::pointer_to_other
-            <typename VoidAllocator::pointer, const Deleter>::type   const_deleter_pointer;
-   typedef typename boost::pointer_to_other
-            <typename VoidAllocator::pointer, const VoidAllocator>::type   const_allocator_pointer;
+private:
+	typedef sp_counted_impl_pd<VoidAllocator, Deleter>       counted_impl;
+	typedef typename boost::pointer_to_other
+	<typename VoidAllocator::pointer, counted_impl>::type    counted_impl_ptr;
+	typedef typename boost::pointer_to_other
+	<typename VoidAllocator::pointer, sp_counted_base>::type counted_base_ptr;
+	typedef typename VoidAllocator::template rebind
+	<counted_impl>::other                        counted_impl_allocator;
+	typedef typename boost::pointer_to_other
+	<typename VoidAllocator::pointer, const Deleter>::type   const_deleter_pointer;
+	typedef typename boost::pointer_to_other
+	<typename VoidAllocator::pointer, const VoidAllocator>::type   const_allocator_pointer;
 
-   pointer           m_px;
-   counted_impl_ptr  m_pi;
+	pointer           m_px;
+	counted_impl_ptr  m_pi;
 
-   template <class T2, class VoidAllocator2, class Deleter2>
-   friend class weak_count;
+	template <class T2, class VoidAllocator2, class Deleter2>
+	friend class weak_count;
 
-   template <class T2, class VoidAllocator2, class Deleter2>
-   friend class shared_count;
+	template <class T2, class VoidAllocator2, class Deleter2>
+	friend class shared_count;
 
-   public:
+public:
 
-   shared_count()
-      :  m_px(0), m_pi(0) // nothrow
-   {}
+	shared_count()
+		:  m_px ( 0 ), m_pi ( 0 ) // nothrow
+	{}
 
-   template <class Ptr>
-   shared_count(const shared_count &other_shared_count, const Ptr &p)
-      :  m_px(p), m_pi(other_shared_count.m_pi)
-   {}
+	template <class Ptr>
+	shared_count ( const shared_count &other_shared_count, const Ptr &p )
+		:  m_px ( p ), m_pi ( other_shared_count.m_pi )
+	{}
 
-   template <class Ptr>
-   shared_count(const Ptr &p, const VoidAllocator &a, Deleter d)
-      :  m_px(p), m_pi(0)
-   {
-      BOOST_TRY{
-         if(p){
-            counted_impl_allocator alloc(a);
-            m_pi = alloc.allocate(1);
-            //Anti-exception deallocator
-            scoped_ptr<counted_impl, 
-                     scoped_ptr_dealloc_functor<counted_impl_allocator> >
-                        deallocator(m_pi, alloc);
-            //It's more correct to use VoidAllocator::construct but
-            //this needs copy constructor and we don't like it
-            new(detail::get_pointer(m_pi))counted_impl(p, a, d);
-            deallocator.release();
-         }
-      }
-      BOOST_CATCH (...){
-         d(p); // delete p
-         BOOST_RETHROW
-      }
-      BOOST_CATCH_END
-   }
+	template <class Ptr>
+	shared_count ( const Ptr &p, const VoidAllocator &a, Deleter d )
+		:  m_px ( p ), m_pi ( 0 )
+	{
+		BOOST_TRY
+		{
+			if ( p )
+			{
+				counted_impl_allocator alloc ( a );
+				m_pi = alloc.allocate ( 1 );
+				//Anti-exception deallocator
+				scoped_ptr<counted_impl,
+				scoped_ptr_dealloc_functor<counted_impl_allocator> >
+				deallocator ( m_pi, alloc );
+				//It's more correct to use VoidAllocator::construct but
+				//this needs copy constructor and we don't like it
+				new ( detail::get_pointer ( m_pi ) ) counted_impl ( p, a, d );
+				deallocator.release();
+			}
+		}
+		BOOST_CATCH ( ... )
+		{
+			d ( p ); // delete p
+			BOOST_RETHROW
+		}
+		BOOST_CATCH_END
+	}
 
-   ~shared_count() // nothrow
-   {  
-      if( m_pi != 0 ) 
-         m_pi->release();
-   }
+	~shared_count() // nothrow
+	{
+		if ( m_pi != 0 )
+			m_pi->release();
+	}
 
-   shared_count(shared_count const & r)
-      :  m_px(r.m_px), m_pi(r.m_pi) // nothrow
-   { if( m_pi != 0 ) m_pi->add_ref_copy(); }
+	shared_count ( shared_count const &r )
+		:  m_px ( r.m_px ), m_pi ( r.m_pi ) // nothrow
+	{ if ( m_pi != 0 ) m_pi->add_ref_copy(); }
 
-   //this is a test
-   template<class Y>
-   explicit shared_count(shared_count<Y, VoidAllocator, Deleter> const & r)
-      :  m_px(r.m_px), m_pi(r.m_pi) // nothrow
-   {  if( m_pi != 0 ) m_pi->add_ref_copy();  }
+	//this is a test
+	template<class Y>
+	explicit shared_count ( shared_count<Y, VoidAllocator, Deleter> const &r )
+		:  m_px ( r.m_px ), m_pi ( r.m_pi ) // nothrow
+	{  if ( m_pi != 0 ) m_pi->add_ref_copy();  }
 
-   //this is a test
-   template<class Y>
-   explicit shared_count(const pointer & ptr, shared_count<Y, VoidAllocator, Deleter> const & r)
-      :  m_px(ptr), m_pi(r.m_pi) // nothrow
-   {  if( m_pi != 0 ) m_pi->add_ref_copy();  }
+	//this is a test
+	template<class Y>
+	explicit shared_count ( const pointer &ptr, shared_count<Y, VoidAllocator, Deleter> const &r )
+		:  m_px ( ptr ), m_pi ( r.m_pi ) // nothrow
+	{  if ( m_pi != 0 ) m_pi->add_ref_copy();  }
 
-/*
-   explicit shared_count(weak_count<Y, VoidAllocator, Deleter> const & r)
-      // throws bad_weak_ptr when r.use_count() == 0
-      : m_pi( r.m_pi )
-   {
-      if( m_pi == 0 || !m_pi->add_ref_lock() ){
-         boost::throw_exception( boost::interprocess::bad_weak_ptr() );
-      }
-   }
-*/
-   template<class Y>
-   explicit shared_count(weak_count<Y, VoidAllocator, Deleter> const & r)
-      // throws bad_weak_ptr when r.use_count() == 0
-      : m_px(r.m_px), m_pi( r.m_pi )
-   {
-      if( m_pi == 0 || !m_pi->add_ref_lock() ){
-         throw( boost::interprocess::bad_weak_ptr() );
-      }
-   }
+	/*
+	   explicit shared_count(weak_count<Y, VoidAllocator, Deleter> const & r)
+	      // throws bad_weak_ptr when r.use_count() == 0
+	      : m_pi( r.m_pi )
+	   {
+	      if( m_pi == 0 || !m_pi->add_ref_lock() ){
+	         boost::throw_exception( boost::interprocess::bad_weak_ptr() );
+	      }
+	   }
+	*/
+	template<class Y>
+	explicit shared_count ( weak_count<Y, VoidAllocator, Deleter> const &r )
+	// throws bad_weak_ptr when r.use_count() == 0
+		: m_px ( r.m_px ), m_pi ( r.m_pi )
+	{
+		if ( m_pi == 0 || !m_pi->add_ref_lock() )
+		{
+			throw ( boost::interprocess::bad_weak_ptr() );
+		}
+	}
 
-   const pointer &get_pointer() const
-   {  return m_px;   }
+	const pointer &get_pointer() const
+	{  return m_px;   }
 
-   pointer &get_pointer()
-   {  return m_px;   }
+	pointer &get_pointer()
+	{  return m_px;   }
 
-   shared_count & operator= (shared_count const & r) // nothrow
-   {
-      m_px = r.m_px;
-      counted_impl_ptr tmp = r.m_pi;
-      if( tmp != m_pi ){
-         if(tmp != 0)   tmp->add_ref_copy();
-         if(m_pi != 0)  m_pi->release();
-         m_pi = tmp;
-      }
-      return *this;
-   }
+	shared_count &operator= ( shared_count const &r ) // nothrow
+	{
+		m_px = r.m_px;
+		counted_impl_ptr tmp = r.m_pi;
+		if ( tmp != m_pi )
+		{
+			if ( tmp != 0 )   tmp->add_ref_copy();
+			if ( m_pi != 0 )  m_pi->release();
+			m_pi = tmp;
+		}
+		return *this;
+	}
 
-   template<class Y>
-   shared_count & operator= (shared_count<Y, VoidAllocator, Deleter> const & r) // nothrow
-   {
-      m_px = r.m_px;
-      counted_impl_ptr tmp = r.m_pi;
-      if( tmp != m_pi ){
-         if(tmp != 0)   tmp->add_ref_copy();
-         if(m_pi != 0)  m_pi->release();
-         m_pi = tmp;
-      }
-      return *this;
-   }
+	template<class Y>
+	shared_count &operator= ( shared_count<Y, VoidAllocator, Deleter> const &r ) // nothrow
+	{
+		m_px = r.m_px;
+		counted_impl_ptr tmp = r.m_pi;
+		if ( tmp != m_pi )
+		{
+			if ( tmp != 0 )   tmp->add_ref_copy();
+			if ( m_pi != 0 )  m_pi->release();
+			m_pi = tmp;
+		}
+		return *this;
+	}
 
-   void swap(shared_count & r) // nothrow
-   {  detail::do_swap(m_px, r.m_px);   detail::do_swap(m_pi, r.m_pi);   }
+	void swap ( shared_count &r ) // nothrow
+	{  detail::do_swap ( m_px, r.m_px );   detail::do_swap ( m_pi, r.m_pi );   }
 
-   long use_count() const // nothrow
-   {  return m_pi != 0? m_pi->use_count(): 0;  }
+	long use_count() const // nothrow
+	{  return m_pi != 0 ? m_pi->use_count() : 0;  }
 
-   bool unique() const // nothrow
-   {  return use_count() == 1;   }
+	bool unique() const // nothrow
+	{  return use_count() == 1;   }
 
-   const_deleter_pointer get_deleter() const
-   {  return m_pi ? m_pi->get_deleter() : 0; }
+	const_deleter_pointer get_deleter() const
+	{  return m_pi ? m_pi->get_deleter() : 0; }
 
-//   const_allocator_pointer get_allocator() const
-//   {  return m_pi ? m_pi->get_allocator() : 0; }
+	//   const_allocator_pointer get_allocator() const
+	//   {  return m_pi ? m_pi->get_allocator() : 0; }
 
-   template<class T2, class VoidAllocator2, class Deleter2>
-   bool internal_equal (shared_count<T2, VoidAllocator2, Deleter2> const & other) const
-   {  return this->m_pi == other.m_pi;   }
+	template<class T2, class VoidAllocator2, class Deleter2>
+	bool internal_equal ( shared_count<T2, VoidAllocator2, Deleter2> const &other ) const
+	{  return this->m_pi == other.m_pi;   }
 
-   template<class T2, class VoidAllocator2, class Deleter2>
-   bool internal_less  (shared_count<T2, VoidAllocator2, Deleter2> const & other) const
-   {  return std::less<counted_base_ptr>()(this->m_pi, other.m_pi);  }
+	template<class T2, class VoidAllocator2, class Deleter2>
+	bool internal_less  ( shared_count<T2, VoidAllocator2, Deleter2> const &other ) const
+	{  return std::less<counted_base_ptr>() ( this->m_pi, other.m_pi );  }
 };
 
 template<class T, class VoidAllocator, class Deleter, class T2, class VoidAllocator2, class Deleter2> inline
-bool operator==(shared_count<T, VoidAllocator, Deleter> const & a, shared_count<T2, VoidAllocator2, Deleter2> const & b)
-{  return a.internal_equal(b);  }
+bool operator== ( shared_count<T, VoidAllocator, Deleter> const &a, shared_count<T2, VoidAllocator2, Deleter2> const &b )
+{  return a.internal_equal ( b );  }
 
 template<class T, class VoidAllocator, class Deleter, class T2, class VoidAllocator2, class Deleter2> inline
-bool operator<(shared_count<T, VoidAllocator, Deleter> const & a, shared_count<T2, VoidAllocator2, Deleter2> const & b)
-{  return a.internal_less(b);   }
+bool operator< ( shared_count<T, VoidAllocator, Deleter> const &a, shared_count<T2, VoidAllocator2, Deleter2> const &b )
+{  return a.internal_less ( b );   }
 
 
 template<class T, class VoidAllocator, class Deleter>
 class weak_count
 {
-   public:
-   typedef typename boost::pointer_to_other
-      <typename VoidAllocator::pointer, T>::type            pointer;
+public:
+	typedef typename boost::pointer_to_other
+	<typename VoidAllocator::pointer, T>::type            pointer;
 
-   private:
-   typedef sp_counted_impl_pd<VoidAllocator, Deleter>    counted_impl;
-   typedef typename boost::pointer_to_other
-      <typename VoidAllocator::pointer, counted_impl>::type    counted_impl_ptr;
-   typedef typename boost::pointer_to_other
-      <typename VoidAllocator::pointer, sp_counted_base>::type counted_base_ptr;
+private:
+	typedef sp_counted_impl_pd<VoidAllocator, Deleter>    counted_impl;
+	typedef typename boost::pointer_to_other
+	<typename VoidAllocator::pointer, counted_impl>::type    counted_impl_ptr;
+	typedef typename boost::pointer_to_other
+	<typename VoidAllocator::pointer, sp_counted_base>::type counted_base_ptr;
 
-   pointer           m_px;
-   counted_impl_ptr  m_pi;
+	pointer           m_px;
+	counted_impl_ptr  m_pi;
 
-   template <class T2, class VoidAllocator2, class Deleter2>
-   friend class weak_count;
+	template <class T2, class VoidAllocator2, class Deleter2>
+	friend class weak_count;
 
-   template <class T2, class VoidAllocator2, class Deleter2>
-   friend class shared_count;
+	template <class T2, class VoidAllocator2, class Deleter2>
+	friend class shared_count;
 
-   public:
+public:
 
-   weak_count(): m_px(0), m_pi(0) // nothrow
-   {}
+	weak_count() : m_px ( 0 ), m_pi ( 0 ) // nothrow
+	{}
 
-   template <class Y>
-   explicit weak_count(shared_count<Y, VoidAllocator, Deleter> const & r)
-      :  m_px(r.m_px), m_pi(r.m_pi) // nothrow
-   {  if(m_pi != 0) m_pi->weak_add_ref(); }
+	template <class Y>
+	explicit weak_count ( shared_count<Y, VoidAllocator, Deleter> const &r )
+		:  m_px ( r.m_px ), m_pi ( r.m_pi ) // nothrow
+	{  if ( m_pi != 0 ) m_pi->weak_add_ref(); }
 
-   weak_count(weak_count const & r)
-      :  m_px(r.m_px), m_pi(r.m_pi) // nothrow
-   {  if(m_pi != 0) m_pi->weak_add_ref(); }
+	weak_count ( weak_count const &r )
+		:  m_px ( r.m_px ), m_pi ( r.m_pi ) // nothrow
+	{  if ( m_pi != 0 ) m_pi->weak_add_ref(); }
 
-   template<class Y>
-   weak_count(weak_count<Y, VoidAllocator, Deleter> const & r)
-      : m_px(r.m_px), m_pi(r.m_pi) // nothrow
-   {  if(m_pi != 0) m_pi->weak_add_ref(); }
+	template<class Y>
+	weak_count ( weak_count<Y, VoidAllocator, Deleter> const &r )
+		: m_px ( r.m_px ), m_pi ( r.m_pi ) // nothrow
+	{  if ( m_pi != 0 ) m_pi->weak_add_ref(); }
 
-   ~weak_count() // nothrow
-   {  if(m_pi != 0) m_pi->weak_release(); }
+	~weak_count() // nothrow
+	{  if ( m_pi != 0 ) m_pi->weak_release(); }
 
-   template<class Y>
-   weak_count & operator= (shared_count<Y, VoidAllocator, Deleter> const & r) // nothrow
-   {
-      m_px = r.m_px;
-      counted_impl_ptr tmp = r.m_pi;
-      if(tmp != 0)   tmp->weak_add_ref();
-      if(m_pi != 0)  m_pi->weak_release();
-      m_pi = tmp;
-      return *this;
-   }
+	template<class Y>
+	weak_count &operator= ( shared_count<Y, VoidAllocator, Deleter> const &r ) // nothrow
+	{
+		m_px = r.m_px;
+		counted_impl_ptr tmp = r.m_pi;
+		if ( tmp != 0 )   tmp->weak_add_ref();
+		if ( m_pi != 0 )  m_pi->weak_release();
+		m_pi = tmp;
+		return *this;
+	}
 
-   weak_count & operator= (weak_count const & r) // nothrow
-   {
-      counted_impl_ptr tmp = r.m_pi;
-      if(tmp != 0) tmp->weak_add_ref();
-      if(m_pi != 0) m_pi->weak_release();
-      m_pi = tmp;
-      return *this;
-   }
+	weak_count &operator= ( weak_count const &r ) // nothrow
+	{
+		counted_impl_ptr tmp = r.m_pi;
+		if ( tmp != 0 ) tmp->weak_add_ref();
+		if ( m_pi != 0 ) m_pi->weak_release();
+		m_pi = tmp;
+		return *this;
+	}
 
-   void set_pointer(const pointer &ptr)
-   {  m_px = ptr; }
+	void set_pointer ( const pointer &ptr )
+	{  m_px = ptr; }
 
-   template<class Y>
-   weak_count & operator= (weak_count<Y, VoidAllocator, Deleter> const& r) // nothrow
-   {
-      counted_impl_ptr tmp = r.m_pi;
-      if(tmp != 0) tmp->weak_add_ref();
-      if(m_pi != 0) m_pi->weak_release();
-      m_pi = tmp;
-      return *this;
-   }
+	template<class Y>
+	weak_count &operator= ( weak_count<Y, VoidAllocator, Deleter> const &r ) // nothrow
+	{
+		counted_impl_ptr tmp = r.m_pi;
+		if ( tmp != 0 ) tmp->weak_add_ref();
+		if ( m_pi != 0 ) m_pi->weak_release();
+		m_pi = tmp;
+		return *this;
+	}
 
-   void swap(weak_count & r) // nothrow
-   {  detail::do_swap(m_px, r.m_px);  detail::do_swap(m_pi, r.m_pi);   }
+	void swap ( weak_count &r ) // nothrow
+	{  detail::do_swap ( m_px, r.m_px );  detail::do_swap ( m_pi, r.m_pi );   }
 
-   long use_count() const // nothrow
-   {  return m_pi != 0? m_pi->use_count() : 0;   }
+	long use_count() const // nothrow
+	{  return m_pi != 0 ? m_pi->use_count() : 0;   }
 
-   template<class T2, class VoidAllocator2, class Deleter2>
-   bool internal_equal (weak_count<T2, VoidAllocator2, Deleter2> const & other) const
-   {  return this->m_pi == other.m_pi;   }
+	template<class T2, class VoidAllocator2, class Deleter2>
+	bool internal_equal ( weak_count<T2, VoidAllocator2, Deleter2> const &other ) const
+	{  return this->m_pi == other.m_pi;   }
 
-   template<class T2, class VoidAllocator2, class Deleter2>
-   bool internal_less (weak_count<T2, VoidAllocator2, Deleter2> const & other) const
-   {  return std::less<counted_base_ptr>()(this->m_pi, other.m_pi);  }
+	template<class T2, class VoidAllocator2, class Deleter2>
+	bool internal_less ( weak_count<T2, VoidAllocator2, Deleter2> const &other ) const
+	{  return std::less<counted_base_ptr>() ( this->m_pi, other.m_pi );  }
 };
 
 template<class T, class VoidAllocator, class Deleter, class T2, class VoidAllocator2, class Deleter2> inline
-bool operator==(weak_count<T, VoidAllocator, Deleter> const & a, weak_count<T2, VoidAllocator2, Deleter2> const & b)
-{  return a.internal_equal(b);  }
+bool operator== ( weak_count<T, VoidAllocator, Deleter> const &a, weak_count<T2, VoidAllocator2, Deleter2> const &b )
+{  return a.internal_equal ( b );  }
 
 template<class T, class VoidAllocator, class Deleter, class T2, class VoidAllocator2, class Deleter2> inline
-bool operator<(weak_count<T, VoidAllocator, Deleter> const & a, weak_count<T2, VoidAllocator2, Deleter2> const & b)
-{  return a.internal_less(b);   }
+bool operator< ( weak_count<T, VoidAllocator, Deleter> const &a, weak_count<T2, VoidAllocator2, Deleter2> const &b )
+{  return a.internal_less ( b );   }
 
 } // namespace detail
 } // namespace interprocess

@@ -13,53 +13,55 @@
 
 #include <boost/optional.hpp>
 
-namespace boost {
-  namespace signals2 {
-    class expired_slot;
+namespace boost
+{
+namespace signals2
+{
+class expired_slot;
 
-    template<typename T>
-      class optional_last_value
-    {
-    public:
-      typedef optional<T> result_type;
+template<typename T>
+class optional_last_value
+{
+public:
+typedef optional<T> result_type;
 
-      template<typename InputIterator>
-        optional<T> operator()(InputIterator first, InputIterator last) const
-      {
-        optional<T> value;
-        while (first != last)
-        {
-          try
-          {
-            value = *first;
-          }
-          catch(const expired_slot &) {}
-          ++first;
-        }
-        return value;
-      }
-    };
+template<typename InputIterator>
+optional<T> operator() ( InputIterator first, InputIterator last ) const
+{
+	optional<T> value;
+	while ( first != last )
+	{
+		try
+		{
+			value = *first;
+		}
+		catch ( const expired_slot & ) {}
+		++first;
+	}
+	return value;
+}
+};
 
-    template<>
-      class optional_last_value<void>
-    {
-    public:
-      typedef void result_type;
-      template<typename InputIterator>
-        result_type operator()(InputIterator first, InputIterator last) const
-      {
-        while (first != last)
-        {
-          try
-          {
-            *first;
-          }
-          catch(const expired_slot &) {}
-          ++first;
-        }
-        return;
-      }
-    };
-  } // namespace signals2
+template<>
+class optional_last_value<void>
+{
+public:
+typedef void result_type;
+template<typename InputIterator>
+result_type operator() ( InputIterator first, InputIterator last ) const
+{
+	while ( first != last )
+	{
+		try
+		{
+			*first;
+		}
+		catch ( const expired_slot & ) {}
+		++first;
+	}
+	return;
+}
+};
+} // namespace signals2
 } // namespace boost
 #endif // BOOST_SIGNALS2_OPTIONAL_LAST_VALUE_HPP

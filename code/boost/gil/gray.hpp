@@ -1,6 +1,6 @@
 /*
     Copyright 2005-2007 Adobe Systems Incorporated
-   
+
     Use, modification and distribution are subject to the Boost Software License,
     Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt).
@@ -27,7 +27,10 @@
 #include <boost/mpl/range_c.hpp>
 #include <boost/mpl/vector_c.hpp>
 
-namespace boost { namespace gil {
+namespace boost
+{
+namespace gil
+{
 
 /// \ingroup ColorNameModel
 /// \brief Gray
@@ -39,7 +42,8 @@ typedef mpl::vector1<gray_color_t> gray_t;
 /// \ingroup LayoutModel
 typedef layout<gray_t> gray_layout_t;
 
-} }  // namespace boost::gil
+}
+}  // namespace boost::gil
 
 #endif
 

@@ -31,8 +31,12 @@
 #include "boost/preprocessor/arithmetic/inc.hpp"
 #include "boost/preprocessor/iterate.hpp"
 
-namespace boost {
-namespace detail { namespace variant {
+namespace boost
+{
+namespace detail
+{
+namespace variant
+{
 
 #if !defined(BOOST_VARIANT_DETAIL_NO_SUBSTITUTE)
 
@@ -46,14 +50,14 @@ namespace detail { namespace variant {
 // primary template
 //
 template <
-      typename T, typename Dest, typename Source
-      BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(
-          typename Arity /* = ... (see substitute_fwd.hpp) */
-        )
+    typename T, typename Dest, typename Source
+    BOOST_MPL_AUX_LAMBDA_ARITY_PARAM (
+        typename Arity /* = ... (see substitute_fwd.hpp) */
+    )
     >
 struct substitute
 {
-    typedef T type;
+	typedef T type;
 };
 
 //
@@ -73,10 +77,10 @@ struct substitute
     }; \
     /**/
 
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG( BOOST_PP_EMPTY() )
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG(const)
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG(volatile)
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG(const volatile)
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG ( BOOST_PP_EMPTY() )
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG ( const )
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG ( volatile )
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG ( const volatile )
 
 #undef BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG
 
@@ -98,10 +102,10 @@ BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG(const volatile)
     }; \
     /**/
 
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER( BOOST_PP_EMPTY() )
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER(const)
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER(volatile)
-BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER(const volatile)
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER ( BOOST_PP_EMPTY() )
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER ( const )
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER ( volatile )
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER ( const volatile )
 
 #undef BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER
 
@@ -109,16 +113,16 @@ BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER(const volatile)
 // reference specializations
 //
 template <typename T, typename Dest, typename Source>
-struct substitute<
-      T&
-    , Dest
-    , Source
-      BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<-1>)
-    >
+struct substitute <
+		T &
+		, Dest
+		, Source
+BOOST_MPL_AUX_LAMBDA_ARITY_PARAM ( mpl::int_ < -1 > )
+>
 {
-    typedef typename substitute<
-          T, Dest, Source
-        >::type & type;
+    typedef typename substitute <
+    T, Dest, Source
+    >::type &type;
 };
 
 //
@@ -144,7 +148,8 @@ struct substitute<
 
 #endif // !defined(BOOST_VARIANT_DETAIL_NO_SUBSTITUTE)
 
-}} // namespace detail::variant
+}
+} // namespace detail::variant
 } // namespace boost
 
 #endif // BOOST_VARIANT_DETAIL_SUBSTITUTE_HPP
@@ -160,47 +165,47 @@ struct substitute<
 // template specializations
 //
 template <
-      template < BOOST_MPL_PP_PARAMS(i,typename P) > class T
-    , BOOST_MPL_PP_PARAMS(i,typename U)
+    template < BOOST_MPL_PP_PARAMS ( i, typename P ) > class T
+    , BOOST_MPL_PP_PARAMS ( i, typename U )
     , typename Dest
     , typename Source
     >
-struct substitute<
-      T< BOOST_MPL_PP_PARAMS(i,U) >
-    , Dest
-    , Source
-      BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<( i )>)
-    >
+struct substitute <
+T< BOOST_MPL_PP_PARAMS ( i, U ) >
+, Dest
+, Source
+BOOST_MPL_AUX_LAMBDA_ARITY_PARAM ( mpl::int_< ( i ) > )
+>
 {
 private:
-    BOOST_MPL_PP_REPEAT(i, BOOST_VARIANT_AUX_SUBSTITUTE_TYPEDEF, _)
+	BOOST_MPL_PP_REPEAT ( i, BOOST_VARIANT_AUX_SUBSTITUTE_TYPEDEF, _ )
 
 public:
-    typedef T< BOOST_MPL_PP_PARAMS(i,u) > type;
+	typedef T< BOOST_MPL_PP_PARAMS ( i, u ) > type;
 };
 
 //
 // function specializations
 //
 template <
-      typename R
-    , BOOST_MPL_PP_PARAMS(i,typename U)
+    typename R
+    , BOOST_MPL_PP_PARAMS ( i, typename U )
     , typename Dest
     , typename Source
     >
-struct substitute<
-      R (*)( BOOST_MPL_PP_PARAMS(i,U) )
-    , Dest
-    , Source
-      BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<-1>)
-    >
+struct substitute <
+R ( * ) ( BOOST_MPL_PP_PARAMS ( i, U ) )
+, Dest
+, Source
+BOOST_MPL_AUX_LAMBDA_ARITY_PARAM ( mpl::int_ < -1 > )
+>
 {
 private:
-    typedef typename substitute< R, Dest, Source >::type r;
-    BOOST_MPL_PP_REPEAT(i, BOOST_VARIANT_AUX_SUBSTITUTE_TYPEDEF, _)
+	typedef typename substitute< R, Dest, Source >::type r;
+	BOOST_MPL_PP_REPEAT ( i, BOOST_VARIANT_AUX_SUBSTITUTE_TYPEDEF, _ )
 
 public:
-    typedef r (*type)( BOOST_MPL_PP_PARAMS(i,u) );
+	typedef r ( *type ) ( BOOST_MPL_PP_PARAMS ( i, u ) );
 };
 
 #elif i == 0
@@ -209,20 +214,20 @@ public:
 // zero-arg function specialization
 //
 template <
-      typename R, typename Dest, typename Source
+    typename R, typename Dest, typename Source
     >
-struct substitute<
-      R (*)( void )
-    , Dest
-    , Source
-      BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<-1>)
-    >
+struct substitute <
+R ( * ) ( void )
+, Dest
+, Source
+BOOST_MPL_AUX_LAMBDA_ARITY_PARAM ( mpl::int_ < -1 > )
+>
 {
 private:
-    typedef typename substitute< R, Dest, Source >::type r;
+	typedef typename substitute< R, Dest, Source >::type r;
 
 public:
-    typedef r (*type)( void );
+	typedef r ( *type ) ( void );
 };
 
 #endif // i

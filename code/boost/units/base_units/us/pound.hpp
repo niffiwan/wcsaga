@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -19,13 +19,13 @@
 #include <boost/units/base_units/cgs/gram.hpp>
 #include <boost/units/conversion.hpp>
 
-BOOST_UNITS_DEFINE_BASE_UNIT_WITH_CONVERSIONS(us, pound, "pound", "lb", 453.59237, cgs::gram_base_unit, -502);    // exact conversion
+BOOST_UNITS_DEFINE_BASE_UNIT_WITH_CONVERSIONS ( us, pound, "pound", "lb", 453.59237, cgs::gram_base_unit, -502 ); // exact conversion
 
 #if BOOST_UNITS_HAS_BOOST_TYPEOF
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 
-BOOST_TYPEOF_REGISTER_TYPE(boost::units::us::pound_base_unit)
+BOOST_TYPEOF_REGISTER_TYPE ( boost::units::us::pound_base_unit )
 
 #endif
 

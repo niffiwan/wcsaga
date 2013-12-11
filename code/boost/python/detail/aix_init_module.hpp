@@ -9,18 +9,25 @@
 # include <cstdio>
 # ifdef __KCC
 #  include <iostream> // this works around a problem in KCC 4.0f
-# endif 
+# endif
 
-namespace boost { namespace python { namespace detail { 
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
 extern "C"
 {
-    typedef PyObject* (*so_load_function)(char*,char*,FILE*);
+	typedef PyObject * ( *so_load_function ) ( char *, char *, FILE * );
 }
 
-void aix_init_module(so_load_function, char const* name, void (*init_module)());
+void aix_init_module ( so_load_function, char const *name, void ( *init_module ) () );
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 # endif
 
 #endif // AIX_INIT_MODULE_DWA2002529_HPP

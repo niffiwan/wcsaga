@@ -1,6 +1,6 @@
 //  (C) Copyright Gennadiy Rozental 2006-2008.
 //  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file LICENSE_1_0.txt or copy at 
+//  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/test for the library home page.
@@ -27,9 +27,11 @@
 
 //____________________________________________________________________________//
 
-namespace boost {
+namespace boost
+{
 
-namespace debug {
+namespace debug
+{
 
 // ************************************************************************** //
 // **************  check if program is running under debugger  ************** //
@@ -48,15 +50,16 @@ void BOOST_TEST_DECL debugger_break();
 // **************              gui debugger setup              ************** //
 // ************************************************************************** //
 
-struct dbg_startup_info {
-    long                    pid;
-    bool                    break_or_continue;
-    unit_test::const_string binary_path;
-    unit_test::const_string display;
-    unit_test::const_string init_done_lock;
+struct dbg_startup_info
+{
+	long                    pid;
+	bool                    break_or_continue;
+	unit_test::const_string binary_path;
+	unit_test::const_string display;
+	unit_test::const_string init_done_lock;
 };
 
-typedef unit_test::callback1<dbg_startup_info const&> dbg_starter;
+typedef unit_test::callback1<dbg_startup_info const &> dbg_starter;
 
 // ************************************************************************** //
 // **************                debugger setup                ************** //
@@ -64,11 +67,11 @@ typedef unit_test::callback1<dbg_startup_info const&> dbg_starter;
 
 #if BOOST_WORKAROUND( BOOST_MSVC, <1300)
 
-std::string BOOST_TEST_DECL set_debugger( unit_test::const_string dbg_id );
+std::string BOOST_TEST_DECL set_debugger ( unit_test::const_string dbg_id );
 
-#else 
+#else
 
-std::string BOOST_TEST_DECL set_debugger( unit_test::const_string dbg_id, dbg_starter s = dbg_starter() );
+std::string BOOST_TEST_DECL set_debugger ( unit_test::const_string dbg_id, dbg_starter s = dbg_starter() );
 
 #endif
 
@@ -77,20 +80,20 @@ std::string BOOST_TEST_DECL set_debugger( unit_test::const_string dbg_id, dbg_st
 // **************    attach debugger to the current process    ************** //
 // ************************************************************************** //
 
-bool BOOST_TEST_DECL attach_debugger( bool break_or_continue = true );
+bool BOOST_TEST_DECL attach_debugger ( bool break_or_continue = true );
 
 // ************************************************************************** //
 // **************   switch on/off detect memory leaks feature  ************** //
 // ************************************************************************** //
 
-void BOOST_TEST_DECL detect_memory_leaks( bool on_off );
+void BOOST_TEST_DECL detect_memory_leaks ( bool on_off );
 
 // ************************************************************************** //
 // **************      cause program to break execution in     ************** //
 // **************     debugger at specific allocation point    ************** //
 // ************************************************************************** //
 
-void BOOST_TEST_DECL break_memory_alloc( long mem_alloc_order_num );
+void BOOST_TEST_DECL break_memory_alloc ( long mem_alloc_order_num );
 
 } // namespace debug
 

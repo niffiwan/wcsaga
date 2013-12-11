@@ -15,20 +15,20 @@
 
 namespace boost
 {
-  namespace signals2
-  {
-    namespace detail
-    {
-      class does_nothing
-      {
-      public:
-        template<typename T>
-          void operator()(const T&) const
-          {}
-      };
-      typedef boost::function_output_iterator<does_nothing> null_output_iterator;
-    } // namespace detail
-  } // namespace signals2
+namespace signals2
+{
+namespace detail
+{
+class does_nothing
+{
+public:
+template<typename T>
+void operator() ( const T & ) const
+{}
+};
+typedef boost::function_output_iterator<does_nothing> null_output_iterator;
+} // namespace detail
+} // namespace signals2
 } // namespace boost
 
 #endif  // BOOST_SIGNALS2_NULL_OUTPUT_ITERATOR_HPP

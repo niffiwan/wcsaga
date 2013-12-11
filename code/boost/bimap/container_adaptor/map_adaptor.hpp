@@ -23,9 +23,12 @@
 #include <boost/mpl/aux_/na.hpp>
 #include <boost/call_traits.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace container_adaptor {
+namespace boost
+{
+namespace bimaps
+{
+namespace container_adaptor
+{
 
 /// \brief Container adaptor to easily build a std::map signature compatible container.
 
@@ -46,78 +49,78 @@ template
     class KeyToBaseConverter               = ::boost::mpl::na,
 
     class FunctorsFromDerivedClasses = mpl::vector<>
->
+    >
 class map_adaptor :
 
-    public ::boost::bimaps::container_adaptor::
-                ordered_associative_container_adaptor
-    <
-        Base,
-        Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
-        BOOST_DEDUCED_TYPENAME Iterator::value_type::first_type,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        ReverseIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        KeyToBaseConverter,
-        FunctorsFromDerivedClasses
-    >
+	public ::boost::bimaps::container_adaptor::
+	ordered_associative_container_adaptor
+	<
+	Base,
+	Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
+	BOOST_DEDUCED_TYPENAME Iterator::value_type::first_type,
+	IteratorToBaseConverter, IteratorFromBaseConverter,
+	ReverseIteratorFromBaseConverter,
+	ValueToBaseConverter, ValueFromBaseConverter,
+	KeyToBaseConverter,
+	FunctorsFromDerivedClasses
+	>
 {
 
-    typedef ::boost::bimaps::container_adaptor::
-                ordered_associative_container_adaptor
-    <
-        Base,
-        Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
-        BOOST_DEDUCED_TYPENAME Iterator::value_type::first_type,
-        IteratorToBaseConverter, IteratorFromBaseConverter,
-        ReverseIteratorFromBaseConverter,
-        ValueToBaseConverter, ValueFromBaseConverter,
-        KeyToBaseConverter,
-        FunctorsFromDerivedClasses
+	typedef ::boost::bimaps::container_adaptor::
+	ordered_associative_container_adaptor
+	<
+	Base,
+	Iterator, ConstIterator, ReverseIterator, ConstReverseIterator,
+	BOOST_DEDUCED_TYPENAME Iterator::value_type::first_type,
+	IteratorToBaseConverter, IteratorFromBaseConverter,
+	ReverseIteratorFromBaseConverter,
+	ValueToBaseConverter, ValueFromBaseConverter,
+	KeyToBaseConverter,
+	FunctorsFromDerivedClasses
 
-    > base_;
+	> base_;
 
-    // MetaData -------------------------------------------------------------
+	// MetaData -------------------------------------------------------------
 
-    public:
+public:
 
-    typedef BOOST_DEDUCED_TYPENAME Iterator::value_type::second_type data_type;
+	typedef BOOST_DEDUCED_TYPENAME Iterator::value_type::second_type data_type;
 
-    // Access -----------------------------------------------------------------
+	// Access -----------------------------------------------------------------
 
-    public:
+public:
 
-    explicit map_adaptor(Base & c) :
-        base_(c) {}
+	explicit map_adaptor ( Base &c ) :
+		base_ ( c ) {}
 
-    protected:
+protected:
 
-    typedef map_adaptor map_adaptor_;
+	typedef map_adaptor map_adaptor_;
 
-    // Interface --------------------------------------------------------------
+	// Interface --------------------------------------------------------------
 
-    public:
+public:
 
-    template< class CompatibleKey >
-    data_type& operator[](const CompatibleKey & k)
-    {
-        return this->base()
-            [this->template functor<BOOST_DEDUCED_TYPENAME base_::key_to_base>()(k)];
-    }
+	template< class CompatibleKey >
+	data_type &operator[] ( const CompatibleKey &k )
+	{
+		return this->base()
+		       [this->template functor<BOOST_DEDUCED_TYPENAME base_::key_to_base>() ( k )];
+	}
 
-    template< class CompatibleKey >
-    data_type& at(const CompatibleKey & k)
-    {
-        return this->base().
-            at(this->template functor<BOOST_DEDUCED_TYPENAME base_::key_to_base>()(k));
-    }
+	template< class CompatibleKey >
+	data_type &at ( const CompatibleKey &k )
+	{
+		return this->base().
+		       at ( this->template functor<BOOST_DEDUCED_TYPENAME base_::key_to_base>() ( k ) );
+	}
 
-    template< class CompatibleKey >
-    const data_type& at(const CompatibleKey & k) const
-    {
-        return this->base().
-            at(this->template functor<BOOST_DEDUCED_TYPENAME base_::key_to_base>()(k));
-    }
+	template< class CompatibleKey >
+	const data_type &at ( const CompatibleKey &k ) const
+	{
+		return this->base().
+		       at ( this->template functor<BOOST_DEDUCED_TYPENAME base_::key_to_base>() ( k ) );
+	}
 
 };
 

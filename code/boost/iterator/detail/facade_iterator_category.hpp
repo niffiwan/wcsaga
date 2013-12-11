@@ -33,21 +33,24 @@
 // forward declaration
 namespace boost { struct use_default; }
 
-namespace boost { namespace detail  {
+namespace boost
+{
+namespace detail
+{
 
 struct input_output_iterator_tag
-  : std::input_iterator_tag
+		: std::input_iterator_tag
 {
-    // Using inheritance for only input_iterator_tag helps to avoid
-    // ambiguities when a stdlib implementation dispatches on a
-    // function which is overloaded on both input_iterator_tag and
-    // output_iterator_tag, as STLPort does, in its __valid_range
-    // function.  I claim it's better to avoid the ambiguity in these
-    // cases.
-    operator std::output_iterator_tag() const
-    {
-        return std::output_iterator_tag();
-    }
+	// Using inheritance for only input_iterator_tag helps to avoid
+	// ambiguities when a stdlib implementation dispatches on a
+	// function which is overloaded on both input_iterator_tag and
+	// output_iterator_tag, as STLPort does, in its __valid_range
+	// function.  I claim it's better to avoid the ambiguity in these
+	// cases.
+	operator std::output_iterator_tag() const
+	{
+		return std::output_iterator_tag();
+	}
 };
 
 //
@@ -58,14 +61,14 @@ struct input_output_iterator_tag
 template <class ValueParam, class Reference>
 struct iterator_writability_disabled
 # ifdef BOOST_ITERATOR_REF_CONSTNESS_KILLS_WRITABILITY // Adding Thomas' logic?
-  : mpl::or_<
-        is_const<Reference>
-      , boost::detail::indirect_traits::is_reference_to_const<Reference>
-      , is_const<ValueParam>
-    >
-# else 
-  : is_const<ValueParam>
-# endif 
+		: mpl::or_ <
+		is_const<Reference>
+		, boost::detail::indirect_traits::is_reference_to_const<Reference>
+		, is_const<ValueParam>
+		>
+# else
+		: is_const<ValueParam>
+# endif
 {};
 
 
@@ -85,47 +88,47 @@ struct iterator_writability_disabled
 //
 template <class Traversal, class ValueParam, class Reference>
 struct iterator_facade_default_category
-  : mpl::eval_if<
-        mpl::and_<
-            is_reference<Reference>
-          , is_convertible<Traversal,forward_traversal_tag>
-        >
-      , mpl::eval_if<
-            is_convertible<Traversal,random_access_traversal_tag>
-          , mpl::identity<std::random_access_iterator_tag>
-          , mpl::if_<
-                is_convertible<Traversal,bidirectional_traversal_tag>
-              , std::bidirectional_iterator_tag
-              , std::forward_iterator_tag
-            >
-        >
-      , typename mpl::eval_if<
-            mpl::and_<
-                is_convertible<Traversal, single_pass_traversal_tag>
-                
-                // check for readability
-              , is_convertible<Reference, ValueParam>
-            >
-          , mpl::identity<std::input_iterator_tag>
-          , mpl::identity<Traversal>
-        >
-    >
+		: mpl::eval_if <
+		mpl::and_ <
+		is_reference<Reference>
+		, is_convertible<Traversal, forward_traversal_tag>
+		>
+		, mpl::eval_if <
+		is_convertible<Traversal, random_access_traversal_tag>
+		, mpl::identity<std::random_access_iterator_tag>
+		, mpl::if_ <
+		is_convertible<Traversal, bidirectional_traversal_tag>
+		, std::bidirectional_iterator_tag
+		, std::forward_iterator_tag
+		>
+		>
+		, typename mpl::eval_if <
+		mpl::and_ <
+		is_convertible<Traversal, single_pass_traversal_tag>
+
+		// check for readability
+		, is_convertible<Reference, ValueParam>
+		>
+		, mpl::identity<std::input_iterator_tag>
+		, mpl::identity<Traversal>
+		>
+		>
 {
 };
 
 // True iff T is convertible to an old-style iterator category.
 template <class T>
 struct is_iterator_category
-  : mpl::or_<
-        is_convertible<T,std::input_iterator_tag>
-      , is_convertible<T,std::output_iterator_tag>
-    >
+		: mpl::or_ <
+		is_convertible<T, std::input_iterator_tag>
+		, is_convertible<T, std::output_iterator_tag>
+		>
 {
 };
 
 template <class T>
 struct is_iterator_traversal
-  : is_convertible<T,incrementable_traversal_tag>
+		: is_convertible<T, incrementable_traversal_tag>
 {};
 
 //
@@ -136,25 +139,25 @@ struct is_iterator_traversal
 //
 template <class Category, class Traversal>
 struct iterator_category_with_traversal
-  : Category, Traversal
+		: Category, Traversal
 {
 # if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-    // Make sure this isn't used to build any categories where
-    // convertibility to Traversal is redundant.  Should just use the
-    // Category element in that case.
-    BOOST_MPL_ASSERT_NOT((
-        is_convertible<
-              typename iterator_category_to_traversal<Category>::type
-            , Traversal
-          >));
+	// Make sure this isn't used to build any categories where
+	// convertibility to Traversal is redundant.  Should just use the
+	// Category element in that case.
+	BOOST_MPL_ASSERT_NOT ( (
+	                           is_convertible <
+	                           typename iterator_category_to_traversal<Category>::type
+	                           , Traversal
+	                           > ) );
 
-    BOOST_MPL_ASSERT((is_iterator_category<Category>));
-    BOOST_MPL_ASSERT_NOT((is_iterator_category<Traversal>));
-    BOOST_MPL_ASSERT_NOT((is_iterator_traversal<Category>));
+	BOOST_MPL_ASSERT ( ( is_iterator_category<Category> ) );
+	BOOST_MPL_ASSERT_NOT ( ( is_iterator_category<Traversal> ) );
+	BOOST_MPL_ASSERT_NOT ( ( is_iterator_traversal<Category> ) );
 #  if !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1310))
-    BOOST_MPL_ASSERT((is_iterator_traversal<Traversal>));
-#  endif 
-# endif 
+	BOOST_MPL_ASSERT ( ( is_iterator_traversal<Traversal> ) );
+#  endif
+# endif
 };
 
 // Computes an iterator_category tag whose traversal is Traversal and
@@ -163,21 +166,21 @@ template <class Traversal, class ValueParam, class Reference>
 struct facade_iterator_category_impl
 {
 # if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-    BOOST_MPL_ASSERT_NOT((is_iterator_category<Traversal>));
-# endif 
-    
-    typedef typename iterator_facade_default_category<
-        Traversal,ValueParam,Reference
-    >::type category;
-    
-    typedef typename mpl::if_<
-        is_same<
-            Traversal
-          , typename iterator_category_to_traversal<category>::type
-        >
-      , category
-      , iterator_category_with_traversal<category,Traversal>
-    >::type type;
+	BOOST_MPL_ASSERT_NOT ( ( is_iterator_category<Traversal> ) );
+# endif
+
+	typedef typename iterator_facade_default_category <
+	Traversal, ValueParam, Reference
+	>::type category;
+
+	typedef typename mpl::if_ <
+	is_same <
+	Traversal
+	, typename iterator_category_to_traversal<category>::type
+	>
+	, category
+	, iterator_category_with_traversal<category, Traversal>
+	>::type type;
 };
 
 //
@@ -185,15 +188,16 @@ struct facade_iterator_category_impl
 //
 template <class CategoryOrTraversal, class ValueParam, class Reference>
 struct facade_iterator_category
-  : mpl::eval_if<
-        is_iterator_category<CategoryOrTraversal>
-      , mpl::identity<CategoryOrTraversal> // old-style categories are fine as-is
-      , facade_iterator_category_impl<CategoryOrTraversal,ValueParam,Reference>
-    >
+		: mpl::eval_if <
+		is_iterator_category<CategoryOrTraversal>
+		, mpl::identity<CategoryOrTraversal> // old-style categories are fine as-is
+		, facade_iterator_category_impl<CategoryOrTraversal, ValueParam, Reference>
+		>
 {
 };
 
-}} // namespace boost::detail
+}
+} // namespace boost::detail
 
 # include <boost/iterator/detail/config_undef.hpp>
 

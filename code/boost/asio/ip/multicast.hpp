@@ -24,10 +24,14 @@
 
 #include <boost/asio/ip/detail/socket_option.hpp>
 
-namespace boost {
-namespace asio {
-namespace ip {
-namespace multicast {
+namespace boost
+{
+namespace asio
+{
+namespace ip
+{
+namespace multicast
+{
 
 /// Socket option to join a multicast group on a specified interface.
 /**
@@ -36,7 +40,7 @@ namespace multicast {
  * @par Examples
  * Setting the option to join a multicast group:
  * @code
- * boost::asio::ip::udp::socket socket(io_service); 
+ * boost::asio::ip::udp::socket socket(io_service);
  * ...
  * boost::asio::ip::address multicast_address =
  *   boost::asio::ip::address::from_string("225.0.0.1");
@@ -50,8 +54,8 @@ namespace multicast {
 #if defined(GENERATING_DOCUMENTATION)
 typedef implementation_defined join_group;
 #else
-typedef boost::asio::ip::detail::socket_option::multicast_request<
-  IPPROTO_IP, IP_ADD_MEMBERSHIP, IPPROTO_IPV6, IPV6_JOIN_GROUP> join_group;
+typedef boost::asio::ip::detail::socket_option::multicast_request <
+IPPROTO_IP, IP_ADD_MEMBERSHIP, IPPROTO_IPV6, IPV6_JOIN_GROUP > join_group;
 #endif
 
 /// Socket option to leave a multicast group on a specified interface.
@@ -61,7 +65,7 @@ typedef boost::asio::ip::detail::socket_option::multicast_request<
  * @par Examples
  * Setting the option to leave a multicast group:
  * @code
- * boost::asio::ip::udp::socket socket(io_service); 
+ * boost::asio::ip::udp::socket socket(io_service);
  * ...
  * boost::asio::ip::address multicast_address =
  *   boost::asio::ip::address::from_string("225.0.0.1");
@@ -75,8 +79,8 @@ typedef boost::asio::ip::detail::socket_option::multicast_request<
 #if defined(GENERATING_DOCUMENTATION)
 typedef implementation_defined leave_group;
 #else
-typedef boost::asio::ip::detail::socket_option::multicast_request<
-  IPPROTO_IP, IP_DROP_MEMBERSHIP, IPPROTO_IPV6, IPV6_LEAVE_GROUP> leave_group;
+typedef boost::asio::ip::detail::socket_option::multicast_request <
+IPPROTO_IP, IP_DROP_MEMBERSHIP, IPPROTO_IPV6, IPV6_LEAVE_GROUP > leave_group;
 #endif
 
 /// Socket option for local interface to use for outgoing multicast packets.
@@ -86,7 +90,7 @@ typedef boost::asio::ip::detail::socket_option::multicast_request<
  * @par Examples
  * Setting the option:
  * @code
- * boost::asio::ip::udp::socket socket(io_service); 
+ * boost::asio::ip::udp::socket socket(io_service);
  * ...
  * boost::asio::ip::address_v4 local_interface =
  *   boost::asio::ip::address_v4::from_string("1.2.3.4");
@@ -100,9 +104,9 @@ typedef boost::asio::ip::detail::socket_option::multicast_request<
 #if defined(GENERATING_DOCUMENTATION)
 typedef implementation_defined outbound_interface;
 #else
-typedef boost::asio::ip::detail::socket_option::network_interface<
-  IPPROTO_IP, IP_MULTICAST_IF, IPPROTO_IPV6, IPV6_MULTICAST_IF>
-  outbound_interface;
+typedef boost::asio::ip::detail::socket_option::network_interface <
+IPPROTO_IP, IP_MULTICAST_IF, IPPROTO_IPV6, IPV6_MULTICAST_IF >
+outbound_interface;
 #endif
 
 /// Socket option for time-to-live associated with outgoing multicast packets.
@@ -112,7 +116,7 @@ typedef boost::asio::ip::detail::socket_option::network_interface<
  * @par Examples
  * Setting the option:
  * @code
- * boost::asio::ip::udp::socket socket(io_service); 
+ * boost::asio::ip::udp::socket socket(io_service);
  * ...
  * boost::asio::ip::multicast::hops option(4);
  * socket.set_option(option);
@@ -121,7 +125,7 @@ typedef boost::asio::ip::detail::socket_option::network_interface<
  * @par
  * Getting the current option value:
  * @code
- * boost::asio::ip::udp::socket socket(io_service); 
+ * boost::asio::ip::udp::socket socket(io_service);
  * ...
  * boost::asio::ip::multicast::hops option;
  * socket.get_option(option);
@@ -134,8 +138,8 @@ typedef boost::asio::ip::detail::socket_option::network_interface<
 #if defined(GENERATING_DOCUMENTATION)
 typedef implementation_defined hops;
 #else
-typedef boost::asio::ip::detail::socket_option::multicast_hops<
-  IPPROTO_IP, IP_MULTICAST_TTL, IPPROTO_IPV6, IPV6_MULTICAST_HOPS> hops;
+typedef boost::asio::ip::detail::socket_option::multicast_hops <
+IPPROTO_IP, IP_MULTICAST_TTL, IPPROTO_IPV6, IPV6_MULTICAST_HOPS > hops;
 #endif
 
 /// Socket option determining whether outgoing multicast packets will be
@@ -146,7 +150,7 @@ typedef boost::asio::ip::detail::socket_option::multicast_hops<
  * @par Examples
  * Setting the option:
  * @code
- * boost::asio::ip::udp::socket socket(io_service); 
+ * boost::asio::ip::udp::socket socket(io_service);
  * ...
  * boost::asio::ip::multicast::enable_loopback option(true);
  * socket.set_option(option);
@@ -155,7 +159,7 @@ typedef boost::asio::ip::detail::socket_option::multicast_hops<
  * @par
  * Getting the current option value:
  * @code
- * boost::asio::ip::udp::socket socket(io_service); 
+ * boost::asio::ip::udp::socket socket(io_service);
  * ...
  * boost::asio::ip::multicast::enable_loopback option;
  * socket.get_option(option);
@@ -168,9 +172,9 @@ typedef boost::asio::ip::detail::socket_option::multicast_hops<
 #if defined(GENERATING_DOCUMENTATION)
 typedef implementation_defined enable_loopback;
 #else
-typedef boost::asio::ip::detail::socket_option::multicast_enable_loopback<
-  IPPROTO_IP, IP_MULTICAST_LOOP, IPPROTO_IPV6, IPV6_MULTICAST_LOOP>
-  enable_loopback;
+typedef boost::asio::ip::detail::socket_option::multicast_enable_loopback <
+IPPROTO_IP, IP_MULTICAST_LOOP, IPPROTO_IPV6, IPV6_MULTICAST_LOOP >
+enable_loopback;
 #endif
 
 } // namespace multicast

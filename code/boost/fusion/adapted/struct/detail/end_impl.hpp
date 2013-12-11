@@ -10,39 +10,42 @@
 
 #include <boost/fusion/adapted/struct/struct_iterator.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct struct_tag;
+namespace fusion
+{
+struct struct_tag;
 
-    namespace extension
-    {
-        template <typename Tag>
-        struct end_impl;
+namespace extension
+{
+template <typename Tag>
+struct end_impl;
 
-        template <typename Struct>
-        struct struct_size;
+template <typename Struct>
+struct struct_size;
 
-        template <>
-        struct end_impl<struct_tag>
-        {
-            template <typename Sequence>
-            struct apply
-            {
-                typedef
-                    struct_iterator<
-                        Sequence
-                      , struct_size<Sequence>::value
-                    >
-                type;
+template <>
+struct end_impl<struct_tag>
+{
+	template <typename Sequence>
+	struct apply
+	{
+		typedef
+		struct_iterator <
+		Sequence
+		, struct_size<Sequence>::value
+		>
+		type;
 
-                static type
-                call(Sequence& v)
-                {
-                    return type(v);
-                }
-            };
-        };
-    }
-}}
+		static type
+		call ( Sequence &v )
+		{
+			return type ( v );
+		}
+	};
+};
+}
+}
+}
 
 #endif

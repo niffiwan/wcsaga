@@ -21,64 +21,64 @@ namespace detail
 {
 
 
-  
+
 template< bool NeedsLocking >
 struct count_base
 {
-  count_base() : count_( 0 ) {}
-  mutable boost::detail::atomic_count count_;
+	count_base() : count_ ( 0 ) {}
+	mutable boost::detail::atomic_count count_;
 };
 
 template<>
 struct count_base< false >
 {
-  count_base() : count_( 0 ) {}
-  mutable long count_;
+	count_base() : count_ ( 0 ) {}
+	mutable long count_;
 };
 
 //////////////////////////////////////////////////////////////////////////////
 template< bool NeedsLocking = true >
 class counted_base : private count_base< NeedsLocking >
 {
-  typedef count_base< NeedsLocking > base_type;
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    bool ref_counted() const
-    {
-      return base_type::count_ != 0;
-    }
+	typedef count_base< NeedsLocking > base_type;
+public:
+	//////////////////////////////////////////////////////////////////////////
+	bool ref_counted() const
+	{
+		return base_type::count_ != 0;
+	}
 
-    long ref_count() const
-    {
-      return base_type::count_;
-    }
+	long ref_count() const
+	{
+		return base_type::count_;
+	}
 
-  protected:
-    //////////////////////////////////////////////////////////////////////////
-    counted_base() {}
-    ~counted_base() {}
+protected:
+	//////////////////////////////////////////////////////////////////////////
+	counted_base() {}
+	~counted_base() {}
 
-    // do nothing copy implementation is intentional (the number of
-    // referencing pointers of the source and the destination is not changed
-    // through the copy operation)
-    counted_base( const counted_base & ) : base_type() {}
-    counted_base & operator=( const counted_base & ) { return *this; }
+	// do nothing copy implementation is intentional (the number of
+	// referencing pointers of the source and the destination is not changed
+	// through the copy operation)
+	counted_base ( const counted_base & ) : base_type() {}
+	counted_base &operator= ( const counted_base & ) { return *this; }
 
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    // The following declarations should be private.
-    // They are only public because many compilers lack template friends.
-    //////////////////////////////////////////////////////////////////////////
-    void add_ref() const
-    {
-      ++base_type::count_;
-    }
+public:
+	//////////////////////////////////////////////////////////////////////////
+	// The following declarations should be private.
+	// They are only public because many compilers lack template friends.
+	//////////////////////////////////////////////////////////////////////////
+	void add_ref() const
+	{
+		++base_type::count_;
+	}
 
-    bool release() const
-    {
-      BOOST_ASSERT( base_type::count_ > 0 );
-      return --base_type::count_ == 0;
-    }
+	bool release() const
+	{
+		BOOST_ASSERT ( base_type::count_ > 0 );
+		return --base_type::count_ == 0;
+	}
 };
 
 

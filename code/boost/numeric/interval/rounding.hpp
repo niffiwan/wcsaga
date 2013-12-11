@@ -10,9 +10,12 @@
 #ifndef BOOST_NUMERIC_INTERVAL_ROUNDING_HPP
 #define BOOST_NUMERIC_INTERVAL_ROUNDING_HPP
 
-namespace boost {
-namespace numeric {
-namespace interval_lib {
+namespace boost
+{
+namespace numeric
+{
+namespace interval_lib
+{
 
 /*
  * Default rounding_control class (does nothing)
@@ -21,14 +24,14 @@ namespace interval_lib {
 template<class T>
 struct rounding_control
 {
-  typedef int rounding_mode;
-  static void get_rounding_mode(rounding_mode&) {}
-  static void set_rounding_mode(rounding_mode)  {}
-  static void upward()     {}
-  static void downward()   {}
-  static void to_nearest() {}
-  static const T& to_int(const T& x)         { return x; }
-  static const T& force_rounding(const T& x) { return x; }
+	typedef int rounding_mode;
+	static void get_rounding_mode ( rounding_mode & ) {}
+	static void set_rounding_mode ( rounding_mode )  {}
+	static void upward()     {}
+	static void downward()   {}
+	static void to_nearest() {}
+	static const T &to_int ( const T &x )         { return x; }
+	static const T &force_rounding ( const T &x ) { return x; }
 };
 
 /*
@@ -49,25 +52,26 @@ struct rounded_arith_opp;
 template<class T, class Rounding>
 struct rounded_transc_dummy;
 
-template<class T, class Rounding = rounded_arith_exact<T> > 
+template<class T, class Rounding = rounded_arith_exact<T> >
 struct rounded_transc_exact;
 
-template<class T, class Rounding = rounded_arith_std<T> > 
+template<class T, class Rounding = rounded_arith_std<T> >
 struct rounded_transc_std;
 
-template<class T, class Rounding = rounded_arith_opp<T> > 
+template<class T, class Rounding = rounded_arith_opp<T> >
 struct rounded_transc_opp;
 
 /*
  * State-saving classes: allow to set and reset rounding control
  */
 
-namespace detail {
+namespace detail
+{
 
 template<class Rounding>
 struct save_state_unprotected: Rounding
 {
-  typedef save_state_unprotected<Rounding> unprotected_rounding;
+	typedef save_state_unprotected<Rounding> unprotected_rounding;
 };
 
 } // namespace detail
@@ -75,21 +79,22 @@ struct save_state_unprotected: Rounding
 template<class Rounding>
 struct save_state: Rounding
 {
-  typename Rounding::rounding_mode mode;
-  save_state() {
-    this->get_rounding_mode(mode);
-    this->init();
-  }
-  ~save_state() { this->set_rounding_mode(mode); }
-  typedef detail::save_state_unprotected<Rounding> unprotected_rounding;
+	typename Rounding::rounding_mode mode;
+	save_state()
+	{
+		this->get_rounding_mode ( mode );
+		this->init();
+	}
+	~save_state() { this->set_rounding_mode ( mode ); }
+	typedef detail::save_state_unprotected<Rounding> unprotected_rounding;
 };
-  
+
 template<class Rounding>
 struct save_state_nothing: Rounding
 {
-  typedef save_state_nothing<Rounding> unprotected_rounding;
+	typedef save_state_nothing<Rounding> unprotected_rounding;
 };
-  
+
 template<class T>
 struct rounded_math: save_state_nothing<rounded_arith_exact<T> >
 {};

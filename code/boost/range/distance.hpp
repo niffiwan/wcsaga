@@ -19,15 +19,15 @@
 #include <boost/range/end.hpp>
 #include <boost/range/difference_type.hpp>
 
-namespace boost 
+namespace boost
 {
 
-    template< class T >
-    inline BOOST_DEDUCED_TYPENAME range_difference<T>::type 
-    distance( const T& r )
-    {
-        return std::distance( boost::begin( r ), boost::end( r ) );
-    }
+template< class T >
+inline BOOST_DEDUCED_TYPENAME range_difference<T>::type
+distance ( const T &r )
+{
+	return std::distance ( boost::begin ( r ), boost::end ( r ) );
+}
 
 } // namespace 'boost'
 

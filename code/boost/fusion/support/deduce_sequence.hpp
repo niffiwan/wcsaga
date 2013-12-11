@@ -14,31 +14,37 @@
 #include <boost/fusion/view/transform_view.hpp>
 
 
-namespace boost { namespace fusion { namespace traits
+namespace boost
 {
-    template <class Sequence> struct deduce_sequence;
+namespace fusion
+{
+namespace traits
+{
+template <class Sequence> struct deduce_sequence;
 
-    namespace detail
-    {
-        struct deducer
-        {
-            template <typename Sig>
-            struct result;
+namespace detail
+{
+struct deducer
+{
+	template <typename Sig>
+	struct result;
 
-            template <class Self, typename T>
-            struct result< Self(T) >
-                : fusion::traits::deduce<T>
-            { };
-        };
-    }
+	template <class Self, typename T>
+	struct result< Self ( T ) >
+: fusion::traits::deduce<T>
+	{ };
+};
+}
 
-    template <class Sequence>
-    struct deduce_sequence
-        : result_of::as_vector<
-            fusion::transform_view<Sequence, detail::deducer> >
-    { };
+template <class Sequence>
+struct deduce_sequence
+		: result_of::as_vector <
+		fusion::transform_view<Sequence, detail::deducer> >
+{ };
 
-}}}
+}
+}
+}
 
 #endif
 

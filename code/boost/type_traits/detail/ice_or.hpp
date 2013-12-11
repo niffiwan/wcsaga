@@ -10,8 +10,10 @@
 
 #include <boost/config.hpp>
 
-namespace boost {
-namespace type_traits {
+namespace boost
+{
+namespace type_traits
+{
 
 template <bool b1, bool b2, bool b3 = false, bool b4 = false, bool b5 = false, bool b6 = false, bool b7 = false>
 struct ice_or;
@@ -19,13 +21,13 @@ struct ice_or;
 template <bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7>
 struct ice_or
 {
-    BOOST_STATIC_CONSTANT(bool, value = true);
+	BOOST_STATIC_CONSTANT ( bool, value = true );
 };
 
 template <>
 struct ice_or<false, false, false, false, false, false, false>
 {
-    BOOST_STATIC_CONSTANT(bool, value = false);
+	BOOST_STATIC_CONSTANT ( bool, value = false );
 };
 
 } // namespace type_traits

@@ -18,8 +18,10 @@
 #include <boost/interprocess/detail/config_begin.hpp>
 #include <boost/interprocess/containers/container/detail/version_type.hpp>
 
-namespace boost {
-namespace interprocess {
+namespace boost
+{
+namespace interprocess
+{
 
 using boost::container::containers_detail::version_type;
 using boost::container::containers_detail::version;

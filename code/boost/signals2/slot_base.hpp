@@ -20,66 +20,66 @@
 
 namespace boost
 {
-  namespace signals2
-  {
-    namespace detail
-    {
-      class tracked_objects_visitor;
-    }
+namespace signals2
+{
+namespace detail
+{
+class tracked_objects_visitor;
+}
 
-    class expired_slot: public bad_weak_ptr
-    {
-    public:
-      virtual char const * what() const throw()
-      {
-        return "boost::signals2::expired_slot";
-      }
-    };
+class expired_slot: public bad_weak_ptr
+{
+public:
+virtual char const *what() const throw()
+{
+	return "boost::signals2::expired_slot";
+}
+};
 
-    class slot_base
-    {
-    public:
-      typedef std::vector<boost::weak_ptr<void> > tracked_container_type;
-      typedef std::vector<boost::shared_ptr<void> > locked_container_type;
+class slot_base
+{
+public:
+typedef std::vector<boost::weak_ptr<void> > tracked_container_type;
+typedef std::vector<boost::shared_ptr<void> > locked_container_type;
 
-      const tracked_container_type& tracked_objects() const {return _tracked_objects;}
-      locked_container_type lock() const
-      {
-        locked_container_type locked_objects;
-        tracked_container_type::const_iterator it;
-        for(it = tracked_objects().begin(); it != tracked_objects().end(); ++it)
-        {
-          try
-          {
-            locked_objects.push_back(shared_ptr<void>(*it));
-          }
-          catch(const bad_weak_ptr &)
-          {
-            boost::throw_exception(expired_slot());
-          }
-        }
-        return locked_objects;
-      }
-      bool expired() const
-      {
-        tracked_container_type::const_iterator it;
-        for(it = tracked_objects().begin(); it != tracked_objects().end(); ++it)
-        {
-          if(it->expired()) return true;
-        }
-        return false;
-      }
-    protected:
-      friend class detail::tracked_objects_visitor;
+const tracked_container_type &tracked_objects() const {return _tracked_objects;}
+locked_container_type lock() const
+{
+	locked_container_type locked_objects;
+	tracked_container_type::const_iterator it;
+	for ( it = tracked_objects().begin(); it != tracked_objects().end(); ++it )
+	{
+		try
+		{
+			locked_objects.push_back ( shared_ptr<void> ( *it ) );
+		}
+		catch ( const bad_weak_ptr & )
+		{
+			boost::throw_exception ( expired_slot() );
+		}
+	}
+	return locked_objects;
+}
+bool expired() const
+{
+	tracked_container_type::const_iterator it;
+	for ( it = tracked_objects().begin(); it != tracked_objects().end(); ++it )
+	{
+		if ( it->expired() ) return true;
+	}
+	return false;
+}
+protected:
+friend class detail::tracked_objects_visitor;
 
-      void track_signal(const signal_base &signal)
-      {
-        _tracked_objects.push_back(signal.lock_pimpl());
-      }
+void track_signal ( const signal_base &signal )
+{
+	_tracked_objects.push_back ( signal.lock_pimpl() );
+}
 
-      tracked_container_type _tracked_objects;
-    };
-  }
+tracked_container_type _tracked_objects;
+};
+}
 } // end namespace boost
 
 #endif // BOOST_SIGNALS2_SLOT_BASE_HPP

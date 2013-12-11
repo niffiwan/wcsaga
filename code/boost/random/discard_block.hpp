@@ -23,87 +23,90 @@
 #include <boost/random/detail/config.hpp>
 
 
-namespace boost {
-namespace random {
+namespace boost
+{
+namespace random
+{
 
 template<class UniformRandomNumberGenerator, unsigned int p, unsigned int r>
 class discard_block
 {
 public:
-  typedef UniformRandomNumberGenerator base_type;
-  typedef typename base_type::result_type result_type;
+	typedef UniformRandomNumberGenerator base_type;
+	typedef typename base_type::result_type result_type;
 
-  BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
-  BOOST_STATIC_CONSTANT(unsigned int, total_block = p);
-  BOOST_STATIC_CONSTANT(unsigned int, returned_block = r);
+	BOOST_STATIC_CONSTANT ( bool, has_fixed_range = false );
+	BOOST_STATIC_CONSTANT ( unsigned int, total_block = p );
+	BOOST_STATIC_CONSTANT ( unsigned int, returned_block = r );
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-  BOOST_STATIC_ASSERT(total_block >= returned_block);
+	BOOST_STATIC_ASSERT ( total_block >= returned_block );
 #endif
 
-  discard_block() : _rng(), _n(0) { }
-  explicit discard_block(const base_type & rng) : _rng(rng), _n(0) { }
-  template<class T> explicit discard_block(T s) : _rng(s), _n(0) {}
-  template<class It> discard_block(It& first, It last)
-    : _rng(first, last), _n(0) { }
-  void seed() { _rng.seed(); _n = 0; }
-  template<class T> void seed(T s) { _rng.seed(s); _n = 0; }
-  template<class It> void seed(It& first, It last)
-  { _n = 0; _rng.seed(first, last); }
+	discard_block() : _rng(), _n ( 0 ) { }
+	explicit discard_block ( const base_type &rng ) : _rng ( rng ), _n ( 0 ) { }
+	template<class T> explicit discard_block ( T s ) : _rng ( s ), _n ( 0 ) {}
+	template<class It> discard_block ( It &first, It last )
+		: _rng ( first, last ), _n ( 0 ) { }
+	void seed() { _rng.seed(); _n = 0; }
+	template<class T> void seed ( T s ) { _rng.seed ( s ); _n = 0; }
+	template<class It> void seed ( It &first, It last )
+	{ _n = 0; _rng.seed ( first, last ); }
 
-  const base_type& base() const { return _rng; }
+	const base_type &base() const { return _rng; }
 
-  result_type operator()()
-  {
-    if(_n >= returned_block) {
-      // discard values of random number generator
-      for( ; _n < total_block; ++_n)
-        _rng();
-      _n = 0;
-    }
-    ++_n;
-    return _rng();
-  }
+	result_type operator() ()
+	{
+		if ( _n >= returned_block )
+		{
+			// discard values of random number generator
+			for ( ; _n < total_block; ++_n )
+				_rng();
+			_n = 0;
+		}
+		++_n;
+		return _rng();
+	}
 
-  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (_rng.min)(); }
-  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (_rng.max)(); }
-  static bool validation(result_type x) { return true; }  // dummy
+	result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return ( _rng.min ) (); }
+	result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return ( _rng.max ) (); }
+	static bool validation ( result_type x ) { return true; } // dummy
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
 
 #ifndef BOOST_RANDOM_NO_STREAM_OPERATORS
-  template<class CharT, class Traits>
-  friend std::basic_ostream<CharT,Traits>&
-  operator<<(std::basic_ostream<CharT,Traits>& os, const discard_block& s)
-  {
-    os << s._rng << " " << s._n << " ";
-    return os;
-  }
+	template<class CharT, class Traits>
+	friend std::basic_ostream<CharT, Traits> &
+	operator<< ( std::basic_ostream<CharT, Traits> &os, const discard_block &s )
+	{
+		os << s._rng << " " << s._n << " ";
+		return os;
+	}
 
-  template<class CharT, class Traits>
-  friend std::basic_istream<CharT,Traits>&
-  operator>>(std::basic_istream<CharT,Traits>& is, discard_block& s)
-  {
-    is >> s._rng >> std::ws >> s._n >> std::ws;
-    return is;
-  }
+	template<class CharT, class Traits>
+	friend std::basic_istream<CharT, Traits> &
+	operator>> ( std::basic_istream<CharT, Traits> &is, discard_block &s )
+	{
+		is >> s._rng >> std::ws >> s._n >> std::ws;
+		return is;
+	}
 #endif
 
-  friend bool operator==(const discard_block& x, const discard_block& y)
-  { return x._rng == y._rng && x._n == y._n; }
-  friend bool operator!=(const discard_block& x, const discard_block& y)
-  { return !(x == y); }
+	friend bool operator== ( const discard_block &x, const discard_block &y )
+	{ return x._rng == y._rng && x._n == y._n; }
+	friend bool operator!= ( const discard_block &x, const discard_block &y )
+	{ return ! ( x == y ); }
 #else
-  // Use a member function; Streamable concept not supported.
-  bool operator==(const discard_block& rhs) const
-  { return _rng == rhs._rng && _n == rhs._n; }
-  bool operator!=(const discard_block& rhs) const
-  { return !(*this == rhs); }
+	// Use a member function; Streamable concept not supported.
+	bool operator== ( const discard_block &rhs ) const
+	{ return _rng == rhs._rng && _n == rhs._n; }
+	bool operator!= ( const discard_block &rhs ) const
+	{ return ! ( *this == rhs ); }
 #endif
 
 private:
-  base_type _rng;
-  unsigned int _n;
+	base_type _rng;
+	unsigned int _n;
 };
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION

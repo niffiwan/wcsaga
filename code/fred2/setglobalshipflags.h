@@ -12,25 +12,25 @@
 
 class SetGlobalShipFlags : public CDialog
 {
-// Construction
+	// Construction
 public:
-	SetGlobalShipFlags(CWnd* pParent = NULL);   // standard constructor
+	SetGlobalShipFlags ( CWnd *pParent = NULL ); // standard constructor
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(SetGlobalShipFlags)
 	enum { IDD = IDD_SET_GLOBAL_SHIP_FLAGS };
-		// NOTE: the ClassWizard will add data members here
+	// NOTE: the ClassWizard will add data members here
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(SetGlobalShipFlags)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions

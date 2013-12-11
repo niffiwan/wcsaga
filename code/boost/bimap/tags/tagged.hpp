@@ -18,8 +18,10 @@
 
 #include <boost/config.hpp>
 
-namespace boost {
-namespace bimaps {
+namespace boost
+{
+namespace bimaps
+{
 
 /// \brief A light non-invasive idiom to tag a type.
 /**
@@ -48,7 +50,8 @@ writer can enjoy the coding too.
 
                                                                             **/
 
-namespace tags {
+namespace tags
+{
 
 /// \brief The tag holder
 /**
@@ -80,8 +83,8 @@ See also value_type_of, tag_of, is_tagged, apply_to_value_type.
 template< class Type, class Tag >
 struct tagged
 {
-    typedef Type value_type;
-    typedef Tag tag;
+	typedef Type value_type;
+	typedef Tag tag;
 };
 
 } // namespace tags

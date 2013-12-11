@@ -1,4 +1,4 @@
-// Boost.Units - A C++ library for zero-overhead dimensional analysis and 
+// Boost.Units - A C++ library for zero-overhead dimensional analysis and
 // unit/quantity manipulation and conversion
 //
 // Copyright (C) 2003-2008 Matthias Christian Schabel
@@ -17,11 +17,14 @@
 
 #include <boost/units/config.hpp>
 
-namespace boost {
+namespace boost
+{
 
-namespace units {
+namespace units
+{
 
-namespace detail {
+namespace detail
+{
 
 struct dimension_list_tag;
 
@@ -30,9 +33,9 @@ struct dimension_list_tag;
 /// Dimension lists in which all exponents resolve to zero reduce to @c dimensionless_type.
 struct dimensionless_type
 {
-    typedef dimensionless_type          type;
-    typedef detail::dimension_list_tag  tag;
-    typedef mpl::long_<0>               size;
+	typedef dimensionless_type          type;
+	typedef detail::dimension_list_tag  tag;
+	typedef mpl::long_<0>               size;
 };
 
 } // namespace units
@@ -43,7 +46,7 @@ struct dimensionless_type
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 
-BOOST_TYPEOF_REGISTER_TYPE(boost::units::dimensionless_type)
+BOOST_TYPEOF_REGISTER_TYPE ( boost::units::dimensionless_type )
 
 #endif
 

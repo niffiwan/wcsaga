@@ -23,44 +23,47 @@
 //!\file
 //!Describes an abstract interface for placement construction and destruction.
 
-namespace boost {
-namespace interprocess { 
-namespace detail {
+namespace boost
+{
+namespace interprocess
+{
+namespace detail
+{
 
 struct in_place_interface
 {
-   in_place_interface(std::size_t alignm, std::size_t sz, const char *tname)
-   :  alignment(alignm), size(sz), type_name(tname)
-   {}
+	in_place_interface ( std::size_t alignm, std::size_t sz, const char *tname )
+		:  alignment ( alignm ), size ( sz ), type_name ( tname )
+	{}
 
-   std::size_t alignment;
-   std::size_t size;
-   const char *type_name;
+	std::size_t alignment;
+	std::size_t size;
+	const char *type_name;
 
-   virtual void construct_n(void *mem, std::size_t num, std::size_t &constructed) = 0;
-   virtual void destroy_n(void *mem, std::size_t num, std::size_t &destroyed) = 0;
-   virtual ~in_place_interface(){}
+	virtual void construct_n ( void *mem, std::size_t num, std::size_t &constructed ) = 0;
+	virtual void destroy_n ( void *mem, std::size_t num, std::size_t &destroyed ) = 0;
+	virtual ~in_place_interface() {}
 };
 
 template<class T>
 struct placement_destroy :  public in_place_interface
 {
-   placement_destroy()
-      :  in_place_interface(detail::alignment_of<T>::value, sizeof(T), typeid(T).name())
-   {}
+	placement_destroy()
+		:  in_place_interface ( detail::alignment_of<T>::value, sizeof ( T ), typeid ( T ).name() )
+	{}
 
-   virtual void destroy_n(void *mem, std::size_t num, std::size_t &destroyed)
-   {
-      T* memory = static_cast<T*>(mem);
-      for(destroyed = 0; destroyed < num; ++destroyed)
-         (memory++)->~T();
-   }
+	virtual void destroy_n ( void *mem, std::size_t num, std::size_t &destroyed )
+	{
+		T *memory = static_cast<T *> ( mem );
+		for ( destroyed = 0; destroyed < num; ++destroyed )
+			( memory++ )->~T();
+	}
 
-   virtual void construct_n(void *, std::size_t, std::size_t &) {}
+	virtual void construct_n ( void *, std::size_t, std::size_t & ) {}
 
-   private:
-   void destroy(void *mem)
-   {  static_cast<T*>(mem)->~T();   }
+private:
+	void destroy ( void *mem )
+	{  static_cast<T *> ( mem )->~T();   }
 };
 
 }

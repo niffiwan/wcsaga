@@ -25,88 +25,96 @@
 #include <boost/throw_exception.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
-namespace boost { namespace iostreams {
+namespace boost
+{
+namespace iostreams
+{
 
-namespace detail {
+namespace detail
+{
 
 template<typename Device>
-void skip(Device& dev, stream_offset off, mpl::true_)
-{ iostreams::seek(dev, off, BOOST_IOS::cur); }
+void skip ( Device &dev, stream_offset off, mpl::true_ )
+{ iostreams::seek ( dev, off, BOOST_IOS::cur ); }
 
 template<typename Device>
-void skip(Device& dev, stream_offset off, mpl::false_)
-{   // gcc 2.95 needs namespace qualification for char_traits.
-    typedef typename char_type_of<Device>::type  char_type;
-    typedef iostreams::char_traits<char_type>    traits_type;
-    for (stream_offset z = 0; z < off; ) {
-        typename traits_type::int_type c;
-        if (traits_type::is_eof(c = iostreams::get(dev)))
-            boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad skip offset"));
-        if (!traits_type::would_block(c))
-            ++z;
-    }
+void skip ( Device &dev, stream_offset off, mpl::false_ )
+{
+	// gcc 2.95 needs namespace qualification for char_traits.
+	typedef typename char_type_of<Device>::type  char_type;
+	typedef iostreams::char_traits<char_type>    traits_type;
+	for ( stream_offset z = 0; z < off; )
+	{
+		typename traits_type::int_type c;
+		if ( traits_type::is_eof ( c = iostreams::get ( dev ) ) )
+			boost::throw_exception ( BOOST_IOSTREAMS_FAILURE ( "bad skip offset" ) );
+		if ( !traits_type::would_block ( c ) )
+			++z;
+	}
 }
 
 template<typename Filter, typename Device>
-void skip( Filter& flt, Device& dev, stream_offset off,
-           BOOST_IOS::openmode which, mpl::true_ )
-{ boost::iostreams::seek(flt, dev, off, BOOST_IOS::cur, which); }
+void skip ( Filter &flt, Device &dev, stream_offset off,
+            BOOST_IOS::openmode which, mpl::true_ )
+{ boost::iostreams::seek ( flt, dev, off, BOOST_IOS::cur, which ); }
 
 template<typename Filter, typename Device>
-void skip( Filter& flt, Device& dev, stream_offset off,
-           BOOST_IOS::openmode, mpl::false_ )
-{ 
-    typedef typename char_type_of<Device>::type char_type;
-    char_type c;
-    for (stream_offset z = 0; z < off; ) {
-        std::streamsize amt;
-        if ((amt = iostreams::read(flt, dev, &c, 1)) == -1)
-            boost::throw_exception(BOOST_IOSTREAMS_FAILURE("bad skip offset"));
-        if (amt == 1)
-            ++z;
-    }
+void skip ( Filter &flt, Device &dev, stream_offset off,
+            BOOST_IOS::openmode, mpl::false_ )
+{
+	typedef typename char_type_of<Device>::type char_type;
+	char_type c;
+	for ( stream_offset z = 0; z < off; )
+	{
+		std::streamsize amt;
+		if ( ( amt = iostreams::read ( flt, dev, &c, 1 ) ) == -1 )
+			boost::throw_exception ( BOOST_IOSTREAMS_FAILURE ( "bad skip offset" ) );
+		if ( amt == 1 )
+			++z;
+	}
 }
 
 } // End namespace detail.
 
 template<typename Device>
-void skip(Device& dev, stream_offset off)
-{ 
-    typedef typename mode_of<Device>::type     mode;
-    typedef mpl::or_<
-        is_convertible<mode, input_seekable>,
-        is_convertible<mode, output_seekable>
-    >                                          can_seek;
-    BOOST_STATIC_ASSERT(
-        (can_seek::value || is_convertible<mode, input>::value)
-    );
-    detail::skip(dev, off, can_seek());
+void skip ( Device &dev, stream_offset off )
+{
+	typedef typename mode_of<Device>::type     mode;
+	typedef mpl::or_ <
+	is_convertible<mode, input_seekable>,
+	               is_convertible<mode, output_seekable>
+	               >                                          can_seek;
+	BOOST_STATIC_ASSERT (
+	    ( can_seek::value || is_convertible<mode, input>::value )
+	);
+	detail::skip ( dev, off, can_seek() );
 }
 
 template<typename Filter, typename Device>
-void skip( Filter& flt, Device& dev, stream_offset off, 
-           BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out )
-{ 
-    typedef typename mode_of<Filter>::type                 filter_mode;
-    typedef typename mode_of<Device>::type                 device_mode;
-    typedef mpl::or_<
-        mpl::and_<
-            is_convertible<filter_mode, input_seekable>,
-            is_convertible<device_mode, input_seekable>
-        >,
-        mpl::and_<
-            is_convertible<filter_mode, output_seekable>,
-            is_convertible<device_mode, output_seekable>
-        >
-    >                                                      can_seek;
-    BOOST_STATIC_ASSERT(
-        ( can_seek::value || 
-          (is_convertible<filter_mode, input>::value &&
-          is_convertible<device_mode, input>::value) )
-    );
-    detail::skip(flt, dev, off, which, can_seek());
+void skip ( Filter &flt, Device &dev, stream_offset off,
+            BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out )
+{
+	typedef typename mode_of<Filter>::type                 filter_mode;
+	typedef typename mode_of<Device>::type                 device_mode;
+	typedef mpl::or_ <
+	mpl::and_ <
+	is_convertible<filter_mode, input_seekable>,
+	               is_convertible<device_mode, input_seekable>
+	               >,
+	               mpl::and_ <
+	               is_convertible<filter_mode, output_seekable>,
+	               is_convertible<device_mode, output_seekable>
+	               >
+	               >                                                      can_seek;
+	BOOST_STATIC_ASSERT (
+	    ( can_seek::value ||
+	      ( is_convertible<filter_mode, input>::value &&
+	        is_convertible<device_mode, input>::value ) )
+	);
+	detail::skip ( flt, dev, off, which, can_seek() );
 }
 
-} } // End namespaces iostreams, boost.
+}
+} // End namespaces iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_SKIP_HPP_INCLUDED //------------------------//

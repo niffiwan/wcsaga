@@ -21,8 +21,10 @@
 
 #if !defined(BOOST_NO_IOSTREAM)
 
-namespace boost {
-namespace asio {
+namespace boost
+{
+namespace asio
+{
 
 /// Typedef for the typical usage of basic_streambuf.
 typedef basic_streambuf<> streambuf;

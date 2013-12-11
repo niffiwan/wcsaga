@@ -9,26 +9,33 @@
 # include <boost/mpl/eval_if.hpp>
 # include <boost/mpl/identity.hpp>
 
-namespace boost { namespace python { namespace detail { 
+namespace boost
+{
+namespace python
+{
+namespace detail
+{
 
 template <class T>
 struct unwrap_wrapper_helper
 {
-    typedef typename T::_wrapper_wrapped_type_ type;
+	typedef typename T::_wrapper_wrapped_type_ type;
 };
 
 template <class T>
 struct unwrap_wrapper_
-  : mpl::eval_if<is_wrapper<T>,unwrap_wrapper_helper<T>,mpl::identity<T> >
+		: mpl::eval_if<is_wrapper<T>, unwrap_wrapper_helper<T>, mpl::identity<T> >
 {};
 
 template <class T>
-typename unwrap_wrapper_<T>::type*
-unwrap_wrapper(T*)
+typename unwrap_wrapper_<T>::type *
+unwrap_wrapper ( T * )
 {
-    return 0;
+	return 0;
 }
 
-}}} // namespace boost::python::detail
+}
+}
+} // namespace boost::python::detail
 
 #endif // UNWRAP_WRAPPER_DWA2004723_HPP

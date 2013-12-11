@@ -24,35 +24,35 @@
 
 namespace boost
 {
-    template<class T>
-    struct is_std_map
-        : boost::mpl::false_
-    {};
+template<class T>
+struct is_std_map
+		: boost::mpl::false_
+{};
 
-    template<
-        class Kty
-      , class Ty
-      , class Pr
-      , class Alloc
+template <
+    class Kty
+    , class Ty
+    , class Pr
+    , class Alloc
     >
-    struct is_std_map< ::std::map<Kty,Ty,Pr,Alloc> >
-        : boost::mpl::true_
-    {};
+struct is_std_map< ::std::map<Kty, Ty, Pr, Alloc> >
+		: boost::mpl::true_
+{};
 
-    template<class T>
-    struct is_std_multimap
-        : boost::mpl::false_
-    {};
+template<class T>
+struct is_std_multimap
+		: boost::mpl::false_
+{};
 
-    template<
-        class Kty
-      , class Ty
-      , class Pr
-      , class Alloc
+template <
+    class Kty
+    , class Ty
+    , class Pr
+    , class Alloc
     >
-    struct is_std_multimap< ::std::multimap<Kty,Ty,Pr,Alloc> >
-        : boost::mpl::true_
-    {};
+struct is_std_multimap< ::std::multimap<Kty, Ty, Pr, Alloc> >
+		: boost::mpl::true_
+{};
 }
 
 #endif

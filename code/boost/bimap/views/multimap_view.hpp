@@ -23,9 +23,12 @@
 #include <boost/bimap/support/iterator_type_by.hpp>
 #include <boost/bimap/detail/map_view_base.hpp>
 
-namespace boost {
-namespace bimaps {
-namespace views {
+namespace boost
+{
+namespace bimaps
+{
+namespace views
+{
 
 /// \brief View of a side of a bimap that is signature compatible with std::multimap.
 /**
@@ -38,41 +41,41 @@ See also const_multimap_view.
 
 template< class Tag, class BimapType >
 class multimap_view
-:
-    public BOOST_BIMAP_MAP_VIEW_CONTAINER_ADAPTOR(
-        multimap_adaptor,
-        Tag,BimapType,
-        reverse_iterator_type_by,const_reverse_iterator_type_by
-    ),
-    public ::boost::bimaps::detail::
-                map_view_base< multimap_view<Tag,BimapType>,Tag,BimapType >
+	:
+	public BOOST_BIMAP_MAP_VIEW_CONTAINER_ADAPTOR (
+	    multimap_adaptor,
+	    Tag, BimapType,
+	    reverse_iterator_type_by, const_reverse_iterator_type_by
+	),
+	public ::boost::bimaps::detail::
+	map_view_base< multimap_view<Tag, BimapType>, Tag, BimapType >
 
 {
-    typedef BOOST_BIMAP_MAP_VIEW_CONTAINER_ADAPTOR(
-        multimap_adaptor,
-        Tag,BimapType,
-        reverse_iterator_type_by,const_reverse_iterator_type_by
+	typedef BOOST_BIMAP_MAP_VIEW_CONTAINER_ADAPTOR (
+	    multimap_adaptor,
+	    Tag, BimapType,
+	    reverse_iterator_type_by, const_reverse_iterator_type_by
 
-    ) base_;
+	) base_;
 
-    BOOST_BIMAP_MAP_VIEW_BASE_FRIEND(multimap_view,Tag,BimapType)
+	BOOST_BIMAP_MAP_VIEW_BASE_FRIEND ( multimap_view, Tag, BimapType )
 
-    public:
+public:
 
-    typedef BOOST_DEDUCED_TYPENAME base_::value_type::info_type info_type;
+	typedef BOOST_DEDUCED_TYPENAME base_::value_type::info_type info_type;
 
-    multimap_view(BOOST_DEDUCED_TYPENAME base_::base_type & c)
-        : base_(c) {}
+	multimap_view ( BOOST_DEDUCED_TYPENAME base_::base_type &c )
+		: base_ ( c ) {}
 
-    BOOST_BIMAP_MAP_VIEW_RANGE_IMPLEMENTATION(base_)
+	BOOST_BIMAP_MAP_VIEW_RANGE_IMPLEMENTATION ( base_ )
 
-    multimap_view & operator=(const multimap_view & v) 
-    {
-        this->base() = v.base();
-        return *this;
-    }
+	multimap_view &operator= ( const multimap_view &v )
+	{
+		this->base() = v.base();
+		return *this;
+	}
 
-    BOOST_BIMAP_NON_UNIQUE_VIEW_INSERT_FUNCTIONS
+	BOOST_BIMAP_NON_UNIQUE_VIEW_INSERT_FUNCTIONS
 };
 
 
@@ -93,20 +96,21 @@ typedef BOOST_DEDUCED_TYPENAME MAP_VIEW::TYPENAME                             \
     BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,key_compare)
 /*===========================================================================*/
 
-namespace detail {
+namespace detail
+{
 
 template< class Tag, class BimapType >
-struct left_map_view_extra_typedefs< ::boost::bimaps::views::multimap_view<Tag,BimapType> >
+struct left_map_view_extra_typedefs< ::boost::bimaps::views::multimap_view<Tag, BimapType> >
 {
-    private: typedef ::boost::bimaps::views::multimap_view<Tag,BimapType> map_view_;
-    public : BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY(map_view_,left)
+private: typedef ::boost::bimaps::views::multimap_view<Tag, BimapType> map_view_;
+public : BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY ( map_view_, left )
 };
 
 template< class Tag, class BimapType >
-struct right_map_view_extra_typedefs< ::boost::bimaps::views::multimap_view<Tag,BimapType> >
+struct right_map_view_extra_typedefs< ::boost::bimaps::views::multimap_view<Tag, BimapType> >
 {
-    private: typedef ::boost::bimaps::views::multimap_view<Tag,BimapType> map_view_;
-    public : BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY(map_view_,right)
+private: typedef ::boost::bimaps::views::multimap_view<Tag, BimapType> map_view_;
+public : BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY ( map_view_, right )
 };
 
 } // namespace detail

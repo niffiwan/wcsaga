@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -21,56 +21,56 @@ opengl_state GL_state;
 
 opengl_texture_state::~opengl_texture_state()
 {
-	if (units != NULL)
+	if ( units != NULL )
 	{
-		vm_free(units);
+		vm_free ( units );
 	}
 }
 
-void opengl_texture_state::init(GLuint n_units)
+void opengl_texture_state::init ( GLuint n_units )
 {
-	Assert(n_units > 0);
-	units = (opengl_texture_unit*)vm_malloc(n_units * sizeof(opengl_texture_unit));
+	Assert ( n_units > 0 );
+	units = ( opengl_texture_unit * ) vm_malloc ( n_units * sizeof ( opengl_texture_unit ) );
 	num_texture_units = n_units;
 
-	for (unsigned int i = 0; i < num_texture_units; i++)
+	for ( unsigned int i = 0; i < num_texture_units; i++ )
 	{
 		units[i].active = GL_FALSE;
 		units[i].enabled = GL_FALSE;
 
-		default_values(i);
+		default_values ( i );
 	}
 
 	DisableAll();
 }
 
-void opengl_texture_state::default_values(GLint unit, GLenum target)
+void opengl_texture_state::default_values ( GLint unit, GLenum target )
 {
-	vglActiveTextureARB(GL_TEXTURE0 + unit);
+	vglActiveTextureARB ( GL_TEXTURE0 + unit );
 
-	if (target == GL_INVALID_ENUM)
+	if ( target == GL_INVALID_ENUM )
 	{
-		if (unit < GL_supported_texture_units)
+		if ( unit < GL_supported_texture_units )
 		{
-			glDisable(GL_TEXTURE_2D);
-			glDisable(GL_TEXTURE_CUBE_MAP);
-			glDisable(GL_TEXTURE_RECTANGLE_ARB);
+			glDisable ( GL_TEXTURE_2D );
+			glDisable ( GL_TEXTURE_CUBE_MAP );
+			glDisable ( GL_TEXTURE_RECTANGLE_ARB );
 		}
 
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-		glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
+		glBindTexture ( GL_TEXTURE_2D, 0 );
+		glBindTexture ( GL_TEXTURE_CUBE_MAP, 0 );
+		glBindTexture ( GL_TEXTURE_RECTANGLE_ARB, 0 );
 
 		units[unit].texture_target = GL_TEXTURE_2D;
 		units[unit].texture_id = 0;
 	}
 
-	if (unit < GL_supported_texture_units)
+	if ( unit < GL_supported_texture_units )
 	{
-		glDisable(GL_TEXTURE_GEN_S);
-		glDisable(GL_TEXTURE_GEN_T);
-		glDisable(GL_TEXTURE_GEN_R);
-		glDisable(GL_TEXTURE_GEN_Q);
+		glDisable ( GL_TEXTURE_GEN_S );
+		glDisable ( GL_TEXTURE_GEN_T );
+		glDisable ( GL_TEXTURE_GEN_R );
+		glDisable ( GL_TEXTURE_GEN_Q );
 	}
 
 	units[unit].texgen_S = GL_FALSE;
@@ -78,12 +78,12 @@ void opengl_texture_state::default_values(GLint unit, GLenum target)
 	units[unit].texgen_R = GL_FALSE;
 	units[unit].texgen_Q = GL_FALSE;
 
-	if (unit < GL_supported_texture_units)
+	if ( unit < GL_supported_texture_units )
 	{
-		glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-		glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-		glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-		glTexGeni(GL_Q, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+		glTexGeni ( GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR );
+		glTexGeni ( GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR );
+		glTexGeni ( GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR );
+		glTexGeni ( GL_Q, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR );
 	}
 
 	units[unit].texgen_mode_S = GL_EYE_LINEAR;
@@ -91,38 +91,38 @@ void opengl_texture_state::default_values(GLint unit, GLenum target)
 	units[unit].texgen_mode_R = GL_EYE_LINEAR;
 	units[unit].texgen_mode_Q = GL_EYE_LINEAR;
 
-	glTexParameteri((target == GL_INVALID_ENUM) ? GL_TEXTURE_2D : target, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri((target == GL_INVALID_ENUM) ? GL_TEXTURE_2D : target, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri((target == GL_INVALID_ENUM) ? GL_TEXTURE_2D : target, GL_TEXTURE_WRAP_R, GL_REPEAT);
+	glTexParameteri ( ( target == GL_INVALID_ENUM ) ? GL_TEXTURE_2D : target, GL_TEXTURE_WRAP_S, GL_REPEAT );
+	glTexParameteri ( ( target == GL_INVALID_ENUM ) ? GL_TEXTURE_2D : target, GL_TEXTURE_WRAP_T, GL_REPEAT );
+	glTexParameteri ( ( target == GL_INVALID_ENUM ) ? GL_TEXTURE_2D : target, GL_TEXTURE_WRAP_R, GL_REPEAT );
 
 	units[unit].wrap_S = GL_REPEAT;
 	units[unit].wrap_T = GL_REPEAT;
 	units[unit].wrap_R = GL_REPEAT;
 
-	glTexParameteri((target == GL_INVALID_ENUM) ? GL_TEXTURE_2D : target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri((target == GL_INVALID_ENUM) ? GL_TEXTURE_2D : target, GL_TEXTURE_MIN_FILTER,
-		GL_NEAREST_MIPMAP_LINEAR);
-	glTexParameteri((target == GL_INVALID_ENUM) ? GL_TEXTURE_2D : target, GL_TEXTURE_MAX_LEVEL, 1000);
+	glTexParameteri ( ( target == GL_INVALID_ENUM ) ? GL_TEXTURE_2D : target, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexParameteri ( ( target == GL_INVALID_ENUM ) ? GL_TEXTURE_2D : target, GL_TEXTURE_MIN_FILTER,
+	                  GL_NEAREST_MIPMAP_LINEAR );
+	glTexParameteri ( ( target == GL_INVALID_ENUM ) ? GL_TEXTURE_2D : target, GL_TEXTURE_MAX_LEVEL, 1000 );
 
 	units[unit].mag_filter = GL_LINEAR;
 	units[unit].min_filter = GL_NEAREST_MIPMAP_LINEAR;
 	units[unit].max_level = 1000;
 
-	if (unit < GL_supported_texture_units)
+	if ( unit < GL_supported_texture_units )
 	{
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
-		glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE);
+		glTexEnvi ( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+		glTexEnvi ( GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE );
+		glTexEnvi ( GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE );
 	}
 
 	units[unit].env_mode = GL_MODULATE;
 	units[unit].env_combine_rgb = GL_MODULATE;
 	units[unit].env_combine_alpha = GL_MODULATE;
 
-	if (unit < GL_supported_texture_units)
+	if ( unit < GL_supported_texture_units )
 	{
-		glTexEnvf(GL_TEXTURE_ENV, GL_RGB_SCALE, 1.0f);
-		glTexEnvf(GL_TEXTURE_ENV, GL_ALPHA_SCALE, 1.0f);
+		glTexEnvf ( GL_TEXTURE_ENV, GL_RGB_SCALE, 1.0f );
+		glTexEnvf ( GL_TEXTURE_ENV, GL_ALPHA_SCALE, 1.0f );
 	}
 
 	units[unit].rgb_scale = 1.0f;
@@ -131,21 +131,21 @@ void opengl_texture_state::default_values(GLint unit, GLenum target)
 	units[unit].aniso_filter = 1.0f;
 }
 
-GLboolean opengl_texture_state::TexgenS(GLint state)
+GLboolean opengl_texture_state::TexgenS ( GLint state )
 {
 	GLboolean save_state = units[active_texture_unit].texgen_S;
 
-	if (!((state == -1) || (state == units[active_texture_unit].texgen_S)))
+	if ( ! ( ( state == -1 ) || ( state == units[active_texture_unit].texgen_S ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glEnable(GL_TEXTURE_GEN_S);
+			Assert ( state == GL_TRUE );
+			glEnable ( GL_TEXTURE_GEN_S );
 			units[active_texture_unit].texgen_S = GL_TRUE;
 		}
 		else
 		{
-			glDisable(GL_TEXTURE_GEN_S);
+			glDisable ( GL_TEXTURE_GEN_S );
 			units[active_texture_unit].texgen_S = GL_FALSE;
 		}
 	}
@@ -153,21 +153,21 @@ GLboolean opengl_texture_state::TexgenS(GLint state)
 	return save_state;
 }
 
-GLboolean opengl_texture_state::TexgenT(GLint state)
+GLboolean opengl_texture_state::TexgenT ( GLint state )
 {
 	GLboolean save_state = units[active_texture_unit].texgen_T;
 
-	if (!((state == -1) || (state == units[active_texture_unit].texgen_T)))
+	if ( ! ( ( state == -1 ) || ( state == units[active_texture_unit].texgen_T ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glEnable(GL_TEXTURE_GEN_T);
+			Assert ( state == GL_TRUE );
+			glEnable ( GL_TEXTURE_GEN_T );
 			units[active_texture_unit].texgen_T = GL_TRUE;
 		}
 		else
 		{
-			glDisable(GL_TEXTURE_GEN_T);
+			glDisable ( GL_TEXTURE_GEN_T );
 			units[active_texture_unit].texgen_T = GL_FALSE;
 		}
 	}
@@ -175,21 +175,21 @@ GLboolean opengl_texture_state::TexgenT(GLint state)
 	return save_state;
 }
 
-GLboolean opengl_texture_state::TexgenR(GLint state)
+GLboolean opengl_texture_state::TexgenR ( GLint state )
 {
 	GLboolean save_state = units[active_texture_unit].texgen_R;
 
-	if (!((state == -1) || (state == units[active_texture_unit].texgen_R)))
+	if ( ! ( ( state == -1 ) || ( state == units[active_texture_unit].texgen_R ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glEnable(GL_TEXTURE_GEN_R);
+			Assert ( state == GL_TRUE );
+			glEnable ( GL_TEXTURE_GEN_R );
 			units[active_texture_unit].texgen_R = GL_TRUE;
 		}
 		else
 		{
-			glDisable(GL_TEXTURE_GEN_R);
+			glDisable ( GL_TEXTURE_GEN_R );
 			units[active_texture_unit].texgen_R = GL_FALSE;
 		}
 	}
@@ -197,21 +197,21 @@ GLboolean opengl_texture_state::TexgenR(GLint state)
 	return save_state;
 }
 
-GLboolean opengl_texture_state::TexgenQ(GLint state)
+GLboolean opengl_texture_state::TexgenQ ( GLint state )
 {
 	GLboolean save_state = units[active_texture_unit].texgen_Q;
 
-	if (!((state == -1) || (state == units[active_texture_unit].texgen_Q)))
+	if ( ! ( ( state == -1 ) || ( state == units[active_texture_unit].texgen_Q ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glEnable(GL_TEXTURE_GEN_Q);
+			Assert ( state == GL_TRUE );
+			glEnable ( GL_TEXTURE_GEN_Q );
 			units[active_texture_unit].texgen_Q = GL_TRUE;
 		}
 		else
 		{
-			glDisable(GL_TEXTURE_GEN_Q);
+			glDisable ( GL_TEXTURE_GEN_Q );
 			units[active_texture_unit].texgen_Q = GL_FALSE;
 		}
 	}
@@ -219,69 +219,69 @@ GLboolean opengl_texture_state::TexgenQ(GLint state)
 	return save_state;
 }
 
-void opengl_texture_state::SetTarget(GLenum tex_target)
+void opengl_texture_state::SetTarget ( GLenum tex_target )
 {
-	if (units[active_texture_unit].texture_target != tex_target)
+	if ( units[active_texture_unit].texture_target != tex_target )
 	{
 		Disable();
 
-		if (units[active_texture_unit].texture_id)
+		if ( units[active_texture_unit].texture_id )
 		{
-			glBindTexture(units[active_texture_unit].texture_target, 0);
+			glBindTexture ( units[active_texture_unit].texture_target, 0 );
 			units[active_texture_unit].texture_id = 0;
 		}
 
 		// reset modes, since those were only valid for the previous texture target
-		default_values(active_texture_unit, tex_target);
+		default_values ( active_texture_unit, tex_target );
 		units[active_texture_unit].texture_target = tex_target;
 	}
 }
 
-void opengl_texture_state::SetActiveUnit(GLuint id)
+void opengl_texture_state::SetActiveUnit ( GLuint id )
 {
-	if (id >= num_texture_units)
+	if ( id >= num_texture_units )
 	{
 		Int3();
 		id = 0;
 	}
 
-	vglActiveTextureARB(GL_TEXTURE0 + id);
+	vglActiveTextureARB ( GL_TEXTURE0 + id );
 
 	active_texture_unit = id;
 }
 
-void opengl_texture_state::Enable(GLuint tex_id)
+void opengl_texture_state::Enable ( GLuint tex_id )
 {
-	if (units[active_texture_unit].active && (units[active_texture_unit].texture_id == tex_id))
+	if ( units[active_texture_unit].active && ( units[active_texture_unit].texture_id == tex_id ) )
 	{
 		return;
 	}
 
-	if (!shader_mode && (active_texture_unit < (uint)GL_supported_texture_units))
+	if ( !shader_mode && ( active_texture_unit < ( uint ) GL_supported_texture_units ) )
 	{
-		glEnable(units[active_texture_unit].texture_target);
+		glEnable ( units[active_texture_unit].texture_target );
 		units[active_texture_unit].enabled = GL_TRUE;
 	}
 
-	if (units[active_texture_unit].texture_id != tex_id)
+	if ( units[active_texture_unit].texture_id != tex_id )
 	{
-		glBindTexture(units[active_texture_unit].texture_target, tex_id);
+		glBindTexture ( units[active_texture_unit].texture_target, tex_id );
 		units[active_texture_unit].texture_id = tex_id;
 	}
 
 	units[active_texture_unit].active = GL_TRUE;
 }
 
-void opengl_texture_state::Disable(bool force)
+void opengl_texture_state::Disable ( bool force )
 {
-	if (!force && !units[active_texture_unit].active)
+	if ( !force && !units[active_texture_unit].active )
 	{
 		return;
 	}
 
-	if (force || units[active_texture_unit].enabled)
+	if ( force || units[active_texture_unit].enabled )
 	{
-		glDisable(units[active_texture_unit].texture_target);
+		glDisable ( units[active_texture_unit].texture_target );
 		units[active_texture_unit].enabled = GL_FALSE;
 	}
 
@@ -290,12 +290,12 @@ void opengl_texture_state::Disable(bool force)
 
 void opengl_texture_state::DisableAll()
 {
-	for (unsigned int i = 0; i < num_texture_units; i++)
+	for ( unsigned int i = 0; i < num_texture_units; i++ )
 	{
-		if (units[i].active)
+		if ( units[i].active )
 		{
-			SetActiveUnit(i);
-			Disable(true);
+			SetActiveUnit ( i );
+			Disable ( true );
 		}
 	}
 
@@ -304,9 +304,9 @@ void opengl_texture_state::DisableAll()
 	Current_texture_source = TEXTURE_SOURCE_NONE;
 }
 
-void opengl_texture_state::Delete(GLuint tex_id)
+void opengl_texture_state::Delete ( GLuint tex_id )
 {
-	if (tex_id == 0)
+	if ( tex_id == 0 )
 	{
 		Int3();
 		return;
@@ -314,52 +314,52 @@ void opengl_texture_state::Delete(GLuint tex_id)
 
 	GLuint atu_save = active_texture_unit;
 
-	for (unsigned int i = 0; i < num_texture_units; i++)
+	for ( unsigned int i = 0; i < num_texture_units; i++ )
 	{
-		if (units[i].texture_id == tex_id)
+		if ( units[i].texture_id == tex_id )
 		{
-			SetActiveUnit(i);
+			SetActiveUnit ( i );
 			Disable();
 
-			glBindTexture(units[i].texture_target, 0);
+			glBindTexture ( units[i].texture_target, 0 );
 			units[i].texture_id = 0;
 
-			default_values(i, units[i].texture_target);
+			default_values ( i, units[i].texture_target );
 
-			if (i == atu_save)
+			if ( i == atu_save )
 			{
 				atu_save = 0;
 			}
 		}
 	}
 
-	SetActiveUnit(atu_save);
+	SetActiveUnit ( atu_save );
 }
 
-GLfloat opengl_texture_state::AnisoFilter(GLfloat aniso)
+GLfloat opengl_texture_state::AnisoFilter ( GLfloat aniso )
 {
 	GLfloat rval = units[active_texture_unit].aniso_filter;
 
-	if ((aniso > 0.0f)/*&& (aniso != rval)*/ )
+	if ( ( aniso > 0.0f ) /*&& (aniso != rval)*/ )
 	{
-		if (Is_Extension_Enabled(OGL_EXT_TEXTURE_FILTER_ANISOTROPIC))
+		if ( Is_Extension_Enabled ( OGL_EXT_TEXTURE_FILTER_ANISOTROPIC ) )
 		{
 			units[active_texture_unit].aniso_filter = aniso;
-			CLAMP(units[active_texture_unit].aniso_filter, 1.0f, GL_max_anisotropy);
+			CLAMP ( units[active_texture_unit].aniso_filter, 1.0f, GL_max_anisotropy );
 
-			glTexParameterf(units[active_texture_unit].texture_target, GL_TEXTURE_MAX_ANISOTROPY_EXT,
-				units[active_texture_unit].aniso_filter);
+			glTexParameterf ( units[active_texture_unit].texture_target, GL_TEXTURE_MAX_ANISOTROPY_EXT,
+			                  units[active_texture_unit].aniso_filter );
 		}
 
-		if (Is_Extension_Enabled(OGL_EXT_TEXTURE_LOD_BIAS))
+		if ( Is_Extension_Enabled ( OGL_EXT_TEXTURE_LOD_BIAS ) )
 		{
-			if (units[active_texture_unit].aniso_filter > 1.0f)
+			if ( units[active_texture_unit].aniso_filter > 1.0f )
 			{
-				glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, 0.0f);
+				glTexEnvf ( GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, 0.0f );
 			}
 			else
 			{
-				glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, -0.75f);
+				glTexEnvf ( GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, -0.75f );
 			}
 		}
 	}
@@ -369,9 +369,9 @@ GLfloat opengl_texture_state::AnisoFilter(GLfloat aniso)
 
 opengl_state::~opengl_state()
 {
-	if (light_Status != NULL)
+	if ( light_Status != NULL )
 	{
-		vm_free(light_Status);
+		vm_free ( light_Status );
 	}
 }
 
@@ -379,83 +379,83 @@ void opengl_state::init()
 {
 	int i;
 
-	glDisable(GL_FOG);
+	glDisable ( GL_FOG );
 	fog_Status = GL_FALSE;
 
-	glDisable(GL_BLEND);
+	glDisable ( GL_BLEND );
 	blend_Status = GL_FALSE;
 
-	glDisable(GL_ALPHA_TEST);
+	glDisable ( GL_ALPHA_TEST );
 	alphatest_Status = GL_FALSE;
 
-	glDisable(GL_DEPTH_TEST);
+	glDisable ( GL_DEPTH_TEST );
 	depthtest_Status = GL_FALSE;
 
-	glDisable(GL_SCISSOR_TEST);
+	glDisable ( GL_SCISSOR_TEST );
 	scissortest_Status = GL_FALSE;
 
-	glDisable(GL_CULL_FACE);
+	glDisable ( GL_CULL_FACE );
 	cullface_Status = GL_FALSE;
 
-	glDisable(GL_POLYGON_OFFSET_FILL);
+	glDisable ( GL_POLYGON_OFFSET_FILL );
 	polygonoffsetfill_Status = GL_FALSE;
 
-	glDisable(GL_NORMALIZE);
+	glDisable ( GL_NORMALIZE );
 	normalize_Status = GL_FALSE;
 
-	for (i = 0; i < (int)(sizeof(clipplane_Status) / sizeof(GLboolean)); i++)
+	for ( i = 0; i < ( int ) ( sizeof ( clipplane_Status ) / sizeof ( GLboolean ) ); i++ )
 	{
-		glDisable(GL_CLIP_PLANE0 + i);
+		glDisable ( GL_CLIP_PLANE0 + i );
 		clipplane_Status[i] = GL_FALSE;
 	}
 
-	Assert(GL_max_lights > 0);
-	light_Status = (GLboolean*)vm_malloc(GL_max_lights * sizeof(GLboolean));
+	Assert ( GL_max_lights > 0 );
+	light_Status = ( GLboolean * ) vm_malloc ( GL_max_lights * sizeof ( GLboolean ) );
 
-	for (i = 0; i < GL_max_lights; i++)
+	for ( i = 0; i < GL_max_lights; i++ )
 	{
-		glDisable(GL_LIGHT0 + i);
+		glDisable ( GL_LIGHT0 + i );
 		light_Status[i] = GL_FALSE;
 	}
 
-	glDepthMask(GL_FALSE);
+	glDepthMask ( GL_FALSE );
 	depthmask_Status = GL_FALSE;
 
-	glDisable(GL_LIGHTING);
+	glDisable ( GL_LIGHTING );
 	lighting_Status = GL_FALSE;
 
-	glFrontFace(GL_CCW);
+	glFrontFace ( GL_CCW );
 	frontface_Value = GL_CCW;
 
-	glCullFace(GL_BACK);
+	glCullFace ( GL_BACK );
 	cullface_Value = GL_BACK;
 
-	glBlendFunc(GL_ONE, GL_ZERO);
+	glBlendFunc ( GL_ONE, GL_ZERO );
 	blendfunc_Value[0] = GL_ONE;
 	blendfunc_Value[1] = GL_ZERO;
 
-	glDepthFunc(GL_LESS);
+	glDepthFunc ( GL_LESS );
 	depthfunc_Value = GL_LESS;
 
 	Current_alpha_blend_mode = ALPHA_BLEND_NONE;
 	Current_zbuffer_type = ZBUFFER_TYPE_READ;
 }
 
-GLboolean opengl_state::Lighting(GLint state)
+GLboolean opengl_state::Lighting ( GLint state )
 {
 	GLboolean save_state = lighting_Status;
 
-	if (!((state == -1) || (state == lighting_Status)))
+	if ( ! ( ( state == -1 ) || ( state == lighting_Status ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glEnable(GL_LIGHTING);
+			Assert ( state == GL_TRUE );
+			glEnable ( GL_LIGHTING );
 			lighting_Status = GL_TRUE;
 		}
 		else
 		{
-			glDisable(GL_LIGHTING);
+			glDisable ( GL_LIGHTING );
 			lighting_Status = GL_FALSE;
 		}
 	}
@@ -463,21 +463,21 @@ GLboolean opengl_state::Lighting(GLint state)
 	return save_state;
 }
 
-GLboolean opengl_state::Fog(GLint state)
+GLboolean opengl_state::Fog ( GLint state )
 {
 	GLboolean save_state = fog_Status;
 
-	if (!((state == -1) || (state == fog_Status)))
+	if ( ! ( ( state == -1 ) || ( state == fog_Status ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glEnable(GL_FOG);
+			Assert ( state == GL_TRUE );
+			glEnable ( GL_FOG );
 			fog_Status = GL_TRUE;
 		}
 		else
 		{
-			glDisable(GL_FOG);
+			glDisable ( GL_FOG );
 			fog_Status = GL_FALSE;
 		}
 	}
@@ -485,45 +485,45 @@ GLboolean opengl_state::Fog(GLint state)
 	return save_state;
 }
 
-GLboolean opengl_state::Blend(GLint state)
+GLboolean opengl_state::Blend ( GLint state )
 {
 	GLboolean save_state = blend_Status;
 
-	if (!((state == -1) || (state == blend_Status)))
+	if ( ! ( ( state == -1 ) || ( state == blend_Status ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glEnable(GL_BLEND);
+			Assert ( state == GL_TRUE );
+			glEnable ( GL_BLEND );
 			blend_Status = GL_TRUE;
 		}
 		else
 		{
-			glDisable(GL_BLEND);
+			glDisable ( GL_BLEND );
 			blend_Status = GL_FALSE;
 		}
 
-		Current_alpha_blend_mode = (gr_alpha_blend)(-1);
+		Current_alpha_blend_mode = ( gr_alpha_blend ) ( -1 );
 	}
 
 	return save_state;
 }
 
-GLboolean opengl_state::AlphaTest(GLint state)
+GLboolean opengl_state::AlphaTest ( GLint state )
 {
 	GLboolean save_state = alphatest_Status;
 
-	if (!((state == -1) || (state == alphatest_Status)))
+	if ( ! ( ( state == -1 ) || ( state == alphatest_Status ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glEnable(GL_ALPHA_TEST);
+			Assert ( state == GL_TRUE );
+			glEnable ( GL_ALPHA_TEST );
 			alphatest_Status = GL_TRUE;
 		}
 		else
 		{
-			glDisable(GL_ALPHA_TEST);
+			glDisable ( GL_ALPHA_TEST );
 			alphatest_Status = GL_FALSE;
 		}
 	}
@@ -531,21 +531,21 @@ GLboolean opengl_state::AlphaTest(GLint state)
 	return save_state;
 }
 
-GLboolean opengl_state::DepthTest(GLint state)
+GLboolean opengl_state::DepthTest ( GLint state )
 {
 	GLboolean save_state = depthtest_Status;
 
-	if (!((state == -1) || (state == depthtest_Status)))
+	if ( ! ( ( state == -1 ) || ( state == depthtest_Status ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glEnable(GL_DEPTH_TEST);
+			Assert ( state == GL_TRUE );
+			glEnable ( GL_DEPTH_TEST );
 			depthtest_Status = GL_TRUE;
 		}
 		else
 		{
-			glDisable(GL_DEPTH_TEST);
+			glDisable ( GL_DEPTH_TEST );
 			depthtest_Status = GL_FALSE;
 		}
 	}
@@ -553,21 +553,21 @@ GLboolean opengl_state::DepthTest(GLint state)
 	return save_state;
 }
 
-GLboolean opengl_state::ScissorTest(GLint state)
+GLboolean opengl_state::ScissorTest ( GLint state )
 {
 	GLboolean save_state = scissortest_Status;
 
-	if (!((state == -1) || (state == scissortest_Status)))
+	if ( ! ( ( state == -1 ) || ( state == scissortest_Status ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glEnable(GL_SCISSOR_TEST);
+			Assert ( state == GL_TRUE );
+			glEnable ( GL_SCISSOR_TEST );
 			scissortest_Status = GL_TRUE;
 		}
 		else
 		{
-			glDisable(GL_SCISSOR_TEST);
+			glDisable ( GL_SCISSOR_TEST );
 			scissortest_Status = GL_FALSE;
 		}
 	}
@@ -575,21 +575,21 @@ GLboolean opengl_state::ScissorTest(GLint state)
 	return save_state;
 }
 
-GLboolean opengl_state::CullFace(GLint state)
+GLboolean opengl_state::CullFace ( GLint state )
 {
 	GLboolean save_state = cullface_Status;
 
-	if (!((state == -1) || (state == cullface_Status)))
+	if ( ! ( ( state == -1 ) || ( state == cullface_Status ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glEnable(GL_CULL_FACE);
+			Assert ( state == GL_TRUE );
+			glEnable ( GL_CULL_FACE );
 			cullface_Status = GL_TRUE;
 		}
 		else
 		{
-			glDisable(GL_CULL_FACE);
+			glDisable ( GL_CULL_FACE );
 			cullface_Status = GL_FALSE;
 		}
 	}
@@ -597,21 +597,21 @@ GLboolean opengl_state::CullFace(GLint state)
 	return save_state;
 }
 
-GLboolean opengl_state::PolygonOffsetFill(GLint state)
+GLboolean opengl_state::PolygonOffsetFill ( GLint state )
 {
 	GLboolean save_state = polygonoffsetfill_Status;
 
-	if (!((state == -1) || (state == polygonoffsetfill_Status)))
+	if ( ! ( ( state == -1 ) || ( state == polygonoffsetfill_Status ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glEnable(GL_POLYGON_OFFSET_FILL);
+			Assert ( state == GL_TRUE );
+			glEnable ( GL_POLYGON_OFFSET_FILL );
 			polygonoffsetfill_Status = GL_TRUE;
 		}
 		else
 		{
-			glDisable(GL_POLYGON_OFFSET_FILL);
+			glDisable ( GL_POLYGON_OFFSET_FILL );
 			polygonoffsetfill_Status = GL_FALSE;
 		}
 	}
@@ -619,21 +619,21 @@ GLboolean opengl_state::PolygonOffsetFill(GLint state)
 	return save_state;
 }
 
-GLboolean opengl_state::Normalize(GLint state)
+GLboolean opengl_state::Normalize ( GLint state )
 {
 	GLboolean save_state = normalize_Status;
 
-	if (!((state == -1) || (state == normalize_Status)))
+	if ( ! ( ( state == -1 ) || ( state == normalize_Status ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glEnable(GL_NORMALIZE);
+			Assert ( state == GL_TRUE );
+			glEnable ( GL_NORMALIZE );
 			normalize_Status = GL_TRUE;
 		}
 		else
 		{
-			glDisable(GL_NORMALIZE);
+			glDisable ( GL_NORMALIZE );
 			normalize_Status = GL_FALSE;
 		}
 	}
@@ -641,23 +641,23 @@ GLboolean opengl_state::Normalize(GLint state)
 	return save_state;
 }
 
-GLboolean opengl_state::Light(GLint num, GLint state)
+GLboolean opengl_state::Light ( GLint num, GLint state )
 {
-	Assert((light_Status != NULL) && (num >= 0) && (num < GL_max_lights));
+	Assert ( ( light_Status != NULL ) && ( num >= 0 ) && ( num < GL_max_lights ) );
 
 	GLboolean save_state = light_Status[num];
 
-	if (!((state == -1) || (state == light_Status[num])))
+	if ( ! ( ( state == -1 ) || ( state == light_Status[num] ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glEnable(GL_LIGHT0 + num);
+			Assert ( state == GL_TRUE );
+			glEnable ( GL_LIGHT0 + num );
 			light_Status[num] = GL_TRUE;
 		}
 		else
 		{
-			glDisable(GL_LIGHT0 + num);
+			glDisable ( GL_LIGHT0 + num );
 			light_Status[num] = GL_FALSE;
 		}
 	}
@@ -665,23 +665,23 @@ GLboolean opengl_state::Light(GLint num, GLint state)
 	return save_state;
 }
 
-GLboolean opengl_state::ClipPlane(GLint num, GLint state)
+GLboolean opengl_state::ClipPlane ( GLint num, GLint state )
 {
-	Assert((num >= 0) || (num < (int)(sizeof(clipplane_Status) / sizeof(GLboolean))));
+	Assert ( ( num >= 0 ) || ( num < ( int ) ( sizeof ( clipplane_Status ) / sizeof ( GLboolean ) ) ) );
 
 	GLboolean save_state = clipplane_Status[num];
 
-	if (!((state == -1) || (state == clipplane_Status[num])))
+	if ( ! ( ( state == -1 ) || ( state == clipplane_Status[num] ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glEnable(GL_CLIP_PLANE0 + num);
+			Assert ( state == GL_TRUE );
+			glEnable ( GL_CLIP_PLANE0 + num );
 			clipplane_Status[num] = GL_TRUE;
 		}
 		else
 		{
-			glDisable(GL_CLIP_PLANE0 + num);
+			glDisable ( GL_CLIP_PLANE0 + num );
 			clipplane_Status[num] = GL_FALSE;
 		}
 	}
@@ -689,51 +689,51 @@ GLboolean opengl_state::ClipPlane(GLint num, GLint state)
 	return save_state;
 }
 
-GLboolean opengl_state::DepthMask(GLint state)
+GLboolean opengl_state::DepthMask ( GLint state )
 {
 	GLboolean save_state = depthmask_Status;
 
-	if (!((state == -1) || (state == depthmask_Status)))
+	if ( ! ( ( state == -1 ) || ( state == depthmask_Status ) ) )
 	{
-		if (state)
+		if ( state )
 		{
-			Assert(state == GL_TRUE);
-			glDepthMask(GL_TRUE);
+			Assert ( state == GL_TRUE );
+			glDepthMask ( GL_TRUE );
 			depthmask_Status = GL_TRUE;
 		}
 		else
 		{
-			glDepthMask(GL_FALSE);
+			glDepthMask ( GL_FALSE );
 			depthmask_Status = GL_FALSE;
 		}
 
-		Current_zbuffer_type = (gr_zbuffer_type)(-1);
+		Current_zbuffer_type = ( gr_zbuffer_type ) ( -1 );
 	}
 
 	return save_state;
 }
 
-void opengl_state::SetTextureSource(gr_texture_source ts)
+void opengl_state::SetTextureSource ( gr_texture_source ts )
 {
-	if (ts == Texture.Current_texture_source)
+	if ( ts == Texture.Current_texture_source )
 	{
 		return;
 	}
 
-	switch (ts)
+	switch ( ts )
 	{
 	case TEXTURE_SOURCE_DECAL:
 		GL_state.Texture.SetActiveUnit();
-		GL_state.Texture.SetMinFilter(GL_LINEAR);
-		GL_state.Texture.SetMagFilter(GL_LINEAR);
-		GL_state.Texture.SetEnvMode(GL_MODULATE);
+		GL_state.Texture.SetMinFilter ( GL_LINEAR );
+		GL_state.Texture.SetMagFilter ( GL_LINEAR );
+		GL_state.Texture.SetEnvMode ( GL_MODULATE );
 		break;
 
 	case TEXTURE_SOURCE_NO_FILTERING:
 		GL_state.Texture.SetActiveUnit();
-		GL_state.Texture.SetMinFilter(GL_NEAREST);
-		GL_state.Texture.SetMagFilter(GL_LINEAR);
-		GL_state.Texture.SetEnvMode(GL_MODULATE);
+		GL_state.Texture.SetMinFilter ( GL_NEAREST );
+		GL_state.Texture.SetMagFilter ( GL_LINEAR );
+		GL_state.Texture.SetEnvMode ( GL_MODULATE );
 		break;
 
 	case TEXTURE_SOURCE_NONE:
@@ -748,92 +748,92 @@ void opengl_state::SetTextureSource(gr_texture_source ts)
 	Texture.Current_texture_source = ts;
 }
 
-void opengl_state::SetAlphaBlendMode(gr_alpha_blend ab)
+void opengl_state::SetAlphaBlendMode ( gr_alpha_blend ab )
 {
-	if (ab == Current_alpha_blend_mode)
+	if ( ab == Current_alpha_blend_mode )
 	{
 		return;
 	}
 
-	switch (ab)
+	switch ( ab )
 	{
 	case ALPHA_BLEND_ALPHA_BLEND_ALPHA:
-		GL_state.BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		GL_state.BlendFunc ( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 		break;
 
 	case ALPHA_BLEND_NONE:
-		GL_state.BlendFunc(GL_ONE, GL_ZERO);
+		GL_state.BlendFunc ( GL_ONE, GL_ZERO );
 		break;
 
 	case ALPHA_BLEND_ADDITIVE:
-		GL_state.BlendFunc(GL_ONE, GL_ONE);
+		GL_state.BlendFunc ( GL_ONE, GL_ONE );
 		break;
 
 	case ALPHA_BLEND_ALPHA_ADDITIVE:
-		GL_state.BlendFunc(GL_SRC_ALPHA, GL_ONE);
+		GL_state.BlendFunc ( GL_SRC_ALPHA, GL_ONE );
 		break;
 
 	case ALPHA_BLEND_ALPHA_BLEND_SRC_COLOR:
-		GL_state.BlendFunc(/*GL_SRC_COLOR*/GL_SRC_ALPHA, GL_ONE_MINUS_SRC_COLOR);
+		GL_state.BlendFunc ( /*GL_SRC_COLOR*/GL_SRC_ALPHA, GL_ONE_MINUS_SRC_COLOR );
 		break;
 
 	default:
 		break;
 	}
 
-	GL_state.Blend((ab == ALPHA_BLEND_NONE) ? GL_FALSE : GL_TRUE);
+	GL_state.Blend ( ( ab == ALPHA_BLEND_NONE ) ? GL_FALSE : GL_TRUE );
 
 	Current_alpha_blend_mode = ab;
 }
 
-void opengl_state::SetZbufferType(gr_zbuffer_type zt)
+void opengl_state::SetZbufferType ( gr_zbuffer_type zt )
 {
-	if (zt == Current_zbuffer_type)
+	if ( zt == Current_zbuffer_type )
 	{
 		return;
 	}
 
-	switch (zt)
+	switch ( zt )
 	{
 	case ZBUFFER_TYPE_NONE:
-		GL_state.DepthFunc(GL_ALWAYS);
-		GL_state.DepthMask(GL_FALSE);
+		GL_state.DepthFunc ( GL_ALWAYS );
+		GL_state.DepthMask ( GL_FALSE );
 		break;
 
 	case ZBUFFER_TYPE_READ:
-		GL_state.DepthFunc(GL_LESS);
-		GL_state.DepthMask(GL_FALSE);
+		GL_state.DepthFunc ( GL_LESS );
+		GL_state.DepthMask ( GL_FALSE );
 		break;
 
 	case ZBUFFER_TYPE_WRITE:
-		GL_state.DepthFunc(GL_ALWAYS);
-		GL_state.DepthMask(GL_TRUE);
+		GL_state.DepthFunc ( GL_ALWAYS );
+		GL_state.DepthMask ( GL_TRUE );
 		break;
 
 	case ZBUFFER_TYPE_FULL:
-		GL_state.DepthFunc(GL_LESS);
-		GL_state.DepthMask(GL_TRUE);
+		GL_state.DepthFunc ( GL_LESS );
+		GL_state.DepthMask ( GL_TRUE );
 		break;
 
 	default:
 		break;
 	}
 
-	GL_state.DepthTest((zt == ZBUFFER_TYPE_NONE) ? GL_FALSE : GL_TRUE);
+	GL_state.DepthTest ( ( zt == ZBUFFER_TYPE_NONE ) ? GL_FALSE : GL_TRUE );
 
 	Current_zbuffer_type = zt;
 }
 
 
-void opengl_setup_render_states(int& r, int& g, int& b, int& alpha, int& tmap_type, int flags, int is_scaler)
+void opengl_setup_render_states ( int &r, int &g, int &b, int &alpha, int &tmap_type, int flags, int is_scaler )
 {
-	gr_texture_source texture_source = (gr_texture_source)(-1);
-	gr_alpha_blend alpha_blend = (gr_alpha_blend)(-1);
-	gr_zbuffer_type zbuffer_type = (gr_zbuffer_type)(-1);
+	gr_texture_source texture_source = ( gr_texture_source ) ( -1 );
+	gr_alpha_blend alpha_blend = ( gr_alpha_blend ) ( -1 );
+	gr_zbuffer_type zbuffer_type = ( gr_zbuffer_type ) ( -1 );
 
-	if (gr_zbuffering)
+	if ( gr_zbuffering )
 	{
-		if (is_scaler || (gr_screen.current_alphablend_mode == GR_ALPHABLEND_FILTER))
+		if ( is_scaler || ( gr_screen.current_alphablend_mode == GR_ALPHABLEND_FILTER ) )
 		{
 			zbuffer_type = ZBUFFER_TYPE_READ;
 		}
@@ -849,7 +849,7 @@ void opengl_setup_render_states(int& r, int& g, int& b, int& alpha, int& tmap_ty
 
 	tmap_type = TCACHE_TYPE_NORMAL;
 
-	if (flags & TMAP_FLAG_TEXTURED)
+	if ( flags & TMAP_FLAG_TEXTURED )
 	{
 		r = g = b = 255;
 	}
@@ -860,16 +860,16 @@ void opengl_setup_render_states(int& r, int& g, int& b, int& alpha, int& tmap_ty
 		b = gr_screen.current_color.blue;
 	}
 
-	if (flags & TMAP_FLAG_BW_TEXTURE)
+	if ( flags & TMAP_FLAG_BW_TEXTURE )
 	{
 		r = gr_screen.current_color.red;
 		g = gr_screen.current_color.green;
 		b = gr_screen.current_color.blue;
 	}
 
-	if (gr_screen.current_alphablend_mode == GR_ALPHABLEND_FILTER)
+	if ( gr_screen.current_alphablend_mode == GR_ALPHABLEND_FILTER )
 	{
-		if ((gr_screen.current_bitmap >= 0) && bm_has_alpha_channel(gr_screen.current_bitmap))
+		if ( ( gr_screen.current_bitmap >= 0 ) && bm_has_alpha_channel ( gr_screen.current_bitmap ) )
 		{
 			tmap_type = TCACHE_TYPE_XPARENT;
 
@@ -878,44 +878,44 @@ void opengl_setup_render_states(int& r, int& g, int& b, int& alpha, int& tmap_ty
 			// Blend with screen pixel using src*alpha+dst
 			float factor = gr_screen.current_alpha;
 
-			if (factor >= 1.0f)
+			if ( factor >= 1.0f )
 			{
 				alpha = 255;
 			}
 			else
 			{
-				alpha = fl2i(gr_screen.current_alpha * 255.0f);
+				alpha = fl2i ( gr_screen.current_alpha * 255.0f );
 			}
 		}
 		else
 		{
 			tmap_type = TCACHE_TYPE_NORMAL;
-			alpha_blend = ALPHA_BLEND_ADDITIVE;	// ALPHA_BLEND_ALPHA_ADDITIVE;
+			alpha_blend = ALPHA_BLEND_ADDITIVE; // ALPHA_BLEND_ALPHA_ADDITIVE;
 
 			// Blend with screen pixel using src*alpha+dst
 			float factor = gr_screen.current_alpha;
 
 			alpha = 255;
 
-			if (factor < 1.0f)
+			if ( factor < 1.0f )
 			{
-				r = fl2i(r * gr_screen.current_alpha);
-				g = fl2i(g * gr_screen.current_alpha);
-				b = fl2i(b * gr_screen.current_alpha);
+				r = fl2i ( r * gr_screen.current_alpha );
+				g = fl2i ( g * gr_screen.current_alpha );
+				b = fl2i ( b * gr_screen.current_alpha );
 			}
 		}
 	}
 	else
 	{
 		alpha_blend = ALPHA_BLEND_ALPHA_BLEND_ALPHA;
-		alpha = fl2i(gr_screen.current_alpha * 255.0f);
+		alpha = fl2i ( gr_screen.current_alpha * 255.0f );
 	}
 
 
-	if (flags & TMAP_FLAG_TEXTURED)
+	if ( flags & TMAP_FLAG_TEXTURED )
 	{
 		// use nonfiltered textures for interface graphics
-		if (flags & TMAP_FLAG_INTERFACE)
+		if ( flags & TMAP_FLAG_INTERFACE )
 		{
 			tmap_type = TCACHE_TYPE_INTERFACE;
 			texture_source = TEXTURE_SOURCE_NO_FILTERING;
@@ -930,7 +930,7 @@ void opengl_setup_render_states(int& r, int& g, int& b, int& alpha, int& tmap_ty
 		texture_source = TEXTURE_SOURCE_NONE;
 	}
 
-	GL_state.SetTextureSource(texture_source);
-	GL_state.SetAlphaBlendMode(alpha_blend);
-	GL_state.SetZbufferType(zbuffer_type);
+	GL_state.SetTextureSource ( texture_source );
+	GL_state.SetAlphaBlendMode ( alpha_blend );
+	GL_state.SetZbufferType ( zbuffer_type );
 }

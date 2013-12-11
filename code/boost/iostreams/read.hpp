@@ -30,9 +30,13 @@
 # include <boost/iostreams/detail/vc6/read.hpp>
 #else // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //--------------------------//
 
-namespace boost { namespace iostreams {
+namespace boost
+{
+namespace iostreams
+{
 
-namespace detail {
+namespace detail
+{
 
 template<typename T>
 struct read_device_impl;
@@ -43,202 +47,217 @@ struct read_filter_impl;
 } // End namespace detail.
 
 template<typename T>
-typename int_type_of<T>::type get(T& t)
-{ return detail::read_device_impl<T>::get(detail::unwrap(t)); }
+typename int_type_of<T>::type get ( T &t )
+{ return detail::read_device_impl<T>::get ( detail::unwrap ( t ) ); }
 
 template<typename T>
 inline std::streamsize
-read(T& t, typename char_type_of<T>::type* s, std::streamsize n)
-{ return detail::read_device_impl<T>::read(detail::unwrap(t), s, n); }
+read ( T &t, typename char_type_of<T>::type *s, std::streamsize n )
+{ return detail::read_device_impl<T>::read ( detail::unwrap ( t ), s, n ); }
 
 template<typename T, typename Source>
 std::streamsize
-read(T& t, Source& src, typename char_type_of<T>::type* s, std::streamsize n)
-{ return detail::read_filter_impl<T>::read(detail::unwrap(t), src, s, n); }
+read ( T &t, Source &src, typename char_type_of<T>::type *s, std::streamsize n )
+{ return detail::read_filter_impl<T>::read ( detail::unwrap ( t ), src, s, n ); }
 
 template<typename T>
-bool putback(T& t, typename char_type_of<T>::type c)
-{ return detail::read_device_impl<T>::putback(detail::unwrap(t), c); }
+bool putback ( T &t, typename char_type_of<T>::type c )
+{ return detail::read_device_impl<T>::putback ( detail::unwrap ( t ), c ); }
 
 //----------------------------------------------------------------------------//
 
-namespace detail {
+namespace detail
+{
 
 // Helper function for adding -1 as EOF indicator.
-inline std::streamsize check_eof(std::streamsize n) { return n != 0 ? n : -1; }
+inline std::streamsize check_eof ( std::streamsize n ) { return n != 0 ? n : -1; }
 
 // Helper templates for reading from streambufs.
 template<bool IsLinked>
 struct true_eof_impl;
 
 template<>
-struct true_eof_impl<true> {
-    template<typename T>
-    static bool true_eof(T& t) { return t.true_eof(); }
+struct true_eof_impl<true>
+{
+	template<typename T>
+	static bool true_eof ( T &t ) { return t.true_eof(); }
 };
 
 template<>
-struct true_eof_impl<false> {
-    template<typename T>
-    static bool true_eof(T&) { return true; }
+struct true_eof_impl<false>
+{
+	template<typename T>
+	static bool true_eof ( T & ) { return true; }
 };
 
 template<typename T>
-inline bool true_eof(T& t)
+inline bool true_eof ( T &t )
 {
-    const bool linked = is_linked<T>::value;
-    return true_eof_impl<linked>::true_eof(t);
+	const bool linked = is_linked<T>::value;
+	return true_eof_impl<linked>::true_eof ( t );
 }
 
 //------------------Definition of read_device_impl----------------------------//
 
 template<typename T>
 struct read_device_impl
-    : mpl::if_<
-          detail::is_custom<T>,
-          operations<T>,
-          read_device_impl<
-              BOOST_DEDUCED_TYPENAME
-              detail::dispatch<
-                  T, istream_tag, streambuf_tag, input
-              >::type
-          >
-      >::type
-    { };
+		: mpl::if_ <
+		detail::is_custom<T>,
+		operations<T>,
+		read_device_impl <
+		BOOST_DEDUCED_TYPENAME
+		detail::dispatch <
+		T, istream_tag, streambuf_tag, input
+		>::type
+		>
+		>::type
+{ };
 
 template<>
-struct read_device_impl<istream_tag> {
-    template<typename T>
-    static typename int_type_of<T>::type get(T& t)
-    { return t.get(); }
+struct read_device_impl<istream_tag>
+{
+	template<typename T>
+	static typename int_type_of<T>::type get ( T &t )
+	{ return t.get(); }
 
-    template<typename T>
-    static std::streamsize
-    read(T& t, typename char_type_of<T>::type* s, std::streamsize n)
-    { return check_eof(t.rdbuf()->sgetn(s, n)); }
+	template<typename T>
+	static std::streamsize
+	read ( T &t, typename char_type_of<T>::type *s, std::streamsize n )
+	{ return check_eof ( t.rdbuf()->sgetn ( s, n ) ); }
 
-    template<typename T>
-    static bool putback(T& t, typename char_type_of<T>::type c)
-    {
-        typedef typename char_type_of<T>::type          char_type;
-        typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
-        return !traits_type::eq_int_type( t.rdbuf()->sputbackc(c),
-                                          traits_type::eof() );
-    }
+	template<typename T>
+	static bool putback ( T &t, typename char_type_of<T>::type c )
+	{
+		typedef typename char_type_of<T>::type          char_type;
+		typedef BOOST_IOSTREAMS_CHAR_TRAITS ( char_type )  traits_type;
+		return !traits_type::eq_int_type ( t.rdbuf()->sputbackc ( c ),
+		                                   traits_type::eof() );
+	}
 };
 
 template<>
-struct read_device_impl<streambuf_tag> {
-    template<typename T>
-    static typename int_type_of<T>::type
-    get(T& t)
-    {   // gcc 2.95 needs namespace qualification for char_traits.
-        typedef typename char_type_of<T>::type     char_type;
-        typedef iostreams::char_traits<char_type>  traits_type;
-        typename int_type_of<T>::type c;
-        return !traits_type::is_eof(c = t.sbumpc()) ||
-                detail::true_eof(t)
-                    ?
-                c : traits_type::would_block();
-    }
+struct read_device_impl<streambuf_tag>
+{
+	template<typename T>
+	static typename int_type_of<T>::type
+	get ( T &t )
+	{
+		// gcc 2.95 needs namespace qualification for char_traits.
+		typedef typename char_type_of<T>::type     char_type;
+		typedef iostreams::char_traits<char_type>  traits_type;
+		typename int_type_of<T>::type c;
+		return !traits_type::is_eof ( c = t.sbumpc() ) ||
+		       detail::true_eof ( t )
+		       ?
+		       c : traits_type::would_block();
+	}
 
-    template<typename T>
-    static std::streamsize
-    read(T& t, typename char_type_of<T>::type* s, std::streamsize n)
-    {
-        std::streamsize amt;
-        return (amt = t.sgetn(s, n)) != 0 ?
-            amt :
-            detail::true_eof(t) ?
-                -1 :
-                0;
-    }
+	template<typename T>
+	static std::streamsize
+	read ( T &t, typename char_type_of<T>::type *s, std::streamsize n )
+	{
+		std::streamsize amt;
+		return ( amt = t.sgetn ( s, n ) ) != 0 ?
+		       amt :
+		       detail::true_eof ( t ) ?
+		       -1 :
+		       0;
+	}
 
-    template<typename T>
-    static bool putback(T& t, typename char_type_of<T>::type c)
-    {   // gcc 2.95 needs namespace qualification for char_traits.
-        typedef typename char_type_of<T>::type     char_type;
-        typedef iostreams::char_traits<char_type>  traits_type;
-        return !traits_type::is_eof(t.sputbackc(c));
-    }
+	template<typename T>
+	static bool putback ( T &t, typename char_type_of<T>::type c )
+	{
+		// gcc 2.95 needs namespace qualification for char_traits.
+		typedef typename char_type_of<T>::type     char_type;
+		typedef iostreams::char_traits<char_type>  traits_type;
+		return !traits_type::is_eof ( t.sputbackc ( c ) );
+	}
 };
 
 template<>
-struct read_device_impl<input> {
-    template<typename T>
-    static typename int_type_of<T>::type
-    get(T& t)
-    {   // gcc 2.95 needs namespace qualification for char_traits.
-        typedef typename char_type_of<T>::type     char_type;
-        typedef iostreams::char_traits<char_type>  traits_type;
-        char_type c;
-        std::streamsize amt;
-        return (amt = t.read(&c, 1)) == 1 ?
-            traits_type::to_int_type(c) :
-            amt == -1 ?
-                traits_type::eof() :
-                traits_type::would_block();
-    }
+struct read_device_impl<input>
+{
+	template<typename T>
+	static typename int_type_of<T>::type
+	get ( T &t )
+	{
+		// gcc 2.95 needs namespace qualification for char_traits.
+		typedef typename char_type_of<T>::type     char_type;
+		typedef iostreams::char_traits<char_type>  traits_type;
+		char_type c;
+		std::streamsize amt;
+		return ( amt = t.read ( &c, 1 ) ) == 1 ?
+		       traits_type::to_int_type ( c ) :
+		       amt == -1 ?
+		       traits_type::eof() :
+		       traits_type::would_block();
+	}
 
-    template<typename T>
-    static std::streamsize
-    read(T& t, typename char_type_of<T>::type* s, std::streamsize n)
-    { return t.read(s, n); }
+	template<typename T>
+	static std::streamsize
+	read ( T &t, typename char_type_of<T>::type *s, std::streamsize n )
+	{ return t.read ( s, n ); }
 
-    template<typename T>
-    static bool putback(T& t, typename char_type_of<T>::type c)
-    {   // T must be Peekable.
-        return t.putback(c);
-    }
+	template<typename T>
+	static bool putback ( T &t, typename char_type_of<T>::type c )
+	{
+		// T must be Peekable.
+		return t.putback ( c );
+	}
 };
 
 //------------------Definition of read_filter_impl----------------------------//
 
 template<typename T>
 struct read_filter_impl
-    : mpl::if_<
-          detail::is_custom<T>,
-          operations<T>,
-          read_filter_impl<
-              BOOST_DEDUCED_TYPENAME
-              detail::dispatch<
-                  T, multichar_tag, any_tag
-              >::type
-          >
-      >::type
-    { };
+		: mpl::if_ <
+		detail::is_custom<T>,
+		operations<T>,
+		read_filter_impl <
+		BOOST_DEDUCED_TYPENAME
+		detail::dispatch <
+		T, multichar_tag, any_tag
+		>::type
+		>
+		>::type
+{ };
 
 template<>
-struct read_filter_impl<multichar_tag> {
-    template<typename T, typename Source>
-    static std::streamsize read
-       (T& t, Source& src, typename char_type_of<T>::type* s, std::streamsize n)
-    { return t.read(src, s, n); }
+struct read_filter_impl<multichar_tag>
+{
+	template<typename T, typename Source>
+	static std::streamsize read
+	( T &t, Source &src, typename char_type_of<T>::type *s, std::streamsize n )
+	{ return t.read ( src, s, n ); }
 };
 
 template<>
-struct read_filter_impl<any_tag> {
-    template<typename T, typename Source>
-    static std::streamsize read
-       (T& t, Source& src, typename char_type_of<T>::type* s, std::streamsize n)
-    {   // gcc 2.95 needs namespace qualification for char_traits.
-        typedef typename char_type_of<T>::type     char_type;
-        typedef iostreams::char_traits<char_type>  traits_type;
-        for (std::streamsize off = 0; off < n; ++off) {
-            typename traits_type::int_type c = t.get(src);
-            if (traits_type::is_eof(c))
-                return check_eof(off);
-            if (traits_type::would_block(c))
-                return off;
-            s[off] = traits_type::to_char_type(c);
-        }
-        return n;
-    }
+struct read_filter_impl<any_tag>
+{
+	template<typename T, typename Source>
+	static std::streamsize read
+	( T &t, Source &src, typename char_type_of<T>::type *s, std::streamsize n )
+	{
+		// gcc 2.95 needs namespace qualification for char_traits.
+		typedef typename char_type_of<T>::type     char_type;
+		typedef iostreams::char_traits<char_type>  traits_type;
+		for ( std::streamsize off = 0; off < n; ++off )
+		{
+			typename traits_type::int_type c = t.get ( src );
+			if ( traits_type::is_eof ( c ) )
+				return check_eof ( off );
+			if ( traits_type::would_block ( c ) )
+				return off;
+			s[off] = traits_type::to_char_type ( c );
+		}
+		return n;
+	}
 };
 
 } // End namespace detail.
 
-} } // End namespaces iostreams, boost.
+}
+} // End namespaces iostreams, boost.
 
 #endif // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-------------------------//
 

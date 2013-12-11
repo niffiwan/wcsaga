@@ -30,74 +30,74 @@ class sp_counted_base
 {
 private:
 
-    sp_counted_base( sp_counted_base const & );
-    sp_counted_base & operator= ( sp_counted_base const & );
+	sp_counted_base ( sp_counted_base const & );
+	sp_counted_base &operator= ( sp_counted_base const & );
 
-    long use_count_;        // #shared
-    long weak_count_;       // #weak + (#shared != 0)
+	long use_count_;        // #shared
+	long weak_count_;       // #weak + (#shared != 0)
 
 public:
 
-    sp_counted_base(): use_count_( 1 ), weak_count_( 1 )
-    {
-    }
+	sp_counted_base() : use_count_ ( 1 ), weak_count_ ( 1 )
+	{
+	}
 
-    virtual ~sp_counted_base() // nothrow
-    {
-    }
+	virtual ~sp_counted_base() // nothrow
+	{
+	}
 
-    // dispose() is called when use_count_ drops to zero, to release
-    // the resources managed by *this.
+	// dispose() is called when use_count_ drops to zero, to release
+	// the resources managed by *this.
 
-    virtual void dispose() = 0; // nothrow
+	virtual void dispose() = 0; // nothrow
 
-    // destroy() is called when weak_count_ drops to zero.
+	// destroy() is called when weak_count_ drops to zero.
 
-    virtual void destroy() // nothrow
-    {
-        delete this;
-    }
+	virtual void destroy() // nothrow
+	{
+		delete this;
+	}
 
-    virtual void * get_deleter( sp_typeinfo const & ti ) = 0;
+	virtual void *get_deleter ( sp_typeinfo const &ti ) = 0;
 
-    void add_ref_copy()
-    {
-        ++use_count_;
-    }
+	void add_ref_copy()
+	{
+		++use_count_;
+	}
 
-    bool add_ref_lock() // true on success
-    {
-        if( use_count_ == 0 ) return false;
-        ++use_count_;
-        return true;
-    }
+	bool add_ref_lock() // true on success
+	{
+		if ( use_count_ == 0 ) return false;
+		++use_count_;
+		return true;
+	}
 
-    void release() // nothrow
-    {
-        if( --use_count_ == 0 )
-        {
-            dispose();
-            weak_release();
-        }
-    }
+	void release() // nothrow
+	{
+		if ( --use_count_ == 0 )
+		{
+			dispose();
+			weak_release();
+		}
+	}
 
-    void weak_add_ref() // nothrow
-    {
-        ++weak_count_;
-    }
+	void weak_add_ref() // nothrow
+	{
+		++weak_count_;
+	}
 
-    void weak_release() // nothrow
-    {
-        if( --weak_count_ == 0 )
-        {
-            destroy();
-        }
-    }
+	void weak_release() // nothrow
+	{
+		if ( --weak_count_ == 0 )
+		{
+			destroy();
+		}
+	}
 
-    long use_count() const // nothrow
-    {
-        return use_count_;
-    }
+	long use_count() const // nothrow
+	{
+		return use_count_;
+	}
 };
 
 } // namespace detail

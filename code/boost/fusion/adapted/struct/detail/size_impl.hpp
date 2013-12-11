@@ -10,28 +10,31 @@
 
 #include <boost/mpl/int.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    namespace extension
-    {
-        template <typename Struct>
-        struct struct_size;
-    }
+namespace fusion
+{
+namespace extension
+{
+template <typename Struct>
+struct struct_size;
+}
 
-    struct struct_tag;
+struct struct_tag;
 
-    namespace extension
-    {
-        template<typename T>
-        struct size_impl;
+namespace extension
+{
+template<typename T>
+struct size_impl;
 
-        template <>
-        struct size_impl<struct_tag>
-        {
-            template <typename Sequence>
-            struct apply : extension::struct_size<Sequence> {};
-        };
-    }
-}}
+template <>
+struct size_impl<struct_tag>
+{
+	template <typename Sequence>
+	struct apply : extension::struct_size<Sequence> {};
+};
+}
+}
+}
 
 #endif

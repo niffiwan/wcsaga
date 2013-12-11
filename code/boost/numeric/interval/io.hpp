@@ -21,18 +21,20 @@
 #include <boost/numeric/interval/utility.hpp>
 #include <ostream>
 
-namespace boost {
-namespace numeric {
+namespace boost
+{
+namespace numeric
+{
 
 template<class CharType, class CharTraits, class T, class Policies>
 std::basic_ostream<CharType, CharTraits> &operator<<
-  (std::basic_ostream<CharType, CharTraits> &stream,
-   interval<T, Policies> const &value)
+( std::basic_ostream<CharType, CharTraits> &stream,
+  interval<T, Policies> const &value )
 {
-  if (empty(value))
-    return stream << "[]";
-  else
-    return stream << '[' << lower(value) << ',' << upper(value) << ']';
+	if ( empty ( value ) )
+		return stream << "[]";
+	else
+		return stream << '[' << lower ( value ) << ',' << upper ( value ) << ']';
 }
 
 } // namespace numeric

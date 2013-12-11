@@ -22,66 +22,75 @@
 #include <boost/mpl/bool.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // Enablers
-    ///////////////////////////////////////////////////////////////////////////
-    template <>
-    struct use_terminal<qi::domain, tag::auto_>     // enables auto_
-      : mpl::true_ {};
-}}
+namespace spirit
+{
+///////////////////////////////////////////////////////////////////////////
+// Enablers
+///////////////////////////////////////////////////////////////////////////
+template <>
+struct use_terminal<qi::domain, tag::auto_>     // enables auto_
+		: mpl::true_ {};
+}
+}
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost { namespace spirit { namespace qi
+namespace boost
 {
-    using spirit::auto_;
+namespace spirit
+{
+namespace qi
+{
+using spirit::auto_;
 
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Modifiers>
-    struct auto_parser
-      : parser<auto_parser<Modifiers> >
-    {
-        template <typename Context, typename Iterator>
-        struct attribute
-        {
-            typedef spirit::hold_any type;
-        };
+///////////////////////////////////////////////////////////////////////////
+template <typename Modifiers>
+struct auto_parser
+		: parser<auto_parser<Modifiers> >
+{
+	template <typename Context, typename Iterator>
+	struct attribute
+	{
+		typedef spirit::hold_any type;
+	};
 
-        auto_parser(Modifiers const& modifiers)
-          : modifiers_(modifiers) {}
+	auto_parser ( Modifiers const &modifiers )
+		: modifiers_ ( modifiers ) {}
 
-        template <typename Iterator, typename Context, typename Skipper
-          , typename Attribute>
-        bool parse(Iterator& first, Iterator const& last
-          , Context& context, Skipper const& skipper, Attribute& attr) const
-        {
-            return compile<qi::domain>(create_parser<Attribute>(), modifiers_)
-                      .parse(first, last, context, skipper, attr);
-        }
+	template <typename Iterator, typename Context, typename Skipper
+	          , typename Attribute>
+	bool parse ( Iterator &first, Iterator const &last
+	             , Context &context, Skipper const &skipper, Attribute &attr ) const
+	{
+		return compile<qi::domain> ( create_parser<Attribute>(), modifiers_ )
+		       .parse ( first, last, context, skipper, attr );
+	}
 
-        template <typename Context>
-        info what(Context& /*context*/) const
-        {
-            return info("auto_");
-        }
+	template <typename Context>
+	info what ( Context & /*context*/ ) const
+	{
+		return info ( "auto_" );
+	}
 
-        Modifiers modifiers_;
-    };
+	Modifiers modifiers_;
+};
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Generator generators: make_xxx function (objects)
-    ///////////////////////////////////////////////////////////////////////////
-    template <typename Modifiers>
-    struct make_primitive<tag::auto_, Modifiers> 
-    {
-        typedef auto_parser<Modifiers> result_type;
+///////////////////////////////////////////////////////////////////////////
+// Generator generators: make_xxx function (objects)
+///////////////////////////////////////////////////////////////////////////
+template <typename Modifiers>
+struct make_primitive<tag::auto_, Modifiers>
+{
+	typedef auto_parser<Modifiers> result_type;
 
-        result_type operator()(unused_type, Modifiers const& modifiers) const
-        {
-            return result_type(modifiers);
-        }
-    };
-}}}
+	result_type operator() ( unused_type, Modifiers const &modifiers ) const
+	{
+		return result_type ( modifiers );
+	}
+};
+}
+}
+}
 
 #endif

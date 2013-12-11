@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -28,31 +28,31 @@
 
 /*
 static int Mission_stats_start_y[GR_NUM_RESOLUTIONS] = {
-	80,	// GR_640
-	80		// GR_1024
+    80, // GR_640
+    80      // GR_1024
 };
 
 static int Alltime_stats_start_y[GR_NUM_RESOLUTIONS] = {
-	270,	// GR_640
-	270	// GR_1024
+    270,    // GR_640
+    270 // GR_1024
 };
 
 static int Multiplayer_list_start[GR_NUM_RESOLUTIONS] = {
-	20,	// GR_640
-	20		// GR_1024
+    20, // GR_640
+    20      // GR_1024
 };
 */
 
 // static UI_WINDOW Player_stats_window;
 
-player* Active_player;
+player *Active_player;
 
 void show_stats_init()
 {
 	// Player_stats_window.create( 0, 0, gr_screen.max_w_unscaled, gr_screen.max_h_unscaled, 0 );
-	if (Game_mode & GM_MULTIPLAYER)
+	if ( Game_mode & GM_MULTIPLAYER )
 	{
-		set_player_stats(MY_NET_PLAYER_NUM);
+		set_player_stats ( MY_NET_PLAYER_NUM );
 	}
 	else
 	{
@@ -61,187 +61,187 @@ void show_stats_init()
 }
 
 // write out the label for each stat
-void show_stats_label(int stage, int sx, int sy, int dy)
+void show_stats_label ( int stage, int sx, int sy, int dy )
 {
-	switch (stage)
+	switch ( stage )
 	{
 	case MISSION_STATS:
-		gr_printf(sx, sy, XSTR("Mission Stats", 114));
+		gr_printf ( sx, sy, XSTR ( "Mission Stats", 114 ) );
 		sy += 2 * dy;
-		gr_printf(sx, sy, XSTR("Total kills", 115));
+		gr_printf ( sx, sy, XSTR ( "Total kills", 115 ) );
 		sy += 2 * dy;
-		gr_printf(sx, sy, XSTR("Primary weapon shots", 116));
+		gr_printf ( sx, sy, XSTR ( "Primary weapon shots", 116 ) );
 		sy += dy;
-		gr_printf(sx, sy, XSTR("Primary weapon hits", 117));
+		gr_printf ( sx, sy, XSTR ( "Primary weapon hits", 117 ) );
 		sy += dy;
-		gr_printf(sx, sy, XSTR("Primary friendly hits", 118));
+		gr_printf ( sx, sy, XSTR ( "Primary friendly hits", 118 ) );
 		sy += dy;
-		gr_printf(sx, sy, XSTR("Primary hit %%", 119));
+		gr_printf ( sx, sy, XSTR ( "Primary hit %%", 119 ) );
 		sy += dy;
-		gr_printf(sx, sy, XSTR("Primary friendly hit %%", 120));
-		sy += 2 * dy;
-
-		gr_printf(sx, sy, XSTR("Secondary weapon shots", 121));
-		sy += dy;
-		gr_printf(sx, sy, XSTR("Secondary weapon hits", 122));
-		sy += dy;
-		gr_printf(sx, sy, XSTR("Secondary friendly hits", 123));
-		sy += dy;
-		gr_printf(sx, sy, XSTR("Secondary hit %%", 124));
-		sy += dy;
-		gr_printf(sx, sy, XSTR("Secondary friendly hit %%", 125));
+		gr_printf ( sx, sy, XSTR ( "Primary friendly hit %%", 120 ) );
 		sy += 2 * dy;
 
-		gr_printf(sx, sy, XSTR("Assists", 126));
+		gr_printf ( sx, sy, XSTR ( "Secondary weapon shots", 121 ) );
+		sy += dy;
+		gr_printf ( sx, sy, XSTR ( "Secondary weapon hits", 122 ) );
+		sy += dy;
+		gr_printf ( sx, sy, XSTR ( "Secondary friendly hits", 123 ) );
+		sy += dy;
+		gr_printf ( sx, sy, XSTR ( "Secondary hit %%", 124 ) );
+		sy += dy;
+		gr_printf ( sx, sy, XSTR ( "Secondary friendly hit %%", 125 ) );
 		sy += 2 * dy;
 
-		if (Game_mode & GM_MULTIPLAYER)
+		gr_printf ( sx, sy, XSTR ( "Assists", 126 ) );
+		sy += 2 * dy;
+
+		if ( Game_mode & GM_MULTIPLAYER )
 		{
-			gr_printf(sx, sy, XSTR("Player Deaths", 127));
+			gr_printf ( sx, sy, XSTR ( "Player Deaths", 127 ) );
 			sy += 2 * dy;
 
-			gr_printf(sx, sy, XSTR("Mission score", 1526));
+			gr_printf ( sx, sy, XSTR ( "Mission score", 1526 ) );
 		}
 
 
 		break;
 
 	case ALL_TIME_STATS:
-		gr_printf(sx, sy, XSTR("All Time Stats", 128));
+		gr_printf ( sx, sy, XSTR ( "All Time Stats", 128 ) );
 		sy += 2 * dy;
-		gr_printf(sx, sy, XSTR("Total kills", 115));
+		gr_printf ( sx, sy, XSTR ( "Total kills", 115 ) );
 		sy += 2 * dy;
-		gr_printf(sx, sy, XSTR("Primary weapon shots", 116));
+		gr_printf ( sx, sy, XSTR ( "Primary weapon shots", 116 ) );
 		sy += dy;
-		gr_printf(sx, sy, XSTR("Primary weapon hits", 117));
+		gr_printf ( sx, sy, XSTR ( "Primary weapon hits", 117 ) );
 		sy += dy;
-		gr_printf(sx, sy, XSTR("Primary friendly hits", 118));
+		gr_printf ( sx, sy, XSTR ( "Primary friendly hits", 118 ) );
 		sy += dy;
-		gr_printf(sx, sy, XSTR("Primary hit %%", 119));
+		gr_printf ( sx, sy, XSTR ( "Primary hit %%", 119 ) );
 		sy += dy;
-		gr_printf(sx, sy, XSTR("Primary friendly hit %%", 120));
-		sy += 2 * dy;
-
-		gr_printf(sx, sy, XSTR("Secondary weapon shots", 121));
-		sy += dy;
-		gr_printf(sx, sy, XSTR("Secondary weapon hits", 122));
-		sy += dy;
-		gr_printf(sx, sy, XSTR("Secondary friendly hits", 123));
-		sy += dy;
-		gr_printf(sx, sy, XSTR("Secondary hit %%", 124));
-		sy += dy;
-		gr_printf(sx, sy, XSTR("Secondary friendly hit %%", 125));
+		gr_printf ( sx, sy, XSTR ( "Primary friendly hit %%", 120 ) );
 		sy += 2 * dy;
 
-		gr_printf(sx, sy, XSTR("Assists", 126));
+		gr_printf ( sx, sy, XSTR ( "Secondary weapon shots", 121 ) );
+		sy += dy;
+		gr_printf ( sx, sy, XSTR ( "Secondary weapon hits", 122 ) );
+		sy += dy;
+		gr_printf ( sx, sy, XSTR ( "Secondary friendly hits", 123 ) );
+		sy += dy;
+		gr_printf ( sx, sy, XSTR ( "Secondary hit %%", 124 ) );
+		sy += dy;
+		gr_printf ( sx, sy, XSTR ( "Secondary friendly hit %%", 125 ) );
 		sy += 2 * dy;
 
-		if (Game_mode & GM_MULTIPLAYER)
+		gr_printf ( sx, sy, XSTR ( "Assists", 126 ) );
+		sy += 2 * dy;
+
+		if ( Game_mode & GM_MULTIPLAYER )
 		{
-			gr_printf(sx, sy, XSTR("Score", 1527));
+			gr_printf ( sx, sy, XSTR ( "Score", 1527 ) );
 		}
 		break;
 	} // end switch
 }
 
-void stats_underline_text(int sx, int sy, char* text)
+void stats_underline_text ( int sx, int sy, char *text )
 {
 	int w, h, fh;
 
-	gr_get_string_size(&w, &h, text);
+	gr_get_string_size ( &w, &h, text );
 	fh = gr_get_font_height();
-	gr_line(sx - 1, sy + fh, sx + w + 1, sy + fh);
+	gr_line ( sx - 1, sy + fh, sx + w + 1, sy + fh );
 }
 
-void show_stats_numbers(int stage, int sx, int sy, int dy, int add_mission)
+void show_stats_numbers ( int stage, int sx, int sy, int dy, int add_mission )
 {
 	char text[30];
 	float pct;
 
 	sy += 2 * dy;
-	switch (stage)
+	switch ( stage )
 	{
 	case MISSION_STATS:
 		// mission kills stats
-		sprintf(text, "%d", Active_player->stats.m_kill_count_ok);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", Active_player->stats.m_kill_count_ok );
+		gr_printf ( sx, sy, text );
 		// stats_underline_text(sx,sy,text);
 		sy += 2 * dy;
 		// mission primary weapon stats
-		sprintf(text, "%d", Active_player->stats.mp_shots_fired);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", Active_player->stats.mp_shots_fired );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		sprintf(text, "%d", Active_player->stats.mp_shots_hit);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", Active_player->stats.mp_shots_hit );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		sprintf(text, "%d", Active_player->stats.mp_bonehead_hits);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", Active_player->stats.mp_bonehead_hits );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		if (Active_player->stats.mp_shots_fired > 0)
-			pct = (float)100.0 * ((float)Active_player->stats.mp_shots_hit / (float)Active_player->stats.
-								  mp_shots_fired);
+		if ( Active_player->stats.mp_shots_fired > 0 )
+			pct = ( float ) 100.0 * ( ( float ) Active_player->stats.mp_shots_hit / ( float ) Active_player->stats.
+			                          mp_shots_fired );
 		else
-			pct = (float)0.0;
-		CLAMP(pct, 0.0f, 100.0f);
-		sprintf(text, "%d", (int)pct);
-		strcat_s(text, " %%");
-		gr_printf(sx, sy, text);
+			pct = ( float ) 0.0;
+		CLAMP ( pct, 0.0f, 100.0f );
+		sprintf ( text, "%d", ( int ) pct );
+		strcat_s ( text, " %%" );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		if (Active_player->stats.mp_shots_fired > 0)
-			pct = (float)100.0 * ((float)Active_player->stats.mp_bonehead_hits / (float)Active_player->stats.
-								  mp_shots_fired);
+		if ( Active_player->stats.mp_shots_fired > 0 )
+			pct = ( float ) 100.0 * ( ( float ) Active_player->stats.mp_bonehead_hits / ( float ) Active_player->stats.
+			                          mp_shots_fired );
 		else
-			pct = (float)0.0;
-		CLAMP(pct, 0.0f, 100.0f);
-		sprintf(text, "%d", (int)pct);
-		strcat_s(text, " %%");
-		gr_printf(sx, sy, text);
+			pct = ( float ) 0.0;
+		CLAMP ( pct, 0.0f, 100.0f );
+		sprintf ( text, "%d", ( int ) pct );
+		strcat_s ( text, " %%" );
+		gr_printf ( sx, sy, text );
 		sy += 2 * dy;
 
 		// mission secondary weapon stats
-		sprintf(text, "%d", Active_player->stats.ms_shots_fired);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", Active_player->stats.ms_shots_fired );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		sprintf(text, "%d", Active_player->stats.ms_shots_hit);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", Active_player->stats.ms_shots_hit );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		sprintf(text, "%d", Active_player->stats.ms_bonehead_hits);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", Active_player->stats.ms_bonehead_hits );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		if (Active_player->stats.ms_shots_fired > 0)
-			pct = (float)100.0 * ((float)Active_player->stats.ms_shots_hit / (float)Active_player->stats.
-								  ms_shots_fired);
+		if ( Active_player->stats.ms_shots_fired > 0 )
+			pct = ( float ) 100.0 * ( ( float ) Active_player->stats.ms_shots_hit / ( float ) Active_player->stats.
+			                          ms_shots_fired );
 		else
-			pct = (float)0.0;
-		CLAMP(pct, 0.0f, 100.0f);
-		sprintf(text, "%d", (int)pct);
-		strcat_s(text, " %%");
-		gr_printf(sx, sy, text);
+			pct = ( float ) 0.0;
+		CLAMP ( pct, 0.0f, 100.0f );
+		sprintf ( text, "%d", ( int ) pct );
+		strcat_s ( text, " %%" );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		if (Active_player->stats.ms_shots_fired > 0)
-			pct = (float)100.0 * ((float)Active_player->stats.ms_bonehead_hits / (float)Active_player->stats.
-								  ms_shots_fired);
+		if ( Active_player->stats.ms_shots_fired > 0 )
+			pct = ( float ) 100.0 * ( ( float ) Active_player->stats.ms_bonehead_hits / ( float ) Active_player->stats.
+			                          ms_shots_fired );
 		else
-			pct = (float)0.0;
-		CLAMP(pct, 0.0f, 100.0f);
-		sprintf(text, "%d", (int)pct);
-		strcat_s(text, " %%");
-		gr_printf(sx, sy, text);
+			pct = ( float ) 0.0;
+		CLAMP ( pct, 0.0f, 100.0f );
+		sprintf ( text, "%d", ( int ) pct );
+		strcat_s ( text, " %%" );
+		gr_printf ( sx, sy, text );
 		sy += 2 * dy;
 
 		// mission assists and player rescues (respawns)
-		sprintf(text, "%d", (int)Active_player->stats.m_assists);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", ( int ) Active_player->stats.m_assists );
+		gr_printf ( sx, sy, text );
 		sy += 2 * dy;
 
-		if (Game_mode & GM_MULTIPLAYER)
+		if ( Game_mode & GM_MULTIPLAYER )
 		{
-			sprintf(text, "%d", (int)Active_player->stats.m_player_deaths);
-			gr_printf(sx, sy, text);
+			sprintf ( text, "%d", ( int ) Active_player->stats.m_player_deaths );
+			gr_printf ( sx, sy, text );
 			sy += 2 * dy;
 
 			// mission score
-			gr_printf(sx, sy, "%d", (int)Active_player->stats.m_score);
+			gr_printf ( sx, sy, "%d", ( int ) Active_player->stats.m_score );
 		}
 
 
@@ -252,8 +252,8 @@ void show_stats_numbers(int stage, int sx, int sy, int dy, int add_mission)
 
 		// if we are passed mission_add (the stats for the current mission), copy it to "add", otherwise,
 		// zero it out
-		memset(&add, 0, sizeof(scoring_struct));
-		if (add_mission)
+		memset ( &add, 0, sizeof ( scoring_struct ) );
+		if ( add_mission )
 		{
 			add.kill_count_ok = Active_player->stats.m_kill_count_ok;
 			add.p_shots_fired = Active_player->stats.mp_shots_fired;
@@ -266,98 +266,98 @@ void show_stats_numbers(int stage, int sx, int sy, int dy, int add_mission)
 		}
 
 		// mission kills stats
-		sprintf(text, "%d", Active_player->stats.kill_count_ok + add.kill_count_ok);
-		hud_num_make_mono(text);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", Active_player->stats.kill_count_ok + add.kill_count_ok );
+		hud_num_make_mono ( text );
+		gr_printf ( sx, sy, text );
 		// stats_underline_text(sx,sy,text);
 		sy += 2 * dy;
 		// alltime primary weapon stats
-		sprintf(text, "%d", Active_player->stats.p_shots_fired + add.p_shots_fired);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", Active_player->stats.p_shots_fired + add.p_shots_fired );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		sprintf(text, "%d", Active_player->stats.p_shots_hit + add.p_shots_hit);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", Active_player->stats.p_shots_hit + add.p_shots_hit );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		sprintf(text, "%d", Active_player->stats.p_bonehead_hits + add.p_bonehead_hits);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", Active_player->stats.p_bonehead_hits + add.p_bonehead_hits );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		if ((Active_player->stats.p_shots_fired + add.p_shots_fired) > 0)
-			pct = (float)100.0 * ((float)(Active_player->stats.p_shots_hit +
-										  add.p_shots_hit) / (float)(Active_player->stats.p_shots_fired +
-																	 add.p_shots_fired));
+		if ( ( Active_player->stats.p_shots_fired + add.p_shots_fired ) > 0 )
+			pct = ( float ) 100.0 * ( ( float ) ( Active_player->stats.p_shots_hit +
+			                                      add.p_shots_hit ) / ( float ) ( Active_player->stats.p_shots_fired +
+			                                              add.p_shots_fired ) );
 		else
-			pct = (float)0.0;
-		sprintf(text, "%d", (int)pct);
-		strcat_s(text, " %%");
-		gr_printf(sx, sy, text);
+			pct = ( float ) 0.0;
+		sprintf ( text, "%d", ( int ) pct );
+		strcat_s ( text, " %%" );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		if ((Active_player->stats.p_shots_fired + add.p_shots_fired) > 0)
-			pct = (float)100.0 * ((float)(Active_player->stats.p_bonehead_hits +
-										  add.p_bonehead_hits) / (float)(Active_player->stats.p_shots_fired +
-																		 add.p_shots_fired));
+		if ( ( Active_player->stats.p_shots_fired + add.p_shots_fired ) > 0 )
+			pct = ( float ) 100.0 * ( ( float ) ( Active_player->stats.p_bonehead_hits +
+			                                      add.p_bonehead_hits ) / ( float ) ( Active_player->stats.p_shots_fired +
+			                                              add.p_shots_fired ) );
 		else
-			pct = (float)0.0;
-		sprintf(text, "%d", (int)pct);
-		strcat_s(text, " %%");
-		gr_printf(sx, sy, text);
+			pct = ( float ) 0.0;
+		sprintf ( text, "%d", ( int ) pct );
+		strcat_s ( text, " %%" );
+		gr_printf ( sx, sy, text );
 		sy += 2 * dy;
 
 		// alltime secondary weapon stats
-		sprintf(text, "%d", Active_player->stats.s_shots_fired + add.s_shots_fired);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", Active_player->stats.s_shots_fired + add.s_shots_fired );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		sprintf(text, "%d", Active_player->stats.s_shots_hit + add.s_shots_hit);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", Active_player->stats.s_shots_hit + add.s_shots_hit );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		sprintf(text, "%d", Active_player->stats.s_bonehead_hits + add.s_bonehead_hits);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", Active_player->stats.s_bonehead_hits + add.s_bonehead_hits );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		if ((Active_player->stats.s_shots_fired + add.s_shots_fired) > 0)
-			pct = (float)100.0 * ((float)(Active_player->stats.s_shots_hit +
-										  add.s_shots_hit) / (float)(Active_player->stats.s_shots_fired +
-																	 add.s_shots_fired));
+		if ( ( Active_player->stats.s_shots_fired + add.s_shots_fired ) > 0 )
+			pct = ( float ) 100.0 * ( ( float ) ( Active_player->stats.s_shots_hit +
+			                                      add.s_shots_hit ) / ( float ) ( Active_player->stats.s_shots_fired +
+			                                              add.s_shots_fired ) );
 		else
-			pct = (float)0.0;
-		sprintf(text, "%d", (int)pct);
-		strcat_s(text, " %%");
-		gr_printf(sx, sy, text);
+			pct = ( float ) 0.0;
+		sprintf ( text, "%d", ( int ) pct );
+		strcat_s ( text, " %%" );
+		gr_printf ( sx, sy, text );
 		sy += dy;
-		if ((Active_player->stats.s_shots_fired + add.s_shots_fired) > 0)
-			pct = (float)100.0 * ((float)(Active_player->stats.s_bonehead_hits +
-										  add.s_bonehead_hits) / (float)(Active_player->stats.s_shots_fired +
-																		 add.s_shots_fired));
+		if ( ( Active_player->stats.s_shots_fired + add.s_shots_fired ) > 0 )
+			pct = ( float ) 100.0 * ( ( float ) ( Active_player->stats.s_bonehead_hits +
+			                                      add.s_bonehead_hits ) / ( float ) ( Active_player->stats.s_shots_fired +
+			                                              add.s_shots_fired ) );
 		else
-			pct = (float)0.0;
-		sprintf(text, "%d", (int)pct);
-		strcat_s(text, " %%");
-		gr_printf(sx, sy, text);
+			pct = ( float ) 0.0;
+		sprintf ( text, "%d", ( int ) pct );
+		strcat_s ( text, " %%" );
+		gr_printf ( sx, sy, text );
 		sy += 2 * dy;
 
 		// alltime assists
-		sprintf(text, "%d", (int)Active_player->stats.assists + add.assists);
-		gr_printf(sx, sy, text);
+		sprintf ( text, "%d", ( int ) Active_player->stats.assists + add.assists );
+		gr_printf ( sx, sy, text );
 		sy += 2 * dy;
 
-		if (Game_mode & GM_MULTIPLAYER)
+		if ( Game_mode & GM_MULTIPLAYER )
 		{
-			gr_printf(sx, sy, "%d", (int)Active_player->stats.score);
+			gr_printf ( sx, sy, "%d", ( int ) Active_player->stats.score );
 		}
 		break;
 	} // end switch
 }
 
-int find_netplayer_n(int n)
+int find_netplayer_n ( int n )
 {
 	int idx;
 	int target;
 	target = n;
 	n = 0;
-	for (idx = 0; idx < MAX_PLAYERS; idx++)
+	for ( idx = 0; idx < MAX_PLAYERS; idx++ )
 	{
-		if (MULTI_CONNECTED(Net_players[idx]))
+		if ( MULTI_CONNECTED ( Net_players[idx] ) )
 		{
 			n++;
-			if (n == target)
+			if ( n == target )
 				return idx;
 		}
 	}
@@ -371,16 +371,16 @@ void show_stats_close() {}
 // a netgame needs to be doing this (and if fact, only he *should* be doing this)
 void init_multiplayer_stats()
 {
-	scoring_struct* ptr;
+	scoring_struct *ptr;
 
-	for (int idx = 0; idx < MAX_PLAYERS; idx++)
+	for ( int idx = 0; idx < MAX_PLAYERS; idx++ )
 	{
 		ptr = &Players[idx].stats;
-		scoring_level_init(ptr);
+		scoring_level_init ( ptr );
 	}
 }
 
-void set_player_stats(int pid)
+void set_player_stats ( int pid )
 {
 	Active_player = Net_players[pid].m_player;
 }

@@ -19,53 +19,59 @@
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/core/matcher/assert_line_base.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+namespace boost
+{
+namespace xpressive
+{
+namespace detail
 {
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // assert_eol_matcher
-    //
-    template<typename Traits>
-    struct assert_eol_matcher
-      : assert_line_base<Traits>
-    {
-        typedef typename Traits::char_type char_type;
-        
-        assert_eol_matcher(Traits const &tr)
-          : assert_line_base<Traits>(tr)
-        {
-        }
+///////////////////////////////////////////////////////////////////////////////
+// assert_eol_matcher
+//
+template<typename Traits>
+struct assert_eol_matcher
+		: assert_line_base<Traits>
+{
+	typedef typename Traits::char_type char_type;
 
-        template<typename BidiIter, typename Next>
-        bool match(match_state<BidiIter> &state, Next const &next) const
-        {
-            if(state.eos())
-            {
-                if(!state.flags_.match_eol_)
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                char_type ch = *state.cur_;
+	assert_eol_matcher ( Traits const &tr )
+		: assert_line_base<Traits> ( tr )
+	{
+	}
 
-                // If the current character is not a newline, we're not at the end of a line
-                if(!traits_cast<Traits>(state).isctype(ch, this->newline_))
-                {
-                    return false;
-                }
-                // There is no line-break between \r and \n
-                else if(ch == this->nl_ && (!state.bos() || state.flags_.match_prev_avail_) && *boost::prior(state.cur_) == this->cr_)
-                {
-                    return false;
-                }
-            }
+	template<typename BidiIter, typename Next>
+	bool match ( match_state<BidiIter> &state, Next const &next ) const
+	{
+		if ( state.eos() )
+		{
+			if ( !state.flags_.match_eol_ )
+			{
+				return false;
+			}
+		}
+		else
+		{
+			char_type ch = *state.cur_;
 
-            return next.match(state);
-        }
-    };
+			// If the current character is not a newline, we're not at the end of a line
+			if ( !traits_cast<Traits> ( state ).isctype ( ch, this->newline_ ) )
+			{
+				return false;
+			}
+			// There is no line-break between \r and \n
+			else if ( ch == this->nl_ && ( !state.bos() || state.flags_.match_prev_avail_ ) && *boost::prior ( state.cur_ ) == this->cr_ )
+			{
+				return false;
+			}
+		}
 
-}}}
+		return next.match ( state );
+	}
+};
+
+}
+}
+}
 
 #endif

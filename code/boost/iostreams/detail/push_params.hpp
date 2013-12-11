@@ -6,16 +6,16 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 #ifndef BOOST_IOSTREAMS_DETAIL_PUSH_PARAMS_HPP_INCLUDED
-#define BOOST_IOSTREAMS_DETAIL_PUSH_PARAMS_HPP_INCLUDED 
+#define BOOST_IOSTREAMS_DETAIL_PUSH_PARAMS_HPP_INCLUDED
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif                    
+#endif
 
 #define BOOST_IOSTREAMS_PUSH_PARAMS() \
     , std::streamsize buffer_size = -1 , std::streamsize pback_size = -1 \
     /**/
 
-#define BOOST_IOSTREAMS_PUSH_ARGS() , buffer_size, pback_size     
+#define BOOST_IOSTREAMS_PUSH_ARGS() , buffer_size, pback_size
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_PUSH_PARAMS_HPP_INCLUDED

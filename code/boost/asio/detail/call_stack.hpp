@@ -20,9 +20,12 @@
 #include <boost/asio/detail/noncopyable.hpp>
 #include <boost/asio/detail/tss_ptr.hpp>
 
-namespace boost {
-namespace asio {
-namespace detail {
+namespace boost
+{
+namespace asio
+{
+namespace detail
+{
 
 // Helper class to determine whether or not the current thread is inside an
 // invocation of io_service::run() for a specified io_service object.
@@ -30,53 +33,53 @@ template <typename Owner>
 class call_stack
 {
 public:
-  // Context class automatically pushes an owner on to the stack.
-  class context
-    : private noncopyable
-  {
-  public:
-    // Push the owner on to the stack.
-    explicit context(Owner* d)
-      : owner_(d),
-        next_(call_stack<Owner>::top_)
-    {
-      call_stack<Owner>::top_ = this;
-    }
+	// Context class automatically pushes an owner on to the stack.
+	class context
+		: private noncopyable
+	{
+	public:
+		// Push the owner on to the stack.
+		explicit context ( Owner *d )
+			: owner_ ( d ),
+			  next_ ( call_stack<Owner>::top_ )
+		{
+			call_stack<Owner>::top_ = this;
+		}
 
-    // Pop the owner from the stack.
-    ~context()
-    {
-      call_stack<Owner>::top_ = next_;
-    }
+		// Pop the owner from the stack.
+		~context()
+		{
+			call_stack<Owner>::top_ = next_;
+		}
 
-  private:
-    friend class call_stack<Owner>;
+	private:
+		friend class call_stack<Owner>;
 
-    // The owner associated with the context.
-    Owner* owner_;
+		// The owner associated with the context.
+		Owner *owner_;
 
-    // The next element in the stack.
-    context* next_;
-  };
+		// The next element in the stack.
+		context *next_;
+	};
 
-  friend class context;
+	friend class context;
 
-  // Determine whether the specified owner is on the stack.
-  static bool contains(Owner* d)
-  {
-    context* elem = top_;
-    while (elem)
-    {
-      if (elem->owner_ == d)
-        return true;
-      elem = elem->next_;
-    }
-    return false;
-  }
+	// Determine whether the specified owner is on the stack.
+	static bool contains ( Owner *d )
+	{
+		context *elem = top_;
+		while ( elem )
+		{
+			if ( elem->owner_ == d )
+				return true;
+			elem = elem->next_;
+		}
+		return false;
+	}
 
 private:
-  // The top of the stack of calls for the current thread.
-  static tss_ptr<context> top_;
+	// The top of the stack of calls for the current thread.
+	static tss_ptr<context> top_;
 };
 
 template <typename Owner>

@@ -24,54 +24,56 @@
 #include <boost/accumulators/accumulators_fwd.hpp>
 #include <boost/accumulators/framework/parameters/accumulator.hpp>
 
-namespace boost { namespace accumulators
+namespace boost
+{
+namespace accumulators
 {
 
 namespace detail
 {
-    template<typename AccumulatorSet, typename Feature>
-    struct accumulator_set_result
-    {
-        typedef typename as_feature<Feature>::type feature_type;
-        typedef typename mpl::apply<AccumulatorSet, feature_type>::type::result_type type;
-    };
+template<typename AccumulatorSet, typename Feature>
+struct accumulator_set_result
+{
+	typedef typename as_feature<Feature>::type feature_type;
+	typedef typename mpl::apply<AccumulatorSet, feature_type>::type::result_type type;
+};
 
-    template<typename Args, typename Feature>
-    struct argument_pack_result
-      : accumulator_set_result<
-            typename remove_reference<
-                typename parameter::binding<Args, tag::accumulator>::type
-            >::type
-          , Feature
-        >
-    {
-    };
+template<typename Args, typename Feature>
+struct argument_pack_result
+		: accumulator_set_result <
+		typename remove_reference <
+		typename parameter::binding<Args, tag::accumulator>::type
+		>::type
+		, Feature
+		>
+{
+};
 
-    template<typename A, typename Feature>
-    struct extractor_result
-      : mpl::eval_if<
-            detail::is_accumulator_set<A>
-          , accumulator_set_result<A, Feature>
-          , argument_pack_result<A, Feature>
-        >
-    {
-    };
+template<typename A, typename Feature>
+struct extractor_result
+		: mpl::eval_if <
+		detail::is_accumulator_set<A>
+		, accumulator_set_result<A, Feature>
+		, argument_pack_result<A, Feature>
+		>
+{
+};
 
-    template<typename Feature, typename AccumulatorSet>
-    typename extractor_result<AccumulatorSet, Feature>::type
-    do_extract(AccumulatorSet const &acc, mpl::true_)
-    {
-        typedef typename as_feature<Feature>::type feature_type;
-        return extract_result<feature_type>(acc);
-    }
+template<typename Feature, typename AccumulatorSet>
+typename extractor_result<AccumulatorSet, Feature>::type
+do_extract ( AccumulatorSet const &acc, mpl::true_ )
+{
+	typedef typename as_feature<Feature>::type feature_type;
+	return extract_result<feature_type> ( acc );
+}
 
-    template<typename Feature, typename Args>
-    typename extractor_result<Args, Feature>::type
-    do_extract(Args const &args, mpl::false_)
-    {
-        typedef typename as_feature<Feature>::type feature_type;
-        return find_accumulator<feature_type>(args[accumulator]).result(args);
-    }
+template<typename Feature, typename Args>
+typename extractor_result<Args, Feature>::type
+do_extract ( Args const &args, mpl::false_ )
+{
+	typedef typename as_feature<Feature>::type feature_type;
+	return find_accumulator<feature_type> ( args[accumulator] ).result ( args );
+}
 
 } // namespace detail
 
@@ -81,45 +83,45 @@ namespace detail
 template<typename Feature>
 struct extractor
 {
-    typedef extractor<Feature> this_type;
+	typedef extractor<Feature> this_type;
 
-    /// The result meta-function for determining the return type of the extractor
-    template<typename F>
-    struct result;
+	/// The result meta-function for determining the return type of the extractor
+	template<typename F>
+	struct result;
 
-    template<typename A1>
-    struct result<this_type(A1)>
-      : detail::extractor_result<A1, Feature>
-    {
-    };
+	template<typename A1>
+	struct result<this_type ( A1 ) >
+: detail::extractor_result<A1, Feature>
+	{
+	};
 
-    /// Extract the result associated with Feature from the accumulator set
-    /// \param acc The accumulator set object from which to extract the result
-    template<typename Arg1>
-    typename detail::extractor_result<Arg1, Feature>::type
-    operator ()(Arg1 const &arg1) const
-    {
-        // Arg1 could be an accumulator_set or an argument pack containing
-        // an accumulator_set. Dispatch accordingly.
-        return detail::do_extract<Feature>(arg1, detail::is_accumulator_set<Arg1>());
-    }
+	/// Extract the result associated with Feature from the accumulator set
+	/// \param acc The accumulator set object from which to extract the result
+	template<typename Arg1>
+	typename detail::extractor_result<Arg1, Feature>::type
+	operator () ( Arg1 const &arg1 ) const
+	{
+		// Arg1 could be an accumulator_set or an argument pack containing
+		// an accumulator_set. Dispatch accordingly.
+		return detail::do_extract<Feature> ( arg1, detail::is_accumulator_set<Arg1>() );
+	}
 
-    /// \overload
-    ///
-    /// \param a1 Optional named parameter to be passed to the accumulator's result() function.
-    template<typename AccumulatorSet, typename A1>
-    typename detail::extractor_result<AccumulatorSet, Feature>::type
-    operator ()(AccumulatorSet const &acc, A1 const &a1) const
-    {
-        BOOST_MPL_ASSERT((detail::is_accumulator_set<AccumulatorSet>));
-        typedef typename as_feature<Feature>::type feature_type;
-        return extract_result<feature_type>(acc, a1);
-    }
+	/// \overload
+	///
+	/// \param a1 Optional named parameter to be passed to the accumulator's result() function.
+	template<typename AccumulatorSet, typename A1>
+	typename detail::extractor_result<AccumulatorSet, Feature>::type
+	operator () ( AccumulatorSet const &acc, A1 const &a1 ) const
+	{
+		BOOST_MPL_ASSERT ( ( detail::is_accumulator_set<AccumulatorSet> ) );
+		typedef typename as_feature<Feature>::type feature_type;
+		return extract_result<feature_type> ( acc, a1 );
+	}
 
-    // ... other overloads generated by Boost.Preprocessor:
+	// ... other overloads generated by Boost.Preprocessor:
 
-    /// INTERNAL ONLY
-    ///
+	/// INTERNAL ONLY
+	///
 #define BOOST_ACCUMULATORS_EXTRACTOR_FUN_OP(z, n, _)                                    \
     template<BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)>                                  \
     struct result<this_type(BOOST_PP_ENUM_PARAMS_Z(z, n, A))>                           \
@@ -140,20 +142,20 @@ struct extractor
         return extract_result<feature_type>(acc BOOST_PP_ENUM_TRAILING_PARAMS_Z(z, n, a));\
     }
 
-    BOOST_PP_REPEAT_FROM_TO(
-        2
-      , BOOST_PP_INC(BOOST_ACCUMULATORS_MAX_ARGS)
-      , BOOST_ACCUMULATORS_EXTRACTOR_FUN_OP
-      , _
-    )
+	BOOST_PP_REPEAT_FROM_TO (
+	    2
+	    , BOOST_PP_INC ( BOOST_ACCUMULATORS_MAX_ARGS )
+	    , BOOST_ACCUMULATORS_EXTRACTOR_FUN_OP
+	    , _
+	)
 
-    #ifdef BOOST_ACCUMULATORS_DOXYGEN_INVOKED
-    /// \overload
-    ///
-    template<typename AccumulatorSet, typename A1, typename A2, ...>
-    typename detail::extractor_result<AccumulatorSet, Feature>::type
-    operator ()(AccumulatorSet const &acc, A1 const &a1, A2 const &a2, ...);
-    #endif
+#ifdef BOOST_ACCUMULATORS_DOXYGEN_INVOKED
+	/// \overload
+	///
+	template<typename AccumulatorSet, typename A1, typename A2, ...>
+	typename detail::extractor_result<AccumulatorSet, Feature>::type
+	operator () ( AccumulatorSet const &acc, A1 const &a1, A2 const &a2, ... );
+#endif
 };
 
 /// INTERNAL ONLY
@@ -224,6 +226,7 @@ struct extractor
       , (3, (Tag, Feature, ParamSeq))                                                               \
     )
 
-}} // namespace boost::accumulators
+}
+} // namespace boost::accumulators
 
 #endif

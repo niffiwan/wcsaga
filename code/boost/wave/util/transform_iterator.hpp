@@ -23,58 +23,62 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost {
-namespace wave { 
-namespace impl {
+namespace boost
+{
+namespace wave
+{
+namespace impl
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  The new Boost.Iterator library already conatins a transform_iterator usable 
+//  The new Boost.Iterator library already conatins a transform_iterator usable
 //  for our needs. The code below wraps this up.
 //
 ///////////////////////////////////////////////////////////////////////////////
-    template <class AdaptableUnaryFunctionT, class IteratorT>
-    class ref_transform_iterator_generator
-    {
-        typedef typename AdaptableUnaryFunctionT::result_type   return_type;
-        typedef typename AdaptableUnaryFunctionT::argument_type argument_type;
+template <class AdaptableUnaryFunctionT, class IteratorT>
+class ref_transform_iterator_generator
+{
+	typedef typename AdaptableUnaryFunctionT::result_type   return_type;
+	typedef typename AdaptableUnaryFunctionT::argument_type argument_type;
 
-    public:
-        typedef boost::transform_iterator<
-                return_type (*)(argument_type), IteratorT, return_type>
-            type;
-    };
+public:
+	typedef boost::transform_iterator <
+	return_type ( * ) ( argument_type ), IteratorT, return_type >
+	type;
+};
 
-    template <class AdaptableUnaryFunctionT, class IteratorT>
-    inline 
-    typename ref_transform_iterator_generator<
-        AdaptableUnaryFunctionT, IteratorT>::type
-    make_ref_transform_iterator(
-        IteratorT base, AdaptableUnaryFunctionT const &f)
-    {
-        typedef typename ref_transform_iterator_generator<
-                AdaptableUnaryFunctionT, IteratorT>::type
-            iterator_type;
-        return iterator_type(base, f.transform);
-    }
+template <class AdaptableUnaryFunctionT, class IteratorT>
+inline
+typename ref_transform_iterator_generator <
+AdaptableUnaryFunctionT, IteratorT >::type
+make_ref_transform_iterator (
+    IteratorT base, AdaptableUnaryFunctionT const &f )
+{
+	typedef typename ref_transform_iterator_generator <
+	AdaptableUnaryFunctionT, IteratorT >::type
+	iterator_type;
+	return iterator_type ( base, f.transform );
+}
 
-    //  Retrieve the token value given a parse node
-    //  This is used in conjunction with the ref_transform_iterator above, to
-    //  get the token values while iterating directly over the parse tree.
-    template <typename TokenT, typename ParseTreeNodeT>
-    struct get_token_value {
+//  Retrieve the token value given a parse node
+//  This is used in conjunction with the ref_transform_iterator above, to
+//  get the token values while iterating directly over the parse tree.
+template <typename TokenT, typename ParseTreeNodeT>
+struct get_token_value
+{
 
-        typedef TokenT const &result_type;
-        typedef ParseTreeNodeT const &argument_type;
+	typedef TokenT const &result_type;
+	typedef ParseTreeNodeT const &argument_type;
 
-        static result_type
-        transform (argument_type node) 
-        {
-            BOOST_ASSERT(1 == std::distance(node.value.begin(), 
-                node.value.end()));
-            return *node.value.begin();
-        }
-    };
+	static result_type
+	transform ( argument_type node )
+	{
+		BOOST_ASSERT ( 1 == std::distance ( node.value.begin(),
+		                                    node.value.end() ) );
+		return *node.value.begin();
+	}
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace impl

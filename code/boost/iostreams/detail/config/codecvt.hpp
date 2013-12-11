@@ -15,7 +15,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif       
+#endif
 
 //------------------Support for codecvt with user-defined state types---------//
 
@@ -44,7 +44,7 @@
 #if !defined(__MSL_CPP__) && !defined(__LIBCOMO__) && \
     (!defined(BOOST_RWSTD_VER) || BOOST_RWSTD_VER < 0x04010300) && \
     (!defined(__MACH__) || !defined(__INTEL_COMPILER))
-    /**/
+/**/
 # define BOOST_IOSTREAMS_CODECVT_CV_QUALIFIER const
 #else
 # define BOOST_IOSTREAMS_CODECVT_CV_QUALIFIER
@@ -55,7 +55,7 @@
 #if BOOST_WORKAROUND(_STLPORT_VERSION, < 0x461)
 # define BOOST_IOSTREAMS_NO_CODECVT_MAX_LENGTH
 #endif
-                    
+
 //------------------Put mbstate_t and codecvt in std--------------------------//
 
 #ifndef BOOST_IOSTREAMS_NO_LOCALE
@@ -63,16 +63,17 @@
 #endif
 
 // From Robert Ramey's version of utf8_codecvt_facet.
-namespace std { 
+namespace std
+{
 
 #if defined(__LIBCOMO__)
-    using ::mbstate_t;
+using ::mbstate_t;
 #elif defined(BOOST_DINKUMWARE_STDLIB) && !defined(__BORLANDC__)
-    using ::mbstate_t;
+using ::mbstate_t;
 #elif defined(__SGI_STL_PORT)
 #elif defined(BOOST_NO_STDC_NAMESPACE)
-    using ::codecvt;
-    using ::mbstate_t;
+using ::codecvt;
+using ::mbstate_t;
 #endif
 
 } // End namespace std.

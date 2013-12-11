@@ -15,22 +15,29 @@
 #include <sstream>
 #include <boost/mpi/config.hpp>
 
-namespace boost { namespace graph { namespace accounting {
+namespace boost
+{
+namespace graph
+{
+namespace accounting
+{
 
 typedef double time_type;
 
 inline time_type get_time()
 {
-  return MPI_Wtime();
+	return MPI_Wtime();
 }
 
-inline std::string print_time(time_type t)
+inline std::string print_time ( time_type t )
 {
-  std::ostringstream out;
-  out << std::setiosflags(std::ios::fixed) << std::setprecision(2) << t;
-  return out.str();
+	std::ostringstream out;
+	out << std::setiosflags ( std::ios::fixed ) << std::setprecision ( 2 ) << t;
+	return out.str();
 }
 
-} } } // end namespace boost::graph::accounting
+}
+}
+} // end namespace boost::graph::accounting
 
 #endif // BOOST_GRAPH_ACCOUNTING_HPP

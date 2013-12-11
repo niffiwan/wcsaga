@@ -14,34 +14,37 @@
 #include <boost/spirit/home/support/attributes.hpp>
 #include <boost/utility/enable_if.hpp>
 
-namespace boost { namespace spirit
+namespace boost
 {
-    ///////////////////////////////////////////////////////////////////////////
-    // This one is the function that the user can call directly in order 
-    // to create a customized attr_cast component
-    template <typename Expr>
-    typename enable_if<proto::is_expr<Expr>
-      , stateful_tag_type<Expr, tag::attr_cast> >::type
-    attr_cast(Expr const& expr)
-    {
-        return stateful_tag_type<Expr, tag::attr_cast>(expr);
-    }
+namespace spirit
+{
+///////////////////////////////////////////////////////////////////////////
+// This one is the function that the user can call directly in order
+// to create a customized attr_cast component
+template <typename Expr>
+typename enable_if<proto::is_expr<Expr>
+, stateful_tag_type<Expr, tag::attr_cast> >::type
+attr_cast ( Expr const &expr )
+{
+	return stateful_tag_type<Expr, tag::attr_cast> ( expr );
+}
 
-    template <typename Exposed, typename Expr>
-    typename enable_if<proto::is_expr<Expr>
-      , stateful_tag_type<Expr, tag::attr_cast, Exposed> >::type
-    attr_cast(Expr const& expr)
-    {
-        return stateful_tag_type<Expr, tag::attr_cast, Exposed>(expr);
-    }
+template <typename Exposed, typename Expr>
+typename enable_if<proto::is_expr<Expr>
+, stateful_tag_type<Expr, tag::attr_cast, Exposed> >::type
+attr_cast ( Expr const &expr )
+{
+	return stateful_tag_type<Expr, tag::attr_cast, Exposed> ( expr );
+}
 
-    template <typename Exposed, typename Transformed, typename Expr>
-    typename enable_if<proto::is_expr<Expr>
-      , stateful_tag_type<Expr, tag::attr_cast, Exposed, Transformed> >::type
-    attr_cast(Expr const& expr)
-    {
-        return stateful_tag_type<Expr, tag::attr_cast, Exposed, Transformed>(expr);
-    }
-}}
+template <typename Exposed, typename Transformed, typename Expr>
+typename enable_if<proto::is_expr<Expr>
+, stateful_tag_type<Expr, tag::attr_cast, Exposed, Transformed> >::type
+attr_cast ( Expr const &expr )
+{
+	return stateful_tag_type<Expr, tag::attr_cast, Exposed, Transformed> ( expr );
+}
+}
+}
 
 #endif

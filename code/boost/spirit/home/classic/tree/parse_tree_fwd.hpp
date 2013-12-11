@@ -10,30 +10,34 @@
 
 #include <boost/spirit/home/classic/namespace.hpp>
 
-namespace boost { namespace spirit {
+namespace boost
+{
+namespace spirit
+{
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
 
-    template <
-        typename MatchPolicyT, 
-        typename NodeFactoryT,
-        typename T = nil_t
+template <
+    typename MatchPolicyT,
+    typename NodeFactoryT,
+    typename T = nil_t
     >
-    struct pt_tree_policy;
+struct pt_tree_policy;
 
-    template <
-        typename IteratorT,
-        typename NodeFactoryT = node_val_data_factory<nil_t>,
-        typename T = nil_t
+template <
+    typename IteratorT,
+    typename NodeFactoryT = node_val_data_factory<nil_t>,
+    typename T = nil_t
     >
-    struct pt_match_policy;
+struct pt_match_policy;
 
-    template <typename T>
-    struct gen_pt_node_parser;
+template <typename T>
+struct gen_pt_node_parser;
 
 BOOST_SPIRIT_CLASSIC_NAMESPACE_END
 
-}} // namespace BOOST_SPIRIT_CLASSIC_NS
+}
+} // namespace BOOST_SPIRIT_CLASSIC_NS
 
 #endif
 

@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -25,12 +25,12 @@
 
 
 
-char* OGL_extension_string = NULL;
+char *OGL_extension_string = NULL;
 
 // ogl_extension is:
 //   - required for game flag
 //   - enabled flag
-//   - number of extensions to check for 
+//   - number of extensions to check for
 //   - extension name(s)  (max is 3 variants)
 //   - number of functions that extension needs/wants
 //   - function names that extension needs (max is 20)
@@ -130,11 +130,11 @@ ogl_extension GL_Extensions[NUM_OGL_EXTENSIONS] =
 	},
 
 	// provides app support to control how distance is calculated in fog computations
-	//	{ false, false, 1, { "GL_NV_fog_distance" }, 0, { NULL } },
+	//  { false, false, 1, { "GL_NV_fog_distance" }, 0, { NULL } },
 
 	// specify RGB values for secondary color
-	//	{ false, false, 1, { "GL_EXT_secondary_color" }, 2, {
-	//		"glSecondaryColor3fvEXT", "glSecondaryColor3ubvEXT" } },
+	//  { false, false, 1, { "GL_EXT_secondary_color" }, 2, {
+	//      "glSecondaryColor3fvEXT", "glSecondaryColor3ubvEXT" } },
 
 	// "COMBINE" function for texture environment, these two are basically the same
 	{
@@ -167,8 +167,8 @@ ogl_extension GL_Extensions[NUM_OGL_EXTENSIONS] =
 	},
 
 	// allows for row major order matrices rather than the standard column major order
-	//	{ true,  false, 1, { "GL_ARB_transpose_matrix" }, 2, {
-	//		"glLoadTransposeMatrixfARB", "glMultTransposeMatrixfARB" } },
+	//  { true,  false, 1, { "GL_ARB_transpose_matrix" }, 2, {
+	//      "glLoadTransposeMatrixfARB", "glMultTransposeMatrixfARB" } },
 
 	// this is obsolete with OGL 1.2, which is why the function name is the standard, but we check for the orginal extension name
 	{
@@ -253,7 +253,7 @@ ogl_extension GL_Extensions[NUM_OGL_EXTENSIONS] =
 	},
 
 	// Mac-only extension that allows use of system copy of texture to avoid an additional API copy
-	//	{ false, 0, 1, { "GL_APPLE_client_storage" }, 0, { NULL } },
+	//  { false, 0, 1, { "GL_APPLE_client_storage" }, 0, { NULL } },
 
 	// make me some mipmaps!
 	{
@@ -506,8 +506,8 @@ ogl_function GL_Functions[NUM_OGL_FUNCTIONS] =
 		"glGetCompressedTexImageARB",
 		0
 	},
-	//	{ "glSecondaryColor3fvEXT", 0 },
-	//	{ "glSecondaryColor3ubvEXT", 0 },
+	//  { "glSecondaryColor3fvEXT", 0 },
+	//  { "glSecondaryColor3ubvEXT", 0 },
 	{
 		"glLockArraysEXT",
 		0
@@ -516,8 +516,8 @@ ogl_function GL_Functions[NUM_OGL_FUNCTIONS] =
 		"glUnlockArraysEXT",
 		0
 	},
-	//	{ "glLoadTransposeMatrixfARB", 0 },
-	//	{ "glMultTransposeMatrixfARB", 0 },
+	//  { "glLoadTransposeMatrixfARB", 0 },
+	//  { "glMultTransposeMatrixfARB", 0 },
 	{
 		"glDrawRangeElements",
 		0
@@ -719,37 +719,37 @@ ogl_function GL_EXT_Special[NUM_OGL_EXT_SPECIAL] =
 
 
 #ifdef _WIN32
-#define GET_PROC_ADDRESS(x)		wglGetProcAddress((x))
+#define GET_PROC_ADDRESS(x)     wglGetProcAddress((x))
 #else
-#define GET_PROC_ADDRESS(x)		SDL_GL_GetProcAddress((x))
+#define GET_PROC_ADDRESS(x)     SDL_GL_GetProcAddress((x))
 #endif
 
 //tries to find a certain extension
-static inline int opengl_find_extension(const char* ext_to_find)
+static inline int opengl_find_extension ( const char *ext_to_find )
 {
-	if (OGL_extension_string == NULL)
+	if ( OGL_extension_string == NULL )
 		return 0;
 
-	return (strstr(OGL_extension_string, ext_to_find) != NULL);
+	return ( strstr ( OGL_extension_string, ext_to_find ) != NULL );
 }
 
 // these extensions may not be listed the normal way so we don't check the extension string for them
 static int opengl_get_extensions_special()
 {
 	int i, num_found = 0;
-	ogl_function* func = NULL;
+	ogl_function *func = NULL;
 
-	for (i = 0; i < NUM_OGL_EXT_SPECIAL; i++)
+	for ( i = 0; i < NUM_OGL_EXT_SPECIAL; i++ )
 	{
 		func = &GL_EXT_Special[i];
 
-		Assert(func->function_name != NULL);
+		Assert ( func->function_name != NULL );
 
-		func->function_ptr = (ptr_u)GET_PROC_ADDRESS(func->function_name);
+		func->function_ptr = ( ptr_u ) GET_PROC_ADDRESS ( func->function_name );
 
-		if (func->function_ptr)
+		if ( func->function_ptr )
 		{
-			mprintf(("  Found special extension function \"%s\".\n", func->function_name));
+			mprintf ( ( "  Found special extension function \"%s\".\n", func->function_name ) );
 			num_found++;
 		}
 	}
@@ -757,16 +757,16 @@ static int opengl_get_extensions_special()
 	return num_found;
 }
 
-ogl_function* get_ogl_function(const char* name)
+ogl_function *get_ogl_function ( const char *name )
 {
-	if (name == NULL)
+	if ( name == NULL )
 	{
 		return NULL;
 	}
 
-	for (int i = 0; i < NUM_OGL_FUNCTIONS; i++)
+	for ( int i = 0; i < NUM_OGL_FUNCTIONS; i++ )
 	{
-		if (!strcmp(GL_Functions[i].function_name, name))
+		if ( !strcmp ( GL_Functions[i].function_name, name ) )
 		{
 			return &GL_Functions[i];
 		}
@@ -780,56 +780,56 @@ ogl_function* get_ogl_function(const char* name)
 int opengl_get_extensions()
 {
 	int i, j, k, num_found = 0;
-	ogl_extension* ext = NULL;
-	ogl_function* func = NULL;
+	ogl_extension *ext = NULL;
+	ogl_function *func = NULL;
 
-	OGL_extension_string = (char*)glGetString(GL_EXTENSIONS);
+	OGL_extension_string = ( char * ) glGetString ( GL_EXTENSIONS );
 
-	for (i = 0; i < NUM_OGL_EXTENSIONS; i++)
+	for ( i = 0; i < NUM_OGL_EXTENSIONS; i++ )
 	{
 		ext = &GL_Extensions[i];
 		k = 0;
 
-		while (!ext->enabled && (k < ext->num_extensions))
+		while ( !ext->enabled && ( k < ext->num_extensions ) )
 		{
-			if (opengl_find_extension(ext->extension_name[k]))
+			if ( opengl_find_extension ( ext->extension_name[k] ) )
 			{
 				// some extensions do not have functions
-				if (!ext->num_functions)
+				if ( !ext->num_functions )
 				{
-					mprintf(("  Using extension \"%s\".\n", ext->extension_name[k]));
+					mprintf ( ( "  Using extension \"%s\".\n", ext->extension_name[k] ) );
 					ext->enabled = 1;
 					num_found++;
 					goto Next;
 				}
 
 				// we do have functions so check any/all of them
-				for (j = 0; j < ext->num_functions; j++)
+				for ( j = 0; j < ext->num_functions; j++ )
 				{
-					func = get_ogl_function(ext->function_names[j]);
+					func = get_ogl_function ( ext->function_names[j] );
 
-					if (func == NULL)
+					if ( func == NULL )
 						break;
 
-					if (!func->function_ptr)
-						func->function_ptr = (ptr_u)GET_PROC_ADDRESS(func->function_name);
+					if ( !func->function_ptr )
+						func->function_ptr = ( ptr_u ) GET_PROC_ADDRESS ( func->function_name );
 
-					if (!func->function_ptr)
+					if ( !func->function_ptr )
 						break;
 				}
 
-				if (j != ext->num_functions)
+				if ( j != ext->num_functions )
 				{
-					mprintf((
-						"  Found extension \"%s\", but can't find the required function \"%s()\".  Extension will be disabled!\n", ext->extension_name[k], ext->function_names[j]));
+					mprintf ( (
+					              "  Found extension \"%s\", but can't find the required function \"%s()\".  Extension will be disabled!\n", ext->extension_name[k], ext->function_names[j] ) );
 
-					if (ext->required_to_run)
-						Error(LOCATION,
-							"The required OpenGL extension '%s' is not fully supported by your current driver version or graphics card.\n", ext->extension_name[k]);
+					if ( ext->required_to_run )
+						Error ( LOCATION,
+						        "The required OpenGL extension '%s' is not fully supported by your current driver version or graphics card.\n", ext->extension_name[k] );
 				}
 				else
 				{
-					mprintf(("  Using extension \"%s\".\n", ext->extension_name[k]));
+					mprintf ( ( "  Using extension \"%s\".\n", ext->extension_name[k] ) );
 					ext->enabled = 1;
 					num_found++;
 				}
@@ -837,13 +837,13 @@ int opengl_get_extensions()
 			else
 			{
 				// only report if unable to find when we have checked all available extension name variants
-				if (k + 1 >= ext->num_extensions)
+				if ( k + 1 >= ext->num_extensions )
 				{
-					mprintf(("  Unable to find extension \"%s\".\n", ext->extension_name[k]));
+					mprintf ( ( "  Unable to find extension \"%s\".\n", ext->extension_name[k] ) );
 
-					if (ext->required_to_run)
-						Error(LOCATION,
-							"The required OpenGL extension '%s' is not supported by your current driver version or graphics card.\n", ext->extension_name[k]);
+					if ( ext->required_to_run )
+						Error ( LOCATION,
+						        "The required OpenGL extension '%s' is not supported by your current driver version or graphics card.\n", ext->extension_name[k] );
 				}
 			}
 
@@ -855,7 +855,7 @@ Next:
 
 	num_found += opengl_get_extensions_special();
 
-	mprintf(("\n"));
+	mprintf ( ( "\n" ) );
 
 	return num_found;
 }
@@ -868,30 +868,30 @@ void opengl_extensions_init()
 	opengl_get_extensions();
 
 	// if S3TC compression is found, then "GL_ARB_texture_compression" must be an extension
-	Use_compressed_textures = Is_Extension_Enabled(OGL_EXT_TEXTURE_COMPRESSION_S3TC);
-	Texture_compression_available = Is_Extension_Enabled(OGL_ARB_TEXTURE_COMPRESSION);
+	Use_compressed_textures = Is_Extension_Enabled ( OGL_EXT_TEXTURE_COMPRESSION_S3TC );
+	Texture_compression_available = Is_Extension_Enabled ( OGL_ARB_TEXTURE_COMPRESSION );
 
 	//allow VBOs to be used
-	if (!Cmdline_nohtl && !Cmdline_novbo && Is_Extension_Enabled(OGL_ARB_VERTEX_BUFFER_OBJECT))
+	if ( !Cmdline_nohtl && !Cmdline_novbo && Is_Extension_Enabled ( OGL_ARB_VERTEX_BUFFER_OBJECT ) )
 	{
 		Use_VBOs = 1;
 	}
 
-	//	if ( Is_Extension_Enabled(OGL_ARB_PIXEL_BUFFER_OBJECT) ) {
-	//		Use_PBOs = 1;
-	//	}
+	//  if ( Is_Extension_Enabled(OGL_ARB_PIXEL_BUFFER_OBJECT) ) {
+	//      Use_PBOs = 1;
+	//  }
 
-	if (!Cmdline_noglsl && Is_Extension_Enabled(OGL_ARB_SHADER_OBJECTS) &&
-		Is_Extension_Enabled(OGL_ARB_FRAGMENT_SHADER)
-		&& Is_Extension_Enabled(OGL_ARB_VERTEX_SHADER) && Is_Extension_Enabled(OGL_SM30))
+	if ( !Cmdline_noglsl && Is_Extension_Enabled ( OGL_ARB_SHADER_OBJECTS ) &&
+	        Is_Extension_Enabled ( OGL_ARB_FRAGMENT_SHADER )
+	        && Is_Extension_Enabled ( OGL_ARB_VERTEX_SHADER ) && Is_Extension_Enabled ( OGL_SM30 ) )
 	{
 		Use_GLSL = 1;
 	}
 
 	// setup the best fog function found
-	if (!Fred_running)
+	if ( !Fred_running )
 	{
-		if (Is_Extension_Enabled(OGL_EXT_FOG_COORD))
+		if ( Is_Extension_Enabled ( OGL_EXT_FOG_COORD ) )
 		{
 			OGL_fogmode = 2;
 		}
@@ -902,38 +902,38 @@ void opengl_extensions_init()
 	}
 
 	// if we can't do cubemaps then turn off Cmdline_env
-	if (!(Is_Extension_Enabled(OGL_ARB_TEXTURE_CUBE_MAP) && Is_Extension_Enabled(OGL_ARB_TEXTURE_ENV_COMBINE)))
+	if ( ! ( Is_Extension_Enabled ( OGL_ARB_TEXTURE_CUBE_MAP ) && Is_Extension_Enabled ( OGL_ARB_TEXTURE_ENV_COMBINE ) ) )
 	{
 		Cmdline_env = 0;
 	}
 
 	// can't have this stuff without GLSL support
-	if (!Use_GLSL)
+	if ( !Use_GLSL )
 	{
 		Cmdline_normal = 0;
 		Cmdline_height = 0;
 	}
 
-	if (Use_GLSL)
+	if ( Use_GLSL )
 	{
 		GLint max_texture_units;
-		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS_ARB, &max_texture_units);
+		glGetIntegerv ( GL_MAX_TEXTURE_IMAGE_UNITS_ARB, &max_texture_units );
 
 		// we need enough texture slots for this stuff to work
 
-		if (max_texture_units < 4)
+		if ( max_texture_units < 4 )
 		{
 			Int3();
 			Use_GLSL = 0;
 		}
 
-		if (max_texture_units < 5)
+		if ( max_texture_units < 5 )
 		{
 			Cmdline_normal = 0;
 			Cmdline_height = 0;
 		}
 
-		if (max_texture_units < 6)
+		if ( max_texture_units < 6 )
 		{
 			Cmdline_height = 0;
 		}

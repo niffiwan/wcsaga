@@ -16,31 +16,33 @@
 #include <boost/fusion/container/vector/vector.hpp>
 #include <boost/fusion/support/detail/as_fusion_element.hpp>
 
-namespace boost { namespace fusion
+namespace boost
 {
-    struct void_;
+namespace fusion
+{
+struct void_;
 
-    namespace result_of
-    {
-        template <
-            BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(
-                FUSION_MAX_VECTOR_SIZE, typename T, void_)
-          , typename Extra = void_
-        >
-        struct make_vector;
+namespace result_of
+{
+template <
+    BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT (
+        FUSION_MAX_VECTOR_SIZE, typename T, void_ )
+    , typename Extra = void_
+    >
+struct make_vector;
 
-        template <>
-        struct make_vector<>
-        {
-            typedef vector0<> type;
-        };
-    }
+template <>
+struct make_vector<>
+{
+	typedef vector0<> type;
+};
+}
 
-    inline vector0<>
-    make_vector()
-    {
-        return vector0<>();
-    }
+inline vector0<>
+make_vector()
+{
+	return vector0<>();
+}
 
 #define BOOST_FUSION_AS_FUSION_ELEMENT(z, n, data)                               \
     typename detail::as_fusion_element<BOOST_PP_CAT(T, n)>::type
@@ -51,7 +53,8 @@ namespace boost { namespace fusion
 
 #undef BOOST_FUSION_AS_FUSION_ELEMENT
 
-}}
+}
+}
 
 #endif
 #else // defined(BOOST_PP_IS_ITERATING)
@@ -63,28 +66,28 @@ namespace boost { namespace fusion
 
 #define N BOOST_PP_ITERATION()
 
-    namespace result_of
-    {
-        template <BOOST_PP_ENUM_PARAMS(N, typename T)>
+namespace result_of
+{
+template <BOOST_PP_ENUM_PARAMS ( N, typename T ) >
 #if defined(BOOST_NO_PARTIAL_SPECIALIZATION_IMPLICIT_DEFAULT_ARGS)
-        #define TEXT(z, n, text) , text
-        struct make_vector< BOOST_PP_ENUM_PARAMS(N, T) BOOST_PP_REPEAT_FROM_TO(BOOST_PP_DEC(N), FUSION_MAX_VECTOR_SIZE, TEXT, void_) >
-        #undef TEXT
+#define TEXT(z, n, text) , text
+struct make_vector< BOOST_PP_ENUM_PARAMS ( N, T ) BOOST_PP_REPEAT_FROM_TO ( BOOST_PP_DEC ( N ), FUSION_MAX_VECTOR_SIZE, TEXT, void_ ) >
+#undef TEXT
 #else
-        struct make_vector<BOOST_PP_ENUM_PARAMS(N, T)>
+struct make_vector<BOOST_PP_ENUM_PARAMS ( N, T ) >
 #endif
-        {
-            typedef BOOST_PP_CAT(vector, N)<BOOST_PP_ENUM(N, BOOST_FUSION_AS_FUSION_ELEMENT, _)> type;
-        };
-    }
+{
+    typedef BOOST_PP_CAT ( vector, N ) <BOOST_PP_ENUM ( N, BOOST_FUSION_AS_FUSION_ELEMENT, _ ) > type;
+};
+}
 
-    template <BOOST_PP_ENUM_PARAMS(N, typename T)>
-    inline BOOST_PP_CAT(vector, N)<BOOST_PP_ENUM(N, BOOST_FUSION_AS_FUSION_ELEMENT, _)>
-    make_vector(BOOST_PP_ENUM_BINARY_PARAMS(N, T, const& _))
-    {
-        return BOOST_PP_CAT(vector, N)<BOOST_PP_ENUM(N, BOOST_FUSION_AS_FUSION_ELEMENT, _)>(
-            BOOST_PP_ENUM_PARAMS(N, _));
-    }
+template <BOOST_PP_ENUM_PARAMS ( N, typename T ) >
+inline BOOST_PP_CAT ( vector, N ) <BOOST_PP_ENUM ( N, BOOST_FUSION_AS_FUSION_ELEMENT, _ ) >
+make_vector ( BOOST_PP_ENUM_BINARY_PARAMS ( N, T, const &_ ) )
+{
+	return BOOST_PP_CAT ( vector, N ) <BOOST_PP_ENUM ( N, BOOST_FUSION_AS_FUSION_ELEMENT, _ ) > (
+	           BOOST_PP_ENUM_PARAMS ( N, _ ) );
+}
 
 #undef N
 #endif // defined(BOOST_PP_IS_ITERATING)

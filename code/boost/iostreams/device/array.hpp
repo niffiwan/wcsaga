@@ -22,35 +22,40 @@
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-namespace boost { namespace iostreams {
+namespace boost
+{
+namespace iostreams
+{
 
-namespace detail {
+namespace detail
+{
 
 template<typename Mode, typename Ch>
-class array_adapter {
+class array_adapter
+{
 public:
-    typedef Ch                                 char_type;
-    typedef std::pair<char_type*, char_type*>  pair_type;
-    struct category
-        : public Mode,
-          public device_tag,
-          public direct_tag
-        { };
-    array_adapter(char_type* begin, char_type* end);
-    array_adapter(char_type* begin, std::size_t length);
-    array_adapter(const char_type* begin, const char_type* end);
-    array_adapter(const char_type* begin, std::size_t length);
+	typedef Ch                                 char_type;
+	typedef std::pair<char_type *, char_type *>  pair_type;
+	struct category
+			: public Mode,
+			  public device_tag,
+			  public direct_tag
+	{ };
+	array_adapter ( char_type *begin, char_type *end );
+	array_adapter ( char_type *begin, std::size_t length );
+	array_adapter ( const char_type *begin, const char_type *end );
+	array_adapter ( const char_type *begin, std::size_t length );
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    template<int N>
-    array_adapter(char_type (&ar)[N])
-        : begin_(ar), end_(ar + N) 
-        { }
+	template<int N>
+	array_adapter ( char_type ( &ar ) [N] )
+		: begin_ ( ar ), end_ ( ar + N )
+	{ }
 #endif
-    pair_type input_sequence();
-    pair_type output_sequence();
+	pair_type input_sequence();
+	pair_type output_sequence();
 private:
-    char_type* begin_;
-    char_type* end_;
+	char_type *begin_;
+	char_type *end_;
 };
 
 } // End namespace detail.
@@ -86,59 +91,65 @@ private:
     typedef BOOST_PP_CAT(basic_, name)<char>     name; \
     typedef BOOST_PP_CAT(basic_, name)<wchar_t>  BOOST_PP_CAT(w, name); \
     /**/
-BOOST_IOSTREAMS_ARRAY(array_source, input_seekable)
-BOOST_IOSTREAMS_ARRAY(array_sink, output_seekable)
-BOOST_IOSTREAMS_ARRAY(array, seekable)
+BOOST_IOSTREAMS_ARRAY ( array_source, input_seekable )
+BOOST_IOSTREAMS_ARRAY ( array_sink, output_seekable )
+BOOST_IOSTREAMS_ARRAY ( array, seekable )
 #undef BOOST_IOSTREAMS_ARRAY_CTOR
 #undef BOOST_IOSTREAMS_ARRAY
 
 
 //------------------Implementation of array_adapter---------------------------//
 
-namespace detail {
+namespace detail
+{
 
 template<typename Mode, typename Ch>
 array_adapter<Mode, Ch>::array_adapter
-    (char_type* begin, char_type* end) 
-    : begin_(begin), end_(end) 
-    { }
+( char_type *begin, char_type *end )
+	: begin_ ( begin ), end_ ( end )
+{ }
 
 template<typename Mode, typename Ch>
 array_adapter<Mode, Ch>::array_adapter
-    (char_type* begin, std::size_t length) 
-    : begin_(begin), end_(begin + length) 
-    { }
+( char_type *begin, std::size_t length )
+	: begin_ ( begin ), end_ ( begin + length )
+{ }
 
 template<typename Mode, typename Ch>
 array_adapter<Mode, Ch>::array_adapter
-    (const char_type* begin, const char_type* end) 
-    : begin_(const_cast<char_type*>(begin)),  // Treated as read-only.
-      end_(const_cast<char_type*>(end))       // Treated as read-only.
-{ BOOST_STATIC_ASSERT((!is_convertible<Mode, output>::value)); }
+( const char_type *begin, const char_type *end )
+	: begin_ ( const_cast<char_type *> ( begin ) ), // Treated as read-only.
+	  end_ ( const_cast<char_type *> ( end ) ) // Treated as read-only.
+{ BOOST_STATIC_ASSERT ( ( !is_convertible<Mode, output>::value ) ); }
 
 template<typename Mode, typename Ch>
 array_adapter<Mode, Ch>::array_adapter
-    (const char_type* begin, std::size_t length) 
-    : begin_(const_cast<char_type*>(begin)),       // Treated as read-only.
-      end_(const_cast<char_type*>(begin) + length) // Treated as read-only.
-{ BOOST_STATIC_ASSERT((!is_convertible<Mode, output>::value)); }
+( const char_type *begin, std::size_t length )
+	: begin_ ( const_cast<char_type *> ( begin ) ), // Treated as read-only.
+	  end_ ( const_cast<char_type *> ( begin ) + length ) // Treated as read-only.
+{ BOOST_STATIC_ASSERT ( ( !is_convertible<Mode, output>::value ) ); }
 
 template<typename Mode, typename Ch>
 typename array_adapter<Mode, Ch>::pair_type
 array_adapter<Mode, Ch>::input_sequence()
-{ BOOST_STATIC_ASSERT((is_convertible<Mode, input>::value));
-  return pair_type(begin_, end_); }
+{
+	BOOST_STATIC_ASSERT ( ( is_convertible<Mode, input>::value ) );
+	return pair_type ( begin_, end_ );
+}
 
 template<typename Mode, typename Ch>
 typename array_adapter<Mode, Ch>::pair_type
 array_adapter<Mode, Ch>::output_sequence()
-{ BOOST_STATIC_ASSERT((is_convertible<Mode, output>::value));
-  return pair_type(begin_, end_); }
+{
+	BOOST_STATIC_ASSERT ( ( is_convertible<Mode, output>::value ) );
+	return pair_type ( begin_, end_ );
+}
 
 } // End namespace detail.
 
 //----------------------------------------------------------------------------//
 
-} } // End namespaces iostreams, boost.
+}
+} // End namespaces iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_ARRAY_HPP_INCLUDED

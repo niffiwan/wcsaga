@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -12,42 +12,43 @@
 #include "ship/ship.h"
 
 // we won't have more than 9 checkboxes per dialog
-#define MAX_CHECKBOXES		10
+#define MAX_CHECKBOXES      10
 
 /////////////////////////////////////////////////////////////////////////////
 // ignore_orders_dlg dialog
 
-typedef struct check_box_info {
+typedef struct check_box_info
+{
 	CButton *button;
-	int		id;
+	int     id;
 } check_box_info;
 
 class ignore_orders_dlg : public CDialog
 {
-// Construction
+	// Construction
 public:
 	int m_ship;
-	ignore_orders_dlg(CWnd* pParent = NULL);   // standard constructor
+	ignore_orders_dlg ( CWnd *pParent = NULL ); // standard constructor
 
 	ship *m_shipp;
 	check_box_info check_boxes[MAX_CHECKBOXES];
 	int m_num_checks_active;
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(ignore_orders_dlg)
 	enum { IDD = IDD_IGNORE_ORDERS };
-		// NOTE: the ClassWizard will add data members here
+	// NOTE: the ClassWizard will add data members here
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(ignore_orders_dlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions

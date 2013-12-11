@@ -20,89 +20,92 @@
 #include <boost/interprocess/containers/container/detail/type_traits.hpp>
 #include <algorithm>
 
-namespace boost {
-namespace container {
-namespace containers_detail {
+namespace boost
+{
+namespace container
+{
+namespace containers_detail
+{
 
 template <class SizeType>
 SizeType
-   get_next_capacity(const SizeType max_size
-                    ,const SizeType capacity
-                    ,const SizeType n)
+get_next_capacity ( const SizeType max_size
+                    , const SizeType capacity
+                    , const SizeType n )
 {
-//   if (n > max_size - capacity)
-//      throw std::length_error("get_next_capacity");
+	//   if (n > max_size - capacity)
+	//      throw std::length_error("get_next_capacity");
 
-   const SizeType m3 = max_size/3;
+	const SizeType m3 = max_size / 3;
 
-   if (capacity < m3)
-      return capacity + max_value(3*(capacity+1)/5, n);
+	if ( capacity < m3 )
+		return capacity + max_value ( 3 * ( capacity + 1 ) / 5, n );
 
-   if (capacity < m3*2)
-      return capacity + max_value((capacity+1)/2, n);
+	if ( capacity < m3 * 2 )
+		return capacity + max_value ( ( capacity + 1 ) / 2, n );
 
-   return max_size;
+	return max_size;
 }
 
 template<class T>
-const T &max_value(const T &a, const T &b)
+const T &max_value ( const T &a, const T &b )
 {  return a > b ? a : b;   }
 
 template<class T>
-const T &min_value(const T &a, const T &b)
+const T &min_value ( const T &a, const T &b )
 {  return a < b ? a : b;   }
 
 template<class SmartPtr>
 struct smart_ptr_type
 {
-   typedef typename SmartPtr::value_type value_type;
-   typedef value_type *pointer;
-   static pointer get (const SmartPtr &smartptr)
-   {  return smartptr.get();}
+	typedef typename SmartPtr::value_type value_type;
+	typedef value_type *pointer;
+	static pointer get ( const SmartPtr &smartptr )
+	{  return smartptr.get();}
 };
 
 template<class T>
-struct smart_ptr_type<T*>
+struct smart_ptr_type<T *>
 {
-   typedef T value_type;
-   typedef value_type *pointer;
-   static pointer get (pointer ptr)
-   {  return ptr;}
+	typedef T value_type;
+	typedef value_type *pointer;
+	static pointer get ( pointer ptr )
+	{  return ptr;}
 };
 
 //!Overload for smart pointers to avoid ADL problems with get_pointer
 template<class Ptr>
 inline typename smart_ptr_type<Ptr>::pointer
-get_pointer(const Ptr &ptr)
-{  return smart_ptr_type<Ptr>::get(ptr);   }
+get_pointer ( const Ptr &ptr )
+{  return smart_ptr_type<Ptr>::get ( ptr );   }
 
 //!To avoid ADL problems with swap
 template <class T>
-inline void do_swap(T& x, T& y)
+inline void do_swap ( T &x, T &y )
 {
-   using std::swap;
-   swap(x, y);
+	using std::swap;
+	swap ( x, y );
 }
 
 //Rounds "orig_size" by excess to round_to bytes
-inline std::size_t get_rounded_size(std::size_t orig_size, std::size_t round_to)
+inline std::size_t get_rounded_size ( std::size_t orig_size, std::size_t round_to )
 {
-   return ((orig_size-1)/round_to+1)*round_to;
+	return ( ( orig_size - 1 ) / round_to + 1 ) * round_to;
 }
 
 template <std::size_t OrigSize, std::size_t RoundTo>
 struct ct_rounded_size
 {
-   enum { value = ((OrigSize-1)/RoundTo+1)*RoundTo };
+	enum { value = ( ( OrigSize - 1 ) / RoundTo + 1 ) * RoundTo };
 };
 
 template<class T>
 struct move_const_ref_type
-   : if_c
-   < ::boost::is_fundamental<T>::value || ::boost::is_pointer<T>::value
-   ,const T &
-   ,BOOST_INTERPROCESS_CATCH_CONST_RLVALUE(T)
-   >
+		: if_c
+		< ::boost::is_fundamental<T>::value || ::boost::is_pointer<T>::value
+		, const T &
+, BOOST_INTERPROCESS_CATCH_CONST_RLVALUE ( T )
+>
 {};
 
 }  //namespace containers_detail {
