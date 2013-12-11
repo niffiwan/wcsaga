@@ -14,3 +14,6 @@ depcomp
 install-sh
 missing
 .svn
+.hg
+.hgignore
+*.layout
