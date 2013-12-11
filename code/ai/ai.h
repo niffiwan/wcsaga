@@ -48,6 +48,8 @@ struct object;
 #define	AIF_BIG_SHIP_COLLIDE_RECOVER_1		(1 << 21)	//	Collided into a big ship.  Recovering by flying away.
 #define	AIF_BIG_SHIP_COLLIDE_RECOVER_2		(1 << 22)	//	Collided into a big ship.  Fly towards big ship sphere perimeter.
 #define	AIF_STEALTH_PURSUIT					(1 << 23)	// Ai is trying to fight stealth ship
+
+// Goober5000
 #define	AIF_UNLOAD_PRIMARIES				(1 << 24)	//	Fire primaries as fast as possible!
 #define AIF_TRYING_UNSUCCESSFULLY_TO_WARP	(1 << 25)	// Trying to warp, but can't warp at the moment
 #define AIF_CLOSING_DISTANCE_WITH_AB		(1 << 26)	// Closing distance with afterburners while attacking
@@ -116,8 +118,7 @@ struct object;
 #define AIORF_FORWARD				(1<<7)	//	forward movement
 
 // structure for AI goals
-typedef struct ai_goal
-{
+typedef struct ai_goal {
 	int signature;			//	Unique identifier.  All goals ever created (per mission) have a unique signature.
 	int ai_mode;				// one of the AIM_* modes for this goal
 	int ai_submode;			// maybe need a submode
@@ -133,14 +134,12 @@ typedef struct ai_goal
 	// unions for docking stuff.
 	// (AIGF_DOCKER_INDEX_VALID and AIGF_DOCKEE_INDEX_VALID tell us to use indexes; otherwise we use names)
 	// these are the dockpoints used on the docker and dockee ships, not the ships themselves
-	union
-	{
+	union {
 		char* name;
 		int index;
 	} docker;
 
-	union
-	{
+	union {
 		char* name;
 		int index;
 	} dockee;
@@ -181,8 +180,7 @@ typedef struct ai_goal
 
 #define	AI_ACTIVE_GOAL_DYNAMIC	999
 
-typedef struct ai_class
-{
+typedef struct ai_class {
 	char name[NAME_LENGTH];
 	float ai_accuracy[NUM_SKILL_LEVELS];
 	float ai_evasion[NUM_SKILL_LEVELS];
@@ -298,8 +296,7 @@ typedef struct ai_class
 //	Contains hooks back to original path information.
 //	This hook is used to extract information on the point such as whether it is
 //	protected by turrets.
-typedef struct pnode
-{
+typedef struct pnode {
 	vec3d pos;
 	int path_num;			//	path number from polymodel, ie in polymodel, paths[path_num]
 	int path_index;			//	index in original model path of point, ie in model_path, use verts[path_index]
@@ -312,8 +309,7 @@ extern pnode* Ppfp;			//	Free pointer in path points.
 // Goober5000 (based on the "you can only remember 7 things in short-term memory" assumption)
 #define MAX_IGNORE_NEW_OBJECTS	7
 
-typedef struct ai_info
-{
+typedef struct ai_info {
 	int ai_flags;				//	Special flags for AI behavior.
 	int shipnum;					// Ship using this slot, -1 means none.
 	int type;						//	
@@ -449,8 +445,7 @@ typedef struct ai_info
 	int ai_profile_flags;	//Holds AI_Profiles flags (possibly overriden by AI class) that actually apply to AI
 
 
-	union
-	{
+	union {
 		float lead_scale;							//	Amount to lead current opponent by.
 		float stay_near_distance;				//	Distance to stay within for AIM_STAY_NEAR mode.
 	};
@@ -608,9 +603,7 @@ extern void ai_do_default_behavior(object* obj);
 extern void ai_start_waypoints(object* objp, int waypoint_list_index, int wp_flags);
 extern void ai_ship_hit(object* objp_ship, object* hit_objp, vec3d* hitpos, int shield_quadrant, vec3d* hit_normal);
 extern void ai_ship_destroy(int shipnum, int method);
-extern void ai_turn_towards_vector(vec3d* dest, object* objp, float frametime, float turn_time, vec3d* slide_vec,
-								   vec3d* rel_pos, float bank_override, int flags, vec3d* rvec = NULL, int sexp_flags =
-								   0);
+extern void ai_turn_towards_vector(vec3d* dest, object* objp, float frametime, float turn_time, vec3d* slide_vec, vec3d* rel_pos, float bank_override, int flags, vec3d* rvec = NULL, int sexp_flags = 0);
 extern void init_ai_object(int objnum);
 extern void ai_init(void);				//	Call this one to parse ai.tbl.
 extern void ai_level_init(void);		//	Call before each level to reset AI
@@ -624,8 +617,7 @@ extern void ai_update_danger_weapon(int objnum, int weapon_objnum);
 // called externally from MissionParse.cpp to position ships in wings upon arrival into the
 // mission.
 extern void get_absolute_wing_pos(vec3d* result_pos, object* leader_objp, int wing_index, int formation_object_flag);
-extern void get_absolute_wing_pos_autopilot(vec3d* result_pos, object* leader_objp, int wing_index,
-											int formation_object_flag);
+extern void get_absolute_wing_pos_autopilot(vec3d* result_pos, object* leader_objp, int wing_index, int formation_object_flag);
 
 //	Interface from goals code to AI.  Set ship to guard.  *objp guards *other_objp
 extern void ai_set_guard_object(object* objp, object* other_objp);
@@ -661,29 +653,25 @@ extern void ai_chase_ct();
 extern void ai_find_path(object* pl_objp, int objnum, int path_num, int exit_flag, int subsys_path=0);
 extern float ai_path();
 extern void evade_weapon();
-extern int might_collide_with_ship(object* obj1, object* obj2, float dot_to_enemy, float dist_to_enemy,
-								   float duration);
+extern int might_collide_with_ship(object* obj1, object* obj2, float dot_to_enemy, float dist_to_enemy, float duration);
 extern int ai_fire_primary_weapon(object* objp);	//changed to return weather it fired-Bobboau
 extern int ai_fire_secondary_weapon(object* objp, int priority1 = -1, int priority2 = -1);
 extern float ai_get_weapon_dist(ship_weapon* swp);
 extern void turn_towards_point(object* objp, vec3d* point, vec3d* slide_vec, float bank_override);
 extern int ai_maybe_fire_afterburner(object* objp, ai_info* aip);
-extern void set_predicted_enemy_pos(vec3d* predicted_enemy_pos, object* pobjp, vec3d* enemy_pos, vec3d* enemy_vel,
-									ai_info* aip);
+extern void set_predicted_enemy_pos(vec3d* predicted_enemy_pos, object* pobjp, vec3d* enemy_pos, vec3d* enemy_vel, ai_info* aip);
 
 extern int is_instructor(object* objp);
 extern int find_enemy(int objnum, float range, int max_attackers);
 
 float ai_get_weapon_speed(ship_weapon* swp);
-void set_predicted_enemy_pos_turret(vec3d* predicted_enemy_pos, vec3d* gun_pos, object* pobjp, vec3d* enemy_pos,
-									vec3d* enemy_vel, float weapon_speed, float time_enemy_in_range);
+void set_predicted_enemy_pos_turret(vec3d* predicted_enemy_pos, vec3d* gun_pos, object* pobjp, vec3d* enemy_pos, vec3d* enemy_vel, float weapon_speed, float time_enemy_in_range);
 
 // function to change rearm status for ai ships (called from sexpression code)
 extern void ai_set_rearm_status(int team, int new_status);
 extern void ai_good_secondary_time(int team, int weapon_index, int num_weapons, char* shipname);
 
-extern void ai_do_objects_docked_stuff(object* docker, int docker_point, object* dockee, int dockee_point,
-									   bool update_clients = true);
+extern void ai_do_objects_docked_stuff(object* docker, int docker_point, object* dockee, int dockee_point, bool update_clients = true);
 extern void ai_do_objects_undocked_stuff(object* docker, object* dockee);
 extern void ai_do_objects_repairing_stuff(object* repaired_obj, object* repair_obj, int how);
 

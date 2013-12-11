@@ -57,8 +57,7 @@
 
 #define MAX_AI_PROFILES	5
 
-typedef struct ai_profile_t
-{
+typedef struct ai_profile_t {
 
 	char profile_name[NAME_LENGTH];
 

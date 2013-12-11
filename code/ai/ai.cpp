@@ -29,8 +29,7 @@ int ai_get_slot(int shipnum)
 	int i;
 
 	for (i = 0; i < MAX_AI_INFO; i++)
-		if (Ai_info[i].shipnum == -1)
-		{
+		if (Ai_info[i].shipnum == -1) {
 			Ai_info[i].shipnum = shipnum;
 			return i;
 		}
@@ -83,8 +82,7 @@ char* ai_get_goal_ship_name(char* name, int* index)
 	int i;
 
 	for (i = 0; i < Total_goal_ship_names; i++)
-		if (!stricmp(name, Goal_ship_names[i]))
-		{
+		if (!stricmp(name, Goal_ship_names[i])) {
 			*index = i;
 			return Goal_ship_names[i];
 		}
