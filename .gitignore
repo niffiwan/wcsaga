@@ -1,18 +1,16 @@
-# Compiled Object files
-*.slo
-*.lo
 *.o
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-
-# Compiled Static libraries
-*.lai
-*.la
 *.a
-
-# Other vcs systems
-.hg
-.hgignore
+.deps/
+code/.deps/
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache/
+m4/
+config.*
+code/fs2_open_*
+configure
+depcomp
+install-sh
+missing
 .svn
