@@ -2,7 +2,7 @@
  * Created by Ian "Goober5000" Warfield for the FreeSpace2 Source Code Project.
  * You may not sell or otherwise commercially exploit the source or things you
  * create based on the source.
- */ 
+ */
 
 
 
@@ -10,25 +10,25 @@
 #include <wx/wxprec.h>
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+#pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-	#include <wx/wx.h>
+#include <wx/wx.h>
 #endif
 
 #include "campaigneditor.h"
 #include <wx/xrc/xmlres.h>
 
 
-BEGIN_EVENT_TABLE(dlgCampaignEditor, wxDialog)
+BEGIN_EVENT_TABLE ( dlgCampaignEditor, wxDialog )
 END_EVENT_TABLE()
 
 
-dlgCampaignEditor::dlgCampaignEditor(wxWindow *parent)
+dlgCampaignEditor::dlgCampaignEditor ( wxWindow *parent )
 	: wxDialog()
 {
-	wxXmlResource::Get()->LoadDialog(this, parent, "dlgCampaignEditor");
+	wxXmlResource::Get()->LoadDialog ( this, parent, "dlgCampaignEditor" );
 }
 
 dlgCampaignEditor::~dlgCampaignEditor()

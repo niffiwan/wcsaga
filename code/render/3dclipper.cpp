@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -13,16 +13,16 @@
 #include "graphics/tmapper.h"
 
 
-int free_point_num=0;
+int free_point_num = 0;
 
 vertex temp_points[TMAP_MAX_VERTS];
 vertex *free_points[TMAP_MAX_VERTS];
 
-void init_free_points(void)
+void init_free_points ( void )
 {
 	int i;
 
-	for (i=0;i<TMAP_MAX_VERTS;i++)
+	for ( i = 0; i < TMAP_MAX_VERTS; i++ )
 		free_points[i] = &temp_points[i];
 }
 
@@ -38,9 +38,9 @@ vertex *get_temp_point()
 	return p;
 }
 
-void free_temp_point(vertex *p)
+void free_temp_point ( vertex *p )
 {
-	Assert(p->flags & PF_TEMP_POINT);
+	Assert ( p->flags & PF_TEMP_POINT );
 
 	free_points[--free_point_num] = p;
 
@@ -48,208 +48,231 @@ void free_temp_point(vertex *p)
 }
 
 //clips an edge against one plane.
-vertex *clip_edge(int plane_flag,vertex *on_pnt,vertex *off_pnt, uint flags)
+vertex *clip_edge ( int plane_flag, vertex *on_pnt, vertex *off_pnt, uint flags )
 {
 	float ratio;
 	vertex *tmp;
 
 	tmp = get_temp_point();
 
-	if ( plane_flag & CC_OFF_USER )	{
+	if ( plane_flag & CC_OFF_USER )
+	{
 
 		// Clip with user-defined plane
 		vec3d w, ray_direction;
-		float num,den;
+		float num, den;
 
-		vm_vec_sub(&ray_direction,(vec3d *)&off_pnt->x,(vec3d *)&on_pnt->x);
-			
-		vm_vec_sub(&w,(vec3d *)&on_pnt->x,&G3_user_clip_point);
-	
-		den = -vm_vec_dot(&G3_user_clip_normal,&ray_direction);
-		if ( den == 0.0f ) {	// Ray & plane are parallel, so there is no intersection
-			Int3();	// Get John
+		vm_vec_sub ( &ray_direction, ( vec3d * ) &off_pnt->x, ( vec3d * ) &on_pnt->x );
+
+		vm_vec_sub ( &w, ( vec3d * ) &on_pnt->x, &G3_user_clip_point );
+
+		den = -vm_vec_dot ( &G3_user_clip_normal, &ray_direction );
+		if ( den == 0.0f )      // Ray & plane are parallel, so there is no intersection
+		{
+			Int3(); // Get John
 			ratio = 1.0f;
-		} else {
-			num =  vm_vec_dot(&G3_user_clip_normal,&w);
-	
+		}
+		else
+		{
+			num =  vm_vec_dot ( &G3_user_clip_normal, &w );
+
 			ratio = num / den;
 		}
 
-		tmp->x = on_pnt->x + (off_pnt->x-on_pnt->x) * ratio;
-		tmp->y = on_pnt->y + (off_pnt->y-on_pnt->y) * ratio;
-		tmp->z = on_pnt->z + (off_pnt->z-on_pnt->z) * ratio;
+		tmp->x = on_pnt->x + ( off_pnt->x - on_pnt->x ) * ratio;
+		tmp->y = on_pnt->y + ( off_pnt->y - on_pnt->y ) * ratio;
+		tmp->z = on_pnt->z + ( off_pnt->z - on_pnt->z ) * ratio;
 
-	} else {
-		float a,b,kn,kd;
+	}
+	else
+	{
+		float a, b, kn, kd;
 
 		//compute clipping value k = (xs-zs) / (xs-xe-zs+ze)
 		//use x or y as appropriate, and negate x/y value as appropriate
 
-		if (plane_flag & (CC_OFF_RIGHT | CC_OFF_LEFT)) {
+		if ( plane_flag & ( CC_OFF_RIGHT | CC_OFF_LEFT ) )
+		{
 			a = on_pnt->x;
 			b = off_pnt->x;
 		}
-		else {
+		else
+		{
 			a = on_pnt->y;
 			b = off_pnt->y;
 		}
 
-		if (plane_flag & (CC_OFF_LEFT | CC_OFF_BOT)) {
+		if ( plane_flag & ( CC_OFF_LEFT | CC_OFF_BOT ) )
+		{
 			a = -a;
 			b = -b;
 		}
 
-		kn = a - on_pnt->z;						//xs-zs
-		kd = kn - b + off_pnt->z;				//xs-zs-xe+ze
+		kn = a - on_pnt->z;                     //xs-zs
+		kd = kn - b + off_pnt->z;               //xs-zs-xe+ze
 
 		ratio = kn / kd;
 
-		tmp->x = on_pnt->x + (off_pnt->x-on_pnt->x) * ratio;
-		tmp->y = on_pnt->y + (off_pnt->y-on_pnt->y) * ratio;
+		tmp->x = on_pnt->x + ( off_pnt->x - on_pnt->x ) * ratio;
+		tmp->y = on_pnt->y + ( off_pnt->y - on_pnt->y ) * ratio;
 
-		if (plane_flag & (CC_OFF_TOP|CC_OFF_BOT))	{
+		if ( plane_flag & ( CC_OFF_TOP | CC_OFF_BOT ) )
+		{
 			tmp->z = tmp->y;
-		} else {
+		}
+		else
+		{
 			tmp->z = tmp->x;
 		}
 
-		if (plane_flag & (CC_OFF_LEFT|CC_OFF_BOT))
+		if ( plane_flag & ( CC_OFF_LEFT | CC_OFF_BOT ) )
 			tmp->z = -tmp->z;
 
 	}
 
-	if (flags & TMAP_FLAG_TEXTURED) {
-		tmp->u = on_pnt->u + (off_pnt->u-on_pnt->u) * ratio;
-		tmp->v = on_pnt->v + (off_pnt->v-on_pnt->v) * ratio;
+	if ( flags & TMAP_FLAG_TEXTURED )
+	{
+		tmp->u = on_pnt->u + ( off_pnt->u - on_pnt->u ) * ratio;
+		tmp->v = on_pnt->v + ( off_pnt->v - on_pnt->v ) * ratio;
 
-		tmp->u2 = on_pnt->u2 + (off_pnt->u2-on_pnt->u2) * ratio;
-		tmp->v2 = on_pnt->v2 + (off_pnt->v2-on_pnt->v2) * ratio;
+		tmp->u2 = on_pnt->u2 + ( off_pnt->u2 - on_pnt->u2 ) * ratio;
+		tmp->v2 = on_pnt->v2 + ( off_pnt->v2 - on_pnt->v2 ) * ratio;
 	}
 
-	if (flags & TMAP_FLAG_GOURAUD ) {
-		if (flags & TMAP_FLAG_RAMP) {
+	if ( flags & TMAP_FLAG_GOURAUD )
+	{
+		if ( flags & TMAP_FLAG_RAMP )
+		{
 
 			float on_b, off_b;
 
-			on_b = i2fl(on_pnt->b);
-			off_b = i2fl(off_pnt->b);
+			on_b = i2fl ( on_pnt->b );
+			off_b = i2fl ( off_pnt->b );
 
-			tmp->b = ubyte(fl2i(on_b + (off_b-on_b) * ratio));
+			tmp->b = ubyte ( fl2i ( on_b + ( off_b - on_b ) * ratio ) );
 		}
-		if (flags & TMAP_FLAG_RGB) {
+		if ( flags & TMAP_FLAG_RGB )
+		{
 			float on_r, on_b, on_g, onspec_r, onspec_g, onspec_b;
 			float off_r, off_b, off_g, offspec_r, offspec_g, offspec_b;
 
-			on_r = i2fl(on_pnt->r);
-			off_r = i2fl(off_pnt->r);
+			on_r = i2fl ( on_pnt->r );
+			off_r = i2fl ( off_pnt->r );
 
-			on_g = i2fl(on_pnt->g);
-			off_g = i2fl(off_pnt->g);
+			on_g = i2fl ( on_pnt->g );
+			off_g = i2fl ( off_pnt->g );
 
-			on_b = i2fl(on_pnt->b);
-			off_b = i2fl(off_pnt->b);
-
-
-			onspec_r = i2fl(on_pnt->spec_r);
-			offspec_r = i2fl(off_pnt->spec_r);
-
-			onspec_g = i2fl(on_pnt->spec_g);
-			offspec_g = i2fl(off_pnt->spec_g);
-
-			onspec_b = i2fl(on_pnt->spec_b);
-			offspec_b = i2fl(off_pnt->spec_b);
+			on_b = i2fl ( on_pnt->b );
+			off_b = i2fl ( off_pnt->b );
 
 
-			tmp->r = ubyte(fl2i(on_r + (off_r-on_r) * ratio));
-			tmp->g = ubyte(fl2i(on_g + (off_g-on_g) * ratio));
-			tmp->b = ubyte(fl2i(on_b + (off_b-on_b) * ratio));
+			onspec_r = i2fl ( on_pnt->spec_r );
+			offspec_r = i2fl ( off_pnt->spec_r );
 
-			tmp->spec_r = ubyte(fl2i(onspec_r + (offspec_r-onspec_r) * ratio));
-			tmp->spec_g = ubyte(fl2i(onspec_g + (offspec_g-onspec_g) * ratio));
-			tmp->spec_b = ubyte(fl2i(onspec_b + (offspec_b-onspec_b) * ratio));
+			onspec_g = i2fl ( on_pnt->spec_g );
+			offspec_g = i2fl ( off_pnt->spec_g );
+
+			onspec_b = i2fl ( on_pnt->spec_b );
+			offspec_b = i2fl ( off_pnt->spec_b );
+
+
+			tmp->r = ubyte ( fl2i ( on_r + ( off_r - on_r ) * ratio ) );
+			tmp->g = ubyte ( fl2i ( on_g + ( off_g - on_g ) * ratio ) );
+			tmp->b = ubyte ( fl2i ( on_b + ( off_b - on_b ) * ratio ) );
+
+			tmp->spec_r = ubyte ( fl2i ( onspec_r + ( offspec_r - onspec_r ) * ratio ) );
+			tmp->spec_g = ubyte ( fl2i ( onspec_g + ( offspec_g - onspec_g ) * ratio ) );
+			tmp->spec_b = ubyte ( fl2i ( onspec_b + ( offspec_b - onspec_b ) * ratio ) );
 		}
 	}
 	else
 	{
-		tmp->spec_r=tmp->spec_g=tmp->spec_b=0;
+		tmp->spec_r = tmp->spec_g = tmp->spec_b = 0;
 	}
 
-	if (flags & TMAP_FLAG_ALPHA) {
+	if ( flags & TMAP_FLAG_ALPHA )
+	{
 
 		float on_a, off_a;
 
-		on_a = i2fl(on_pnt->a);
-		off_a = i2fl(off_pnt->a);
+		on_a = i2fl ( on_pnt->a );
+		off_a = i2fl ( off_pnt->a );
 
-		tmp->a = ubyte(fl2i(on_a + (off_a-on_a) * ratio));
+		tmp->a = ubyte ( fl2i ( on_a + ( off_a - on_a ) * ratio ) );
 	}
 
-	g3_code_vertex(tmp);
+	g3_code_vertex ( tmp );
 
-	return tmp;	
+	return tmp;
 }
 
 //clips a line to the viewing pyramid.
-void clip_line(vertex **p0,vertex **p1,ubyte codes_or, uint flags)
+void clip_line ( vertex **p0, vertex **p1, ubyte codes_or, uint flags )
 {
 	int plane_flag;
 	vertex *old_p1;
 
-	for (plane_flag=1;plane_flag<=CC_OFF_USER;plane_flag<<=1)
-		if (codes_or & plane_flag) {
+	for ( plane_flag = 1; plane_flag <= CC_OFF_USER; plane_flag <<= 1 )
+		if ( codes_or & plane_flag )
+		{
 
-			if ((*p0)->codes & plane_flag)
-				{vertex *t=*p0; *p0=*p1; *p1=t;}	//swap!
+			if ( ( *p0 )->codes & plane_flag )
+			{vertex *t = *p0; *p0 = *p1; *p1 = t;} //swap!
 
 			old_p1 = *p1;
 
-			*p1 = clip_edge(plane_flag,*p0,*p1,flags);
-			codes_or = (unsigned char)((*p0)->codes | (*p1)->codes);	//get new codes
+			*p1 = clip_edge ( plane_flag, *p0, *p1, flags );
+			codes_or = ( unsigned char ) ( ( *p0 )->codes | ( *p1 )->codes ); //get new codes
 
-			if (old_p1->flags & PF_TEMP_POINT)
-				free_temp_point(old_p1);
+			if ( old_p1->flags & PF_TEMP_POINT )
+				free_temp_point ( old_p1 );
 		}
 
 }
 
-int clip_plane(int plane_flag,vertex **src,vertex **dest,int *nv,ccodes *cc,uint flags)
+int clip_plane ( int plane_flag, vertex **src, vertex **dest, int *nv, ccodes *cc, uint flags )
 {
 	int i;
-	vertex **save_dest=dest;
+	vertex **save_dest = dest;
 
 	//copy first two verts to end
 	src[*nv] = src[0];
-	src[*nv+1] = src[1];
+	src[*nv + 1] = src[1];
 
 	cc->cc_and = 0xff;
 	cc->cc_or = 0;
 
-	for (i=1;i<=*nv;i++) {
+	for ( i = 1; i <= *nv; i++ )
+	{
 
-		if (src[i]->codes & plane_flag) {				//cur point off?
+		if ( src[i]->codes & plane_flag )               //cur point off?
+		{
 
-			if (! (src[i-1]->codes & plane_flag)) {	//prev not off?
+			if ( ! ( src[i - 1]->codes & plane_flag ) ) //prev not off?
+			{
 
-				*dest = clip_edge(plane_flag,src[i-1],src[i],flags);
-				cc->cc_or  |= (*dest)->codes;
-				cc->cc_and &= (*dest)->codes;
+				*dest = clip_edge ( plane_flag, src[i - 1], src[i], flags );
+				cc->cc_or  |= ( *dest )->codes;
+				cc->cc_and &= ( *dest )->codes;
 				dest++;
 			}
 
-			if (! (src[i+1]->codes & plane_flag)) {
+			if ( ! ( src[i + 1]->codes & plane_flag ) )
+			{
 
-				*dest = clip_edge(plane_flag,src[i+1],src[i],flags);
-				cc->cc_or  |= (*dest)->codes;
-				cc->cc_and &= (*dest)->codes;
+				*dest = clip_edge ( plane_flag, src[i + 1], src[i], flags );
+				cc->cc_or  |= ( *dest )->codes;
+				cc->cc_and &= ( *dest )->codes;
 				dest++;
 			}
 
 			//see if must free discarded point
 
-			if (src[i]->flags & PF_TEMP_POINT)
-				free_temp_point(src[i]);
+			if ( src[i]->flags & PF_TEMP_POINT )
+				free_temp_point ( src[i] );
 		}
-		else {			//cur not off, copy to dest buffer
+		else            //cur not off, copy to dest buffer
+		{
 
 			*dest++ = src[i];
 
@@ -258,29 +281,30 @@ int clip_plane(int plane_flag,vertex **src,vertex **dest,int *nv,ccodes *cc,uint
 		}
 	}
 
-	return (dest-save_dest);
+	return ( dest - save_dest );
 }
 
 
-vertex **clip_polygon(vertex **src,vertex **dest,int *nv,ccodes *cc,uint flags)
+vertex **clip_polygon ( vertex **src, vertex **dest, int *nv, ccodes *cc, uint flags )
 {
 	int plane_flag;
 	vertex **t;
 
-	for (plane_flag=1;plane_flag<=CC_OFF_USER;plane_flag<<=1)
+	for ( plane_flag = 1; plane_flag <= CC_OFF_USER; plane_flag <<= 1 )
 
-		if (cc->cc_or & plane_flag) {
+		if ( cc->cc_or & plane_flag )
+		{
 
-			*nv = clip_plane(plane_flag,src,dest,nv,cc,flags);
+			*nv = clip_plane ( plane_flag, src, dest, nv, cc, flags );
 
-			if (cc->cc_and)		//clipped away
+			if ( cc->cc_and )   //clipped away
 				return dest;
 
 			t = src; src = dest; dest = t;
 
 		}
 
-	return src;		//we swapped after we copied
+	return src;     //we swapped after we copied
 }
 
 

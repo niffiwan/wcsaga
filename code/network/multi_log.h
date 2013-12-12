@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -31,9 +31,9 @@ void multi_log_close();
 void multi_log_process();
 
 // printf function itself called by the ml_printf macro
-void ml_printf(char *format, ...);
+void ml_printf ( char *format, ... );
 
 // string print function
-void ml_string(char *string, int add_time = 1);
+void ml_string ( char *string, int add_time = 1 );
 
 #endif

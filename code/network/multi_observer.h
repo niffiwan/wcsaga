@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -18,17 +18,17 @@
 
 struct net_addr;
 struct player;
-struct net_player; 
+struct net_player;
 
 // ---------------------------------------------------------------------------------------
 // MULTI OBSERVER FUNCTIONS
 //
 
-// create a _permanent_ observer player 
-int multi_obs_create_player(int player_num,char *name,net_addr *addr,player *pl);
+// create a _permanent_ observer player
+int multi_obs_create_player ( int player_num, char *name, net_addr *addr, player *pl );
 
 // create an explicit observer object and assign it to the passed player
-void multi_obs_create_observer(net_player *pl);
+void multi_obs_create_observer ( net_player *pl );
 
 // create observer object locally, and additionally, setup some other information
 // ( client-side equivalent of multi_obs_create_observer() )

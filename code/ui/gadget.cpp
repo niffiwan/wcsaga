@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -28,7 +28,7 @@ UI_GADGET::~UI_GADGET()
 
 int UI_GADGET::get_hotspot()
 {
-	if (!linked_to_hotspot)
+	if ( !linked_to_hotspot )
 		return -1;
 
 	return hotspot_num;
@@ -42,7 +42,7 @@ void UI_GADGET::reset()
 // --------------------------------------------------------------------
 // Links a hotspot (palette index in mask) to the given gadget.
 //
-void UI_GADGET::link_hotspot(int num)
+void UI_GADGET::link_hotspot ( int num )
 {
 	hotspot_num = num;
 	linked_to_hotspot = 1;
@@ -56,73 +56,80 @@ void UI_GADGET::link_hotspot(int num)
 // with a default value of zero.
 //
 // NOTE:  The bitmaps stored in a .ani file.  What each frame is used for
-//			 is left up to the component to decide.
+//           is left up to the component to decide.
 //
 
 // loads nframes bitmaps, starting at index start_frame.
 // anything < start_frame will not be loaded.
 // this keeps the loading code from trying to load bitmaps which don't exist
-// and taking an unnecessary disk hit.		
-int UI_GADGET::set_bmaps(char *ani_fname, int nframes, int start_frame)
+// and taking an unnecessary disk hit.
+int UI_GADGET::set_bmaps ( char *ani_fname, int nframes, int start_frame )
 {
-	int first_frame, i;	
+	int first_frame, i;
 	char full_name[MAX_FILENAME_LEN] = "";
 	char tmp[33];
-	int idx, s_idx;	
+	int idx, s_idx;
 	int num_digits;
 	int its_all_good = 0;
-	
+
 	// clear out all frames
-	for(idx=0; idx<MAX_BMAPS_PER_GADGET; idx++){
+	for ( idx = 0; idx < MAX_BMAPS_PER_GADGET; idx++ )
+	{
 		bmap_ids[idx] = -1;
 	}
-	
+
 	// load all the bitmaps
 	bm_filename = ani_fname;
 
-	Assert(nframes < MAX_BMAPS_PER_GADGET);		
-	m_num_frames = nframes;		
-	for(idx=start_frame; idx<nframes; idx++){
+	Assert ( nframes < MAX_BMAPS_PER_GADGET );
+	m_num_frames = nframes;
+	for ( idx = start_frame; idx < nframes; idx++ )
+	{
 		// clear the string
-		strcpy_s(full_name, "");
+		strcpy_s ( full_name, "" );
 
 		// get the # of digits for this index
-		num_digits = (idx < 10) ? 1 : (idx < 100) ? 2 : (idx < 1000) ? 3 : 4;
+		num_digits = ( idx < 10 ) ? 1 : ( idx < 100 ) ? 2 : ( idx < 1000 ) ? 3 : 4;
 
 		// build the actual filename
-		strcpy_s(full_name, ani_fname);		
-		for(s_idx=0; s_idx<(4-num_digits); s_idx++){
-			strcat_s(full_name, NOX("0"));
+		strcpy_s ( full_name, ani_fname );
+		for ( s_idx = 0; s_idx < ( 4 - num_digits ); s_idx++ )
+		{
+			strcat_s ( full_name, NOX ( "0" ) );
 		}
-		sprintf(tmp, "%d", idx);
-		strcat_s(full_name, tmp);		
+		sprintf ( tmp, "%d", idx );
+		strcat_s ( full_name, tmp );
 
-		// try and load the bitmap				
-		bmap_ids[idx] = bm_load(full_name);	
-		if(bmap_ids[idx] != -1){		
-			
+		// try and load the bitmap
+		bmap_ids[idx] = bm_load ( full_name );
+		if ( bmap_ids[idx] != -1 )
+		{
+
 			its_all_good = 1;
-		} 
+		}
 	}
 
 	// done
-	if(its_all_good){
-		uses_bmaps = 1;		
+	if ( its_all_good )
+	{
+		uses_bmaps = 1;
 		return 0;
 	}
 
-	// no go, so try and load as an ani. try and load as an .ani	
-	first_frame = bm_load_animation(ani_fname, &m_num_frames);	
-	if((first_frame >= 0) && (m_num_frames <= MAX_BMAPS_PER_GADGET)){					
+	// no go, so try and load as an ani. try and load as an .ani
+	first_frame = bm_load_animation ( ani_fname, &m_num_frames );
+	if ( ( first_frame >= 0 ) && ( m_num_frames <= MAX_BMAPS_PER_GADGET ) )
+	{
 		// seems pretty stupid that we didn't just use a variable for the first frame and access all
 		// other frames offset from it instead of accessing this bmap_ids[] array, but probably too
 		// much trouble to go through and change this anymore.  How sad..
-		for ( i=0; i<m_num_frames; i++ ) {
+		for ( i = 0; i < m_num_frames; i++ )
+		{
 			bmap_ids[i] = first_frame + i;
-		}	
-	}	
+		}
+	}
 
-	// flag that this control is using bitmaps for art	
+	// flag that this control is using bitmaps for art
 	uses_bmaps = 1;
 	return 0;
 }
@@ -136,70 +143,79 @@ void UI_GADGET::draw()
 	UI_GADGET *cur;
 
 	// if hidden, hide children as well
-	if (hidden){
+	if ( hidden )
+	{
 		return;
 	}
 
-	if (children) {
+	if ( children )
+	{
 		cur = children;
-		do {
+		do
+		{
 			cur->draw();
 			cur = cur->next;
 
-		} while (cur != children);
+		}
+		while ( cur != children );
 	}
 }
 
-//	Free up bitmaps used by the gadget, and call children to destroy themselves as well.
+//  Free up bitmaps used by the gadget, and call children to destroy themselves as well.
 //
 void UI_GADGET::destroy()
 {
 	int i;
 	UI_GADGET *cur;
 
-	for ( i=0; i<m_num_frames; i++ ) {
-		if (bmap_ids[i] != -1) {
+	for ( i = 0; i < m_num_frames; i++ )
+	{
+		if ( bmap_ids[i] != -1 )
+		{
 			// we need to unload here rather than release since some controls
 			// may still need access to the bitmap slot.  if it can be released
 			// then the child should do it - taylor
-			bm_unload(bmap_ids[i]);
+			bm_unload ( bmap_ids[i] );
 			bmap_ids[i] = -1;
 		}
 	}
 
-	if (children) {
+	if ( children )
+	{
 		cur = children;
-		do {
+		do
+		{
 			cur->destroy();
 			cur = cur->next;
 
-		} while (cur != children);
+		}
+		while ( cur != children );
 	}
 }
 
 // Use this if you need to change the size and position of a gadget after you have created it.
 //
-void UI_GADGET::update_dimensions(int _x, int _y, int _w, int _h)
+void UI_GADGET::update_dimensions ( int _x, int _y, int _w, int _h )
 {
 	if ( _x != -1 ) x = _x;
 	if ( _y != -1 ) y = _y;
 	if ( _w != -1 ) w = _w;
-	if ( _h != -1 ) h = _h;	
+	if ( _h != -1 ) h = _h;
 }
 
-void UI_GADGET::get_dimensions(int *x_, int *y_, int *w_, int *h_)
+void UI_GADGET::get_dimensions ( int *x_, int *y_, int *w_, int *h_ )
 {
 	*x_ = x;
 	*y_ = y;
 	*w_ = w;
-	*h_ = h;	
+	*h_ = h;
 }
 
 // Hide (or show) a gadget.
 //  n != 0: Hide gadget
 //  n == 0: Show gadget
 //
-void UI_GADGET::hide(int n)
+void UI_GADGET::hide ( int n )
 {
 	hidden = n ? 1 : 0;
 }
@@ -214,24 +230,24 @@ void UI_GADGET::unhide()
 //
 void UI_GADGET::capture_mouse()
 {
-	my_wnd->capture_mouse(this);
+	my_wnd->capture_mouse ( this );
 }
 
 // Check if (return true if):
-//   mouse_captured():	this gadget has the mouse captured.
-//   mouse_captured(x):	gadget x has the mouse captured.
+//   mouse_captured():  this gadget has the mouse captured.
+//   mouse_captured(x): gadget x has the mouse captured.
 //
-int UI_GADGET::mouse_captured(UI_GADGET *gadget)
+int UI_GADGET::mouse_captured ( UI_GADGET *gadget )
 {
-	if (!gadget)
+	if ( !gadget )
 		gadget = this;
 
-	return (my_wnd->mouse_captured_gadget == gadget);
+	return ( my_wnd->mouse_captured_gadget == gadget );
 }
 
 // Set up the gadget and registers it with the UI window
 //
-void UI_GADGET::base_create(UI_WINDOW *wnd, int _kind, int _x, int _y, int _w, int _h)
+void UI_GADGET::base_create ( UI_WINDOW *wnd, int _kind, int _x, int _y, int _w, int _h )
 {
 	int i;
 
@@ -249,7 +265,7 @@ void UI_GADGET::base_create(UI_WINDOW *wnd, int _kind, int _x, int _y, int _w, i
 	next = prev = this;
 
 	// this actually links the gadget into the UI window's top level family (as the youngest gadget)
-	set_parent(NULL);
+	set_parent ( NULL );
 
 	// initialize variables
 	hotkey = -1;
@@ -262,12 +278,13 @@ void UI_GADGET::base_create(UI_WINDOW *wnd, int _kind, int _x, int _y, int _w, i
 	linked_to_hotspot = 0;
 	uses_bmaps = 0;
 	m_num_frames = 0;
-	for ( i=0; i<MAX_BMAPS_PER_GADGET; i++ ) {
+	for ( i = 0; i < MAX_BMAPS_PER_GADGET; i++ )
+	{
 		bmap_ids[i] = -1;
 	}
 }
 
-void UI_GADGET::set_hotkey(int key)
+void UI_GADGET::set_hotkey ( int key )
 {
 	hotkey = key;
 }
@@ -275,7 +292,7 @@ void UI_GADGET::set_hotkey(int key)
 // Far as I can tell, the callback function is handled differently for each gadget type, if
 // handled by a given gadget type at all.
 //
-void UI_GADGET::set_callback(void (*_user_function)(void))
+void UI_GADGET::set_callback ( void ( *_user_function ) ( void ) )
 {
 	user_function = _user_function;
 }
@@ -287,7 +304,7 @@ UI_GADGET *UI_GADGET::get_next()
 	UI_GADGET *tmp;
 
 	tmp = next;
-	while ((tmp != this) && tmp->disabled_flag)
+	while ( ( tmp != this ) && tmp->disabled_flag )
 		tmp = tmp->next;
 
 	return tmp;
@@ -300,7 +317,7 @@ UI_GADGET *UI_GADGET::get_prev()
 	UI_GADGET *tmp;
 
 	tmp = prev;
-	while ((tmp != this) && tmp->disabled_flag)
+	while ( ( tmp != this ) && tmp->disabled_flag )
 		tmp = tmp->prev;
 
 	return tmp;
@@ -328,31 +345,34 @@ int UI_GADGET::has_focus()
 
 // get mouse pointer position relative to gadget's origin (UL corner)
 //
-void UI_GADGET::get_mouse_pos(int *xx, int *yy)
+void UI_GADGET::get_mouse_pos ( int *xx, int *yy )
 {
-	if (xx)
+	if ( xx )
 		*xx = ui_mouse.x - x;
-	if (yy)
+	if ( yy )
 		*yy = ui_mouse.y - y;
 }
 
 // Call process() for all children of gadget.  As a base gadget for all other gadget types,
 // it doesn't actually do anything for itself.
 //
-void UI_GADGET::process(int focus)
+void UI_GADGET::process ( int focus )
 {
 	UI_GADGET *tmp;
 
-	if (disabled_flag)
+	if ( disabled_flag )
 		return;
 
 	tmp = children;  // process all children of gadget
-	if (tmp) {
-		do {
+	if ( tmp )
+	{
+		do
+		{
 			tmp->process();
 			tmp = tmp->next;
 
-		} while (tmp != children);
+		}
+		while ( tmp != children );
 	}
 }
 
@@ -365,33 +385,44 @@ int UI_GADGET::is_mouse_on()
 	int mask_w, mask_h;
 
 	// if linked to a hotspot, use the mask for determination
-	if (linked_to_hotspot) {
-		mask_data = (ubyte*)my_wnd->get_mask_data(&mask_w, &mask_h);
-		if ( mask_data == NULL ) {
-			nprintf(("Warning", "No mask defined, but control is linked to hotspot\n"));
+	if ( linked_to_hotspot )
+	{
+		mask_data = ( ubyte * ) my_wnd->get_mask_data ( &mask_w, &mask_h );
+		if ( mask_data == NULL )
+		{
+			nprintf ( ( "Warning", "No mask defined, but control is linked to hotspot\n" ) );
 			Int3();
 			return 0;
 		}
 
 		// if the mouse values are out of range of the bitmap
 		// NOTE : this happens when using smaller mask bitmaps than the screen resolution (during development)
-		if((ui_mouse.x >= mask_w) || (ui_mouse.y >= mask_h)){
+		if ( ( ui_mouse.x >= mask_w ) || ( ui_mouse.y >= mask_h ) )
+		{
 			return 0;
 		}
 
 		// check the pixel value under the mouse
 		offset = ui_mouse.y * mask_w + ui_mouse.x;
-		pixel_val = *(mask_data + offset);
-		if (pixel_val == hotspot_num){
+		pixel_val = * ( mask_data + offset );
+		if ( pixel_val == hotspot_num )
+		{
 			return 1;
-		} else {
+		}
+		else
+		{
 			return 0;
 		}
-	// otherwise, we just check the bounding box area
-	} else {
-		if ((ui_mouse.x >= x) && (ui_mouse.x < x + w) && (ui_mouse.y >= y) && (ui_mouse.y < y + h) ){
+		// otherwise, we just check the bounding box area
+	}
+	else
+	{
+		if ( ( ui_mouse.x >= x ) && ( ui_mouse.x < x + w ) && ( ui_mouse.y >= y ) && ( ui_mouse.y < y + h ) )
+		{
 			return 1;
-		} else {
+		}
+		else
+		{
 			return 0;
 		}
 	}
@@ -402,21 +433,24 @@ int UI_GADGET::is_mouse_on()
 int UI_GADGET::is_mouse_on_children()
 {
 	UI_GADGET *tmp;
-	
+
 	tmp = children;
-	if (tmp) {
-		do {
-			if (tmp->is_mouse_on())
+	if ( tmp )
+	{
+		do
+		{
+			if ( tmp->is_mouse_on() )
 				return 1;
-			if (tmp->is_mouse_on_children())
+			if ( tmp->is_mouse_on_children() )
 				return 1;
 
 			tmp = tmp->next;
 
-		} while (tmp != children);
+		}
+		while ( tmp != children );
 	}
 
-	return 0;	
+	return 0;
 }
 
 void UI_GADGET::disable()
@@ -427,7 +461,7 @@ void UI_GADGET::disable()
 // Enables (or possibly disables) the gadget.  n is an optional argument.  If not supplied,
 // enables the garget.  If supplied, enables garget if n is true, disables it if n is false.
 //
-void UI_GADGET::enable(int n)
+void UI_GADGET::enable ( int n )
 {
 	disabled_flag = n ? 0 : 1;
 }
@@ -446,20 +480,23 @@ int UI_GADGET::enabled()
 	return !disabled_flag;
 }
 
-void UI_GADGET::drag_with_children( int dx, int dy )
+void UI_GADGET::drag_with_children ( int dx, int dy )
 {
 	UI_GADGET *tmp;
 
 	x = dx + base_start_x;
 	y = dy + base_start_y;
-	
+
 	tmp = children;
-	if (tmp) {
-		do {
-			tmp->drag_with_children(dx, dy);
+	if ( tmp )
+	{
+		do
+		{
+			tmp->drag_with_children ( dx, dy );
 			tmp = tmp->next;
 
-		} while (tmp != children);
+		}
+		while ( tmp != children );
 	}
 }
 
@@ -470,14 +507,17 @@ void UI_GADGET::start_drag_with_children()
 	base_dragging = 1;
 	base_start_x = x;
 	base_start_y = y;
-	
+
 	tmp = children;
-	if (tmp) {
-		do {
+	if ( tmp )
+	{
+		do
+		{
 			tmp->start_drag_with_children();
 			tmp = tmp->next;
 
-		} while (tmp != children);
+		}
+		while ( tmp != children );
 	}
 }
 
@@ -487,43 +527,55 @@ void UI_GADGET::stop_drag_with_children()
 
 	base_dragging = 0;
 	tmp = children;
-	if (tmp) {
-		do {
+	if ( tmp )
+	{
+		do
+		{
 			tmp->stop_drag_with_children();
 			tmp = tmp->next;
 
-		} while (tmp != children);
+		}
+		while ( tmp != children );
 	}
 }
 
 // Returns 1 if moving
 int UI_GADGET::check_move()
 {
-	#if 0
-		if ( parent != NULL ) return base_dragging;
+#if 0
+	if ( parent != NULL ) return base_dragging;
 
-		if ( !base_dragging )	{
+	if ( !base_dragging )
+	{
 
-			if ( B2_JUST_PRESSED )	{
-				if ( is_mouse_on() || is_mouse_on_children() ) {
-					start_drag_with_children();
-					base_drag_x = ui_mouse.x;
-					base_drag_y = ui_mouse.y;
-					return 1;
-				} else {
-					return 0;
-				}
-			} else 
-				return 0;
-		} else {
-			drag_with_children(ui_mouse.x - base_drag_x,ui_mouse.y - base_drag_y);
-			nprintf(( "UI", "UI: X=%d, Y=%d, Delta=(%d,%d)\n", x, y, (ui_mouse.x - base_drag_x), (ui_mouse.y - base_drag_y) ));
-			if (B2_RELEASED)	{
-				stop_drag_with_children();
+		if ( B2_JUST_PRESSED )
+		{
+			if ( is_mouse_on() || is_mouse_on_children() )
+			{
+				start_drag_with_children();
+				base_drag_x = ui_mouse.x;
+				base_drag_y = ui_mouse.y;
+				return 1;
 			}
-			return 1;
+			else
+			{
+				return 0;
+			}
 		}
-	#endif
+		else
+			return 0;
+	}
+	else
+	{
+		drag_with_children ( ui_mouse.x - base_drag_x, ui_mouse.y - base_drag_y );
+		nprintf ( ( "UI", "UI: X=%d, Y=%d, Delta=(%d,%d)\n", x, y, ( ui_mouse.x - base_drag_x ), ( ui_mouse.y - base_drag_y ) ) );
+		if ( B2_RELEASED )
+		{
+			stop_drag_with_children();
+		}
+		return 1;
+	}
+#endif
 	return 0;
 }
 
@@ -538,17 +590,22 @@ int UI_GADGET::check_move()
 //
 void UI_GADGET::remove_from_family()
 {
-	if (parent) {
-		if (parent->children == this) {
-			if (next == this)  // an only child?
+	if ( parent )
+	{
+		if ( parent->children == this )
+		{
+			if ( next == this ) // an only child?
 				parent->children = NULL;  // if so, parent now has no children
 			else
 				parent->children = next;  // next sibling is now the eldest
 		}
 
-	} else {
-		if (my_wnd->first_gadget == this) {
-			if (next == this)  // an only child?
+	}
+	else
+	{
+		if ( my_wnd->first_gadget == this )
+		{
+			if ( next == this ) // an only child?
 				my_wnd->first_gadget = NULL;  // if so, parent now has no children
 			else
 				my_wnd->first_gadget = next;  // next sibling is now the eldest
@@ -556,7 +613,8 @@ void UI_GADGET::remove_from_family()
 	}
 
 	parent = NULL;
-	if (next != this) {  // does gadget have siblings?
+	if ( next != this )  // does gadget have siblings?
+	{
 		next->prev = prev;
 		prev->next = next;
 	}
@@ -567,16 +625,20 @@ void UI_GADGET::remove_from_family()
 // Put gadget into a new family (removing from old one if needed first).
 // See remove_from_family() for definition of what a family is.
 //
-void UI_GADGET::set_parent(UI_GADGET *daddy)
+void UI_GADGET::set_parent ( UI_GADGET *daddy )
 {
 	remove_from_family();
 	parent = daddy;
 
-	if (!daddy) {
-		if (!my_wnd->first_gadget) {
+	if ( !daddy )
+	{
+		if ( !my_wnd->first_gadget )
+		{
 			my_wnd->first_gadget = this;
 
-		} else {
+		}
+		else
+		{
 			UI_GADGET *eldest_sibling, *youngest_sibling;
 
 			eldest_sibling = my_wnd->first_gadget;
@@ -592,10 +654,13 @@ void UI_GADGET::set_parent(UI_GADGET *daddy)
 		return;
 	}
 
-	if (!daddy->children) {
+	if ( !daddy->children )
+	{
 		daddy->children = this;
 
-	} else {
+	}
+	else
+	{
 		UI_GADGET *eldest_sibling, *youngest_sibling;
 
 		eldest_sibling = daddy->children;

@@ -22,38 +22,38 @@
 /* These are function pointer prototypes provided for library loading */
 
 /* Only one function doesn't return an int or a float */
-typedef int ( SCP_EXT_CALLCONV *SCPTRACKIR_PFINIT )( HWND );
+typedef int ( SCP_EXT_CALLCONV *SCPTRACKIR_PFINIT ) ( HWND );
 
 /* All other trackir functions return an int or a float
  *  and take no parameters
  */
-typedef int ( SCP_EXT_CALLCONV *SCPTRACKIR_PFINTVOID )( );
-typedef float ( SCP_EXT_CALLCONV *SCPTRACKIR_PFFLOATVOID )( );
+typedef int ( SCP_EXT_CALLCONV *SCPTRACKIR_PFINTVOID ) ( );
+typedef float ( SCP_EXT_CALLCONV *SCPTRACKIR_PFFLOATVOID ) ( );
 
 class TrackIRDLL : public SCP_ExternalCode
 {
 public:
 	TrackIRDLL( )
 	{
-		/* Load the DLL and functions 
+		/* Load the DLL and functions
 		 * If this is done globally, we'll be found by MSPDBDEBUGGING :)
 		 */
 
 		Reset( );
 
-		if ( !LoadExternal( TRACKIRBRIDGEDLLNAME ) )
+		if ( !LoadExternal ( TRACKIRBRIDGEDLLNAME ) )
 			return;
 
-		m_Init = (SCPTRACKIR_PFINIT)LoadFunction( "SCPTIR_Init" );
-		m_Close = (SCPTRACKIR_PFINTVOID)LoadFunction( "SCPTIR_Close" );
-		m_Query = (SCPTRACKIR_PFINTVOID)LoadFunction( "SCPTIR_Query" );
+		m_Init = ( SCPTRACKIR_PFINIT ) LoadFunction ( "SCPTIR_Init" );
+		m_Close = ( SCPTRACKIR_PFINTVOID ) LoadFunction ( "SCPTIR_Close" );
+		m_Query = ( SCPTRACKIR_PFINTVOID ) LoadFunction ( "SCPTIR_Query" );
 
-		m_GetX = (SCPTRACKIR_PFFLOATVOID)LoadFunction( "SCPTIR_GetX" );
-		m_GetY = (SCPTRACKIR_PFFLOATVOID)LoadFunction( "SCPTIR_GetY" );
-		m_GetZ = (SCPTRACKIR_PFFLOATVOID)LoadFunction( "SCPTIR_GetZ" );
-		m_GetRoll = (SCPTRACKIR_PFFLOATVOID)LoadFunction( "SCPTIR_GetRoll" );
-		m_GetPitch = (SCPTRACKIR_PFFLOATVOID)LoadFunction( "SCPTIR_GetPitch" );
-		m_GetYaw = (SCPTRACKIR_PFFLOATVOID)LoadFunction( "SCPTIR_GetYaw" );
+		m_GetX = ( SCPTRACKIR_PFFLOATVOID ) LoadFunction ( "SCPTIR_GetX" );
+		m_GetY = ( SCPTRACKIR_PFFLOATVOID ) LoadFunction ( "SCPTIR_GetY" );
+		m_GetZ = ( SCPTRACKIR_PFFLOATVOID ) LoadFunction ( "SCPTIR_GetZ" );
+		m_GetRoll = ( SCPTRACKIR_PFFLOATVOID ) LoadFunction ( "SCPTIR_GetRoll" );
+		m_GetPitch = ( SCPTRACKIR_PFFLOATVOID ) LoadFunction ( "SCPTIR_GetPitch" );
+		m_GetYaw = ( SCPTRACKIR_PFFLOATVOID ) LoadFunction ( "SCPTIR_GetYaw" );
 		m_enabled = true;
 	}
 
@@ -71,7 +71,7 @@ public:
 	void Reset( )
 	{
 		m_Init = NULL;
-		m_Close = NULL; 
+		m_Close = NULL;
 		m_Query = NULL;
 		m_GetX = NULL;
 		m_GetY = NULL;
@@ -83,10 +83,10 @@ public:
 	}
 
 	/* Returns 0 on success */
-	int Init( HWND hwnd )
+	int Init ( HWND hwnd )
 	{
 		if ( m_Init )
-			return m_Init( hwnd );
+			return m_Init ( hwnd );
 		return 0;
 	}
 

@@ -14,7 +14,7 @@
 //Struct used to hold data about file defaults
 typedef struct def_file
 {
-	char* filename;
+	char *filename;
 	char *contents;
 } def_file;
 
@@ -32,29 +32,29 @@ extern char *Default_fonts_table;
 //**********
 def_file Default_files[] =
 {
-	{ "species_defs.tbl",		Default_species_table },
-	{ "iff_defs.tbl",			Default_iff_table },
-	{ "objecttypes.tbl",		Default_shiptypes_table },
-	{ "ai_profiles.tbl",		Default_ai_profiles_table },
-	{ "autopilot.tbl",			Default_autopilot_table },
-	{ "fonts.tbl",				Default_fonts_table },
+	{ "species_defs.tbl",       Default_species_table },
+	{ "iff_defs.tbl",           Default_iff_table },
+	{ "objecttypes.tbl",        Default_shiptypes_table },
+	{ "ai_profiles.tbl",        Default_ai_profiles_table },
+	{ "autopilot.tbl",          Default_autopilot_table },
+	{ "fonts.tbl",              Default_fonts_table },
 };
 
-static int Num_default_files = sizeof(Default_files) / sizeof(def_file);
+static int Num_default_files = sizeof ( Default_files ) / sizeof ( def_file );
 //**********
 
-char *defaults_get_file(char *filename)
+char *defaults_get_file ( char *filename )
 {
-	for(int i = 0; i < Num_default_files; i++)
+	for ( int i = 0; i < Num_default_files; i++ )
 	{
-		if(!stricmp(Default_files[i].filename, filename))
+		if ( !stricmp ( Default_files[i].filename, filename ) )
 		{
 			return Default_files[i].contents;
 		}
 	}
 
 	//WMC - This is really bad, because it means we have a default table missing.
-	Error(LOCATION, "Default table '%s' missing from executable - contact a coder.", filename);
+	Error ( LOCATION, "Default table '%s' missing from executable - contact a coder.", filename );
 	return NULL;
 }
 

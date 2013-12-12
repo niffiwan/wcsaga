@@ -12,20 +12,20 @@
 
 class VoiceActingManager : public CDialog
 {
-// Construction
+	// Construction
 public:
-	VoiceActingManager(CWnd* pParent = NULL);   // standard constructor
+	VoiceActingManager ( CWnd *pParent = NULL ); // standard constructor
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(VoiceActingManager)
 	enum { IDD = IDD_VOICE_MANAGER };
-	CString	m_abbrev_briefing;
-	CString	m_abbrev_campaign;
-	CString	m_abbrev_command_briefing;
-	CString	m_abbrev_debriefing;
-	CString	m_abbrev_message;
-	CString	m_abbrev_mission;
-	CString	m_example;
+	CString m_abbrev_briefing;
+	CString m_abbrev_campaign;
+	CString m_abbrev_command_briefing;
+	CString m_abbrev_debriefing;
+	CString m_abbrev_message;
+	CString m_abbrev_mission;
+	CString m_example;
 	BOOL m_no_replace;
 	CString m_script_entry_format;
 	BOOL m_export_everything;
@@ -36,25 +36,25 @@ public:
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(VoiceActingManager)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	CString get_suffix();
-	int calc_digits(int size);
+	int calc_digits ( int size );
 	void build_example();
-	void build_example(CString section);
-	CString generate_filename(CString section, int number, int digits);
-	char *get_message_sender(char *message);
+	void build_example ( CString section );
+	CString generate_filename ( CString section, int number, int digits );
+	char *get_message_sender ( char *message );
 
 	CFILE *fp;
-	int fout(char *format, ...);
+	int fout ( char *format, ... );
 
 	// Generated message map functions
 	//{{AFX_MSG(VoiceActingManager)

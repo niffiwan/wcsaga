@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -17,39 +17,39 @@
 
 class ship_flags_dlg : public CDialog
 {
-// Construction
+	// Construction
 public:
-	ship_flags_dlg(CWnd* pParent = NULL);   // standard constructor
+	ship_flags_dlg ( CWnd *pParent = NULL ); // standard constructor
 	void OnOK();
-	void update_ship(int ship);
-	void setup(int n);
-	int tristate_set(int val, int cur_state);
+	void update_ship ( int ship );
+	void setup ( int n );
+	int tristate_set ( int val, int cur_state );
 	void set_modified();
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(ship_flags_dlg)
 	enum { IDD = IDD_SHIP_FLAGS };
-	CButton	m_red_alert_carry;
-	CButton	m_scannable;
-	CButton	m_reinforcement;
-	CButton	m_protect_ship;
-	CButton	m_beam_protect_ship;
-	CButton	m_no_dynamic;
-	CButton	m_no_arrival_music;
-	CButton	m_kamikaze;
-	CButton	m_invulnerable;
-	CButton	m_targetable_as_bomb;
-	CButton	m_ignore_count;
-	CButton	m_hidden;
-	CButton	m_primitive_sensors;
-	CButton	m_no_subspace_drive;
-	CButton	m_affected_by_gravity;
-	CButton	m_toggle_subsystem_scanning;
-	CButton	m_escort;
-	CButton	m_destroy;
-	CButton	m_cargo_known;
-	CButton	m_special_warpin;
-	CButton	m_disable_messages;
+	CButton m_red_alert_carry;
+	CButton m_scannable;
+	CButton m_reinforcement;
+	CButton m_protect_ship;
+	CButton m_beam_protect_ship;
+	CButton m_no_dynamic;
+	CButton m_no_arrival_music;
+	CButton m_kamikaze;
+	CButton m_invulnerable;
+	CButton m_targetable_as_bomb;
+	CButton m_ignore_count;
+	CButton m_hidden;
+	CButton m_primitive_sensors;
+	CButton m_no_subspace_drive;
+	CButton m_affected_by_gravity;
+	CButton m_toggle_subsystem_scanning;
+	CButton m_escort;
+	CButton m_destroy;
+	CButton m_cargo_known;
+	CButton m_special_warpin;
+	CButton m_disable_messages;
 	CButton m_no_death_scream;
 	CButton m_always_death_scream;
 	CButton m_guardian;
@@ -59,22 +59,22 @@ public:
 	CButton m_nav_carry;
 	CButton m_nav_needslink;
 	CButton m_hide_ship_name;
-	CButton	m_set_class_dynamically;
-	CSpinButtonCtrl	m_destroy_spin;
+	CButton m_set_class_dynamically;
+	CSpinButtonCtrl m_destroy_spin;
 	numeric_edit_control m_kdamage;
 	numeric_edit_control m_destroy_value;
 	numeric_edit_control m_escort_value;
 	numeric_edit_control m_respawn_priority;
 	//}}AFX_DATA
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(ship_flags_dlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 	int p_enable;  // used to enable(1)/disable(0) controls based on if a player ship
 

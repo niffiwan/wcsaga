@@ -1,11 +1,11 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
-*/ 
+*/
 
 
 
@@ -37,25 +37,25 @@
             WHEN_OUTSIDE;                                               \
         }                                                               \
         if(x1 < XMIN) {                                        \
-			INT_SCALE(temp,(y2 - y1),(XMIN - x1),(x2 - x1));      \
+            INT_SCALE(temp,(y2 - y1),(XMIN - x1),(x2 - x1));      \
             if((y1 += temp) > YMAX) { WHEN_OUTSIDE; }          \
             x1 = XMIN;                                         \
             WHEN_CLIPPED;                                               \
         }                                                               \
         if(x2 > XMAX) {                                        \
-			INT_SCALE(temp,(y2 - y1),(x2 - XMAX),(x2 - x1));      \
+            INT_SCALE(temp,(y2 - y1),(x2 - XMAX),(x2 - x1));      \
             if((y2 -= temp) < YMIN) { WHEN_OUTSIDE; }          \
             x2 = XMAX;                                         \
             WHEN_CLIPPED;                                               \
         }                                                               \
         if(y1 < YMIN) {                                        \
-			INT_SCALE(temp,(x2 - x1),(YMIN - y1),(y2 - y1));      \
+            INT_SCALE(temp,(x2 - x1),(YMIN - y1),(y2 - y1));      \
             x1 += temp;                                                 \
             y1 = YMIN;                                         \
             WHEN_CLIPPED;                                               \
         }                                                               \
         if(y2 > YMAX) {                                        \
-			INT_SCALE(temp,(x2 - x1),(y2 - YMAX),(y2 - y1));      \
+            INT_SCALE(temp,(x2 - x1),(y2 - YMAX),(y2 - y1));      \
             x2 -= temp;                                                 \
             y2 = YMAX;                                         \
             WHEN_CLIPPED;                                               \
@@ -66,25 +66,25 @@
             WHEN_OUTSIDE;                                               \
         }                                                               \
         if(x1 > XMAX) {                                        \
-			INT_SCALE(temp,(y2 - y1),(x1 - XMAX),(x1 - x2));      \
+            INT_SCALE(temp,(y2 - y1),(x1 - XMAX),(x1 - x2));      \
             if((y1 += temp) > YMAX) { WHEN_OUTSIDE; }          \
             x1 = XMAX;                                         \
             WHEN_CLIPPED;                                               \
         }                                                               \
         if(x2 < XMIN) {                                        \
-			INT_SCALE(temp,(y2 - y1),(XMIN - x2),(x1 - x2));      \
+            INT_SCALE(temp,(y2 - y1),(XMIN - x2),(x1 - x2));      \
             if((y2 -= temp) < YMIN) { WHEN_OUTSIDE; }          \
             x2 = XMIN;                                         \
             WHEN_CLIPPED;                                               \
         }                                                               \
         if(y1 < YMIN) {                                        \
-			INT_SCALE(temp,(x1 - x2),(YMIN - y1),(y2 - y1));      \
+            INT_SCALE(temp,(x1 - x2),(YMIN - y1),(y2 - y1));      \
             x1 -= temp;                                                 \
             y1 = YMIN;                                         \
             WHEN_CLIPPED;                                               \
         }                                                               \
         if(y2 > YMAX) {                                        \
-			INT_SCALE(temp,(x1 - x2),(y2 - YMAX),(y2 - y1));      \
+            INT_SCALE(temp,(x1 - x2),(y2 - YMAX),(y2 - y1));      \
             x2 += temp;                                                 \
             y2 = YMAX;                                         \
             WHEN_CLIPPED;                                               \
@@ -112,25 +112,25 @@
             WHEN_OUTSIDE;                                               \
         }                                                               \
         if(x1 < XMIN) {                                        \
-			FL_SCALE(temp,(y2 - y1),(XMIN - x1),(x2 - x1));      \
+            FL_SCALE(temp,(y2 - y1),(XMIN - x1),(x2 - x1));      \
             if((y1 += temp) > YMAX) { WHEN_OUTSIDE; }          \
             x1 = XMIN;                                         \
             WHEN_CLIPPED;                                               \
         }                                                               \
         if(x2 > XMAX) {                                        \
-			FL_SCALE(temp,(y2 - y1),(x2 - XMAX),(x2 - x1));      \
+            FL_SCALE(temp,(y2 - y1),(x2 - XMAX),(x2 - x1));      \
             if((y2 -= temp) < YMIN) { WHEN_OUTSIDE; }          \
             x2 = XMAX;                                         \
             WHEN_CLIPPED;                                               \
         }                                                               \
         if(y1 < YMIN) {                                        \
-			FL_SCALE(temp,(x2 - x1),(YMIN - y1),(y2 - y1));      \
+            FL_SCALE(temp,(x2 - x1),(YMIN - y1),(y2 - y1));      \
             x1 += temp;                                                 \
             y1 = YMIN;                                         \
             WHEN_CLIPPED;                                               \
         }                                                               \
         if(y2 > YMAX) {                                        \
-			FL_SCALE(temp,(x2 - x1),(y2 - YMAX),(y2 - y1));      \
+            FL_SCALE(temp,(x2 - x1),(y2 - YMAX),(y2 - y1));      \
             x2 -= temp;                                                 \
             y2 = YMAX;                                         \
             WHEN_CLIPPED;                                               \
@@ -141,25 +141,25 @@
             WHEN_OUTSIDE;                                               \
         }                                                               \
         if(x1 > XMAX) {                                        \
-			FL_SCALE(temp,(y2 - y1),(x1 - XMAX),(x1 - x2));      \
+            FL_SCALE(temp,(y2 - y1),(x1 - XMAX),(x1 - x2));      \
             if((y1 += temp) > YMAX) { WHEN_OUTSIDE; }          \
             x1 = XMAX;                                         \
             WHEN_CLIPPED;                                               \
         }                                                               \
         if(x2 < XMIN) {                                        \
-			FL_SCALE(temp,(y2 - y1),(XMIN - x2),(x1 - x2));      \
+            FL_SCALE(temp,(y2 - y1),(XMIN - x2),(x1 - x2));      \
             if((y2 -= temp) < YMIN) { WHEN_OUTSIDE; }          \
             x2 = XMIN;                                         \
             WHEN_CLIPPED;                                               \
         }                                                               \
         if(y1 < YMIN) {                                        \
-			FL_SCALE(temp,(x1 - x2),(YMIN - y1),(y2 - y1));      \
+            FL_SCALE(temp,(x1 - x2),(YMIN - y1),(y2 - y1));      \
             x1 -= temp;                                                 \
             y1 = YMIN;                                         \
             WHEN_CLIPPED;                                               \
         }                                                               \
         if(y2 > YMAX) {                                        \
-			FL_SCALE(temp,(x1 - x2),(y2 - YMAX),(y2 - y1));      \
+            FL_SCALE(temp,(x1 - x2),(y2 - YMAX),(y2 - y1));      \
             x2 += temp;                                                 \
             y2 = YMAX;                                         \
             WHEN_CLIPPED;                                               \

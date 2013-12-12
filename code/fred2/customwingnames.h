@@ -12,37 +12,37 @@
 
 class CustomWingNames : public CDialog
 {
-// Construction
+	// Construction
 public:
-	CustomWingNames(CWnd* pParent = NULL);   // standard constructor
+	CustomWingNames ( CWnd *pParent = NULL ); // standard constructor
 	int query_modified();
 	void OnOK();
 	void OnCancel();
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(CustomWingNames)
 	enum { IDD = IDD_CUSTOM_WING_NAMES };
-	CString	m_squadron_1;
-	CString	m_squadron_2;
-	CString	m_squadron_3;
-	CString	m_squadron_4;
-	CString	m_squadron_5;
-	CString	m_starting_1;
-	CString	m_starting_2;
-	CString	m_starting_3;
-	CString	m_tvt_1;
-	CString	m_tvt_2;
+	CString m_squadron_1;
+	CString m_squadron_2;
+	CString m_squadron_3;
+	CString m_squadron_4;
+	CString m_squadron_5;
+	CString m_starting_1;
+	CString m_starting_2;
+	CString m_starting_3;
+	CString m_tvt_1;
+	CString m_tvt_2;
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CustomWingNames)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions

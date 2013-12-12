@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -11,7 +11,8 @@
 //
 
 
-typedef struct dockpoint_information {
+typedef struct dockpoint_information
+{
 	int dockee_shipnum;
 	int dockee_point;
 } dockpoint_information;
@@ -21,54 +22,54 @@ typedef struct dockpoint_information {
 
 class initial_status : public CDialog
 {
-// Construction
+	// Construction
 public:
-	void dock(object *objp1, int dockpoint1, object *objp2, int dockpoint2);
-	void undock(object *objp1, object *objp2);
+	void dock ( object *objp1, int dockpoint1, object *objp2, int dockpoint2 );
+	void undock ( object *objp1, object *objp2 );
 	void OnOK();
 	int inited;
 	void change_subsys();
-	void change_docker_point(bool store_selection);
-	void change_dockee(bool store_selection);
-	void change_dockee_point(bool store_selection);
+	void change_docker_point ( bool store_selection );
+	void change_dockee ( bool store_selection );
+	void change_dockee_point ( bool store_selection );
 
-	initial_status(CWnd* pParent = NULL);   // standard constructor
+	initial_status ( CWnd *pParent = NULL ); // standard constructor
 	~initial_status();
 
 	int m_ship;
 	int m_multi_edit;
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(initial_status)
 	enum { IDD = IDD_INITIAL_STATUS };
-	CSpinButtonCtrl	m_hull_spin;
-	CSpinButtonCtrl	m_velocity_spin;
-	CSpinButtonCtrl	m_shields_spin;
-	CSpinButtonCtrl	m_damage_spin;
-	int		m_damage;
-	int		m_shields;
-	int		m_force_shields;
-	int		m_velocity;
-	int		m_hull;
-	BOOL	m_has_shields;
-	int		m_locked;
-	CString	m_cargo_name;
-	int		m_primaries_locked;
-	int		m_secondaries_locked;
-	int		m_turrets_locked;
-	int		m_afterburner_locked;
+	CSpinButtonCtrl m_hull_spin;
+	CSpinButtonCtrl m_velocity_spin;
+	CSpinButtonCtrl m_shields_spin;
+	CSpinButtonCtrl m_damage_spin;
+	int     m_damage;
+	int     m_shields;
+	int     m_force_shields;
+	int     m_velocity;
+	int     m_hull;
+	BOOL    m_has_shields;
+	int     m_locked;
+	CString m_cargo_name;
+	int     m_primaries_locked;
+	int     m_secondaries_locked;
+	int     m_turrets_locked;
+	int     m_afterburner_locked;
 
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(initial_status)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions
@@ -89,8 +90,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
-	void list_dockees(int dock_types);
-	void list_dockee_points(int shipnum);
+	void list_dockees ( int dock_types );
+	void list_dockee_points ( int shipnum );
 	void update_docking_info();
 	int cur_subsys;
 

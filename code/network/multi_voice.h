@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -19,13 +19,13 @@
 struct header;
 
 // voice system status defines
-#define MULTI_VOICE_STATUS_IDLE					0			// nothing's happening, do nothing
-#define MULTI_VOICE_STATUS_DENIED				1			// have been denied the token (show a red icon or something)
-#define MULTI_VOICE_STATUS_RECORDING			2			// am currently recording (show a green icon or something)
-#define MULTI_VOICE_STATUS_PLAYING				3			// playing back a stream (show another icon)
+#define MULTI_VOICE_STATUS_IDLE                 0           // nothing's happening, do nothing
+#define MULTI_VOICE_STATUS_DENIED               1           // have been denied the token (show a red icon or something)
+#define MULTI_VOICE_STATUS_RECORDING            2           // am currently recording (show a green icon or something)
+#define MULTI_VOICE_STATUS_PLAYING              3           // playing back a stream (show another icon)
 
 // max recording time for one stream
-#define MULTI_VOICE_MAX_TIME						5000
+#define MULTI_VOICE_MAX_TIME                        5000
 
 // capabilities of this machine (make sure multi_voice_init() is called before referencing these)
 extern int Multi_voice_can_record;
@@ -52,19 +52,19 @@ void multi_voice_reset();
 void multi_voice_process();
 
 // set the default voice quality and duration (if server passes -1, he just broadcasts the qos to all clients)
-void multi_voice_set_vars(int qos,int duration);
+void multi_voice_set_vars ( int qos, int duration );
 
 // voice settings debug console function
 void multi_voice_dcf();
 
 // update the qos and/or duration of recording if the current setting is different from the passed in value
-void multi_voice_maybe_update_vars(int new_qos,int new_duration);
+void multi_voice_maybe_update_vars ( int new_qos, int new_duration );
 
 // the status of the voice system - use this to determine what bitmaps to display, etc see above MULTI_VOICE_STATUS_* defines
 int multi_voice_status();
 
 // <player> sends hit bitflag settings (who he'll receive sound from, etc)
-void multi_voice_set_prefs(int pref_flags);
+void multi_voice_set_prefs ( int pref_flags );
 
 
 // --------------------------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ void multi_voice_process_next_chunk();
 //
 
 // process an incoming voice packet of some kind or another
-void multi_voice_process_packet(unsigned char *data, header *hinfo);
+void multi_voice_process_packet ( unsigned char *data, header *hinfo );
 
 
 // --------------------------------------------------------------------------------------------------

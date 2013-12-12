@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -19,36 +19,36 @@
 
 class ship_select : public CDialog
 {
-// Construction
+	// Construction
 public:
 	void update_status();
 	void OnOK();
 	void create_list();
-	ship_select(CWnd* pParent = NULL);   // standard constructor
+	ship_select ( CWnd *pParent = NULL ); // standard constructor
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(ship_select)
 	enum { IDD = IDD_SHIP_SELECT };
-	CListBox	m_wing_list;
-	CListBox	m_ship_list;
-	BOOL	m_filter_ships;
-	BOOL	m_filter_starts;
-	BOOL	m_filter_waypoints;
-	BOOL	m_filter_iff[MAX_IFFS];
+	CListBox    m_wing_list;
+	CListBox    m_ship_list;
+	BOOL    m_filter_ships;
+	BOOL    m_filter_starts;
+	BOOL    m_filter_waypoints;
+	BOOL    m_filter_iff[MAX_IFFS];
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(ship_select)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
-	void OnFilterShipsIFF(int iff);
+	void OnFilterShipsIFF ( int iff );
 
 	// Generated message map functions
 	//{{AFX_MSG(ship_select)

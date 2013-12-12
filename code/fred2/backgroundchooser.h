@@ -12,28 +12,28 @@
 
 class BackgroundChooser : public CDialog
 {
-// Construction
+	// Construction
 public:
-	BackgroundChooser(int numBackgrounds);   // standard constructor
+	BackgroundChooser ( int numBackgrounds ); // standard constructor
 	void OnOK();
 	void OnCancel();
 
 	int GetChosenBackground();
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(BackgroundChooser)
 	enum { IDD = IDD_BACKGROUND_CHOOSER};
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(BackgroundChooser)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 	int m_numBackgrounds;
 	int m_chosenBackground;

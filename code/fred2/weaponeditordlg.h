@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -16,13 +16,13 @@
 
 class WeaponEditorDlg : public CDialog
 {
-// Construction
+	// Construction
 public:
 	void update_pilot();
 	void OnCancel();
 	void change_selection();
 	void OnOK();
-	WeaponEditorDlg(CWnd* pParent = NULL);   // standard constructor
+	WeaponEditorDlg ( CWnd *pParent = NULL ); // standard constructor
 
 	int m_ammo_max1;
 	int m_ammo_max2;
@@ -34,37 +34,37 @@ public:
 	int m_multi_edit;
 	ship_weapon pilot, *cur_weapon;
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(WeaponEditorDlg)
 	enum { IDD = IDD_WEAPON_EDITOR };
-	CSpinButtonCtrl	m_spin4;
-	CSpinButtonCtrl	m_spin3;
-	CSpinButtonCtrl	m_spin2;
-	CSpinButtonCtrl	m_spin1;
-	int		m_ai_class;
-	int		m_ammo1;
-	int		m_ammo2;
-	int		m_ammo3;
-	int		m_ammo4;
-	int		m_gun1;
-	int		m_gun2;
-	int		m_gun3;
-	int		m_missile1;
-	int		m_missile2;
-	int		m_missile3;
-	int		m_missile4;
-	int		m_cur_item;
+	CSpinButtonCtrl m_spin4;
+	CSpinButtonCtrl m_spin3;
+	CSpinButtonCtrl m_spin2;
+	CSpinButtonCtrl m_spin1;
+	int     m_ai_class;
+	int     m_ammo1;
+	int     m_ammo2;
+	int     m_ammo3;
+	int     m_ammo4;
+	int     m_gun1;
+	int     m_gun2;
+	int     m_gun3;
+	int     m_missile1;
+	int     m_missile2;
+	int     m_missile3;
+	int     m_missile4;
+	int     m_cur_item;
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(WeaponEditorDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions

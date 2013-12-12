@@ -6,12 +6,12 @@
 
 void dbugfile_init();
 void dbugfile_deinit();
-void dbugfile_sprintf(int line, char *file, const char *format, ...);
-void dbugfile_print_matrix_3x3(int line, char *file, float *matrix, char *text);
-void dbugfile_print_matrix_4x4(int line, char *file, float *matrix, char *text);
-void dbugfile_print_counter(int line, char *file, int counter_num, char *string);
+void dbugfile_sprintf ( int line, char *file, const char *format, ... );
+void dbugfile_print_matrix_3x3 ( int line, char *file, float *matrix, char *text );
+void dbugfile_print_matrix_4x4 ( int line, char *file, float *matrix, char *text );
+void dbugfile_print_counter ( int line, char *file, int counter_num, char *string );
 
-#ifdef DBUGFILE_ACTIVE 
+#ifdef DBUGFILE_ACTIVE
 
 #define DBUGFILE_INIT()   dbugfile_init();
 #define DBUGFILE_DEINIT() dbugfile_deinit();
@@ -34,7 +34,7 @@ extern int dbugfile_counters[MAX_COUNTERS];
 #define DBUGFILE_INC_COUNTER(n) if(n < MAX_COUNTERS) dbugfile_counters[n]++;
 #define DBUGFILE_DEC_COUNTER(n) if(n < MAX_COUNTERS) dbugfile_counters[n]--;
 
-#define DBUGFILE_OUTPUT_COUNTER(n,s)	dbugfile_print_counter(__LINE__, __FILE__, n, s);
+#define DBUGFILE_OUTPUT_COUNTER(n,s)    dbugfile_print_counter(__LINE__, __FILE__, n, s);
 
 #else
 

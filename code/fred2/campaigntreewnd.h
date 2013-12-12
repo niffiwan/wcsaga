@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -14,24 +14,24 @@
 
 class campaign_tree_wnd : public CFrameWnd
 {
-	DECLARE_DYNCREATE(campaign_tree_wnd)
+	DECLARE_DYNCREATE ( campaign_tree_wnd )
 
-// Construction
+	// Construction
 public:
 	campaign_tree_wnd();
 
-// Attributes
+	// Attributes
 public:
 
-// Operations
+	// Operations
 public:
 	int error_checker();
-	int fred_check_sexp(int sexp, int type, char *msg, ...);
-	int error(char *msg, ...);
-	int internal_error(char *msg, ...);
+	int fred_check_sexp ( int sexp, int type, char *msg, ... );
+	int error ( char *msg, ... );
+	int internal_error ( char *msg, ... );
 	int save_modified();
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(campaign_tree_wnd)
 	//}}AFX_VIRTUAL
@@ -39,16 +39,16 @@ public:
 private:
 	int g_err;
 
-// Implementation
+	// Implementation
 public:
 	virtual ~campaign_tree_wnd();
-	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
+	virtual BOOL OnCreateClient ( LPCREATESTRUCT lpcs, CCreateContext *pContext );
 
 	// Generated message map functions
 	CSplitterWnd m_splitter;
 
 	//{{AFX_MSG(campaign_tree_wnd)
-	afx_msg void OnUpdateCpgnFileOpen(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateCpgnFileOpen ( CCmdUI *pCmdUI );
 	afx_msg void OnCpgnFileOpen();
 	afx_msg void OnDestroy();
 	afx_msg void OnCpgnFileSave();

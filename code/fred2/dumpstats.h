@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -21,33 +21,33 @@
 
 class DumpStats : public CDialog
 {
-// Construction
+	// Construction
 public:
-	DumpStats(CWnd* pParent = NULL);   // standard constructor
-	void get_mission_stats(CString &buffer);
-	void get_background_stats(CString &buffer);
-	void get_object_stats(CString &buffer);
-	void get_objectives_and_goals(CString &buffer);
-	void get_ship_weapon_selection(CString &buffer);
-	void get_messaging_info(CString &buffer);
-	void get_species_ship_breakdown(CString &buffer);
-	void get_default_ship_loadouts(CString &buffer);
+	DumpStats ( CWnd *pParent = NULL ); // standard constructor
+	void get_mission_stats ( CString &buffer );
+	void get_background_stats ( CString &buffer );
+	void get_object_stats ( CString &buffer );
+	void get_objectives_and_goals ( CString &buffer );
+	void get_ship_weapon_selection ( CString &buffer );
+	void get_messaging_info ( CString &buffer );
+	void get_species_ship_breakdown ( CString &buffer );
+	void get_default_ship_loadouts ( CString &buffer );
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(DumpStats)
 	enum { IDD = IDD_DUMP_STATS };
-		// NOTE: the ClassWizard will add data members here
+	// NOTE: the ClassWizard will add data members here
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(DumpStats)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions

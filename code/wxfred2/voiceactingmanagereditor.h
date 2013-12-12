@@ -2,7 +2,7 @@
  * Created by Ian "Goober5000" Warfield for the FreeSpace2 Source Code Project.
  * You may not sell or otherwise commercially exploit the source or things you
  * create based on the source.
- */ 
+ */
 
 
 
@@ -11,20 +11,20 @@
 
 class dlgVoiceActingManagerEditor : public wxDialog
 {
-	public:
-		// constructor/destructors
-		dlgVoiceActingManagerEditor(wxWindow *parent);
-		~dlgVoiceActingManagerEditor();
+public:
+	// constructor/destructors
+	dlgVoiceActingManagerEditor ( wxWindow *parent );
+	~dlgVoiceActingManagerEditor();
 
-		// event handlers
-		void OnGenerateFileNames(wxCommandEvent &WXUNUSED(event));
+	// event handlers
+	void OnGenerateFileNames ( wxCommandEvent &WXUNUSED ( event ) );
 
-	protected:		
-		// events
-		DECLARE_EVENT_TABLE()
+protected:
+	// events
+	DECLARE_EVENT_TABLE()
 
-	private:
-		// dialog control stuff goes here
+private:
+	// dialog control stuff goes here
 };
 
 #endif

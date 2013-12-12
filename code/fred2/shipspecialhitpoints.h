@@ -15,28 +15,28 @@
 
 class ShipSpecialHitpoints : public CDialog
 {
-// Construction
+	// Construction
 public:
-	ShipSpecialHitpoints(CWnd* pParent = NULL);   // standard constructor
+	ShipSpecialHitpoints ( CWnd *pParent = NULL ); // standard constructor
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(ShipSpecialHitpoints)
 	enum { IDD = IDD_SPECIAL_HITPOINTS };
-	BOOL	m_special_hitpoints_enabled;
-	int		m_shields;
-	int		m_hull;
-	int		m_ship_num;
+	BOOL    m_special_hitpoints_enabled;
+	int     m_shields;
+	int     m_hull;
+	int     m_ship_num;
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(ShipSpecialHitpoints)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions

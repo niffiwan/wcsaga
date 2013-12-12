@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -16,36 +16,36 @@
 
 class reinforcement_editor_dlg : public CDialog
 {
-// Construction
+	// Construction
 public:
 	int query_modified();
 	void OnOK();
 	void OnCancel();
 	void save_data();
 	void update_data();
-	reinforcement_editor_dlg(CWnd* pParent = NULL);   // standard constructor
+	reinforcement_editor_dlg ( CWnd *pParent = NULL ); // standard constructor
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(reinforcement_editor_dlg)
 	enum { IDD = IDD_REINFORCEMENT_EDITOR };
-	CSpinButtonCtrl	m_delay_spin;
-	CSpinButtonCtrl	m_uses_spin;
-	int		m_uses;
-	int		m_delay;
+	CSpinButtonCtrl m_delay_spin;
+	CSpinButtonCtrl m_uses_spin;
+	int     m_uses;
+	int     m_delay;
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(reinforcement_editor_dlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
-	void remove_selected( CListBox *box );
-	void move_messages( CListBox *box );
+	void remove_selected ( CListBox *box );
+	void move_messages ( CListBox *box );
 
 	// Generated message map functions
 	//{{AFX_MSG(reinforcement_editor_dlg)
@@ -67,29 +67,29 @@ private:
 
 class reinforcement_select : public CDialog
 {
-// Construction
+	// Construction
 public:
 	int cur;
 	char name[NAME_LENGTH];
-	reinforcement_select(CWnd* pParent = NULL);   // standard constructor
+	reinforcement_select ( CWnd *pParent = NULL ); // standard constructor
 	void OnOK();
 	void OnCancel();
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(reinforcement_select)
 	enum { IDD = IDD_REINFORCEMENT_SELECT };
-		// NOTE: the ClassWizard will add data members here
+	// NOTE: the ClassWizard will add data members here
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(reinforcement_select)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions

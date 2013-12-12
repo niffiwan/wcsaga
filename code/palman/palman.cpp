@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -17,15 +17,15 @@
 #include "cfile/cfile.h"
 
 
-#define	SQUARE(x) ((x)*(x))
+#define SQUARE(x) ((x)*(x))
 
 #define NUM_BLEND_TABLES 3
 float blend_table_factors[NUM_BLEND_TABLES] = { 0.5f, 1.0f, 1.2f };
 
-ubyte palette_org[256*3];
-ubyte gr_palette[256*3];
-ubyte gr_fade_table[(256*34)*2];
-static ubyte palette_blend_table[NUM_BLEND_TABLES*256*256];
+ubyte palette_org[256 * 3];
+ubyte gr_palette[256 * 3];
+ubyte gr_fade_table[ ( 256 * 34 ) * 2];
+static ubyte palette_blend_table[NUM_BLEND_TABLES * 256 * 256];
 
 int palette_blend_table_calculated = 0;
 int palette_fade_table_calculated = 0;
@@ -35,7 +35,7 @@ uint gr_palette_checksum = 0;
 uint palman_screen_signature = 0;
 
 #define LOOKUP_SIZE (64*64*64)
-ubyte palette_lookup[64*64*64];
+ubyte palette_lookup[64 * 64 * 64];
 
 static char palette_name[128] = { "none" };
 
@@ -49,12 +49,14 @@ ubyte Palman_non_darkening_default[MAX_NONDARK_COLORS][3];
 int Palman_num_nondarkening = 0;
 ubyte Palman_non_darkening[MAX_NONDARK_COLORS][3];
 
-int palman_is_nondarkening(int r,int g, int b)
+int palman_is_nondarkening ( int r, int g, int b )
 {
-	int i;	
+	int i;
 
-	for (i=0; i<Palman_num_nondarkening; i++ )	{
-		if ( (r==Palman_non_darkening[i][0]) && (g==Palman_non_darkening[i][1]) && (b==Palman_non_darkening[i][2]) )	{
+	for ( i = 0; i < Palman_num_nondarkening; i++ )
+	{
+		if ( ( r == Palman_non_darkening[i][0] ) && ( g == Palman_non_darkening[i][1] ) && ( b == Palman_non_darkening[i][2] ) )
+		{
 			return 1;
 		}
 	}
@@ -64,33 +66,36 @@ int palman_is_nondarkening(int r,int g, int b)
 void palman_load_pixels()
 {
 	int rval;
-	if ((rval = setjmp(parse_abort)) != 0) {
-		mprintf(("TABLES: Unable to parse '%s'!  Error code = %i.\n", "pixels.tbl", rval));
+	if ( ( rval = setjmp ( parse_abort ) ) != 0 )
+	{
+		mprintf ( ( "TABLES: Unable to parse '%s'!  Error code = %i.\n", "pixels.tbl", rval ) );
 		return;
 	}
 
 	// open pixels.tbl
-	read_file_text("pixels.tbl", CF_TYPE_TABLES);
+	read_file_text ( "pixels.tbl", CF_TYPE_TABLES );
 	reset_parse();
 
-	// parse pixels	
-	while(!optional_string("#END")){
+	// parse pixels
+	while ( !optional_string ( "#END" ) )
+	{
 		// nondarkening pixel
-		if(required_string("+ND")){
-			stuff_ubyte(&Palman_non_darkening_default[Palman_num_nondarkening_default][0]);
-			stuff_ubyte(&Palman_non_darkening_default[Palman_num_nondarkening_default][1]);
-			stuff_ubyte(&Palman_non_darkening_default[Palman_num_nondarkening_default++][2]);
+		if ( required_string ( "+ND" ) )
+		{
+			stuff_ubyte ( &Palman_non_darkening_default[Palman_num_nondarkening_default][0] );
+			stuff_ubyte ( &Palman_non_darkening_default[Palman_num_nondarkening_default][1] );
+			stuff_ubyte ( &Palman_non_darkening_default[Palman_num_nondarkening_default++][2] );
 		}
 	}
 
 	// set this to be the active table
-	palman_set_nondarkening(Palman_non_darkening_default, Palman_num_nondarkening_default);
+	palman_set_nondarkening ( Palman_non_darkening_default, Palman_num_nondarkening_default );
 }
 
-void palman_set_nondarkening(ubyte colors[MAX_NONDARK_COLORS][3], int size)
+void palman_set_nondarkening ( ubyte colors[MAX_NONDARK_COLORS][3], int size )
 {
 	// if we're supposed to use the passed table
-	memcpy(Palman_non_darkening, colors, MAX_NONDARK_COLORS * 3);
+	memcpy ( Palman_non_darkening, colors, MAX_NONDARK_COLORS * 3 );
 	Palman_num_nondarkening = size;
 }
 
@@ -98,82 +103,94 @@ void palette_cache_clear()
 {
 	int i;
 
-	for (i=0; i<LOOKUP_SIZE; i++ )	{
+	for ( i = 0; i < LOOKUP_SIZE; i++ )
+	{
 		palette_lookup[i] = 255;
 	}
 }
 
-int palette_cache_find( int r, int g, int b )
+int palette_cache_find ( int r, int g, int b )
 {
-	if ( !palman_is_nondarkening(r,g,b))	{
-		int value = ((r/4)<<12)+((g/4)<<6)+(b/4);
-		if ( palette_lookup[value] != 255 )	{
+	if ( !palman_is_nondarkening ( r, g, b ) )
+	{
+		int value = ( ( r / 4 ) << 12 ) + ( ( g / 4 ) << 6 ) + ( b / 4 );
+		if ( palette_lookup[value] != 255 )
+		{
 			return palette_lookup[value];
 		}
 	}
 	return -1;
 }
 
-void palette_cache_add( int r, int g, int b, int index )
+void palette_cache_add ( int r, int g, int b, int index )
 {
-	int value = ((r/4)<<12)+((g/4)<<6)+(b/4);
+	int value = ( ( r / 4 ) << 12 ) + ( ( g / 4 ) << 6 ) + ( b / 4 );
 
-	if ( !palman_is_nondarkening(r,g,b))	{
-		palette_lookup[value] = (ubyte)index;
+	if ( !palman_is_nondarkening ( r, g, b ) )
+	{
+		palette_lookup[value] = ( ubyte ) index;
 	}
 }
 
 char palette_base_filename[128] = { "default" };
 int palette_base_loaded = 0;
 
-void palette_load_table( char * filename )
+void palette_load_table ( char *filename )
 {
 	int i;
 	int w, h;
 	int pcx_error;
 
-	strcpy_s( palette_base_filename, filename );
-	char * p = strchr(palette_base_filename,'.');
-	if ( p )	{
+	strcpy_s ( palette_base_filename, filename );
+	char *p = strchr ( palette_base_filename, '.' );
+	if ( p )
+	{
 		*p = 0;
 	}
 
-	pcx_error = pcx_read_header(palette_base_filename, NULL, &w, &h, NULL, palette_org );
-	if ( pcx_error != PCX_ERROR_NONE )	{
+	pcx_error = pcx_read_header ( palette_base_filename, NULL, &w, &h, NULL, palette_org );
+	if ( pcx_error != PCX_ERROR_NONE )
+	{
 		// Read the old .256 file
 		CFILE *fp;
 		int fsize;
-		fp = cfopen( palette_base_filename, "rb" );
-		if ( fp==NULL)
-			Error( LOCATION, "Can't open palette file <%s>",palette_base_filename);
+		fp = cfopen ( palette_base_filename, "rb" );
+		if ( fp == NULL )
+			Error ( LOCATION, "Can't open palette file <%s>", palette_base_filename );
 
-		fsize	= cfilelength( fp );
-		Assert( fsize == 9472 );
-		cfread( palette_org, 256*3, 1, fp );
-		cfclose(fp);
+		fsize   = cfilelength ( fp );
+		Assert ( fsize == 9472 );
+		cfread ( palette_org, 256 * 3, 1, fp );
+		cfclose ( fp );
 
-		for (i=0; i<768; i++ )	{	
-			palette_org[i] = ubyte((palette_org[i]*255)/63);
+		for ( i = 0; i < 768; i++ )
+		{
+			palette_org[i] = ubyte ( ( palette_org[i] * 255 ) / 63 );
 		}
 	}
 
 	palette_base_loaded = 1;
 
-	gr_set_palette(palette_base_filename, palette_org);
+	gr_set_palette ( palette_base_filename, palette_org );
 }
 
 
-DCF(palette,"Loads a new palette")
+DCF ( palette, "Loads a new palette" )
 {
-	if ( Dc_command )	{
-		dc_get_arg(ARG_STRING|ARG_NONE);
-		if ( Dc_arg_type == ARG_NONE )	{
-		} else {
-			palette_load_table( Dc_arg );
+	if ( Dc_command )
+	{
+		dc_get_arg ( ARG_STRING | ARG_NONE );
+		if ( Dc_arg_type == ARG_NONE )
+		{
+		}
+		else
+		{
+			palette_load_table ( Dc_arg );
 		}
 	}
-	if ( Dc_help )	{
-		dc_printf( "Usage: palette filename\nLoads the palette file.\n" );
+	if ( Dc_help )
+	{
+		dc_printf ( "Usage: palette filename\nLoads the palette file.\n" );
 	}
 
 }
@@ -181,30 +198,37 @@ DCF(palette,"Loads a new palette")
 int Palman_allow_any_color = 0;
 
 
-uint palette_find( int r, int g, int b )
+uint palette_find ( int r, int g, int b )
 {
 	int i, j;
 	int best_value, best_index, value;
 
-	int	is_transparent = 0;
-	if ( (r == 0) && (g==255) && (b==0) )	{
+	int is_transparent = 0;
+	if ( ( r == 0 ) && ( g == 255 ) && ( b == 0 ) )
+	{
 		is_transparent = 1;
 	}
 
 	int restrict = 0;
-	if ( Palman_restrict_colors && (!Palman_allow_any_color) )	{
+	if ( Palman_restrict_colors && ( !Palman_allow_any_color ) )
+	{
 		restrict = 1;
 	}
-			
-//	int	rgb = ((r/4)<<12)+((g/4)<<6)+(b/4);
 
-	i = palette_cache_find(r,g,b);
-	if ( i != -1 )	{
-		if ( restrict )	{
-			if ( i > 127 )	{
+	//  int rgb = ((r/4)<<12)+((g/4)<<6)+(b/4);
+
+	i = palette_cache_find ( r, g, b );
+	if ( i != -1 )
+	{
+		if ( restrict )
+		{
+			if ( i > 127 )
+			{
 				return i;
 			}
-		} else {
+		}
+		else
+		{
 			return i;
 		}
 	}
@@ -213,29 +237,34 @@ uint palette_find( int r, int g, int b )
 	best_index = -1;
 
 	int bottom_color = 0;
-	if ( restrict )	{
+	if ( restrict )
+	{
 		bottom_color = 128;
 	}
 
-	j=3*bottom_color; 
+	j = 3 * bottom_color;
 
-	for (i=bottom_color; i<255; i++ )	{
+	for ( i = bottom_color; i < 255; i++ )
+	{
 		int pr, pg, pb;
 
 		pr = gr_palette[j];
-		pg = gr_palette[j+1];
-		pb = gr_palette[j+2];
+		pg = gr_palette[j + 1];
+		pb = gr_palette[j + 2];
 
-		value = SQUARE(r-pr) + SQUARE(g-pg) + SQUARE(b-pb);
+		value = SQUARE ( r - pr ) + SQUARE ( g - pg ) + SQUARE ( b - pb );
 
-		if ( (best_index==-1) || (value < best_value) )	{
+		if ( ( best_index == -1 ) || ( value < best_value ) )
+		{
 			// Don't map anything to 0,255,0 (transparent) ever, except 0,255,0
-			if (value==0) {
-				palette_cache_add( r, g, b, i );
+			if ( value == 0 )
+			{
+				palette_cache_add ( r, g, b, i );
 				return i;
 			}
 			// Not an exact match, so don't let anything map to a nondarkening color.
-			if ( (!is_transparent) && (!palman_is_nondarkening( pr, pg, pb ))  )	{
+			if ( ( !is_transparent ) && ( !palman_is_nondarkening ( pr, pg, pb ) )  )
+			{
 				best_value = value;
 				best_index = i;
 			}
@@ -243,11 +272,12 @@ uint palette_find( int r, int g, int b )
 		j += 3;
 	}
 
-	if ( best_index == -1 )	{
+	if ( best_index == -1 )
+	{
 		best_index = bottom_color;
 	}
 
-	palette_cache_add( r, g, b, best_index );
+	palette_cache_add ( r, g, b, best_index );
 	return best_index;
 }
 
@@ -271,53 +301,59 @@ uint palette_find( int r, int g, int b )
 // version 18 - fixed bug with blue nondarkening colors
 // version 19 - fixed bug where only colors divisible by 4 got used.
 // version 20 - added flag to only use lower 128 colors for palette.
-#define PAL_ID 0x4c415056			// "LAPV" in file = VPAL (Volition Palette)
+#define PAL_ID 0x4c415056           // "LAPV" in file = VPAL (Volition Palette)
 #define PAL_VERSION  20
 #define PAL_LAST_COMPATIBLE_VERSION 20
 
-void palette_write_cached1( char *name )
+void palette_write_cached1 ( char *name )
 {
 	CFILE *fp;
 	char new_name[128];
 
-	strcpy_s( new_name, name );
-	strcat_s( new_name, ".clr" );
-	
-//	mprintf(( "Writing palette cache file '%s'\n", new_name ));
+	strcpy_s ( new_name, name );
+	strcat_s ( new_name, ".clr" );
 
-	fp = cfopen( new_name, "wb", CFILE_NORMAL, CF_TYPE_CACHE );
+	//  mprintf(( "Writing palette cache file '%s'\n", new_name ));
+
+	fp = cfopen ( new_name, "wb", CFILE_NORMAL, CF_TYPE_CACHE );
 	if ( !fp ) return;
-	
-	cfwrite_uint( PAL_ID, fp );
-	cfwrite_int(PAL_VERSION, fp );
-	cfwrite( &gr_palette_checksum, 4, 1, fp );
 
-	cfwrite_compressed( &gr_palette, 256*3, 1, fp );						// < 1 KB
+	cfwrite_uint ( PAL_ID, fp );
+	cfwrite_int ( PAL_VERSION, fp );
+	cfwrite ( &gr_palette_checksum, 4, 1, fp );
 
-	cfwrite_compressed( &palette_lookup, LOOKUP_SIZE, 1, fp );			// 256KB
-	
-	if ( palette_fade_table_calculated )	{
-		cfwrite_int(1,fp);
-		cfwrite_int(Gr_gamma_int,fp);
-		cfwrite_compressed( &gr_fade_table,   256*34*2, 1, fp );		// 17KB
-	} else {
-		cfwrite_int(0,fp);
+	cfwrite_compressed ( &gr_palette, 256 * 3, 1, fp );                     // < 1 KB
+
+	cfwrite_compressed ( &palette_lookup, LOOKUP_SIZE, 1, fp );         // 256KB
+
+	if ( palette_fade_table_calculated )
+	{
+		cfwrite_int ( 1, fp );
+		cfwrite_int ( Gr_gamma_int, fp );
+		cfwrite_compressed ( &gr_fade_table,   256 * 34 * 2, 1, fp );   // 17KB
 	}
-	
-	if ( palette_blend_table_calculated )	{
-		cfwrite_int(NUM_BLEND_TABLES,fp);
-		cfwrite_compressed( &palette_blend_table,  256*256, NUM_BLEND_TABLES, fp );	//64KB*
-	} else {
-		cfwrite_int(0,fp);
+	else
+	{
+		cfwrite_int ( 0, fp );
 	}
 
-	cfclose(fp);
-//	mprintf(( "Done.\n" ));
+	if ( palette_blend_table_calculated )
+	{
+		cfwrite_int ( NUM_BLEND_TABLES, fp );
+		cfwrite_compressed ( &palette_blend_table,  256 * 256, NUM_BLEND_TABLES, fp ); //64KB*
+	}
+	else
+	{
+		cfwrite_int ( 0, fp );
+	}
+
+	cfclose ( fp );
+	//  mprintf(( "Done.\n" ));
 }
 
 // Returns TRUE if successful, else 0
 
-int palette_read_cached( char *name )
+int palette_read_cached ( char *name )
 {
 	CFILE *fp;
 	char new_name[128];
@@ -325,155 +361,187 @@ int palette_read_cached( char *name )
 	uint id, new_checksum;
 	ubyte new_palette[768];
 
-	strcpy_s( new_name, name );
-	strcat_s( new_name, ".clr" );
+	strcpy_s ( new_name, name );
+	strcat_s ( new_name, ".clr" );
 
-//	mprintf(( "Reading palette '%s'\n", name ));
-	
-	fp = cfopen( new_name, "rb", CFILE_NORMAL, CF_TYPE_CACHE );
+	//  mprintf(( "Reading palette '%s'\n", name ));
+
+	fp = cfopen ( new_name, "rb", CFILE_NORMAL, CF_TYPE_CACHE );
 
 	// Couldn't find file
-	if ( !fp ) {
-		mprintf(( "No cached palette file\n" ));
+	if ( !fp )
+	{
+		mprintf ( ( "No cached palette file\n" ) );
 		return 0;
 	}
 
-	id  = cfread_uint( fp );
-	if ( id != PAL_ID )	{
-		mprintf(( "Cached palette file has incorrect ID\n" ));
-		cfclose(fp);
+	id  = cfread_uint ( fp );
+	if ( id != PAL_ID )
+	{
+		mprintf ( ( "Cached palette file has incorrect ID\n" ) );
+		cfclose ( fp );
 		return 0;
 	}
-	version = cfread_int( fp );
-	if ( version < PAL_LAST_COMPATIBLE_VERSION ) {
-		mprintf(( "Cached palette file is an older incompatible version\n" ));
-		cfclose(fp);
-		return 0;
-	}
-	
-	cfread( &new_checksum, 4, 1, fp );
-	if ( gr_palette_checksum != new_checksum )	{
-		mprintf(( "Cached palette file is out of date (Checksum)\n" ));
-		cfclose(fp);
+	version = cfread_int ( fp );
+	if ( version < PAL_LAST_COMPATIBLE_VERSION )
+	{
+		mprintf ( ( "Cached palette file is an older incompatible version\n" ) );
+		cfclose ( fp );
 		return 0;
 	}
 
-	cfread_compressed( &new_palette, 256*3, 1, fp );
-	if ( memcmp( new_palette, gr_palette, 768 ) )	{
-		mprintf(( "Cached palette file is out of date (Contents)\n" ));
-		cfclose(fp);
+	cfread ( &new_checksum, 4, 1, fp );
+	if ( gr_palette_checksum != new_checksum )
+	{
+		mprintf ( ( "Cached palette file is out of date (Checksum)\n" ) );
+		cfclose ( fp );
 		return 0;
 	}
 
-	cfread_compressed( &palette_lookup, LOOKUP_SIZE, 1, fp );			// 256KB
+	cfread_compressed ( &new_palette, 256 * 3, 1, fp );
+	if ( memcmp ( new_palette, gr_palette, 768 ) )
+	{
+		mprintf ( ( "Cached palette file is out of date (Contents)\n" ) );
+		cfclose ( fp );
+		return 0;
+	}
 
-	int fade_table_saved = cfread_int(fp);
-	
-	if ( fade_table_saved )	{
+	cfread_compressed ( &palette_lookup, LOOKUP_SIZE, 1, fp );          // 256KB
+
+	int fade_table_saved = cfread_int ( fp );
+
+	if ( fade_table_saved )
+	{
 		int new_gamma;
-		cfread( &new_gamma, 4, 1, fp );
-		cfread_compressed( &gr_fade_table,   256*34*2, 1, fp );		// 17KB
-		if ( new_gamma == Gr_gamma_int )	{
+		cfread ( &new_gamma, 4, 1, fp );
+		cfread_compressed ( &gr_fade_table,   256 * 34 * 2, 1, fp ); // 17KB
+		if ( new_gamma == Gr_gamma_int )
+		{
 			palette_fade_table_calculated = 1;
-		} else {
+		}
+		else
+		{
 			palette_fade_table_calculated = 0;
 		}
-	} else {
+	}
+	else
+	{
 		palette_fade_table_calculated = 0;
 	}
-	
-	int num_blend_tables_saved = cfread_int(fp);
-	if ( (num_blend_tables_saved == NUM_BLEND_TABLES) && (num_blend_tables_saved>0))	{
+
+	int num_blend_tables_saved = cfread_int ( fp );
+	if ( ( num_blend_tables_saved == NUM_BLEND_TABLES ) && ( num_blend_tables_saved > 0 ) )
+	{
 		palette_blend_table_calculated = 1;
-		cfread_compressed( &palette_blend_table,  256*256, NUM_BLEND_TABLES, fp );	//64KB*
-	} else {
+		cfread_compressed ( &palette_blend_table,  256 * 256, NUM_BLEND_TABLES, fp ); //64KB*
+	}
+	else
+	{
 		palette_blend_table_calculated = 0;
 	}
 
-	cfclose(fp);
+	cfclose ( fp );
 
-//	mprintf(( "Done.\n" ));
+	//  mprintf(( "Done.\n" ));
 
 	return 1;
 }
 
-void palman_create_blend_table(float factor, ubyte *table)
+void palman_create_blend_table ( float factor, ubyte *table )
 {
 	int i;
 
 	// Make the blending table
-	for (i=0; i<256; i++ )	{
+	for ( i = 0; i < 256; i++ )
+	{
 		int j, r, g, b;
 		float si, fr, fg, fb, br, bg, bb;
 		float Sf, Df;
 
-		fr = i2fl(gr_palette[i*3+0]);
-		fg = i2fl(gr_palette[i*3+1]);
-		fb = i2fl(gr_palette[i*3+2]);
+		fr = i2fl ( gr_palette[i * 3 + 0] );
+		fg = i2fl ( gr_palette[i * 3 + 1] );
+		fb = i2fl ( gr_palette[i * 3 + 2] );
 
 		// Make everything blended with Xparent be black
-		if ( i==255 )	{
+		if ( i == 255 )
+		{
 			fr = fg = fb = 0.0f;
 		}
 
-		si = (( fr+fg+fb ) / (256.0f*3.0f)) * factor;
+		si = ( ( fr + fg + fb ) / ( 256.0f * 3.0f ) ) * factor;
 
-		if ( factor > 1.0f )	{
-			if ( si > 1.0f )	{
+		if ( factor > 1.0f )
+		{
+			if ( si > 1.0f )
+			{
 				Sf = 1.0f;
 				Df = 0.0f;
-			} else	{
+			}
+			else
+			{
 				Sf = 1.0f;
 				Df = 1.0f - si;
 			}
-		} else {
-			if ( si > 1.0f )	{
+		}
+		else
+		{
+			if ( si > 1.0f )
+			{
 				Sf = 1.0f;
 				Df = 0.0f;
-			} else	{
+			}
+			else
+			{
 				Sf = si;
 				Df = 1.0f;
 			}
 			Sf = factor;
 			Df = 1.0f;
 		}
- 
-//		Sf = Df =1.0f;
 
-		for (j=0; j<256; j++ )	{
-			br = i2fl(gr_palette[j*3+0]);
-			bg = i2fl(gr_palette[j*3+1]);
-			bb = i2fl(gr_palette[j*3+2]);
+		//      Sf = Df =1.0f;
+
+		for ( j = 0; j < 256; j++ )
+		{
+			br = i2fl ( gr_palette[j * 3 + 0] );
+			bg = i2fl ( gr_palette[j * 3 + 1] );
+			bb = i2fl ( gr_palette[j * 3 + 2] );
 
 			// Make all things on top of Xparent be black
-			if ( j==255 )	{
+			if ( j == 255 )
+			{
 				br = bg = bb = 0.0f;
 			}
 
-			r = fl2i( fr*Sf + br*Df );
-			g = fl2i( fg*Sf + bg*Df );
-			b = fl2i( fb*Sf + bb*Df );
+			r = fl2i ( fr * Sf + br * Df );
+			g = fl2i ( fg * Sf + bg * Df );
+			b = fl2i ( fb * Sf + bb * Df );
 
 			int max = r;
 			if ( g > max ) max = g;
 			if ( b > max ) max = b;
-			if ( max > 255 )	{
-				r = (255*r)/max;
-				g = (255*g)/max;
-				b = (255*b)/max;
+			if ( max > 255 )
+			{
+				r = ( 255 * r ) / max;
+				g = ( 255 * g ) / max;
+				b = ( 255 * b ) / max;
 			}
 			if ( r > 255 ) r = 255; else if ( r < 0 ) r = 0;
 			if ( g > 255 ) g = 255; else if ( g < 0 ) g = 0;
 			if ( b > 255 ) b = 255; else if ( b < 0 ) b = 0;
 
 			if ( i == 255 )
-				table[i*256+j] = (unsigned char)j;
-			else {
+				table[i * 256 + j] = ( unsigned char ) j;
+			else
+			{
 				// If background transparent, and color isn't bright, call it transparent.
-				if ( j == 255 && ((r+g+b) < 110))	{
-					table[i*256+j] = 255;
-				} else {
-					table[i*256+j] = (unsigned char)palette_find(r,g,b);
+				if ( j == 255 && ( ( r + g + b ) < 110 ) )
+				{
+					table[i * 256 + j] = 255;
+				}
+				else
+				{
+					table[i * 256 + j] = ( unsigned char ) palette_find ( r, g, b );
 				}
 			}
 		}
@@ -484,8 +552,8 @@ void palette_flush()
 {
 	// DB 2/3/99 - I think this was causing some wacky unhandled exceptions at game shutdown. Since we don't use palettes anymore.....
 	/*
-	if ( stricmp( palette_name, "none" ) )	{
-		palette_write_cached1( palette_name );
+	if ( stricmp( palette_name, "none" ) )  {
+	    palette_write_cached1( palette_name );
 	}
 	*/
 }
@@ -494,21 +562,21 @@ void palette_flush()
 // When gr_set_palette is called, it fills in gr_palette and then calls this
 // function, which should update all the tables.
 // Pass NULL to flush current palette.
-void palette_update(char *name_with_extension, int restrict_font_to_128)
+void palette_update ( char *name_with_extension, int restrict_font_to_128 )
 {
-//	int i;
+	//  int i;
 	uint tmp_checksum;
 	char name[128];
 
 	Palman_restrict_colors = restrict_font_to_128;
-	
-	strcpy_s( name, name_with_extension );
-	char *p = strchr( name, '.' );
+
+	strcpy_s ( name, name_with_extension );
+	char *p = strchr ( name, '.' );
 	if ( p ) *p = 0;
 
-	strcpy_s( palette_name, name );
+	strcpy_s ( palette_name, name );
 
-	tmp_checksum = palette_compute_checksum( gr_palette );
+	tmp_checksum = palette_compute_checksum ( gr_palette );
 	if ( tmp_checksum == gr_palette_checksum ) return;
 
 	gr_palette_checksum = tmp_checksum;
@@ -519,92 +587,107 @@ void palette_update(char *name_with_extension, int restrict_font_to_128)
 	palette_fade_table_calculated = 0;
 
 	// For "none" palettes, don't calculate tables
-	if ( !stricmp( name, "none" ) ) {
-		bm_update();			// update the bitmap palette's
+	if ( !stricmp ( name, "none" ) )
+	{
+		bm_update();            // update the bitmap palette's
 		return;
 	}
 
 	// Read in the cached info if there is any.
-	if ( palette_read_cached( name ) )	{
-		bm_update();			// update the bitmap palette's
+	if ( palette_read_cached ( name ) )
+	{
+		bm_update();            // update the bitmap palette's
 		return;
 	}
-	
-	bm_update();			// update the bitmap palette's
+
+	bm_update();            // update the bitmap palette's
 }
 
 ubyte *palette_get_fade_table()
 {
-	int i,l;
+	int i, l;
 
-	if ( palman_screen_signature != gr_screen.signature )	{
+	if ( palman_screen_signature != gr_screen.signature )
+	{
 		palman_screen_signature = gr_screen.signature;
 		palette_fade_table_calculated = 0;
 	}
 
 
-	if ( !palette_fade_table_calculated )	{
-		//mprintf(( "Creating fading table..." ));	
+	if ( !palette_fade_table_calculated )
+	{
+		//mprintf(( "Creating fading table..." ));
 
-		for (i=0; i<256; i++ )	{
+		for ( i = 0; i < 256; i++ )
+		{
 			int r, g, b;
 			int ur, ug, ub;
-			r = gr_palette[i*3+0];
-			g = gr_palette[i*3+1];
-			b = gr_palette[i*3+2];
+			r = gr_palette[i * 3 + 0];
+			g = gr_palette[i * 3 + 1];
+			b = gr_palette[i * 3 + 2];
 
-			if ( palman_is_nondarkening(r,g,b))		{
+			if ( palman_is_nondarkening ( r, g, b ) )
+			{
 				// Make pure white not fade
-				for (l=0; l<32; l++ )	{
-					gr_fade_table[((l+1)*256)+i] = (unsigned char)i;
+				for ( l = 0; l < 32; l++ )
+				{
+					gr_fade_table[ ( ( l + 1 ) * 256 ) + i] = ( unsigned char ) i;
 				}
-			} else {
-				for (l=0; l<32; l++ )	{
+			}
+			else
+			{
+				for ( l = 0; l < 32; l++ )
+				{
 
-					if ( l < 24 )	{
-						float f = (float)pow(i2fl(l)/23.0f, 1.0f/Gr_gamma);
-						ur = fl2i(i2fl(r)*f); if ( ur > 255 ) ur = 255;
-						ug = fl2i(i2fl(g)*f); if ( ug > 255 ) ug = 255;
-						ub = fl2i(i2fl(b)*f); if ( ub > 255 ) ub = 255;
-					} else {
-						int x,y;
-						int gi, gr, gg, gb;
-			
-						gi = (r+g+b)/3;
-
-						#ifdef RGB_LIGHTING
-							gr = r;
-							gg = g;
-							gb = gi*2;
-						#else
-							gr = r*2;
-							gg = g*2;
-							gb = b*2;
-						#endif
-				
-						x = l-24;			// x goes from 0 to 7
-						y = 31-l;			// y goes from 7 to 0
-
-						ur = ((gr*x)+(r*y))/7; if ( ur > 255 ) ur = 255;
-						ug = ((gg*x)+(g*y))/7; if ( ug > 255 ) ug = 255;
-						ub = ((gb*x)+(b*y))/7; if ( ub > 255 ) ub = 255;
+					if ( l < 24 )
+					{
+						float f = ( float ) pow ( i2fl ( l ) / 23.0f, 1.0f / Gr_gamma );
+						ur = fl2i ( i2fl ( r ) * f ); if ( ur > 255 ) ur = 255;
+						ug = fl2i ( i2fl ( g ) * f ); if ( ug > 255 ) ug = 255;
+						ub = fl2i ( i2fl ( b ) * f ); if ( ub > 255 ) ub = 255;
 					}
-					gr_fade_table[((l+1)*256)+i] = (unsigned char)palette_find( ur, ug, ub );
+					else
+					{
+						int x, y;
+						int gi, gr, gg, gb;
+
+						gi = ( r + g + b ) / 3;
+
+#ifdef RGB_LIGHTING
+						gr = r;
+						gg = g;
+						gb = gi * 2;
+#else
+						gr = r * 2;
+						gg = g * 2;
+						gb = b * 2;
+#endif
+
+						x = l - 24;         // x goes from 0 to 7
+						y = 31 - l;         // y goes from 7 to 0
+
+						ur = ( ( gr * x ) + ( r * y ) ) / 7; if ( ur > 255 ) ur = 255;
+						ug = ( ( gg * x ) + ( g * y ) ) / 7; if ( ug > 255 ) ug = 255;
+						ub = ( ( gb * x ) + ( b * y ) ) / 7; if ( ub > 255 ) ub = 255;
+					}
+					gr_fade_table[ ( ( l + 1 ) * 256 ) + i] = ( unsigned char ) palette_find ( ur, ug, ub );
 
 				}
 			}
-			gr_fade_table[ (0*256)+i ] = gr_fade_table[ (1*256)+i ];
-			gr_fade_table[ (33*256)+i ] = gr_fade_table[ (32*256)+i ];
+			gr_fade_table[ ( 0 * 256 ) + i ] = gr_fade_table[ ( 1 * 256 ) + i ];
+			gr_fade_table[ ( 33 * 256 ) + i ] = gr_fade_table[ ( 32 * 256 ) + i ];
 		}
 
 		// Mirror the fade table
-		for (i=0; i<34; i++ )	{
-			for ( l = 0; l < 256; l++ )	{
-				gr_fade_table[ ((67-i)*256)+l ] = gr_fade_table[ (i*256)+l ];
+		for ( i = 0; i < 34; i++ )
+		{
+			for ( l = 0; l < 256; l++ )
+			{
+				gr_fade_table[ ( ( 67 - i ) * 256 ) + l ] = gr_fade_table[ ( i * 256 ) + l ];
 			}
 		}
 
-//		mprintf(( "done\n" ));	
+		//      mprintf(( "done\n" ));
 		palette_fade_table_calculated = 1;
 	}
 
@@ -612,27 +695,30 @@ ubyte *palette_get_fade_table()
 }
 
 
-ubyte *palette_get_blend_table(float alpha)
+ubyte *palette_get_blend_table ( float alpha )
 {
 	int i;
 
-	if ( !palette_blend_table_calculated )	{
-//		mprintf(( "Creating blending table..." ));	
-		for (i=0; i<NUM_BLEND_TABLES; i++ )	{
-			palman_create_blend_table(blend_table_factors[i], &palette_blend_table[i*256*256] );
+	if ( !palette_blend_table_calculated )
+	{
+		//      mprintf(( "Creating blending table..." ));
+		for ( i = 0; i < NUM_BLEND_TABLES; i++ )
+		{
+			palman_create_blend_table ( blend_table_factors[i], &palette_blend_table[i * 256 * 256] );
 		}
-//		mprintf(( "done\n" ));	
+		//      mprintf(( "done\n" ));
 		palette_blend_table_calculated = 1;
 	}
-	
-	for (i=0; i<NUM_BLEND_TABLES; i++ )	{
-		if ( alpha <= blend_table_factors[i] )	
-			break;
-	} 
-	if ( i<0 ) i = 0;
-	if ( i>NUM_BLEND_TABLES-1 ) i = NUM_BLEND_TABLES-1;
 
-	return &palette_blend_table[i*256*256];
+	for ( i = 0; i < NUM_BLEND_TABLES; i++ )
+	{
+		if ( alpha <= blend_table_factors[i] )
+			break;
+	}
+	if ( i < 0 ) i = 0;
+	if ( i > NUM_BLEND_TABLES - 1 ) i = NUM_BLEND_TABLES - 1;
+
+	return &palette_blend_table[i * 256 * 256];
 }
 
 
@@ -640,41 +726,43 @@ ubyte *palette_get_blend_table(float alpha)
 // compute a simple checksum on the given palette.  Used by the bitmap manager
 // to determine if we need to reload a new palette for a bitmap.  Code liberally
 // stolen from descent networking checksum code
-uint palette_compute_checksum( ubyte *pal )
+uint palette_compute_checksum ( ubyte *pal )
 {
 	int i;
 	uint sum1, sum2;
 
 	sum1 = sum2 = 0;
 
-	for (i = 0; i < 768; i++) {
-		sum1 += (uint)pal[i];
+	for ( i = 0; i < 768; i++ )
+	{
+		sum1 += ( uint ) pal[i];
 		if ( sum1 >= 255 ) sum1 -= 255;
 		sum2 += sum1;
 	}
 	sum2 %= 255;
 
-	return ((sum1<<8)+sum2);
+	return ( ( sum1 << 8 ) + sum2 );
 }
 
 // this function takes a bitmap number and sets the game palette to the palette of this
 // bitmap.
-void palette_use_bm_palette(int n)
+void palette_use_bm_palette ( int n )
 {
 	ubyte tmp[768];
 	char name[128];
 
-	bm_get_palette(n, tmp, name);				// get the palette for this bitmap
+	bm_get_palette ( n, tmp, name );            // get the palette for this bitmap
 
-	gr_set_palette(name, tmp);				// load the new palette.
+	gr_set_palette ( name, tmp );           // load the new palette.
 }
 
 void palette_restore_palette()
 {
 	ubyte tmp[768];
-	memcpy(tmp, palette_org, 3*256);
+	memcpy ( tmp, palette_org, 3 * 256 );
 
-	if ( palette_base_loaded )		{
-		gr_set_palette(palette_base_filename, tmp);
+	if ( palette_base_loaded )
+	{
+		gr_set_palette ( palette_base_filename, tmp );
 	}
 }

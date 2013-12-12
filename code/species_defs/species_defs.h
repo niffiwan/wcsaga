@@ -20,7 +20,8 @@
 #include "hud/hudparse.h"
 
 // for bitmap thrusters
-typedef struct thrust_pair_bitmap {
+typedef struct thrust_pair_bitmap
+{
 	generic_bitmap normal;
 	generic_bitmap afterburn;
 
@@ -30,7 +31,8 @@ typedef struct thrust_pair_bitmap {
 } thrust_pair_bitmap;
 
 // for animated thrusters
-typedef struct thrust_pair {
+typedef struct thrust_pair
+{
 	generic_anim normal;
 	generic_anim afterburn;
 
@@ -39,7 +41,8 @@ typedef struct thrust_pair {
 	}
 } thrust_pair;
 
-typedef struct thrust_info {
+typedef struct thrust_info
+{
 	thrust_pair flames;
 	thrust_pair glow;
 
@@ -53,14 +56,17 @@ typedef struct thrust_info {
 // ship debris chunks are treated as asteroids and tied so tightly into the asteroid code that
 // separating them makes the code much more complicated.
 
-typedef struct species_info {
+typedef struct species_info
+{
 
 	char species_name[NAME_LENGTH];
 	int default_iff;
 	float awacs_multiplier;
 
-	union {
-		struct {
+	union
+	{
+		struct
+		{
 			int r, g, b;
 		} rgb;
 		int a1d[3];
@@ -86,10 +92,10 @@ typedef struct species_info {
 
 	// constructor to initialize everything to 0
 	species_info( )
-		: default_iff( 0 ), awacs_multiplier( 0 )
+		: default_iff ( 0 ), awacs_multiplier ( 0 )
 	{
 		species_name[ 0 ] = NULL;
-		memset( fred_color.a1d, 0, sizeof( fred_color.a1d ) );
+		memset ( fred_color.a1d, 0, sizeof ( fred_color.a1d ) );
 	}
 
 } species_info;

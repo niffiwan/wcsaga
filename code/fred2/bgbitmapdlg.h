@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -17,9 +17,9 @@
 
 class bg_bitmap_dlg : public CDialog
 {
-// Construction
+	// Construction
 public:
-	void update_data(int update = 1);
+	void update_data ( int update = 1 );
 	void create();
 
 	// sun data functions
@@ -32,36 +32,36 @@ public:
 	void bitmap_data_close();
 	void bitmap_data_save_current();
 
-	void get_data_spinner(NM_UPDOWN* pUD, int id, int *var, int min, int max);
-	void get_data_int(int id, int *var, int min, int max);
-	void get_data_float(int id, float *var, float max, float min);
+	void get_data_spinner ( NM_UPDOWN *pUD, int id, int *var, int min, int max );
+	void get_data_int ( int id, int *var, int min, int max );
+	void get_data_float ( int id, float *var, float max, float min );
 
-	bg_bitmap_dlg(CWnd* pParent = NULL);   // standard constructor
+	bg_bitmap_dlg ( CWnd *pParent = NULL ); // standard constructor
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(bg_bitmap_dlg)
 	enum { IDD = IDD_BG_BITMAP };
-	CSliderCtrl	m_amb_blue;
-	CSliderCtrl	m_amb_green;
-	CSliderCtrl	m_amb_red;
-	CString	m_neb_intensity;	
-	int		m_nebula_color;
-	int		m_nebula_index;
-	int		m_bank;
-	int		m_heading;
-	int		m_pitch;
-	CSliderCtrl			m_slider;
-	int		m_neb2_texture;
-	BOOL		m_subspace;
-	BOOL		m_fullneb;
-	int		m_poof_0;
-	int		m_poof_1;
-	int		m_poof_2;
-	int		m_poof_3;
-	int		m_poof_4;
-	int		m_poof_5;
-	BOOL	m_toggle_trails;
-	CString	m_storm_name;
+	CSliderCtrl m_amb_blue;
+	CSliderCtrl m_amb_green;
+	CSliderCtrl m_amb_red;
+	CString m_neb_intensity;
+	int     m_nebula_color;
+	int     m_nebula_index;
+	int     m_bank;
+	int     m_heading;
+	int     m_pitch;
+	CSliderCtrl         m_slider;
+	int     m_neb2_texture;
+	BOOL        m_subspace;
+	BOOL        m_fullneb;
+	int     m_poof_0;
+	int     m_poof_1;
+	int     m_poof_2;
+	int     m_poof_3;
+	int     m_poof_4;
+	int     m_poof_5;
+	BOOL    m_toggle_trails;
+	CString m_storm_name;
 	CString s_name;
 	int s_pitch;
 	int s_bank;
@@ -87,14 +87,14 @@ public:
 	CString m_envmap;
 	//}}AFX_DATA
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(bg_bitmap_dlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 	// clear and build the nebula filename list appropriately
 	void build_nebfile_list();
@@ -106,12 +106,12 @@ protected:
 	// Generated message map functions
 	//{{AFX_MSG(bg_bitmap_dlg)
 	afx_msg void OnClose();
-	afx_msg void OnCancel();	
-	afx_msg void OnOK();	
+	afx_msg void OnCancel();
+	afx_msg void OnOK();
 	afx_msg void OnSelchangeNebcolor();
 	afx_msg void OnSelchangeNebpattern();
 	afx_msg void OnFullNeb();
-	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnHScroll ( UINT nSBCode, UINT nPos, CScrollBar *pScrollBar );
 	afx_msg void OnSunChange();
 	afx_msg void OnAddSun();
 	afx_msg void OnDelSun();
@@ -120,9 +120,9 @@ protected:
 	afx_msg void OnAddBitmap();
 	afx_msg void OnDelBitmap();
 	afx_msg void OnBitmapDropdownChange();
-	afx_msg void OnDeltaposSbitmapPSpin(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnDeltaposSbitmapBSpin(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnDeltaposSbitmapHSpin(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnDeltaposSbitmapPSpin ( NMHDR *pNMHDR, LRESULT *pResult );
+	afx_msg void OnDeltaposSbitmapBSpin ( NMHDR *pNMHDR, LRESULT *pResult );
+	afx_msg void OnDeltaposSbitmapHSpin ( NMHDR *pNMHDR, LRESULT *pResult );
 	afx_msg void OnKillfocusSbitmapScaleX();
 	afx_msg void OnKillfocusSbitmapScaleY();
 	afx_msg void OnKillfocusSbitmapDivX();
@@ -130,9 +130,9 @@ protected:
 	afx_msg void OnKillfocusSbitmapP();
 	afx_msg void OnKillfocusSbitmapB();
 	afx_msg void OnKillfocusSbitmapH();
-	afx_msg void OnDeltaposSun1PSpin(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnDeltaposSun1HSpin(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnDeltaposSun1BSpin(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnDeltaposSun1PSpin ( NMHDR *pNMHDR, LRESULT *pResult );
+	afx_msg void OnDeltaposSun1HSpin ( NMHDR *pNMHDR, LRESULT *pResult );
+	afx_msg void OnDeltaposSun1BSpin ( NMHDR *pNMHDR, LRESULT *pResult );
 	afx_msg void OnKillfocusSun1P();
 	afx_msg void OnKillfocusSun1H();
 	afx_msg void OnKillfocusSun1B();
@@ -145,7 +145,7 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
-private:	
+private:
 };
 
 #endif

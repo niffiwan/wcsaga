@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -21,33 +21,33 @@
 
 class ShipSpecialDamage : public CDialog
 {
-// Construction
+	// Construction
 public:
-	ShipSpecialDamage(CWnd* pParent = NULL);   // standard constructor
-	void update_ship(int ship);
+	ShipSpecialDamage ( CWnd *pParent = NULL ); // standard constructor
+	void update_ship ( int ship );
 
-// Dialog Data
+	// Dialog Data
 	//{{AFX_DATA(ShipSpecialDamage)
 	enum { IDD = IDD_SPECIAL_DAMAGE };
-	int		m_shock_enabled;
-	BOOL		m_special_exp_enabled;
-	int		m_inner_rad;
-	int		m_outer_rad;
-	int		m_damage;
-	int		m_shock_speed;
-	int		m_blast;
-	int		m_ship_num;
+	int     m_shock_enabled;
+	BOOL        m_special_exp_enabled;
+	int     m_inner_rad;
+	int     m_outer_rad;
+	int     m_damage;
+	int     m_shock_speed;
+	int     m_blast;
+	int     m_ship_num;
 	//}}AFX_DATA
 
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(ShipSpecialDamage)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+protected:
+	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
 	//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 protected:
 
 	// Generated message map functions

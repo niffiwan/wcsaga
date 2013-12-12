@@ -2,7 +2,7 @@
  * Created by Ian "Goober5000" Warfield for the FreeSpace2 Source Code Project.
  * You may not sell or otherwise commercially exploit the source or things you
  * create based on the source.
- */ 
+ */
 
 
 
@@ -10,11 +10,11 @@
 #include <wx/wxprec.h>
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+#pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-	#include <wx/wx.h>
+#include <wx/wx.h>
 #endif
 
 #include "voiceactingmanagereditor.h"
@@ -22,23 +22,23 @@
 #include "voicefilemanager.h"
 
 
-BEGIN_EVENT_TABLE(dlgVoiceActingManagerEditor, wxDialog)
-	EVT_BUTTON(XRCID("btnGenerateFileNames"), dlgVoiceActingManagerEditor::OnGenerateFileNames)
+BEGIN_EVENT_TABLE ( dlgVoiceActingManagerEditor, wxDialog )
+	EVT_BUTTON ( XRCID ( "btnGenerateFileNames" ), dlgVoiceActingManagerEditor::OnGenerateFileNames )
 END_EVENT_TABLE()
 
 
-dlgVoiceActingManagerEditor::dlgVoiceActingManagerEditor(wxWindow *parent)
+dlgVoiceActingManagerEditor::dlgVoiceActingManagerEditor ( wxWindow *parent )
 	: wxDialog()
 {
-	wxXmlResource::Get()->LoadDialog(this, parent, "dlgVoiceActingManagerEditor");
+	wxXmlResource::Get()->LoadDialog ( this, parent, "dlgVoiceActingManagerEditor" );
 }
 
 dlgVoiceActingManagerEditor::~dlgVoiceActingManagerEditor()
 {}
 
-void dlgVoiceActingManagerEditor::OnGenerateFileNames(wxCommandEvent &WXUNUSED(event))
+void dlgVoiceActingManagerEditor::OnGenerateFileNames ( wxCommandEvent &WXUNUSED ( event ) )
 {
-	dlgVoiceFileManager *dlg = new dlgVoiceFileManager(this);
+	dlgVoiceFileManager *dlg = new dlgVoiceFileManager ( this );
 	dlg->ShowModal();
 	dlg->Destroy();
 }

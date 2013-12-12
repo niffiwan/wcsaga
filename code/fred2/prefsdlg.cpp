@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -26,8 +26,8 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-CPrefsDlg::CPrefsDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CPrefsDlg::IDD, pParent)
+CPrefsDlg::CPrefsDlg ( CWnd *pParent /*=NULL*/ )
+	: CDialog ( CPrefsDlg::IDD, pParent )
 {
 	//{{AFX_DATA_INIT(CPrefsDlg)
 	m_ConfirmDeleting = TRUE;
@@ -44,19 +44,19 @@ CPrefsDlg::CPrefsDlg(CWnd* pParent /*=NULL*/)
 
 extern int Show_stars;
 
-void CPrefsDlg::DoDataExchange(CDataExchange* pDX)
+void CPrefsDlg::DoDataExchange ( CDataExchange *pDX )
 {
-	CDialog::DoDataExchange(pDX);
+	CDialog::DoDataExchange ( pDX );
 	//{{AFX_DATA_MAP(CPrefsDlg)
-	DDX_Check(pDX, ID_CONFIRM_DELETING, m_ConfirmDeleting);
-	DDX_Check(pDX, ID_SHOW_CAPITALSHIPS, m_ShowCapitalShips);
-	DDX_Check(pDX, ID_SHOW_ELEVATIONS, m_ShowElevations);
-	DDX_Check(pDX, ID_SHOW_FIGHTERS, m_ShowFighters);
-	DDX_Check(pDX, ID_SHOW_GRID, m_ShowGrid);
-	DDX_Check(pDX, ID_SHOW_MISCOBJECTS, m_ShowMiscObjects);
-	DDX_Check(pDX, ID_SHOW_PLANETS, m_ShowPlanets);
-	DDX_Check(pDX, ID_SHOW_WAYPOINTS, m_ShowWaypoints);
-	DDX_Check(pDX, IDC_PREF_STARFIELD, m_ShowStarfield);
+	DDX_Check ( pDX, ID_CONFIRM_DELETING, m_ConfirmDeleting );
+	DDX_Check ( pDX, ID_SHOW_CAPITALSHIPS, m_ShowCapitalShips );
+	DDX_Check ( pDX, ID_SHOW_ELEVATIONS, m_ShowElevations );
+	DDX_Check ( pDX, ID_SHOW_FIGHTERS, m_ShowFighters );
+	DDX_Check ( pDX, ID_SHOW_GRID, m_ShowGrid );
+	DDX_Check ( pDX, ID_SHOW_MISCOBJECTS, m_ShowMiscObjects );
+	DDX_Check ( pDX, ID_SHOW_PLANETS, m_ShowPlanets );
+	DDX_Check ( pDX, ID_SHOW_WAYPOINTS, m_ShowWaypoints );
+	DDX_Check ( pDX, IDC_PREF_STARFIELD, m_ShowStarfield );
 	//}}AFX_DATA_MAP
 
 	Show_stars = m_ShowStarfield;
@@ -64,9 +64,9 @@ void CPrefsDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BEGIN_MESSAGE_MAP(CPrefsDlg, CDialog)
+BEGIN_MESSAGE_MAP ( CPrefsDlg, CDialog )
 	//{{AFX_MSG_MAP(CPrefsDlg)
-	ON_BN_CLICKED(IDC_SAVE_DEFAULT_PREFS, OnSaveDefaultPrefs)
+	ON_BN_CLICKED ( IDC_SAVE_DEFAULT_PREFS, OnSaveDefaultPrefs )
 	ON_WM_CLOSE()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -74,23 +74,23 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CPrefsDlg message handlers
 
-void CPrefsDlg::OnSaveDefaultPrefs() 
+void CPrefsDlg::OnSaveDefaultPrefs()
 {
 	// Put code to save user prefs here.
-	
+
 	m_ConfirmDeleting = 1;
 }
 
-void CPrefsDlg::OnClose() 
+void CPrefsDlg::OnClose()
 {
 	// MessageBeep((WORD) -1);
-	
+
 	CDialog::OnClose();
 }
 
-BOOL CPrefsDlg::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext) 
+BOOL CPrefsDlg::Create ( LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT &rect, CWnd *pParentWnd, UINT nID, CCreateContext *pContext )
 {
 	// MessageBeep((WORD) -1);
-	
-	return CDialog::Create(IDD, pParentWnd);
+
+	return CDialog::Create ( IDD, pParentWnd );
 }

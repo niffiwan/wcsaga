@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -28,7 +28,7 @@ struct object;
 void multi_df_level_pre_enter();
 
 // evaluate a kill in dogfight by a netplayer
-void multi_df_eval_kill(net_player *killer, object *dead_obj);
+void multi_df_eval_kill ( net_player *killer, object *dead_obj );
 
 // debrief
 void multi_df_debrief_init();
