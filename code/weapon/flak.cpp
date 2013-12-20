@@ -192,7 +192,6 @@ void flak_pick_range(object * objp, vec3d * firing_pos,
 void flak_jitter_aim(vec3d * dir, float dist_to_target,
                      float weapon_subsys_strength)
 {
-<<<<<<< HEAD
   vec3d rand_twist_pre, rand_twist_post;
   matrix temp;
   vec3d final_aim;
@@ -224,36 +223,6 @@ void flak_jitter_aim(vec3d * dir, float dist_to_target,
   vm_vec_scale(&final_aim, dist_to_target);
   vm_vec_add(dir, &final_aim, &rand_twist_post);
   vm_vec_normalize(dir);
-=======
-	vec3d rand_twist_pre, rand_twist_post;
-	matrix temp;
-	vec3d final_aim;
-	float error_val;
-
-	// get the matrix needed to rotate the base direction to the actual direction
-	vm_vector_2_matrix ( &temp, dir, NULL, NULL );
-
-	// error value
-	error_val = Flak_error + ( Flak_error * 0.65f * ( 1.0f - weapon_subsys_strength ) );
-
-	// scale the rvec by some random value and make it the "pre-twist" value
-	float rand_dist = frand_range ( 0.0f, error_val );
-	// no jitter - so do nothing
-	if ( rand_dist <= 0.0f )
-	{
-		return;
-	}
-	vm_vec_copy_scale ( &rand_twist_pre, &temp.vec.rvec, rand_dist );
-
-	// now rotate the twist vector around the x axis (the base aim axis) at a random angle
-	vm_rot_point_around_line ( &rand_twist_post, &rand_twist_pre, fl_radian ( 359.0f * frand_range ( 0.0f, 1.0f ) ), &vmd_zero_vector, dir );
-
-	// add the resulting vector to the base aim vector and normalize
-	final_aim = *dir;
-	vm_vec_scale ( &final_aim, dist_to_target );
-	vm_vec_add ( dir, &final_aim, &rand_twist_post );
-	vm_vec_normalize ( dir );
->>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 // create a muzzle flash from a flak gun based upon firing position and weapon type

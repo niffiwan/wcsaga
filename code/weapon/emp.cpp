@@ -58,20 +58,12 @@ wacky_text Emp_wacky_text[NUM_TEXT_STAMPS];
 
 // for randomly inserting characters
 #define NUM_RANDOM_CHARS        51
-<<<<<<< HEAD
 char Emp_random_char[NUM_RANDOM_CHARS] = {
   'a', 'b', 'c', 'd', 'e', 'f', 'g', '4', 'h', '8', '_', '$', ')', '-', '~',
     'u', 'q',
   '.', 'x', 'h', '&', '%', '*', '1', '3', 't', 'h', 'o', 'p', '@', 'h', 'i',
     'v', '+', '=',
   '|', '{', '}', ':', ';', '^', 'l', 'z', 'u', 'v', '<', '>', '?', '5', '8'
-=======
-char Emp_random_char[NUM_RANDOM_CHARS] =
-{
-	'a', 'b', 'c', 'd', 'e', 'f', 'g', '4', 'h', '8', '_', '$', ')', '-', '~', 'u', 'q',
-	'.', 'x', 'h', '&', '%', '*', '1', '3', 't', 'h', 'o', 'p', '@', 'h', 'i', 'v', '+', '=',
-	'|', '{', '}', ':', ';', '^', 'l', 'z', 'u', 'v', '<', '>', '?', '5', '8'
->>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 };
 
 // EMP EFFECTS ON PLAYERS -----
@@ -115,7 +107,6 @@ void emp_level_init()
 void emp_apply(vec3d * pos, float inner_radius, float outer_radius,
                float emp_intensity, float emp_time)
 {
-<<<<<<< HEAD
   float actual_intensity, actual_time;
   vec3d dist;
   float dist_mag;
@@ -312,186 +303,6 @@ void emp_apply(vec3d * pos, float inner_radius, float outer_radius,
           emp_start_ship(target, actual_intensity, actual_time);
         }
     }
-=======
-	float actual_intensity, actual_time;
-	vec3d dist;
-	float dist_mag;
-	float scale_factor;
-	object *target;
-	ship_obj *so;
-	missile_obj *mo;
-	ship_subsys *moveup;
-	weapon_info *wip_target;
-
-	// all machines check to see if the blast hit a bomb. if so, shut it down (can't move anymore)
-	for ( mo = GET_FIRST ( &Missile_obj_list ); mo != END_OF_LIST ( &Missile_obj_list ); mo = GET_NEXT ( mo ) )
-	{
-		target = &Objects[mo->objnum];
-		if ( target->type != OBJ_WEAPON )
-		{
-			continue;
-		}
-
-		Assert ( target->instance >= 0 );
-		if ( target->instance < 0 )
-		{
-			continue;
-		}
-		Assert ( Weapons[target->instance].weapon_info_index >= 0 );
-		if ( Weapons[target->instance].weapon_info_index < 0 )
-		{
-			continue;
-		}
-
-		// if we have a bomb weapon
-		wip_target = &Weapon_info[Weapons[target->instance].weapon_info_index];
-		if ( ( wip_target->weapon_hitpoints > 0 ) && ! ( wip_target->wi_flags2 & WIF2_NO_EMP_KILL ) )
-		{
-			// get the distance between the detonation and the target object
-			vm_vec_sub ( &dist, &target->pos, pos );
-			dist_mag = vm_vec_mag ( &dist );
-
-			// if the bomb was within 1/4 of the outer radius, castrate it
-			if ( dist_mag <= ( outer_radius * 0.25f ) )
-			{
-				// memset(&target->phys_info, 0, sizeof(physics_info));
-				Weapons[target->instance].weapon_flags |= WF_DEAD_IN_WATER;
-				mprintf ( ( "EMP killing weapon\n" ) );
-			}
-		}
-	}
-
-	// if I'm only a client in a multiplayer game, do nothing
-	if ( MULTIPLAYER_CLIENT )
-	{
-		return;
-	}
-
-	// See if there are any friendly ships present, if so return without preventing msg
-	for ( so = GET_FIRST ( &Ship_obj_list ); so != END_OF_LIST ( &Ship_obj_list ); so = GET_NEXT ( so ) )
-	{
-		target = &Objects[so->objnum];
-		if ( target->type != OBJ_SHIP )
-		{
-			continue;
-		}
-
-		Assert ( Objects[so->objnum].instance >= 0 );
-		if ( Objects[so->objnum].instance < 0 )
-		{
-			continue;
-		}
-		Assert ( Ships[Objects[so->objnum].instance].ship_info_index >= 0 );
-		if ( Ships[Objects[so->objnum].instance].ship_info_index < 0 )
-		{
-			continue;
-		}
-
-		// if the ship is a cruiser or cap ship, only apply the EMP effect to turrets
-		if ( Ship_info[Ships[target->instance].ship_info_index].flags & ( SIF_BIG_SHIP | SIF_HUGE_SHIP ) )
-		{
-			// void ship_subsys_set_disrupted(ship_subsys *ss, int time)
-			moveup = &Ships[target->instance].subsys_list;
-			if ( moveup->next != NULL )
-			{
-				moveup = moveup->next;
-			}
-			while ( moveup != &Ships[target->instance].subsys_list )
-			{
-				// if this is a turret, disrupt it
-				if ( ( moveup->system_info != NULL ) && ( moveup->system_info->type == SUBSYSTEM_TURRET ) )
-				{
-					vec3d actual_pos;
-
-					// get the distance to the subsys
-					vm_vec_unrotate ( &actual_pos, &moveup->system_info->pnt, &target->orient );
-					vm_vec_add2 ( &actual_pos, &target->pos );
-					vm_vec_sub ( &dist, &actual_pos, pos );
-					dist_mag = vm_vec_mag ( &dist );
-
-					// if for some reason, the object was outside the blast, radius
-					if ( dist_mag > outer_radius )
-					{
-						// next item
-						moveup = moveup->next;
-						continue;
-					}
-
-					// compute a scale factor for the emp effect
-					scale_factor = 1.0f;
-					if ( dist_mag >= inner_radius )
-					{
-						scale_factor = 1.0f - ( dist_mag / outer_radius );
-					}
-
-					scale_factor -= Ship_info[Ships[target->instance].ship_info_index].emp_resistance_mod;
-
-					if ( scale_factor < 0.0f )
-					{
-						moveup = moveup->next;
-						continue;
-					}
-
-					// disrupt the turret
-					ship_subsys_set_disrupted ( moveup, ( int ) ( MAX_TURRET_DISRUPT_TIME * scale_factor ) );
-
-					mprintf ( ( "EMP disrupting subsys %s on ship %s (%f, %f)\n", moveup->system_info->subobj_name, Ships[Objects[so->objnum].instance].ship_name, scale_factor, MAX_TURRET_DISRUPT_TIME * scale_factor ) );
-				}
-
-				// next item
-				moveup = moveup->next;
-			}
-		}
-		// otherwise coat the whole ship with the effect. mmmmmmmmm.
-		else
-		{
-			// get the distance between the detonation and the target object
-			vm_vec_sub ( &dist, &target->pos, pos );
-			dist_mag = vm_vec_mag ( &dist );
-
-			// if for some reason, the object was outside the blast, radius
-			if ( dist_mag > outer_radius )
-			{
-				continue;
-			}
-
-			// compute a scale factor for the emp effect
-			scale_factor = 1.0f;
-			if ( dist_mag >= inner_radius )
-			{
-				scale_factor = 1.0f - ( dist_mag / outer_radius );
-			}
-
-			scale_factor -= Ship_info[Ships[target->instance].ship_info_index].emp_resistance_mod;
-
-			if ( scale_factor < 0.0f )
-			{
-				continue;
-			}
-
-			// calculate actual EMP effect values
-			actual_intensity = emp_intensity * scale_factor;
-			actual_time = emp_time * scale_factor;
-			mprintf ( ( "EMP effect s : %f, i : %f, t : %f\n", scale_factor, actual_intensity, actual_time ) );
-
-			// if this effect happened to be on me, start it now
-			if ( ( target == Player_obj ) && ! ( Game_mode & GM_STANDALONE_SERVER ) )
-			{
-				emp_start_local ( actual_intensity, actual_time );
-			}
-
-			// if this is a multiplayer game, notify other players of the effect
-			if ( Game_mode & GM_MULTIPLAYER )
-			{
-				Assert ( MULTIPLAYER_MASTER );
-				send_emp_effect ( target->net_signature, actual_intensity, actual_time );
-			}
-
-			// now be sure to start the emp effect for the ship itself
-			emp_start_ship ( target, actual_intensity, actual_time );
-		}
-	}
->>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 // start the emp effect for the passed ship (setup lightning arcs, timestamp, etc)
@@ -773,7 +584,6 @@ void emp_hud_printf(int x, int y, int gauge_id, char *format, ...)
 // maybe reformat a string
 void emp_maybe_reformat_text(char *text, int max_len, int gauge_id)
 {
-<<<<<<< HEAD
   wacky_text *wt;
 
   // if the EMP effect is not active, never reformat it
@@ -895,100 +705,6 @@ void emp_maybe_reformat_text(char *text, int max_len, int gauge_id)
 
   // watch out for '#' - Goober5000
   end_string_at_first_hash_symbol(text);
-=======
-	wacky_text *wt;
-
-	// if the EMP effect is not active, never reformat it
-	if ( !emp_active_local() )
-	{
-		return;
-	}
-
-	// randomly _don't_ apply text craziness
-	if ( frand_range ( 0.0f, 1.0f ) > Emp_intensity )
-	{
-		return;
-	}
-
-	// if the gauge is EG_NULL, empty the string
-	if ( gauge_id == EG_NULL )
-	{
-		strcpy ( text, "" );
-		return;
-	}
-
-	// if this gauge has not been wacked out, or if the timestamp has expired, we
-	// neeed to wack it out again
-	Assert ( ( gauge_id >= EG_NULL ) && ( gauge_id < NUM_TEXT_STAMPS ) );
-	wt = &Emp_wacky_text[gauge_id];
-	if ( ( wt->stamp == -1 ) || timestamp_elapsed ( wt->stamp ) )
-	{
-		// reformat specific gauges differently
-		switch ( gauge_id )
-		{
-		//  weapons
-		case EG_WEAPON_TITLE: case EG_WEAPON_P1: case EG_WEAPON_P2: case EG_WEAPON_P3: case EG_WEAPON_S1: case EG_WEAPON_S2:
-			int wep_index;
-			wep_index = ( int ) frand_range ( 0.0f, ( float ) ( MAX_WEAPON_TYPES - 1 ) );
-			strcpy_s ( wt->str, Weapon_info[ wep_index >= MAX_WEAPON_TYPES ? 0 : wep_index ].name );
-			break;
-
-		// escort list
-		case EG_ESCORT1: case EG_ESCORT2: case EG_ESCORT3:
-			// choose a random ship
-			int shipnum;
-			shipnum = ship_get_random_targetable_ship();
-			if ( shipnum >= 0 )
-			{
-				strcpy_s ( wt->str, Ships[shipnum].ship_name );
-			}
-			break;
-
-		// directives title
-		case EG_OBJ_TITLE:
-			strcpy_s ( wt->str, "" );
-			break;
-
-		// directives themselves
-		case EG_OBJ1: case EG_OBJ2: case EG_OBJ3: case EG_OBJ4: case EG_OBJ5:
-			strcpy_s ( wt->str, text );
-			emp_randomize_chars ( wt->str );
-			break;
-
-		// target box info
-		case EG_TBOX_EXTRA1: case EG_TBOX_EXTRA2: case EG_TBOX_EXTRA3: case EG_TBOX_CLASS:
-		case EG_TBOX_DIST: case EG_TBOX_CARGO: case EG_TBOX_HULL: case EG_TBOX_NAME: case EG_TBOX_INTEG:
-			strcpy_s ( wt->str, text );
-			emp_randomize_chars ( wt->str );
-			break;
-
-		// squadmsg menu
-		case EG_SQ1: case EG_SQ2: case EG_SQ3: case EG_SQ4: case EG_SQ5: case EG_SQ6: case EG_SQ7:
-		case EG_SQ8: case EG_SQ9: case EG_SQ10:
-			strcpy_s ( wt->str, text );
-			emp_randomize_chars ( wt->str );
-			break;
-
-		// default
-		default :
-			return;
-		}
-
-		// recalculate the timestamp
-		wt->stamp = timestamp ( ( int ) frand_range ( 100.0f, 750.0f * ( 1.0f - Emp_intensity ) ) );
-
-		// copy the text
-		strcpy ( text, wt->str );
-	}
-	// otherwise, use what we calculated last time
-	else
-	{
-		strcpy ( text, wt->str );
-	}
-
-	// watch out for '#' - Goober5000
-	end_string_at_first_hash_symbol ( text );
->>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 // randomize the chars in a string

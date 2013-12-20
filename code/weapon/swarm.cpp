@@ -472,7 +472,6 @@ void turret_swarm_delete(int i)
 void turret_swarm_set_up_info(int parent_objnum, ship_subsys * turret,
                               weapon_info * wip, int weapon_num)
 {
-<<<<<<< HEAD
   turret_swarm_info *tsi;
   object *parent_obj, *target_obj;
   ship *shipp;
@@ -568,104 +567,12 @@ void turret_swarm_set_up_info(int parent_objnum, ship_subsys * turret,
   tsi->target_subsys = turret->targeted_subsys;
   tsi->time_to_fire = 1;        // first missile next frame
   tsi->weapon_num = weapon_num;
-=======
-	turret_swarm_info *tsi;
-	object *parent_obj, *target_obj;
-	ship *shipp;
-	int tsi_index;
-
-	// weapon info pointer
-	//Removed check in the interests of speed -WMC
-	/*
-	Assert((turret_weapon_class >= 0) && (turret_weapon_class < Num_weapon_types));
-	if((turret_weapon_class < 0) || (turret_weapon_class >= Num_weapon_types)){
-	    return;
-	}
-	*/
-
-	// get ship pointer
-	Assert ( ( parent_objnum >= 0 ) && ( parent_objnum < MAX_OBJECTS ) );
-	if ( ( parent_objnum < 0 ) || ( parent_objnum >= MAX_OBJECTS ) )
-	{
-		return;
-	}
-	parent_obj = &Objects[parent_objnum];
-	Assert ( parent_obj->type == OBJ_SHIP );
-	shipp = &Ships[parent_obj->instance];
-	Assert ( ( turret->turret_enemy_objnum >= 0 ) && ( turret->turret_enemy_objnum < MAX_OBJECTS ) );
-	if ( ( turret->turret_enemy_objnum < 0 ) || ( turret->turret_enemy_objnum >= MAX_OBJECTS ) )
-	{
-		return;
-	}
-	target_obj = &Objects[turret->turret_enemy_objnum];
-
-	// valid swarm weapon
-	Assert ( ( ( wip->wi_flags & WIF_SWARM ) && ( wip->swarm_count > 0 ) ) || ( ( wip->wi_flags & WIF_CORKSCREW ) && ( wip->cs_num_fired > 0 ) ) );
-
-	if ( ! ( ( wip->wi_flags & WIF_SWARM ) || ( wip->wi_flags & WIF_CORKSCREW ) ) || ( ( wip->wi_flags & WIF_SWARM ) && ( wip->swarm_count <= 0 ) ) || ( ( wip->wi_flags & WIF_CORKSCREW ) && ( wip->cs_num_fired <= 0 ) ) )
-		return;
-
-	// get turret_swarm_info
-	tsi_index = turret_swarm_create();
-	if ( tsi_index == -1 )
-	{
-		return;
-	}
-
-	// set turret to point to tsi
-	tsi = &Turret_swarm_info[tsi_index];
-
-	if ( turret->turret_swarm_num == MAX_TFP )
-	{
-		mprintf ( ( "Overlapping turret swarm firing intervals\n" ) );
-		turret_swarm_delete ( turret->turret_swarm_info_index[0] );
-		int old_s;
-		for ( old_s = 0; old_s < ( MAX_TFP - 1 ); old_s++ )
-		{
-			turret->turret_swarm_info_index[old_s] = turret->turret_swarm_info_index[old_s + 1];
-		}
-		turret->turret_swarm_info_index[9] = -1;
-		turret->turret_swarm_num--;
-		shipp->num_turret_swarm_info--;
-	}
-	turret->turret_swarm_info_index[turret->turret_swarm_num] = tsi_index;
-	turret->turret_swarm_num++;
-
-	// increment ship tsi counter
-	shipp->num_turret_swarm_info++;
-
-
-	// *Unnecessary check, now done on startup   -Et1
-	/*
-
-	// make sure time is sufficient to launch all the missiles before next volley
-	#ifndef NDEBUG
-	Assert(wip->swarm_count * SWARM_MISSILE_DELAY < wip->fire_wait * 1000.0f);
-	#endif
-
-	*/
-	// initialize tsi
-	tsi->weapon_class = WEAPON_INFO_INDEX ( wip );
-	if ( wip->wi_flags & WIF_SWARM )
-		tsi->num_to_launch = wip->swarm_count;
-	else
-		tsi->num_to_launch = wip->cs_num_fired;
-	tsi->parent_objnum = parent_objnum;
-	tsi->parent_sig = parent_obj->signature;
-	tsi->target_objnum = turret->turret_enemy_objnum;
-	tsi->target_sig = target_obj->signature;
-	tsi->turret = turret;
-	tsi->target_subsys = turret->targeted_subsys;
-	tsi->time_to_fire = 1;  // first missile next frame
-	tsi->weapon_num = weapon_num;
->>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 void turret_swarm_fire_from_turret(turret_swarm_info * tsi);
 // check if ship has turret ready to fire swarm type missiles
 void turret_swarm_maybe_fire_missile(int shipnum)
 {
-<<<<<<< HEAD
   ship *shipp = &Ships[shipnum];
   ship_subsys *subsys;
   turret_swarm_info *tsi;
@@ -792,123 +699,6 @@ void turret_swarm_maybe_fire_missile(int shipnum)
         }
     }
   Assert(num_turret_swarm_turrets_left == 0);
-=======
-	ship *shipp = &Ships[shipnum];
-	ship_subsys *subsys;
-	turret_swarm_info *tsi;
-	object *parent_obj, *target_obj;
-	int target_objnum, num_turret_swarm_turrets_left;
-	int k, j;
-
-	// check if ship has any turrets ready to fire
-	if ( shipp->num_turret_swarm_info <= 0 )
-	{
-		Assert ( shipp->num_turret_swarm_info == 0 );
-		return;
-	}
-
-	// ship obj which has fired turret swarm missiles
-	parent_obj = &Objects[shipp->objnum];
-	num_turret_swarm_turrets_left = shipp->num_turret_swarm_info;
-
-	// search ship subsystems for turrets with valid turret_swarm_info_index
-	for ( subsys = GET_FIRST ( &shipp->subsys_list ); subsys != END_OF_LIST ( &shipp->subsys_list ); subsys = GET_NEXT ( subsys ) )
-	{
-		if ( subsys->turret_swarm_num > 0 )
-		{
-
-			int swarms_per_turret = subsys->turret_swarm_num;
-
-			for ( k = 0; k < swarms_per_turret; k++ )
-			{
-				int turret_tsi = subsys->turret_swarm_info_index[k];
-				num_turret_swarm_turrets_left--;
-				Assert ( num_turret_swarm_turrets_left >= 0 );
-
-				// get turret_swarm_info
-				Assert ( ( turret_tsi >= 0 ) && ( turret_tsi < MAX_TURRET_SWARM_INFO ) );
-				tsi = &Turret_swarm_info[turret_tsi];
-
-				// check if parent ship is valid (via signature)
-				if ( ( tsi->parent_sig == parent_obj->signature ) )
-				{
-
-					// make sure we have the right turret.
-					Assert ( tsi->turret == subsys );
-
-					// check if time to fire
-					if ( timestamp_elapsed ( tsi->time_to_fire ) )
-					{
-						Assert ( tsi->num_to_launch > 0 );
-
-						// check target still alive
-						target_objnum = -1;
-						if ( tsi->target_objnum > -1 )
-						{
-							target_obj = &Objects[tsi->target_objnum];
-
-							if ( target_obj->signature == tsi->target_sig )
-							{
-								target_objnum = tsi->target_objnum;
-							}
-							else
-							{
-								// poor target, it died
-								tsi->target_objnum = -1;
-							}
-						}
-
-						// make sure turret is still alive and fire swarmer
-						if ( subsys->current_hits > 0 )
-						{
-							turret_swarm_fire_from_turret ( tsi );
-						}
-
-						// *Get timestamp from weapon info's -Et1
-						tsi->time_to_fire = timestamp ( Weapon_info[tsi->weapon_class].SwarmWait );
-
-						// do book keeping
-						tsi->num_to_launch--;
-
-						if ( tsi->num_to_launch == 0 )
-						{
-							// we are done firing, so see about resetting any animation timestamps for reversal (closing)...
-							// (I figure that a good estimate is to trigger a close after three additional swarms had fired - taylor)
-							if ( subsys->turret_animation_position == MA_POS_READY )
-								subsys->turret_animation_done_time = timestamp ( Weapon_info[tsi->weapon_class].SwarmWait * 3 );
-
-							shipp->num_turret_swarm_info--;
-							subsys->turret_swarm_num--;
-							turret_swarm_delete ( subsys->turret_swarm_info_index[k] );
-							subsys->turret_swarm_info_index[k] = -1;
-						}
-					}
-				}
-				else
-				{
-					Warning ( LOCATION, "Found turret swarm info on ship: %s with turret: %s, but signature does not match.", shipp->ship_name, subsys->system_info->subobj_name );
-					shipp->num_turret_swarm_info--;
-					subsys->turret_swarm_num--;
-					turret_swarm_delete ( subsys->turret_swarm_info_index[k] );
-					subsys->turret_swarm_info_index[k] = -1;
-				}
-			}
-			//swarm reset stuff
-			for ( k = 0; k < ( MAX_TFP - 1 ); k++ )
-			{
-				for ( j = ( k + 1 ); j < MAX_TFP; j++ )
-				{
-					if ( ( subsys->turret_swarm_info_index[k] == -1 ) && ( subsys->turret_swarm_info_index[j] != -1 ) )
-					{
-						subsys->turret_swarm_info_index[k] = subsys->turret_swarm_info_index[j];
-						subsys->turret_swarm_info_index[j] = -1;
-					}
-				}
-			}
-		}
-	}
-	Assert ( num_turret_swarm_turrets_left == 0 );
->>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 // check Turret_swarm_info for info that are invalid - ie, ships died while firing.

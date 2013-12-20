@@ -41,7 +41,6 @@ typedef struct shockwave_create_info
 
   void load();
 
-<<<<<<< HEAD
     shockwave_create_info():inner_rad(0.f), outer_rad(0.f), damage(0.f),
     blast(0.f)
   {
@@ -52,18 +51,6 @@ typedef struct shockwave_create_info
     rot_angles.h = 0.;
     rot_angles.p = 0.;
   }
-=======
-	shockwave_create_info()
-		: inner_rad ( 0.f ), outer_rad ( 0.f ), damage ( 0.f ), blast ( 0.f )
-	{
-		name[ 0 ] = '\0';
-		pof_name[ 0 ] = '\0';
-		damage_type_idx = -1;
-		rot_angles.b = 0.;
-		rot_angles.h = 0.;
-		rot_angles.p = 0.;
-	}
->>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 } shockwave_create_info;
 
 void shockwave_close();
