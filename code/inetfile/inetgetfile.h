@@ -5,18 +5,16 @@
  * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
-*/
-
-
-
+*/  
+    
 #ifndef _INET_GETFILE_HEADER_
 #define _INET_GETFILE_HEADER_
-
+  
 //At the end of this file is an example of usage
-
+  
 #include "inetfile/cftp.h"
 #include "inetfile/chttpget.h"
-
+  
 #define INET_ERROR_NO_ERROR         0
 #define INET_ERROR_BADPARMS         1
 #define INET_ERROR_CANT_WRITE_FILE  2
@@ -25,33 +23,29 @@
 #define INET_ERROR_HOST_NOT_FOUND   5
 #define INET_ERROR_UNKNOWN_ERROR        6
 #define INET_ERROR_NO_MEMORY        7
-
-class InetGetFile
+  class InetGetFile 
 {
-public:
-	InetGetFile ( char *URL, char *localfile );
-	~InetGetFile();
-	bool IsFileReceived();
-	bool IsFileError();
-	bool IsConnecting();
-	bool IsReceiving();
-	int GetErrorCode();
-	int GetBytesIn();
-	int GetTotalBytes();
-	void AbortGet();
+public:InetGetFile(char *URL, char *localfile);
+  ~InetGetFile();
+  bool IsFileReceived();
+  bool IsFileError();
+  bool IsConnecting();
+  bool IsReceiving();
+  int GetErrorCode();
+  int GetBytesIn();
+  int GetTotalBytes();
+  void AbortGet();
+ protected:CFtpGet * ftp;
+  ChttpGet * http;
+  bool m_bUseHTTP;
+  int m_ErrorCode;
+  int m_State;
+  int m_HardError;
+ };
 
-protected:
-	CFtpGet *ftp;
-	ChttpGet *http;
-	bool m_bUseHTTP;
-	int m_ErrorCode;
-	int m_State;
-	int m_HardError;
-
-};
-
-#endif
-
+ 
+#endif  /*  */
+  
 /*
 
 #include <stdio.h>
@@ -101,4 +95,4 @@ int main(int argc,char **argv)
 
 
 
- */
+ */ 

@@ -121,203 +121,234 @@ variable system: takes a string and constructs an expression includeing game var
   if there is a syntax error in a game variable the default error behavior is to create a
   constant of value 0.0f
 
-*/
-
-
+*/ 
+   
 //#include "object/object.h"    //WMC - not really needed
 #include "globalincs/pstypes.h"
 #include <math.h>
-
+  
 #ifndef _VARIABLE_H__
 #define _VARIABLE_H__
-
-
-enum variable_type {VAR_BASE, VAR_CONSTANT, VAR_OPP, VAR_EXP, VAR_GAME};
-
+   enum variable_type
+{ VAR_BASE, VAR_CONSTANT, VAR_OPP, VAR_EXP, VAR_GAME };
+ 
 //data structure for holding information about a texture
-struct texture_variable_data
+struct texture_variable_data 
 {
-	texture_variable_data() : n_frames ( 1 ), fps ( 1 ) {};
-	texture_variable_data ( texture_variable_data *t )
-	{
-		if ( t )
-		{
-			n_frames = t->n_frames;
-			fps = t->fps;
-		}
-		else
-		{
-			n_frames = 1;
-			fps = 1;
-		}
-	};
-	int n_frames;
-	int fps;
-};
+  texture_variable_data():n_frames(1), fps(1)
+  {
+  };
+  texture_variable_data(texture_variable_data * t) 
+  {
+    if (t)
+      
+      {
+        n_frames = t->n_frames;
+        fps = t->fps;
+      }
+    
+    else
+      
+      {
+        n_frames = 1;
+        fps = 1;
+      }
+  };
+  int n_frames;
+  int fps;
+};
 
+ 
 //a pointer passed when evaluateing an expression gives information to the
 //expression about wich object is the current object and wich texture is the
 //current texture, crap like that.
-struct variable_call_data
+struct variable_call_data 
 {
-	variable_call_data ( struct object *o = NULL, texture_variable_data *t = NULL ) : obj ( o ), texture ( t ) {};
-	void operator = ( int ) {};
-	object *obj;
-	texture_variable_data texture;
-};
+variable_call_data(struct object *o = NULL, texture_variable_data * t = NULL):obj(o),
+    texture
+    (t)
+  {
+  };
+  void operator =(int)
+  {
+  };
+  object * obj;
+  texture_variable_data texture;
+};
 
-
+  
 //base class of all variables from wich all other variables
 //(includeing full expressions) are derived
-class variable
+  class variable 
 {
-protected:
-	variable_type type;//an identifier, needed so I can perform constant colapseing
-public:
-	variable ( variable_type t ) : type ( t ) {}; //all ariables must define what type of variable they are
-
-	virtual~variable() {}; //virtual so derived destructors will get called when you expect them to be
-	// all variable's wich child variables _*must*_ kill there childeren when they die
-
-	virtual float value ( variable_call_data *data = NULL ) = 0; //this is the critical function of
-	//the varialbe system it will be diferent on each derived class, it returns the value of
-	//a variable, if it's a game variable, it's usualy calling a accessor function like
-	//timestamp() or returning something from the passed data
-
-	variable_type get_type() {return type;};
-	//returns what type of variable this is, used for constant colapseing,
-	//type should never change after instansiation
+protected:variable_type type;//an identifier, needed so I can perform constant colapseing
+public: variable(variable_type t):type(t)
+  {
+  };                            //all ariables must define what type of variable they are
+  virtual ~ variable()
+  {
+  };                            //virtual so derived destructors will get called when you expect them to be
+  // all variable's wich child variables _*must*_ kill there childeren when they die
+  virtual float value(variable_call_data * data = NULL) = 0;   //this is the critical function of
+  //the varialbe system it will be diferent on each derived class, it returns the value of
+  //a variable, if it's a game variable, it's usualy calling a accessor function like
+  //timestamp() or returning something from the passed data
+  variable_type get_type()
+  {
+    return type;
+  };
+  
+    //returns what type of variable this is, used for constant colapseing,
+    //type should never change after instansiation
 };
 
-
-
-class expression: public variable
+   class expression:public variable 
 {
-	//this is a class made to mbuild and manage an expression tree
-
-	variable *head; //the head of the expression tree
-
-	variable *parse_next ( char *& ); //part of the constructor,
-	//is recursively called to build the expression tree from a postfix expression
-	//each call moves the string as it parses it, hence the reference
-
-	variable *get_object_variable ( char ** ); //this takes a pointer to a cstring
-	//that contains game variable formatting
-	/*game variable syntax goes like this
-	:scope.member[element]:
-	the colens denote the begining and end of a game variable
-	scope is wich object or area the requiered variable is in,
-	for example global, or object, or texture
-	member is the name of the specific variable
-	and [element] is used for variables that are in the form of
-	arrays or lists. element is usualy a number, but sometimes a string or enumeration
-	like parse_next it moves the input string as it parses it so upon return the calling
-	function's string is at the next item ready to be parsed
-	*/
-	int expression::wich_unary ( char *c );
-	//utility function for determineing wich if any unary opperator the input string denotes
-
-	//the function prefix() used to be a member, but it requiered the string class and I
-	//didn't want to requier the include of that file for one function declairation
-public:
-	expression ( char * ); //constructor, takes an expression string and builds the tree
-	~expression() {delete head;}; //kills the head. the head in turn kills it's
-	//childeren wich them selves kill there childeren,
-	//culminateing in a cascade of infantacidal dealocation horror!
-
-	float value ( variable_call_data *data = NULL );
-	//recursively evaluates all elements of the tree.
-	//actualy, it doesn't call expression::value
-	//so maybe recursive isn't quite the right word for it... hmmm...
+  
+    //this is a class made to mbuild and manage an expression tree
+    variable * head;           //the head of the expression tree
+  variable * parse_next(char *&);      //part of the constructor,
+  //is recursively called to build the expression tree from a postfix expression
+  //each call moves the string as it parses it, hence the reference
+  variable * get_object_variable(char **);     //this takes a pointer to a cstring
+  //that contains game variable formatting
+  /*game variable syntax goes like this
+     :scope.member[element]:
+     the colens denote the begining and end of a game variable
+     scope is wich object or area the requiered variable is in,
+     for example global, or object, or texture
+     member is the name of the specific variable
+     and [element] is used for variables that are in the form of
+     arrays or lists. element is usualy a number, but sometimes a string or enumeration
+     like parse_next it moves the input string as it parses it so upon return the calling
+     function's string is at the next item ready to be parsed
+   */ 
+  int expression::wich_unary(char *c);
+  
+    //utility function for determineing wich if any unary opperator the input string denotes
+    
+    //the function prefix() used to be a member, but it requiered the string class and I
+    //didn't want to requier the include of that file for one function declairation
+public:expression(char *);    //constructor, takes an expression string and builds the tree
+  ~expression()
+  {
+    delete head;
+  };                            //kills the head. the head in turn kills it's
+  //childeren wich them selves kill there childeren,
+  //culminateing in a cascade of infantacidal dealocation horror!
+  float value(variable_call_data * data = NULL);
+  
+    //recursively evaluates all elements of the tree.
+    //actualy, it doesn't call expression::value
+    //so maybe recursive isn't quite the right word for it... hmmm...
 };
 
-bool is_value ( char c ); //utility, tells if a charicter is part of a number
-
-class var_matrix
+ bool is_value(char c);       //utility, tells if a charicter is part of a number
+class var_matrix 
 {
-	//a matrix of expressions
-	//neat huh?
-	//built to minimize evaluation calls
-	//if no evaluations are requiered, it returns identity
+  
+    //a matrix of expressions
+    //neat huh?
+    //built to minimize evaluation calls
+    //if no evaluations are requiered, it returns identity
+    variable ** mat;           //will always be allocated to a 4*4 matrix of expressions
+  int size[2];                  //the largest direction in a given dimention assigned a value
+  //I was going to use this for something, but I forgot what... something
+  //about it auto-maticly being able to make variable vectors and/or N*M matriciese
+public:void set_element(int i, int j, char *str) 
+  {
+    
+      //set's an element in the matrix, if the value to be set
+      //is what it would be if the matrix were an identity at the
+      //specified element no allocation is performed
+      //code in the get_value function will find a NULL there and return the apropriate value
+      Assert(j < 4);
+    Assert(i < 4);
+    if (i + 1 > size[0])
+      size[0] = i + 1;
+    if (j + 1 > size[1])
+      size[1] = j + 1;
+     char *s = str;
+    while (is_value(*s))
+      s++;
+    
+      //if there is a number at the front of the expression go to the next item
+      if (!*s)
+      
+      {
+        
+          //if there is nothing after the first element in the expression see if it's
+          //an identity element if it is then we ignore it
+        float f = (float) atof(str);
+        if (i == j && f == 1.0f)
+          return;
+        if (i != j && f == 0.0f)
+          return;
+      }
+     
+      //not identity, well we have to allocate an expression
+      
+      //if there is no element pointer matrix yet,
+      //it would probly be a good idea to build that first though
+      if (!mat)
+      
+      {
+        mat = new variable *[16];
+        memset(mat, NULL, sizeof(expression *) * 16);
+      }
+     
+      //ok get the index of the element
+    int idx = j * 4 + i;
+    
+      //if something lives there now kill it and take it's land
+      if (mat[idx])
+      
+      {
+        delete mat[idx];
+        mat[idx] = NULL;
+      }
+    
+      //ah, an empy home, well I'll just move right on in
+      mat[idx] = new expression(str);
+  }
+  float get_element(int i, int j, object * obj = NULL) 
+  {
+    Assert(j < 4);
+    Assert(i < 4);
+    int idx = j * 4 + i;
+    
+      //grab the index
+      //if there is a matrix, and there is an element in the matrix at the defined  location
+      //return the value of the expression
+      if (mat && mat[idx])
+      return mat[idx]->value(&variable_call_data(obj));
+    
+      //otherwise retrun identity
+      if (i == j)
+      return 1.0f;
+    return 0.0f;
+  }
+  int get_size(int d)
+  {
+    return size[d % 2];
+  }                             //get how big the matrix is in a dimention
+var_matrix():mat(NULL)
+  {
+  };                            //construct to identity
+  ~var_matrix() 
+  {
+    
+      //kill off each element within the matrix, them kill the list of elements it'self
+      if (mat)
+      
+      {
+        for (int i = 0; i < 16; i++)
+          if (mat[i])
+            delete mat[i];
+        delete[]mat;
+      }
+  }
+};
 
-	variable **mat; //will always be allocated to a 4*4 matrix of expressions
-	int size[2];//the largest direction in a given dimention assigned a value
-	//I was going to use this for something, but I forgot what... something
-	//about it auto-maticly being able to make variable vectors and/or N*M matriciese
-public:
-	void set_element ( int i, int j, char *str )
-	{
-		//set's an element in the matrix, if the value to be set
-		//is what it would be if the matrix were an identity at the
-		//specified element no allocation is performed
-		//code in the get_value function will find a NULL there and return the apropriate value
-
-		Assert ( j < 4 );
-		Assert ( i < 4 );
-		if ( i + 1 > size[0] ) size[0] = i + 1;
-		if ( j + 1 > size[1] ) size[1] = j + 1;
-
-		char *s = str;
-		while ( is_value ( *s ) )
-			s++;
-		//if there is a number at the front of the expression go to the next item
-		if ( !*s )
-		{
-			//if there is nothing after the first element in the expression see if it's
-			//an identity element if it is then we ignore it
-			float f = ( float ) atof ( str );
-			if ( i == j && f == 1.0f ) return;
-			if ( i != j && f == 0.0f ) return;
-		}
-
-		//not identity, well we have to allocate an expression
-
-		//if there is no element pointer matrix yet,
-		//it would probly be a good idea to build that first though
-		if ( !mat )
-		{
-			mat = new variable*[16];
-			memset ( mat, NULL, sizeof ( expression * ) * 16 );
-		}
-
-		//ok get the index of the element
-		int idx = j * 4 + i;
-		//if something lives there now kill it and take it's land
-		if ( mat[idx] )
-		{
-			delete mat[idx];
-			mat[idx] = NULL;
-		}
-		//ah, an empy home, well I'll just move right on in
-		mat[idx] = new expression ( str );
-	}
-	float get_element ( int i, int j, object *obj = NULL )
-	{
-		Assert ( j < 4 );
-		Assert ( i < 4 );
-		int idx = j * 4 + i;
-		//grab the index
-		//if there is a matrix, and there is an element in the matrix at the defined  location
-		//return the value of the expression
-		if ( mat && mat[idx] ) return mat[idx]->value ( &variable_call_data ( obj ) );
-		//otherwise retrun identity
-		if ( i == j ) return 1.0f;
-		return 0.0f;
-	}
-	int get_size ( int d ) {return size[d % 2];} //get how big the matrix is in a dimention
-
-	var_matrix() : mat ( NULL ) {}; //construct to identity
-
-	~var_matrix()
-	{
-		//kill off each element within the matrix, them kill the list of elements it'self
-		if ( mat )
-		{
-			for ( int i = 0; i < 16; i++ )
-				if ( mat[i] ) delete mat[i];
-			delete[]mat;
-		}
-	}
-};
-
-#endif
+ 
+#endif  /*  */

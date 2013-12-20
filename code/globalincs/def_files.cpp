@@ -3,70 +3,78 @@
  *
  * You may not sell or otherwise commercially exploit the source or things you
  * create based on the source.
- */
-
-
-
-
+ */  
+     
 #include <string.h>
 #include "globalincs/pstypes.h"
-
+  
 //Struct used to hold data about file defaults
-typedef struct def_file
+typedef struct def_file 
 {
-	char *filename;
-	char *contents;
-} def_file;
-
+  char *filename;
+    char *contents;
+ } def_file;
+ 
 //:PART 1:
 //**********
 extern char *Default_species_table;
-extern char *Default_iff_table;
-extern char *Default_shiptypes_table;
-extern char *Default_ai_profiles_table;
-extern char *Default_autopilot_table;
-extern char *Default_fonts_table;
-//**********
+extern char *Default_iff_table;
+extern char *Default_shiptypes_table;
+extern char *Default_ai_profiles_table;
+extern char *Default_autopilot_table;
+extern char *Default_fonts_table;
 
+//**********
+  
 //:PART 2:
 //**********
-def_file Default_files[] =
+  def_file Default_files[] = 
 {
-	{ "species_defs.tbl",       Default_species_table },
-	{ "iff_defs.tbl",           Default_iff_table },
-	{ "objecttypes.tbl",        Default_shiptypes_table },
-	{ "ai_profiles.tbl",        Default_ai_profiles_table },
-	{ "autopilot.tbl",          Default_autopilot_table },
-	{ "fonts.tbl",              Default_fonts_table },
-};
+  
+  {
+  "species_defs.tbl", Default_species_table}, 
+  {
+  "iff_defs.tbl", Default_iff_table}, 
+  {
+  "objecttypes.tbl", Default_shiptypes_table}, 
+  {
+  "ai_profiles.tbl", Default_ai_profiles_table}, 
+  {
+  "autopilot.tbl", Default_autopilot_table}, 
+  {
+"fonts.tbl", Default_fonts_table}, };
 
-static int Num_default_files = sizeof ( Default_files ) / sizeof ( def_file );
+ static int Num_default_files = sizeof(Default_files) / sizeof(def_file);
+
 //**********
-
-char *defaults_get_file ( char *filename )
+char *defaults_get_file(char *filename) 
 {
-	for ( int i = 0; i < Num_default_files; i++ )
-	{
-		if ( !stricmp ( Default_files[i].filename, filename ) )
-		{
-			return Default_files[i].contents;
-		}
-	}
+  for (int i = 0; i < Num_default_files; i++)
+    
+    {
+      if (!stricmp(Default_files[i].filename, filename))
+        
+        {
+          return Default_files[i].contents;
+        }
+    }
+   
+    //WMC - This is really bad, because it means we have a default table missing.
+    Error(LOCATION,
+          "Default table '%s' missing from executable - contact a coder.",
+          filename);
+  return NULL;
+}
 
-	//WMC - This is really bad, because it means we have a default table missing.
-	Error ( LOCATION, "Default table '%s' missing from executable - contact a coder.", filename );
-	return NULL;
-}
-
+ 
 //:PART 3:
 //**********
 //=========================================================================
-
+  
 // This is the default table.
 // Please note that the {\n\}s should be removed from the end of each line
 // if you intend to use this to format your own table.
-
-char *Default_species_table = "\
+char *Default_species_table = "\
 																		\n\
 #SPECIES DEFS															\n\
 																		\n\
@@ -123,15 +131,14 @@ $AwacsMultiplier: 1.50													\n\
 																		\n\
 #END																	\n\
 ";
-
+ 
 //=========================================================================
-
+  
 // This is the default table.
 // Please note that the {\n\}s should be removed from the end of each line
 // and the {\"}s  should be replaced with {"}s if you intend to use this to
 // format your own table.
-
-char *Default_iff_table = "\
+char *Default_iff_table = "\
 																		\n\
 #IFFs																	\n\
 																		\n\
@@ -188,18 +195,17 @@ $Attacks: ( \"Friendly\" \"Hostile\" \"Neutral\" \"Traitor\" )			\n\
 																		\n\
 #End																	\n\
 ";
-
+ 
 //=========================================================================
-
+  
 // This is the default table.
 // Please note that the {\n\}s and {""\}s should be removed from the end of
 // each line and the {\"}s  should be replaced with {"}s if you intend to
 // use this to format your own table.
-
-char *Default_shiptypes_table = "\
+char *Default_shiptypes_table = "\
 																		\n\
 #Ship types																\n\
-""\
+" "\
 $Name:					Navbuoy											\n\
 $Max Debris Speed:		200												\n\
 $FF Multiplier:			1.0												\n\
@@ -211,7 +217,7 @@ $AI:																	\n\
 	+Actively Pursues:		( \"navbuoy\" \"sentry gun\" \"escape pod\" \"cargo\" \"support\" \"stealth\" \"fighter\" \"bomber\" \"fighter/bomber\" \"transport\" \"freighter\" \"awacs\" \"gas miner\" \"cruiser\" \"corvette\" \"capital\" \"super cap\" \"drydock\" \"knossos device\" )	\n\
 	+Turrets attack this:	YES											\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					Sentry Gun										\n\
 $Counts for Alone:		YES												\n\
 $On Hotkey List:		YES												\n\
@@ -230,7 +236,7 @@ $AI:																	\n\
 	+Guards attack this:	YES											\n\
 	+Turrets attack this:	YES											\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					Escape Pod										\n\
 $Praise Destruction:	YES												\n\
 $On Hotkey List:		YES												\n\
@@ -247,7 +253,7 @@ $AI:																	\n\
 	+Actively Pursues:		( \"navbuoy\" \"sentry gun\" \"escape pod\" \"cargo\" \"support\" \"stealth\" \"fighter\" \"bomber\" \"fighter/bomber\" \"transport\" \"freighter\" \"awacs\" \"gas miner\" \"cruiser\" \"corvette\" \"capital\" \"super cap\" \"drydock\" \"knossos device\" )	\n\
 	+Turrets attack this:	YES											\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					Cargo											\n\
 $Scannable:				YES												\n\
 $Max Debris Speed:		200												\n\
@@ -260,7 +266,7 @@ $Fog:																	\n\
 $AI:																	\n\
 	+Passive docks:			( \"cargo\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					Support											\n\
 $Counts for Alone:		YES												\n\
 $Praise Destruction:	YES												\n\
@@ -285,7 +291,7 @@ $AI:																	\n\
 	+Turrets attack this:	YES											\n\
 	+Active docks:			( \"support\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 ;;WMC - Stealth ships always have another type, so this isn't used		\n\
 $Name:					Stealth											\n\
 $Counts for Alone:		YES												\n\
@@ -309,7 +315,7 @@ $AI:																	\n\
 	+Turrets attack this:	YES											\n\
 	+Passive docks:			( \"support\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					Fighter											\n\
 $Counts for Alone:		YES												\n\
 $Praise Destruction:	YES												\n\
@@ -335,7 +341,7 @@ $AI:																	\n\
 	+Can Form Wing:			YES											\n\
 	+Passive docks:			( \"support\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					Bomber											\n\
 $Counts for Alone:		YES												\n\
 $Praise Destruction:	YES												\n\
@@ -361,7 +367,7 @@ $AI:																	\n\
 	+Can Form Wing:			YES											\n\
 	+Passive docks:			( \"support\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 ;;WMC - This fighter/bomber type doesn't seem to be used anywhere, because no ship is set as both fighter and bomber																																																								\n\
 $Name:					Fighter/bomber									\n\
 $Counts for Alone:		YES												\n\
@@ -387,7 +393,7 @@ $AI:																	\n\
 	+Can Form Wing:			YES											\n\
 	+Passive docks:			( \"support\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					Transport										\n\
 $Counts for Alone:		YES												\n\
 $Praise Destruction:	YES												\n\
@@ -413,7 +419,7 @@ $AI:																	\n\
 	+Can Form Wing:			YES											\n\
 	+Passive docks:			( \"support\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					Freighter										\n\
 $Counts for Alone:		YES												\n\
 $Praise Destruction:	YES												\n\
@@ -441,7 +447,7 @@ $AI:																	\n\
 	+Active docks:			( \"cargo\" )								\n\
 	+Passive docks:			( \"support\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					AWACS											\n\
 $Counts for Alone:		YES												\n\
 $Praise Destruction:	YES												\n\
@@ -467,7 +473,7 @@ $AI:																	\n\
 	+Can Form Wing:			YES											\n\
 	+Passive docks:			( \"support\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					Gas Miner										\n\
 $Counts for Alone:		YES												\n\
 $Praise Destruction:	YES												\n\
@@ -493,7 +499,7 @@ $AI:																	\n\
 	+Can Form Wing:			YES											\n\
 	+Passive docks:			( \"support\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					Cruiser											\n\
 $Counts for Alone:		YES												\n\
 $Praise Destruction:	YES												\n\
@@ -519,7 +525,7 @@ $AI:																	\n\
 	+Can Form Wing:			YES											\n\
 	+Passive docks:			( \"support\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					Corvette										\n\
 $Counts for Alone:		YES												\n\
 $Praise Destruction:	YES												\n\
@@ -545,7 +551,7 @@ $AI:																	\n\
 	+Can Form Wing:			YES											\n\
 	+Passive docks:			( \"support\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					Capital											\n\
 $Counts for Alone:		YES												\n\
 $Praise Destruction:	YES												\n\
@@ -572,7 +578,7 @@ $AI:																	\n\
 	+Can Form Wing:			YES											\n\
 	+Passive docks:			( \"support\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					Super Cap										\n\
 $Counts for Alone:		YES												\n\
 $Praise Destruction:	YES												\n\
@@ -597,7 +603,7 @@ $AI:																	\n\
 	+Can Form Wing:			YES											\n\
 	+Passive docks:			( \"support\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					Drydock											\n\
 $Counts for Alone:		YES												\n\
 $Praise Destruction:	YES												\n\
@@ -620,7 +626,7 @@ $AI:																	\n\
 	+Turrets attack this:	YES											\n\
 	+Passive docks:			( \"support\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 $Name:					Knossos Device									\n\
 $Counts for Alone:		YES												\n\
 $Praise Destruction:	YES												\n\
@@ -641,17 +647,16 @@ $AI:																	\n\
 	+Turrets attack this:	YES											\n\
 	+Passive docks:			( \"support\" )								\n\
 $Vaporize Percent Chance: 0.0											\n\
-""\
+" "\
 #End																	\n\
 ";
-
+ 
 //=========================================================================
-
+  
 // This is the default table.
 // Please note that the {\n\}s and {\n""\}s should be removed from the end
 // of each line if you intend to use this to format your own table.
-
-char *Default_ai_profiles_table = "\
+char *Default_ai_profiles_table = "\
 																		\n\
 ;; AI Profiles table.  Incorporates stuff from the old difficulty.tbl	\n\
 ;; plus additional flags previously covered under the blanket New AI	\n\
@@ -694,7 +699,7 @@ $AI Countermeasure Firing Chance: 0.2, 0.3, 0.5, 0.9, 1.1				\n\
 ;; seconds to add to the time it takes for an enemy to come in range of	\n\
 ;; (i.e. target) a friendly ship										\n\
 $AI In Range Time: 2, 1.4, 0.75, 0, -1									\n\
-																		\n""\
+																		\n" "\
 ;; AI ships will link ballistic primaries if ammo levels are greater	\n\
 ;; than these percents													\n\
 $AI Always Links Ammo Weapons: 95, 80, 60, 40, 20						\n\
@@ -734,7 +739,7 @@ $Predict Position Delay: 2, 1.5, 1.333, 0.5, 0							\n\
 																		\n\
 ;; seconds between each instance of an AI ship managing its shields		\n\
 $AI Shield Manage Delay: 5, 4, 2.5, 1.2, 0.1							\n\
-																		\n""\
+																		\n" "\
 ;; factor applied to 'fire wait' for friendly ships						\n\
 $Friendly AI Fire Delay Scale: 2, 1.4, 1.25, 1.1, 1						\n\
 																		\n\
@@ -759,7 +764,7 @@ $Glide Attack Percent: 0, 0, 0, 0, 0									\n\
 $Circle Strafe Percent: 0, 0, 0, 0, 0									\n\
 																		\n\
 ;; Percentage of the time where AI ships will use glide to strafe		\n\
-;; capital ships when it is an option.									\n""\
+;; capital ships when it is an option.									\n" "\
 $Glide Strafe Percent: 0, 0, 0, 0, 0									\n\
 																		\n\
 ;; The amount of time required for the AI to detect 					\n\
@@ -782,7 +787,7 @@ $Max Turret Target Ownage: 3, 4, 7, 12, 19								\n\
 																		\n\
 ;; maximum number of turrets on one ship allowed to be attacking the	\n\
 ;; player at a given time												\n\
-$Max Turret Player Ownage: 3, 4, 7, 12, 19								\n""\
+$Max Turret Player Ownage: 3, 4, 7, 12, 19								\n" "\
 																		\n\
 ;; the minimum percentage of the total assessed damage a player		 	\n\
 ;; must inflict in order to be awarded a kill							\n\
@@ -805,7 +810,7 @@ $Repair Penalty: 10, 20, 35, 50, 60										\n\
 $Delay Before Allowing Bombs to Be Shot Down: 1.5, 1.5, 1.5, 1.5, 1.5	\n\
 																		\n\
 ;; Chance AI has to fire missiles at player is (value + 1) / 7 in every	\n\
-;; 10 second interval													\n""\
+;; 10 second interval													\n" "\
 $Chance AI Has to Fire Missiles at Player:	0, 1, 2, 3, 4				\n\
 																		\n\
 ;; The maximum amount of delay allowed before the AI will update its	\n\
@@ -831,7 +836,7 @@ $smart secondary weapon selection: NO									\n\
 ;; quadrant(s) and not waste energy on fully-charged quadrants			\n\
 ;; (previously was -smart_shields on the command line)					\n\
 $smart shield management: NO											\n\
-																		\n""\
+																		\n" "\
 ;; if set, the AI will properly use brief pulses of afterburner power	\n\
 ;; instead of afterburning until fuel is exhausted						\n\
 $smart afterburner management: NO										\n\
@@ -861,7 +866,7 @@ $shockwaves damage small ship subsystems: NO							\n\
 ;; navigation subsystem is damaged or destroyed							\n\
 $navigation subsystem governs warpout capability: NO					\n\
 																		\n\
-;; if set, will not use a minimum speed limit for docked ships			\n""\
+;; if set, will not use a minimum speed limit for docked ships			\n" "\
 ;; (like in FS1)														\n\
 $ignore lower bound for minimum speed of docked ship: NO				\n\
 																		\n\
@@ -901,7 +906,7 @@ $fix linked primary weapon decision bug: NO								\n\
 ;; if set, prevents turrets from targeting bombs beyond maximum			\n\
 ;; range of the weapons of the turret									\n\
 $prevent turrets targeting too distant bombs: NO						\n\
-																		\n""\
+																		\n" "\
 ;; if set, prevents turrets from trying to target subsystems beyond		\n\
 ;; their fov limits, also keeps the turret subsystem targeting			\n\
 ;; preference order intact regardless of the angle to the target		\n\
@@ -940,14 +945,13 @@ $fix AI class bug:	NO													\n\
 																		\n\
 #End																	\n\
 ";
-
+ 
 //=========================================================================
-
+  
 // This is the default table.
 // Please note that the {\n\}s should be removed from the end of each line
 // if you intend to use this to format your own table.
-
-char *Default_autopilot_table = "\
+char *Default_autopilot_table = "\
 #Autopilot																\n\
 																		\n\
 $Link Distance: 1000													\n\
@@ -973,14 +977,13 @@ $Hazard:																\n\
 																		\n\
 #END																	\n\
 ";
-
+ 
 //=========================================================================
-
+  
 // This is the default table.
 // Please note that the {\n\}s should be removed from the end of each line
 // if you intend to use this to format your own table.
-
-char *Default_fonts_table = "\
+char *Default_fonts_table = "\
 #Fonts																	\n\
 																		\n\
 $Font: font01.vf														\n\
@@ -989,3 +992,4 @@ $Font: font03.vf														\n\
 																		\n\
 #End																	\n\
 ";
+

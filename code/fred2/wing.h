@@ -5,14 +5,12 @@
  * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
-*/
-
-
-
+*/  
+    
 #include "Management.h"
+int create_wing();
+void remove_wing(int wing_num);
+void remove_ship_from_wing(int ship, int min = 1);
+void mark_wing(int wing);
+int delete_wing(int wing = cur_wing, int bypass = 0);
 
-int create_wing();
-void    remove_wing ( int wing_num );
-void    remove_ship_from_wing ( int ship, int min = 1 );
-void    mark_wing ( int wing );
-int delete_wing ( int wing = cur_wing, int bypass = 0 );

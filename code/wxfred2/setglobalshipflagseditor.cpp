@@ -2,35 +2,27 @@
  * Created by Ian "Goober5000" Warfield for the FreeSpace2 Source Code Project.
  * You may not sell or otherwise commercially exploit the source or things you
  * create based on the source.
- */
-
-
-
+ */  
+    
 // precompiled header for compilers that support it
 #include <wx/wxprec.h>
-
+  
 #ifdef __BORLANDC__
 #pragma hdrstop
-#endif
-
+#endif  /*  */
+  
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
-#endif
-
+#endif  /*  */
+  
 #include "setglobalshipflagseditor.h"
 #include <wx/xrc/xmlres.h>
-
-
-BEGIN_EVENT_TABLE ( dlgSetGlobalShipFlagsEditor, wxDialog )
-END_EVENT_TABLE()
-
-
-dlgSetGlobalShipFlagsEditor::dlgSetGlobalShipFlagsEditor ( wxWindow *parent )
-	: wxDialog()
+ BEGIN_EVENT_TABLE(dlgSetGlobalShipFlagsEditor, wxDialog)  END_EVENT_TABLE()   dlgSetGlobalShipFlagsEditor::dlgSetGlobalShipFlagsEditor(wxWindow * parent) :
+wxDialog()
+  
 {
-	wxXmlResource::Get()->LoadDialog ( this, parent, "dlgSetGlobalShipFlagsEditor" );
-}
-
-dlgSetGlobalShipFlagsEditor::~dlgSetGlobalShipFlagsEditor()
-{}
-
+  wxXmlResource::Get()->LoadDialog(this, parent,
+                                    "dlgSetGlobalShipFlagsEditor");
+}  dlgSetGlobalShipFlagsEditor::~dlgSetGlobalShipFlagsEditor() 
+{
+}  

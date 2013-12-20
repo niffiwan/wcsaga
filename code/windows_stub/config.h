@@ -1,16 +1,13 @@
 // config.h
-
-
-
+  
 #ifndef _CONFIG_H
 #define _CONFIG_H
-
-
+   
 #if defined _WIN32
-
+  
 // Goober5000 - now these warnings will only be disabled when compiling with MSVC :)
 #if defined _MSC_VER
-
+  
 // 4100 is unreferenced formal parameters,
 // 4127 is constant conditional (assert)
 // 4201 nonstandard extension used: nameless struct/union (happens a lot in Windows include headers)
@@ -29,37 +26,34 @@
 // 4786 is identifier truncated to 255 characters (happens all the time in Microsoft #includes) -- Goober5000
 // 4996 deprecated strcpy, strcat, sprintf, etc. (from MSVC 2005) - taylor
 #pragma warning(disable: 4100 4127 4201 4390 4410 4511 4512 4514 4611 4663 4710 4711 4725 4786 4996)
-
-#endif
-
+  
+#endif  /*  */
+  
 #if !defined BYTE_ORDER
 #define LITTLE_ENDIAN 1234
 #define BIG_ENDIAN    4321
-
+  
 #if defined _M_IX86 || defined _X86_
 #define BYTE_ORDER   LITTLE_ENDIAN
-#else
+#else   /*  */
 #error unknown byte order
-#endif
-#endif  // BYTE_ORDER
-
+#endif  /*  */
+#endif // BYTE_ORDER
+  
 #ifndef snprintf
 #define snprintf _snprintf
-#endif
-
-#else  // ! Win32
-
-
+#endif  /*  */
+  
+#else // ! Win32
+   
 #include <unistd.h>
 #include "SDL.h"
 #include "SDL_thread.h"
-
-
+   
 // don't verbose stub funtions unless we're debugging
 #define STUB_FUNCTION nprintf(( "Warning", "STUB: %s in "__FILE__" at line %d, thread %d\n", __FUNCTION__, __LINE__, getpid() ))
 #define DEBUGME(d1) nprintf(( "Warning", "DEBUGME: %s in "__FILE__" at line %d, msg \"%s\", thread %d\n", __FUNCTION__, __LINE__, d1, getpid() ))
-
-
+   
 #define _cdecl
 #define __cdecl
 #define __stdcall
@@ -67,50 +61,53 @@
 #define CALLBACK
 #define WINAPI
 #define FAR
-
+  
 // Standard data types
 typedef int BOOL;
-typedef unsigned short WORD;
-typedef unsigned int UINT;
+typedef unsigned short WORD;
+typedef unsigned int UINT;
+
 #ifdef IAM_64BIT
 // force 32-bit version of DWORD
 typedef unsigned int DWORD;
-typedef unsigned int FOURCC;
-typedef unsigned int *PDWORD, *LPDWORD;
-#else
+typedef unsigned int FOURCC;
+typedef unsigned int *PDWORD, *LPDWORD;
+
+#else   /*  */
 typedef unsigned long FOURCC;
-typedef unsigned long DWORD, *PDWORD, *LPDWORD;
-#endif
+typedef unsigned long DWORD, *PDWORD, *LPDWORD;
+
+#endif  /*  */
 //typedef void *HMMIO;
 typedef SDL_RWops *HMMIO;
-typedef void *HACMSTREAM;
-typedef long LONG;
-typedef long HRESULT;
-typedef long HTASK;
-typedef unsigned long SEGPTR;
-typedef long LONG_PTR, *PLONG_PTR;
-typedef long LRESULT;
-typedef long LPARAM;
-typedef long ( CALLBACK *FARPROC16 ) ();
-typedef unsigned int MMRESULT;
-typedef void *HWND;
-typedef void *HINSTANCE;
-typedef void *HANDLE;
-typedef char *LPSTR;
-typedef char *HPSTR;
-typedef void *LPMMIOPROC;
+typedef void *HACMSTREAM;
+typedef long LONG;
+typedef long HRESULT;
+typedef long HTASK;
+typedef unsigned long SEGPTR;
+typedef long LONG_PTR, *PLONG_PTR;
+typedef long LRESULT;
+typedef long LPARAM;
+typedef long (CALLBACK * FARPROC16) ();
+typedef unsigned int MMRESULT;
+typedef void *HWND;
+typedef void *HINSTANCE;
+typedef void *HANDLE;
+typedef char *LPSTR;
+typedef char *HPSTR;
+typedef void *LPMMIOPROC;
+
 #if __WORDSIZE == 64
 #define __int64 long int
-#else
+#else   /*  */
 #define __int64 long long int   // TODO: really need a compile-time assert on all of this
-#endif
+#endif  /*  */
 #define __int32 int
-
-typedef struct _LARGE_INTEGER
+typedef struct _LARGE_INTEGER 
 {
-	__int64 QuadPart;
-} LARGE_INTEGER;
-
+  __int64 QuadPart;
+} LARGE_INTEGER;
+ 
 // networking/socket stuff
 #define SOCKET          int
 #define SOCKADDR        struct sockaddr
@@ -130,43 +127,42 @@ typedef struct _LARGE_INTEGER
 #define WSAEADDRINUSE   EADDRINUSE
 #define SOCKET_ERROR    (-1)
 #define ioctlsocket(x, y, z)    ioctl(x, y, z)
-
+  
 #ifndef INVALID_SOCKET
 #define INVALID_SOCKET ((SOCKET) -1)
-#endif
-
+#endif  /*  */
+  
 // sound defines/structs
 #define WAVE_FORMAT_PCM     1
 #define WAVE_FORMAT_ADPCM   2
-
-#pragma pack(1) // required to get proper values in ds_parse_wave()
-typedef struct
+  
+#pragma pack(1)                 // required to get proper values in ds_parse_wave()
+typedef struct 
 {
-	WORD wFormatTag;
-	WORD nChannels;
-	DWORD nSamplesPerSec;
-	DWORD nAvgBytesPerSec;
-	WORD nBlockAlign;
-} WAVEFORMAT;
-
-typedef struct
+  WORD wFormatTag;
+  WORD nChannels;
+  DWORD nSamplesPerSec;
+  DWORD nAvgBytesPerSec;
+  WORD nBlockAlign;
+} WAVEFORMAT;
+ typedef struct 
 {
-	WAVEFORMAT wf;
-	WORD wBitsPerSample;
-} PCMWAVEFORMAT;
-
-typedef struct
+  WAVEFORMAT wf;
+  WORD wBitsPerSample;
+} PCMWAVEFORMAT;
+ typedef struct 
 {
-	WORD  wFormatTag;
-	WORD  nChannels;
-	DWORD nSamplesPerSec;
-	DWORD nAvgBytesPerSec;
-	WORD  nBlockAlign;
-	WORD  wBitsPerSample;
-	WORD  cbSize;
-} WAVEFORMATEX;
+  WORD wFormatTag;
+  WORD nChannels;
+  DWORD nSamplesPerSec;
+  DWORD nAvgBytesPerSec;
+  WORD nBlockAlign;
+  WORD wBitsPerSample;
+  WORD cbSize;
+} WAVEFORMATEX;
+
 #pragma pack()
-
+  
 // MessageBox-Codes and stuff
 #define MB_ABORTRETRYIGNORE 0
 #define MB_CANCELTRYCONTINUE 0
@@ -198,19 +194,17 @@ typedef struct
 #define MB_TOPMOST 0
 #define MB_SERVICE_NOTIFICATION 0
 #define MB_SERVICE_NOTIFICATION_NT3X 0
-
-int MessageBox ( HWND h, const char *s1, const char *s2, int i );
-
+int MessageBox(HWND h, const char *s1, const char *s2, int i);
+ 
 // thread/process related stuff
 #define _beginthread(x, y, z)
 #define _endthread()
-
-typedef SDL_mutex *CRITICAL_SECTION;
-
+typedef SDL_mutex *CRITICAL_SECTION;
+ 
 // timer stuff
 typedef timeval TIMEVAL;
-bool QueryPerformanceCounter ( LARGE_INTEGER *pcount );
-
+bool QueryPerformanceCounter(LARGE_INTEGER * pcount);
+ 
 // file related items
 #define _MAX_FNAME                  255
 #define _MAX_PATH                   255
@@ -218,72 +212,65 @@ bool QueryPerformanceCounter ( LARGE_INTEGER *pcount );
 #define SetCurrentDirectory(s)      _chdir(s)
 #define GetCurrentDirectory(i, s)   _getcwd((s), (i))
 #define _unlink(s)                  unlink(s)
-
+  
 // mmio stuff
-typedef struct
+typedef struct 
 {
-	DWORD       dwFlags;
-	FOURCC      fccIOProc;
-	LPMMIOPROC  pIOProc;
-	UINT        wErrorRet;
-	HTASK       hTask;
-	LONG        cchBuffer;
-	HPSTR       pchBuffer;
-	HPSTR       pchNext;
-	HPSTR       pchEndRead;
-	HPSTR       pchEndWrite;
-	LONG        lBufOffset;
-	LONG        lDiskOffset;
-	DWORD       adwInfo[4];
-	DWORD       dwReserved1;
-	DWORD       dwReserved2;
-	HMMIO       hmmio;
-} MMIOINFO;
-
-typedef MMIOINFO *LPMMIOINFO;
-
+  DWORD dwFlags;
+  FOURCC fccIOProc;
+  LPMMIOPROC pIOProc;
+  UINT wErrorRet;
+  HTASK hTask;
+  LONG cchBuffer;
+  HPSTR pchBuffer;
+  HPSTR pchNext;
+  HPSTR pchEndRead;
+  HPSTR pchEndWrite;
+  LONG lBufOffset;
+  LONG lDiskOffset;
+  DWORD adwInfo[4];
+  DWORD dwReserved1;
+  DWORD dwReserved2;
+  HMMIO hmmio;
+} MMIOINFO;
+ typedef MMIOINFO *LPMMIOINFO;
+ 
 #define FOURCC_MEM  0
-
+  
 #define MMIO_READ       (1<<0)
 #define MMIO_READWRITE  (1<<1)
 #define MMIO_WRITE      (1<<2)
 #define MMIO_ALLOCBUF   (1<<3)
-
+  
 #define MMIOERR_CANNOTWRITE     1
-
-HMMIO mmioOpen ( LPSTR szFilename, LPMMIOINFO lpmmioinfo, DWORD dwOpenFlags );
-long mmioSeek ( HMMIO hmmio, long lOffset, int iOrigin );
-long mmioRead ( HMMIO hmmio, HPSTR pch, long cch );
-MMRESULT mmioClose ( HMMIO hmmio, uint wFlags );
-
-
-int filelength ( int fd );
-int _chdir ( const char *path );
-int _getcwd ( char *buffer, unsigned int len );
-int _mkdir ( const char *path );
-void _splitpath ( char *path, char *drive, char *dir, char *fname, char *ext );
-
+  HMMIO mmioOpen(LPSTR szFilename, LPMMIOINFO lpmmioinfo, DWORD dwOpenFlags);
+long mmioSeek(HMMIO hmmio, long lOffset, int iOrigin);
+long mmioRead(HMMIO hmmio, HPSTR pch, long cch);
+MMRESULT mmioClose(HMMIO hmmio, uint wFlags);
+  int filelength(int fd);
+int _chdir(const char *path);
+int _getcwd(char *buffer, unsigned int len);
+int _mkdir(const char *path);
+void _splitpath(char *path, char *drive, char *dir, char *fname, char *ext);
+ 
 // string related
 #define stricmp(s1, s2)         strcasecmp((s1), (s2))
 #define strnicmp(s1, s2, n)     strncasecmp((s1), (s2), (n))
 #define _strnicmp(s1, s2, n)    strncasecmp((s1), (s2), (n))
 #define _strlwr(s)              strlwr(s)
-
-void strlwr ( char *s );
-char *strnset ( char *string, int fill, size_t count );
-
+void strlwr(char *s);
+char *strnset(char *string, int fill, size_t count);
+ 
 // other stuff
 #define _isnan(f)     isnan(f)
 #define _hypot(x, y)  hypot(x, y)
-
-int MulDiv ( int number, int numerator, int denominator );
-void Sleep ( int mili );
-
-struct POINT
+int MulDiv(int number, int numerator, int denominator);
+void Sleep(int mili);
+ struct POINT 
 {
-	int x, y;
-};
-
-#endif  // if !defined (WINDOWS)
-
+  int x, y;
+ };
+ 
+#endif // if !defined (WINDOWS)
+  
 #endif // ifndef _CONFIG_H

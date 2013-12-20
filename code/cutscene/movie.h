@@ -5,14 +5,11 @@
  * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
-*/
-
-
-
+*/  
+    
 #ifndef _MOVIE_HEADER_FILE
 #define _MOVIE_HEADER_FILE
-
-bool movie_play ( char *name );
-void movie_play_two ( char *name1, char *name2 );
-
-#endif
+  bool movie_play(char *name);
+void movie_play_two(char *name1, char *name2);
+ 
+#endif  /*  */

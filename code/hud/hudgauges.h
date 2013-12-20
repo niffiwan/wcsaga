@@ -5,16 +5,14 @@
  * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
-*/
-
-
-
+*/  
+    
 #ifndef __HUD_COMMON_H__
 #define __HUD_COMMON_H__
-
+  
 // HUD gauge types
 #define NUM_HUD_GAUGES                          39
-
+  
 #define HUD_LEAD_INDICATOR                      0
 #define HUD_ORIENTATION_TEE                 1
 #define HUD_HOSTILE_TRIANGLE                    2
@@ -50,12 +48,10 @@
 #define HUD_OFFSCREEN_RANGE                 32
 #define HUD_KILLS_GAUGE                         33
 #define HUD_ATTACKING_TARGET_COUNT          34
-#define HUD_TEXT_FLASH                          35                  // (formerly split up among emp, collision, etc)
+#define HUD_TEXT_FLASH                          35      // (formerly split up among emp, collision, etc)
 #define HUD_MESSAGE_BOX                         36
 #define HUD_SUPPORT_GAUGE                       37
 #define HUD_LAG_GAUGE                           38
-
-extern char *HUD_gauge_text[NUM_HUD_GAUGES];                    // defined in sexp.cpp!!!!
-
-
+extern char *HUD_gauge_text[NUM_HUD_GAUGES];   // defined in sexp.cpp!!!!
+ 
 #endif  /* __HUD_COMMON_H__ */

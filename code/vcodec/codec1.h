@@ -4,8 +4,7 @@
 // voice encoder/decoder.
 //
 // Written by Matthew F. Storch, Ph.D., copyright (c) 1998 Volition Inc.
-
-
+ 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Introduction to the VoiCTech encoder
@@ -28,26 +27,29 @@
 // Codec1. LPC-10 is implemented in a set of files in the LPC10 subdirectory.
 //
 //////////////////////////////////////////////////////////////////////////////
-
+  
 // VoiCTech is only intended to work with 8-bit samples recorded at 11KHz.
 // 8KHz should also work.
 typedef unsigned char t_Sample;
-
+ 
 // Algorithm suites.
-enum t_Code { e_cCodec1, e_cLPC10 };
-
+  enum t_Code
+{ e_cCodec1, e_cLPC10 };
+ 
 // One of these is passed with every buffer that is transmitted; it contains
 // data on how to decode the buffer.
-struct t_CodeInfo { t_Code Code; double Gain; };
-
-
+  struct t_CodeInfo
+{
+  t_Code Code;
+  double Gain;
+};
+  
 // WARNING ***** DANGER ***** WARNING ***** DANGER ***** WARNING ***** DANGER
 // If LPC-10 is used, all buffers must be a multiple of LFRAME (Frame length
 // for LPC-10 codec) in length
 #define LFRAME 180
 // WARNING ***** DANGER ***** WARNING ***** DANGER ***** WARNING ***** DANGER
-
-
+   
 //////////////////////////////////////////////////////////////////////////////
 // InitDecoder must be called once to initialize the decoder.
 // Input:
@@ -60,11 +62,11 @@ struct t_CodeInfo { t_Code Code; double Gain; };
 // Output:
 //     initializes global variables
 //
-void InitDecoder ( int QoS, t_Sample *tempBuf );
+void InitDecoder(int QoS, t_Sample * tempBuf);
+
 //
 //////////////////////////////////////////////////////////////////////////////
-
-
+   
 //////////////////////////////////////////////////////////////////////////////
 // Decode is the main decoder entry point.
 // Input:
@@ -78,12 +80,12 @@ void InitDecoder ( int QoS, t_Sample *tempBuf );
 //     bufOut     - Decoded data written here
 //     returns    - Nothing
 //
-void Decode ( t_CodeInfo *codeInfo, t_Sample *bufIn, t_Sample *bufOut,
-              int encodeSize, int decodeSize );
+void Decode(t_CodeInfo * codeInfo, t_Sample * bufIn, t_Sample * bufOut, 
+            int encodeSize, int decodeSize);
+
 //
 //////////////////////////////////////////////////////////////////////////////
-
-
+   
 //////////////////////////////////////////////////////////////////////////////
 // InitEncoder must be called once to initialize the encoder.  May safely be
 // called again to change tuning parameters.
@@ -100,11 +102,12 @@ void Decode ( t_CodeInfo *codeInfo, t_Sample *bufIn, t_Sample *bufOut,
 // Output:
 //     initializes global variables
 //
-void InitEncoder ( t_Code code, int QoS, t_Sample *tempBuf1, t_Sample *tempBuf2 );
+void InitEncoder(t_Code code, int QoS, t_Sample * tempBuf1,
+                 t_Sample * tempBuf2);
+
 //
 //////////////////////////////////////////////////////////////////////////////
-
-
+   
 //////////////////////////////////////////////////////////////////////////////
 // Encode is the main Encoder entry point.
 // Input:
@@ -118,15 +121,16 @@ void InitEncoder ( t_Code code, int QoS, t_Sample *tempBuf1, t_Sample *tempBuf2 
 //
 #if defined(CODEC_DEMO)
 // Test program version
-int Encode ( t_Sample *bufIn, t_Sample *bufOut, int sizeIn, int sizeOut,
-             t_CodeInfo *codeInfo,
-             t_Sample *levels, int *modes, int samples[9], int storage[9] );
-#else
+int Encode(t_Sample * bufIn, t_Sample * bufOut, int sizeIn, int sizeOut,
+           t_CodeInfo * codeInfo, t_Sample * levels, int *modes,
+           int samples[9], int storage[9]);
+
+#else   /*  */
 // Release version
-int Encode ( t_Sample *bufIn, t_Sample *bufOut, int sizeIn, int sizeOut,
-             t_CodeInfo *codeInfo );
-#endif
+int Encode(t_Sample * bufIn, t_Sample * bufOut, int sizeIn, int sizeOut,
+           t_CodeInfo * codeInfo);
+
+#endif  /*  */
 //
 //////////////////////////////////////////////////////////////////////////////
-
-
+   

@@ -5,47 +5,41 @@
  * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
-*/
-
-
-
+*/  
+    
 #ifndef _GROPENGLEXT_H
 #define _GROPENGLEXT_H
-
+  
 #include "globalincs/pstypes.h"
 #include "graphics/gropengl.h"
-
+  
 //EXTENSIONS!!!!
 //be sure to check for this at startup and handle not finding it gracefully
-
+  
 //to add extensions/functions:
 //define an index after the last one, either an extension or a function
 //increment NUM_OGL_EXTENSIONS if an extension or NUM_OGL_FUNCTIONS if function
 //add function macro for Win32
 //add function info to GL_Functions struct
 //the structure of extensions/functions are located in gropenglextension.cpp
-
-typedef struct ogl_extension
+typedef struct ogl_extension 
 {
-	bool required_to_run;
-	bool enabled;
-	int num_extensions;
-	const char *extension_name[3];
-	int num_functions;
-	const char *function_names[20];
-} ogl_extension;
-
-typedef struct ogl_function
+  bool required_to_run;
+  bool enabled;
+  int num_extensions;
+    const char *extension_name[3];
+    int num_functions;
+    const char *function_names[20];
+ } ogl_extension;
+ typedef struct ogl_function 
 {
-	const char *function_name;
-	ptr_u function_ptr;
-} ogl_function;
-
-extern ogl_function GL_Functions[];
-extern ogl_extension GL_Extensions[];
-extern ogl_function GL_EXT_Special[];
-
-
+  const char *function_name;
+    ptr_u function_ptr;
+ } ogl_function;
+ extern ogl_function GL_Functions[];
+extern ogl_extension GL_Extensions[];
+extern ogl_function GL_EXT_Special[];
+  
 // Extensions
 #define OGL_EXT_FOG_COORD                   0
 #define OGL_ARB_MULTITEXTURE                1
@@ -76,23 +70,22 @@ extern ogl_function GL_EXT_Special[];
 #define OGL_ARB_VERTEX_SHADER               22
 #define OGL_ARB_FRAGMENT_SHADER             23
 #define OGL_SM30                            24
-
+  
 #define NUM_OGL_EXTENSIONS                  25
-
-
+   
 // Functions
-#define OGL_FOG_COORDF                      0           // for better looking fog
-#define OGL_FOG_COORD_POINTER               1           // used with vertex arrays
-#define OGL_MULTI_TEX_COORD_2F              2           // multitex coordinates
-#define OGL_ACTIVE_TEXTURE                  3           // currenly active multitexture
+#define OGL_FOG_COORDF                      0   // for better looking fog
+#define OGL_FOG_COORD_POINTER               1   // used with vertex arrays
+#define OGL_MULTI_TEX_COORD_2F              2   // multitex coordinates
+#define OGL_ACTIVE_TEXTURE                  3   // currenly active multitexture
 #define OGL_CLIENT_ACTIVE_TEXTURE           4
-#define OGL_COMPRESSED_TEX_IMAGE_2D         5           // 2d compressed texture
-#define OGL_COMPRESSED_TEX_SUB_IMAGE_2D     6           // 2d compressed sub texture
+#define OGL_COMPRESSED_TEX_IMAGE_2D         5   // 2d compressed texture
+#define OGL_COMPRESSED_TEX_SUB_IMAGE_2D     6   // 2d compressed sub texture
 #define OGL_GET_COMPRESSED_TEX_IMAGE        7
 //#define OGL_SECONDARY_COLOR_3FV           8           // for better looking fog
 //#define OGL_SECONDARY_COLOR_3UBV          9           // specular
-#define OGL_LOCK_ARRAYS                     8           // HTL
-#define OGL_UNLOCK_ARRAYS                   9           // HTL
+#define OGL_LOCK_ARRAYS                     8   // HTL
+#define OGL_UNLOCK_ARRAYS                   9   // HTL
 //#define OGL_LOAD_TRANSPOSE_MATRIX_F       12
 //#define OGL_MULT_TRANSPOSE_MATRIX_F       13
 #define OGL_DRAW_RANGE_ELEMENTS             10
@@ -141,37 +134,33 @@ extern ogl_function GL_EXT_Special[];
 #define OGL_UNIFORM4FV                      53
 #define OGL_UNIFORM1I                       54
 #define OGL_UNIFORM_MATRIX4FV               55
-
+  
 #define NUM_OGL_FUNCTIONS                   56
-
-
+   
 // special extensions/functions (OS specific, non-GL stuff)
 #define OGL_SPC_WGL_SWAP_INTERVAL       0
 #define OGL_SPC_GLX_SWAP_INTERVAL       1
-
+  
 #define NUM_OGL_EXT_SPECIAL             2
-
-
+   
 #define Is_Extension_Enabled(x)     GL_Extensions[x].enabled
-
-void opengl_extensions_init();
-
-
+void opengl_extensions_init();
+  
 #define GLEXT_CALL(i, x) if (GL_Functions[i].function_ptr) \
-                            ((x)GL_Functions[i].function_ptr)
-
+  ((x) GL_Functions[i].function_ptr)  
 // the same as GLEXT_CALL() except that it can be used with a cast or in an if statement
 // this doesn't do NULL ptr checking so you have to be careful with it!
 #define GLEXT_CALL2(i, x) ((x)GL_Functions[i].function_ptr)
-
+  
 #define GLEXT_SPC_CALL(i, x) if (GL_EXT_Special[i].function_ptr) \
-                            ((x)GL_EXT_Special[i].function_ptr)
-
-
+  ((x) GL_EXT_Special[i].function_ptr)   
 #ifdef __APPLE__
 // special one, since it's a core feature
-typedef void ( * glDrawRangeElementsProcPtr ) ( GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid *indices );
-
+typedef void (*glDrawRangeElementsProcPtr) (GLenum mode, GLuint start,
+                                            GLuint end, GLsizei count,
+                                            GLenum type,
+                                            const GLvoid * indices);
+ 
 // OS X doesn't have the PFN* names so we have to use the real OSX function ptrs
 #define PFNGLFOGCOORDFEXTPROC                   glFogCoordfEXTProcPtr
 #define PFNGLFOGCOORDPOINTEREXTPROC             glFogCoordPointerEXTProcPtr
@@ -233,8 +222,8 @@ typedef void ( * glDrawRangeElementsProcPtr ) ( GLenum mode, GLuint start, GLuin
 #define PFNGLUNIFORM4FVARBPROC                  glUnifrom4fvARBProcPtr
 #define PFNGLUNIFORM1IARBPROC                   glUniform1iARBProcPtr
 #define PFNGLUNIFORMMATRIX4FVARBPROC            glUniformMatrix4fvARBProcPtr
-#endif  // __APPLE__
-
+#endif // __APPLE__
+  
 #define vglFogCoordfEXT                 GLEXT_CALL( OGL_FOG_COORDF, PFNGLFOGCOORDFEXTPROC )
 #define vglFogCoordPointerEXT           GLEXT_CALL( OGL_FOG_COORD_POINTER, PFNGLFOGCOORDPOINTEREXTPROC )
 #define vglMultiTexCoord2fARB           GLEXT_CALL( OGL_MULTI_TEX_COORD_2F, PFNGLMULTITEXCOORD2FARBPROC )
@@ -295,10 +284,9 @@ typedef void ( * glDrawRangeElementsProcPtr ) ( GLenum mode, GLuint start, GLuin
 #define vglUniform4fvARB                GLEXT_CALL( OGL_UNIFORM3FV, PFNGLUNIFORM4FVARBPROC )
 #define vglUniform1iARB                 GLEXT_CALL( OGL_UNIFORM1I, PFNGLUNIFORM1IARBPROC )
 #define vglUniformMatrix4fvARB          GLEXT_CALL( OGL_UNIFORM_MATRIX4FV, PFNGLUNIFORMMATRIX4FVARBPROC )
-
-
+   
 // special extensions
 #define vwglSwapIntervalEXT         GLEXT_SPC_CALL( OGL_SPC_WGL_SWAP_INTERVAL, PFNWGLSWAPINTERVALEXTPROC )
 #define vglXSwapIntervalSGI         GLEXT_SPC_CALL( OGL_SPC_GLX_SWAP_INTERVAL, PFNGLXSWAPINTERVALSGIPROC )
-
+  
 #endif // _GROPENGLEXT_H
