@@ -47,7 +47,7 @@ extern int Ship_select_open;    // This game-wide global flag is set to 1 to ind
 // is needed so we can know if ship_select_close() needs to called if
 // restoring a game from the Options screen invoked from ship select
 
-extern int Commit_pressed;  // flag to indicate that the commit button was pressed
+extern int Commit_pressed;      // flag to indicate that the commit button was pressed
 // use a flag, so the ship_create() can be done at the end of the loop
 
 extern char default_player_ship[255];
@@ -56,44 +56,48 @@ extern int Select_default_ship;
 extern float ShipSelectScreenShipRot;
 extern int ShipSelectModelNum;
 
-void draw_wing_block ( int wb_num, int hot_slot, int selected_slot, int class_select );
+void draw_wing_block(int wb_num, int hot_slot, int selected_slot,
+                     int class_select);
 void ship_select_init();
-void ship_select_do ( float frametime );
+void ship_select_do(float frametime);
 void ship_select_close();
 void ship_select_common_init();
 void ship_select_common_close();
-int ss_get_ship_class ( int ship_entry_index );
+int ss_get_ship_class(int ship_entry_index);
 int ss_get_selected_ship();
 
-void ss_blit_ship_icon ( int x, int y, int ship_class, int bmap_num );
+void ss_blit_ship_icon(int x, int y, int ship_class, int bmap_num);
 
 // called from weapon select
-int ss_return_ship ( int wing_block, int wing_slot, int *ship_index, p_object **ppobjp );
-void ss_return_name ( int wing_block, int wing_slot, char *name );
-int ss_return_original_ship_class ( int slot_num );
-int ss_return_saindex ( int slot_num );
-int ss_disabled_slot ( int slot_num );
-int ss_valid_slot ( int slot_num );
-int ss_wing_slot_is_console_player ( int index );
+int ss_return_ship(int wing_block, int wing_slot, int *ship_index,
+                   p_object ** ppobjp);
+void ss_return_name(int wing_block, int wing_slot, char *name);
+int ss_return_original_ship_class(int slot_num);
+int ss_return_saindex(int slot_num);
+int ss_disabled_slot(int slot_num);
+int ss_valid_slot(int slot_num);
+int ss_wing_slot_is_console_player(int index);
 
 // lock/unlock any necessary slots for multiplayer
 void ss_recalc_multiplayer_slots();
 
-int create_default_player_ship ( int use_last_flown = 1 );
-void update_player_ship ( int si_index );
+int create_default_player_ship(int use_last_flown = 1);
+void update_player_ship(int si_index);
 
 void ss_synch_interface();
 
 // called by multiplayer team select to set the slot based flags
-void ss_make_slot_empty ( int slot_index );
-void ss_make_slot_full ( int slot_index );
+void ss_make_slot_empty(int slot_index);
+void ss_make_slot_full(int slot_index);
 
-int ss_dump_to_list ( int from_slot, int to_list, int *sound );
-int ss_swap_slot_slot ( int from_slot, int to_slot, int *sound );
-int ss_grab_from_list ( int from_list, int to_slot, int *sound );
-int ss_swap_list_slot ( int from_list, int to_slot, int *sound );
+int ss_dump_to_list(int from_slot, int to_list, int *sound);
+int ss_swap_slot_slot(int from_slot, int to_slot, int *sound);
+int ss_grab_from_list(int from_list, int to_slot, int *sound);
+int ss_swap_list_slot(int from_list, int to_slot, int *sound);
 
-void ss_apply ( int mode, int from_slot, int from_index, int to_slot, int to_index, int player_index = -1 );
-void ss_drop ( int from_slot, int from_index, int to_slot, int to_index, int player_index = -1 );
+void ss_apply(int mode, int from_slot, int from_index, int to_slot,
+              int to_index, int player_index = -1);
+void ss_drop(int from_slot, int from_index, int to_slot, int to_index,
+             int player_index = -1);
 
-#endif  /* __MISSIONSHIPCHOICE_H__ */
+#endif /* __MISSIONSHIPCHOICE_H__ */

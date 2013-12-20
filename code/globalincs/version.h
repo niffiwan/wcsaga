@@ -37,15 +37,15 @@
 //   the first version is 3.0 :-)
 //   Major.Minor.Bugfix
 
-#define FS_VERSION_MAJOR 3                  // major version
-#define FS_VERSION_MINOR 6                  // increase by 1 for minor revs
-#define FS_VERSION_BUILD 12                 // bugfix release
-#define FS_VERSION_REVIS 0                  // SVN revision
+#define FS_VERSION_MAJOR 3      // major version
+#define FS_VERSION_MINOR 6      // increase by 1 for minor revs
+#define FS_VERSION_BUILD 12     // bugfix release
+#define FS_VERSION_REVIS 0      // SVN revision
 
-#define SAGA_VERSION_MAJOR 1                    // major version
-#define SAGA_VERSION_MINOR 1                    // increase by 1 for minor revs
-#define SAGA_VERSION_BUILD 0                    // bugfix release
-#define SAGA_VERSION_REVIS 7822                 // SVN revision
+#define SAGA_VERSION_MAJOR 1    // major version
+#define SAGA_VERSION_MINOR 1    // increase by 1 for minor revs
+#define SAGA_VERSION_BUILD 0    // bugfix release
+#define SAGA_VERSION_REVIS 7822 // SVN revision
 
 
 #define VERSION_LOC_FNAME           "version.nfo"
@@ -75,7 +75,7 @@
 // 1 if same version
 // 2 if higher version
 // fills in user version and latest version values if non-NULL
-int version_compare ( char *filename, int *u_major, int *u_minor, int *u_build, int *l_major, int *l_minor,
-                      int *l_build );
+int version_compare(char *filename, int *u_major, int *u_minor, int *u_build,
+                    int *l_major, int *l_minor, int *l_build);
 
 #endif

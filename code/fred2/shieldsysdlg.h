@@ -15,37 +15,37 @@ extern int Shield_sys_types[MAX_SHIP_CLASSES];
 /////////////////////////////////////////////////////////////////////////////
 // shield_sys_dlg dialog
 
-class shield_sys_dlg : public CDialog
+class shield_sys_dlg:public CDialog
 {
-	// Construction
+  // Construction
 public:
-	void set_team();
-	void set_type();
-	shield_sys_dlg ( CWnd *pParent = NULL ); // standard constructor
+  void set_team();
+  void set_type();
+    shield_sys_dlg(CWnd * pParent = NULL);      // standard constructor
 
-	// Dialog Data
-	//{{AFX_DATA(shield_sys_dlg)
-	enum { IDD = IDD_SHIELD_SYS };
-	int     m_team;
-	int     m_type;
-	//}}AFX_DATA
+  // Dialog Data
+  //{{AFX_DATA(shield_sys_dlg)
+  enum
+  { IDD = IDD_SHIELD_SYS };
+  int m_team;
+  int m_type;
+  //}}AFX_DATA
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(shield_sys_dlg)
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(shield_sys_dlg)
 protected:
-	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange * pDX);   // DDX/DDV support
+  //}}AFX_VIRTUAL
 
-	// Implementation
+  // Implementation
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(shield_sys_dlg)
-	virtual void OnOK();
-	virtual BOOL OnInitDialog();
-	afx_msg void OnSelchangeTeam();
-	afx_msg void OnSelchangeType();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-};
+  // Generated message map functions
+  //{{AFX_MSG(shield_sys_dlg)
+    virtual void OnOK();
+  virtual BOOL OnInitDialog();
+  afx_msg void OnSelchangeTeam();
+  afx_msg void OnSelchangeType();
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()};

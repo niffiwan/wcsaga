@@ -13,48 +13,48 @@
 /////////////////////////////////////////////////////////////////////////////
 // ShipSpecialHitpoints dialog
 
-class ShipSpecialHitpoints : public CDialog
+class ShipSpecialHitpoints:public CDialog
 {
-	// Construction
+  // Construction
 public:
-	ShipSpecialHitpoints ( CWnd *pParent = NULL ); // standard constructor
+  ShipSpecialHitpoints(CWnd * pParent = NULL);  // standard constructor
 
-	// Dialog Data
-	//{{AFX_DATA(ShipSpecialHitpoints)
-	enum { IDD = IDD_SPECIAL_HITPOINTS };
-	BOOL    m_special_hitpoints_enabled;
-	BOOL    m_special_shield_enabled;
-	int     m_shields;
-	int     m_hull;
-	//}}AFX_DATA
+  // Dialog Data
+  //{{AFX_DATA(ShipSpecialHitpoints)
+  enum
+  { IDD = IDD_SPECIAL_HITPOINTS };
+  BOOL m_special_hitpoints_enabled;
+  BOOL m_special_shield_enabled;
+  int m_shields;
+  int m_hull;
+  //}}AFX_DATA
 
 private:
-	// variables to handle selection of multiple ships
-	int m_selected_ships[MAX_SHIPS];
-	int num_selected_ships;
-	int m_ship_num;
+  // variables to handle selection of multiple ships
+  int m_selected_ships[MAX_SHIPS];
+  int num_selected_ships;
+  int m_ship_num;
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(ShipSpecialHitpoints)
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(ShipSpecialHitpoints)
 protected:
-	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange * pDX);   // DDX/DDV support
+  //}}AFX_VIRTUAL
 
-	// Implementation
+  // Implementation
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(ShipSpecialHitpoints)
-	afx_msg void OnEnableSpecialHitpoints();
-	afx_msg void OnEnableSpecialShieldpoints();
-	virtual BOOL OnInitDialog();
-	afx_msg void DoGray();
-	virtual void OnCancel();
-	virtual void OnOk();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-};
+  // Generated message map functions
+  //{{AFX_MSG(ShipSpecialHitpoints)
+    afx_msg void OnEnableSpecialHitpoints();
+  afx_msg void OnEnableSpecialShieldpoints();
+  virtual BOOL OnInitDialog();
+  afx_msg void DoGray();
+  virtual void OnCancel();
+  virtual void OnOk();
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()};
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.

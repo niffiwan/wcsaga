@@ -19,54 +19,54 @@
 /////////////////////////////////////////////////////////////////////////////
 // ShipSpecialDamage dialog
 
-class ShipSpecialDamage : public CDialog
+class ShipSpecialDamage:public CDialog
 {
-	// Construction
+  // Construction
 public:
-	ShipSpecialDamage ( CWnd *pParent = NULL ); // standard constructor
-	void update_ship ( int ship );
+  ShipSpecialDamage(CWnd * pParent = NULL);     // standard constructor
+  void update_ship(int ship);
 
-	// Dialog Data
-	//{{AFX_DATA(ShipSpecialDamage)
-	enum { IDD = IDD_SPECIAL_DAMAGE };
-	int     m_shock_enabled;
-	BOOL    m_special_exp_enabled;
-	int     m_inner_rad;
-	int     m_outer_rad;
-	int     m_damage;
-	int     m_shock_speed;
-	int     m_blast;
-	int     m_ship_num;
+  // Dialog Data
+  //{{AFX_DATA(ShipSpecialDamage)
+  enum
+  { IDD = IDD_SPECIAL_DAMAGE };
+  int m_shock_enabled;
+  BOOL m_special_exp_enabled;
+  int m_inner_rad;
+  int m_outer_rad;
+  int m_damage;
+  int m_shock_speed;
+  int m_blast;
+  int m_ship_num;
 
 private:
-	// variables to handle selection of multiple ships
-	int m_selected_ships[MAX_SHIPS];
-	int num_selected_ships;
+  // variables to handle selection of multiple ships
+  int m_selected_ships[MAX_SHIPS];
+  int num_selected_ships;
 
-	//}}AFX_DATA
+  //}}AFX_DATA
 
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(ShipSpecialDamage)
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(ShipSpecialDamage)
 protected:
-	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange * pDX);   // DDX/DDV support
+  //}}AFX_VIRTUAL
 
-	// Implementation
+  // Implementation
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(ShipSpecialDamage)
-	afx_msg void OnEnableShockwave();
-	afx_msg void OnEnableSpecialExp();
-	virtual BOOL OnInitDialog();
-	afx_msg void DoGray();
-	virtual void OnCancel();
-	virtual void OnOK();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-};
+  // Generated message map functions
+  //{{AFX_MSG(ShipSpecialDamage)
+    afx_msg void OnEnableShockwave();
+  afx_msg void OnEnableSpecialExp();
+  virtual BOOL OnInitDialog();
+  afx_msg void DoGray();
+  virtual void OnCancel();
+  virtual void OnOK();
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()};
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.

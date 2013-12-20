@@ -18,28 +18,28 @@
 
 struct ogl_light_color
 {
-	float r, g, b, a;
+  float r, g, b, a;
 };
 
 // Structures
 struct opengl_light
 {
-	GLfloat Ambient[4], Diffuse[4], Specular[4];
+  GLfloat Ambient[4], Diffuse[4], Specular[4];
 
-	// light position
-	GLfloat Position[4];
+  // light position
+  GLfloat Position[4];
 
-	// spotlight direction (for tube lights)
-	GLfloat SpotDir[3];
+  // spotlight direction (for tube lights)
+  GLfloat SpotDir[3];
 
-	float SpotExp, SpotCutOff;
-	float ConstantAtten, LinearAtten, QuadraticAtten;
+  float SpotExp, SpotCutOff;
+  float ConstantAtten, LinearAtten, QuadraticAtten;
 
-	bool occupied;
-	int priority;
-	int type;
+  bool occupied;
+  int priority;
+  int type;
 
-	//  opengl_light() : occupied(false), priority(1), type(0) {};
+  //  opengl_light() : occupied(false), priority(1), type(0) {};
 };
 
 struct light_data;
@@ -51,19 +51,19 @@ extern int Num_active_gl_lights;
 extern int GL_center_alpha;
 
 //Functions
-int gr_opengl_make_light ( light *fs_light, int idx, int priority );    //unused -- stub function
-void gr_opengl_modify_light ( light *fs_light, int idx, int priority ); //unused -- stub function
-void gr_opengl_destroy_light ( int idx );                               //unused -- stub function
-void gr_opengl_set_light ( light *fs_light );
+int gr_opengl_make_light(light * fs_light, int idx, int priority);      //unused -- stub function
+void gr_opengl_modify_light(light * fs_light, int idx, int priority);   //unused -- stub function
+void gr_opengl_destroy_light(int idx);  //unused -- stub function
+void gr_opengl_set_light(light * fs_light);
 void gr_opengl_reset_lighting();
-void gr_opengl_set_lighting ( bool set, bool state );
-void gr_opengl_center_alpha ( int type );
-void gr_opengl_set_center_alpha ( int type );
-void gr_opengl_set_ambient_light ( int red, int green, int blue );
+void gr_opengl_set_lighting(bool set, bool state);
+void gr_opengl_center_alpha(int type);
+void gr_opengl_set_center_alpha(int type);
+void gr_opengl_set_ambient_light(int red, int green, int blue);
 
-void opengl_change_active_lights ( int pos, int d_offset = 0 );
+void opengl_change_active_lights(int pos, int d_offset = 0);
 void opengl_light_init();
 void opengl_light_shutdown();
-void opengl_default_light_settings ( int amb = 1, int emi = 1, int spec = 1 );
+void opengl_default_light_settings(int amb = 1, int emi = 1, int spec = 1);
 
 #endif //_GROPENGLLIGHT_H

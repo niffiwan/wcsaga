@@ -13,35 +13,34 @@
 /////////////////////////////////////////////////////////////////////////////
 // campaign_filelist_box window
 
-class campaign_filelist_box : public CListBox
+class campaign_filelist_box:public CListBox
 {
-	// Construction
+  // Construction
 public:
-	void initialize();
-	campaign_filelist_box();
+  void initialize();
+    campaign_filelist_box();
 
-	// Attributes
-public:
-
-	// Operations
+  // Attributes
 public:
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(campaign_filelist_box)
-	//}}AFX_VIRTUAL
-
-	// Implementation
+  // Operations
 public:
-	virtual ~campaign_filelist_box();
 
-	// Generated message map functions
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(campaign_filelist_box)
+  //}}AFX_VIRTUAL
+
+  // Implementation
+public:
+    virtual ~ campaign_filelist_box();
+
+  // Generated message map functions
 protected:
-	//{{AFX_MSG(campaign_filelist_box)
-	afx_msg void OnLButtonDown ( UINT nFlags, CPoint point );
-	//}}AFX_MSG
+  //{{AFX_MSG(campaign_filelist_box)
+    afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+  //}}AFX_MSG
 
-	DECLARE_MESSAGE_MAP()
-};
+  DECLARE_MESSAGE_MAP()};
 
 /////////////////////////////////////////////////////////////////////////////

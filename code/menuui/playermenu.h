@@ -13,8 +13,8 @@
 #define _PLAYER_SELECT_MENU_HEADER_FILE
 
 // general defines
-#define PLAYER_SELECT_MODE_SINGLE   0                           // looking through single player pilots
-#define PLAYER_SELECT_MODE_MULTI    1                           // looking through multi player pilots
+#define PLAYER_SELECT_MODE_SINGLE   0   // looking through single player pilots
+#define PLAYER_SELECT_MODE_MULTI    1   // looking through multi player pilots
 
 // flag indicating if this is the absolute first pilot created and selected. Used to determine
 // if the main hall should display the help overlay screen

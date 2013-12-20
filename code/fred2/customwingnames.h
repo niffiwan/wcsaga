@@ -10,48 +10,48 @@
 /////////////////////////////////////////////////////////////////////////////
 // CustomWingNames dialog
 
-class CustomWingNames : public CDialog
+class CustomWingNames:public CDialog
 {
-	// Construction
+  // Construction
 public:
-	CustomWingNames ( CWnd *pParent = NULL ); // standard constructor
-	int query_modified();
-	void OnOK();
-	void OnCancel();
+  CustomWingNames(CWnd * pParent = NULL);       // standard constructor
+  int query_modified();
+  void OnOK();
+  void OnCancel();
 
-	// Dialog Data
-	//{{AFX_DATA(CustomWingNames)
-	enum { IDD = IDD_CUSTOM_WING_NAMES };
-	CString m_squadron_1;
-	CString m_squadron_2;
-	CString m_squadron_3;
-	CString m_squadron_4;
-	CString m_squadron_5;
-	CString m_starting_1;
-	CString m_starting_2;
-	CString m_starting_3;
-	CString m_tvt_1;
-	CString m_tvt_2;
-	//}}AFX_DATA
+  // Dialog Data
+  //{{AFX_DATA(CustomWingNames)
+  enum
+  { IDD = IDD_CUSTOM_WING_NAMES };
+  CString m_squadron_1;
+  CString m_squadron_2;
+  CString m_squadron_3;
+  CString m_squadron_4;
+  CString m_squadron_5;
+  CString m_starting_1;
+  CString m_starting_2;
+  CString m_starting_3;
+  CString m_tvt_1;
+  CString m_tvt_2;
+  //}}AFX_DATA
 
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CustomWingNames)
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(CustomWingNames)
 protected:
-	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange * pDX);   // DDX/DDV support
+  //}}AFX_VIRTUAL
 
-	// Implementation
+  // Implementation
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CustomWingNames)
-	virtual BOOL OnInitDialog();
-	afx_msg void OnClose();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-};
+  // Generated message map functions
+  //{{AFX_MSG(CustomWingNames)
+    virtual BOOL OnInitDialog();
+  afx_msg void OnClose();
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()};
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.

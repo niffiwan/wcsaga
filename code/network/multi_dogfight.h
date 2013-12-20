@@ -28,7 +28,7 @@ struct object;
 void multi_df_level_pre_enter();
 
 // evaluate a kill in dogfight by a netplayer
-void multi_df_eval_kill ( net_player *killer, object *dead_obj );
+void multi_df_eval_kill(net_player * killer, object * dead_obj);
 
 // debrief
 void multi_df_debrief_init();

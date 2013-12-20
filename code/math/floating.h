@@ -16,8 +16,8 @@
 #include <float.h>
 
 extern float frand();
-extern int rand_chance ( float frametime, float chance = 1.0f );
-float frand_range ( float min, float max );
+extern int rand_chance(float frametime, float chance = 1.0f);
+float frand_range(float min, float max);
 
 // determine if a floating point number is NaN (Not a Number)
 #define fl_is_nan(fl) _isnan((double)(fl))
@@ -90,7 +90,7 @@ float fl_isqrt( float x )
 
 
 // rounds off a floating point number to a multiple of some number
-extern float fl_roundoff ( float x, int multiple );
+extern float fl_roundoff(float x, int multiple);
 
 
 #endif

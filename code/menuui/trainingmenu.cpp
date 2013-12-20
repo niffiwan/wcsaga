@@ -29,101 +29,104 @@ static int training_menu_inited = 0;
 
 void training_menu_init()
 {
-	char background_img_filename[MAX_FILENAME_LEN];
-	char background_mask_filename[MAX_FILENAME_LEN];
+  char background_img_filename[MAX_FILENAME_LEN];
+  char background_mask_filename[MAX_FILENAME_LEN];
 
-	snazzy_menu_init();
+  snazzy_menu_init();
 
-	read_menu_tbl ( NOX ( "TRAINING MENU" ), background_img_filename, background_mask_filename, region, &num_training );
+  read_menu_tbl(NOX("TRAINING MENU"), background_img_filename,
+                background_mask_filename, region, &num_training);
 
-	// load in the background bitmap (filenames are hard-coded temporarily)
-	trainingMenuBitmap = bm_load ( background_img_filename );
-	if ( trainingMenuBitmap < 0 )
-	{
-		Error ( LOCATION, "Could not load in %s!", background_img_filename );
-	}
+  // load in the background bitmap (filenames are hard-coded temporarily)
+  trainingMenuBitmap = bm_load(background_img_filename);
+  if (trainingMenuBitmap < 0)
+    {
+      Error(LOCATION, "Could not load in %s!", background_img_filename);
+    }
 
-	trainingMenuMask = bm_load ( background_mask_filename );
-	Training_mask_w = -1;
-	Training_mask_h = -1;
+  trainingMenuMask = bm_load(background_mask_filename);
+  Training_mask_w = -1;
+  Training_mask_h = -1;
 
-	if ( trainingMenuMask < 0 )
-	{
-		Error ( LOCATION, "Could not load in %s!", background_mask_filename );
-	}
-	else
-	{
-		// get a pointer to bitmap by using bm_lock()
-		trainingMenuMaskPtr = bm_lock ( trainingMenuMask, 8, BMP_AABITMAP );
-		mask_data = ( ubyte * ) trainingMenuMaskPtr->data;
-		bm_get_info ( trainingMenuMask, &Training_mask_w, &Training_mask_h );
-	}
+  if (trainingMenuMask < 0)
+    {
+      Error(LOCATION, "Could not load in %s!", background_mask_filename);
+    }
+  else
+    {
+      // get a pointer to bitmap by using bm_lock()
+      trainingMenuMaskPtr = bm_lock(trainingMenuMask, 8, BMP_AABITMAP);
+      mask_data = (ubyte *) trainingMenuMaskPtr->data;
+      bm_get_info(trainingMenuMask, &Training_mask_w, &Training_mask_h);
+    }
 }
 
 void training_menu_close()
 {
-	if ( training_menu_inited )
-	{
-		// done with the bitmap, so unlock it
-		bm_unlock ( trainingMenuMask );
+  if (training_menu_inited)
+    {
+      // done with the bitmap, so unlock it
+      bm_unlock(trainingMenuMask);
 
-		// unload the bitmaps
-		bm_release ( trainingMenuBitmap );
-		bm_release ( trainingMenuMask );
+      // unload the bitmaps
+      bm_release(trainingMenuBitmap);
+      bm_release(trainingMenuMask);
 
-		training_menu_inited = 0;
-		snazzy_menu_close();
-	}
+      training_menu_inited = 0;
+      snazzy_menu_close();
+    }
 }
 
-void training_menu_do_frame ( float frametime )
+void training_menu_do_frame(float frametime)
 {
-	int training_menu_choice;
+  int training_menu_choice;
 
-	if ( !training_menu_inited )
-	{
-		training_menu_init();
-		training_menu_inited = 1;
-	}
+  if (!training_menu_inited)
+    {
+      training_menu_init();
+      training_menu_inited = 1;
+    }
 
-	gr_reset_clip();
-	gr_set_color ( 0, 0, 0 );
-	GR_MAYBE_CLEAR_RES ( trainingMenuBitmap );
-	// set the background
-	if ( trainingMenuBitmap != -1 )
-	{
-		gr_set_bitmap ( trainingMenuBitmap );
-		gr_bitmap ( 0, 0 );
-	}
+  gr_reset_clip();
+  gr_set_color(0, 0, 0);
+  GR_MAYBE_CLEAR_RES(trainingMenuBitmap);
+  // set the background
+  if (trainingMenuBitmap != -1)
+    {
+      gr_set_bitmap(trainingMenuBitmap);
+      gr_bitmap(0, 0);
+    }
 
-	int snazzy_action = -1;
-	training_menu_choice = snazzy_menu_do ( mask_data, Training_mask_w, Training_mask_h, num_training,
-	                                        region, &snazzy_action );
-	if ( snazzy_action != SNAZZY_CLICKED )
-	{
-		training_menu_choice = -1;
-	}
+  int snazzy_action = -1;
+  training_menu_choice =
+    snazzy_menu_do(mask_data, Training_mask_w, Training_mask_h, num_training,
+                   region, &snazzy_action);
+  if (snazzy_action != SNAZZY_CLICKED)
+    {
+      training_menu_choice = -1;
+    }
 
-	switch ( training_menu_choice )
-	{
+  switch (training_menu_choice)
+    {
 
-	case TRAINING_MENU_TRAINING_MISSIONS_MASK:
-		break;
-	case TRAINING_MENU_REPLAY_MISSIONS_MASK:
-		// TODO: load the mission and start the briefing
-		break;
-	case TRAINING_MENU_RETURN_MASK:
-	case ESC_PRESSED:
-		gameseq_post_event ( GS_EVENT_MAIN_MENU );
-		break;
-	case -1:
-		// nothing selected
-		break;
-	default:
-		Error ( LOCATION, "Unknown option %d in training menu screen", training_menu_choice );
-		break;
+    case TRAINING_MENU_TRAINING_MISSIONS_MASK:
+      break;
+    case TRAINING_MENU_REPLAY_MISSIONS_MASK:
+      // TODO: load the mission and start the briefing
+      break;
+    case TRAINING_MENU_RETURN_MASK:
+    case ESC_PRESSED:
+      gameseq_post_event(GS_EVENT_MAIN_MENU);
+      break;
+    case -1:
+      // nothing selected
+      break;
+    default:
+      Error(LOCATION, "Unknown option %d in training menu screen",
+            training_menu_choice);
+      break;
 
-	} // end switch
+    }                           // end switch
 
-	gr_flip();
+  gr_flip();
 }

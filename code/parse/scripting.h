@@ -15,8 +15,8 @@
 
 struct image_desc
 {
-	char fname[MAX_FILENAME_LEN];
-	int handle;
+  char fname[MAX_FILENAME_LEN];
+  int handle;
 };
 
 //**********Main Conditional Hook stuff
@@ -64,125 +64,129 @@ struct image_desc
 
 struct script_condition
 {
-	int condition_type;
-	union
-	{
-		char name[NAME_LENGTH];
-	} data;
+  int condition_type;
+  union
+  {
+    char name[NAME_LENGTH];
+  } data;
 
-	script_condition()
-	{
-		condition_type = CHC_NONE;
-		memset ( data.name, 0, sizeof ( data.name ) );
-	}
+    script_condition()
+  {
+    condition_type = CHC_NONE;
+    memset(data.name, 0, sizeof(data.name));
+  }
 };
 
 struct script_action
 {
-	int action_type;
-	script_hook hook;
+  int action_type;
+  script_hook hook;
 
-	script_action()
-	{
-		action_type = CHA_NONE;
-	}
+    script_action()
+  {
+    action_type = CHA_NONE;
+  }
 };
 
 class ConditionedHook
 {
 private:
-	SCP_vector<script_action> Actions;
-	script_condition Conditions[MAX_HOOK_CONDITIONS];
+  SCP_vector < script_action > Actions;
+  script_condition Conditions[MAX_HOOK_CONDITIONS];
 public:
-	bool AddCondition ( script_condition sc );
-	bool AddAction ( script_action sa );
+    bool AddCondition(script_condition sc);
+  bool AddAction(script_action sa);
 
-	bool ConditionsValid ( int action, struct object *objp = NULL );
-	bool IsOverride ( class script_state *sys, int action );
-	bool Run ( class script_state *sys, int action, char format = '\0', void *data = NULL );
+  bool ConditionsValid(int action, struct object *objp = NULL);
+  bool IsOverride(class script_state * sys, int action);
+  bool Run(class script_state * sys, int action, char format =
+           '\0', void *data = NULL);
 };
 
 //**********Main script_state function
 class script_state
 {
 private:
-	char StateName[32];
+  char StateName[32];
 
-	int Langs;
-	struct lua_State *LuaState;
-	const struct script_lua_lib_list *LuaLibs;
+  int Langs;
+  struct lua_State *LuaState;
+  const struct script_lua_lib_list *LuaLibs;
 
-	//Utility variables
-	SCP_vector<image_desc> ScriptImages;
-	SCP_vector<ConditionedHook> ConditionalHooks;
+  //Utility variables
+    SCP_vector < image_desc > ScriptImages;
+    SCP_vector < ConditionedHook > ConditionalHooks;
 
 private:
 
-	void ParseChunkSub ( int *out_lang, int *out_index, char *debug_str = NULL );
-	int RunBytecodeSub ( int in_lang, int in_idx, char format = '\0', void *data = NULL );
+  void ParseChunkSub(int *out_lang, int *out_index, char *debug_str = NULL);
+  int RunBytecodeSub(int in_lang, int in_idx, char format = '\0', void *data =
+                     NULL);
 
-	void SetLuaSession ( struct lua_State *L );
+  void SetLuaSession(struct lua_State *L);
 
-	void OutputLuaMeta ( FILE *fp );
+  void OutputLuaMeta(FILE * fp);
 
-	//Lua private helper functions
-	bool OpenHookVarTable();
-	bool CloseHookVarTable();
+  //Lua private helper functions
+  bool OpenHookVarTable();
+  bool CloseHookVarTable();
 
-	//Internal Lua helper functions
-	void EndLuaFrame();
+  //Internal Lua helper functions
+  void EndLuaFrame();
 
-	//Destroy everything
-	void Clear();
+  //Destroy everything
+  void Clear();
 
 public:
-	//***Init/Deinit
-	script_state ( char *name );
-	script_state &operator= ( script_state &in );
-	~script_state();
+  //***Init/Deinit
+    script_state(char *name);
+    script_state & operator=(script_state & in);
+   ~script_state();
 
-	//***Internal scripting stuff
-	int LoadBm ( char *name );
-	void UnloadImages();
+  //***Internal scripting stuff
+  int LoadBm(char *name);
+  void UnloadImages();
 
-	lua_State *GetLuaSession()
-	{
-		return LuaState;
-	}
+  lua_State *GetLuaSession()
+  {
+    return LuaState;
+  }
 
-	//***Init functions for langs
-	int CreateLuaState();
+  //***Init functions for langs
+  int CreateLuaState();
 
-	//***Get data
-	int OutputMeta ( char *filename );
+  //***Get data
+  int OutputMeta(char *filename);
 
-	//***Moves data
-	//void MoveData(script_state &in);
+  //***Moves data
+  //void MoveData(script_state &in);
 
-	//***Variable handling functions
-	bool GetGlobal ( char *name, char format = '\0', void *data = NULL );
-	void RemGlobal ( char *name );
+  //***Variable handling functions
+  bool GetGlobal(char *name, char format = '\0', void *data = NULL);
+  void RemGlobal(char *name);
 
-	void SetHookVar ( char *name, char format, void *data = NULL );
-	void SetHookObject ( char *name, object *objp );
-	void SetHookObjects ( int num, ... );
-	bool GetHookVar ( char *name, char format = '\0', void *data = NULL );
-	void RemHookVar ( char *name );
-	void RemHookVars ( unsigned int num, ... );
+  void SetHookVar(char *name, char format, void *data = NULL);
+  void SetHookObject(char *name, object * objp);
+  void SetHookObjects(int num, ...);
+  bool GetHookVar(char *name, char format = '\0', void *data = NULL);
+  void RemHookVar(char *name);
+  void RemHookVars(unsigned int num, ...);
 
-	//***Hook creation functions
-	bool EvalString ( char *string, char *format = NULL, void *rtn = NULL, char *debug_str = NULL );
-	script_hook ParseChunk ( char *debug_str = NULL );
-	bool ParseCondition ( char *filename = "<Unknown>" );
+  //***Hook creation functions
+  bool EvalString(char *string, char *format = NULL, void *rtn =
+                  NULL, char *debug_str = NULL);
+  script_hook ParseChunk(char *debug_str = NULL);
+  bool ParseCondition(char *filename = "<Unknown>");
 
-	//***Hook running functions
-	int RunBytecode ( script_hook &hd, char format = '\0', void *data = NULL );
-	bool IsOverride ( script_hook &hd );
-	int RunCondition ( int condition, char format = '\0', void *data = NULL, struct object *objp = NULL );
-	bool IsConditionOverride ( int action, object *objp = NULL );
+  //***Hook running functions
+  int RunBytecode(script_hook & hd, char format = '\0', void *data = NULL);
+  bool IsOverride(script_hook & hd);
+  int RunCondition(int condition, char format = '\0', void *data =
+                   NULL, struct object *objp = NULL);
+  bool IsConditionOverride(int action, object * objp = NULL);
 
-	//*****Other functions
-	void EndFrame();
+  //*****Other functions
+  void EndFrame();
 };
 
 

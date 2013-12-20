@@ -36,16 +36,16 @@ typedef unsigned char t_Sample;
 // Algorithm suites.
 enum t_Code
 {
-	e_cCodec1,
-	e_cLPC10
+  e_cCodec1,
+  e_cLPC10
 };
 
 // One of these is passed with every buffer that is transmitted; it contains
 // data on how to decode the buffer.
 struct t_CodeInfo
 {
-	t_Code Code;
-	double Gain;
+  t_Code Code;
+  double Gain;
 };
 
 
@@ -68,7 +68,7 @@ struct t_CodeInfo
 // Output:
 //     initializes global variables
 //
-void InitDecoder ( int QoS, t_Sample *tempBuf );
+void InitDecoder(int QoS, t_Sample * tempBuf);
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -86,7 +86,8 @@ void InitDecoder ( int QoS, t_Sample *tempBuf );
 //     bufOut     - Decoded data written here
 //     returns    - Nothing
 //
-void Decode ( t_CodeInfo *codeInfo, t_Sample *bufIn, t_Sample *bufOut, int encodeSize, int decodeSize );
+void Decode(t_CodeInfo * codeInfo, t_Sample * bufIn, t_Sample * bufOut,
+            int encodeSize, int decodeSize);
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -107,7 +108,8 @@ void Decode ( t_CodeInfo *codeInfo, t_Sample *bufIn, t_Sample *bufOut, int encod
 // Output:
 //     initializes global variables
 //
-void InitEncoder ( t_Code code, int QoS, t_Sample *tempBuf1, t_Sample *tempBuf2 );
+void InitEncoder(t_Code code, int QoS, t_Sample * tempBuf1,
+                 t_Sample * tempBuf2);
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -125,14 +127,13 @@ void InitEncoder ( t_Code code, int QoS, t_Sample *tempBuf1, t_Sample *tempBuf2 
 //
 #if defined(CODEC_DEMO)
 // Test program version
-int Encode ( t_Sample *bufIn, t_Sample *bufOut, int sizeIn, int sizeOut,
-             t_CodeInfo *codeInfo,
-             t_Sample *levels, int *modes, int samples[9], int storage[9] );
+int Encode(t_Sample * bufIn, t_Sample * bufOut, int sizeIn, int sizeOut,
+           t_CodeInfo * codeInfo,
+           t_Sample * levels, int *modes, int samples[9], int storage[9]);
 #else
 // Release version
-int Encode ( t_Sample *bufIn, t_Sample *bufOut, int sizeIn, int sizeOut, t_CodeInfo *codeInfo );
+int Encode(t_Sample * bufIn, t_Sample * bufOut, int sizeIn, int sizeOut,
+           t_CodeInfo * codeInfo);
 #endif
 //
 //////////////////////////////////////////////////////////////////////////////
-
-

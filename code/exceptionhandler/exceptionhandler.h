@@ -59,7 +59,8 @@ typedef struct _EXCEPTION_POINTERS EXCEPTION_POINTERS, *PEXCEPTION_POINTERS;
 //
 // --------------------
 
-int __cdecl RecordExceptionInfo ( PEXCEPTION_POINTERS data, const char *Message );
+int __cdecl RecordExceptionInfo(PEXCEPTION_POINTERS data,
+                                const char *Message);
 
 // --------------------
 //

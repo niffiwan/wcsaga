@@ -12,21 +12,21 @@
 
 
 #ifndef NDEBUG
-void load_filter_info ( void );
-void outwnd_init ( int display_under_freespace_window = 0 );
+void load_filter_info(void);
+void outwnd_init(int display_under_freespace_window = 0);
 void outwnd_close();
-void outwnd_printf ( char *id = NULL, char *format = NULL, ... );
-void outwnd_printf2 ( char *format = NULL, ... );
+void outwnd_printf(char *id = NULL, char *format = NULL, ...);
+void outwnd_printf2(char *format = NULL, ...);
 
 extern int Log_debug_output_to_file;
 
-void safe_point ( char *file, int line, char *format, ... );
+void safe_point(char *file, int line, char *format, ...);
 #define SAFEPOINT(s) safe_point(__FILE__,__LINE__,(s))
 
 #else
 
 #define SAFEPOINT(s)
 
-#endif  // NDEBUG
+#endif // NDEBUG
 
-#endif  // _OUTWND_H
+#endif // _OUTWND_H

@@ -12,48 +12,47 @@
 /////////////////////////////////////////////////////////////////////////////
 // restrict_paths dialog
 
-class restrict_paths : public CDialog
+class restrict_paths:public CDialog
 {
-	// Construction
+  // Construction
 public:
-	restrict_paths ( CWnd *pParent = NULL ); // standard constructor
+  restrict_paths(CWnd * pParent = NULL);        // standard constructor
 
-	// parameters for the dialog
-	bool m_arrival;
-	int m_ship_class;
-	int *m_path_mask;
-
-
-	// Dialog Data
-	//{{AFX_DATA(restrict_paths)
-	enum { IDD = IDD_RESTRICT_PATHS };
-	CCheckListBox       m_path_list;
-	//}}AFX_DATA
+  // parameters for the dialog
+  bool m_arrival;
+  int m_ship_class;
+  int *m_path_mask;
 
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(restrict_paths)
+  // Dialog Data
+  //{{AFX_DATA(restrict_paths)
+  enum
+  { IDD = IDD_RESTRICT_PATHS };
+  CCheckListBox m_path_list;
+  //}}AFX_DATA
+
+
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(restrict_paths)
 protected:
-	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange * pDX);   // DDX/DDV support
+  //}}AFX_VIRTUAL
 
-	// Implementation
+  // Implementation
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(restrict_paths)
-	virtual BOOL OnInitDialog();
-	void OnCancel();
-	void OnOK();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+  // Generated message map functions
+  //{{AFX_MSG(restrict_paths)
+    virtual BOOL OnInitDialog();
+  void OnCancel();
+  void OnOK();
+  //}}AFX_MSG
+DECLARE_MESSAGE_MAP() private:
+  // model info
+    polymodel * m_model;
+  int m_num_paths;
 
-private:
-	// model info
-	polymodel *m_model;
-	int m_num_paths;
-
-	// regenerate all controls
-	void reset_controls();
+  // regenerate all controls
+  void reset_controls();
 };

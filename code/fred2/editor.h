@@ -22,21 +22,21 @@ extern "C" {
 
 #define MAX_GRID_POINTS     1000
 
-void create_object ( int objnum, vec3d *pos );
+void create_object(int objnum, vec3d * pos);
 
 //  This stuff properly belongs in editor.h, but I gave up trying to figure out how
 //  to add an include file to the project.
 
-extern void test_form_wing ( int x );
+extern void test_form_wing(int x);
 
-extern int  select_object ( int cx, int cy );
+extern int select_object(int cx, int cy);
 extern void game_init();
 
-extern matrix   Grid_gmatrix;
-extern vec3d    Grid_center;
+extern matrix Grid_gmatrix;
+extern vec3d Grid_center;
 
-extern int  Show_stars;
-extern void rpd_line ( vec3d *v0, vec3d *v1 );
+extern int Show_stars;
+extern void rpd_line(vec3d * v0, vec3d * v1);
 
 
 /*

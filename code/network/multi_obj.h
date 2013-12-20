@@ -35,12 +35,12 @@ struct net_player;
 // update info
 typedef struct np_update
 {
-	ubyte seq;                          // sequence #
-	int update_stamp;               // global update stamp
-	int status_update_stamp;
-	int subsys_update_stamp;
-	ushort pos_chksum;                  // positional checksum
-	ushort orient_chksum;               // orient checksum
+  ubyte seq;                    // sequence #
+  int update_stamp;             // global update stamp
+  int status_update_stamp;
+  int subsys_update_stamp;
+  ushort pos_chksum;            // positional checksum
+  ushort orient_chksum;         // orient checksum
 } np_update;
 
 // ---------------------------------------------------------------------------------------------------
@@ -51,23 +51,23 @@ typedef struct np_update
 void multi_oo_process();
 
 // process incoming object update data
-void multi_oo_process_update ( ubyte *data, header *hinfo );
+void multi_oo_process_update(ubyte * data, header * hinfo);
 
 // initialize all object update timestamps (call whenever entering gameplay state)
 void multi_oo_gameplay_init();
 
 // send control info for a client (which is basically a "reverse" object update)
 void multi_oo_send_control_info();
-void multi_oo_send_changed_object ( object *changedobj );
+void multi_oo_send_changed_object(object * changedobj);
 
 // reset all sequencing info
 void multi_oo_reset_sequencing();
 
 // is this object one which needs to go through the interpolation
-int multi_oo_is_interp_object ( object *objp );
+int multi_oo_is_interp_object(object * objp);
 
 // interp
-void multi_oo_interp ( object *objp );
+void multi_oo_interp(object * objp);
 
 
 // ---------------------------------------------------------------------------------------------------
@@ -88,10 +88,10 @@ void multi_oo_rate_process();
 void multi_oo_rate_init_all();
 
 // initialize the rate limiting for the passed in player
-void multi_oo_rate_init ( net_player *pl );
+void multi_oo_rate_init(net_player * pl);
 
 // if the given net-player has exceeded his datarate limit, or if the overall datarate limit has been reached
-int multi_oo_rate_exceeded ( net_player *pl );
+int multi_oo_rate_exceeded(net_player * pl);
 
 // if it is ok for me to send a control info (will be ~N times a second)
 int multi_oo_cirate_can_send();
@@ -100,6 +100,6 @@ int multi_oo_cirate_can_send();
 void multi_oo_display();
 
 // notify of a player join
-void multi_oo_player_reset_all ( net_player *pl = NULL );
+void multi_oo_player_reset_all(net_player * pl = NULL);
 
 #endif

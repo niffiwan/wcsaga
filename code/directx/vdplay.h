@@ -10,7 +10,7 @@
 #ifndef __DPLAY_INCLUDED__
 #define __DPLAY_INCLUDED__
 
-#include <ole2.h>       // for DECLARE_INTERFACE and HRESULT
+#include <ole2.h>               // for DECLARE_INTERFACE and HRESULT
 
 #define _FACDP  0x877
 #define MAKE_DPHRESULT( code )    MAKE_HRESULT( 1, _FACDP, code )
@@ -23,14 +23,19 @@ extern "C"
 /*
  * GUIDS used by DirectPlay objects
  */
-DEFINE_GUID ( IID_IDirectPlay2, 0x2b74f7c0, 0x9154, 0x11cf, 0xa9, 0xcd, 0x0, 0xaa, 0x0, 0x68, 0x86, 0xe3 );
-DEFINE_GUID ( IID_IDirectPlay2A, 0x9d460580, 0xa822, 0x11cf, 0x96, 0xc, 0x0, 0x80, 0xc7, 0x53, 0x4e, 0x82 );
+  DEFINE_GUID(IID_IDirectPlay2, 0x2b74f7c0, 0x9154, 0x11cf, 0xa9, 0xcd, 0x0,
+              0xaa, 0x0, 0x68, 0x86, 0xe3);
+  DEFINE_GUID(IID_IDirectPlay2A, 0x9d460580, 0xa822, 0x11cf, 0x96, 0xc, 0x0,
+              0x80, 0xc7, 0x53, 0x4e, 0x82);
 
-DEFINE_GUID ( IID_IDirectPlay3, 0x133efe40, 0x32dc, 0x11d0, 0x9c, 0xfb, 0x0, 0xa0, 0xc9, 0xa, 0x43, 0xcb );
-DEFINE_GUID ( IID_IDirectPlay3A, 0x133efe41, 0x32dc, 0x11d0, 0x9c, 0xfb, 0x0, 0xa0, 0xc9, 0xa, 0x43, 0xcb );
+  DEFINE_GUID(IID_IDirectPlay3, 0x133efe40, 0x32dc, 0x11d0, 0x9c, 0xfb, 0x0,
+              0xa0, 0xc9, 0xa, 0x43, 0xcb);
+  DEFINE_GUID(IID_IDirectPlay3A, 0x133efe41, 0x32dc, 0x11d0, 0x9c, 0xfb, 0x0,
+              0xa0, 0xc9, 0xa, 0x43, 0xcb);
 
 // {D1EB6D20-8923-11d0-9D97-00A0C90A43CB}
-DEFINE_GUID ( CLSID_DirectPlay, 0xd1eb6d20, 0x8923, 0x11d0, 0x9d, 0x97, 0x0, 0xa0, 0xc9, 0xa, 0x43, 0xcb );
+  DEFINE_GUID(CLSID_DirectPlay, 0xd1eb6d20, 0x8923, 0x11d0, 0x9d, 0x97, 0x0,
+              0xa0, 0xc9, 0xa, 0x43, 0xcb);
 
 /*
  * GUIDS used by Service Providers shipped with DirectPlay
@@ -39,23 +44,27 @@ DEFINE_GUID ( CLSID_DirectPlay, 0xd1eb6d20, 0x8923, 0x11d0, 0x9d, 0x97, 0x0, 0xa
 
 // GUID for IPX service provider
 // {685BC400-9D2C-11cf-A9CD-00AA006886E3}
-DEFINE_GUID ( DPSPGUID_IPX,
-              0x685bc400, 0x9d2c, 0x11cf, 0xa9, 0xcd, 0x0, 0xaa, 0x0, 0x68, 0x86, 0xe3 );
+  DEFINE_GUID(DPSPGUID_IPX,
+              0x685bc400, 0x9d2c, 0x11cf, 0xa9, 0xcd, 0x0, 0xaa, 0x0, 0x68,
+              0x86, 0xe3);
 
 // GUID for TCP/IP service provider
 // 36E95EE0-8577-11cf-960C-0080C7534E82
-DEFINE_GUID ( DPSPGUID_TCPIP,
-              0x36E95EE0, 0x8577, 0x11cf, 0x96, 0xc, 0x0, 0x80, 0xc7, 0x53, 0x4e, 0x82 );
+  DEFINE_GUID(DPSPGUID_TCPIP,
+              0x36E95EE0, 0x8577, 0x11cf, 0x96, 0xc, 0x0, 0x80, 0xc7, 0x53,
+              0x4e, 0x82);
 
 // GUID for Serial service provider
 // {0F1D6860-88D9-11cf-9C4E-00A0C905425E}
-DEFINE_GUID ( DPSPGUID_SERIAL,
-              0xf1d6860, 0x88d9, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e );
+  DEFINE_GUID(DPSPGUID_SERIAL,
+              0xf1d6860, 0x88d9, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5,
+              0x42, 0x5e);
 
 // GUID for Modem service provider
 // {44EAA760-CB68-11cf-9C4E-00A0C905425E}
-DEFINE_GUID ( DPSPGUID_MODEM,
-              0x44eaa760, 0xcb68, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e );
+  DEFINE_GUID(DPSPGUID_MODEM,
+              0x44eaa760, 0xcb68, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5,
+              0x42, 0x5e);
 
 /****************************************************************************
  *
@@ -66,30 +75,24 @@ DEFINE_GUID ( DPSPGUID_MODEM,
  ****************************************************************************/
 
 #ifndef IDIRECTPLAY2_OR_GREATER
-typedef struct IDirectPlay
-		FAR *LPDIRECTPLAY;
+  typedef struct IDirectPlay FAR *LPDIRECTPLAY;
 #else
-typedef struct IUnknown           FAR *LPDIRECTPLAY;
+  typedef struct IUnknown FAR *LPDIRECTPLAY;
 #endif
 
-typedef struct IDirectPlay2
-		FAR *LPDIRECTPLAY2;
-typedef struct IDirectPlay2
-		FAR *LPDIRECTPLAY2A;
-typedef struct IDirectPlay2 IDirectPlay2A;
+  typedef struct IDirectPlay2 FAR *LPDIRECTPLAY2;
+  typedef struct IDirectPlay2 FAR *LPDIRECTPLAY2A;
+  typedef struct IDirectPlay2 IDirectPlay2A;
 
-typedef struct IDirectPlay3
-		FAR *LPDIRECTPLAY3;
-typedef struct IDirectPlay3
-		FAR *LPDIRECTPLAY3A;
-typedef struct IDirectPlay3 IDirectPlay3A;
+  typedef struct IDirectPlay3 FAR *LPDIRECTPLAY3;
+  typedef struct IDirectPlay3 FAR *LPDIRECTPLAY3A;
+  typedef struct IDirectPlay3 IDirectPlay3A;
 
 /*
  * DPID
  * DirectPlay player and group ID
  */
-typedef DWORD DPID,
-        FAR *LPDPID;
+  typedef DWORD DPID, FAR * LPDPID;
 
 /*
  * DPID that system messages come from
@@ -115,25 +118,24 @@ typedef DWORD DPID,
  * DPCAPS
  * Used to obtain the capabilities of a DirectPlay object
  */
-typedef struct
-{
-	DWORD dwSize;               // Size of structure, in bytes
-	DWORD dwFlags;              // DPCAPS_xxx flags
-	DWORD dwMaxBufferSize;      // Maximum message size, in bytes,  for this service provider
-	DWORD dwMaxQueueSize;       // Obsolete.
-	DWORD dwMaxPlayers;         // Maximum players/groups (local + remote)
-	DWORD dwHundredBaud;        // Bandwidth in 100 bits per second units;
-	// i.e. 24 is 2400, 96 is 9600, etc.
-	DWORD dwLatency;            // Estimated latency; 0 = unknown
-	DWORD dwMaxLocalPlayers;    // Maximum # of locally created players allowed
-	DWORD dwHeaderLength;       // Maximum header length, in bytes, on messages
-	// added by the service provider
-	DWORD dwTimeout;            // Service provider's suggested timeout value
-	// This is how long DirectPlay will wait for
-	// responses to system messages
-}
-DPCAPS,
-FAR *LPDPCAPS;
+  typedef struct
+  {
+    DWORD dwSize;               // Size of structure, in bytes
+    DWORD dwFlags;              // DPCAPS_xxx flags
+    DWORD dwMaxBufferSize;      // Maximum message size, in bytes,  for this service provider
+    DWORD dwMaxQueueSize;       // Obsolete.
+    DWORD dwMaxPlayers;         // Maximum players/groups (local + remote)
+    DWORD dwHundredBaud;        // Bandwidth in 100 bits per second units;
+    // i.e. 24 is 2400, 96 is 9600, etc.
+    DWORD dwLatency;            // Estimated latency; 0 = unknown
+    DWORD dwMaxLocalPlayers;    // Maximum # of locally created players allowed
+    DWORD dwHeaderLength;       // Maximum header length, in bytes, on messages
+    // added by the service provider
+    DWORD dwTimeout;            // Service provider's suggested timeout value
+    // This is how long DirectPlay will wait for
+    // responses to system messages
+  }
+  DPCAPS, FAR * LPDPCAPS;
 
 /*
  * This DirectPlay object is the session host.  If the host exits the
@@ -181,43 +183,41 @@ FAR *LPDPCAPS;
  * Used to describe the properties of a DirectPlay
  * session instance
  */
-typedef struct
-{
-	DWORD   dwSize;             // Size of structure
-	DWORD   dwFlags;            // DPSESSION_xxx flags
-	GUID    guidInstance;       // ID for the session instance
-	GUID    guidApplication;    // GUID of the DirectPlay application.
-	// GUID_NULL for all applications.
-	DWORD   dwMaxPlayers;       // Maximum # players allowed in session
-	DWORD   dwCurrentPlayers;   // Current # players in session (read only)
-	union
-	{
-		// Name of the session
-		LPWSTR  lpszSessionName;    // Unicode
-		LPSTR   lpszSessionNameA;   // ANSI
-	};
-	union
-	{
-		// Password of the session (optional)
-		LPWSTR  lpszPassword;       // Unicode
-		LPSTR   lpszPasswordA;      // ANSI
-	};
-	DWORD   dwReserved1;        // Reserved for future MS use.
-	DWORD   dwReserved2;
-	DWORD   dwUser1;            // For use by the application
-	DWORD   dwUser2;
-	DWORD   dwUser3;
-	DWORD   dwUser4;
-}
-DPSESSIONDESC2,
-FAR *LPDPSESSIONDESC2;
+  typedef struct
+  {
+    DWORD dwSize;               // Size of structure
+    DWORD dwFlags;              // DPSESSION_xxx flags
+    GUID guidInstance;          // ID for the session instance
+    GUID guidApplication;       // GUID of the DirectPlay application.
+    // GUID_NULL for all applications.
+    DWORD dwMaxPlayers;         // Maximum # players allowed in session
+    DWORD dwCurrentPlayers;     // Current # players in session (read only)
+    union
+    {
+      // Name of the session
+      LPWSTR lpszSessionName;   // Unicode
+      LPSTR lpszSessionNameA;   // ANSI
+    };
+    union
+    {
+      // Password of the session (optional)
+      LPWSTR lpszPassword;      // Unicode
+      LPSTR lpszPasswordA;      // ANSI
+    };
+    DWORD dwReserved1;          // Reserved for future MS use.
+    DWORD dwReserved2;
+    DWORD dwUser1;              // For use by the application
+    DWORD dwUser2;
+    DWORD dwUser3;
+    DWORD dwUser4;
+  }
+  DPSESSIONDESC2, FAR * LPDPSESSIONDESC2;
 
 /*
  * LPCDPSESSIONDESC2
  * A constant pointer to DPSESSIONDESC2
  */
-typedef const DPSESSIONDESC2
-FAR *LPCDPSESSIONDESC2;
+  typedef const DPSESSIONDESC2 FAR * LPCDPSESSIONDESC2;
 
 /*
 * Applications cannot create new players in this session.
@@ -292,167 +292,155 @@ FAR *LPCDPSESSIONDESC2;
  * Used to hold the name of a DirectPlay entity
  * like a player or a group
  */
-typedef struct
-{
-	DWORD   dwSize;             // Size of structure
-	DWORD   dwFlags;            // Not used. Must be zero.
-	union
-	{
-		// The short or friendly name
-		LPWSTR  lpszShortName;  // Unicode
-		LPSTR   lpszShortNameA; // ANSI
-	};
-	union
-	{
-		// The long or formal name
-		LPWSTR  lpszLongName;   // Unicode
-		LPSTR   lpszLongNameA;  // ANSI
-	};
+  typedef struct
+  {
+    DWORD dwSize;               // Size of structure
+    DWORD dwFlags;              // Not used. Must be zero.
+    union
+    {
+      // The short or friendly name
+      LPWSTR lpszShortName;     // Unicode
+      LPSTR lpszShortNameA;     // ANSI
+    };
+    union
+    {
+      // The long or formal name
+      LPWSTR lpszLongName;      // Unicode
+      LPSTR lpszLongNameA;      // ANSI
+    };
 
-}
-DPNAME,
-FAR *LPDPNAME;
+  }
+  DPNAME, FAR * LPDPNAME;
 
 /*
  * LPCDPNAME
  * A constant pointer to DPNAME
  */
-typedef const DPNAME
-FAR *LPCDPNAME;
+  typedef const DPNAME FAR * LPCDPNAME;
 
 /*
  * DPCREDENTIALS
  * Used to hold the user name and password of a DirectPlay user
  */
-typedef struct
-{
-	DWORD dwSize;               // Size of structure
-	DWORD dwFlags;              // Not used. Must be zero.
-	union
-	{
-		// User name of the account
-		LPWSTR  lpszUsername;   // Unicode
-		LPSTR   lpszUsernameA;  // ANSI
-	};
-	union
-	{
-		// Password of the account
-		LPWSTR  lpszPassword;   // Unicode
-		LPSTR   lpszPasswordA;  // ANSI
-	};
-	union
-	{
-		// Domain name of the account
-		LPWSTR  lpszDomain;     // Unicode
-		LPSTR   lpszDomainA;    // ANSI
-	};
-}
-DPCREDENTIALS,
-FAR *LPDPCREDENTIALS;
+  typedef struct
+  {
+    DWORD dwSize;               // Size of structure
+    DWORD dwFlags;              // Not used. Must be zero.
+    union
+    {
+      // User name of the account
+      LPWSTR lpszUsername;      // Unicode
+      LPSTR lpszUsernameA;      // ANSI
+    };
+    union
+    {
+      // Password of the account
+      LPWSTR lpszPassword;      // Unicode
+      LPSTR lpszPasswordA;      // ANSI
+    };
+    union
+    {
+      // Domain name of the account
+      LPWSTR lpszDomain;        // Unicode
+      LPSTR lpszDomainA;        // ANSI
+    };
+  }
+  DPCREDENTIALS, FAR * LPDPCREDENTIALS;
 
-typedef const DPCREDENTIALS
-FAR *LPCDPCREDENTIALS;
+  typedef const DPCREDENTIALS FAR * LPCDPCREDENTIALS;
 
 /*
  * DPSECURITYDESC
  * Used to describe the security properties of a DirectPlay
  * session instance
  */
-typedef struct
-{
-	DWORD dwSize;                   // Size of structure
-	DWORD dwFlags;                  // Not used. Must be zero.
-	union
-	{
-		// SSPI provider name
-		LPWSTR  lpszSSPIProvider;   // Unicode
-		LPSTR   lpszSSPIProviderA;  // ANSI
-	};
-	union
-	{
-		// CAPI provider name
-		LPWSTR lpszCAPIProvider;    // Unicode
-		LPSTR  lpszCAPIProviderA;   // ANSI
-	};
-	DWORD dwCAPIProviderType;       // Crypto Service Provider type
-	DWORD dwEncryptionAlgorithm;    // Encryption Algorithm type
-}
-DPSECURITYDESC,
-FAR *LPDPSECURITYDESC;
+  typedef struct
+  {
+    DWORD dwSize;               // Size of structure
+    DWORD dwFlags;              // Not used. Must be zero.
+    union
+    {
+      // SSPI provider name
+      LPWSTR lpszSSPIProvider;  // Unicode
+      LPSTR lpszSSPIProviderA;  // ANSI
+    };
+    union
+    {
+      // CAPI provider name
+      LPWSTR lpszCAPIProvider;  // Unicode
+      LPSTR lpszCAPIProviderA;  // ANSI
+    };
+    DWORD dwCAPIProviderType;   // Crypto Service Provider type
+    DWORD dwEncryptionAlgorithm;        // Encryption Algorithm type
+  }
+  DPSECURITYDESC, FAR * LPDPSECURITYDESC;
 
-typedef const DPSECURITYDESC
-FAR *LPCDPSECURITYDESC;
+  typedef const DPSECURITYDESC FAR * LPCDPSECURITYDESC;
 
 /*
  * DPACCOUNTDESC
  * Used to describe a user membership account
  */
-typedef struct
-{
-	DWORD dwSize;                   // Size of structure
-	DWORD dwFlags;                  // Not used. Must be zero.
-	union
-	{
-		// Account identifier
-		LPWSTR  lpszAccountID;      // Unicode
-		LPSTR   lpszAccountIDA;     // ANSI
-	};
-}
-DPACCOUNTDESC,
-FAR *LPDPACCOUNTDESC;
+  typedef struct
+  {
+    DWORD dwSize;               // Size of structure
+    DWORD dwFlags;              // Not used. Must be zero.
+    union
+    {
+      // Account identifier
+      LPWSTR lpszAccountID;     // Unicode
+      LPSTR lpszAccountIDA;     // ANSI
+    };
+  }
+  DPACCOUNTDESC, FAR * LPDPACCOUNTDESC;
 
-typedef const DPACCOUNTDESC
-FAR *LPCDPACCOUNTDESC;
+  typedef const DPACCOUNTDESC FAR * LPCDPACCOUNTDESC;
 
 /*
  * LPCGUID
  * A constant pointer to a guid
  */
-typedef const GUID
-FAR *LPCGUID;
+  typedef const GUID FAR * LPCGUID;
 
 /*
  * DPLCONNECTION
  * Used to hold all in the informaion needed to connect
  * an application to a session or create a session
  */
-typedef struct
-{
-	DWORD               dwSize;             // Size of this structure
-	DWORD               dwFlags;            // Flags specific to this structure
-	LPDPSESSIONDESC2    lpSessionDesc;      // Pointer to session desc to use on connect
-	LPDPNAME            lpPlayerName;       // Pointer to Player name structure
-	GUID                guidSP;             // GUID of the DPlay SP to use
-	LPVOID              lpAddress;          // Address for service provider
-	DWORD               dwAddressSize;      // Size of address data
-}
-DPLCONNECTION,
-FAR *LPDPLCONNECTION;
+  typedef struct
+  {
+    DWORD dwSize;               // Size of this structure
+    DWORD dwFlags;              // Flags specific to this structure
+    LPDPSESSIONDESC2 lpSessionDesc;     // Pointer to session desc to use on connect
+    LPDPNAME lpPlayerName;      // Pointer to Player name structure
+    GUID guidSP;                // GUID of the DPlay SP to use
+    LPVOID lpAddress;           // Address for service provider
+    DWORD dwAddressSize;        // Size of address data
+  }
+  DPLCONNECTION, FAR * LPDPLCONNECTION;
 
 /*
  * LPCDPLCONNECTION
  * A constant pointer to DPLCONNECTION
  */
-typedef const DPLCONNECTION
-FAR *LPCDPLCONNECTION;
+  typedef const DPLCONNECTION FAR * LPCDPLCONNECTION;
 
 /*
  * DPCHAT
  * Used to hold the a DirectPlay chat message
  */
-typedef struct
-{
-	DWORD               dwSize;
-	DWORD               dwFlags;
-	union
-	{
-		// Message string
-		LPWSTR  lpszMessage;   // Unicode
-		LPSTR   lpszMessageA;  // ANSI
-	};
-}
-DPCHAT,
-FAR *LPDPCHAT;
+  typedef struct
+  {
+    DWORD dwSize;
+    DWORD dwFlags;
+    union
+    {
+      // Message string
+      LPWSTR lpszMessage;       // Unicode
+      LPSTR lpszMessageA;       // ANSI
+    };
+  }
+  DPCHAT, FAR * LPDPCHAT;
 
 /****************************************************************************
  *
@@ -463,11 +451,10 @@ FAR *LPDPCHAT;
 /*
  * Callback for IDirectPlay2::EnumSessions
  */
-typedef BOOL ( FAR PASCAL *LPDPENUMSESSIONSCALLBACK2 ) (
-    LPCDPSESSIONDESC2   lpThisSD,
-    LPDWORD             lpdwTimeOut,
-    DWORD               dwFlags,
-    LPVOID              lpContext );
+  typedef BOOL(FAR PASCAL *
+               LPDPENUMSESSIONSCALLBACK2) (LPCDPSESSIONDESC2 lpThisSD,
+                                           LPDWORD lpdwTimeOut, DWORD dwFlags,
+                                           LPVOID lpContext);
 
 /*
  * This flag is set on the EnumSessions callback dwFlags parameter when
@@ -485,12 +472,11 @@ typedef BOOL ( FAR PASCAL *LPDPENUMSESSIONSCALLBACK2 ) (
  *              IDirectPlay2::EnumGroups
  *              IDirectPlay2::EnumGroupPlayers
  */
-typedef BOOL ( FAR PASCAL *LPDPENUMPLAYERSCALLBACK2 ) (
-    DPID            dpId,
-    DWORD           dwPlayerType,
-    LPCDPNAME       lpName,
-    DWORD           dwFlags,
-    LPVOID          lpContext );
+  typedef BOOL(FAR PASCAL * LPDPENUMPLAYERSCALLBACK2) (DPID dpId,
+                                                       DWORD dwPlayerType,
+                                                       LPCDPNAME lpName,
+                                                       DWORD dwFlags,
+                                                       LPVOID lpContext);
 
 
 /*
@@ -498,35 +484,33 @@ typedef BOOL ( FAR PASCAL *LPDPENUMPLAYERSCALLBACK2 ) (
  * This callback prototype will be used if compiling
  * for Unicode strings
  */
-typedef BOOL ( FAR PASCAL *LPDPENUMDPCALLBACK ) (
-    LPGUID      lpguidSP,
-    LPWSTR      lpSPName,
-    DWORD       dwMajorVersion,
-    DWORD       dwMinorVersion,
-    LPVOID      lpContext );
+  typedef BOOL(FAR PASCAL * LPDPENUMDPCALLBACK) (LPGUID lpguidSP,
+                                                 LPWSTR lpSPName,
+                                                 DWORD dwMajorVersion,
+                                                 DWORD dwMinorVersion,
+                                                 LPVOID lpContext);
 
 /*
  * ANSI callback for DirectPlayEnumerate
  * This callback prototype will be used if compiling
  * for ANSI strings
  */
-typedef BOOL ( FAR PASCAL *LPDPENUMDPCALLBACKA ) (
-    LPGUID      lpguidSP,
-    LPSTR       lpSPName,
-    DWORD       dwMajorVersion,
-    DWORD       dwMinorVersion,
-    LPVOID      lpContext );
+  typedef BOOL(FAR PASCAL * LPDPENUMDPCALLBACKA) (LPGUID lpguidSP,
+                                                  LPSTR lpSPName,
+                                                  DWORD dwMajorVersion,
+                                                  DWORD dwMinorVersion,
+                                                  LPVOID lpContext);
 
 /*
  * Callback for IDirectPlay3(A)::EnumConnections
  */
-typedef BOOL ( FAR PASCAL *LPDPENUMCONNECTIONSCALLBACK ) (
-    LPCGUID     lpguidSP,
-    LPVOID      lpConnection,
-    DWORD       dwConnectionSize,
-    LPCDPNAME   lpName,
-    DWORD       dwFlags,
-    LPVOID      lpContext );
+  typedef BOOL(FAR PASCAL * LPDPENUMCONNECTIONSCALLBACK) (LPCGUID lpguidSP,
+                                                          LPVOID lpConnection,
+                                                          DWORD
+                                                          dwConnectionSize,
+                                                          LPCDPNAME lpName,
+                                                          DWORD dwFlags,
+                                                          LPVOID lpContext);
 
 
 /*
@@ -537,11 +521,12 @@ typedef BOOL ( FAR PASCAL *LPDPENUMCONNECTIONSCALLBACK ) (
 #define DirectPlayEnumerate     DirectPlayEnumerateW
 #else
 #define DirectPlayEnumerate     DirectPlayEnumerateA
-#endif // UNICODE
+#endif                          // UNICODE
 
-extern HRESULT WINAPI DirectPlayEnumerateA ( LPDPENUMDPCALLBACKA, LPVOID );
-extern HRESULT WINAPI DirectPlayEnumerateW ( LPDPENUMDPCALLBACK, LPVOID );
-extern HRESULT WINAPI DirectPlayCreate ( LPGUID lpGUID, LPDIRECTPLAY *lplpDP, IUnknown *pUnk );
+  extern HRESULT WINAPI DirectPlayEnumerateA(LPDPENUMDPCALLBACKA, LPVOID);
+  extern HRESULT WINAPI DirectPlayEnumerateW(LPDPENUMDPCALLBACK, LPVOID);
+  extern HRESULT WINAPI DirectPlayCreate(LPGUID lpGUID, LPDIRECTPLAY * lplpDP,
+                                         IUnknown * pUnk);
 
 /****************************************************************************
  *
@@ -551,75 +536,49 @@ extern HRESULT WINAPI DirectPlayCreate ( LPGUID lpGUID, LPDIRECTPLAY *lplpDP, IU
 
 #undef INTERFACE
 #define INTERFACE IDirectPlay2
-DECLARE_INTERFACE_ ( IDirectPlay2, IUnknown )
-{
-	/*** IUnknown methods ***/
-	STDMETHOD ( QueryInterface )       ( THIS_ REFIID riid, LPVOID * ppvObj )
-	PURE;
-	STDMETHOD_ ( ULONG, AddRef )
-	( THIS ) PURE;
-	STDMETHOD_ ( ULONG, Release )
-	( THIS ) PURE;
-	/*** IDirectPlay2 methods ***/
-	STDMETHOD ( AddPlayerToGroup )     ( THIS_ DPID, DPID )
-	PURE;
-	STDMETHOD
-	( Close ) ( THIS ) PURE;
-	STDMETHOD ( CreateGroup )          ( THIS_ LPDPID, LPDPNAME, LPVOID, DWORD, DWORD )
-	PURE;
-	STDMETHOD ( CreatePlayer )         ( THIS_ LPDPID, LPDPNAME, HANDLE, LPVOID, DWORD, DWORD )
-	PURE;
-	STDMETHOD ( DeletePlayerFromGroup ) ( THIS_ DPID, DPID )
-	PURE;
-	STDMETHOD
-	( DestroyGroup ) ( THIS_ DPID ) PURE;
-	STDMETHOD
-	( DestroyPlayer ) ( THIS_ DPID ) PURE;
-	STDMETHOD ( EnumGroupPlayers )     ( THIS_ DPID, LPGUID, LPDPENUMPLAYERSCALLBACK2, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( EnumGroups )           ( THIS_ LPGUID, LPDPENUMPLAYERSCALLBACK2, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( EnumPlayers )          ( THIS_ LPGUID, LPDPENUMPLAYERSCALLBACK2, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( EnumSessions )         ( THIS_ LPDPSESSIONDESC2, DWORD, LPDPENUMSESSIONSCALLBACK2, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( GetCaps )              ( THIS_ LPDPCAPS, DWORD )
-	PURE;
-	STDMETHOD ( GetGroupData )         ( THIS_ DPID, LPVOID, LPDWORD, DWORD )
-	PURE;
-	STDMETHOD ( GetGroupName )         ( THIS_ DPID, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( GetMessageCount )      ( THIS_ DPID, LPDWORD )
-	PURE;
-	STDMETHOD ( GetPlayerAddress )     ( THIS_ DPID, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( GetPlayerCaps )        ( THIS_ DPID, LPDPCAPS, DWORD )
-	PURE;
-	STDMETHOD ( GetPlayerData )        ( THIS_ DPID, LPVOID, LPDWORD, DWORD )
-	PURE;
-	STDMETHOD ( GetPlayerName )        ( THIS_ DPID, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( GetSessionDesc )       ( THIS_ LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD
-	( Initialize ) ( THIS_ LPGUID ) PURE;
-	STDMETHOD ( Open )                 ( THIS_ LPDPSESSIONDESC2, DWORD )
-	PURE;
-	STDMETHOD ( Receive )              ( THIS_ LPDPID, LPDPID, DWORD, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( Send )                 ( THIS_ DPID, DPID, DWORD, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( SetGroupData )         ( THIS_ DPID, LPVOID, DWORD, DWORD )
-	PURE;
-	STDMETHOD ( SetGroupName )         ( THIS_ DPID, LPDPNAME, DWORD )
-	PURE;
-	STDMETHOD ( SetPlayerData )        ( THIS_ DPID, LPVOID, DWORD, DWORD )
-	PURE;
-	STDMETHOD ( SetPlayerName )        ( THIS_ DPID, LPDPNAME, DWORD )
-	PURE;
-	STDMETHOD ( SetSessionDesc )       ( THIS_ LPDPSESSIONDESC2, DWORD )
-	PURE;
-};
+    DECLARE_INTERFACE_(IDirectPlay2, IUnknown)
+  {
+        /*** IUnknown methods ***/
+    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
+    STDMETHOD_(ULONG, AddRef) (THIS) PURE;
+    STDMETHOD_(ULONG, Release) (THIS) PURE;
+        /*** IDirectPlay2 methods ***/
+    STDMETHOD(AddPlayerToGroup) (THIS_ DPID, DPID) PURE;
+    STDMETHOD(Close) (THIS) PURE;
+    STDMETHOD(CreateGroup) (THIS_ LPDPID, LPDPNAME, LPVOID, DWORD, DWORD)
+      PURE;
+    STDMETHOD(CreatePlayer) (THIS_ LPDPID, LPDPNAME, HANDLE, LPVOID, DWORD,
+                             DWORD) PURE;
+    STDMETHOD(DeletePlayerFromGroup) (THIS_ DPID, DPID) PURE;
+    STDMETHOD(DestroyGroup) (THIS_ DPID) PURE;
+    STDMETHOD(DestroyPlayer) (THIS_ DPID) PURE;
+    STDMETHOD(EnumGroupPlayers) (THIS_ DPID, LPGUID, LPDPENUMPLAYERSCALLBACK2,
+                                 LPVOID, DWORD) PURE;
+    STDMETHOD(EnumGroups) (THIS_ LPGUID, LPDPENUMPLAYERSCALLBACK2, LPVOID,
+                           DWORD) PURE;
+    STDMETHOD(EnumPlayers) (THIS_ LPGUID, LPDPENUMPLAYERSCALLBACK2, LPVOID,
+                            DWORD) PURE;
+    STDMETHOD(EnumSessions) (THIS_ LPDPSESSIONDESC2, DWORD,
+                             LPDPENUMSESSIONSCALLBACK2, LPVOID, DWORD) PURE;
+    STDMETHOD(GetCaps) (THIS_ LPDPCAPS, DWORD) PURE;
+    STDMETHOD(GetGroupData) (THIS_ DPID, LPVOID, LPDWORD, DWORD) PURE;
+    STDMETHOD(GetGroupName) (THIS_ DPID, LPVOID, LPDWORD) PURE;
+    STDMETHOD(GetMessageCount) (THIS_ DPID, LPDWORD) PURE;
+    STDMETHOD(GetPlayerAddress) (THIS_ DPID, LPVOID, LPDWORD) PURE;
+    STDMETHOD(GetPlayerCaps) (THIS_ DPID, LPDPCAPS, DWORD) PURE;
+    STDMETHOD(GetPlayerData) (THIS_ DPID, LPVOID, LPDWORD, DWORD) PURE;
+    STDMETHOD(GetPlayerName) (THIS_ DPID, LPVOID, LPDWORD) PURE;
+    STDMETHOD(GetSessionDesc) (THIS_ LPVOID, LPDWORD) PURE;
+    STDMETHOD(Initialize) (THIS_ LPGUID) PURE;
+    STDMETHOD(Open) (THIS_ LPDPSESSIONDESC2, DWORD) PURE;
+    STDMETHOD(Receive) (THIS_ LPDPID, LPDPID, DWORD, LPVOID, LPDWORD) PURE;
+    STDMETHOD(Send) (THIS_ DPID, DPID, DWORD, LPVOID, DWORD) PURE;
+    STDMETHOD(SetGroupData) (THIS_ DPID, LPVOID, DWORD, DWORD) PURE;
+    STDMETHOD(SetGroupName) (THIS_ DPID, LPDPNAME, DWORD) PURE;
+    STDMETHOD(SetPlayerData) (THIS_ DPID, LPVOID, DWORD, DWORD) PURE;
+    STDMETHOD(SetPlayerName) (THIS_ DPID, LPDPNAME, DWORD) PURE;
+    STDMETHOD(SetSessionDesc) (THIS_ LPDPSESSIONDESC2, DWORD) PURE;
+  };
 
 /****************************************************************************
  *
@@ -707,101 +666,72 @@ DECLARE_INTERFACE_ ( IDirectPlay2, IUnknown )
 
 #undef INTERFACE
 #define INTERFACE IDirectPlay3
-DECLARE_INTERFACE_ ( IDirectPlay3, IDirectPlay2 )
-{
-	/*** IUnknown methods ***/
-	STDMETHOD ( QueryInterface )       ( THIS_ REFIID riid, LPVOID * ppvObj )
-	PURE;
-	STDMETHOD_ ( ULONG, AddRef )
-	( THIS ) PURE;
-	STDMETHOD_ ( ULONG, Release )
-	( THIS ) PURE;
-	/*** IDirectPlay2 methods ***/
-	STDMETHOD ( AddPlayerToGroup )     ( THIS_ DPID, DPID )
-	PURE;
-	STDMETHOD
-	( Close ) ( THIS ) PURE;
-	STDMETHOD ( CreateGroup )          ( THIS_ LPDPID, LPDPNAME, LPVOID, DWORD, DWORD )
-	PURE;
-	STDMETHOD ( CreatePlayer )         ( THIS_ LPDPID, LPDPNAME, HANDLE, LPVOID, DWORD, DWORD )
-	PURE;
-	STDMETHOD ( DeletePlayerFromGroup ) ( THIS_ DPID, DPID )
-	PURE;
-	STDMETHOD
-	( DestroyGroup ) ( THIS_ DPID ) PURE;
-	STDMETHOD
-	( DestroyPlayer ) ( THIS_ DPID ) PURE;
-	STDMETHOD ( EnumGroupPlayers )     ( THIS_ DPID, LPGUID, LPDPENUMPLAYERSCALLBACK2, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( EnumGroups )           ( THIS_ LPGUID, LPDPENUMPLAYERSCALLBACK2, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( EnumPlayers )          ( THIS_ LPGUID, LPDPENUMPLAYERSCALLBACK2, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( EnumSessions )         ( THIS_ LPDPSESSIONDESC2, DWORD, LPDPENUMSESSIONSCALLBACK2, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( GetCaps )              ( THIS_ LPDPCAPS, DWORD )
-	PURE;
-	STDMETHOD ( GetGroupData )         ( THIS_ DPID, LPVOID, LPDWORD, DWORD )
-	PURE;
-	STDMETHOD ( GetGroupName )         ( THIS_ DPID, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( GetMessageCount )      ( THIS_ DPID, LPDWORD )
-	PURE;
-	STDMETHOD ( GetPlayerAddress )     ( THIS_ DPID, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( GetPlayerCaps )        ( THIS_ DPID, LPDPCAPS, DWORD )
-	PURE;
-	STDMETHOD ( GetPlayerData )        ( THIS_ DPID, LPVOID, LPDWORD, DWORD )
-	PURE;
-	STDMETHOD ( GetPlayerName )        ( THIS_ DPID, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( GetSessionDesc )       ( THIS_ LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD
-	( Initialize ) ( THIS_ LPGUID ) PURE;
-	STDMETHOD ( Open )                 ( THIS_ LPDPSESSIONDESC2, DWORD )
-	PURE;
-	STDMETHOD ( Receive )              ( THIS_ LPDPID, LPDPID, DWORD, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( Send )                 ( THIS_ DPID, DPID, DWORD, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( SetGroupData )         ( THIS_ DPID, LPVOID, DWORD, DWORD )
-	PURE;
-	STDMETHOD ( SetGroupName )         ( THIS_ DPID, LPDPNAME, DWORD )
-	PURE;
-	STDMETHOD ( SetPlayerData )        ( THIS_ DPID, LPVOID, DWORD, DWORD )
-	PURE;
-	STDMETHOD ( SetPlayerName )        ( THIS_ DPID, LPDPNAME, DWORD )
-	PURE;
-	STDMETHOD ( SetSessionDesc )       ( THIS_ LPDPSESSIONDESC2, DWORD )
-	PURE;
-	/*** IDirectPlay3 methods ***/
-	STDMETHOD ( AddGroupToGroup )      ( THIS_ DPID, DPID )
-	PURE;
-	STDMETHOD ( CreateGroupInGroup )   ( THIS_ DPID, LPDPID, LPDPNAME, LPVOID, DWORD, DWORD )
-	PURE;
-	STDMETHOD ( DeleteGroupFromGroup ) ( THIS_ DPID, DPID )
-	PURE;
-	STDMETHOD ( EnumConnections )      ( THIS_ LPCGUID, LPDPENUMCONNECTIONSCALLBACK, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( EnumGroupsInGroup )    ( THIS_ DPID, LPGUID, LPDPENUMPLAYERSCALLBACK2, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( GetGroupConnectionSettings ) ( THIS_ DWORD, DPID, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( InitializeConnection ) ( THIS_ LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( SecureOpen )           ( THIS_ LPCDPSESSIONDESC2, DWORD, LPCDPSECURITYDESC, LPCDPCREDENTIALS )
-	PURE;
-	STDMETHOD ( SendChatMessage ) ( THIS_ DPID, DPID, DWORD, LPDPCHAT );
-	STDMETHOD ( SetGroupConnectionSettings ) ( THIS_ DWORD, DPID, LPDPLCONNECTION )
-	PURE;
-	STDMETHOD ( StartSession ) ( THIS_ DWORD, DPID );
-	STDMETHOD ( GetGroupFlags ) ( THIS_ DPID, LPDWORD );
-	STDMETHOD ( GetGroupParent ) ( THIS_ DPID, LPDPID );
-	STDMETHOD ( GetPlayerAccount )     ( THIS_ DPID, DWORD, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( GetPlayerFlags ) ( THIS_ DPID, LPDWORD );
-};
+  DECLARE_INTERFACE_(IDirectPlay3, IDirectPlay2)
+  {
+        /*** IUnknown methods ***/
+    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
+    STDMETHOD_(ULONG, AddRef) (THIS) PURE;
+    STDMETHOD_(ULONG, Release) (THIS) PURE;
+        /*** IDirectPlay2 methods ***/
+    STDMETHOD(AddPlayerToGroup) (THIS_ DPID, DPID) PURE;
+    STDMETHOD(Close) (THIS) PURE;
+    STDMETHOD(CreateGroup) (THIS_ LPDPID, LPDPNAME, LPVOID, DWORD, DWORD)
+      PURE;
+    STDMETHOD(CreatePlayer) (THIS_ LPDPID, LPDPNAME, HANDLE, LPVOID, DWORD,
+                             DWORD) PURE;
+    STDMETHOD(DeletePlayerFromGroup) (THIS_ DPID, DPID) PURE;
+    STDMETHOD(DestroyGroup) (THIS_ DPID) PURE;
+    STDMETHOD(DestroyPlayer) (THIS_ DPID) PURE;
+    STDMETHOD(EnumGroupPlayers) (THIS_ DPID, LPGUID, LPDPENUMPLAYERSCALLBACK2,
+                                 LPVOID, DWORD) PURE;
+    STDMETHOD(EnumGroups) (THIS_ LPGUID, LPDPENUMPLAYERSCALLBACK2, LPVOID,
+                           DWORD) PURE;
+    STDMETHOD(EnumPlayers) (THIS_ LPGUID, LPDPENUMPLAYERSCALLBACK2, LPVOID,
+                            DWORD) PURE;
+    STDMETHOD(EnumSessions) (THIS_ LPDPSESSIONDESC2, DWORD,
+                             LPDPENUMSESSIONSCALLBACK2, LPVOID, DWORD) PURE;
+    STDMETHOD(GetCaps) (THIS_ LPDPCAPS, DWORD) PURE;
+    STDMETHOD(GetGroupData) (THIS_ DPID, LPVOID, LPDWORD, DWORD) PURE;
+    STDMETHOD(GetGroupName) (THIS_ DPID, LPVOID, LPDWORD) PURE;
+    STDMETHOD(GetMessageCount) (THIS_ DPID, LPDWORD) PURE;
+    STDMETHOD(GetPlayerAddress) (THIS_ DPID, LPVOID, LPDWORD) PURE;
+    STDMETHOD(GetPlayerCaps) (THIS_ DPID, LPDPCAPS, DWORD) PURE;
+    STDMETHOD(GetPlayerData) (THIS_ DPID, LPVOID, LPDWORD, DWORD) PURE;
+    STDMETHOD(GetPlayerName) (THIS_ DPID, LPVOID, LPDWORD) PURE;
+    STDMETHOD(GetSessionDesc) (THIS_ LPVOID, LPDWORD) PURE;
+    STDMETHOD(Initialize) (THIS_ LPGUID) PURE;
+    STDMETHOD(Open) (THIS_ LPDPSESSIONDESC2, DWORD) PURE;
+    STDMETHOD(Receive) (THIS_ LPDPID, LPDPID, DWORD, LPVOID, LPDWORD) PURE;
+    STDMETHOD(Send) (THIS_ DPID, DPID, DWORD, LPVOID, DWORD) PURE;
+    STDMETHOD(SetGroupData) (THIS_ DPID, LPVOID, DWORD, DWORD) PURE;
+    STDMETHOD(SetGroupName) (THIS_ DPID, LPDPNAME, DWORD) PURE;
+    STDMETHOD(SetPlayerData) (THIS_ DPID, LPVOID, DWORD, DWORD) PURE;
+    STDMETHOD(SetPlayerName) (THIS_ DPID, LPDPNAME, DWORD) PURE;
+    STDMETHOD(SetSessionDesc) (THIS_ LPDPSESSIONDESC2, DWORD) PURE;
+        /*** IDirectPlay3 methods ***/
+    STDMETHOD(AddGroupToGroup) (THIS_ DPID, DPID) PURE;
+    STDMETHOD(CreateGroupInGroup) (THIS_ DPID, LPDPID, LPDPNAME, LPVOID,
+                                   DWORD, DWORD) PURE;
+    STDMETHOD(DeleteGroupFromGroup) (THIS_ DPID, DPID) PURE;
+    STDMETHOD(EnumConnections) (THIS_ LPCGUID, LPDPENUMCONNECTIONSCALLBACK,
+                                LPVOID, DWORD) PURE;
+    STDMETHOD(EnumGroupsInGroup) (THIS_ DPID, LPGUID,
+                                  LPDPENUMPLAYERSCALLBACK2, LPVOID,
+                                  DWORD) PURE;
+    STDMETHOD(GetGroupConnectionSettings) (THIS_ DWORD, DPID, LPVOID,
+                                           LPDWORD) PURE;
+    STDMETHOD(InitializeConnection) (THIS_ LPVOID, DWORD) PURE;
+    STDMETHOD(SecureOpen) (THIS_ LPCDPSESSIONDESC2, DWORD, LPCDPSECURITYDESC,
+                           LPCDPCREDENTIALS) PURE;
+    STDMETHOD(SendChatMessage) (THIS_ DPID, DPID, DWORD, LPDPCHAT);
+    STDMETHOD(SetGroupConnectionSettings) (THIS_ DWORD, DPID, LPDPLCONNECTION)
+      PURE;
+    STDMETHOD(StartSession) (THIS_ DWORD, DPID);
+    STDMETHOD(GetGroupFlags) (THIS_ DPID, LPDWORD);
+    STDMETHOD(GetGroupParent) (THIS_ DPID, LPDPID);
+    STDMETHOD(GetPlayerAccount) (THIS_ DPID, DWORD, LPVOID, LPDWORD) PURE;
+    STDMETHOD(GetPlayerFlags) (THIS_ DPID, LPDWORD);
+  };
 
 /****************************************************************************
  *
@@ -1351,146 +1281,136 @@ DECLARE_INTERFACE_ ( IDirectPlay3, IDirectPlay2 )
  * DPMSG_GENERIC
  * Generic message structure used to identify the message type.
  */
-typedef struct
-{
-	DWORD       dwType;         // Message type
-}
-DPMSG_GENERIC,
-FAR *LPDPMSG_GENERIC;
+  typedef struct
+  {
+    DWORD dwType;               // Message type
+  }
+  DPMSG_GENERIC, FAR * LPDPMSG_GENERIC;
 
 /*
  * DPMSG_CREATEPLAYERORGROUP
  * System message generated when a new player or group
  * created in the session with information about it.
  */
-typedef struct
-{
-	DWORD       dwType;         // Message type
-	DWORD       dwPlayerType;   // Is it a player or group
-	DPID        dpId;           // ID of the player or group
-	DWORD       dwCurrentPlayers;   // current # players & groups in session
-	LPVOID      lpData;         // pointer to remote data
-	DWORD       dwDataSize;     // size of remote data
-	DPNAME      dpnName;        // structure with name info
-	// the following fields are only available when using
-	// the IDirectPlay3 interface or greater
-	DPID        dpIdParent;     // id of parent group
-	DWORD       dwFlags;        // player or group flags
-}
-DPMSG_CREATEPLAYERORGROUP,
-FAR *LPDPMSG_CREATEPLAYERORGROUP;
+  typedef struct
+  {
+    DWORD dwType;               // Message type
+    DWORD dwPlayerType;         // Is it a player or group
+    DPID dpId;                  // ID of the player or group
+    DWORD dwCurrentPlayers;     // current # players & groups in session
+    LPVOID lpData;              // pointer to remote data
+    DWORD dwDataSize;           // size of remote data
+    DPNAME dpnName;             // structure with name info
+    // the following fields are only available when using
+    // the IDirectPlay3 interface or greater
+    DPID dpIdParent;            // id of parent group
+    DWORD dwFlags;              // player or group flags
+  }
+  DPMSG_CREATEPLAYERORGROUP, FAR * LPDPMSG_CREATEPLAYERORGROUP;
 
 /*
  * DPMSG_DESTROYPLAYERORGROUP
  * System message generated when a player or group is being
  * destroyed in the session with information about it.
  */
-typedef struct
-{
-	DWORD       dwType;         // Message type
-	DWORD       dwPlayerType;   // Is it a player or group
-	DPID        dpId;           // player ID being deleted
-	LPVOID      lpLocalData;    // copy of players local data
-	DWORD       dwLocalDataSize; // sizeof local data
-	LPVOID      lpRemoteData;   // copy of players remote data
-	DWORD       dwRemoteDataSize; // sizeof remote data
-	// the following fields are only available when using
-	// the IDirectPlay3 interface or greater
-	DPNAME      dpnName;        // structure with name info
-	DPID        dpIdParent;     // id of parent group
-	DWORD       dwFlags;        // player or group flags
-}
-DPMSG_DESTROYPLAYERORGROUP,
-FAR *LPDPMSG_DESTROYPLAYERORGROUP;
+  typedef struct
+  {
+    DWORD dwType;               // Message type
+    DWORD dwPlayerType;         // Is it a player or group
+    DPID dpId;                  // player ID being deleted
+    LPVOID lpLocalData;         // copy of players local data
+    DWORD dwLocalDataSize;      // sizeof local data
+    LPVOID lpRemoteData;        // copy of players remote data
+    DWORD dwRemoteDataSize;     // sizeof remote data
+    // the following fields are only available when using
+    // the IDirectPlay3 interface or greater
+    DPNAME dpnName;             // structure with name info
+    DPID dpIdParent;            // id of parent group
+    DWORD dwFlags;              // player or group flags
+  }
+  DPMSG_DESTROYPLAYERORGROUP, FAR * LPDPMSG_DESTROYPLAYERORGROUP;
 
 /*
  * DPMSG_ADDPLAYERTOGROUP
  * System message generated when a player is being added
  * to a group.
  */
-typedef struct
-{
-	DWORD       dwType;         // Message type
-	DPID        dpIdGroup;      // group ID being added to
-	DPID        dpIdPlayer;     // player ID being added
-}
-DPMSG_ADDPLAYERTOGROUP,
-FAR *LPDPMSG_ADDPLAYERTOGROUP;
+  typedef struct
+  {
+    DWORD dwType;               // Message type
+    DPID dpIdGroup;             // group ID being added to
+    DPID dpIdPlayer;            // player ID being added
+  }
+  DPMSG_ADDPLAYERTOGROUP, FAR * LPDPMSG_ADDPLAYERTOGROUP;
 
 /*
  * DPMSG_DELETEPLAYERFROMGROUP
  * System message generated when a player is being
  * removed from a group
  */
-typedef DPMSG_ADDPLAYERTOGROUP DPMSG_DELETEPLAYERFROMGROUP;
-typedef DPMSG_DELETEPLAYERFROMGROUP
-FAR *LPDPMSG_DELETEPLAYERFROMGROUP;
+  typedef DPMSG_ADDPLAYERTOGROUP DPMSG_DELETEPLAYERFROMGROUP;
+  typedef DPMSG_DELETEPLAYERFROMGROUP FAR * LPDPMSG_DELETEPLAYERFROMGROUP;
 
 /*
  * DPMSG_ADDGROUPTOGROUP
  * System message generated when a group is being added
  * to a group.
  */
-typedef struct
-{
-	DWORD       dwType;         // Message type
-	DPID        dpIdParentGroup; // group ID being added to
-	DPID        dpIdGroup;     // group ID being added
-}
-DPMSG_ADDGROUPTOGROUP,
-FAR *LPDPMSG_ADDGROUPTOGROUP;
+  typedef struct
+  {
+    DWORD dwType;               // Message type
+    DPID dpIdParentGroup;       // group ID being added to
+    DPID dpIdGroup;             // group ID being added
+  }
+  DPMSG_ADDGROUPTOGROUP, FAR * LPDPMSG_ADDGROUPTOGROUP;
 
 /*
  * DPMSG_DELETEGROUPFROMGROUP
  * System message generated when a GROUP is being
  * removed from a group
  */
-typedef DPMSG_ADDGROUPTOGROUP DPMSG_DELETEGROUPFROMGROUP;
-typedef DPMSG_DELETEGROUPFROMGROUP
-FAR *LPDPMSG_DELETEGROUPFROMGROUP;
+  typedef DPMSG_ADDGROUPTOGROUP DPMSG_DELETEGROUPFROMGROUP;
+  typedef DPMSG_DELETEGROUPFROMGROUP FAR * LPDPMSG_DELETEGROUPFROMGROUP;
 
 /*
  * DPMSG_SETPLAYERORGROUPDATA
  * System message generated when remote data for a player or
  * group has changed.
  */
-typedef struct
-{
-	DWORD       dwType;         // Message type
-	DWORD       dwPlayerType;   // Is it a player or group
-	DPID        dpId;           // ID of player or group
-	LPVOID      lpData;         // pointer to remote data
-	DWORD       dwDataSize;     // size of remote data
-}
-DPMSG_SETPLAYERORGROUPDATA,
-FAR *LPDPMSG_SETPLAYERORGROUPDATA;
+  typedef struct
+  {
+    DWORD dwType;               // Message type
+    DWORD dwPlayerType;         // Is it a player or group
+    DPID dpId;                  // ID of player or group
+    LPVOID lpData;              // pointer to remote data
+    DWORD dwDataSize;           // size of remote data
+  }
+  DPMSG_SETPLAYERORGROUPDATA, FAR * LPDPMSG_SETPLAYERORGROUPDATA;
 
 /*
  * DPMSG_SETPLAYERORGROUPNAME
  * System message generated when the name of a player or
  * group has changed.
  */
-typedef struct
-{
-	DWORD       dwType;         // Message type
-	DWORD       dwPlayerType;   // Is it a player or group
-	DPID        dpId;           // ID of player or group
-	DPNAME      dpnName;        // structure with new name info
-}
-DPMSG_SETPLAYERORGROUPNAME,
-FAR *LPDPMSG_SETPLAYERORGROUPNAME;
+  typedef struct
+  {
+    DWORD dwType;               // Message type
+    DWORD dwPlayerType;         // Is it a player or group
+    DPID dpId;                  // ID of player or group
+    DPNAME dpnName;             // structure with new name info
+  }
+  DPMSG_SETPLAYERORGROUPNAME, FAR * LPDPMSG_SETPLAYERORGROUPNAME;
 
 /*
  * DPMSG_SETSESSIONDESC
  * System message generated when session desc has changed
  */
-typedef struct
-{
-	DWORD           dwType;     // Message type
-	DPSESSIONDESC2  dpDesc;     // Session desc
-}
-DPMSG_SETSESSIONDESC,
-FAR *LPDPMSG_SETSESSIONDESC;
+  typedef struct
+  {
+    DWORD dwType;               // Message type
+    DPSESSIONDESC2 dpDesc;      // Session desc
+  }
+  DPMSG_SETSESSIONDESC, FAR * LPDPMSG_SETSESSIONDESC;
 
 /*
  * DPMSG_HOST
@@ -1498,62 +1418,57 @@ FAR *LPDPMSG_SETSESSIONDESC;
  * DirectPlay object.
  *
  */
-typedef DPMSG_GENERIC DPMSG_HOST;
-typedef DPMSG_HOST
-FAR *LPDPMSG_HOST;
+  typedef DPMSG_GENERIC DPMSG_HOST;
+  typedef DPMSG_HOST FAR * LPDPMSG_HOST;
 
 /*
  * DPMSG_SESSIONLOST
  * System message generated when the connection to the session is lost.
  *
  */
-typedef DPMSG_GENERIC DPMSG_SESSIONLOST;
-typedef DPMSG_SESSIONLOST
-FAR *LPDPMSG_SESSIONLOST;
+  typedef DPMSG_GENERIC DPMSG_SESSIONLOST;
+  typedef DPMSG_SESSIONLOST FAR * LPDPMSG_SESSIONLOST;
 
 /*
  * DPMSG_SECUREMESSAGE
  * System message generated when a player requests a secure send
  */
-typedef struct
-{
-	DWORD       dwType;         // Message Type
-	DWORD       dwFlags;        // Signed/Encrypted
-	DPID        dpIdFrom;       // ID of Sending Player
-	LPVOID      lpData;         // Player message
-	DWORD       dwDataSize;     // Size of player message
-}
-DPMSG_SECUREMESSAGE,
-FAR *LPDPMSG_SECUREMESSAGE;
+  typedef struct
+  {
+    DWORD dwType;               // Message Type
+    DWORD dwFlags;              // Signed/Encrypted
+    DPID dpIdFrom;              // ID of Sending Player
+    LPVOID lpData;              // Player message
+    DWORD dwDataSize;           // Size of player message
+  }
+  DPMSG_SECUREMESSAGE, FAR * LPDPMSG_SECUREMESSAGE;
 
 /*
  * DPMSG_STARTSESSION
  * System message containing all information required to
  * start a new session
  */
-typedef struct
-{
-	DWORD              dwType;     // Message type
-	LPDPLCONNECTION    lpConn;     // DPLCONNECTION structure
-}
-DPMSG_STARTSESSION,
-FAR *LPDPMSG_STARTSESSION;
+  typedef struct
+  {
+    DWORD dwType;               // Message type
+    LPDPLCONNECTION lpConn;     // DPLCONNECTION structure
+  }
+  DPMSG_STARTSESSION, FAR * LPDPMSG_STARTSESSION;
 
 /*
  * DPMSG_CHAT
  * System message containing a chat message
  */
-typedef struct
-{
-	DWORD              dwType;        // Message type
-	DWORD              dwFlags;       // Message flags
-	DPID               idFromPlayer;  // ID of the Sending Player
-	DPID               idToPlayer;    // ID of the To Player
-	DPID               idToGroup;     // ID of the To Group
-	LPDPCHAT           lpChat;        // Pointer to a structure containing the chat message
-}
-DPMSG_CHAT,
-FAR *LPDPMSG_CHAT;
+  typedef struct
+  {
+    DWORD dwType;               // Message type
+    DWORD dwFlags;              // Message flags
+    DPID idFromPlayer;          // ID of the Sending Player
+    DPID idToPlayer;            // ID of the To Player
+    DPID idToGroup;             // ID of the To Group
+    LPDPCHAT lpChat;            // Pointer to a structure containing the chat message
+  }
+  DPMSG_CHAT, FAR * LPDPMSG_CHAT;
 
 /****************************************************************************
  *
@@ -1668,124 +1583,102 @@ FAR *LPDPMSG_CHAT;
 #define DPSYS_DELETEPLAYERFROMGRP   0x0021
 #define DPSYS_CONNECT               0x484b
 
-typedef struct
-{
-	DWORD dwType;
-	DWORD dwPlayerType;
-	DPID dpId;
-	char szLongName[DPLONGNAMELEN];
-	char szShortName[DPSHORTNAMELEN];
-	DWORD dwCurrentPlayers;
-} DPMSG_ADDPLAYER;
+  typedef struct
+  {
+    DWORD dwType;
+    DWORD dwPlayerType;
+    DPID dpId;
+    char szLongName[DPLONGNAMELEN];
+    char szShortName[DPSHORTNAMELEN];
+    DWORD dwCurrentPlayers;
+  } DPMSG_ADDPLAYER;
 
-typedef DPMSG_ADDPLAYER DPMSG_ADDGROUP;
+  typedef DPMSG_ADDPLAYER DPMSG_ADDGROUP;
 
-typedef struct
-{
-	DWORD dwType;
-	DPID dpIdGroup;
-	DPID dpIdPlayer;
-} DPMSG_GROUPADD;
+  typedef struct
+  {
+    DWORD dwType;
+    DPID dpIdGroup;
+    DPID dpIdPlayer;
+  } DPMSG_GROUPADD;
 
-typedef DPMSG_GROUPADD DPMSG_GROUPDELETE;
-typedef struct
-{
-	DWORD dwType;
-	DPID dpId;
-} DPMSG_DELETEPLAYER;
+  typedef DPMSG_GROUPADD DPMSG_GROUPDELETE;
+  typedef struct
+  {
+    DWORD dwType;
+    DPID dpId;
+  } DPMSG_DELETEPLAYER;
 
-typedef BOOL ( PASCAL *LPDPENUMPLAYERSCALLBACK ) (
-    DPID    dpId,
-    LPSTR   lpFriendlyName,
-    LPSTR   lpFormalName,
-    DWORD   dwFlags,
-    LPVOID  lpContext );
+  typedef BOOL(PASCAL * LPDPENUMPLAYERSCALLBACK) (DPID dpId,
+                                                  LPSTR lpFriendlyName,
+                                                  LPSTR lpFormalName,
+                                                  DWORD dwFlags,
+                                                  LPVOID lpContext);
 
-typedef struct
-{
-	DWORD dwSize;
-	GUID guidSession;
-	DWORD dwSession;
-	DWORD dwMaxPlayers;
-	DWORD dwCurrentPlayers;
-	DWORD dwFlags;
-	char szSessionName[DPSESSIONNAMELEN];
-	char szUserField[DPUSERRESERVED];
-	DWORD dwReserved1;
-	char szPassword[DPPASSWORDLEN];
-	DWORD dwReserved2;
-	DWORD dwUser1;
-	DWORD dwUser2;
-	DWORD dwUser3;
-	DWORD dwUser4;
-} DPSESSIONDESC, *LPDPSESSIONDESC;
+  typedef struct
+  {
+    DWORD dwSize;
+    GUID guidSession;
+    DWORD dwSession;
+    DWORD dwMaxPlayers;
+    DWORD dwCurrentPlayers;
+    DWORD dwFlags;
+    char szSessionName[DPSESSIONNAMELEN];
+    char szUserField[DPUSERRESERVED];
+    DWORD dwReserved1;
+    char szPassword[DPPASSWORDLEN];
+    DWORD dwReserved2;
+    DWORD dwUser1;
+    DWORD dwUser2;
+    DWORD dwUser3;
+    DWORD dwUser4;
+  } DPSESSIONDESC, *LPDPSESSIONDESC;
 
-typedef BOOL ( PASCAL *LPDPENUMSESSIONSCALLBACK ) (
-    LPDPSESSIONDESC lpDPSessionDesc,
-    LPVOID      lpContext,
-    LPDWORD     lpdwTimeOut,
-    DWORD       dwFlags );
+  typedef BOOL(PASCAL *
+               LPDPENUMSESSIONSCALLBACK) (LPDPSESSIONDESC lpDPSessionDesc,
+                                          LPVOID lpContext,
+                                          LPDWORD lpdwTimeOut, DWORD dwFlags);
 
 /*
  * IDirectPlay
  */
 #undef INTERFACE
 #define INTERFACE IDirectPlay
-DECLARE_INTERFACE_ ( IDirectPlay, IUnknown )
-{
-	/*** IUnknown methods ***/
-	STDMETHOD ( QueryInterface )       ( THIS_ REFIID riid, LPVOID * ppvObj )
-	PURE;
-	STDMETHOD_ ( ULONG, AddRef )
-	( THIS ) PURE;
-	STDMETHOD_ ( ULONG, Release )
-	( THIS ) PURE;
-	/*** IDirectPlay methods ***/
-	STDMETHOD ( AddPlayerToGroup )     ( THIS_ DPID, DPID )
-	PURE;
-	STDMETHOD
-	( Close ) ( THIS ) PURE;
-	STDMETHOD ( CreatePlayer )         ( THIS_ LPDPID, LPSTR, LPSTR, LPHANDLE )
-	PURE;
-	STDMETHOD ( CreateGroup )          ( THIS_ LPDPID, LPSTR, LPSTR )
-	PURE;
-	STDMETHOD ( DeletePlayerFromGroup ) ( THIS_ DPID, DPID )
-	PURE;
-	STDMETHOD
-	( DestroyPlayer ) ( THIS_ DPID ) PURE;
-	STDMETHOD
-	( DestroyGroup ) ( THIS_ DPID ) PURE;
-	STDMETHOD
-	( EnableNewPlayers ) ( THIS_ BOOL ) PURE;
-	STDMETHOD ( EnumGroupPlayers )     ( THIS_ DPID, LPDPENUMPLAYERSCALLBACK, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( EnumGroups )           ( THIS_ DWORD, LPDPENUMPLAYERSCALLBACK, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( EnumPlayers )          ( THIS_ DWORD, LPDPENUMPLAYERSCALLBACK, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( EnumSessions )         ( THIS_ LPDPSESSIONDESC, DWORD, LPDPENUMSESSIONSCALLBACK, LPVOID, DWORD )
-	PURE;
-	STDMETHOD
-	( GetCaps ) ( THIS_ LPDPCAPS ) PURE;
-	STDMETHOD ( GetMessageCount )      ( THIS_ DPID, LPDWORD )
-	PURE;
-	STDMETHOD ( GetPlayerCaps )        ( THIS_ DPID, LPDPCAPS )
-	PURE;
-	STDMETHOD ( GetPlayerName )        ( THIS_ DPID, LPSTR, LPDWORD, LPSTR, LPDWORD )
-	PURE;
-	STDMETHOD
-	( Initialize ) ( THIS_ LPGUID ) PURE;
-	STDMETHOD
-	( Open ) ( THIS_ LPDPSESSIONDESC ) PURE;
-	STDMETHOD ( Receive )              ( THIS_ LPDPID, LPDPID, DWORD, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD
-	( SaveSession ) ( THIS_ LPSTR ) PURE;
-	STDMETHOD ( Send )                 ( THIS_ DPID, DPID, DWORD, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( SetPlayerName )        ( THIS_ DPID, LPSTR, LPSTR )
-	PURE;
-};
+  DECLARE_INTERFACE_(IDirectPlay, IUnknown)
+  {
+        /*** IUnknown methods ***/
+    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
+    STDMETHOD_(ULONG, AddRef) (THIS) PURE;
+    STDMETHOD_(ULONG, Release) (THIS) PURE;
+        /*** IDirectPlay methods ***/
+    STDMETHOD(AddPlayerToGroup) (THIS_ DPID, DPID) PURE;
+    STDMETHOD(Close) (THIS) PURE;
+    STDMETHOD(CreatePlayer) (THIS_ LPDPID, LPSTR, LPSTR, LPHANDLE) PURE;
+    STDMETHOD(CreateGroup) (THIS_ LPDPID, LPSTR, LPSTR) PURE;
+    STDMETHOD(DeletePlayerFromGroup) (THIS_ DPID, DPID) PURE;
+    STDMETHOD(DestroyPlayer) (THIS_ DPID) PURE;
+    STDMETHOD(DestroyGroup) (THIS_ DPID) PURE;
+    STDMETHOD(EnableNewPlayers) (THIS_ BOOL) PURE;
+    STDMETHOD(EnumGroupPlayers) (THIS_ DPID, LPDPENUMPLAYERSCALLBACK, LPVOID,
+                                 DWORD) PURE;
+    STDMETHOD(EnumGroups) (THIS_ DWORD, LPDPENUMPLAYERSCALLBACK, LPVOID,
+                           DWORD) PURE;
+    STDMETHOD(EnumPlayers) (THIS_ DWORD, LPDPENUMPLAYERSCALLBACK, LPVOID,
+                            DWORD) PURE;
+    STDMETHOD(EnumSessions) (THIS_ LPDPSESSIONDESC, DWORD,
+                             LPDPENUMSESSIONSCALLBACK, LPVOID, DWORD) PURE;
+    STDMETHOD(GetCaps) (THIS_ LPDPCAPS) PURE;
+    STDMETHOD(GetMessageCount) (THIS_ DPID, LPDWORD) PURE;
+    STDMETHOD(GetPlayerCaps) (THIS_ DPID, LPDPCAPS) PURE;
+    STDMETHOD(GetPlayerName) (THIS_ DPID, LPSTR, LPDWORD, LPSTR, LPDWORD)
+      PURE;
+    STDMETHOD(Initialize) (THIS_ LPGUID) PURE;
+    STDMETHOD(Open) (THIS_ LPDPSESSIONDESC) PURE;
+    STDMETHOD(Receive) (THIS_ LPDPID, LPDPID, DWORD, LPVOID, LPDWORD) PURE;
+    STDMETHOD(SaveSession) (THIS_ LPSTR) PURE;
+    STDMETHOD(Send) (THIS_ DPID, DPID, DWORD, LPVOID, DWORD) PURE;
+    STDMETHOD(SetPlayerName) (THIS_ DPID, LPSTR, LPSTR) PURE;
+  };
 
 /****************************************************************************
  *
@@ -1845,7 +1738,8 @@ DECLARE_INTERFACE_ ( IDirectPlay, IUnknown )
 
 #endif
 
-DEFINE_GUID ( IID_IDirectPlay, 0x5454e9a0, 0xdb65, 0x11ce, 0x92, 0x1c, 0x00, 0xaa, 0x00, 0x6c, 0x49, 0x72 );
+  DEFINE_GUID(IID_IDirectPlay, 0x5454e9a0, 0xdb65, 0x11ce, 0x92, 0x1c, 0x00,
+              0xaa, 0x00, 0x6c, 0x49, 0x72);
 
 #endif // IDIRECTPLAY2_OR_GREATER
 
@@ -1867,10 +1761,11 @@ DEFINE_GUID ( IID_IDirectPlay, 0x5454e9a0, 0xdb65, 0x11ce, 0x92, 0x1c, 0x00, 0xa
 #define IDirectPlay_AddRef(p)                       (p)->AddRef()
 #define IDirectPlay_Release(p)                      (p)->Release()
 
-#endif // IDirectPlay interface macros 
+#endif // IDirectPlay interface macros
 
 #ifdef __cplusplus
 }
+
 ;
 #endif
 

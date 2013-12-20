@@ -16,7 +16,7 @@
 void barracks_init();
 
 // do a frame for the barrracks
-void barracks_do_frame ( float frametime );
+void barracks_do_frame(float frametime);
 
 // close the barracks
 void barracks_close();

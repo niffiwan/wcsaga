@@ -41,13 +41,13 @@
 #else
 #error unknown byte order
 #endif
-#endif  // BYTE_ORDER
+#endif // BYTE_ORDER
 
 #ifndef snprintf
 #define snprintf _snprintf
 #endif
 
-#else  // ! Win32
+#else // ! Win32
 
 
 #include <unistd.h>
@@ -91,7 +91,7 @@ typedef unsigned long SEGPTR;
 typedef long LONG_PTR, *PLONG_PTR;
 typedef long LRESULT;
 typedef long LPARAM;
-typedef long ( CALLBACK *FARPROC16 ) ();
+typedef long (CALLBACK * FARPROC16) ();
 typedef unsigned int MMRESULT;
 typedef void *HWND;
 typedef void *HINSTANCE;
@@ -108,7 +108,7 @@ typedef void *LPMMIOPROC;
 
 typedef struct _LARGE_INTEGER
 {
-	__int64 QuadPart;
+  __int64 QuadPart;
 } LARGE_INTEGER;
 
 // networking/socket stuff
@@ -139,31 +139,31 @@ typedef struct _LARGE_INTEGER
 #define WAVE_FORMAT_PCM     1
 #define WAVE_FORMAT_ADPCM   2
 
-#pragma pack(1) // required to get proper values in ds_parse_wave()
+#pragma pack(1)                 // required to get proper values in ds_parse_wave()
 typedef struct
 {
-	WORD wFormatTag;
-	WORD nChannels;
-	DWORD nSamplesPerSec;
-	DWORD nAvgBytesPerSec;
-	WORD nBlockAlign;
+  WORD wFormatTag;
+  WORD nChannels;
+  DWORD nSamplesPerSec;
+  DWORD nAvgBytesPerSec;
+  WORD nBlockAlign;
 } WAVEFORMAT;
 
 typedef struct
 {
-	WAVEFORMAT wf;
-	WORD wBitsPerSample;
+  WAVEFORMAT wf;
+  WORD wBitsPerSample;
 } PCMWAVEFORMAT;
 
 typedef struct
 {
-	WORD  wFormatTag;
-	WORD  nChannels;
-	DWORD nSamplesPerSec;
-	DWORD nAvgBytesPerSec;
-	WORD  nBlockAlign;
-	WORD  wBitsPerSample;
-	WORD  cbSize;
+  WORD wFormatTag;
+  WORD nChannels;
+  DWORD nSamplesPerSec;
+  DWORD nAvgBytesPerSec;
+  WORD nBlockAlign;
+  WORD wBitsPerSample;
+  WORD cbSize;
 } WAVEFORMATEX;
 #pragma pack()
 
@@ -199,7 +199,7 @@ typedef struct
 #define MB_SERVICE_NOTIFICATION 0
 #define MB_SERVICE_NOTIFICATION_NT3X 0
 
-int MessageBox ( HWND h, const char *s1, const char *s2, int i );
+int MessageBox(HWND h, const char *s1, const char *s2, int i);
 
 // thread/process related stuff
 #define _beginthread(x, y, z)
@@ -209,7 +209,7 @@ typedef SDL_mutex *CRITICAL_SECTION;
 
 // timer stuff
 typedef timeval TIMEVAL;
-bool QueryPerformanceCounter ( LARGE_INTEGER *pcount );
+bool QueryPerformanceCounter(LARGE_INTEGER * pcount);
 
 // file related items
 #define _MAX_FNAME                  255
@@ -222,22 +222,22 @@ bool QueryPerformanceCounter ( LARGE_INTEGER *pcount );
 // mmio stuff
 typedef struct
 {
-	DWORD       dwFlags;
-	FOURCC      fccIOProc;
-	LPMMIOPROC  pIOProc;
-	UINT        wErrorRet;
-	HTASK       hTask;
-	LONG        cchBuffer;
-	HPSTR       pchBuffer;
-	HPSTR       pchNext;
-	HPSTR       pchEndRead;
-	HPSTR       pchEndWrite;
-	LONG        lBufOffset;
-	LONG        lDiskOffset;
-	DWORD       adwInfo[4];
-	DWORD       dwReserved1;
-	DWORD       dwReserved2;
-	HMMIO       hmmio;
+  DWORD dwFlags;
+  FOURCC fccIOProc;
+  LPMMIOPROC pIOProc;
+  UINT wErrorRet;
+  HTASK hTask;
+  LONG cchBuffer;
+  HPSTR pchBuffer;
+  HPSTR pchNext;
+  HPSTR pchEndRead;
+  HPSTR pchEndWrite;
+  LONG lBufOffset;
+  LONG lDiskOffset;
+  DWORD adwInfo[4];
+  DWORD dwReserved1;
+  DWORD dwReserved2;
+  HMMIO hmmio;
 } MMIOINFO;
 
 typedef MMIOINFO *LPMMIOINFO;
@@ -251,17 +251,17 @@ typedef MMIOINFO *LPMMIOINFO;
 
 #define MMIOERR_CANNOTWRITE     1
 
-HMMIO mmioOpen ( LPSTR szFilename, LPMMIOINFO lpmmioinfo, DWORD dwOpenFlags );
-long mmioSeek ( HMMIO hmmio, long lOffset, int iOrigin );
-long mmioRead ( HMMIO hmmio, HPSTR pch, long cch );
-MMRESULT mmioClose ( HMMIO hmmio, uint wFlags );
+HMMIO mmioOpen(LPSTR szFilename, LPMMIOINFO lpmmioinfo, DWORD dwOpenFlags);
+long mmioSeek(HMMIO hmmio, long lOffset, int iOrigin);
+long mmioRead(HMMIO hmmio, HPSTR pch, long cch);
+MMRESULT mmioClose(HMMIO hmmio, uint wFlags);
 
 
-int filelength ( int fd );
-int _chdir ( const char *path );
-int _getcwd ( char *buffer, unsigned int len );
-int _mkdir ( const char *path );
-void _splitpath ( char *path, char *drive, char *dir, char *fname, char *ext );
+int filelength(int fd);
+int _chdir(const char *path);
+int _getcwd(char *buffer, unsigned int len);
+int _mkdir(const char *path);
+void _splitpath(char *path, char *drive, char *dir, char *fname, char *ext);
 
 // string related
 #define stricmp(s1, s2)         strcasecmp((s1), (s2))
@@ -269,21 +269,21 @@ void _splitpath ( char *path, char *drive, char *dir, char *fname, char *ext );
 #define _strnicmp(s1, s2, n)    strncasecmp((s1), (s2), (n))
 #define _strlwr(s)              strlwr(s)
 
-void strlwr ( char *s );
-char *strnset ( char *string, int fill, size_t count );
+void strlwr(char *s);
+char *strnset(char *string, int fill, size_t count);
 
 // other stuff
 #define _isnan(f)     isnan(f)
 #define _hypot(x, y)  hypot(x, y)
 
-int MulDiv ( int number, int numerator, int denominator );
-void Sleep ( int mili );
+int MulDiv(int number, int numerator, int denominator);
+void Sleep(int mili);
 
 struct POINT
 {
-	int x, y;
+  int x, y;
 };
 
-#endif  // if !defined (WINDOWS)
+#endif // if !defined (WINDOWS)
 
 #endif // ifndef _CONFIG_H

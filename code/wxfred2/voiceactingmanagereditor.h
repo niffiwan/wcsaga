@@ -9,22 +9,20 @@
 #ifndef _VOICE_ACTING_MANAGER_EDITOR_H
 #define _VOICE_ACTING_MANAGER_EDITOR_H
 
-class dlgVoiceActingManagerEditor : public wxDialog
+class dlgVoiceActingManagerEditor:public wxDialog
 {
 public:
-	// constructor/destructors
-	dlgVoiceActingManagerEditor ( wxWindow *parent );
-	~dlgVoiceActingManagerEditor();
+  // constructor/destructors
+  dlgVoiceActingManagerEditor(wxWindow * parent);
+  ~dlgVoiceActingManagerEditor();
 
-	// event handlers
-	void OnGenerateFileNames ( wxCommandEvent &WXUNUSED ( event ) );
+  // event handlers
+  void OnGenerateFileNames(wxCommandEvent & WXUNUSED(event));
 
 protected:
-	// events
-	DECLARE_EVENT_TABLE()
-
-private:
-	// dialog control stuff goes here
+  // events
+DECLARE_EVENT_TABLE() private:
+  // dialog control stuff goes here
 };
 
 #endif

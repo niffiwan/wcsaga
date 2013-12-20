@@ -39,7 +39,7 @@ VERSION HISTORY:
 #endif
 
 #ifndef __ATLCONV_H__
-#include < AtlConv.h >  // MBCS/Unicode Conversion Macros
+#include < AtlConv.h >          // MBCS/Unicode Conversion Macros
 #endif
 
 // Uncomment if using GetRootFolder
@@ -82,115 +82,122 @@ VERSION HISTORY:
 
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef BFFM_SETOKTEXT                  // Version 5.0 or later
+#ifndef BFFM_SETOKTEXT          // Version 5.0 or later
 #define BFFM_SETOKTEXT              ( WM_USER + 105 )   // Unicode only, req. BIF_USENEWUI
 #define BFFM_SETEXPANDED            ( WM_USER + 106 )   // Unicode only, req. BIF_USENEWUI
 #endif
 
-#ifndef BIF_NEWDIALOGSTYLE              // Version 5.0 or later
+#ifndef BIF_NEWDIALOGSTYLE      // Version 5.0 or later
 #define BIF_NEWDIALOGSTYLE          0x0040
 #define BIF_BROWSEINCLUDEURLS       0x0080
-#define BIF_UAHINT                  0x0100              // Req. BIF_NEWDIALOGSTYLE
+#define BIF_UAHINT                  0x0100      // Req. BIF_NEWDIALOGSTYLE
 #define BIF_NONEWFOLDERBUTTON       0x0200
 #define BIF_NOTRANSLATETARGETS      0x0400
-#define BIF_SHAREABLE               0x8000              // Req. BIF_USENEWUI
+#define BIF_SHAREABLE               0x8000      // Req. BIF_USENEWUI
 #define BIF_USENEWUI                ( BIF_NEWDIALOGSTYLE | BIF_EDITBOX )
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
 
-class CFolderDialog : public CCommonDialog
+class CFolderDialog:public CCommonDialog
 {
-	DECLARE_DYNAMIC ( CFolderDialog )
+DECLARE_DYNAMIC(CFolderDialog) public:
+  CFolderDialog(IN LPCTSTR pszTitle = NULL,
+                IN LPCTSTR pszSelPath = NULL,
+                IN CWnd * pWndParent = NULL,
+                IN UINT uFlags = BIF_RETURNONLYFSDIRS);
+  virtual ~ CFolderDialog(VOID);
 
 public:
-	CFolderDialog (  IN LPCTSTR  pszTitle    = NULL,
-	                 IN LPCTSTR  pszSelPath  = NULL,
-	                 IN CWnd    *pWndParent  = NULL,
-	                 IN UINT     uFlags      = BIF_RETURNONLYFSDIRS );
-	virtual ~CFolderDialog ( VOID );
-
-public:
-#if ( _MFC_VER >= 0x0700 )  // VC++ 2002 (7.0)
-	virtual INT_PTR     DoModal ( VOID );
+#if ( _MFC_VER >= 0x0700 )      // VC++ 2002 (7.0)
+  virtual INT_PTR DoModal(VOID);
 #else
-	virtual INT         DoModal ( VOID );
+  virtual INT DoModal(VOID);
 #endif
 
-	BOOL    SetRootFolder ( IN LPCTSTR pszPath );
-	BOOL    GetRootFolder ( IN OUT LPTSTR pszPath );
-	BOOL    SetSelectedFolder ( IN LPCTSTR pszPath );
+  BOOL SetRootFolder(IN LPCTSTR pszPath);
+  BOOL GetRootFolder(IN OUT LPTSTR pszPath);
+  BOOL SetSelectedFolder(IN LPCTSTR pszPath);
 
 public:
-	AFX_INLINE LPCTSTR  GetFolderPath ( VOID )  const;
-	AFX_INLINE LPCTSTR  GetFolderName ( VOID )  const;
-	AFX_INLINE INT      GetFolderImage ( VOID ) const;
-	AFX_INLINE LPCTSTR  GetSelectedFolder ( VOID ) const;
+    AFX_INLINE LPCTSTR GetFolderPath(VOID) const;
+  AFX_INLINE LPCTSTR GetFolderName(VOID) const;
+  AFX_INLINE INT GetFolderImage(VOID) const;
+  AFX_INLINE LPCTSTR GetSelectedFolder(VOID) const;
 
-	AFX_INLINE BROWSEINFO       &GetBI ( VOID );
-	AFX_INLINE const BROWSEINFO &GetBI ( VOID ) const;
-
-protected:
-	BROWSEINFO  m_bi;
-
-	TCHAR   m_szSelPath[ MAX_PATH ];
-	TCHAR   m_szFolPath[ MAX_PATH ];
+  AFX_INLINE BROWSEINFO & GetBI(VOID);
+  AFX_INLINE const BROWSEINFO & GetBI(VOID) const;
 
 protected:
-	DECLARE_MESSAGE_MAP()
+    BROWSEINFO m_bi;
 
-protected: // Overridables
+  TCHAR m_szSelPath[MAX_PATH];
+  TCHAR m_szFolPath[MAX_PATH];
 
-	virtual VOID OnInitialized ( VOID );
-	virtual VOID OnSelChanged ( IN LPITEMIDLIST  pItemIDList );
-	virtual INT  OnValidateFailed ( IN LPCTSTR /*pszPath*/ );
+protected:
+DECLARE_MESSAGE_MAP() protected:       // Overridables
 
-protected: // Windows XP or later
-	virtual VOID OnIUnknown ( IN IUnknown * /*pIUnknown*/ );
+    virtual VOID OnInitialized(VOID);
+  virtual VOID OnSelChanged(IN LPITEMIDLIST pItemIDList);
+  virtual INT OnValidateFailed(IN LPCTSTR /*pszPath */ );
 
-protected: // Valid to call only from the above handlers
+protected:                     // Windows XP or later
+    virtual VOID OnIUnknown(IN IUnknown * /*pIUnknown */ );
 
-	VOID EnableOK ( IN BOOL bEnable = TRUE );
-	VOID SetSelection ( IN LPITEMIDLIST pItemIDList );
-	VOID SetSelection ( IN LPCTSTR pszPath );
-	VOID SetStatusText ( IN LPCTSTR pszText );
+protected:                     // Valid to call only from the above handlers
 
-protected: // Shell version 5.0 or later:
-	VOID SetExpanded ( IN LPCTSTR pszPath );
-	VOID SetExpanded ( IN LPITEMIDLIST pItemIDList );
-	VOID SetOKText ( IN LPCTSTR pszText );
+    VOID EnableOK(IN BOOL bEnable = TRUE);
+  VOID SetSelection(IN LPITEMIDLIST pItemIDList);
+  VOID SetSelection(IN LPCTSTR pszPath);
+  VOID SetStatusText(IN LPCTSTR pszText);
+
+protected:                     // Shell version 5.0 or later:
+    VOID SetExpanded(IN LPCTSTR pszPath);
+  VOID SetExpanded(IN LPITEMIDLIST pItemIDList);
+  VOID SetOKText(IN LPCTSTR pszText);
 
 private:
-	HWND m_hWnd; // used only in the callback function
+    HWND m_hWnd;                // used only in the callback function
 
 private:
-	static INT CALLBACK BrowseCallbackProc (
-	    IN HWND hWnd, IN UINT uMsg, IN LPARAM lParam, IN LPARAM lpData
-	);
+  static INT CALLBACK BrowseCallbackProc(IN HWND hWnd, IN UINT uMsg,
+                                         IN LPARAM lParam, IN LPARAM lpData);
 };
 
 /////////////////////////////////////////////////////////////////////////////
 
-AFX_INLINE LPCTSTR CFolderDialog::GetSelectedFolder ( VOID ) const
-{ return m_szSelPath; }
+AFX_INLINE LPCTSTR CFolderDialog::GetSelectedFolder(VOID) const const
+{
+  return m_szSelPath;
+}
 
-AFX_INLINE BROWSEINFO &CFolderDialog::GetBI ( VOID )
-{ return m_bi; }
+AFX_INLINE BROWSEINFO & CFolderDialog::GetBI(VOID)
+{
+  return m_bi;
+}
 
-AFX_INLINE const BROWSEINFO &CFolderDialog::GetBI ( VOID ) const
-{ return m_bi; }
+AFX_INLINE const BROWSEINFO & CFolderDialog::GetBI(VOID) const const
+{
+  return m_bi;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // Filled after a call to DoModal
 
-AFX_INLINE LPCTSTR CFolderDialog::GetFolderPath ( VOID ) const
-{ return m_szFolPath; }
+AFX_INLINE LPCTSTR CFolderDialog::GetFolderPath(VOID) const const
+{
+  return m_szFolPath;
+}
 
-AFX_INLINE LPCTSTR CFolderDialog::GetFolderName ( VOID ) const
-{ return m_bi.pszDisplayName; }
+AFX_INLINE LPCTSTR CFolderDialog::GetFolderName(VOID) const const
+{
+  return m_bi.pszDisplayName;
+}
 
-AFX_INLINE INT CFolderDialog::GetFolderImage ( VOID ) const
-{ return m_bi.iImage; }
+AFX_INLINE INT CFolderDialog::GetFolderImage(VOID) const const
+{
+  return m_bi.iImage;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 #endif // __FOLDERDLG_H__

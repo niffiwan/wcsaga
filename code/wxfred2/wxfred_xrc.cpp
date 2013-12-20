@@ -32,7 +32,7 @@
 
 void InitXmlResource()
 {
-	wxXmlResource::Get()->Load ( wxT ( "wxfred.xrc" ) );
+  wxXmlResource::Get()->Load(wxT("wxfred.xrc"));
 }
 
 #endif

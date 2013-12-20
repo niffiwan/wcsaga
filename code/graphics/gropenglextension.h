@@ -27,18 +27,18 @@
 
 typedef struct ogl_extension
 {
-	bool required_to_run;
-	bool enabled;
-	int num_extensions;
-	const char *extension_name[3];
-	int num_functions;
-	const char *function_names[20];
+  bool required_to_run;
+  bool enabled;
+  int num_extensions;
+  const char *extension_name[3];
+  int num_functions;
+  const char *function_names[20];
 } ogl_extension;
 
 typedef struct ogl_function
 {
-	const char *function_name;
-	ptr_u function_ptr;
+  const char *function_name;
+  ptr_u function_ptr;
 } ogl_function;
 
 extern ogl_function GL_Functions[];
@@ -81,18 +81,18 @@ extern ogl_function GL_EXT_Special[];
 
 
 // Functions
-#define OGL_FOG_COORDF                      0           // for better looking fog
-#define OGL_FOG_COORD_POINTER               1           // used with vertex arrays
-#define OGL_MULTI_TEX_COORD_2F              2           // multitex coordinates
-#define OGL_ACTIVE_TEXTURE                  3           // currenly active multitexture
+#define OGL_FOG_COORDF                      0   // for better looking fog
+#define OGL_FOG_COORD_POINTER               1   // used with vertex arrays
+#define OGL_MULTI_TEX_COORD_2F              2   // multitex coordinates
+#define OGL_ACTIVE_TEXTURE                  3   // currenly active multitexture
 #define OGL_CLIENT_ACTIVE_TEXTURE           4
-#define OGL_COMPRESSED_TEX_IMAGE_2D         5           // 2d compressed texture
-#define OGL_COMPRESSED_TEX_SUB_IMAGE_2D     6           // 2d compressed sub texture
+#define OGL_COMPRESSED_TEX_IMAGE_2D         5   // 2d compressed texture
+#define OGL_COMPRESSED_TEX_SUB_IMAGE_2D     6   // 2d compressed sub texture
 #define OGL_GET_COMPRESSED_TEX_IMAGE        7
 //#define OGL_SECONDARY_COLOR_3FV           8           // for better looking fog
 //#define OGL_SECONDARY_COLOR_3UBV          9           // specular
-#define OGL_LOCK_ARRAYS                     8           // HTL
-#define OGL_UNLOCK_ARRAYS                   9           // HTL
+#define OGL_LOCK_ARRAYS                     8   // HTL
+#define OGL_UNLOCK_ARRAYS                   9   // HTL
 //#define OGL_LOAD_TRANSPOSE_MATRIX_F       12
 //#define OGL_MULT_TRANSPOSE_MATRIX_F       13
 #define OGL_DRAW_RANGE_ELEMENTS             10
@@ -170,7 +170,10 @@ void opengl_extensions_init();
 
 #ifdef __APPLE__
 // special one, since it's a core feature
-typedef void ( * glDrawRangeElementsProcPtr ) ( GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid *indices );
+typedef void (*glDrawRangeElementsProcPtr) (GLenum mode, GLuint start,
+                                            GLuint end, GLsizei count,
+                                            GLenum type,
+                                            const GLvoid * indices);
 
 // OS X doesn't have the PFN* names so we have to use the real OSX function ptrs
 #define PFNGLFOGCOORDFEXTPROC                   glFogCoordfEXTProcPtr
@@ -233,7 +236,7 @@ typedef void ( * glDrawRangeElementsProcPtr ) ( GLenum mode, GLuint start, GLuin
 #define PFNGLUNIFORM4FVARBPROC                  glUnifrom4fvARBProcPtr
 #define PFNGLUNIFORM1IARBPROC                   glUniform1iARBProcPtr
 #define PFNGLUNIFORMMATRIX4FVARBPROC            glUniformMatrix4fvARBProcPtr
-#endif  // __APPLE__
+#endif // __APPLE__
 
 #define vglFogCoordfEXT                 GLEXT_CALL( OGL_FOG_COORDF, PFNGLFOGCOORDFEXTPROC )
 #define vglFogCoordPointerEXT           GLEXT_CALL( OGL_FOG_COORD_POINTER, PFNGLFOGCOORDPOINTEREXTPROC )

@@ -22,27 +22,33 @@
 // for bitmap thrusters
 typedef struct thrust_pair_bitmap
 {
-	generic_bitmap normal;
-	generic_bitmap afterburn;
+  generic_bitmap normal;
+  generic_bitmap afterburn;
 
-	thrust_pair_bitmap() {}
+    thrust_pair_bitmap()
+  {
+  }
 } thrust_pair_bitmap;
 
 // for animated thrusters
 typedef struct thrust_pair
 {
-	generic_anim normal;
-	generic_anim afterburn;
+  generic_anim normal;
+  generic_anim afterburn;
 
-	thrust_pair() {}
+    thrust_pair()
+  {
+  }
 } thrust_pair;
 
 typedef struct thrust_info
 {
-	thrust_pair flames;
-	thrust_pair glow;
+  thrust_pair flames;
+  thrust_pair glow;
 
-	thrust_info() {}
+    thrust_info()
+  {
+  }
 } thrust_info;
 
 
@@ -53,49 +59,48 @@ typedef struct thrust_info
 typedef struct species_info
 {
 
-	char species_name[NAME_LENGTH];
-	int default_iff;
-	float awacs_multiplier;
+  char species_name[NAME_LENGTH];
+  int default_iff;
+  float awacs_multiplier;
 
-	union
-	{
-		struct
-		{
-			int r, g, b;
-		} rgb;
-		int a1d[3];
-	} fred_color;
+  union
+  {
+    struct
+    {
+      int r, g, b;
+    } rgb;
+    int a1d[3];
+  } fred_color;
 
-	generic_bitmap debris_texture;
-	generic_anim shield_anim;
-	thrust_info thruster_info;
+  generic_bitmap debris_texture;
+  generic_anim shield_anim;
+  thrust_info thruster_info;
 
-	// Bobboau's thruster stuff
-	thrust_pair_bitmap thruster_secondary_glow_info;
-	thrust_pair_bitmap thruster_tertiary_glow_info;
+  // Bobboau's thruster stuff
+  thrust_pair_bitmap thruster_secondary_glow_info;
+  thrust_pair_bitmap thruster_tertiary_glow_info;
 
-	// the members below this comment are not parsed in species_defs.tbl
+  // the members below this comment are not parsed in species_defs.tbl
 
-	game_snd snd_flyby_fighter;
-	game_snd snd_flyby_bomber;
+  game_snd snd_flyby_fighter;
+  game_snd snd_flyby_bomber;
 
-	generic_anim icon_bitmaps[MAX_BRIEF_ICONS];
-	hud_anim icon_highlight_anims[MAX_BRIEF_ICONS];
-	hud_anim icon_fade_anims[MAX_BRIEF_ICONS];
+  generic_anim icon_bitmaps[MAX_BRIEF_ICONS];
+  hud_anim icon_highlight_anims[MAX_BRIEF_ICONS];
+  hud_anim icon_fade_anims[MAX_BRIEF_ICONS];
 
 
-	// constructor to initialize everything to 0
-	species_info()
-		: default_iff ( 0 ),
-		  awacs_multiplier ( 0 )
-	{
-		species_name[ 0 ] = NULL;
-		memset ( fred_color.a1d, 0, sizeof ( fred_color.a1d ) );
-	}
+  // constructor to initialize everything to 0
+    species_info():default_iff(0), awacs_multiplier(0)
+  {
+    species_name[0] = NULL;
+    memset(fred_color.a1d, 0, sizeof(fred_color.a1d));
+  }
 
-} species_info;
+}
+species_info;
 
-extern SCP_vector<species_info> Species_info;
+extern SCP_vector < species_info > Species_info;
 
 
 // load up the species_defs.tbl into the correct data areas

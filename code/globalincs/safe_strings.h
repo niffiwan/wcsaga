@@ -21,7 +21,7 @@
 
 /* errno_t, EINVAL, ERANGE, etc.. */
 #include <errno.h>
-#include <stdlib.h> /* size_t */
+#include <stdlib.h>             /* size_t */
 
 /* Because errno_t is not (yet) standard, we define it here like this */
 typedef int errno_t;
@@ -36,32 +36,36 @@ typedef int errno_t;
  */
 #ifndef SAFESTRINGS_TEST_APP
 
-#   ifndef __safe_strings_error_handler
-#       define __safe_strings_error_handler( val ) Error(file, line,"%s: String error. Please Report.\nTrying to put into %d byte buffer:\n%s", #val, sizeInBytes,strSource)
-#   endif
+#ifndef __safe_strings_error_handler
+#define __safe_strings_error_handler( val ) Error(file, line,"%s: String error. Please Report.\nTrying to put into %d byte buffer:\n%s", #val, sizeInBytes,strSource)
+#endif
 
 #else
 
 /* For testing only */
-#   define __safe_strings_error_handler( errnoVal ) extern void error_handler( int errnoValue, const char* errnoStr,  const char* file, const char* function, int line );\
+#define __safe_strings_error_handler( errnoVal ) extern void error_handler( int errnoValue, const char* errnoStr,  const char* file, const char* function, int line );\
                                                                 error_handler( errnoVal, #errnoVal, __FILE__, __FUNCTION__, __LINE__ );
 #endif
 
-extern errno_t scp_strcpy_s ( const char *file, int line, char *strDest, size_t sizeInBytes, const char *strSource );
-extern errno_t scp_strcat_s ( const char *file, int line, char *strDest, size_t sizeInBytes, const char *strSource );
+extern errno_t scp_strcpy_s(const char *file, int line, char *strDest,
+                            size_t sizeInBytes, const char *strSource);
+extern errno_t scp_strcat_s(const char *file, int line, char *strDest,
+                            size_t sizeInBytes, const char *strSource);
 
-template<size_t size>
-inline
-errno_t scp_strcpy_s ( const char *file, int line, char ( &strDest ) [ size ], const char *strSource )
+template < size_t size >
+  inline
+  errno_t scp_strcpy_s(const char *file, int line, char (&strDest)[size],
+                       const char *strSource)
 {
-	return scp_strcpy_s ( file, line, strDest, size, strSource );
+  return scp_strcpy_s(file, line, strDest, size, strSource);
 }
 
-template<size_t size>
-inline
-errno_t scp_strcat_s ( const char *file, int line, char ( &strDest ) [ size ], const char *strSource )
+template < size_t size >
+  inline
+  errno_t scp_strcat_s(const char *file, int line, char (&strDest)[size],
+                       const char *strSource)
 {
-	return scp_strcat_s ( file, line, strDest, size, strSource );
+  return scp_strcat_s(file, line, strDest, size, strSource);
 }
 
 #define strcpy_s( ... ) scp_strcpy_s( __FILE__, __LINE__, __VA_ARGS__ )
@@ -71,28 +75,30 @@ errno_t scp_strcat_s ( const char *file, int line, char ( &strDest ) [ size ], c
 
 #pragma message("safe_strings disabled - this is not good!")
 
-inline errno_t strcpy_s ( char *strDest, size_t sizeInBytes, const char *strSource )
+inline errno_t strcpy_s(char *strDest, size_t sizeInBytes,
+                        const char *strSource)
 {
-	strcpy ( strDest, strSource );
-	return 0;
+  strcpy(strDest, strSource);
+  return 0;
 }
 
-inline errno_t strcat_s ( char *strDest, size_t sizeInBytes, const char *strSource )
+inline errno_t strcat_s(char *strDest, size_t sizeInBytes,
+                        const char *strSource)
 {
-	strcat ( strDest, strSource );
-	return 0;
+  strcat(strDest, strSource);
+  return 0;
 }
 
-inline errno_t strcpy_s ( char *strDest, const char *strSource )
+inline errno_t strcpy_s(char *strDest, const char *strSource)
 {
-	strcpy ( strDest, strSource );
-	return 0;
+  strcpy(strDest, strSource);
+  return 0;
 }
 
-inline errno_t strcat_s ( char *strDest, const char *strSource )
+inline errno_t strcat_s(char *strDest, const char *strSource)
 {
-	strcat ( strDest, strSource );
-	return 0;
+  strcat(strDest, strSource);
+  return 0;
 }
 
 #endif

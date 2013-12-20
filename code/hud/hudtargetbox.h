@@ -52,28 +52,28 @@ extern bool Highlight_tagged_ships;
 void hud_targetbox_init();
 void hud_targetbox_init_flash();
 void hud_render_target_model();
-void hud_show_target_data ( float frametime );
-void hud_get_target_strength ( object *objp, float *shields, float *integrity );
+void hud_show_target_data(float frametime);
+void hud_get_target_strength(object * objp, float *shields, float *integrity);
 
 // used to flash text, uses the TBOX_FLASH_ #defines above
-void hud_targetbox_start_flash ( int index, int duration = TBOX_FLASH_DURATION );
-int hud_targetbox_maybe_flash ( int index, int flash_fast = 0 );
-void hud_targetbox_end_flash ( int index );
-int hud_targetbox_is_bright ( int index );
-int hud_targetbox_flash_expired ( int index );
+void hud_targetbox_start_flash(int index, int duration = TBOX_FLASH_DURATION);
+int hud_targetbox_maybe_flash(int index, int flash_fast = 0);
+void hud_targetbox_end_flash(int index);
+int hud_targetbox_is_bright(int index);
+int hud_targetbox_flash_expired(int index);
 
 // functions to manage the targetbox static that appears when sensors are severely damaged
 void hud_targetbox_static_init();
-int hud_targetbox_static_maybe_blit ( float frametime );
+int hud_targetbox_static_maybe_blit(float frametime);
 
-void hud_render_target_ship ( object *target_objp );
-void hud_render_target_debris ( object *target_objp );
-void hud_render_target_weapon ( object *target_objp );
+void hud_render_target_ship(object * target_objp);
+void hud_render_target_debris(object * target_objp);
+void hud_render_target_weapon(object * target_objp);
 
 void hud_update_cargo_scan_sound();
-void hud_cargo_scan_update ( object *targetp, float frametime );
+void hud_cargo_scan_update(object * targetp, float frametime);
 
-void hud_targetbox_truncate_subsys_name ( char *outstr );
+void hud_targetbox_truncate_subsys_name(char *outstr);
 
 //swich through the valid targetbox modes
 void hud_targetbox_switch_wireframe_mode();

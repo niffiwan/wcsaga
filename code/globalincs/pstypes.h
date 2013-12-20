@@ -22,7 +22,7 @@
 // #define PD_BUILD                     // fred documentation/evaluation build
 //  #define FRENCH_BUILD                // build for French (obsolete)
 // #define GERMAN_BUILD             // build for German (this is now used)
-#define RELEASE_REAL                    // this means that it is an actual release candidate, not just an optimized/release build
+#define RELEASE_REAL            // this means that it is an actual release candidate, not just an optimized/release build
 
 // uncomment this #define for DVD version (makes popups say DVD instead of CD 2 or whatever): JCF 5/10/2000
 // #define DVD_MESSAGE_HACK
@@ -32,7 +32,7 @@
 //      #define GAME_CD_CHECK
 //  #endif
 
-#include <stdio.h>  // For NULL, etc
+#include <stdio.h>              // For NULL, etc
 #include <stdlib.h>
 #include <memory.h>
 #include <string.h>
@@ -66,7 +66,7 @@
 #endif
 
 #ifdef IAM_64BIT
-typedef __int32 _fs_time_t;  // time_t here is 64-bit and we need 32-bit
+typedef __int32 _fs_time_t;     // time_t here is 64-bit and we need 32-bit
 typedef __int32 fix;
 // PTR compatible sizes
 typedef __int64 ptr_s;
@@ -91,23 +91,23 @@ typedef unsigned long ulong;
 //Stucture to store clipping codes in a word
 typedef struct ccodes
 {
-	ubyte cc_or, cc_and;        //or is low byte, and is high byte
+  ubyte cc_or, cc_and;          //or is low byte, and is high byte
 } ccodes;
 
 struct vertex;
 
 typedef struct vec3d
 {
-	union
-	{
-		struct
-		{
-			float x, y, z;
-		} xyz;
-		float a1d[3];
-	};
-	inline void operator= ( vertex &vert );
-	inline void set_screen_vert ( vertex &vert );
+  union
+  {
+    struct
+    {
+      float x, y, z;
+    } xyz;
+    float a1d[3];
+  };
+  inline void operator=(vertex & vert);
+  inline void set_screen_vert(vertex & vert);
 } vec3d;
 
 /*
@@ -119,7 +119,7 @@ typedef struct vectora {
 
 typedef struct vec2d
 {
-	float x, y;
+  float x, y;
 } vec2d;
 
 /*
@@ -131,71 +131,76 @@ typedef struct vert2df {
 
 typedef struct angles
 {
-	float p, b, h;
+  float p, b, h;
 } angles_t;
 
 typedef struct matrix
 {
-	union
-	{
-		struct
-		{
-			vec3d rvec, uvec, fvec;
-		} vec;
-		float a2d[3][3];
-		float a1d[9];
-	};
+  union
+  {
+    struct
+    {
+      vec3d rvec, uvec, fvec;
+    } vec;
+    float a2d[3][3];
+    float a1d[9];
+  };
 } matrix;
 
 typedef struct uv_pair
 {
-	float u, v;
+  float u, v;
 } uv_pair;
 
 // Used to store rotated points for mines.
 // Has flag to indicate if projected.
 typedef struct vertex
 {
-	float x, y, z;              // world space position
-	float sx, sy, sw;           // screen space position (sw == 1/z)
-	float u, v, u2, v2, u3, v3, u4, v4;                 // texture position
-	vec3d real_pos;         // _real_ world position
-	ubyte spec_a, spec_r, spec_b, spec_g;   //specular highlights -Bobboau
-	ubyte r, g, b, a;           // color.  Use b for darkening;
-	ubyte codes;                // what sides of view pyramid this point is on/off.  0 = Inside view pyramid.
-	ubyte flags;                // Projection flags.  Indicates whether it is projected or not or if projection overflowed.
-	ubyte pad[2];               // pad structure to be 4 byte aligned.
-	void operator= ( vec3d &vec )
-	{
-		memcpy ( &x, &vec, sizeof ( vec3d ) );
-	}
-} vertex;
-
-inline void vec3d::operator= ( vertex &vert )
-{
-	memcpy ( this, &vert.x, sizeof ( vec3d ) );
+  float x, y, z;                // world space position
+  float sx, sy, sw;             // screen space position (sw == 1/z)
+  float u, v, u2, v2, u3, v3, u4, v4;   // texture position
+  vec3d real_pos;               // _real_ world position
+  ubyte spec_a, spec_r, spec_b, spec_g; //specular highlights -Bobboau
+  ubyte r, g, b, a;             // color.  Use b for darkening;
+  ubyte codes;                  // what sides of view pyramid this point is on/off.  0 = Inside view pyramid.
+  ubyte flags;                  // Projection flags.  Indicates whether it is projected or not or if projection overflowed.
+  ubyte pad[2];                 // pad structure to be 4 byte aligned.
+  void operator=(vec3d & vec)
+  {
+    memcpy(&x, &vec, sizeof(vec3d));
+  }
 }
-//set the vector to the vertex screen position
-inline void vec3d::set_screen_vert ( vertex &vert )
+vertex;
+
+inline void vec3d::operator=(vertex & vert)
 {
-	memcpy ( this, &vert.sx, sizeof ( vec3d ) );
+  memcpy(this, &vert.x, sizeof(vec3d));
+}
+
+//set the vector to the vertex screen position
+inline void vec3d::set_screen_vert(vertex & vert)
+{
+  memcpy(this, &vert.sx, sizeof(vec3d));
 }
 
 //def_list
 typedef struct flag_def_list
 {
-	char *name;
-	int def;
-	ubyte var;
+  char *name;
+  int def;
+  ubyte var;
 } def_list;
 
 //This are defined in MainWin.c
-extern void _cdecl WinAssert ( char *text, char *filename, int line );
-void _cdecl WinAssert ( char *text, char *filename, int linenum, const char *format, ... );
-extern void LuaError ( struct lua_State *L, char *format = NULL, ... );
-extern void _cdecl Error ( const char *filename, int line, const char *format, ... );
-extern void _cdecl Warning ( char *filename, int line, const char *format, ... );
-extern void _cdecl WarningEx ( char *filename, int line, const char *format, ... );
+extern void _cdecl WinAssert(char *text, char *filename, int line);
+void _cdecl WinAssert(char *text, char *filename, int linenum,
+                      const char *format, ...);
+extern void LuaError(struct lua_State *L, char *format = NULL, ...);
+extern void _cdecl Error(const char *filename, int line, const char *format,
+                         ...);
+extern void _cdecl Warning(char *filename, int line, const char *format, ...);
+extern void _cdecl WarningEx(char *filename, int line, const char *format,
+                             ...);
 
 extern int Global_warning_count;
 extern int Global_error_count;
@@ -229,30 +234,30 @@ extern int Global_error_count;
 // Disabling this functionality is dangerous, crazy values can run rampent unchecked and the longer its disabled
 // the more likely you are to have problems getting it working again.
 #if defined(NDEBUG)
-#   define Assert(x) do { ASSUME(x); } while (0)
-#   ifndef _MSC_VER   // non MS compilers
-#       define Assertion(x, y, ...) do {} while (0)
-#   else
-#       if _MSC_VER >= 1400 // VC 2005 or greater
-#           define Assertion(x, y, ...) do { ASSUME(x); } while (0)
-#       else
-#           define Assertion(x, y) do {} while (0)
-#       endif
-#   endif
+#define Assert(x) do { ASSUME(x); } while (0)
+#ifndef _MSC_VER                // non MS compilers
+#define Assertion(x, y, ...) do {} while (0)
 #else
-void gr_activate ( int );
-#   define Assert(x) do { if (!(x)){ WinAssert(#x,__FILE__,__LINE__); } ASSUME( x ); } while (0)
+#if _MSC_VER >= 1400            // VC 2005 or greater
+#define Assertion(x, y, ...) do { ASSUME(x); } while (0)
+#else
+#define Assertion(x, y) do {} while (0)
+#endif
+#endif
+#else
+void gr_activate(int);
+#define Assert(x) do { if (!(x)){ WinAssert(#x,__FILE__,__LINE__); } ASSUME( x ); } while (0)
 
 // Assertion can only use its proper fuctionality in compilers that support variadic macro
-#   ifndef _MSC_VER   // non MS compilers
-#       define Assertion(x, y, ...) do { if (!(x)){ WinAssert(#x,__FILE__,__LINE__, y, __VA_ARGS__ ); } } while (0)
-#   else
-#       if _MSC_VER >= 1400 // VC 2005 or greater
-#           define Assertion(x, y, ...) do { if (!(x)){ WinAssert(#x,__FILE__,__LINE__, y, __VA_ARGS__ ); } ASSUME(x); } while (0)
-#       else // everything else
-#           define Assertion(x, y) do { if (!(x)){ WinAssert(#x,__FILE__,__LINE__); } } while (0)
-#       endif
-#   endif
+#ifndef _MSC_VER                // non MS compilers
+#define Assertion(x, y, ...) do { if (!(x)){ WinAssert(#x,__FILE__,__LINE__, y, __VA_ARGS__ ); } } while (0)
+#else
+#if _MSC_VER >= 1400            // VC 2005 or greater
+#define Assertion(x, y, ...) do { if (!(x)){ WinAssert(#x,__FILE__,__LINE__, y, __VA_ARGS__ ); } ASSUME(x); } while (0)
+#else // everything else
+#define Assertion(x, y) do { if (!(x)){ WinAssert(#x,__FILE__,__LINE__); } } while (0)
+#endif
+#endif
 #endif
 /*******************NEVER COMMENT Assert ************************************************/
 
@@ -279,12 +284,12 @@ void gr_activate ( int );
 // No debug version of Int3
 #define Int3() do { } while (0)
 #else
-void debug_int3 ( char *file, int line );
+void debug_int3(char *file, int line);
 
 // Debug version of Int3
 #define Int3() debug_int3(__FILE__, __LINE__)
-#endif  // NDEBUG && DEMO
-#endif  // INTERPLAYQA
+#endif // NDEBUG && DEMO
+#endif // INTERPLAYQA
 
 #ifndef MIN
 #define MIN(a,b) (((a) < (b)) ? (a) : (b))
@@ -296,15 +301,15 @@ void debug_int3 ( char *file, int line );
 
 #define PI              3.141592654f
 // twice values
-const float PI2 = ( PI * 2.0f );
+const float PI2 = (PI * 2.0f);
 // half values
-const float PI_2 = ( PI / 2.0f );
-const int RAND_MAX_2 = ( RAND_MAX / 2 );
+const float PI_2 = (PI / 2.0f);
+const int RAND_MAX_2 = (RAND_MAX / 2);
 
 #define ANG_TO_RAD(x)   ((x)*PI/180)
 
 
-extern int Fred_running;  // Is Fred running, or FreeSpace?
+extern int Fred_running;        // Is Fred running, or FreeSpace?
 
 
 //======================================================================================
@@ -333,10 +338,10 @@ DCF(toggle_it,"description")
 class debug_command
 {
 public:
-	char *name;
-	char *help;
-	void ( *func ) ();
-	debug_command ( char *name, char *help, void ( *func ) () ); // constructor
+  char *name;
+  char *help;
+  void (*func) ();
+  debug_command(char *name, char *help, void (*func) ());       // constructor
 };
 
 #define DCF(function_name,help_text)            \
@@ -345,7 +350,7 @@ public:
         void dcf_##function_name()
 
 // Starts the debug console
-extern void debug_console ( void ( *func ) () = NULL );
+extern void debug_console(void (*func) () = NULL);
 
 // The next three variables tell your function what to do.  It should
 // only change something if the dc_command is set.   A minimal function
@@ -360,20 +365,20 @@ extern void debug_console ( void ( *func ) () = NULL );
 // if (dc_status) { print out status }
 // with the last two being optional
 
-extern int Dc_command;  // If this is set, then process the command
-extern int Dc_help;     // If this is set, then print out the help text in the form, "usage: ... \nLong description\n" );
-extern int Dc_status;       // If this is set, then print out the current status of the command.
+extern int Dc_command;          // If this is set, then process the command
+extern int Dc_help;             // If this is set, then print out the help text in the form, "usage: ... \nLong description\n" );
+extern int Dc_status;           // If this is set, then print out the current status of the command.
 
-void dc_get_arg ( uint flags );     // Gets the next argument.   If it doesn't match the flags, this function will print an error and not return.
-extern char *Dc_arg;        // The (lowercased) string value of the argument retrieved from dc_arg
-extern char *Dc_arg_org;    // Dc_arg before it got converted to lowercase
-extern uint Dc_arg_type;    // The type of dc_arg.
-extern char *Dc_command_line;       // The rest of the command line, from the end of the last processed arg on.
-extern int Dc_arg_int;      // If Dc_arg_type & ARG_INT or ARG_HEX is set, then this is the value
-extern float Dc_arg_float;  // If Dc_arg_type & ARG_FLOAT is set, then this is the value
+void dc_get_arg(uint flags);    // Gets the next argument.   If it doesn't match the flags, this function will print an error and not return.
+extern char *Dc_arg;            // The (lowercased) string value of the argument retrieved from dc_arg
+extern char *Dc_arg_org;        // Dc_arg before it got converted to lowercase
+extern uint Dc_arg_type;        // The type of dc_arg.
+extern char *Dc_command_line;   // The rest of the command line, from the end of the last processed arg on.
+extern int Dc_arg_int;          // If Dc_arg_type & ARG_INT or ARG_HEX is set, then this is the value
+extern float Dc_arg_float;      // If Dc_arg_type & ARG_FLOAT is set, then this is the value
 
 // Outputs text to the console
-void dc_printf ( char *format, ... );
+void dc_printf(char *format, ...);
 
 // Each dc_arg_type can have one or more of these flags set.
 // This is because some things can fit into two categories.
@@ -381,13 +386,13 @@ void dc_printf ( char *format, ... );
 // value.
 #define ARG_NONE        (1<<0)  // no argument
 #define ARG_ANY     0xFFFFFFFF  // Anything.
-#define ARG_STRING  (1<<1)  // any valid string
+#define ARG_STRING  (1<<1)      // any valid string
 #define ARG_QUOTE       (1<<2)  // a quoted string
-#define ARG_INT     (1<<3)  // a valid integer
+#define ARG_INT     (1<<3)      // a valid integer
 #define ARG_FLOAT       (1<<4)  // a valid floating point number
 
 // some specific commonly used predefined types. Can add up to (1<<31)
-#define ARG_HEX     (1<<5)  // a valid hexadecimal integer. Note that ARG_INT will always be set also in this case.
+#define ARG_HEX     (1<<5)      // a valid hexadecimal integer. Note that ARG_INT will always be set also in this case.
 #define ARG_TRUE        (1<<6)  // on, true, non-zero number
 #define ARG_FALSE       (1<<7)  // off, false, zero
 #define ARG_PLUS        (1<<8)  // Plus sign
@@ -422,7 +427,7 @@ void dc_printf ( char *format, ... );
 #include "math/floating.h"
 
 // Some constants for stuff
-#define MAX_FILENAME_LEN    32          // Length for filenames, ie "title.pcx"
+#define MAX_FILENAME_LEN    32  // Length for filenames, ie "title.pcx"
 #define MAX_PATH_LEN            260     // Length for pathnames, ie "c:\bitmaps\title.pcx"
 // Set to 260 like the windows MAX_PATH
 
@@ -455,28 +460,28 @@ void dc_printf ( char *format, ... );
 #undef USE_INLINE_ASM
 
 // tigital -
-inline float SWAPFLOAT ( float *x )
+inline float SWAPFLOAT(float *x)
 {
 #if !defined(__MWERKS__)
-	// Usage:  void __stwbrx( unsigned int, unsigned int *address, int byteOffsetFromAddress );
+  // Usage:  void __stwbrx( unsigned int, unsigned int *address, int byteOffsetFromAddress );
 #define __stwbrx(value, base, index) \
         __asm__ ( "stwbrx %0, %1, %2" :  : "r" (value), "b%" (index), "r" (base) : "memory" )
 #endif
 
-	union
-	{
-		int i;
-		float f;
-	} buf;
+  union
+  {
+    int i;
+    float f;
+  } buf;
 
-	// load the float into the integer unit
-	register int a = ( ( int * ) x ) [0];
+  // load the float into the integer unit
+  register int a = ((int *) x)[0];
 
-	// store it to the transfer union, with byteswapping
-	__stwbrx ( a, 0, &buf.i );
+  // store it to the transfer union, with byteswapping
+  __stwbrx(a, 0, &buf.i);
 
-	// load it into the FPU and return it
-	return buf.f;
+  // load it into the FPU and return it
+  return buf.f;
 }
 
 #ifdef SCP_UNIX
@@ -498,15 +503,15 @@ inline float SWAPFLOAT ( float *x )
 #define FALSE   0
 
 int myrand();
-int rand32(); // returns a random number between 0 and 0x7fffffff
+int rand32();                   // returns a random number between 0 and 0x7fffffff
 
 
 // lod checker for (modular) table parsing
 typedef struct lod_checker
 {
-	char filename[MAX_FILENAME_LEN];
-	int num_lods;
-	int override;
+  char filename[MAX_FILENAME_LEN];
+  int num_lods;
+  int override;
 } lod_checker;
 
 
@@ -532,10 +537,11 @@ typedef struct lod_checker
 // If delta_step is above 0, then it will also make sure it
 // calls the callback each time count steps 'delta_step' even
 // if 1/10th of a second hasn't elapsed.
-extern int game_busy_callback ( void ( *callback ) ( int count ), int delta_step = -1 );
+extern int game_busy_callback(void (*callback) (int count), int delta_step =
+                              -1);
 
 // Call whenever loading to display cursor
-extern void game_busy ( char *filename = NULL );
+extern void game_busy(char *filename = NULL);
 
 
 //=========================================================
@@ -545,10 +551,10 @@ extern void game_busy ( char *filename = NULL );
 class monitor
 {
 public:
-	char *name;
-	int value;          // Value that gets cleared to 0 each frame.
-	int min, max, sum, cnt;     // Min & Max of value.  Sum is used to calculate average
-	monitor ( char *name ); // constructor
+  char *name;
+  int value;                    // Value that gets cleared to 0 each frame.
+  int min, max, sum, cnt;       // Min & Max of value.  Sum is used to calculate average
+  monitor(char *name);          // constructor
 };
 
 // Creates a monitor variable
@@ -573,20 +579,19 @@ void monitor_update();
 
 #define NOX(s) s
 
-char *XSTR ( char *str, int index );
+char *XSTR(char *str, int index);
 
 // Caps V between MN and MX.
-template <class T>
-void CAP ( T &v, T mn, T mx )
+template < class T > void CAP(T & v, T mn, T mx)
 {
-	if ( v < mn )
-	{
-		v = mn;
-	}
-	else if ( v > mx )
-	{
-		v = mx;
-	}
+  if (v < mn)
+    {
+      v = mn;
+    }
+  else if (v > mx)
+    {
+      v = mx;
+    }
 }
 
 // faster version of CAP()
@@ -625,7 +630,7 @@ void CAP ( T &v, T mn, T mx )
 //=========================================================
 
 // Returns 0 if not enough RAM.
-int vm_init ( int min_heap_size );
+int vm_init(int min_heap_size);
 
 // Frees all RAM.
 void vm_free_all();
@@ -634,19 +639,21 @@ void vm_free_all();
 // Debug versions
 
 // Allocates some RAM.
-void *_vm_malloc ( int size, char *filename = NULL, int line = -1, int quiet = 0 );
+void *_vm_malloc(int size, char *filename = NULL, int line = -1, int quiet =
+                 0);
 
 // allocates some RAM for a string
-char *_vm_strdup ( const char *ptr, char *filename, int line );
+char *_vm_strdup(const char *ptr, char *filename, int line);
 
 // allocates some RAM for a string of a certain length
-char *_vm_strndup ( const char *ptr, int size, char *filename, int line );
+char *_vm_strndup(const char *ptr, int size, char *filename, int line);
 
 // Frees some RAM.
-void _vm_free ( void *ptr, char *filename = NULL, int line = -1 );
+void _vm_free(void *ptr, char *filename = NULL, int line = -1);
 
 // reallocates some RAM
-void *_vm_realloc ( void *ptr, int size, char *filename = NULL, int line = -1, int quiet = 0 );
+void *_vm_realloc(void *ptr, int size, char *filename = NULL, int line =
+                  -1, int quiet = 0);
 
 // Easy to use macros
 #define vm_malloc(size) _vm_malloc((size),__FILE__,__LINE__,0)
@@ -663,19 +670,19 @@ void *_vm_realloc ( void *ptr, int size, char *filename = NULL, int line = -1, i
 // Release versions
 
 // Allocates some RAM.
-void *_vm_malloc ( int size, int quiet = 0 );
+void *_vm_malloc(int size, int quiet = 0);
 
 // allocates some RAM for a string
-char *_vm_strdup ( const char *ptr );
+char *_vm_strdup(const char *ptr);
 
 // allocates some RAM for a strings of a certain length
-char *_vm_strndup ( const char *ptr, int size );
+char *_vm_strndup(const char *ptr, int size);
 
 // Frees some RAM.
-void _vm_free ( void *ptr );
+void _vm_free(void *ptr);
 
 // reallocates some RAM
-void *_vm_realloc ( void *ptr, int size, int quiet = 0 );
+void *_vm_realloc(void *ptr, int size, int quiet = 0);
 
 // Easy to use macros
 #define vm_malloc(size) _vm_malloc((size),0)
@@ -696,57 +703,59 @@ void *_vm_realloc ( void *ptr, int size, int quiet = 0 );
 //-WMC
 typedef struct script_hook
 {
-	//Override
-	int o_language;
-	int o_index;
-	//Actual hook
-	int h_language;
-	int h_index;
+  //Override
+  int o_language;
+  int o_index;
+  //Actual hook
+  int h_language;
+  int h_index;
 
-	script_hook()
-	{
-		o_language = h_language = 0;
-		o_index = h_index = -1;
-	}
-	bool IsValid()
-	{
-		return ( h_index > -1 );
-	}
-} script_hook;
+  script_hook()
+  {
+    o_language = h_language = 0;
+    o_index = h_index = -1;
+  }
+  bool IsValid()
+  {
+    return (h_index > -1);
+  }
+}
+
+script_hook;
 
 class camid
 {
 private:
-	int sig;
-	uint idx;
+  int sig;
+  uint idx;
 public:
-	camid();
-	camid ( int n_idx, int n_sig );
+  camid();
+  camid(int n_idx, int n_sig);
 
-	class camera *getCamera();
-	uint getIndex();
-	int getSignature();
-	bool isValid();
+  class camera *getCamera();
+  uint getIndex();
+  int getSignature();
+  bool isValid();
 };
 
 /* Restrict keyword semantics are different under VC and GCC */
 
 #ifndef NO_RESTRICT_USE
-#   ifdef _MSC_VER
-#       if _MSC_VER >= 1400
-#           define RESTRICT __restrict
-#       else
-#           define RESTRICT
-#       endif
-#   else
-#       define RESTRICT restrict
-#   endif
+#ifdef _MSC_VER
+#if _MSC_VER >= 1400
+#define RESTRICT __restrict
 #else
-#   define RESTRICT
+#define RESTRICT
+#endif
+#else
+#define RESTRICT restrict
+#endif
+#else
+#define RESTRICT
 #endif
 
 #include "globalincs/vmallocator.h"
 #include "globalincs/safe_strings.h"
 
 
-#endif      // PS_TYPES_H
+#endif // PS_TYPES_H

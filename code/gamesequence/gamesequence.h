@@ -38,8 +38,8 @@
 #define GS_EVENT_HUD_CONFIG                     17      // start the HUD configuration screen
 #define GS_EVENT_MULTI_JOIN_GAME                18      // start multiplayer join game screen
 #define GS_EVENT_CONTROL_CONFIG                 19      // get user to choose what type of controller to config
-#define GS_EVENT_EVENT_DEBUG                    20       // an event debug trace scroll list display screen
-#define GS_EVENT_WEAPON_SELECTION               21      // Do weapon loadout 
+#define GS_EVENT_EVENT_DEBUG                    20      // an event debug trace scroll list display screen
+#define GS_EVENT_WEAPON_SELECTION               21      // Do weapon loadout
 #define GS_EVENT_MISSION_LOG_SCROLLBACK         22      // scrollback screen for message log entries
 #define GS_EVENT_GAMEPLAY_HELP                  23      // show help for the gameplay
 #define GS_EVENT_DEATH_DIED                     24      //  Player just died
@@ -52,23 +52,23 @@
 #define GS_EVENT_MULTI_HOST_SETUP               31      // host setup for multiplayer
 #define GS_EVENT_MULTI_CLIENT_SETUP             32      // client setup for multiplayer
 #define GS_EVENT_DEBRIEF                        33      // go to debriefing
-#define GS_EVENT_GOTO_VIEW_CUTSCENES_SCREEN     34    // go to the demo management screen
-#define GS_EVENT_MULTI_STD_WAIT                 35    // standalone wait state
-#define GS_EVENT_STANDALONE_MAIN                36    // the main do-nothing state of the standalone
-#define GS_EVENT_MULTI_PAUSE                    37    // pause your multiplayer game
+#define GS_EVENT_GOTO_VIEW_CUTSCENES_SCREEN     34      // go to the demo management screen
+#define GS_EVENT_MULTI_STD_WAIT                 35      // standalone wait state
+#define GS_EVENT_STANDALONE_MAIN                36      // the main do-nothing state of the standalone
+#define GS_EVENT_MULTI_PAUSE                    37      // pause your multiplayer game
 #define GS_EVENT_TEAM_SELECT                    38      // team selection for multiplayer
 #define GS_EVENT_TRAINING_PAUSE                 39      // pause game while training message is displayed
-#define GS_EVENT_INGAME_PRE_JOIN                40    // go to ship selection screen for ingame join
+#define GS_EVENT_INGAME_PRE_JOIN                40      // go to ship selection screen for ingame join
 #define GS_EVENT_PLAYER_WARPOUT_START           41      // player hit 'j' to warp out
 #define GS_EVENT_PLAYER_WARPOUT_START_FORCED    42      // player is being forced out of mission no matter what
 #define GS_EVENT_PLAYER_WARPOUT_STOP            43      // player hit 'esc' or something to cancel warp out
 #define GS_EVENT_PLAYER_WARPOUT_DONE_STAGE1     44      // player ship got up to speed
 #define GS_EVENT_PLAYER_WARPOUT_DONE_STAGE2     45      // player ship got through the warp effect
 #define GS_EVENT_PLAYER_WARPOUT_DONE            46      // warp effect went away
-#define GS_EVENT_STANDALONE_POSTGAME            47     // debriefing, etc
+#define GS_EVENT_STANDALONE_POSTGAME            47      // debriefing, etc
 #define GS_EVENT_INITIAL_PLAYER_SELECT          48      // initial screen where player selects from multi/single player pilots
 #define GS_EVENT_GAME_INIT                      49
-#define GS_EVENT_MULTI_MISSION_SYNC             50    // sychronize/transfer/load any mission specific data in multiplayer
+#define GS_EVENT_MULTI_MISSION_SYNC             50      // sychronize/transfer/load any mission specific data in multiplayer
 #define GS_EVENT_MULTI_START_GAME               51      // immediately before the create game screen for the host to set the game variables
 #define GS_EVENT_MULTI_HOST_OPTIONS             52      // options the host can set while in the create game scree
 #define GS_EVENT_MULTI_DOGFIGHT_DEBRIEF         53      // multiplayer furball debriefing screen (replaces normal debriefing)
@@ -89,7 +89,7 @@
 // IMPORTANT:  When you add a new event, update the initialization for GS_event_text[]
 //             which is done in GameSequence.cpp
 //
-extern char *GS_event_text[];       // text description for the GS_EVENT_* #defines above
+extern char *GS_event_text[];   // text description for the GS_EVENT_* #defines above
 
 
 // defines for game sequencing states
@@ -113,36 +113,36 @@ extern char *GS_event_text[];       // text description for the GS_EVENT_* #defi
 #define GS_STATE_CONTROL_CONFIG                     15
 #define GS_STATE_WEAPON_SELECT                      16
 #define GS_STATE_MISSION_LOG_SCROLLBACK             17
-#define GS_STATE_DEATH_DIED                         18      //  Player just died
-#define GS_STATE_DEATH_BLEW_UP                      19      //  Saw ship explode.
+#define GS_STATE_DEATH_DIED                         18  //  Player just died
+#define GS_STATE_DEATH_BLEW_UP                      19  //  Saw ship explode.
 #define GS_STATE_SIMULATOR_ROOM                     20
 #define GS_STATE_CREDITS                            21
 #define GS_STATE_SHOW_GOALS                         22
 #define GS_STATE_HOTKEY_SCREEN                      23
-#define GS_STATE_VIEW_MEDALS                        24      // Go to the View Medals screen
-#define GS_STATE_MULTI_HOST_SETUP                   25      // state where host sets up multiplayer game
-#define GS_STATE_MULTI_CLIENT_SETUP                 26      // client setup for multiplayer game
+#define GS_STATE_VIEW_MEDALS                        24  // Go to the View Medals screen
+#define GS_STATE_MULTI_HOST_SETUP                   25  // state where host sets up multiplayer game
+#define GS_STATE_MULTI_CLIENT_SETUP                 26  // client setup for multiplayer game
 #define GS_STATE_DEBRIEF                            27
 #define GS_STATE_VIEW_CUTSCENES                     28
 #define GS_STATE_MULTI_STD_WAIT                     29
 #define GS_STATE_STANDALONE_MAIN                    30
 #define GS_STATE_MULTI_PAUSED                       31
 #define GS_STATE_TEAM_SELECT                        32
-#define GS_STATE_TRAINING_PAUSED                    33       // game is paused while training msg is being read.
-#define GS_STATE_INGAME_PRE_JOIN                    34       // go to ship selection screen for ingame join
-#define GS_STATE_EVENT_DEBUG                        35       // an event debug trace scroll list display screen
-#define GS_STATE_STANDALONE_POSTGAME                36       // debriefing, etc.
+#define GS_STATE_TRAINING_PAUSED                    33  // game is paused while training msg is being read.
+#define GS_STATE_INGAME_PRE_JOIN                    34  // go to ship selection screen for ingame join
+#define GS_STATE_EVENT_DEBUG                        35  // an event debug trace scroll list display screen
+#define GS_STATE_STANDALONE_POSTGAME                36  // debriefing, etc.
 #define GS_STATE_INITIAL_PLAYER_SELECT              37
 #define GS_STATE_MULTI_MISSION_SYNC                 38
 #define GS_STATE_MULTI_START_GAME                   39
 #define GS_STATE_MULTI_HOST_OPTIONS                 40
 #define GS_STATE_MULTI_DOGFIGHT_DEBRIEF             41
 #define GS_STATE_CAMPAIGN_ROOM                      42
-#define GS_STATE_CMD_BRIEF                          43      // command briefing screen
-#define GS_STATE_RED_ALERT                          44      // red alert screen
-#define GS_STATE_END_OF_CAMPAIGN                    45      // end of main campaign -- only applicable in single player
+#define GS_STATE_CMD_BRIEF                          43  // command briefing screen
+#define GS_STATE_RED_ALERT                          44  // red alert screen
+#define GS_STATE_END_OF_CAMPAIGN                    45  // end of main campaign -- only applicable in single player
 #define GS_STATE_GAMEPLAY_HELP                      46
-#define GS_STATE_END_DEMO                           47      // end of demo campaign (upsell then main menu)
+#define GS_STATE_END_DEMO                           47  // end of demo campaign (upsell then main menu)
 #define GS_STATE_LOOP_BRIEF                         48
 #define GS_STATE_PXO                                49
 #define GS_STATE_LAB                                50
@@ -150,45 +150,45 @@ extern char *GS_event_text[];       // text description for the GS_EVENT_* #defi
 #define GS_STATE_START_GAME                         52
 #define GS_STATE_FICTION_VIEWER                     53
 
-#define GS_NUM_STATES                           54          //Last one++
+#define GS_NUM_STATES                           54      //Last one++
 
 // IMPORTANT:  When you add a new state, update the initialization for GS_state_text[]
 //             which is done in GameSequence.cpp
 //
-extern struct script_hook GS_state_hooks[]; //WMC-for scripting
-extern char *GS_state_text[];       // text description for the GS_STATE_* #defines above
+extern struct script_hook GS_state_hooks[];     //WMC-for scripting
+extern char *GS_state_text[];   // text description for the GS_STATE_* #defines above
 extern int Num_gs_event_text;
-extern int Num_gs_state_text;       //WMC - for scripting
+extern int Num_gs_state_text;   //WMC - for scripting
 
 
 // function prototypes
 //
 void gameseq_init();
-int gameseq_process_events ( void );    // returns current game state
-int gameseq_get_state ( int depth = 0 );
-void gameseq_post_event ( int event );
-int gameseq_get_event ( void );
+int gameseq_process_events(void);       // returns current game state
+int gameseq_get_state(int depth = 0);
+void gameseq_post_event(int event);
+int gameseq_get_event(void);
 
-void gameseq_set_state ( int new_state, int override = 0 );
-void gameseq_push_state ( int new_state );
-void gameseq_pop_state ( void );
+void gameseq_set_state(int new_state, int override = 0);
+void gameseq_push_state(int new_state);
+void gameseq_pop_state(void);
 int gameseq_get_pushed_state();
 int gameseq_get_depth();
 int gameseq_get_previous_state();
-void gameseq_pop_and_discard_state ( void );
+void gameseq_pop_and_discard_state(void);
 
 
 // Called by the sequencing code when things happen.
-void game_process_event ( int current_state, int event );
-void game_leave_state ( int old_state, int new_state );
-void game_enter_state ( int old_state, int new_state );
-void game_do_state ( int current_state );
+void game_process_event(int current_state, int event);
+void game_leave_state(int old_state, int new_state);
+void game_enter_state(int old_state, int new_state);
+void game_do_state(int current_state);
 
 // Kazan
 bool GameState_Stack_Valid();
 
 //WMC
-int gameseq_get_event_idx ( char *s );
-int gameseq_get_state_idx ( char *s );
+int gameseq_get_event_idx(char *s);
+int gameseq_get_state_idx(char *s);
 
 #endif /* __GAMESEQUENCE_H__ */

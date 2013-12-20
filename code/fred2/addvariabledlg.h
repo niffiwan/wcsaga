@@ -20,53 +20,53 @@
 /////////////////////////////////////////////////////////////////////////////
 // CAddVariableDlg dialog
 
-class CAddVariableDlg : public CDialog
+class CAddVariableDlg:public CDialog
 {
-	// Construction
+  // Construction
 public:
-	CAddVariableDlg ( CWnd *pParent = NULL ); // standard constructor
+  CAddVariableDlg(CWnd * pParent = NULL);       // standard constructor
 
-	// Dialog Data
-	//{{AFX_DATA(CAddVariableDlg)
-	enum { IDD = IDD_ADD_VARIABLE };
-	CString m_default_value;
-	CString m_variable_name;
-	bool        m_name_validated;
-	bool        m_data_validated;
-	bool        m_type_number;
-	bool        m_type_campaign_persistent;
-	bool        m_type_player_persistent;
-	bool        m_type_network_variable;
-	bool        m_create;
-	int     m_sexp_var_index;
-	//}}AFX_DATA
+  // Dialog Data
+  //{{AFX_DATA(CAddVariableDlg)
+  enum
+  { IDD = IDD_ADD_VARIABLE };
+  CString m_default_value;
+  CString m_variable_name;
+  bool m_name_validated;
+  bool m_data_validated;
+  bool m_type_number;
+  bool m_type_campaign_persistent;
+  bool m_type_player_persistent;
+  bool m_type_network_variable;
+  bool m_create;
+  int m_sexp_var_index;
+  //}}AFX_DATA
 
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAddVariableDlg)
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(CAddVariableDlg)
 protected:
-	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange * pDX);   // DDX/DDV support
+  //}}AFX_VIRTUAL
 
-	// Implementation
+  // Implementation
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CAddVariableDlg)
-	virtual void OnOK();
-	virtual BOOL OnInitDialog();
-	afx_msg void validate_variable_name ( int set_focus );
-	afx_msg void validate_data ( int set_focus );
-	afx_msg void OnTypeNumber();
-	afx_msg void OnTypeString();
-	afx_msg void OnTypePlayerPersistent();
-	afx_msg void OnTypeCampaignPersistent();
-	afx_msg void OnTypeNetworkVariable();
-	afx_msg void set_variable_type();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-};
+  // Generated message map functions
+  //{{AFX_MSG(CAddVariableDlg)
+    virtual void OnOK();
+  virtual BOOL OnInitDialog();
+  afx_msg void validate_variable_name(int set_focus);
+  afx_msg void validate_data(int set_focus);
+  afx_msg void OnTypeNumber();
+  afx_msg void OnTypeString();
+  afx_msg void OnTypePlayerPersistent();
+  afx_msg void OnTypeCampaignPersistent();
+  afx_msg void OnTypeNetworkVariable();
+  afx_msg void set_variable_type();
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()};
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.

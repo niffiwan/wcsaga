@@ -10,19 +10,20 @@
 #define __ASYNC_INCLUDED__
 
 
-#include <ole2.h>       // for DECLARE_INTERFACE and HRESULT
+#include <ole2.h>               // for DECLARE_INTERFACE and HRESULT
 
 #ifdef __cplusplus
 extern "C"
 {
-#endif /* __cplusplus */
+#endif                          /* __cplusplus */
 
 /*
  * GUIDS used by DPAsyncData objects
  */
 
 // {47BCD7E0-2E89-11d0-A889-00A0C905433C}
-DEFINE_GUID ( IID_IDPAsyncData, 0x47bcd7e0, 0x2e89, 0x11d0, 0xa8, 0x89, 0x0, 0xa0, 0xc9, 0x5, 0x43, 0x3c );
+  DEFINE_GUID(IID_IDPAsyncData, 0x47bcd7e0, 0x2e89, 0x11d0, 0xa8, 0x89, 0x0,
+              0xa0, 0xc9, 0x5, 0x43, 0x3c);
 
 
 /****************************************************************************
@@ -33,8 +34,7 @@ DEFINE_GUID ( IID_IDPAsyncData, 0x47bcd7e0, 0x2e89, 0x11d0, 0xa8, 0x89, 0x0, 0xa
  *
  ****************************************************************************/
 
-typedef struct IDPAsyncData
-		FAR *LPDPASYNCDATA;
+  typedef struct IDPAsyncData FAR *LPDPASYNCDATA;
 
 
 /****************************************************************************
@@ -45,44 +45,28 @@ typedef struct IDPAsyncData
 
 #undef INTERFACE
 #define INTERFACE IDPAsyncData
-DECLARE_INTERFACE_ ( IDPAsyncData, IUnknown )
-{
-	/*  IUnknown Methods    */
-	STDMETHOD ( QueryInterface )       ( THIS_ REFIID riid, LPVOID * ppvObj )
-	PURE;
-	STDMETHOD_ ( ULONG, AddRef )
-	( THIS ) PURE;
-	STDMETHOD_ ( ULONG, Release )
-	( THIS ) PURE;
+    DECLARE_INTERFACE_(IDPAsyncData, IUnknown)
+  {
+    /*  IUnknown Methods    */
+    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
+    STDMETHOD_(ULONG, AddRef) (THIS) PURE;
+    STDMETHOD_(ULONG, Release) (THIS) PURE;
 
-	/*  IDPAsyncData Methods    */
-	STDMETHOD ( AddItem )              ( THIS_ LPDWORD, LPVOID, DWORD )
-	PURE;
-	STDMETHOD
-	( Cancel ) ( THIS ) PURE;
-	STDMETHOD
-	( GetFlags ) ( THIS_ LPDWORD ) PURE;
-	STDMETHOD ( GetItem )              ( THIS_ DWORD, LPVOID * )
-	PURE;
-	STDMETHOD
-	( GetItemCount ) ( THIS_ LPDWORD ) PURE;
-	STDMETHOD ( GetStatus )            ( THIS_ LPDWORD, LPDWORD, HRESULT * )
-	PURE;
-	STDMETHOD
-	( IsSnapshotCurrent ) ( THIS ) PURE;
-	STDMETHOD
-	( RefreshSnapshot ) ( THIS ) PURE;
-	STDMETHOD
-	( RemoveItem ) ( THIS_ DWORD ) PURE;
-	STDMETHOD
-	( SetFlags ) ( THIS_ DWORD ) PURE;
-	STDMETHOD ( SetItem )              ( THIS_ DWORD, LPVOID, DWORD )
-	PURE;
-	STDMETHOD
-	( SetStatus ) ( THIS_ DWORD ) PURE;
-	STDMETHOD ( SetStatusEvent )       ( THIS_ DWORD, HANDLE )
-	PURE;
-};
+    /*  IDPAsyncData Methods    */
+    STDMETHOD(AddItem) (THIS_ LPDWORD, LPVOID, DWORD) PURE;
+    STDMETHOD(Cancel) (THIS) PURE;
+    STDMETHOD(GetFlags) (THIS_ LPDWORD) PURE;
+    STDMETHOD(GetItem) (THIS_ DWORD, LPVOID *) PURE;
+    STDMETHOD(GetItemCount) (THIS_ LPDWORD) PURE;
+    STDMETHOD(GetStatus) (THIS_ LPDWORD, LPDWORD, HRESULT *) PURE;
+    STDMETHOD(IsSnapshotCurrent) (THIS) PURE;
+    STDMETHOD(RefreshSnapshot) (THIS) PURE;
+    STDMETHOD(RemoveItem) (THIS_ DWORD) PURE;
+    STDMETHOD(SetFlags) (THIS_ DWORD) PURE;
+    STDMETHOD(SetItem) (THIS_ DWORD, LPVOID, DWORD) PURE;
+    STDMETHOD(SetStatus) (THIS_ DWORD) PURE;
+    STDMETHOD(SetStatusEvent) (THIS_ DWORD, HANDLE) PURE;
+  };
 
 
 /****************************************************************************
@@ -145,6 +129,7 @@ DECLARE_INTERFACE_ ( IDPAsyncData, IUnknown )
 
 #ifdef __cplusplus
 }
+
 ;
 #endif /* __cplusplus */
 

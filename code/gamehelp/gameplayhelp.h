@@ -14,6 +14,6 @@
 
 void gameplay_help_init();
 void gameplay_help_close();
-void gameplay_help_do_frame ( float frametime );
+void gameplay_help_do_frame(float frametime);
 
 #endif

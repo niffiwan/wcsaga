@@ -32,45 +32,46 @@
 class ChttpGet
 {
 public:
-	ChttpGet ( char *URL, char *localfile );
-	ChttpGet ( char *URL, char *localfile, char *proxyip, unsigned short proxyport );
-	~ChttpGet();
-	void GetFile ( char *URL, char *localfile );
-	int GetStatus();
-	uint GetBytesIn();
-	uint GetTotalBytes();
-	void AbortGet();
-	void WorkerThread();
-	bool m_Aborted;
+  ChttpGet(char *URL, char *localfile);
+    ChttpGet(char *URL, char *localfile, char *proxyip,
+             unsigned short proxyport);
+   ~ChttpGet();
+  void GetFile(char *URL, char *localfile);
+  int GetStatus();
+  uint GetBytesIn();
+  uint GetTotalBytes();
+  void AbortGet();
+  void WorkerThread();
+  bool m_Aborted;
 
 protected:
-	int ConnectSocket();
-	char *GetHTTPLine();
-	uint ReadDataChannel();
-	uint m_iBytesIn;
-	uint m_iBytesTotal;
-	uint m_State;
-	bool m_ProxyEnabled;
-	char *m_ProxyIP;
-	char m_URL[MAX_URL_LEN];
-	ushort m_ProxyPort;
+  int ConnectSocket();
+  char *GetHTTPLine();
+  uint ReadDataChannel();
+  uint m_iBytesIn;
+  uint m_iBytesTotal;
+  uint m_State;
+  bool m_ProxyEnabled;
+  char *m_ProxyIP;
+  char m_URL[MAX_URL_LEN];
+  ushort m_ProxyPort;
 
-	char m_szUserName[100];
-	char m_szPassword[100];
-	char m_szHost[200];
-	char m_szDir[200];
-	char m_szFilename[100];
+  char m_szUserName[100];
+  char m_szPassword[100];
+  char m_szHost[200];
+  char m_szDir[200];
+  char m_szFilename[100];
 
-	bool m_Aborting;
+  bool m_Aborting;
 
 
-	SOCKET m_DataSock;
+  SOCKET m_DataSock;
 
-	FILE *LOCALFILE;
-	char recv_buffer[1000];
+  FILE *LOCALFILE;
+  char recv_buffer[1000];
 
 #ifdef SCP_UNIX
-	SDL_Thread *thread_id;
+  SDL_Thread *thread_id;
 #endif
 };
 

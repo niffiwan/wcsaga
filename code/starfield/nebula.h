@@ -21,9 +21,9 @@ struct angles;
 
 // You shouldn't pass the extension for filename.
 // PBH = Pitch, Bank, Heading.   Pass NULL for default orientation.
-void nebula_init ( char *filename, int pitch, int bank, int heading );
-void nebula_init ( char *filename, angles *pbh = /*NULL*/ 0 );
+void nebula_init(char *filename, int pitch, int bank, int heading);
+void nebula_init(char *filename, angles * pbh = /*NULL*/ 0);
 void nebula_close();
 void nebula_render();
 
-#endif  //_NEBULA_H
+#endif //_NEBULA_H

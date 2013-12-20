@@ -9,22 +9,20 @@
 #ifndef _SHIELD_SYSTEM_EDITOR_H
 #define _SHIELD_SYSTEM_EDITOR_H
 
-class dlgShieldSystemEditor : public wxDialog
+class dlgShieldSystemEditor:public wxDialog
 {
 public:
-	// constructor/destructors
-	dlgShieldSystemEditor ( wxWindow *parent );
-	~dlgShieldSystemEditor();
+  // constructor/destructors
+  dlgShieldSystemEditor(wxWindow * parent);
+  ~dlgShieldSystemEditor();
 
-	// event handlers
-	// event functions go here
+  // event handlers
+  // event functions go here
 
 protected:
-	// events
-	DECLARE_EVENT_TABLE()
-
-private:
-	// dialog control stuff goes here
+  // events
+DECLARE_EVENT_TABLE() private:
+  // dialog control stuff goes here
 };
 
 #endif

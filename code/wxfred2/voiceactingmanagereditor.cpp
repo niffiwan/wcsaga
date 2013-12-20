@@ -22,23 +22,21 @@
 #include "voicefilemanager.h"
 
 
-BEGIN_EVENT_TABLE ( dlgVoiceActingManagerEditor, wxDialog )
-	EVT_BUTTON ( XRCID ( "btnGenerateFileNames" ), dlgVoiceActingManagerEditor::OnGenerateFileNames )
-END_EVENT_TABLE()
-
-
-dlgVoiceActingManagerEditor::dlgVoiceActingManagerEditor ( wxWindow *parent )
-	: wxDialog()
+BEGIN_EVENT_TABLE(dlgVoiceActingManagerEditor, wxDialog) EVT_BUTTON(XRCID("btnGenerateFileNames"), dlgVoiceActingManagerEditor::OnGenerateFileNames) END_EVENT_TABLE()dlgVoiceActingManagerEditor::dlgVoiceActingManagerEditor(wxWindow * parent):wxDialog
+  ()
 {
-	wxXmlResource::Get()->LoadDialog ( this, parent, "dlgVoiceActingManagerEditor" );
+  wxXmlResource::Get()->LoadDialog(this, parent,
+                                   "dlgVoiceActingManagerEditor");
 }
 
 dlgVoiceActingManagerEditor::~dlgVoiceActingManagerEditor()
-{}
-
-void dlgVoiceActingManagerEditor::OnGenerateFileNames ( wxCommandEvent &WXUNUSED ( event ) )
 {
-	dlgVoiceFileManager *dlg = new dlgVoiceFileManager ( this );
-	dlg->ShowModal();
-	dlg->Destroy();
+}
+
+void dlgVoiceActingManagerEditor::
+OnGenerateFileNames(wxCommandEvent & WXUNUSED(event))
+{
+  dlgVoiceFileManager *dlg = new dlgVoiceFileManager(this);
+  dlg->ShowModal();
+  dlg->Destroy();
 }

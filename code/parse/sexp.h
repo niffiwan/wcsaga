@@ -18,7 +18,7 @@ struct ship_subsys;
 struct ship;
 
 // bumped to 30 by Goober5000
-#define OPERATOR_LENGTH 30  // if this ever exceeds TOKEN_LENGTH, let JasonH know!
+#define OPERATOR_LENGTH 30      // if this ever exceeds TOKEN_LENGTH, let JasonH know!
 #define TOKEN_LENGTH        32
 
 /*
@@ -43,7 +43,7 @@ struct ship;
 #define MAX_SEXP_VARIABLES 100
 
 #define MAX_SEXP_TEXT   2000
-#define MAX_OPERATORS   1024  // Yes, this is used, but not by the Sexp code.
+#define MAX_OPERATORS   1024    // Yes, this is used, but not by the Sexp code.
 
 // Operator argument formats (data types of an argument)
 #define OPF_NONE                1       // argument cannot exist at this position if it's this
@@ -118,14 +118,14 @@ struct ship;
 #define OPF_HUD_ELEMENT         71      // A magic name of a specific HUD element
 
 // Operand return types
-#define OPR_NUMBER              1   // returns number
-#define OPR_BOOL                2   // returns true/false value
-#define OPR_NULL                3   // doesn't return a value
-#define OPR_AI_GOAL             4   // is an ai operator (doesn't really return a value, but used for type matching)
-#define OPR_POSITIVE            5   // returns a non-negative number
-#define OPR_STRING              6   // not really a return type, but used for type matching.
-#define OPR_AMBIGUOUS           7   // not really a return type, but used for type matching.
-#define OPR_FLEXIBLE_ARGUMENT   8   // Goober5000 - is an argument operator (doesn't really return a value, but used for type matching)
+#define OPR_NUMBER              1       // returns number
+#define OPR_BOOL                2       // returns true/false value
+#define OPR_NULL                3       // doesn't return a value
+#define OPR_AI_GOAL             4       // is an ai operator (doesn't really return a value, but used for type matching)
+#define OPR_POSITIVE            5       // returns a non-negative number
+#define OPR_STRING              6       // not really a return type, but used for type matching.
+#define OPR_AMBIGUOUS           7       // not really a return type, but used for type matching.
+#define OPR_FLEXIBLE_ARGUMENT   8       // Goober5000 - is an argument operator (doesn't really return a value, but used for type matching)
 
 #define OP_INSERT_FLAG          0x8000
 #define OP_REPLACE_FLAG         0x4000
@@ -255,10 +255,10 @@ struct ship;
 #define OP_PERCENT_SHIPS_DESTROYED          (0x000b | OP_CATEGORY_OBJECTIVE | OP_NONCAMPAIGN_FLAG)
 #define OP_DEPART_NODE_DELAY                (0x000c | OP_CATEGORY_OBJECTIVE | OP_NONCAMPAIGN_FLAG)
 #define OP_DESTROYED_DEPARTED_DELAY         (0x000d | OP_CATEGORY_OBJECTIVE | OP_NONCAMPAIGN_FLAG)
-#define OP_PERCENT_SHIPS_DISARMED           (0x000e | OP_CATEGORY_OBJECTIVE | OP_NONCAMPAIGN_FLAG)  // Goober5000
-#define OP_PERCENT_SHIPS_DISABLED           (0x000f | OP_CATEGORY_OBJECTIVE | OP_NONCAMPAIGN_FLAG)  // Goober5000
-#define OP_PERCENT_SHIPS_ARRIVED            (0x0010 | OP_CATEGORY_OBJECTIVE | OP_NONCAMPAIGN_FLAG)  // FUBAR-BDHR
-#define OP_WAS_DESTROYED_BY_DELAY           (0x0011 | OP_CATEGORY_OBJECTIVE | OP_NONCAMPAIGN_FLAG)  // KeldorKatarn
+#define OP_PERCENT_SHIPS_DISARMED           (0x000e | OP_CATEGORY_OBJECTIVE | OP_NONCAMPAIGN_FLAG)      // Goober5000
+#define OP_PERCENT_SHIPS_DISABLED           (0x000f | OP_CATEGORY_OBJECTIVE | OP_NONCAMPAIGN_FLAG)      // Goober5000
+#define OP_PERCENT_SHIPS_ARRIVED            (0x0010 | OP_CATEGORY_OBJECTIVE | OP_NONCAMPAIGN_FLAG)      // FUBAR-BDHR
+#define OP_WAS_DESTROYED_BY_DELAY           (0x0011 | OP_CATEGORY_OBJECTIVE | OP_NONCAMPAIGN_FLAG)      // KeldorKatarn
 
 #define OP_TIME_SHIP_DESTROYED              (0x0000 | OP_CATEGORY_TIME | OP_NONCAMPAIGN_FLAG)
 #define OP_TIME_SHIP_ARRIVED                (0x0001 | OP_CATEGORY_TIME | OP_NONCAMPAIGN_FLAG)
@@ -492,7 +492,7 @@ struct ship;
 #define OP_CUTSCENES_FADE_OUT               (0x0080 | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG) // WMC
 #define OP_CUTSCENES_SET_CAMERA_POSITION    (0x0081 | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG) // WMC
 #define OP_CUTSCENES_SET_CAMERA_FACING      (0x0082 | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG) // WMC
-#define OP_CUTSCENES_SET_CAMERA_FACING_OBJECT   (0x0083 | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG) // WMC
+#define OP_CUTSCENES_SET_CAMERA_FACING_OBJECT   (0x0083 | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG)     // WMC
 #define OP_CUTSCENES_SET_CAMERA_ROTATION    (0x0084 | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG) // WMC
 #define OP_CUTSCENES_SET_FOV                (0x0085 | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG) // WMC
 #define OP_CUTSCENES_RESET_FOV              (0x0086 | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG) // WMC
@@ -565,7 +565,7 @@ struct ship;
 #define OP_TURRET_SUBSYS_TARGET_DISABLE     (0x00c6 | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG) // Wanderer
 #define OP_TURRET_SUBSYS_TARGET_ENABLE      (0x00c7 | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG) // Wanderer
 #define OP_REMOVE_WEAPONS                   (0x00c8 | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG) // Wanderer
-#define OP_SHIP_MANEUVER                    (0x00c9 | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG) // Wanderer 
+#define OP_SHIP_MANEUVER                    (0x00c9 | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG) // Wanderer
 #define OP_SHIP_ROT_MANEUVER                (0x00ca | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG) // Wanderer
 #define OP_SHIP_LAT_MANEUVER                (0x00cb | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG) // Wanderer
 #define OP_GET_VARIABLE_BY_INDEX            (0x00cc | OP_CATEGORY_CHANGE | OP_NONCAMPAIGN_FLAG) // Goober5000
@@ -611,7 +611,7 @@ struct ship;
 #define OP_AI_IGNORE                        (0x000e | OP_CATEGORY_AI | OP_NONCAMPAIGN_FLAG)
 #define OP_AI_STAY_STILL                    (0x000f | OP_CATEGORY_AI | OP_NONCAMPAIGN_FLAG)
 #define OP_AI_PLAY_DEAD                     (0x0010 | OP_CATEGORY_AI | OP_NONCAMPAIGN_FLAG)
-#define OP_AI_IGNORE_NEW                    (0x0011 | OP_CATEGORY_AI | OP_NONCAMPAIGN_FLAG) // Goober5000
+#define OP_AI_IGNORE_NEW                    (0x0011 | OP_CATEGORY_AI | OP_NONCAMPAIGN_FLAG)     // Goober5000
 
 #define OP_GOALS_ID                         (0x0000 | OP_CATEGORY_UNLISTED)
 #define OP_NEXT_MISSION                     (0x0001 | OP_CATEGORY_UNLISTED)     // used in campaign files for branching
@@ -641,26 +641,26 @@ struct ship;
 #define OP_WAS_DESTROYED_BY                 (0x0019 | OP_CATEGORY_UNLISTED)
 
 // nav point sexps
-#define OP_NAV_IS_VISITED                   (0x0000 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_DISTANCE                     (0x0001 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_ADD_WAYPOINT                 (0x0002 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_ADD_SHIP                     (0x0003 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_DEL                          (0x0004 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_HIDE                         (0x0005 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_RESTRICT                     (0x0006 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_UNHIDE                       (0x0007 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_UNRESTRICT                   (0x0008 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_SET_VISITED                  (0x0009 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_SET_CARRY                    (0x000a | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_UNSET_CARRY                  (0x000b | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_UNSET_VISITED                (0x000c | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_SET_NEEDSLINK                (0x000d | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_UNSET_NEEDSLINK              (0x000e | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_ISLINKED                     (0x000f | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_USECINEMATICS                (0x0010 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_USEAP                        (0x0011 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // Kazan
-#define OP_NAV_SELECT                       (0x0012 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // KeldorKatarn
-#define OP_NAV_UNSELECT                     (0x0013 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)  // KeldorKatarn
+#define OP_NAV_IS_VISITED                   (0x0000 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_DISTANCE                     (0x0001 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_ADD_WAYPOINT                 (0x0002 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_ADD_SHIP                     (0x0003 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_DEL                          (0x0004 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_HIDE                         (0x0005 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_RESTRICT                     (0x0006 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_UNHIDE                       (0x0007 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_UNRESTRICT                   (0x0008 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_SET_VISITED                  (0x0009 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_SET_CARRY                    (0x000a | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_UNSET_CARRY                  (0x000b | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_UNSET_VISITED                (0x000c | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_SET_NEEDSLINK                (0x000d | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_UNSET_NEEDSLINK              (0x000e | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_ISLINKED                     (0x000f | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_USECINEMATICS                (0x0010 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_USEAP                        (0x0011 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // Kazan
+#define OP_NAV_SELECT                       (0x0012 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // KeldorKatarn
+#define OP_NAV_UNSELECT                     (0x0013 | OP_CATEGORY_NAVPOINTS | OP_NONCAMPAIGN_FLAG)      // KeldorKatarn
 
 // training sexps
 #define OP_KEY_PRESSED                      (0x0000 | OP_CATEGORY_TRAINING)
@@ -677,15 +677,15 @@ struct ship;
 #define OP_SPECIAL_CHECK                    (0x000b | OP_CATEGORY_TRAINING)
 #define OP_SECONDARIES_DEPLETED             (0x000c | OP_CATEGORY_TRAINING)
 #define OP_FACING2                          (0x000d | OP_CATEGORY_TRAINING)
-#define OP_PRIMARIES_DEPLETED               (0x000e | OP_CATEGORY_TRAINING) // Goober5000
-#define OP_MISSILE_LOCKED                   (0x000f | OP_CATEGORY_TRAINING) // Sesquipedalian
+#define OP_PRIMARIES_DEPLETED               (0x000e | OP_CATEGORY_TRAINING)     // Goober5000
+#define OP_MISSILE_LOCKED                   (0x000f | OP_CATEGORY_TRAINING)     // Sesquipedalian
 #define OP_SET_TRAINING_CONTEXT_FLY_PATH    (0x0010 | OP_CATEGORY_TRAINING)
 #define OP_SET_TRAINING_CONTEXT_SPEED       (0x0011 | OP_CATEGORY_TRAINING)
-#define OP_KEY_RESET_MULTIPLE               (0x0012 | OP_CATEGORY_TRAINING) // Goober5000
-#define OP_STRING_TO_INT                    (0x0013 | OP_CATEGORY_TRAINING) // Karajorma
-#define OP_RESET_ORDERS                     (0x0014 | OP_CATEGORY_TRAINING) // Karajorma
-#define OP_QUERY_ORDERS                     (0x0015 | OP_CATEGORY_TRAINING) // Karajorma
-#define OP_MATCHING_SPEED                   (0x0016 | OP_CATEGORY_TRAINING) // KeldorKatarn
+#define OP_KEY_RESET_MULTIPLE               (0x0012 | OP_CATEGORY_TRAINING)     // Goober5000
+#define OP_STRING_TO_INT                    (0x0013 | OP_CATEGORY_TRAINING)     // Karajorma
+#define OP_RESET_ORDERS                     (0x0014 | OP_CATEGORY_TRAINING)     // Karajorma
+#define OP_QUERY_ORDERS                     (0x0015 | OP_CATEGORY_TRAINING)     // Karajorma
+#define OP_MATCHING_SPEED                   (0x0016 | OP_CATEGORY_TRAINING)     // KeldorKatarn
 
 // defines for string constants
 #define SEXP_HULL_STRING            "Hull"
@@ -701,7 +701,7 @@ struct ship;
 #define CDR(n)      ((n < 0) ? -1 : Sexp_nodes[n].rest)
 #define CADR(n)     CAR(CDR(n))
 // #define CTEXT(n) (Sexp_nodes[n].text)
-char *CTEXT ( int n );
+char *CTEXT(int n);
 
 // added by Goober5000
 #define CDDR(n)     CDR(CDR(n))
@@ -750,20 +750,20 @@ char *CTEXT ( int n );
 // sexp variable definitions
 #define SEXP_VARIABLE_CHAR                  ('@')
 // defines for type field of sexp_variable.  Be sure not to conflict with type field of sexp_node
-#define SEXP_VARIABLE_NUMBER                (1<<4)  //  (0x0010)
-#define SEXP_VARIABLE_STRING                (1<<5)  //  (0x0020)
-#define SEXP_VARIABLE_UNKNOWN               (1<<6)  //  (0x0040)
-#define SEXP_VARIABLE_NOT_USED              (1<<7)  //  (0x0080)
+#define SEXP_VARIABLE_NUMBER                (1<<4)      //  (0x0010)
+#define SEXP_VARIABLE_STRING                (1<<5)      //  (0x0020)
+#define SEXP_VARIABLE_UNKNOWN               (1<<6)      //  (0x0040)
+#define SEXP_VARIABLE_NOT_USED              (1<<7)      //  (0x0080)
 
-#define SEXP_VARIABLE_BLOCK                 (1<<0)  //  (0x0001)
+#define SEXP_VARIABLE_BLOCK                 (1<<0)      //  (0x0001)
 /*
 #define SEXP_VARIABLE_BLOCK_EXP             (1<<1)  //  (0x0002)
 #define SEXP_VARIABLE_BLOCK_HIT             (1<<2)  //  (0x0004)
 */
-#define SEXP_VARIABLE_PLAYER_PERSISTENT     (1<<3)  //  (0x0008)
+#define SEXP_VARIABLE_PLAYER_PERSISTENT     (1<<3)      //  (0x0008)
 
 // Goober5000 - hopefully this should work and not conflict with anything
-#define SEXP_VARIABLE_CAMPAIGN_PERSISTENT   (1<<29) //  (0x0100)
+#define SEXP_VARIABLE_CAMPAIGN_PERSISTENT   (1<<29)     //  (0x0100)
 //Karajorma
 #define SEXP_VARIABLE_NETWORK               (1<<28)
 
@@ -812,27 +812,27 @@ char *CTEXT ( int n );
 #define SEXP_NUM_EVAL       -2147483641 //-7    // already completed an arithmetic operation and result is stored
 
 // defines for check_sexp_syntax
-#define SEXP_CHECK_NONOP_ARGS           -1          // non-operator has arguments
-#define SEXP_CHECK_OP_EXPECTED      -2          // operator expected, but found data instead
-#define SEXP_CHECK_UNKNOWN_OP           -3          // unrecognized operator
-#define SEXP_CHECK_TYPE_MISMATCH        -4          // return type or data type mismatch
-#define SEXP_CHECK_BAD_ARG_COUNT        -5          // argument count in incorrect
-#define SEXP_CHECK_UNKNOWN_TYPE     -6          // unrecognized return type of data type
+#define SEXP_CHECK_NONOP_ARGS           -1      // non-operator has arguments
+#define SEXP_CHECK_OP_EXPECTED      -2  // operator expected, but found data instead
+#define SEXP_CHECK_UNKNOWN_OP           -3      // unrecognized operator
+#define SEXP_CHECK_TYPE_MISMATCH        -4      // return type or data type mismatch
+#define SEXP_CHECK_BAD_ARG_COUNT        -5      // argument count in incorrect
+#define SEXP_CHECK_UNKNOWN_TYPE     -6  // unrecognized return type of data type
 
-#define SEXP_CHECK_INVALID_NUM                  -101        // number is not valid
-#define SEXP_CHECK_INVALID_SHIP                 -102        // invalid ship name
-#define SEXP_CHECK_INVALID_WING                 -103        // invalid wing name
-#define SEXP_CHECK_INVALID_SUBSYS               -104        // invalid subsystem
-#define SEXP_CHECK_INVALID_IFF                  -105        // invalid iff string
+#define SEXP_CHECK_INVALID_NUM                  -101    // number is not valid
+#define SEXP_CHECK_INVALID_SHIP                 -102    // invalid ship name
+#define SEXP_CHECK_INVALID_WING                 -103    // invalid wing name
+#define SEXP_CHECK_INVALID_SUBSYS               -104    // invalid subsystem
+#define SEXP_CHECK_INVALID_IFF                  -105    // invalid iff string
 #define SEXP_CHECK_INVALID_POINT                    -106        // invalid point
-#define SEXP_CHECK_NEGATIVE_NUM                 -107        // negative number wasn't allowed
+#define SEXP_CHECK_NEGATIVE_NUM                 -107    // negative number wasn't allowed
 #define SEXP_CHECK_INVALID_SHIP_WING            -108    // invalid ship/wing
 #define SEXP_CHECK_INVALID_SHIP_TYPE            -109    // invalid ship type
 #define SEXP_CHECK_UNKNOWN_MESSAGE              -110    // invalid message
 #define SEXP_CHECK_INVALID_PRIORITY             -111    // invalid priority for a message
-#define SEXP_CHECK_INVALID_MISSION_NAME     -112    // invalid mission name
+#define SEXP_CHECK_INVALID_MISSION_NAME     -112        // invalid mission name
 #define SEXP_CHECK_INVALID_GOAL_NAME            -113    // invalid goal name
-#define SEXP_CHECK_INVALID_LEVEL                    -114    // mission level too high in campaign
+#define SEXP_CHECK_INVALID_LEVEL                    -114        // mission level too high in campaign
 #define SEXP_CHECK_INVALID_MSG_SOURCE           -115    // invalid 'who-from' for a message being sent
 #define SEXP_CHECK_INVALID_DOCKER_POINT     -116
 #define SEXP_CHECK_INVALID_DOCKEE_POINT     -117
@@ -870,27 +870,27 @@ char *CTEXT ( int n );
 
 typedef struct sexp_ai_goal_link
 {
-	int ai_goal;
-	int op_code;
+  int ai_goal;
+  int op_code;
 } sexp_ai_goal_link;
 
 typedef struct sexp_oper
 {
-	char *text;
-	int value;
-	int min, max;
+  char *text;
+  int value;
+  int min, max;
 } sexp_oper;
 
 typedef struct sexp_node
 {
-	char text[TOKEN_LENGTH];
-	int op_index;               // the index in the Operators array for the operator at this node (or -1 if not an operator)
-	int type;                       // atom, list, or not used
-	int subtype;                    // type of atom or list?
-	int first;                  // if first parameter is sexp, index into Sexp_nodes
-	int rest;                       // index into Sexp_nodes of rest of parameters
-	int value;                  // known to be true, known to be false, or not known
-	int flags;                  // Goober5000
+  char text[TOKEN_LENGTH];
+  int op_index;                 // the index in the Operators array for the operator at this node (or -1 if not an operator)
+  int type;                     // atom, list, or not used
+  int subtype;                  // type of atom or list?
+  int first;                    // if first parameter is sexp, index into Sexp_nodes
+  int rest;                     // index into Sexp_nodes of rest of parameters
+  int value;                    // known to be true, known to be false, or not known
+  int flags;                    // Goober5000
 } sexp_node;
 
 // Goober5000
@@ -900,27 +900,27 @@ typedef struct sexp_node
 
 typedef struct sexp_variable
 {
-	int type;
-	char text[TOKEN_LENGTH];
-	char variable_name[TOKEN_LENGTH];
+  int type;
+  char text[TOKEN_LENGTH];
+  char variable_name[TOKEN_LENGTH];
 } sexp_variable;
 
 // Goober5000 - adapted from sexp_list_item in Sexp_tree.h
 class arg_item
 {
 public:
-	char *text;
-	arg_item *next;
-	int nesting_level;
+  char *text;
+  arg_item *next;
+  int nesting_level;
 
-	arg_item()
-		: text ( NULL ),
-		  next ( NULL ) {}
-	void add_data ( char *str );
-	void expunge();
-	int empty();
-	arg_item *get_next();
-	void clear_nesting_level();
+    arg_item():text(NULL), next(NULL)
+  {
+  }
+  void add_data(char *str);
+  void expunge();
+  int empty();
+  arg_item *get_next();
+  void clear_nesting_level();
 };
 
 
@@ -957,85 +957,92 @@ extern int Players_mlocked;
 extern ship_subsys *Players_targeted_subsys;
 extern int Players_target_timestamp;
 extern int Players_mlocked_timestamp;
-extern int Sexp_clipboard;  // used by Fred
+extern int Sexp_clipboard;      // used by Fred
 
-extern SCP_vector<int> Current_sexp_operator;
+extern SCP_vector < int >Current_sexp_operator;
 
 extern void init_sexp();
-extern int alloc_sexp ( char *text, int type, int subtype, int first, int rest );
+extern int alloc_sexp(char *text, int type, int subtype, int first, int rest);
 extern int find_free_sexp();
-extern int free_one_sexp ( int num );
-extern int free_sexp ( int num );
-extern int free_sexp2 ( int num );
-extern int dup_sexp_chain ( int node );
-extern int cmp_sexp_chains ( int node1, int node2 );
-extern int find_sexp_list ( int num );
-extern int find_parent_operator ( int num );
-extern int is_sexp_top_level ( int node );
+extern int free_one_sexp(int num);
+extern int free_sexp(int num);
+extern int free_sexp2(int num);
+extern int dup_sexp_chain(int node);
+extern int cmp_sexp_chains(int node1, int node2);
+extern int find_sexp_list(int num);
+extern int find_parent_operator(int num);
+extern int is_sexp_top_level(int node);
 
 // Goober5000 - renamed these to be more clear, to prevent bugs :p
-extern int get_operator_index ( char *token );
-extern int get_operator_const ( char *token );
+extern int get_operator_index(char *token);
+extern int get_operator_const(char *token);
 
-extern int check_sexp_syntax ( int node, int return_type = OPR_BOOL, int recursive = 0, int *bad_node = 0/*NULL*/,
-                               int mode = 0 );
-extern int get_sexp_main ( void ); //  Returns start node
-extern int run_sexp ( const char *sexpression ); // debug and lua sexps
+extern int check_sexp_syntax(int node, int return_type =
+                             OPR_BOOL, int recursive = 0, int *bad_node =
+                             0 /*NULL*/, int mode = 0);
+extern int get_sexp_main(void); //  Returns start node
+extern int run_sexp(const char *sexpression);   // debug and lua sexps
 extern int stuff_sexp_variable_list();
-extern int eval_sexp ( int cur_node, int referenced_node = -1 );
-extern int is_sexp_true ( int cur_node, int referenced_node = -1 );
-extern int query_operator_return_type ( int op );
-extern int query_operator_argument_type ( int op, int argnum );
-extern void update_sexp_references ( char *old_name, char *new_name );
-extern void update_sexp_references ( char *old_name, char *new_name, int format );
-extern int query_referenced_in_sexp ( int mode, char *name, int *node );
-extern int verify_vector ( char *text );
-extern void skip_white ( char **str );
-extern int validate_float ( char **str );
-extern int build_sexp_string ( int cur_node, int level, int mode, int max_len );
-extern int sexp_query_type_match ( int opf, int opr );
-extern char *sexp_error_message ( int num );
+extern int eval_sexp(int cur_node, int referenced_node = -1);
+extern int is_sexp_true(int cur_node, int referenced_node = -1);
+extern int query_operator_return_type(int op);
+extern int query_operator_argument_type(int op, int argnum);
+extern void update_sexp_references(char *old_name, char *new_name);
+extern void update_sexp_references(char *old_name, char *new_name,
+                                   int format);
+extern int query_referenced_in_sexp(int mode, char *name, int *node);
+extern int verify_vector(char *text);
+extern void skip_white(char **str);
+extern int validate_float(char **str);
+extern int build_sexp_string(int cur_node, int level, int mode, int max_len);
+extern int sexp_query_type_match(int opf, int opr);
+extern char *sexp_error_message(int num);
 extern int count_free_sexp_nodes();
 
 // Goober5000
-void do_action_for_each_special_argument ( int cur_node );
-int special_argument_appears_in_sexp_tree ( int node );
-int special_argument_appears_in_sexp_list ( int node );
+void do_action_for_each_special_argument(int cur_node);
+int special_argument_appears_in_sexp_tree(int node);
+int special_argument_appears_in_sexp_list(int node);
 
 // functions to change the attributes of an sexpression tree to persistent or not persistent
-extern void sexp_unmark_persistent ( int n );
-extern void sexp_mark_persistent ( int n );
-extern int waypoint_lookup ( char *name );
-extern int verify_sexp_tree ( int node );
-extern int query_sexp_ai_goal_valid ( int sexp_ai_goal, int ship );
-int query_node_in_sexp ( int node, int sexp );
-void flush_sexp_tree ( int node );
+extern void sexp_unmark_persistent(int n);
+extern void sexp_mark_persistent(int n);
+extern int waypoint_lookup(char *name);
+extern int verify_sexp_tree(int node);
+extern int query_sexp_ai_goal_valid(int sexp_ai_goal, int ship);
+int query_node_in_sexp(int node, int sexp);
+void flush_sexp_tree(int node);
 
 // sexp_variable
-void sexp_modify_variable ( char *text, int index, bool sexp_callback = true );
-int get_index_sexp_variable_from_node ( int node );
-int get_index_sexp_variable_name ( const char *temp_name );
-int get_index_sexp_variable_name_special ( const char *text ); // Goober5000
-bool sexp_replace_variable_names_with_values ( char *text, int max_len ); // Goober5000
-int get_nth_variable_index ( int nth, int variable_type ); // Karajorma
+void sexp_modify_variable(char *text, int index, bool sexp_callback = true);
+int get_index_sexp_variable_from_node(int node);
+int get_index_sexp_variable_name(const char *temp_name);
+int get_index_sexp_variable_name_special(const char *text);     // Goober5000
+bool sexp_replace_variable_names_with_values(char *text, int max_len);  // Goober5000
+int get_nth_variable_index(int nth, int variable_type); // Karajorma
 int sexp_variable_count();
 int sexp_campaign_persistent_variable_count();  // Goober5000
-int sexp_variable_typed_count ( int sexp_variables_index, int variable_type ); // Karajorma
-void sexp_variable_delete ( int index );
+int sexp_variable_typed_count(int sexp_variables_index, int variable_type);     // Karajorma
+void sexp_variable_delete(int index);
 void sexp_variable_sort();
-void sexp_fred_modify_variable ( const char *text, const char *var_name, int index, int type );
-int sexp_add_variable ( const char *text, const char *var_name, int type, int index = -1 );
+void sexp_fred_modify_variable(const char *text, const char *var_name,
+                               int index, int type);
+int sexp_add_variable(const char *text, const char *var_name, int type,
+                      int index = -1);
 bool generate_special_explosion_block_variables();
 int num_block_variables();
-bool has_special_explosion_block_index ( ship *shipp, int *index );
+bool has_special_explosion_block_index(ship * shipp, int *index);
 
 // Karajorma
-void set_primary_ammo ( int ship_index, int requested_bank, int requested_ammo, int rearm_limit = -1, bool update = true );
-void set_secondary_ammo ( int ship_index, int requested_bank, int requested_ammo, int rearm_limit = -1, bool update = true );
+void set_primary_ammo(int ship_index, int requested_bank, int requested_ammo,
+                      int rearm_limit = -1, bool update = true);
+void set_secondary_ammo(int ship_index, int requested_bank,
+                        int requested_ammo, int rearm_limit =
+                        -1, bool update = true);
 
 
 // menu and category stuff
-extern int get_subcategory ( int sexp_id );
+extern int get_subcategory(int sexp_id);
 
 // Goober5000
 extern void sexp_music_close();
@@ -1046,16 +1053,16 @@ extern int Knossos_warp_ani_used;
 //WMC - moved here from FRED
 typedef struct sexp_help_struct
 {
-	int id;
-	char *help;
+  int id;
+  char *help;
 } sexp_help_struct;
 
 extern sexp_help_struct Sexp_help[];
 
 typedef struct op_menu_struct
 {
-	char *name;
-	int id;
+  char *name;
+  int id;
 } op_menu_struct;
 
 extern op_menu_struct op_menu[];
@@ -1067,7 +1074,7 @@ extern int Num_submenus;
 
 //WMC
 //Outputs sexp.html file
-bool output_sexps ( char *filepath );
+bool output_sexps(char *filepath);
 
 
 void multi_sexp_eval();

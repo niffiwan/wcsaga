@@ -17,11 +17,10 @@
 
 struct object;
 
-void afterburners_start ( object *objp );
-void afterburners_stop ( object *objp, int key_released = 0 );
+void afterburners_start(object * objp);
+void afterburners_stop(object * objp, int key_released = 0);
 void afterburner_stop_sounds();
-void afterburners_update ( object *objp, float fl_frametime );
+void afterburners_update(object * objp, float fl_frametime);
 void afterburner_level_init();
 
 #endif /* __AFTERBURNER_H__ */
-

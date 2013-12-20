@@ -12,7 +12,7 @@
 #ifndef _MISSIONMESSAGE_H
 #define _MISSIONMESSAGE_H
 
-#include "globalincs/globals.h"     // include so that we can gets defs for lengths of tokens
+#include "globalincs/globals.h" // include so that we can gets defs for lengths of tokens
 #include "anim/packunpack.h"
 
 struct ship;
@@ -25,13 +25,13 @@ struct ship;
 
 typedef struct message_extra
 {
-	char name[MAX_FILENAME_LEN];
-	int num;
-	anim *anim_data;
+  char name[MAX_FILENAME_LEN];
+  int num;
+  anim *anim_data;
 } message_extra;
 
-extern SCP_vector<message_extra> Message_avis;
-extern SCP_vector<message_extra> Message_waves;
+extern SCP_vector < message_extra > Message_avis;
+extern SCP_vector < message_extra > Message_waves;
 
 // defines for message priorities
 #define MESSAGE_PRIORITY_LOW        1
@@ -84,14 +84,14 @@ extern char *Builtin_message_types[MAX_BUILTIN_MESSAGE_TYPES];
 #define MESSAGE_REPAIR_DONE         21
 #define MESSAGE_REPAIR_ABORTED      22
 #define MESSAGE_HAMMER_SWINE        23
-#define MESSAGE_REARM_REQUEST       24      // wingman messages player when he calls a support ship
+#define MESSAGE_REARM_REQUEST       24  // wingman messages player when he calls a support ship
 #define MESSAGE_DISABLE_TARGET      25
 #define MESSAGE_DISARM_TARGET       26
-#define MESSAGE_PLAYER_DIED         27      // message sent when player starts death roll
+#define MESSAGE_PLAYER_DIED         27  // message sent when player starts death roll
 #define MESSAGE_WINGMAN_SCREAM      28
 #define MESSAGE_SUPPORT_KILLED      29
 #define MESSAGE_ALL_CLEAR           30
-#define MESSAGE_ALL_ALONE           31      // message sent when player is last ship left and primary objectives still exist
+#define MESSAGE_ALL_ALONE           31  // message sent when player is last ship left and primary objectives still exist
 #define MESSAGE_REPAIR_REQUEST      32
 #define MESSAGE_DELTA_ARRIVED       33
 #define MESSAGE_EPSILON_ARRIVED     34
@@ -108,34 +108,34 @@ extern char *Builtin_message_types[MAX_BUILTIN_MESSAGE_TYPES];
 
 typedef struct MissionMessage
 {
-	char name[NAME_LENGTH];                 // used to identify this message
-	char message[MESSAGE_LENGTH];           // actual message
-	int persona_index;                          // which persona says this message
-	int multi_team;                             // multiplayer team filter (important for TvT only)
+  char name[NAME_LENGTH];       // used to identify this message
+  char message[MESSAGE_LENGTH]; // actual message
+  int persona_index;            // which persona says this message
+  int multi_team;               // multiplayer team filter (important for TvT only)
 
-	// unions for avi/wave information.  Because of issues with Fred, we are using
-	// the union to specify either the index into the avi or wave arrays above,
-	// or refernce the name directly.  The currently plan is to only have Fred reference
-	// the name field!!!
-	union
-	{
-		int index;                              // index of avi file to play
-		char *name;
-	} avi_info;
+  // unions for avi/wave information.  Because of issues with Fred, we are using
+  // the union to specify either the index into the avi or wave arrays above,
+  // or refernce the name directly.  The currently plan is to only have Fred reference
+  // the name field!!!
+  union
+  {
+    int index;                  // index of avi file to play
+    char *name;
+  } avi_info;
 
-	union
-	{
-		int index;
-		char *name;
-	} wave_info;
+  union
+  {
+    int index;
+    char *name;
+  } wave_info;
 
 } MMessage;
 
-extern SCP_vector<MMessage> Messages;
+extern SCP_vector < MMessage > Messages;
 
 extern int Num_messages;
-extern int Num_builtin_messages;                // from messages.tbl -- index of message location to load mission specific messages into
-extern int Message_shipnum;                 // used to display info on hud when message is sent
+extern int Num_builtin_messages;        // from messages.tbl -- index of message location to load mission specific messages into
+extern int Message_shipnum;     // used to display info on hud when message is sent
 
 // variable, etc for persona information
 #define MAX_PERSONA_TYPES       4
@@ -144,8 +144,8 @@ extern int Message_shipnum;                 // used to display info on hud when 
 // the persona_type_names defined in missionmessage.cpp
 #define PERSONA_FLAG_WINGMAN    (1<<0)
 #define PERSONA_FLAG_SUPPORT    (1<<1)
-#define PERSONA_FLAG_LARGE      (1<<2)      // for large ships
-#define PERSONA_FLAG_COMMAND    (1<<3)      // for terran command
+#define PERSONA_FLAG_LARGE      (1<<2)  // for large ships
+#define PERSONA_FLAG_COMMAND    (1<<3)  // for terran command
 // be sure that MAX_PERSONA_TYPES is always 1 greater than the last type bitfield above!!!
 
 #define PERSONA_FLAG_VASUDAN    (1<<30)
@@ -153,10 +153,10 @@ extern int Message_shipnum;                 // used to display info on hud when 
 
 typedef struct persona_s
 {
-	char name[NAME_LENGTH];
-	int flags;
-	int species;
-	bool auto_assign;
+  char name[NAME_LENGTH];
+  int flags;
+  int species;
+  bool auto_assign;
 } Persona;
 
 extern Persona *Personas;
@@ -165,7 +165,7 @@ extern int Default_command_persona;
 
 // function to parse a message from either messages.tbl or the mission file.  Both files have the
 // exact same format, so this function just gets reused in both instances.
-void message_parse ( bool importing_from_fsm = false );
+void message_parse(bool importing_from_fsm = false);
 void persona_parse();
 
 void messages_init();
@@ -175,27 +175,30 @@ void message_queue_process();
 int message_is_playing();
 void message_maybe_distort();
 int message_anim_is_playing();
-void message_kill_all ( int kill_all );
+void message_kill_all(int kill_all);
 
-void message_queue_message ( int message_num, int priority, int timing, char *who_from, int source, int group, int delay,
-                             int builtin_type = -1 );
+void message_queue_message(int message_num, int priority, int timing,
+                           char *who_from, int source, int group, int delay,
+                           int builtin_type = -1);
 
 // functions which send messages to player -- called externally
-void message_send_unique_to_player ( char *id, void *data, int source, int priority, int group, int delay );
-void message_send_builtin_to_player ( int type, ship *shipp, int priority, int timing, int group, int delay,
-                                      int multi_target, int multi_team_filter );
+void message_send_unique_to_player(char *id, void *data, int source,
+                                   int priority, int group, int delay);
+void message_send_builtin_to_player(int type, ship * shipp, int priority,
+                                    int timing, int group, int delay,
+                                    int multi_target, int multi_team_filter);
 
 // functions to deal with personas
-int message_persona_name_lookup ( char *name );
+int message_persona_name_lookup(char *name);
 
 // preload mission messages (this is called by the level paging code when running with low memory)
 void message_pagein_mission_messages();
 
 // given a message id#, should it be filtered for me?
-int message_filter_multi ( int id );
+int message_filter_multi(int id);
 
 // Goober5000
-bool message_filename_is_generic ( char *filename );
+bool message_filename_is_generic(char *filename);
 
 // Kazan
 // Use these functions with caution as everything else uses indexes... so make sure if you're going to
@@ -203,7 +206,9 @@ bool message_filename_is_generic ( char *filename );
 
 // these two are probably safe
 // if change_message fails to find the message it'll fall through to add_message
-bool add_message ( char *name, char *message, int persona_index, int multi_team );
-bool change_message ( char *name, char *message, int persona_index, int multi_team );
+bool add_message(char *name, char *message, int persona_index,
+                 int multi_team);
+bool change_message(char *name, char *message, int persona_index,
+                    int multi_team);
 
 #endif

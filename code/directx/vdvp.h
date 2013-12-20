@@ -28,16 +28,25 @@ extern "C"
  * GUIDS used by DirectDrawVideoPort objects
  */
 #if defined( _WIN32 ) && !defined( _NO_COM )
-DEFINE_GUID ( IID_IDDVideoPortContainer,     0x6C142760, 0xA733, 0x11CE, 0xA5, 0x21, 0x00, 0x20, 0xAF, 0x0B, 0xE5, 0x60 );
-DEFINE_GUID ( IID_IDirectDrawVideoPort,      0xB36D93E0, 0x2B43, 0x11CF, 0xA2, 0xDE, 0x00, 0xAA, 0x00, 0xB9, 0x33, 0x56 );
+  DEFINE_GUID(IID_IDDVideoPortContainer, 0x6C142760, 0xA733, 0x11CE, 0xA5,
+              0x21, 0x00, 0x20, 0xAF, 0x0B, 0xE5, 0x60);
+  DEFINE_GUID(IID_IDirectDrawVideoPort, 0xB36D93E0, 0x2B43, 0x11CF, 0xA2,
+              0xDE, 0x00, 0xAA, 0x00, 0xB9, 0x33, 0x56);
 
-DEFINE_GUID ( DDVPTYPE_E_HREFH_VREFH, 0x54F39980L, 0xDA60, 0x11CF, 0x9B, 0x06, 0x00, 0xA0, 0xC9, 0x03, 0xA3, 0xB8 );
-DEFINE_GUID ( DDVPTYPE_E_HREFH_VREFL, 0x92783220L, 0xDA60, 0x11CF, 0x9B, 0x06, 0x00, 0xA0, 0xC9, 0x03, 0xA3, 0xB8 );
-DEFINE_GUID ( DDVPTYPE_E_HREFL_VREFH, 0xA07A02E0L, 0xDA60, 0x11CF, 0x9B, 0x06, 0x00, 0xA0, 0xC9, 0x03, 0xA3, 0xB8 );
-DEFINE_GUID ( DDVPTYPE_E_HREFL_VREFL, 0xE09C77E0L, 0xDA60, 0x11CF, 0x9B, 0x06, 0x00, 0xA0, 0xC9, 0x03, 0xA3, 0xB8 );
-DEFINE_GUID ( DDVPTYPE_CCIR656,       0xFCA326A0L, 0xDA60, 0x11CF, 0x9B, 0x06, 0x00, 0xA0, 0xC9, 0x03, 0xA3, 0xB8 );
-DEFINE_GUID ( DDVPTYPE_BROOKTREE,     0x1352A560L, 0xDA61, 0x11CF, 0x9B, 0x06, 0x00, 0xA0, 0xC9, 0x03, 0xA3, 0xB8 );
-DEFINE_GUID ( DDVPTYPE_PHILIPS,       0x332CF160L, 0xDA61, 0x11CF, 0x9B, 0x06, 0x00, 0xA0, 0xC9, 0x03, 0xA3, 0xB8 );
+  DEFINE_GUID(DDVPTYPE_E_HREFH_VREFH, 0x54F39980L, 0xDA60, 0x11CF, 0x9B, 0x06,
+              0x00, 0xA0, 0xC9, 0x03, 0xA3, 0xB8);
+  DEFINE_GUID(DDVPTYPE_E_HREFH_VREFL, 0x92783220L, 0xDA60, 0x11CF, 0x9B, 0x06,
+              0x00, 0xA0, 0xC9, 0x03, 0xA3, 0xB8);
+  DEFINE_GUID(DDVPTYPE_E_HREFL_VREFH, 0xA07A02E0L, 0xDA60, 0x11CF, 0x9B, 0x06,
+              0x00, 0xA0, 0xC9, 0x03, 0xA3, 0xB8);
+  DEFINE_GUID(DDVPTYPE_E_HREFL_VREFL, 0xE09C77E0L, 0xDA60, 0x11CF, 0x9B, 0x06,
+              0x00, 0xA0, 0xC9, 0x03, 0xA3, 0xB8);
+  DEFINE_GUID(DDVPTYPE_CCIR656, 0xFCA326A0L, 0xDA60, 0x11CF, 0x9B, 0x06, 0x00,
+              0xA0, 0xC9, 0x03, 0xA3, 0xB8);
+  DEFINE_GUID(DDVPTYPE_BROOKTREE, 0x1352A560L, 0xDA61, 0x11CF, 0x9B, 0x06,
+              0x00, 0xA0, 0xC9, 0x03, 0xA3, 0xB8);
+  DEFINE_GUID(DDVPTYPE_PHILIPS, 0x332CF160L, 0xDA61, 0x11CF, 0x9B, 0x06, 0x00,
+              0xA0, 0xC9, 0x03, 0xA3, 0xB8);
 
 /*
  * GUIDS used to describe connections
@@ -53,37 +62,30 @@ DEFINE_GUID ( DDVPTYPE_PHILIPS,       0x332CF160L, 0xDA61, 0x11CF, 0x9B, 0x06, 0
  *
  *==========================================================================*/
 
-struct IDirectDraw;
-struct IDirectDrawSurface;
-struct IDirectDrawPalette;
-struct IDirectDrawClipper;
+  struct IDirectDraw;
+  struct IDirectDrawSurface;
+  struct IDirectDrawPalette;
+  struct IDirectDrawClipper;
 
-typedef struct IDDVideoPortContainer
-		FAR *LPDDVIDEOPORTCONTAINER;
-typedef struct IDirectDrawVideoPort
-		FAR *LPDIRECTDRAWVIDEOPORT;
+  typedef struct IDDVideoPortContainer FAR *LPDDVIDEOPORTCONTAINER;
+  typedef struct IDirectDrawVideoPort FAR *LPDIRECTDRAWVIDEOPORT;
 
-typedef struct _DDVIDEOPORTCONNECT
-		FAR *LPDDVIDEOPORTCONNECT;
-typedef struct _DDVIDEOPORTCAPS
-		FAR *LPDDVIDEOPORTCAPS;
-typedef struct _DDVIDEOPORTDESC
-		FAR *LPDDVIDEOPORTDESC;
-typedef struct _DDVIDEOPORTINFO
-		FAR *LPDDVIDEOPORTINFO;
-typedef struct _DDVIDEOPORTBANDWIDTH
-		FAR *LPDDVIDEOPORTBANDWIDTH;
-typedef struct _DDVIDEOPORTSTATUS
-		FAR *LPDDVIDEOPORTSTATUS;
+  typedef struct _DDVIDEOPORTCONNECT FAR *LPDDVIDEOPORTCONNECT;
+  typedef struct _DDVIDEOPORTCAPS FAR *LPDDVIDEOPORTCAPS;
+  typedef struct _DDVIDEOPORTDESC FAR *LPDDVIDEOPORTDESC;
+  typedef struct _DDVIDEOPORTINFO FAR *LPDDVIDEOPORTINFO;
+  typedef struct _DDVIDEOPORTBANDWIDTH FAR *LPDDVIDEOPORTBANDWIDTH;
+  typedef struct _DDVIDEOPORTSTATUS FAR *LPDDVIDEOPORTSTATUS;
 
-typedef struct IDDVideoPortContainerVtbl DDVIDEOPORTCONTAINERCALLBACKS;
-typedef struct IDirectDrawVideoPortVtbl DIRECTDRAWVIDEOPORTCALLBACKS;
+  typedef struct IDDVideoPortContainerVtbl DDVIDEOPORTCONTAINERCALLBACKS;
+  typedef struct IDirectDrawVideoPortVtbl DIRECTDRAWVIDEOPORTCALLBACKS;
 
 
 /*
  * API's
  */
-typedef HRESULT ( FAR PASCAL *LPDDENUMVIDEOCALLBACK ) ( LPDDVIDEOPORTCAPS, LPVOID );
+  typedef HRESULT(FAR PASCAL * LPDDENUMVIDEOCALLBACK) (LPDDVIDEOPORTCAPS,
+                                                       LPVOID);
 
 
 /*
@@ -98,18 +100,22 @@ typedef HRESULT ( FAR PASCAL *LPDDENUMVIDEOCALLBACK ) ( LPDDVIDEOPORTCAPS, LPVOI
 #if defined( _WIN32 ) && !defined( _NO_COM )
 #undef INTERFACE
 #define INTERFACE IDDVideoPortContainer
-DECLARE_INTERFACE_ ( IDDVideoPortContainer, IUnknown )
-{
-	/*** IUnknown methods ***/
-	STDMETHOD ( QueryInterface ) ( THIS_ REFIID riid, LPVOID FAR * ppvObj ) PURE;
-	STDMETHOD_ ( ULONG, AddRef ) ( THIS )  PURE;
-	STDMETHOD_ ( ULONG, Release ) ( THIS ) PURE;
-	/*** IDirectDrawVideoPort methods ***/
-	STDMETHOD ( CreateVideoPort ) ( THIS_ DWORD, LPDDVIDEOPORTDESC, LPDIRECTDRAWVIDEOPORT FAR *, IUnknown FAR * ) PURE;
-	STDMETHOD ( EnumVideoPorts ) ( THIS_ DWORD, LPDDVIDEOPORTCAPS, LPVOID, LPDDENUMVIDEOCALLBACK ) PURE;
-	STDMETHOD ( GetVideoPortConnectInfo ) ( THIS_ DWORD, LPDWORD, LPDDVIDEOPORTCONNECT ) PURE;
-	STDMETHOD ( QueryVideoPortStatus ) ( THIS_ DWORD, LPDDVIDEOPORTSTATUS ) PURE;
-};
+    DECLARE_INTERFACE_(IDDVideoPortContainer, IUnknown)
+  {
+        /*** IUnknown methods ***/
+    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
+    STDMETHOD_(ULONG, AddRef) (THIS) PURE;
+    STDMETHOD_(ULONG, Release) (THIS) PURE;
+        /*** IDirectDrawVideoPort methods ***/
+    STDMETHOD(CreateVideoPort) (THIS_ DWORD, LPDDVIDEOPORTDESC,
+                                LPDIRECTDRAWVIDEOPORT FAR *,
+                                IUnknown FAR *) PURE;
+    STDMETHOD(EnumVideoPorts) (THIS_ DWORD, LPDDVIDEOPORTCAPS, LPVOID,
+                               LPDDENUMVIDEOCALLBACK) PURE;
+    STDMETHOD(GetVideoPortConnectInfo) (THIS_ DWORD, LPDWORD,
+                                        LPDDVIDEOPORTCONNECT) PURE;
+    STDMETHOD(QueryVideoPortStatus) (THIS_ DWORD, LPDDVIDEOPORTSTATUS) PURE;
+  };
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 #define IVideoPortContainer_QueryInterface(p, a, b)         (p)->lpVtbl->QueryInterface(p, a, b)
@@ -138,28 +144,30 @@ DECLARE_INTERFACE_ ( IDDVideoPortContainer, IUnknown )
 #if defined( _WIN32 ) && !defined( _NO_COM )
 #undef INTERFACE
 #define INTERFACE IDirectDrawVideoPort
-DECLARE_INTERFACE_ ( IDirectDrawVideoPort, IUnknown )
-{
-	/*** IUnknown methods ***/
-	STDMETHOD ( QueryInterface ) ( THIS_ REFIID riid, LPVOID FAR * ppvObj ) PURE;
-	STDMETHOD_ ( ULONG, AddRef ) ( THIS )  PURE;
-	STDMETHOD_ ( ULONG, Release ) ( THIS ) PURE;
-	/*** IVideoPort methods ***/
-	STDMETHOD ( Flip ) ( THIS_ LPDIRECTDRAWSURFACE, DWORD ) PURE;
-	STDMETHOD ( GetBandwidthInfo ) ( THIS_ LPDDPIXELFORMAT, DWORD, DWORD, DWORD, LPDDVIDEOPORTBANDWIDTH ) PURE;
-	STDMETHOD ( GetColorControls ) ( THIS_ LPDDCOLORCONTROL ) PURE;
-	STDMETHOD ( GetInputFormats ) ( THIS_ LPDWORD, LPDDPIXELFORMAT, DWORD ) PURE;
-	STDMETHOD ( GetOutputFormats ) ( THIS_ LPDDPIXELFORMAT, LPDWORD, LPDDPIXELFORMAT, DWORD ) PURE;
-	STDMETHOD ( GetFieldPolarity ) ( THIS_ LPBOOL ) PURE;
-	STDMETHOD ( GetVideoLine ) ( THIS_ LPDWORD ) PURE;
-	STDMETHOD ( GetVideoSignalStatus ) ( THIS_ LPDWORD ) PURE;
-	STDMETHOD ( SetColorControls ) ( THIS_ LPDDCOLORCONTROL ) PURE;
-	STDMETHOD ( SetTargetSurface ) ( THIS_ LPDIRECTDRAWSURFACE, DWORD ) PURE;
-	STDMETHOD ( StartVideo ) ( THIS_ LPDDVIDEOPORTINFO ) PURE;
-	STDMETHOD ( StopVideo ) ( THIS ) PURE;
-	STDMETHOD ( UpdateVideo ) ( THIS_ LPDDVIDEOPORTINFO ) PURE;
-	STDMETHOD ( WaitForSync ) ( THIS_ DWORD, DWORD, DWORD ) PURE;
-};
+  DECLARE_INTERFACE_(IDirectDrawVideoPort, IUnknown)
+  {
+        /*** IUnknown methods ***/
+    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
+    STDMETHOD_(ULONG, AddRef) (THIS) PURE;
+    STDMETHOD_(ULONG, Release) (THIS) PURE;
+        /*** IVideoPort methods ***/
+    STDMETHOD(Flip) (THIS_ LPDIRECTDRAWSURFACE, DWORD) PURE;
+    STDMETHOD(GetBandwidthInfo) (THIS_ LPDDPIXELFORMAT, DWORD, DWORD, DWORD,
+                                 LPDDVIDEOPORTBANDWIDTH) PURE;
+    STDMETHOD(GetColorControls) (THIS_ LPDDCOLORCONTROL) PURE;
+    STDMETHOD(GetInputFormats) (THIS_ LPDWORD, LPDDPIXELFORMAT, DWORD) PURE;
+    STDMETHOD(GetOutputFormats) (THIS_ LPDDPIXELFORMAT, LPDWORD,
+                                 LPDDPIXELFORMAT, DWORD) PURE;
+    STDMETHOD(GetFieldPolarity) (THIS_ LPBOOL) PURE;
+    STDMETHOD(GetVideoLine) (THIS_ LPDWORD) PURE;
+    STDMETHOD(GetVideoSignalStatus) (THIS_ LPDWORD) PURE;
+    STDMETHOD(SetColorControls) (THIS_ LPDDCOLORCONTROL) PURE;
+    STDMETHOD(SetTargetSurface) (THIS_ LPDIRECTDRAWSURFACE, DWORD) PURE;
+    STDMETHOD(StartVideo) (THIS_ LPDDVIDEOPORTINFO) PURE;
+    STDMETHOD(StopVideo) (THIS) PURE;
+    STDMETHOD(UpdateVideo) (THIS_ LPDDVIDEOPORTINFO) PURE;
+    STDMETHOD(WaitForSync) (THIS_ DWORD, DWORD, DWORD) PURE;
+  };
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 #define IVideoPort_QueryInterface(p,a,b)        (p)->lpVtbl->QueryInterface(p,a,b)
@@ -205,40 +213,40 @@ DECLARE_INTERFACE_ ( IDirectDrawVideoPort, IUnknown )
 /*
  * DDVIDEOPORTCONNECT
  */
-typedef struct _DDVIDEOPORTCONNECT
-{
-	DWORD dwSize;           // size of the DDVIDEOPORTCONNECT structure
-	DWORD dwPortWidth;      // Width of the video port
-	GUID guidTypeID;       // Description of video port connection
-	DWORD dwFlags;          // Connection flags
-	DWORD dwReserved1;      // Reserved, set to zero.
-} DDVIDEOPORTCONNECT;
+  typedef struct _DDVIDEOPORTCONNECT
+  {
+    DWORD dwSize;               // size of the DDVIDEOPORTCONNECT structure
+    DWORD dwPortWidth;          // Width of the video port
+    GUID guidTypeID;            // Description of video port connection
+    DWORD dwFlags;              // Connection flags
+    DWORD dwReserved1;          // Reserved, set to zero.
+  } DDVIDEOPORTCONNECT;
 
 
 /*
  * DDVIDEOPORTCAPS
  */
-typedef struct _DDVIDEOPORTCAPS
-{
-	DWORD dwSize;           // size of the DDVIDEOPORTCAPS structure
-	DWORD dwFlags;          // indicates which fields contain data
-	DWORD dwMaxWidth;           // max width of the video port field
-	DWORD dwMaxVBIWidth;        // max width of the VBI data
-	DWORD dwMaxHeight;          // max height of the video port field
-	DWORD dwVideoPortID;        // Video port ID (0 - (dwMaxVideoPorts -1))
-	DWORD dwCaps;           // Video port capabilities
-	DWORD dwFX;             // More video port capabilities
-	DWORD dwNumAutoFlipSurfaces;    // Number of autoflippable surfaces
-	DWORD dwAlignVideoPortBoundary; // Byte restriction of placement within the surface
-	DWORD dwAlignVideoPortPrescaleWidth;// Byte restriction of width after prescaling
-	DWORD dwAlignVideoPortCropBoundary; // Byte restriction of left cropping
-	DWORD dwAlignVideoPortCropWidth;    // Byte restriction of cropping width
-	DWORD dwPreshrinkXStep;     // Width can be shrunk in steps of 1/x
-	DWORD dwPreshrinkYStep;     // Height can be shrunk in steps of 1/x
-	DWORD dwNumVBIAutoFlipSurfaces; // Number of VBI autoflippable surfaces
-	DWORD dwReserved1;          // Reserved for future use
-	DWORD dwReserved2;          // Reserved for future use
-} DDVIDEOPORTCAPS;
+  typedef struct _DDVIDEOPORTCAPS
+  {
+    DWORD dwSize;               // size of the DDVIDEOPORTCAPS structure
+    DWORD dwFlags;              // indicates which fields contain data
+    DWORD dwMaxWidth;           // max width of the video port field
+    DWORD dwMaxVBIWidth;        // max width of the VBI data
+    DWORD dwMaxHeight;          // max height of the video port field
+    DWORD dwVideoPortID;        // Video port ID (0 - (dwMaxVideoPorts -1))
+    DWORD dwCaps;               // Video port capabilities
+    DWORD dwFX;                 // More video port capabilities
+    DWORD dwNumAutoFlipSurfaces;        // Number of autoflippable surfaces
+    DWORD dwAlignVideoPortBoundary;     // Byte restriction of placement within the surface
+    DWORD dwAlignVideoPortPrescaleWidth;        // Byte restriction of width after prescaling
+    DWORD dwAlignVideoPortCropBoundary; // Byte restriction of left cropping
+    DWORD dwAlignVideoPortCropWidth;    // Byte restriction of cropping width
+    DWORD dwPreshrinkXStep;     // Width can be shrunk in steps of 1/x
+    DWORD dwPreshrinkYStep;     // Height can be shrunk in steps of 1/x
+    DWORD dwNumVBIAutoFlipSurfaces;     // Number of VBI autoflippable surfaces
+    DWORD dwReserved1;          // Reserved for future use
+    DWORD dwReserved2;          // Reserved for future use
+  } DDVIDEOPORTCAPS;
 
 /*
  * The dwMaxWidth and dwMaxVBIWidth members are valid
@@ -279,72 +287,72 @@ typedef struct _DDVIDEOPORTCAPS
 /*
  * DDVIDEOPORTDESC
  */
-typedef struct _DDVIDEOPORTDESC
-{
-	DWORD dwSize;           // size of the DDVIDEOPORTDESC structure
-	DWORD dwFieldWidth;         // width of the video port field
-	DWORD dwVBIWidth;           // width of the VBI data
-	DWORD dwFieldHeight;        // height of the video port field
-	DWORD dwMicrosecondsPerField;   // Microseconds per video field
-	DWORD dwMaxPixelsPerSecond;     // Maximum pixel rate per second
-	DWORD dwVideoPortID;        // Video port ID (0 - (dwMaxVideoPorts -1))
-	DWORD dwReserved1;          // Reserved for future use - set to zero
-	DDVIDEOPORTCONNECT VideoPortType;   // Description of video port connection
-	DWORD dwReserved2;          // Reserved for future use - set to zero
-	DWORD dwReserved3;          // Reserved for future use - set to zero
-} DDVIDEOPORTDESC;
+  typedef struct _DDVIDEOPORTDESC
+  {
+    DWORD dwSize;               // size of the DDVIDEOPORTDESC structure
+    DWORD dwFieldWidth;         // width of the video port field
+    DWORD dwVBIWidth;           // width of the VBI data
+    DWORD dwFieldHeight;        // height of the video port field
+    DWORD dwMicrosecondsPerField;       // Microseconds per video field
+    DWORD dwMaxPixelsPerSecond; // Maximum pixel rate per second
+    DWORD dwVideoPortID;        // Video port ID (0 - (dwMaxVideoPorts -1))
+    DWORD dwReserved1;          // Reserved for future use - set to zero
+    DDVIDEOPORTCONNECT VideoPortType;   // Description of video port connection
+    DWORD dwReserved2;          // Reserved for future use - set to zero
+    DWORD dwReserved3;          // Reserved for future use - set to zero
+  } DDVIDEOPORTDESC;
 
 
 /*
  * DDVIDEOPORTINFO
  */
-typedef struct _DDVIDEOPORTINFO
-{
-	DWORD dwSize;           // Size of the structure
-	DWORD dwOriginX;            // Placement of the video data within the surface.
-	DWORD dwOriginY;            // Placement of the video data within the surface.
-	DWORD dwVPFlags;            // Video port options
-	RECT rCrop;             // Cropping rectangle (optional).
-	DWORD dwPrescaleWidth;      // Determines pre-scaling/zooming in the X direction (optional).
-	DWORD dwPrescaleHeight;     // Determines pre-scaling/zooming in the Y direction (optional).
-	LPDDPIXELFORMAT lpddpfInputFormat;  // Video format written to the video port
-	LPDDPIXELFORMAT lpddpfVBIInputFormat; // Input format of the VBI data
-	LPDDPIXELFORMAT lpddpfVBIOutputFormat;// Output format of the data
-	DWORD dwVBIHeight;          // Specifies the number of lines of data within the vertical blanking interval.
-	DWORD dwReserved1;          // Reserved for future use - set to zero
-	DWORD dwReserved2;          // Reserved for future use - set to zero
-} DDVIDEOPORTINFO;
+  typedef struct _DDVIDEOPORTINFO
+  {
+    DWORD dwSize;               // Size of the structure
+    DWORD dwOriginX;            // Placement of the video data within the surface.
+    DWORD dwOriginY;            // Placement of the video data within the surface.
+    DWORD dwVPFlags;            // Video port options
+    RECT rCrop;                 // Cropping rectangle (optional).
+    DWORD dwPrescaleWidth;      // Determines pre-scaling/zooming in the X direction (optional).
+    DWORD dwPrescaleHeight;     // Determines pre-scaling/zooming in the Y direction (optional).
+    LPDDPIXELFORMAT lpddpfInputFormat;  // Video format written to the video port
+    LPDDPIXELFORMAT lpddpfVBIInputFormat;       // Input format of the VBI data
+    LPDDPIXELFORMAT lpddpfVBIOutputFormat;      // Output format of the data
+    DWORD dwVBIHeight;          // Specifies the number of lines of data within the vertical blanking interval.
+    DWORD dwReserved1;          // Reserved for future use - set to zero
+    DWORD dwReserved2;          // Reserved for future use - set to zero
+  } DDVIDEOPORTINFO;
 
 
 /*
  * DDVIDEOPORTBANDWIDTH
  */
-typedef struct _DDVIDEOPORTBANDWIDTH
-{
-	DWORD dwSize;           // Size of the structure
-	DWORD dwCaps;
-	DWORD dwOverlay;                // Zoom factor at which overlay is supported
-	DWORD dwColorkey;           // Zoom factor at which overlay w/ colorkey is supported
-	DWORD dwYInterpolate;       // Zoom factor at which overlay w/ Y interpolation is supported
-	DWORD dwYInterpAndColorkey;     // Zoom factor at which ovelray w/ Y interpolation and colorkeying is supported
-	DWORD dwReserved1;          // Reserved for future use - set to zero
-	DWORD dwReserved2;          // Reserved for future use - set to zero
-} DDVIDEOPORTBANDWIDTH;
+  typedef struct _DDVIDEOPORTBANDWIDTH
+  {
+    DWORD dwSize;               // Size of the structure
+    DWORD dwCaps;
+    DWORD dwOverlay;            // Zoom factor at which overlay is supported
+    DWORD dwColorkey;           // Zoom factor at which overlay w/ colorkey is supported
+    DWORD dwYInterpolate;       // Zoom factor at which overlay w/ Y interpolation is supported
+    DWORD dwYInterpAndColorkey; // Zoom factor at which ovelray w/ Y interpolation and colorkeying is supported
+    DWORD dwReserved1;          // Reserved for future use - set to zero
+    DWORD dwReserved2;          // Reserved for future use - set to zero
+  } DDVIDEOPORTBANDWIDTH;
 
 
 /*
  * DDVIDEOPORTSTATUS
  */
-typedef struct _DDVIDEOPORTSTATUS
-{
-	DWORD dwSize;           // Size of the structure
-	BOOL bInUse;            // TRUE if video port is currently being used
-	DWORD dwFlags;                  // Currently not used
-	DWORD dwReserved1;          // Reserved for future use
-	DDVIDEOPORTCONNECT VideoPortType;   // Information about the connection
-	DWORD dwReserved2;          // Reserved for future use
-	DWORD dwReserved3;          // Reserved for future use
-} DDVIDEOPORTSTATUS;
+  typedef struct _DDVIDEOPORTSTATUS
+  {
+    DWORD dwSize;               // Size of the structure
+    BOOL bInUse;                // TRUE if video port is currently being used
+    DWORD dwFlags;              // Currently not used
+    DWORD dwReserved1;          // Reserved for future use
+    DDVIDEOPORTCONNECT VideoPortType;   // Information about the connection
+    DWORD dwReserved2;          // Reserved for future use
+    DWORD dwReserved3;          // Reserved for future use
+  } DDVIDEOPORTSTATUS;
 
 /*============================================================================
  *
@@ -836,6 +844,7 @@ typedef struct _DDVIDEOPORTSTATUS
 
 #ifdef __cplusplus
 }
+
 ;
 #endif
 

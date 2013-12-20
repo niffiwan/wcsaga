@@ -21,16 +21,12 @@
 #include <wx/xrc/xmlres.h>
 
 
-BEGIN_EVENT_TABLE ( dlgMissionSpecsEditor, wxDialog )
-END_EVENT_TABLE()
-
-
-dlgMissionSpecsEditor::dlgMissionSpecsEditor ( wxWindow *parent )
-	: wxDialog()
+BEGIN_EVENT_TABLE(dlgMissionSpecsEditor, wxDialog) END_EVENT_TABLE()dlgMissionSpecsEditor::dlgMissionSpecsEditor(wxWindow * parent):wxDialog
+  ()
 {
-	wxXmlResource::Get()->LoadDialog ( this, parent, "dlgMissionSpecsEditor" );
+  wxXmlResource::Get()->LoadDialog(this, parent, "dlgMissionSpecsEditor");
 }
 
 dlgMissionSpecsEditor::~dlgMissionSpecsEditor()
-{}
-
+{
+}

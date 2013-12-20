@@ -18,19 +18,19 @@
 
 void gamesnd_parse_soundstbl(); // Loads in general game sounds from sounds.tbl
 void gamesnd_init_sounds();     // initializes the Snds[] and Snds_iface[] array
-void gamesnd_close();   // close out gamesnd... only call from game_shutdown()!
+void gamesnd_close();           // close out gamesnd... only call from game_shutdown()!
 void gamesnd_load_gameplay_sounds();
 void gamesnd_unload_gameplay_sounds();
 void gamesnd_load_interface_sounds();
 void gamesnd_unload_interface_sounds();
 void gamesnd_preload_common_sounds();
-void gamesnd_play_iface ( int n );
+void gamesnd_play_iface(int n);
 void gamesnd_play_error_beep();
-int gamesnd_get_by_name ( char *name );
+int gamesnd_get_by_name(char *name);
 
 //This should handle NO_SOUND just fine since it doesn't directly access lowlevel code
 //Does all parsing for a sound
-void parse_sound ( char *tag, int *idx_dest, char *object_name );
+void parse_sound(char *tag, int *idx_dest, char *object_name);
 
 // this is a callback, so it needs to be a real function
 void common_play_highlight_sound();
@@ -206,11 +206,11 @@ extern game_snd *Snds_iface;
 #define SND_DREADNAUGHT_ENG                 137
 
 // Debris electric arcing sounds
-#define SND_DEBRIS_ARC_01                   139     // 0.10 second spark sound effect (3d sound)
-#define SND_DEBRIS_ARC_02                   140     // 0.25 second spark sound effect (3d sound)
-#define SND_DEBRIS_ARC_03                   141     // 0.50 second spark sound effect (3d sound)
-#define SND_DEBRIS_ARC_04                   142     // 0.75 second spark sound effect (3d sound)
-#define SND_DEBRIS_ARC_05                   143     // 1.00 second spark sound effect (3d sound)
+#define SND_DEBRIS_ARC_01                   139 // 0.10 second spark sound effect (3d sound)
+#define SND_DEBRIS_ARC_02                   140 // 0.25 second spark sound effect (3d sound)
+#define SND_DEBRIS_ARC_03                   141 // 0.50 second spark sound effect (3d sound)
+#define SND_DEBRIS_ARC_04                   142 // 0.75 second spark sound effect (3d sound)
+#define SND_DEBRIS_ARC_05                   143 // 1.00 second spark sound effect (3d sound)
 
 #define SND_CLOAK_ON                    144     // Cloaking on (3d sound)
 #define SND_CLOAK_OFF                   145     // Cloaking off (3d sound)
@@ -262,26 +262,26 @@ extern game_snd *Snds_iface;
 #define SND_USER_SELECT             18
 #define SND_RESET_PRESSED               19
 #define SND_BRIEF_TEXT_WIPE         20
-#define SND_VASUDAN_PA_1                21              // vasudan pa 1
+#define SND_VASUDAN_PA_1                21      // vasudan pa 1
 #define SND_WEAPON_ANIM_START       22
 #define  SND_MAIN_HALL_DOOR_OPEN    23
 #define  SND_MAIN_HALL_DOOR_CLOSE   24
 #define SND_GLOW_OPEN                   25
-#define SND_VASUDAN_PA_2                26              // vasudan pa 2
+#define SND_VASUDAN_PA_2                26      // vasudan pa 2
 #define SND_AMBIENT_MENU                27
 #define SND_POPUP_APPEAR                28
 #define SND_POPUP_DISAPPEAR         29
 #define SND_VOICE_SLIDER_CLIP       30
-#define  SND_VASUDAN_PA_3               31              // vasudan pa 3
+#define  SND_VASUDAN_PA_3               31      // vasudan pa 3
 #define  SND_MAIN_HALL_GET_PEPSI        32
 #define  SND_MAIN_HALL_LIFT_UP      33
 #define  SND_MAIN_HALL_WELD1            34
 #define  SND_MAIN_HALL_WELD2            35
 #define  SND_MAIN_HALL_WELD3            36
 #define  SND_MAIN_HALL_WELD4            37
-#define  SND_MAIN_HALL_INT1         38          // random intercom message 1
-#define  SND_MAIN_HALL_INT2         39          // random intercom message 2
-#define  SND_MAIN_HALL_INT3         40          // random intercom message 3        
+#define  SND_MAIN_HALL_INT1         38  // random intercom message 1
+#define  SND_MAIN_HALL_INT2         39  // random intercom message 2
+#define  SND_MAIN_HALL_INT3         40  // random intercom message 3
 #define SND_ICON_HIGHLIGHT          41
 #define SND_BRIEFING_STATIC         42
 #define SND_MAIN_HALL2_CRANE1_1     43
@@ -304,4 +304,4 @@ extern game_snd *Snds_iface;
 #define SND_MAIN_HALL_PA_17         60
 #define SND_MAIN_HALL_PA_18         61
 
-#endif  /* __GAMESND_H__ */
+#endif /* __GAMESND_H__ */

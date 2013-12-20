@@ -92,52 +92,52 @@ float fl_isqrt_c( float x )
 */
 
 // rounds off a floating point number to a multiple of some number
-float fl_roundoff ( float x, int multiple )
+float fl_roundoff(float x, int multiple)
 {
-	float half = ( float ) multiple / 2.0f;
+  float half = (float) multiple / 2.0f;
 
-	if ( x < 0 )
-		half = -half;
+  if (x < 0)
+    half = -half;
 
-	x += half;
-	return ( float ) ( ( ( int ) x / multiple ) * multiple );
+  x += half;
+  return (float) (((int) x / multiple) * multiple);
 }
 
 
 //  Return random value in range 0.0..1.0- (1.0- means the closest number less than 1.0)
 float frand()
 {
-	int i_rval;
-	do
-	{
-		i_rval = myrand();
-	}
-	while ( i_rval == RAND_MAX );
-	float rval = ( ( float ) i_rval ) / RAND_MAX;
-	return rval;
+  int i_rval;
+  do
+    {
+      i_rval = myrand();
+    }
+  while (i_rval == RAND_MAX);
+  float rval = ((float) i_rval) / RAND_MAX;
+  return rval;
 }
 
 //  Return a floating point number in the range min..max.
-float frand_range ( float min, float max )
+float frand_range(float min, float max)
 {
-	float rval;
+  float rval;
 
-	rval = frand();
-	rval = rval * ( max - min ) + min;
+  rval = frand();
+  rval = rval * (max - min) + min;
 
-	return rval;
+  return rval;
 }
 
 //  Call this in the frame interval to get TRUE chance times per second.
 //  If you want it to return TRUE 3 times per second, call it in the frame interval like so:
 //      rand_chance(flFrametime, 3.0f);
-int rand_chance ( float frametime, float chance ) //  default value for chance = 1.0f.
+int rand_chance(float frametime, float chance)  //  default value for chance = 1.0f.
 {
-	while ( --chance > 0.0f )
-		if ( frand() < frametime )
-			return 1;
+  while (--chance > 0.0f)
+    if (frand() < frametime)
+      return 1;
 
-	return frand() < ( frametime * ( chance + 1.0f ) );
+  return frand() < (frametime * (chance + 1.0f));
 }
 
 /*fix fl2f( float x )

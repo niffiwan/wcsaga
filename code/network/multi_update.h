@@ -17,9 +17,9 @@
 //
 
 // operation return codes
-#define MULTI_UPDATE_CONTINUE                           0               // continue to next screen
-#define MULTI_UPDATE_SHUTTING_DOWN                  1               // freespace is exiting to the launcher
-#define MULTI_UPDATE_MAIN_MENU                      2               // caller should move back to the main menu
+#define MULTI_UPDATE_CONTINUE                           0       // continue to next screen
+#define MULTI_UPDATE_SHUTTING_DOWN                  1   // freespace is exiting to the launcher
+#define MULTI_UPDATE_MAIN_MENU                      2   // caller should move back to the main menu
 
 
 // -------------------------------------------------------------------------------------------------------------------

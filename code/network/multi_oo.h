@@ -37,33 +37,33 @@ struct net_player;
 // interpolation info struct
 typedef struct interp_info
 {
-	// position and timestamp
-	vec3d pos;
-	int pos_time;
+  // position and timestamp
+  vec3d pos;
+  int pos_time;
 
-	// velocity and timestamp
-	vec3d vel;
-	int vel_time;
+  // velocity and timestamp
+  vec3d vel;
+  int vel_time;
 
-	// desired velocity and timestamp
-	vec3d desired_vel;
-	int desired_vel_time;
+  // desired velocity and timestamp
+  vec3d desired_vel;
+  int desired_vel_time;
 
-	// orientation and timestamp
-	matrix orient;
-	int orient_time;
+  // orientation and timestamp
+  matrix orient;
+  int orient_time;
 
-	// rotvel and timestamp
-	vec3d rotvel;
-	int rotvel_time;
+  // rotvel and timestamp
+  vec3d rotvel;
+  int rotvel_time;
 
-	// desired rotvel and timestamp
-	vec3d desired_rotvel;
-	int desired_rotvel_time;
+  // desired rotvel and timestamp
+  vec3d desired_rotvel;
+  int desired_rotvel_time;
 
-	// ping info (in ms)
-	int lowest_ping;                // lowest ping (or -1, if not known)
-	int lowest_ping_avg;            // (lowest ping + average ping)/2   or -1 if not known
+  // ping info (in ms)
+  int lowest_ping;              // lowest ping (or -1, if not known)
+  int lowest_ping_avg;          // (lowest ping + average ping)/2   or -1 if not known
 } interp_info;
 
 
@@ -75,16 +75,16 @@ typedef struct interp_info
 void multi_oo_process();
 
 // process incoming object update data
-void multi_oo_process_update ( ubyte *data, header *hinfo );
+void multi_oo_process_update(ubyte * data, header * hinfo);
 
 // initialize all object update timestamps (call whenever entering gameplay state)
 void multi_oo_gameplay_init();
 
 // process an object update sync packet
-void multi_oo_process_update_sync ( ubyte *data, header *hinfo );
+void multi_oo_process_update_sync(ubyte * data, header * hinfo);
 
 // send an update sync packet
-void multi_oo_send_update_sync ( net_player *pl = NULL );
+void multi_oo_send_update_sync(net_player * pl = NULL);
 
 // initialize the server's time sync stuff
 void multi_oo_sync_init();
@@ -96,7 +96,8 @@ void multi_oo_send_control_info();
 void multi_oo_reset_sequencing();
 
 // interpolate for this object
-void multi_oo_interpolate ( object *objp, interp_info *current, interp_info *last );
+void multi_oo_interpolate(object * objp, interp_info * current,
+                          interp_info * last);
 
 // do all interpolation for this frame - client side and server side
 void multi_oo_interpolate_all();
@@ -123,10 +124,10 @@ void multi_oo_rate_process();
 void multi_oo_rate_init_all();
 
 // initialize the rate limiting for the passed in player
-void multi_oo_rate_init ( net_player *pl );
+void multi_oo_rate_init(net_player * pl);
 
 // if the given net-player has exceeded his datarate limit, or if the overall datarate limit has been reached
-int multi_oo_rate_exceeded ( net_player *pl );
+int multi_oo_rate_exceeded(net_player * pl);
 
 // if it is ok for me to send a control info (will be ~N times a second)
 int multi_oo_cirate_can_send();

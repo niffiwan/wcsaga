@@ -22,27 +22,26 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // dialog1 dialog
 
-dialog1::dialog1 ( CWnd *pParent /*=NULL*/ )
-	: CDialog ( dialog1::IDD, pParent )
+dialog1::dialog1(CWnd * pParent /*=NULL*/ )
+:CDialog(dialog1::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(dialog1)
-	// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+  //{{AFX_DATA_INIT(dialog1)
+  // NOTE: the ClassWizard will add member initialization here
+  //}}AFX_DATA_INIT
 }
 
-void dialog1::DoDataExchange ( CDataExchange *pDX )
+void dialog1::DoDataExchange(CDataExchange * pDX)
 {
-	CDialog::DoDataExchange ( pDX );
-	//{{AFX_DATA_MAP(dialog1)
-	// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+  CDialog::DoDataExchange(pDX);
+  //{{AFX_DATA_MAP(dialog1)
+  // NOTE: the ClassWizard will add DDX and DDV calls here
+  //}}AFX_DATA_MAP
 }
 
-BEGIN_MESSAGE_MAP ( dialog1, CDialog )
-	//{{AFX_MSG_MAP(dialog1)
-	// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+BEGIN_MESSAGE_MAP(dialog1, CDialog)
+  //{{AFX_MSG_MAP(dialog1)
+  // NOTE: the ClassWizard will add message map macros here
+  //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
-
 /////////////////////////////////////////////////////////////////////////////
 // dialog1 message handlers

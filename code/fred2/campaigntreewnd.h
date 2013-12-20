@@ -12,56 +12,54 @@
 /////////////////////////////////////////////////////////////////////////////
 // campaign_tree_wnd window
 
-class campaign_tree_wnd : public CFrameWnd
+class campaign_tree_wnd:public CFrameWnd
 {
-	DECLARE_DYNCREATE ( campaign_tree_wnd )
-
-	// Construction
+  DECLARE_DYNCREATE(campaign_tree_wnd)
+    // Construction
 public:
-	campaign_tree_wnd();
+  campaign_tree_wnd();
 
-	// Attributes
+  // Attributes
 public:
 
-	// Operations
+  // Operations
 public:
-	int error_checker();
-	int fred_check_sexp ( int sexp, int type, char *msg, ... );
-	int error ( char *msg, ... );
-	int internal_error ( char *msg, ... );
-	int save_modified();
+  int error_checker();
+  int fred_check_sexp(int sexp, int type, char *msg, ...);
+  int error(char *msg, ...);
+  int internal_error(char *msg, ...);
+  int save_modified();
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(campaign_tree_wnd)
-	//}}AFX_VIRTUAL
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(campaign_tree_wnd)
+  //}}AFX_VIRTUAL
 
 private:
-	int g_err;
+  int g_err;
 
-	// Implementation
+  // Implementation
 public:
-	virtual ~campaign_tree_wnd();
-	virtual BOOL OnCreateClient ( LPCREATESTRUCT lpcs, CCreateContext *pContext );
+    virtual ~ campaign_tree_wnd();
+  virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext * pContext);
 
-	// Generated message map functions
-	CSplitterWnd m_splitter;
+  // Generated message map functions
+  CSplitterWnd m_splitter;
 
-	//{{AFX_MSG(campaign_tree_wnd)
-	afx_msg void OnUpdateCpgnFileOpen ( CCmdUI *pCmdUI );
-	afx_msg void OnCpgnFileOpen();
-	afx_msg void OnDestroy();
-	afx_msg void OnCpgnFileSave();
-	afx_msg void OnCpgnFileSaveAs();
-	afx_msg void OnCpgnFileNew();
-	afx_msg void OnClose2();
-	afx_msg void OnErrorChecker();
-	afx_msg void OnClose();
-	afx_msg void OnInitialShips();
-	afx_msg void OnInitialWeapons();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-};
+  //{{AFX_MSG(campaign_tree_wnd)
+  afx_msg void OnUpdateCpgnFileOpen(CCmdUI * pCmdUI);
+  afx_msg void OnCpgnFileOpen();
+  afx_msg void OnDestroy();
+  afx_msg void OnCpgnFileSave();
+  afx_msg void OnCpgnFileSaveAs();
+  afx_msg void OnCpgnFileNew();
+  afx_msg void OnClose2();
+  afx_msg void OnErrorChecker();
+  afx_msg void OnClose();
+  afx_msg void OnInitialShips();
+  afx_msg void OnInitialWeapons();
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()};
 
 /////////////////////////////////////////////////////////////////////////////
 

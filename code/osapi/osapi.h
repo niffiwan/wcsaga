@@ -50,14 +50,15 @@ extern int Os_debugger_running;
 // initialization/shutdown functions -----------------------------------------------
 
 // detect the home/base/writable directory to use
-extern const char *detect_home ( void );
+extern const char *detect_home(void);
 
 // If app_name is NULL or ommited, then TITLE is used
 // for the app name, which is where registry keys are stored.
-void os_init ( char *wclass, char *title, char *app_name = NULL, char *version_string = NULL );
+void os_init(char *wclass, char *title, char *app_name =
+             NULL, char *version_string = NULL);
 
 // set the main window title
-void os_set_title ( char *title );
+void os_set_title(char *title);
 
 // call at program end
 void os_cleanup();
@@ -78,7 +79,7 @@ uint os_get_window();
 #define os_get_window() NULL
 #endif // _WIN32
 
-void os_set_window ( uint new_handle );
+void os_set_window(uint new_handle);
 
 
 // process management --------------------------------------------------------------
@@ -87,7 +88,7 @@ void os_set_window ( uint new_handle );
 void os_poll();
 
 // Sleeps for n milliseconds or until app becomes active.
-void os_sleep ( int ms );
+void os_sleep(int ms);
 
 // Used to stop message processing
 void os_suspend();

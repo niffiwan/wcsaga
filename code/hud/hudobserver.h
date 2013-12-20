@@ -23,7 +23,7 @@ extern ship Hud_obs_ship;
 extern ai_info Hud_obs_ai;
 
 // initialize observer hud stuff
-void hud_observer_init ( ship *shipp, ai_info *aip );
+void hud_observer_init(ship * shipp, ai_info * aip);
 
 // render any specific observer stuff
 void hud_render_observer();

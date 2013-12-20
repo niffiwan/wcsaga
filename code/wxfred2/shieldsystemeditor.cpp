@@ -21,16 +21,12 @@
 #include <wx/xrc/xmlres.h>
 
 
-BEGIN_EVENT_TABLE ( dlgShieldSystemEditor, wxDialog )
-END_EVENT_TABLE()
-
-
-dlgShieldSystemEditor::dlgShieldSystemEditor ( wxWindow *parent )
-	: wxDialog()
+BEGIN_EVENT_TABLE(dlgShieldSystemEditor, wxDialog) END_EVENT_TABLE()dlgShieldSystemEditor::dlgShieldSystemEditor(wxWindow * parent):wxDialog
+  ()
 {
-	wxXmlResource::Get()->LoadDialog ( this, parent, "dlgShieldSystemEditor" );
+  wxXmlResource::Get()->LoadDialog(this, parent, "dlgShieldSystemEditor");
 }
 
 dlgShieldSystemEditor::~dlgShieldSystemEditor()
-{}
-
+{
+}

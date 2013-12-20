@@ -14,33 +14,33 @@
 /////////////////////////////////////////////////////////////////////////////
 // text_view_dlg dialog
 
-class text_view_dlg : public CDialog
+class text_view_dlg:public CDialog
 {
-	// Construction
+  // Construction
 public:
-	void set ( int ship );
-	text_view_dlg ( CWnd *pParent = NULL ); // standard constructor
+  void set(int ship);
+    text_view_dlg(CWnd * pParent = NULL);       // standard constructor
 
-	// Dialog Data
-	//{{AFX_DATA(text_view_dlg)
-	enum { IDD = IDD_TEXT_VIEW };
-	CString m_edit;
-	//}}AFX_DATA
+  // Dialog Data
+  //{{AFX_DATA(text_view_dlg)
+  enum
+  { IDD = IDD_TEXT_VIEW };
+  CString m_edit;
+  //}}AFX_DATA
 
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(text_view_dlg)
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(text_view_dlg)
 protected:
-	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange * pDX);   // DDX/DDV support
+  //}}AFX_VIRTUAL
 
-	// Implementation
+  // Implementation
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(text_view_dlg)
-	afx_msg void OnSetfocusEdit1();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-};
+  // Generated message map functions
+  //{{AFX_MSG(text_view_dlg)
+    afx_msg void OnSetfocusEdit1();
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()};

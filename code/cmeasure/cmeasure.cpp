@@ -29,7 +29,7 @@
 //int   Num_cmeasures = 0;
 //int   Cmeasure_inited = 0;
 int Cmeasures_homing_check = 0;
-int Countermeasures_enabled = 1;            //  Debug, set to 0 means no one can fire countermeasures.
+int Countermeasures_enabled = 1;        //  Debug, set to 0 means no one can fire countermeasures.
 
 // This will get called at the start of each level.
 //Not anymore - WMC
@@ -209,79 +209,84 @@ int cmeasure_create( object * source_obj, vec3d * pos, int cm_type, int rand_val
 
 //Used to set a countermeasure velocity after being launched from a ship as a countermeasure
 //ie not as a primary or secondary.
-void cmeasure_set_ship_launch_vel ( object *objp, object *parent_objp, int arand )
+void cmeasure_set_ship_launch_vel(object * objp, object * parent_objp,
+                                  int arand)
 {
-	vec3d vel, rand_vec;
+  vec3d vel, rand_vec;
 
-	//Get cmeasure rear velocity in world
-	vm_vec_scale_add ( &vel, &parent_objp->phys_info.vel, &parent_objp->orient.vec.fvec, -25.0f );
+  //Get cmeasure rear velocity in world
+  vm_vec_scale_add(&vel, &parent_objp->phys_info.vel,
+                   &parent_objp->orient.vec.fvec, -25.0f);
 
-	//Get random velocity vector
-	static_randvec ( arand + 1, &rand_vec );
+  //Get random velocity vector
+  static_randvec(arand + 1, &rand_vec);
 
-	//Add it to the rear velocity
-	vm_vec_scale_add2 ( &vel, &rand_vec, 2.0f );
+  //Add it to the rear velocity
+  vm_vec_scale_add2(&vel, &rand_vec, 2.0f);
 
-	objp->phys_info.vel = vel;
+  objp->phys_info.vel = vel;
 
-	//Zero out this stuff so it isn't moving
-	vm_vec_zero ( &objp->phys_info.rotvel );
-	vm_vec_zero ( &objp->phys_info.max_vel );
-	vm_vec_zero ( &objp->phys_info.max_rotvel );
+  //Zero out this stuff so it isn't moving
+  vm_vec_zero(&objp->phys_info.rotvel);
+  vm_vec_zero(&objp->phys_info.max_vel);
+  vm_vec_zero(&objp->phys_info.max_rotvel);
 
-	//Idunnit. -WMC
-	//objp->phys_info.flags |= PF_CONST_VEL;
+  //Idunnit. -WMC
+  //objp->phys_info.flags |= PF_CONST_VEL;
 
-	//WMC - I don't think this stuff is needed with the flag I set
-	//WMC - Or maybe it is.
+  //WMC - I don't think this stuff is needed with the flag I set
+  //WMC - Or maybe it is.
 
-	// blow out his reverse thrusters. Or drag, same thing.
-	objp->phys_info.rotdamp = 10000.0f;
-	objp->phys_info.side_slip_time_const = 10000.0f;
+  // blow out his reverse thrusters. Or drag, same thing.
+  objp->phys_info.rotdamp = 10000.0f;
+  objp->phys_info.side_slip_time_const = 10000.0f;
 
-	objp->phys_info.max_vel.xyz.z = -25.0f;
-	vm_vec_copy_scale ( &objp->phys_info.desired_vel, &objp->orient.vec.fvec, objp->phys_info.max_vel.xyz.z );
+  objp->phys_info.max_vel.xyz.z = -25.0f;
+  vm_vec_copy_scale(&objp->phys_info.desired_vel, &objp->orient.vec.fvec,
+                    objp->phys_info.max_vel.xyz.z);
 }
 
-void cmeasure_select_next ( ship *shipp )
+void cmeasure_select_next(ship * shipp)
 {
-	Assert ( shipp != NULL );
-	int i, new_index;
+  Assert(shipp != NULL);
+  int i, new_index;
 
-	for ( i = 1; i < Num_weapon_types; i++ )
-	{
-		new_index = ( shipp->current_cmeasure + i ) % Num_weapon_types;
+  for (i = 1; i < Num_weapon_types; i++)
+    {
+      new_index = (shipp->current_cmeasure + i) % Num_weapon_types;
 
-		if ( Weapon_info[new_index].wi_flags & WIF_CMEASURE )
-		{
-			shipp->current_cmeasure = new_index;
-			return;
-		}
-	}
+      if (Weapon_info[new_index].wi_flags & WIF_CMEASURE)
+        {
+          shipp->current_cmeasure = new_index;
+          return;
+        }
+    }
 
-	//snd_play( &Snds[SND_CMEASURE_CYCLE] );
+  //snd_play( &Snds[SND_CMEASURE_CYCLE] );
 
-	mprintf ( ( "Countermeasure type set to %i in frame %i\n", shipp->current_cmeasure, Framecount ) );
+  mprintf(("Countermeasure type set to %i in frame %i\n",
+           shipp->current_cmeasure, Framecount));
 }
 
 // If this is a player countermeasure, let the player know he evaded a missile
-void cmeasure_maybe_alert_success ( object *objp )
+void cmeasure_maybe_alert_success(object * objp)
 {
-	//Is this a countermeasure, and does it have a parent
-	if ( objp->type != OBJ_WEAPON || objp->parent < 0 )
-	{
-		return;
-	}
+  //Is this a countermeasure, and does it have a parent
+  if (objp->type != OBJ_WEAPON || objp->parent < 0)
+    {
+      return;
+    }
 
-	Assert ( Weapon_info[Weapons[objp->instance].weapon_info_index].wi_flags & WIF_CMEASURE );
+  Assert(Weapon_info[Weapons[objp->instance].weapon_info_index].
+         wi_flags & WIF_CMEASURE);
 
-	if ( objp->parent == OBJ_INDEX ( Player_obj ) )
-	{
-		hud_start_text_flash ( XSTR ( "Evaded", 1430 ), 800 );
-		snd_play ( &Snds[SND_MISSILE_EVADED_POPUP] );
-	}
-	else if ( Objects[objp->parent].flags & OF_PLAYER_SHIP )
-	{
-		send_countermeasure_success_packet ( objp->parent );
-	}
+  if (objp->parent == OBJ_INDEX(Player_obj))
+    {
+      hud_start_text_flash(XSTR("Evaded", 1430), 800);
+      snd_play(&Snds[SND_MISSILE_EVADED_POPUP]);
+    }
+  else if (Objects[objp->parent].flags & OF_PLAYER_SHIP)
+    {
+      send_countermeasure_success_packet(objp->parent);
+    }
 }

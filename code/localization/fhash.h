@@ -37,10 +37,10 @@ int fhash_active();
 void fhash_flush();
 
 // add a string with the given id# to the has table
-void fhash_add_str ( char *str, int id );
+void fhash_add_str(char *str, int id);
 
 // determine if the passed string exists in the table
 // returns : -2 if the string doesn't exit, or >= -1 as the string id # otherwise
-int fhash_string_exists ( char *str );
+int fhash_string_exists(char *str);
 
 #endif

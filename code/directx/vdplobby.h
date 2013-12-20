@@ -14,22 +14,27 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif /* __cplusplus */
+#endif                          /* __cplusplus */
 
 /*
  * GUIDS used by DirectPlay objects
  */
 
 /* {AF465C71-9588-11cf-A020-00AA006157AC} */
-DEFINE_GUID ( IID_IDirectPlayLobby, 0xaf465c71, 0x9588, 0x11cf, 0xa0, 0x20, 0x0, 0xaa, 0x0, 0x61, 0x57, 0xac );
+  DEFINE_GUID(IID_IDirectPlayLobby, 0xaf465c71, 0x9588, 0x11cf, 0xa0, 0x20,
+              0x0, 0xaa, 0x0, 0x61, 0x57, 0xac);
 /* {26C66A70-B367-11cf-A024-00AA006157AC} */
-DEFINE_GUID ( IID_IDirectPlayLobbyA, 0x26c66a70, 0xb367, 0x11cf, 0xa0, 0x24, 0x0, 0xaa, 0x0, 0x61, 0x57, 0xac );
+  DEFINE_GUID(IID_IDirectPlayLobbyA, 0x26c66a70, 0xb367, 0x11cf, 0xa0, 0x24,
+              0x0, 0xaa, 0x0, 0x61, 0x57, 0xac);
 /* {0194C220-A303-11d0-9C4F-00A0C905425E} */
-DEFINE_GUID ( IID_IDirectPlayLobby2, 0x194c220, 0xa303, 0x11d0, 0x9c, 0x4f, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e );
+  DEFINE_GUID(IID_IDirectPlayLobby2, 0x194c220, 0xa303, 0x11d0, 0x9c, 0x4f,
+              0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 /* {1BB4AF80-A303-11d0-9C4F-00A0C905425E} */
-DEFINE_GUID ( IID_IDirectPlayLobby2A, 0x1bb4af80, 0xa303, 0x11d0, 0x9c, 0x4f, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e );
+  DEFINE_GUID(IID_IDirectPlayLobby2A, 0x1bb4af80, 0xa303, 0x11d0, 0x9c, 0x4f,
+              0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 /* {2FE8F810-B2A5-11d0-A787-0000F803ABFC} */
-DEFINE_GUID ( CLSID_DirectPlayLobby, 0x2fe8f810, 0xb2a5, 0x11d0, 0xa7, 0x87, 0x0, 0x0, 0xf8, 0x3, 0xab, 0xfc );
+  DEFINE_GUID(CLSID_DirectPlayLobby, 0x2fe8f810, 0xb2a5, 0x11d0, 0xa7, 0x87,
+              0x0, 0x0, 0xf8, 0x3, 0xab, 0xfc);
 
 
 /****************************************************************************
@@ -40,17 +45,13 @@ DEFINE_GUID ( CLSID_DirectPlayLobby, 0x2fe8f810, 0xb2a5, 0x11d0, 0xa7, 0x87, 0x0
  *
  ****************************************************************************/
 
-typedef struct IDirectPlayLobby
-		FAR *LPDIRECTPLAYLOBBY;
-typedef struct IDirectPlayLobby
-		FAR *LPDIRECTPLAYLOBBYA;
-typedef struct IDirectPlayLobby IDirectPlayLobbyA;
+  typedef struct IDirectPlayLobby FAR *LPDIRECTPLAYLOBBY;
+  typedef struct IDirectPlayLobby FAR *LPDIRECTPLAYLOBBYA;
+  typedef struct IDirectPlayLobby IDirectPlayLobbyA;
 
-typedef struct IDirectPlayLobby2
-		FAR *LPDIRECTPLAYLOBBY2;
-typedef struct IDirectPlayLobby2
-		FAR *LPDIRECTPLAYLOBBY2A;
-typedef struct IDirectPlayLobby2 IDirectPlayLobby2A;
+  typedef struct IDirectPlayLobby2 FAR *LPDIRECTPLAYLOBBY2;
+  typedef struct IDirectPlayLobby2 FAR *LPDIRECTPLAYLOBBY2A;
+  typedef struct IDirectPlayLobby2 IDirectPlayLobby2A;
 
 
 /*
@@ -58,49 +59,43 @@ typedef struct IDirectPlayLobby2 IDirectPlayLobby2A;
  * Used to hold information about a registered DirectPlay
  * application
  */
-typedef struct
-		DPLAPPINFO
-{
-	DWORD dwSize;             // Size of this structure
-	GUID guidApplication;    // GUID of the Application
-	union
-	{
-		LPSTR lpszAppNameA;       // Pointer to the Application Name
-		LPWSTR lpszAppName;
-	};
+  typedef struct DPLAPPINFO
+  {
+    DWORD dwSize;               // Size of this structure
+    GUID guidApplication;       // GUID of the Application
+    union
+    {
+      LPSTR lpszAppNameA;       // Pointer to the Application Name
+      LPWSTR lpszAppName;
+    };
 
-}
-DPLAPPINFO,
-FAR *LPDPLAPPINFO;
+  }
+  DPLAPPINFO, FAR * LPDPLAPPINFO;
 
 /*
  * LPCDPLAPPINFO
  * A constant pointer to DPLAPPINFO
  */
-typedef const DPLAPPINFO
-FAR *LPCDPLAPPINFO;
+  typedef const DPLAPPINFO FAR * LPCDPLAPPINFO;
 
 /*
  * DPCOMPOUNDADDRESSELEMENT
  *
  * An array of these is passed to CreateCompoundAddresses()
  */
-typedef struct
-		DPCOMPOUNDADDRESSELEMENT
-{
-	GUID guidDataType;
-	DWORD dwDataSize;
-	LPVOID lpData;
-}
-DPCOMPOUNDADDRESSELEMENT,
-FAR *LPDPCOMPOUNDADDRESSELEMENT;
+  typedef struct DPCOMPOUNDADDRESSELEMENT
+  {
+    GUID guidDataType;
+    DWORD dwDataSize;
+    LPVOID lpData;
+  }
+  DPCOMPOUNDADDRESSELEMENT, FAR * LPDPCOMPOUNDADDRESSELEMENT;
 
 /*
  * LPCDPCOMPOUNDADDRESSELEMENT
  * A constant pointer to DPCOMPOUNDADDRESSELEMENT
  */
-typedef const DPCOMPOUNDADDRESSELEMENT
-FAR *LPCDPCOMPOUNDADDRESSELEMENT;
+  typedef const DPCOMPOUNDADDRESSELEMENT FAR * LPCDPCOMPOUNDADDRESSELEMENT;
 
 
 /****************************************************************************
@@ -112,27 +107,26 @@ FAR *LPCDPCOMPOUNDADDRESSELEMENT;
 /*
  * Callback for EnumAddress()
  */
-typedef BOOL ( FAR PASCAL *LPDPENUMADDRESSCALLBACK ) (
-    REFGUID         guidDataType,
-    DWORD           dwDataSize,
-    LPCVOID         lpData,
-    LPVOID          lpContext );
+  typedef BOOL(FAR PASCAL * LPDPENUMADDRESSCALLBACK) (REFGUID guidDataType,
+                                                      DWORD dwDataSize,
+                                                      LPCVOID lpData,
+                                                      LPVOID lpContext);
 
 /*
  * Callback for EnumAddressTypes()
  */
-typedef BOOL ( FAR PASCAL *LPDPLENUMADDRESSTYPESCALLBACK ) (
-    REFGUID         guidDataType,
-    LPVOID          lpContext,
-    DWORD           dwFlags );
+  typedef BOOL(FAR PASCAL *
+               LPDPLENUMADDRESSTYPESCALLBACK) (REFGUID guidDataType,
+                                               LPVOID lpContext,
+                                               DWORD dwFlags);
 
 /*
  * Callback for EnumLocalApplications()
  */
-typedef BOOL ( FAR PASCAL *LPDPLENUMLOCALAPPLICATIONSCALLBACK ) (
-    LPCDPLAPPINFO   lpAppInfo,
-    LPVOID          lpContext,
-    DWORD           dwFlags );
+  typedef BOOL(FAR PASCAL *
+               LPDPLENUMLOCALAPPLICATIONSCALLBACK) (LPCDPLAPPINFO lpAppInfo,
+                                                    LPVOID lpContext,
+                                                    DWORD dwFlags);
 
 
 /****************************************************************************
@@ -144,10 +138,12 @@ typedef BOOL ( FAR PASCAL *LPDPLENUMLOCALAPPLICATIONSCALLBACK ) (
 #define DirectPlayLobbyCreate   DirectPlayLobbyCreateW
 #else
 #define DirectPlayLobbyCreate   DirectPlayLobbyCreateA
-#endif /* UNICODE */
+#endif                          /* UNICODE */
 
-extern HRESULT WINAPI DirectPlayLobbyCreateW ( LPGUID, LPDIRECTPLAYLOBBY *, IUnknown *, LPVOID, DWORD );
-extern HRESULT WINAPI DirectPlayLobbyCreateA ( LPGUID, LPDIRECTPLAYLOBBYA *, IUnknown *, LPVOID, DWORD );
+  extern HRESULT WINAPI DirectPlayLobbyCreateW(LPGUID, LPDIRECTPLAYLOBBY *,
+                                               IUnknown *, LPVOID, DWORD);
+  extern HRESULT WINAPI DirectPlayLobbyCreateA(LPGUID, LPDIRECTPLAYLOBBYA *,
+                                               IUnknown *, LPVOID, DWORD);
 
 
 /****************************************************************************
@@ -157,41 +153,35 @@ extern HRESULT WINAPI DirectPlayLobbyCreateA ( LPGUID, LPDIRECTPLAYLOBBYA *, IUn
  ****************************************************************************/
 #undef INTERFACE
 #define INTERFACE IDirectPlayLobby
-DECLARE_INTERFACE_ ( IDirectPlayLobby, IUnknown )
-{
-	/*  IUnknown Methods    */
-	STDMETHOD ( QueryInterface )       ( THIS_ REFIID riid, LPVOID * ppvObj )
-	PURE;
-	STDMETHOD_ ( ULONG, AddRef )
-	( THIS ) PURE;
-	STDMETHOD_ ( ULONG, Release )
-	( THIS ) PURE;
+    DECLARE_INTERFACE_(IDirectPlayLobby, IUnknown)
+  {
+    /*  IUnknown Methods    */
+    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
+    STDMETHOD_(ULONG, AddRef) (THIS) PURE;
+    STDMETHOD_(ULONG, Release) (THIS) PURE;
 
-	/*  IDirectPlayLobby Methods    */
-	STDMETHOD ( Connect )              ( THIS_ DWORD, LPDIRECTPLAY2 *, IUnknown FAR * )
-	PURE;
-	STDMETHOD ( CreateAddress )        ( THIS_ REFGUID, REFGUID, LPCVOID, DWORD, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( EnumAddress )          ( THIS_ LPDPENUMADDRESSCALLBACK, LPCVOID, DWORD, LPVOID )
-	PURE;
-	STDMETHOD ( EnumAddressTypes )     ( THIS_ LPDPLENUMADDRESSTYPESCALLBACK, REFGUID, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( EnumLocalApplications ) ( THIS_ LPDPLENUMLOCALAPPLICATIONSCALLBACK, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( GetConnectionSettings ) ( THIS_ DWORD, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( ReceiveLobbyMessage )  ( THIS_ DWORD, DWORD, LPDWORD, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( RunApplication )       ( THIS_ DWORD, LPDWORD, LPDPLCONNECTION, HANDLE )
-	PURE;
-	STDMETHOD ( SendLobbyMessage )     ( THIS_ DWORD, DWORD, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( SetConnectionSettings ) ( THIS_ DWORD, DWORD, LPDPLCONNECTION )
-	PURE;
-	STDMETHOD ( SetLobbyMessageEvent ) ( THIS_ DWORD, DWORD, HANDLE )
-	PURE;
+    /*  IDirectPlayLobby Methods    */
+    STDMETHOD(Connect) (THIS_ DWORD, LPDIRECTPLAY2 *, IUnknown FAR *) PURE;
+    STDMETHOD(CreateAddress) (THIS_ REFGUID, REFGUID, LPCVOID, DWORD, LPVOID,
+                              LPDWORD) PURE;
+    STDMETHOD(EnumAddress) (THIS_ LPDPENUMADDRESSCALLBACK, LPCVOID, DWORD,
+                            LPVOID) PURE;
+    STDMETHOD(EnumAddressTypes) (THIS_ LPDPLENUMADDRESSTYPESCALLBACK, REFGUID,
+                                 LPVOID, DWORD) PURE;
+    STDMETHOD(EnumLocalApplications) (THIS_
+                                      LPDPLENUMLOCALAPPLICATIONSCALLBACK,
+                                      LPVOID, DWORD) PURE;
+    STDMETHOD(GetConnectionSettings) (THIS_ DWORD, LPVOID, LPDWORD) PURE;
+    STDMETHOD(ReceiveLobbyMessage) (THIS_ DWORD, DWORD, LPDWORD, LPVOID,
+                                    LPDWORD) PURE;
+    STDMETHOD(RunApplication) (THIS_ DWORD, LPDWORD, LPDPLCONNECTION,
+                               HANDLE) PURE;
+    STDMETHOD(SendLobbyMessage) (THIS_ DWORD, DWORD, LPVOID, DWORD) PURE;
+    STDMETHOD(SetConnectionSettings) (THIS_ DWORD, DWORD, LPDPLCONNECTION)
+      PURE;
+    STDMETHOD(SetLobbyMessageEvent) (THIS_ DWORD, DWORD, HANDLE) PURE;
 
-};
+  };
 
 /****************************************************************************
  *
@@ -200,44 +190,38 @@ DECLARE_INTERFACE_ ( IDirectPlayLobby, IUnknown )
  ****************************************************************************/
 #undef INTERFACE
 #define INTERFACE IDirectPlayLobby2
-DECLARE_INTERFACE_ ( IDirectPlayLobby2, IDirectPlayLobby )
-{
-	/*  IUnknown Methods    */
-	STDMETHOD ( QueryInterface )       ( THIS_ REFIID riid, LPVOID * ppvObj )
-	PURE;
-	STDMETHOD_ ( ULONG, AddRef )
-	( THIS ) PURE;
-	STDMETHOD_ ( ULONG, Release )
-	( THIS ) PURE;
+  DECLARE_INTERFACE_(IDirectPlayLobby2, IDirectPlayLobby)
+  {
+    /*  IUnknown Methods    */
+    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
+    STDMETHOD_(ULONG, AddRef) (THIS) PURE;
+    STDMETHOD_(ULONG, Release) (THIS) PURE;
 
-	/*  IDirectPlayLobby Methods    */
-	STDMETHOD ( Connect )              ( THIS_ DWORD, LPDIRECTPLAY2 *, IUnknown FAR * )
-	PURE;
-	STDMETHOD ( CreateAddress )        ( THIS_ REFGUID, REFGUID, LPCVOID, DWORD, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( EnumAddress )          ( THIS_ LPDPENUMADDRESSCALLBACK, LPCVOID, DWORD, LPVOID )
-	PURE;
-	STDMETHOD ( EnumAddressTypes )     ( THIS_ LPDPLENUMADDRESSTYPESCALLBACK, REFGUID, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( EnumLocalApplications ) ( THIS_ LPDPLENUMLOCALAPPLICATIONSCALLBACK, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( GetConnectionSettings ) ( THIS_ DWORD, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( ReceiveLobbyMessage )  ( THIS_ DWORD, DWORD, LPDWORD, LPVOID, LPDWORD )
-	PURE;
-	STDMETHOD ( RunApplication )       ( THIS_ DWORD, LPDWORD, LPDPLCONNECTION, HANDLE )
-	PURE;
-	STDMETHOD ( SendLobbyMessage )     ( THIS_ DWORD, DWORD, LPVOID, DWORD )
-	PURE;
-	STDMETHOD ( SetConnectionSettings ) ( THIS_ DWORD, DWORD, LPDPLCONNECTION )
-	PURE;
-	STDMETHOD ( SetLobbyMessageEvent ) ( THIS_ DWORD, DWORD, HANDLE )
-	PURE;
+    /*  IDirectPlayLobby Methods    */
+    STDMETHOD(Connect) (THIS_ DWORD, LPDIRECTPLAY2 *, IUnknown FAR *) PURE;
+    STDMETHOD(CreateAddress) (THIS_ REFGUID, REFGUID, LPCVOID, DWORD, LPVOID,
+                              LPDWORD) PURE;
+    STDMETHOD(EnumAddress) (THIS_ LPDPENUMADDRESSCALLBACK, LPCVOID, DWORD,
+                            LPVOID) PURE;
+    STDMETHOD(EnumAddressTypes) (THIS_ LPDPLENUMADDRESSTYPESCALLBACK, REFGUID,
+                                 LPVOID, DWORD) PURE;
+    STDMETHOD(EnumLocalApplications) (THIS_
+                                      LPDPLENUMLOCALAPPLICATIONSCALLBACK,
+                                      LPVOID, DWORD) PURE;
+    STDMETHOD(GetConnectionSettings) (THIS_ DWORD, LPVOID, LPDWORD) PURE;
+    STDMETHOD(ReceiveLobbyMessage) (THIS_ DWORD, DWORD, LPDWORD, LPVOID,
+                                    LPDWORD) PURE;
+    STDMETHOD(RunApplication) (THIS_ DWORD, LPDWORD, LPDPLCONNECTION,
+                               HANDLE) PURE;
+    STDMETHOD(SendLobbyMessage) (THIS_ DWORD, DWORD, LPVOID, DWORD) PURE;
+    STDMETHOD(SetConnectionSettings) (THIS_ DWORD, DWORD, LPDPLCONNECTION)
+      PURE;
+    STDMETHOD(SetLobbyMessageEvent) (THIS_ DWORD, DWORD, HANDLE) PURE;
 
-	/*  IDirectPlayLobby2 Methods   */
-	STDMETHOD ( CreateCompoundAddress ) ( THIS_ LPCDPCOMPOUNDADDRESSELEMENT, DWORD, LPVOID, LPDWORD )
-	PURE;
-};
+    /*  IDirectPlayLobby2 Methods   */
+    STDMETHOD(CreateCompoundAddress) (THIS_ LPCDPCOMPOUNDADDRESSELEMENT,
+                                      DWORD, LPVOID, LPDWORD) PURE;
+  };
 
 /****************************************************************************
  *
@@ -321,31 +305,27 @@ DECLARE_INTERFACE_ ( IDirectPlayLobby2, IDirectPlayLobby )
  * DPLMSG_GENERIC
  * Generic message structure used to identify the message type.
  */
-typedef struct
-		_DPLMSG_GENERIC
-{
-	DWORD dwType;         // Message type
-}
-DPLMSG_GENERIC,
-FAR *LPDPLMSG_GENERIC;
+  typedef struct _DPLMSG_GENERIC
+  {
+    DWORD dwType;               // Message type
+  }
+  DPLMSG_GENERIC, FAR * LPDPLMSG_GENERIC;
 
 /*
  *  DPLMSG_SETPROPERTY
  *  Standard message sent by an application to a lobby to set a
  *  property
  */
-typedef struct
-		_DPLMSG_SETPROPERTY
-{
-	DWORD dwType;               // Message type
-	DWORD dwRequestID;      // Request ID (DPL_NOCONFIRMATION if no confirmation desired)
-	GUID guidPlayer;            // Player GUID
-	GUID guidPropertyTag;   // Property GUID
-	DWORD dwDataSize;           // Size of data
-	DWORD dwPropertyData[1];    // Buffer containing data
-}
-DPLMSG_SETPROPERTY,
-FAR *LPDPLMSG_SETPROPERTY;
+  typedef struct _DPLMSG_SETPROPERTY
+  {
+    DWORD dwType;               // Message type
+    DWORD dwRequestID;          // Request ID (DPL_NOCONFIRMATION if no confirmation desired)
+    GUID guidPlayer;            // Player GUID
+    GUID guidPropertyTag;       // Property GUID
+    DWORD dwDataSize;           // Size of data
+    DWORD dwPropertyData[1];    // Buffer containing data
+  }
+  DPLMSG_SETPROPERTY, FAR * LPDPLMSG_SETPROPERTY;
 
 #define DPL_NOCONFIRMATION          0
 
@@ -354,52 +334,46 @@ FAR *LPDPLMSG_SETPROPERTY;
  *  Standard message returned by a lobby to confirm a
  *  DPLMSG_SETPROPERTY message.
  */
-typedef struct
-		_DPLMSG_SETPROPERTYRESPONSE
-{
-	DWORD dwType;               // Message type
-	DWORD dwRequestID;      // Request ID
-	GUID guidPlayer;            // Player GUID
-	GUID guidPropertyTag;   // Property GUID
-	HRESULT hr;                 // Return Code
-}
-DPLMSG_SETPROPERTYRESPONSE,
-FAR *LPDPLMSG_SETPROPERTYRESPONSE;
+  typedef struct _DPLMSG_SETPROPERTYRESPONSE
+  {
+    DWORD dwType;               // Message type
+    DWORD dwRequestID;          // Request ID
+    GUID guidPlayer;            // Player GUID
+    GUID guidPropertyTag;       // Property GUID
+    HRESULT hr;                 // Return Code
+  }
+  DPLMSG_SETPROPERTYRESPONSE, FAR * LPDPLMSG_SETPROPERTYRESPONSE;
 
 /*
  *  DPLMSG_GETPROPERTY
  *  Standard message sent by an application to a lobby to request
  *  the current value of a property
  */
-typedef struct
-		_DPLMSG_GETPROPERTY
-{
-	DWORD dwType;               // Message type
-	DWORD dwRequestID;      // Request ID
-	GUID guidPlayer;            // Player GUID
-	GUID guidPropertyTag;   // Property GUID
-}
-DPLMSG_GETPROPERTY,
-FAR *LPDPLMSG_GETPROPERTY;
+  typedef struct _DPLMSG_GETPROPERTY
+  {
+    DWORD dwType;               // Message type
+    DWORD dwRequestID;          // Request ID
+    GUID guidPlayer;            // Player GUID
+    GUID guidPropertyTag;       // Property GUID
+  }
+  DPLMSG_GETPROPERTY, FAR * LPDPLMSG_GETPROPERTY;
 
 /*
  *  DPLMSG_GETPROPERTYRESPONSE
  *  Standard message returned by a lobby in response to a
  *  DPLMSG_GETPROPERTY message.
  */
-typedef struct
-		_DPLMSG_GETPROPERTYRESPONSE
-{
-	DWORD dwType;               // Message type
-	DWORD dwRequestID;      // Request ID
-	GUID guidPlayer;            // Player GUID
-	GUID guidPropertyTag;   // Property GUID
-	HRESULT hr;                 // Return Code
-	DWORD dwDataSize;           // Size of data
-	DWORD dwPropertyData[1];    // Buffer containing data
-}
-DPLMSG_GETPROPERTYRESPONSE,
-FAR *LPDPLMSG_GETPROPERTYRESPONSE;
+  typedef struct _DPLMSG_GETPROPERTYRESPONSE
+  {
+    DWORD dwType;               // Message type
+    DWORD dwRequestID;          // Request ID
+    GUID guidPlayer;            // Player GUID
+    GUID guidPropertyTag;       // Property GUID
+    HRESULT hr;                 // Return Code
+    DWORD dwDataSize;           // Size of data
+    DWORD dwPropertyData[1];    // Buffer containing data
+  }
+  DPLMSG_GETPROPERTYRESPONSE, FAR * LPDPLMSG_GETPROPERTYRESPONSE;
 
 
 /******************************************
@@ -466,8 +440,9 @@ FAR *LPDPLMSG_GETPROPERTYRESPONSE;
  * Property data is a single BOOL with TRUE or FALSE
  */
 // {762CCDA1-D916-11d0-BA39-00C04FD7ED67}
-DEFINE_GUID ( DPLPROPERTY_MessagesSupported,
-              0x762ccda1, 0xd916, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67 );
+  DEFINE_GUID(DPLPROPERTY_MessagesSupported,
+              0x762ccda1, 0xd916, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7,
+              0xed, 0x67);
 
 /*
  * DPLPROPERTY_LobbyGuid
@@ -478,8 +453,9 @@ DEFINE_GUID ( DPLPROPERTY_MessagesSupported,
  * Property data is a single GUID.
  */
 // {F56920A0-D218-11d0-BA39-00C04FD7ED67}
-DEFINE_GUID ( DPLPROPERTY_LobbyGuid,
-              0xf56920a0, 0xd218, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67 );
+  DEFINE_GUID(DPLPROPERTY_LobbyGuid,
+              0xf56920a0, 0xd218, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7,
+              0xed, 0x67);
 
 /*
  * DPLPROPERTY_PlayerGuid
@@ -490,8 +466,9 @@ DEFINE_GUID ( DPLPROPERTY_LobbyGuid,
  * Property data is the DPLDATA_PLAYERDATA structure
  */
 // {B4319322-D20D-11d0-BA39-00C04FD7ED67}
-DEFINE_GUID ( DPLPROPERTY_PlayerGuid,
-              0xb4319322, 0xd20d, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67 );
+  DEFINE_GUID(DPLPROPERTY_PlayerGuid,
+              0xb4319322, 0xd20d, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7,
+              0xed, 0x67);
 
 /*
  * DPLDATA_PLAYERGUID
@@ -499,14 +476,12 @@ DEFINE_GUID ( DPLPROPERTY_PlayerGuid,
  * Data structure to hold the GUID of the player and player creation flags
  * from the lobby.
  */
-typedef struct
-		_DPLDATA_PLAYERGUID
-{
-	GUID guidPlayer;
-	DWORD dwPlayerFlags;
-}
-DPLDATA_PLAYERGUID,
-FAR *LPDPLDATA_PLAYERGUID;
+  typedef struct _DPLDATA_PLAYERGUID
+  {
+    GUID guidPlayer;
+    DWORD dwPlayerFlags;
+  }
+  DPLDATA_PLAYERGUID, FAR * LPDPLDATA_PLAYERGUID;
 
 /*
  * DPLPROPERTY_PlayerScore
@@ -517,8 +492,9 @@ FAR *LPDPLDATA_PLAYERGUID;
  * Property data is the DPLDATA_PLAYERSCORE structure.
  */
 // {48784000-D219-11d0-BA39-00C04FD7ED67}
-DEFINE_GUID ( DPLPROPERTY_PlayerScore,
-              0x48784000, 0xd219, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67 );
+  DEFINE_GUID(DPLPROPERTY_PlayerScore,
+              0x48784000, 0xd219, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7,
+              0xed, 0x67);
 
 /*
  * DPLDATA_PLAYERSCORE
@@ -526,14 +502,12 @@ DEFINE_GUID ( DPLPROPERTY_PlayerScore,
  * Data structure to hold an array of long integers representing a player score.
  * Application must allocate enough memory to hold all the scores.
  */
-typedef struct
-		_DPLDATA_PLAYERSCORE
-{
-	DWORD dwScoreCount;
-	LONG Score[1];
-}
-DPLDATA_PLAYERSCORE,
-FAR *LPDPLDATA_PLAYERSCORE;
+  typedef struct _DPLDATA_PLAYERSCORE
+  {
+    DWORD dwScoreCount;
+    LONG Score[1];
+  }
+  DPLDATA_PLAYERSCORE, FAR * LPDPLDATA_PLAYERSCORE;
 
 /****************************************************************************
  *
@@ -555,14 +529,13 @@ FAR *LPDPLDATA_PLAYERSCORE;
  *
  * Header for block of address data elements
  */
-typedef struct _DPADDRESS
-{
-	GUID guidDataType;
-	DWORD dwDataSize;
-} DPADDRESS;
+  typedef struct _DPADDRESS
+  {
+    GUID guidDataType;
+    DWORD dwDataSize;
+  } DPADDRESS;
 
-typedef DPADDRESS
-FAR *LPDPADDRESS;
+  typedef DPADDRESS FAR * LPDPADDRESS;
 
 /*
  * DPAID_TotalSize
@@ -571,8 +544,9 @@ FAR *LPDPADDRESS;
  */
 
 // {1318F560-912C-11d0-9DAA-00A0C90A43CB}
-DEFINE_GUID ( DPAID_TotalSize,
-              0x1318f560, 0x912c, 0x11d0, 0x9d, 0xaa, 0x0, 0xa0, 0xc9, 0xa, 0x43, 0xcb );
+  DEFINE_GUID(DPAID_TotalSize,
+              0x1318f560, 0x912c, 0x11d0, 0x9d, 0xaa, 0x0, 0xa0, 0xc9, 0xa,
+              0x43, 0xcb);
 
 /*
  * DPAID_ServiceProvider
@@ -582,8 +556,9 @@ DEFINE_GUID ( DPAID_TotalSize,
  */
 
 // {07D916C0-E0AF-11cf-9C4E-00A0C905425E}
-DEFINE_GUID ( DPAID_ServiceProvider,
-              0x7d916c0, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e );
+  DEFINE_GUID(DPAID_ServiceProvider,
+              0x7d916c0, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5,
+              0x42, 0x5e);
 
 /*
  * DPAID_LobbyProvider
@@ -593,8 +568,9 @@ DEFINE_GUID ( DPAID_ServiceProvider,
  */
 
 // {59B95640-9667-11d0-A77D-0000F803ABFC}
-DEFINE_GUID ( DPAID_LobbyProvider,
-              0x59b95640, 0x9667, 0x11d0, 0xa7, 0x7d, 0x0, 0x0, 0xf8, 0x3, 0xab, 0xfc );
+  DEFINE_GUID(DPAID_LobbyProvider,
+              0x59b95640, 0x9667, 0x11d0, 0xa7, 0x7d, 0x0, 0x0, 0xf8, 0x3,
+              0xab, 0xfc);
 
 /*
  * DPAID_Phone and DPAID_PhoneW
@@ -604,12 +580,14 @@ DEFINE_GUID ( DPAID_LobbyProvider,
  */
 
 // {78EC89A0-E0AF-11cf-9C4E-00A0C905425E}
-DEFINE_GUID ( DPAID_Phone,
-              0x78ec89a0, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e );
+  DEFINE_GUID(DPAID_Phone,
+              0x78ec89a0, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5,
+              0x42, 0x5e);
 
 // {BA5A7A70-9DBF-11d0-9CC1-00A0C905425E}
-DEFINE_GUID ( DPAID_PhoneW,
-              0xba5a7a70, 0x9dbf, 0x11d0, 0x9c, 0xc1, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e );
+  DEFINE_GUID(DPAID_PhoneW,
+              0xba5a7a70, 0x9dbf, 0x11d0, 0x9c, 0xc1, 0x0, 0xa0, 0xc9, 0x5,
+              0x42, 0x5e);
 
 /*
  * DPAID_Modem and DPAID_ModemW
@@ -619,12 +597,14 @@ DEFINE_GUID ( DPAID_PhoneW,
  */
 
 // {F6DCC200-A2FE-11d0-9C4F-00A0C905425E}
-DEFINE_GUID ( DPAID_Modem,
-              0xf6dcc200, 0xa2fe, 0x11d0, 0x9c, 0x4f, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e );
+  DEFINE_GUID(DPAID_Modem,
+              0xf6dcc200, 0xa2fe, 0x11d0, 0x9c, 0x4f, 0x0, 0xa0, 0xc9, 0x5,
+              0x42, 0x5e);
 
 // {01FD92E0-A2FF-11d0-9C4F-00A0C905425E}
-DEFINE_GUID ( DPAID_ModemW,
-              0x1fd92e0, 0xa2ff, 0x11d0, 0x9c, 0x4f, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e );
+  DEFINE_GUID(DPAID_ModemW,
+              0x1fd92e0, 0xa2ff, 0x11d0, 0x9c, 0x4f, 0x0, 0xa0, 0xc9, 0x5,
+              0x42, 0x5e);
 
 /*
  * DPAID_Inet and DPAID_InetW
@@ -634,12 +614,14 @@ DEFINE_GUID ( DPAID_ModemW,
  */
 
 // {C4A54DA0-E0AF-11cf-9C4E-00A0C905425E}
-DEFINE_GUID ( DPAID_INet,
-              0xc4a54da0, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e );
+  DEFINE_GUID(DPAID_INet,
+              0xc4a54da0, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5,
+              0x42, 0x5e);
 
 // {E63232A0-9DBF-11d0-9CC1-00A0C905425E}
-DEFINE_GUID ( DPAID_INetW,
-              0xe63232a0, 0x9dbf, 0x11d0, 0x9c, 0xc1, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e );
+  DEFINE_GUID(DPAID_INetW,
+              0xe63232a0, 0x9dbf, 0x11d0, 0x9c, 0xc1, 0x0, 0xa0, 0xc9, 0x5,
+              0x42, 0x5e);
 
 /*
  * DPCOMPORTADDRESS
@@ -649,23 +631,22 @@ DEFINE_GUID ( DPAID_INetW,
  * control are given below.
  */
 
-#define DPCPA_NOFLOW        0           // no flow control
-#define DPCPA_XONXOFFFLOW   1           // software flow control
-#define DPCPA_RTSFLOW       2           // hardware flow control with RTS
-#define DPCPA_DTRFLOW       3           // hardware flow control with DTR
-#define DPCPA_RTSDTRFLOW    4           // hardware flow control with RTS and DTR
+#define DPCPA_NOFLOW        0   // no flow control
+#define DPCPA_XONXOFFFLOW   1   // software flow control
+#define DPCPA_RTSFLOW       2   // hardware flow control with RTS
+#define DPCPA_DTRFLOW       3   // hardware flow control with DTR
+#define DPCPA_RTSDTRFLOW    4   // hardware flow control with RTS and DTR
 
-typedef struct _DPCOMPORTADDRESS
-{
-	DWORD dwComPort;                  // COM port to use (1-4)
-	DWORD dwBaudRate;                 // baud rate (100-256k)
-	DWORD dwStopBits;                 // no. stop bits (1-2)
-	DWORD dwParity;                   // parity (none, odd, even, mark)
-	DWORD dwFlowControl;              // flow control (none, xon/xoff, rts, dtr)
-} DPCOMPORTADDRESS;
+  typedef struct _DPCOMPORTADDRESS
+  {
+    DWORD dwComPort;            // COM port to use (1-4)
+    DWORD dwBaudRate;           // baud rate (100-256k)
+    DWORD dwStopBits;           // no. stop bits (1-2)
+    DWORD dwParity;             // parity (none, odd, even, mark)
+    DWORD dwFlowControl;        // flow control (none, xon/xoff, rts, dtr)
+  } DPCOMPORTADDRESS;
 
-typedef DPCOMPORTADDRESS
-FAR *LPDPCOMPORTADDRESS;
+  typedef DPCOMPORTADDRESS FAR * LPDPCOMPORTADDRESS;
 
 /*
  * DPAID_ComPort
@@ -674,8 +655,9 @@ FAR *LPDPCOMPORTADDRESS;
  */
 
 // {F2F0CE00-E0AF-11cf-9C4E-00A0C905425E}
-DEFINE_GUID ( DPAID_ComPort,
-              0xf2f0ce00, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e );
+  DEFINE_GUID(DPAID_ComPort,
+              0xf2f0ce00, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5,
+              0x42, 0x5e);
 
 /****************************************************************************
  *
@@ -688,6 +670,7 @@ DEFINE_GUID ( DPAID_ComPort,
 
 #ifdef __cplusplus
 }
+
 ;
 #endif /* __cplusplus */
 

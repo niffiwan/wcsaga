@@ -26,12 +26,12 @@
 // NEVER ADD FLAGS LESS THAN 10 here. there are some internal flags which use those
 
 // font size
-#define PF_TITLE            (1<<10) // Draw title centered in regular font (title is first line)
-#define PF_TITLE_BIG        (1<<11) // Draw title centered in large font (title is first line)
+#define PF_TITLE            (1<<10)     // Draw title centered in regular font (title is first line)
+#define PF_TITLE_BIG        (1<<11)     // Draw title centered in large font (title is first line)
 #define PF_BODY_BIG     (1<<12) // Draw message body in large font
 
 // color
-#define PF_TITLE_RED        (1<<13) // Color to draw title, if different from default
+#define PF_TITLE_RED        (1<<13)     // Color to draw title, if different from default
 #define PF_TITLE_GREEN  (1<<14)
 #define PF_TITLE_BLUE   (1<<15)
 #define PF_TITLE_WHITE  (1<<16)
@@ -40,14 +40,14 @@
 #define PF_BODY_BLUE        (1<<19)
 
 // icon choices
-#define PF_USE_NEGATIVE_ICON        (1<<20) // Always drawn as first icon if set
+#define PF_USE_NEGATIVE_ICON        (1<<20)     // Always drawn as first icon if set
 #define PF_USE_AFFIRMATIVE_ICON (1<<21) // Always drawn as second icon if two choices (if 1 choice, it is the only icon)
 
 // misc
 #define PF_RUN_STATE                    (1<<22) // call the do frame of the current state underneath the popup
-#define PF_IGNORE_ESC               (1<<23) // ignore the escape character
-#define PF_ALLOW_DEAD_KEYS          (1<<24) // Allow player to use keyset that exists when player dies
-#define PF_NO_NETWORKING            (1<<25) // don't do any networking
+#define PF_IGNORE_ESC               (1<<23)     // ignore the escape character
+#define PF_ALLOW_DEAD_KEYS          (1<<24)     // Allow player to use keyset that exists when player dies
+#define PF_NO_NETWORKING            (1<<25)     // don't do any networking
 
 // no special buttons
 #define PF_NO_SPECIAL_BUTTONS       (1<<26)
@@ -69,7 +69,7 @@
 // typical usage:
 //
 //  rval = popup(0, 2, POPUP_YES, POPUP_NO, "Hey %s, do you want to quit", pl->callsign);
-int popup ( int flags, int nchoices, ... );
+int popup(int flags, int nchoices, ...);
 
 // popup with cancel button and conditional funcrion.
 // input:   condition   =>   function to call every frame, if condition() returns FALSE, the popup
@@ -92,10 +92,10 @@ int popup ( int flags, int nchoices, ... );
 // .
 // .
 //  rval = popup_till_condition( condition_function, "Cancel", "Checking to see if %s is an idiot.", pl->callsign);
-int popup_till_condition ( int ( *condition ) (), ... );
+int popup_till_condition(int (*condition) (), ...);
 
 // popup to return the value from an input box
-char *popup_input ( int flags, char *caption, int max_output_len = -1 );
+char *popup_input(int flags, char *caption, int max_output_len = -1);
 
 int popup_active();
 
@@ -105,6 +105,6 @@ int popup_running_state();
 void popup_kill_any_active();
 
 // change the text inside of the popup
-void popup_change_text ( char *new_text );
+void popup_change_text(char *new_text);
 
 #endif

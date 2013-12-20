@@ -21,16 +21,12 @@
 #include <wx/xrc/xmlres.h>
 
 
-BEGIN_EVENT_TABLE ( dlgVoiceFileManager, wxDialog )
-END_EVENT_TABLE()
-
-
-dlgVoiceFileManager::dlgVoiceFileManager ( wxWindow *parent )
-	: wxDialog()
+BEGIN_EVENT_TABLE(dlgVoiceFileManager, wxDialog) END_EVENT_TABLE()dlgVoiceFileManager::dlgVoiceFileManager(wxWindow * parent):wxDialog
+  ()
 {
-	wxXmlResource::Get()->LoadDialog ( this, parent, "dlgVoiceFileManager" );
+  wxXmlResource::Get()->LoadDialog(this, parent, "dlgVoiceFileManager");
 }
 
 dlgVoiceFileManager::~dlgVoiceFileManager()
-{}
-
+{
+}

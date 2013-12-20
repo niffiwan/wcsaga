@@ -19,44 +19,44 @@
 /////////////////////////////////////////////////////////////////////////////
 // DumpStats dialog
 
-class DumpStats : public CDialog
+class DumpStats:public CDialog
 {
-	// Construction
+  // Construction
 public:
-	DumpStats ( CWnd *pParent = NULL ); // standard constructor
-	void get_mission_stats ( CString &buffer );
-	void get_background_stats ( CString &buffer );
-	void get_object_stats ( CString &buffer );
-	void get_objectives_and_goals ( CString &buffer );
-	void get_ship_weapon_selection ( CString &buffer );
-	void get_messaging_info ( CString &buffer );
-	void get_species_ship_breakdown ( CString &buffer );
-	void get_default_ship_loadouts ( CString &buffer );
+  DumpStats(CWnd * pParent = NULL);     // standard constructor
+  void get_mission_stats(CString & buffer);
+  void get_background_stats(CString & buffer);
+  void get_object_stats(CString & buffer);
+  void get_objectives_and_goals(CString & buffer);
+  void get_ship_weapon_selection(CString & buffer);
+  void get_messaging_info(CString & buffer);
+  void get_species_ship_breakdown(CString & buffer);
+  void get_default_ship_loadouts(CString & buffer);
 
-	// Dialog Data
-	//{{AFX_DATA(DumpStats)
-	enum { IDD = IDD_DUMP_STATS };
-	// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+  // Dialog Data
+  //{{AFX_DATA(DumpStats)
+  enum
+  { IDD = IDD_DUMP_STATS };
+  // NOTE: the ClassWizard will add data members here
+  //}}AFX_DATA
 
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(DumpStats)
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(DumpStats)
 protected:
-	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange * pDX);   // DDX/DDV support
+  //}}AFX_VIRTUAL
 
-	// Implementation
+  // Implementation
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(DumpStats)
-	virtual BOOL OnInitDialog();
-	afx_msg void OnDumpToFile();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-};
+  // Generated message map functions
+  //{{AFX_MSG(DumpStats)
+    virtual BOOL OnInitDialog();
+  afx_msg void OnDumpToFile();
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()};
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.

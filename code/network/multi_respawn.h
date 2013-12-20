@@ -27,7 +27,7 @@ struct net_player;
 //
 
 // check to see if a net player needs to be respawned
-void multi_respawn_check ( object *objp );
+void multi_respawn_check(object * objp);
 
 // respawn normally
 void multi_respawn_normal();
@@ -45,12 +45,12 @@ void multi_respawn_init();
 void multi_respawn_check_ai();
 
 // notify of a player leaving
-void multi_respawn_player_leave ( net_player *pl );
+void multi_respawn_player_leave(net_player * pl);
 
 // ---------------------------------------------------------------------------------------
 // MULTI RESPAWN PACKET HANDLERS
 //
 
-void multi_respawn_process_packet ( ubyte *data, header *hinfo );
+void multi_respawn_process_packet(ubyte * data, header * hinfo);
 
 #endif

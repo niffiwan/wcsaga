@@ -18,13 +18,15 @@ const int MAX_NUM_TIMERBARS = 20;
 // These functions should never be used directly, always use macros below
 void timerbar_start_frame();
 void timerbar_end_frame();
-void timerbar_set_draw_func ( void ( *new_draw_func_ptr ) ( int colour, float x, float y, float w, float h ) );
+void
+timerbar_set_draw_func(void (*new_draw_func_ptr)
+                       (int colour, float x, float y, float w, float h));
 
-void timerbar_push ( int value );
+void timerbar_push(int value);
 void timerbar_pop();
 
 // This function shouldnt not be used any more or it will break push and pop calls
-void timerbar_switch_type ( int num );
+void timerbar_switch_type(int num);
 
 #define TIMERBAR_SET_DRAW_FUNC(f) if (Cmdline_timerbar) timerbar_set_draw_func(f);
 #define TIMERBAR_START_FRAME()    if (Cmdline_timerbar) timerbar_start_frame();
@@ -35,4 +37,3 @@ void timerbar_switch_type ( int num );
 #define TIMERBAR_POP()   if (Cmdline_timerbar) timerbar_pop();
 
 #endif
-

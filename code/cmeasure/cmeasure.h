@@ -25,7 +25,7 @@ struct object;
 
 //#define   MAX_CMEASURE_TYPES      3
 
-#define CMEASURE_WAIT               333         //  delay in milliseconds between countermeasure firing.
+#define CMEASURE_WAIT               333 //  delay in milliseconds between countermeasure firing.
 
 //#define   CMF_DUD_HEAT                0x01            //  If set, this cmeasure is a dud to heat seekers.  Set at create time.
 //#define   CMF_DUD_ASPECT              0x02            //  If set, this cmeasure is a dud to aspect seekers.  Set at create time.
@@ -69,9 +69,10 @@ extern int Countermeasures_enabled;
 //extern void cmeasure_process_pre( object * obj, float frame_time);
 //extern void cmeasure_process_post( object * obj, float frame_time);
 //extern int cmeasure_create( object * source_obj, vec3d *pos, int cm_type, int rand_val = -1 );
-extern void cmeasure_set_ship_launch_vel ( object *objp, object *parent_objp, int arand );
-extern void cmeasure_select_next ( object *objp );
-extern void cmeasure_maybe_alert_success ( object *objp );
+extern void cmeasure_set_ship_launch_vel(object * objp, object * parent_objp,
+                                         int arand);
+extern void cmeasure_select_next(object * objp);
+extern void cmeasure_maybe_alert_success(object * objp);
 
 extern float Skill_level_cmeasure_life_scale[NUM_SKILL_LEVELS];
 

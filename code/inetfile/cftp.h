@@ -40,58 +40,59 @@
 
 
 #ifdef WIN32
-extern void FTPObjThread ( void *obj );
+extern void FTPObjThread(void *obj);
 #else
-extern int FTPObjThread ( void *obj );
+extern int FTPObjThread(void *obj);
 #endif
 
 class CFtpGet
 {
 
 public:
-	CFtpGet ( char *URL, char *localfile, char *Username = NULL, char *Password = NULL );
-	~CFtpGet();
-	int GetStatus();
-	uint GetBytesIn();
-	uint GetTotalBytes();
-	void AbortGet();
+  CFtpGet(char *URL, char *localfile, char *Username = NULL, char *Password =
+          NULL);
+   ~CFtpGet();
+  int GetStatus();
+  uint GetBytesIn();
+  uint GetTotalBytes();
+  void AbortGet();
 
-	void WorkerThread();
+  void WorkerThread();
 
 protected:
 
-	int ConnectControlSocket();
-	int LoginHost();
-	uint SendFTPCommand ( char *command );
-	uint ReadFTPServerReply();
-	uint GetFile();
-	uint IssuePort();
-	uint ReadDataChannel();
-	void FlushControlChannel();
+  int ConnectControlSocket();
+  int LoginHost();
+  uint SendFTPCommand(char *command);
+  uint ReadFTPServerReply();
+  uint GetFile();
+  uint IssuePort();
+  uint ReadDataChannel();
+  void FlushControlChannel();
 
-	uint m_iBytesIn;
-	uint m_iBytesTotal;
-	uint m_State;
+  uint m_iBytesIn;
+  uint m_iBytesTotal;
+  uint m_State;
 
-	bool m_Aborting;
-	bool m_Aborted;
+  bool m_Aborting;
+  bool m_Aborted;
 
-	char m_szUserName[100];
-	char m_szPassword[100];
-	char m_szHost[200];
-	char m_szDir[200];
-	char m_szFilename[100];
+  char m_szUserName[100];
+  char m_szPassword[100];
+  char m_szHost[200];
+  char m_szDir[200];
+  char m_szFilename[100];
 
-	char recv_buffer[1000];
+  char recv_buffer[1000];
 
-	SOCKET m_ListenSock;
-	SOCKET m_DataSock;
-	SOCKET m_ControlSock;
+  SOCKET m_ListenSock;
+  SOCKET m_DataSock;
+  SOCKET m_ControlSock;
 
-	FILE *LOCALFILE;
+  FILE *LOCALFILE;
 
 #ifdef SCP_UNIX
-	SDL_Thread *thread_id;
+  SDL_Thread *thread_id;
 #endif
 };
 

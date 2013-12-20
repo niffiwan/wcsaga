@@ -15,21 +15,23 @@
 // prototype
 struct net_player;
 
-#define CHATBOX_MAX_LEN                     125         // max length of the actual text string
+#define CHATBOX_MAX_LEN                     125 // max length of the actual text string
 
 // chatbox flags for creation/switching between modes
 #define CHATBOX_FLAG_SMALL                   (1<<0)     // small chatbox
 #define CHATBOX_FLAG_BIG                     (1<<1)     // big chatbox
-#define CHATBOX_FLAG_MULTI_PAUSED        (1<<2)     // chatbox in the multiplayer paused screen
+#define CHATBOX_FLAG_MULTI_PAUSED        (1<<2) // chatbox in the multiplayer paused screen
 #define CHATBOX_FLAG_DRAW_BOX                (1<<3)     // should be drawn by the chatbox code
 #define CHATBOX_FLAG_BUTTONS                 (1<<4)     // the chatbox should be drawing/checking its own buttons
 // NOTE : CHATBOX_FLAG_BUTTONS requires that CHATBOX_FLAG_DRAW_BOX is also set!
 
 // initialize all chatbox details with the given mode flags
-int chatbox_create ( int mode_flags = ( CHATBOX_FLAG_SMALL | CHATBOX_FLAG_DRAW_BOX | CHATBOX_FLAG_BUTTONS ) );
+int chatbox_create(int mode_flags =
+                   (CHATBOX_FLAG_SMALL | CHATBOX_FLAG_DRAW_BOX |
+                    CHATBOX_FLAG_BUTTONS));
 
 // process this frame for the chatbox
-int chatbox_process ( int key_in = -1 );
+int chatbox_process(int key_in = -1);
 
 // shutdown all chatbox functionality
 void chatbox_close();
@@ -47,7 +49,7 @@ int chatbox_scroll_down();
 void chatbox_clear();
 
 // add a line of text (from the player identified by pid) to the chatbox
-void chatbox_add_line ( char *msg, int pid, int add_id = 1 );
+void chatbox_add_line(char *msg, int pid, int add_id = 1);
 
 // force the chatbox to go into small mode (if its in large mode) - will not wotk if in multi paused chatbox mode
 void chatbox_force_small();

@@ -36,7 +36,8 @@ void mflash_level_init();
 void mflash_level_close();
 
 // create a muzzle flash on the guy
-void mflash_create ( vec3d *gun_pos, vec3d *gun_dir, physics_info *pip, int mflash_type, object *local = NULL );
+void mflash_create(vec3d * gun_pos, vec3d * gun_dir, physics_info * pip,
+                   int mflash_type, object * local = NULL);
 
 // process muzzle flash stuff
 void mflash_process_all();
@@ -45,12 +46,12 @@ void mflash_process_all();
 void mflash_render_all();
 
 // lookup type by name
-int mflash_lookup ( char *name );
+int mflash_lookup(char *name);
 
 // mark as used
-void mflash_mark_as_used ( int index = -1 );
+void mflash_mark_as_used(int index = -1);
 
 // level page in
-void mflash_page_in ( bool load_all = false );
+void mflash_page_in(bool load_all = false);
 
 #endif

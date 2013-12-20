@@ -9,22 +9,20 @@
 #ifndef _COMMAND_BRIEFING_EDITOR_H
 #define _COMMAND_BRIEFING_EDITOR_H
 
-class dlgCommandBriefingEditor : public wxDialog
+class dlgCommandBriefingEditor:public wxDialog
 {
 public:
-	// constructor/destructors
-	dlgCommandBriefingEditor ( wxWindow *parent );
-	~dlgCommandBriefingEditor();
+  // constructor/destructors
+  dlgCommandBriefingEditor(wxWindow * parent);
+  ~dlgCommandBriefingEditor();
 
-	// event handlers
-	// event functions go here
+  // event handlers
+  // event functions go here
 
 protected:
-	// events
-	DECLARE_EVENT_TABLE()
-
-private:
-	// dialog control stuff goes here
+  // events
+DECLARE_EVENT_TABLE() private:
+  // dialog control stuff goes here
 };
 
 #endif

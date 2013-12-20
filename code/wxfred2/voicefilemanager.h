@@ -9,22 +9,20 @@
 #ifndef _VOICE_FILE_MANAGER_H
 #define _VOICE_FILE_MANAGER_H
 
-class dlgVoiceFileManager : public wxDialog
+class dlgVoiceFileManager:public wxDialog
 {
 public:
-	// constructor/destructors
-	dlgVoiceFileManager ( wxWindow *parent );
-	~dlgVoiceFileManager();
+  // constructor/destructors
+  dlgVoiceFileManager(wxWindow * parent);
+  ~dlgVoiceFileManager();
 
-	// event handlers
-	// event functions go here
+  // event handlers
+  // event functions go here
 
 protected:
-	// events
-	DECLARE_EVENT_TABLE()
-
-private:
-	// dialog control stuff goes here
+  // events
+DECLARE_EVENT_TABLE() private:
+  // dialog control stuff goes here
 };
 
 #endif

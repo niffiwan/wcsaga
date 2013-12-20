@@ -9,12 +9,11 @@
 #ifndef _WXFRED2_H
 #define _WXFRED2_H
 
-class wxFRED2 : public wxApp
+class wxFRED2:public wxApp
 {
 public:
-	virtual bool OnInit();
+  virtual bool OnInit();
 };
 
-DECLARE_APP ( wxFRED2 )
-
+DECLARE_APP(wxFRED2)
 #endif

@@ -15,40 +15,40 @@
 /////////////////////////////////////////////////////////////////////////////
 // waypoint_path_dlg dialog
 
-class waypoint_path_dlg : public CDialog
+class waypoint_path_dlg:public CDialog
 {
-	// Construction
+  // Construction
 public:
-	int bypass_errors;
-	int update_data ( int redraw = 1 );
-	void initialize_data ( int full_update );
-	void OnOK();
-	BOOL Create();
-	waypoint_path_dlg ( CWnd *pParent = NULL ); // standard constructor
+  int bypass_errors;
+  int update_data(int redraw = 1);
+  void initialize_data(int full_update);
+  void OnOK();
+  BOOL Create();
+    waypoint_path_dlg(CWnd * pParent = NULL);   // standard constructor
 
-	// Dialog Data
-	//{{AFX_DATA(waypoint_path_dlg)
-	enum { IDD = IDD_WAYPOINT_PATH_EDITOR };
-	CString m_name;
-	//}}AFX_DATA
+  // Dialog Data
+  //{{AFX_DATA(waypoint_path_dlg)
+  enum
+  { IDD = IDD_WAYPOINT_PATH_EDITOR };
+  CString m_name;
+  //}}AFX_DATA
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(waypoint_path_dlg)
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(waypoint_path_dlg)
 protected:
-	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
-	virtual BOOL OnCommand ( WPARAM wParam, LPARAM lParam );
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange * pDX);   // DDX/DDV support
+  virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
+  //}}AFX_VIRTUAL
 
-	// Implementation
+  // Implementation
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(waypoint_path_dlg)
-	afx_msg void OnInitMenu ( CMenu *pMenu );
-	afx_msg void OnClose();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-};
+  // Generated message map functions
+  //{{AFX_MSG(waypoint_path_dlg)
+    afx_msg void OnInitMenu(CMenu * pMenu);
+  afx_msg void OnClose();
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()};
 
 #endif

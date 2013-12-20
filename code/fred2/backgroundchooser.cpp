@@ -16,73 +16,72 @@ static char THIS_FILE[] = __FILE__;
 // BackgroundChooser dialog
 
 
-BackgroundChooser::BackgroundChooser ( int numBackgrounds )
-	: CDialog ( BackgroundChooser::IDD )
+BackgroundChooser::
+BackgroundChooser(int numBackgrounds):CDialog(BackgroundChooser::IDD)
 {
-	//{{AFX_DATA_INIT(BackgroundChooser)
-	//}}AFX_DATA_INIT
+  //{{AFX_DATA_INIT(BackgroundChooser)
+  //}}AFX_DATA_INIT
 
-	m_numBackgrounds = numBackgrounds;
-	m_chosenBackground = -1;
+  m_numBackgrounds = numBackgrounds;
+  m_chosenBackground = -1;
 }
 
 
-void BackgroundChooser::DoDataExchange ( CDataExchange *pDX )
+void BackgroundChooser::DoDataExchange(CDataExchange * pDX)
 {
-	CDialog::DoDataExchange ( pDX );
-	//{{AFX_DATA_MAP(BackgroundChooser)
-	//}}AFX_DATA_MAP
+  CDialog::DoDataExchange(pDX);
+  //{{AFX_DATA_MAP(BackgroundChooser)
+  //}}AFX_DATA_MAP
 }
 
 
-BEGIN_MESSAGE_MAP ( BackgroundChooser, CDialog )
-	//{{AFX_MSG_MAP(BackgroundChooser)
-	//}}AFX_MSG_MAP
+BEGIN_MESSAGE_MAP(BackgroundChooser, CDialog)
+  //{{AFX_MSG_MAP(BackgroundChooser)
+  //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
-
 /////////////////////////////////////////////////////////////////////////////
 // BackgroundChooser message handlers
-
-BOOL BackgroundChooser::OnInitDialog()
+     BOOL BackgroundChooser::OnInitDialog()
 {
-	int i;
+  int i;
 
-	for ( i = 0; i < m_numBackgrounds; i++ )
-	{
-		char temp[NAME_LENGTH];
-		sprintf ( temp, "Background %d", i + 1 );
+  for (i = 0; i < m_numBackgrounds; i++)
+    {
+      char temp[NAME_LENGTH];
+      sprintf(temp, "Background %d", i + 1);
 
-		( ( CComboBox * ) GetDlgItem ( IDC_BACKGROUND ) )->AddString ( temp );
-	}
-	( ( CComboBox * ) GetDlgItem ( IDC_BACKGROUND ) )->SetCurSel ( 0 );
+      ((CComboBox *) GetDlgItem(IDC_BACKGROUND))->AddString(temp);
+    }
+  ((CComboBox *) GetDlgItem(IDC_BACKGROUND))->SetCurSel(0);
 
-	CDialog::OnInitDialog();
-	UpdateData ( FALSE );
-	return TRUE;
+  CDialog::OnInitDialog();
+  UpdateData(FALSE);
+  return TRUE;
 }
 
 void BackgroundChooser::OnOK()
 {
-	UpdateData ( TRUE );
+  UpdateData(TRUE);
 
-	m_chosenBackground = ( ( CComboBox * ) GetDlgItem ( IDC_BACKGROUND ) )->GetCurSel();
+  m_chosenBackground =
+    ((CComboBox *) GetDlgItem(IDC_BACKGROUND))->GetCurSel();
 
-	CDialog::OnOK();
+  CDialog::OnOK();
 }
 
 void BackgroundChooser::OnCancel()
 {
-	// TODO: Add extra cleanup here
+  // TODO: Add extra cleanup here
 
-	CDialog::OnCancel();
+  CDialog::OnCancel();
 }
 
 void BackgroundChooser::OnClose()
 {
-	OnCancel();
+  OnCancel();
 }
 
 int BackgroundChooser::GetChosenBackground()
 {
-	return m_chosenBackground;
+  return m_chosenBackground;
 }

@@ -21,16 +21,18 @@
 #include "fredframe.h"
 #include "wxfred_xrc.h"
 
-IMPLEMENT_APP ( wxFRED2 )
-
-bool wxFRED2::OnInit()
+IMPLEMENT_APP(wxFRED2)
+     bool wxFRED2::OnInit()
 {
-	wxXmlResource::Get()->InitAllHandlers();
-	InitXmlResource();
+  wxXmlResource::Get()->InitAllHandlers();
+  InitXmlResource();
 
-	FREDFrame *frame = new FREDFrame ( _T ( "Untitled - FRED2_OPEN 3.6.5 - FreeSpace 2 Mission Editor" ), 50, 50, 800, 600 );
-	SetTopWindow ( frame );
-	frame->Show ( TRUE );
+  FREDFrame *frame =
+    new
+    FREDFrame(_T("Untitled - FRED2_OPEN 3.6.5 - FreeSpace 2 Mission Editor"),
+              50, 50, 800, 600);
+  SetTopWindow(frame);
+  frame->Show(TRUE);
 
-	return true;
+  return true;
 }

@@ -42,8 +42,8 @@
 
 
 // from ship.h
-#define MAX_SHIPS                   400         // max number of ship instances there can be.DTP; bumped from 200 to 400
-#define SHIPS_LIMIT                 400         // what MAX_SHIPS will be at release time (for error checking in debug mode); dtp Bumped from 200 to 400
+#define MAX_SHIPS                   400 // max number of ship instances there can be.DTP; bumped from 200 to 400
+#define SHIPS_LIMIT                 400 // what MAX_SHIPS will be at release time (for error checking in debug mode); dtp Bumped from 200 to 400
 
 // ****************************************************************
 // DO NOT CHANGE THIS - IT WILL LIKELY BREAK FREESPACE2 PXO SUPPORT
@@ -69,7 +69,7 @@
 
 #define MAX_TVT_TEAMS               2   // number of teams in a TVT game
 #define MAX_TVT_WINGS_PER_TEAM      1   // number of wings per team in a TVT game
-#define MAX_TVT_WINGS       MAX_TVT_TEAMS * MAX_TVT_WINGS_PER_TEAM  // number of wings in a TVT game
+#define MAX_TVT_WINGS       MAX_TVT_TEAMS * MAX_TVT_WINGS_PER_TEAM      // number of wings in a TVT game
 
 // from model.h
 #define MAX_SHIP_PRIMARY_BANKS      3
@@ -124,4 +124,4 @@ extern int Num_medals;
 #define MAX_LIGHTS 256
 
 
-#endif  // _GLOBALS_H
+#endif // _GLOBALS_H

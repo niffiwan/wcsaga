@@ -21,16 +21,13 @@
 #include <wx/xrc/xmlres.h>
 
 
-BEGIN_EVENT_TABLE ( dlgSetGlobalShipFlagsEditor, wxDialog )
-END_EVENT_TABLE()
-
-
-dlgSetGlobalShipFlagsEditor::dlgSetGlobalShipFlagsEditor ( wxWindow *parent )
-	: wxDialog()
+BEGIN_EVENT_TABLE(dlgSetGlobalShipFlagsEditor, wxDialog) END_EVENT_TABLE()dlgSetGlobalShipFlagsEditor::dlgSetGlobalShipFlagsEditor(wxWindow * parent):wxDialog
+  ()
 {
-	wxXmlResource::Get()->LoadDialog ( this, parent, "dlgSetGlobalShipFlagsEditor" );
+  wxXmlResource::Get()->LoadDialog(this, parent,
+                                   "dlgSetGlobalShipFlagsEditor");
 }
 
 dlgSetGlobalShipFlagsEditor::~dlgSetGlobalShipFlagsEditor()
-{}
-
+{
+}

@@ -36,7 +36,7 @@ extern net_player *Multi_pause_pauser;
 void multi_pause_reset();
 
 // send a request to pause or unpause a game (all players should use this function)
-void multi_pause_request ( int pause );
+void multi_pause_request(int pause);
 
 // (client) call when receiving a packet indicating we should pause
 void multi_pause_pause();
@@ -45,7 +45,7 @@ void multi_pause_pause();
 void multi_pause_unpause();
 
 // (server) evaluate a pause request from the given player (should call for himself as well)
-void multi_pause_server_eval_request ( net_player *pl, int pause );
+void multi_pause_server_eval_request(net_player * pl, int pause);
 
 // if we still want to eat keys
 int multi_pause_eat_keys();
@@ -62,7 +62,7 @@ void multi_pause_init();
 void multi_pause_do();
 
 // close the multi pause screen
-void multi_pause_close ( int end_mission );
+void multi_pause_close(int end_mission);
 
 
 #endif

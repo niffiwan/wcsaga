@@ -69,21 +69,21 @@
 
 struct crc_valid_status
 {
-	char name[NAME_LENGTH];
-	uint crc32;
-	ubyte valid;
+  char name[NAME_LENGTH];
+  uint crc32;
+  ubyte valid;
 };
 
 struct file_record
 {
-	char name[33];
-	uint crc32;
+  char name[33];
+  uint crc32;
 };
 
 struct fs2open_ship_typekill
 {
-	char name[NAME_LENGTH];
-	ushort kills;
+  char name[NAME_LENGTH];
+  ushort kills;
 };
 
 

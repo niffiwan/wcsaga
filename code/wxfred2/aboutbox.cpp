@@ -21,16 +21,12 @@
 #include <wx/xrc/xmlres.h>
 
 
-BEGIN_EVENT_TABLE ( dlgAboutBox, wxDialog )
-END_EVENT_TABLE()
-
-
-dlgAboutBox::dlgAboutBox ( wxWindow *parent )
-	: wxDialog()
+BEGIN_EVENT_TABLE(dlgAboutBox, wxDialog) END_EVENT_TABLE()dlgAboutBox::dlgAboutBox(wxWindow * parent):wxDialog
+  ()
 {
-	wxXmlResource::Get()->LoadDialog ( this, parent, "dlgAboutBox" );
+  wxXmlResource::Get()->LoadDialog(this, parent, "dlgAboutBox");
 }
 
 dlgAboutBox::~dlgAboutBox()
-{}
-
+{
+}

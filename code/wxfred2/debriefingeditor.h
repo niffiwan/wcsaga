@@ -9,22 +9,20 @@
 #ifndef _DEBRIEFING_EDITOR_H
 #define _DEBRIEFING_EDITOR_H
 
-class dlgDebriefingEditor : public wxDialog
+class dlgDebriefingEditor:public wxDialog
 {
 public:
-	// constructor/destructors
-	dlgDebriefingEditor ( wxWindow *parent );
-	~dlgDebriefingEditor();
+  // constructor/destructors
+  dlgDebriefingEditor(wxWindow * parent);
+  ~dlgDebriefingEditor();
 
-	// event handlers
-	// event functions go here
+  // event handlers
+  // event functions go here
 
 protected:
-	// events
-	DECLARE_EVENT_TABLE()
-
-private:
-	// dialog control stuff goes here
+  // events
+DECLARE_EVENT_TABLE() private:
+  // dialog control stuff goes here
 };
 
 #endif

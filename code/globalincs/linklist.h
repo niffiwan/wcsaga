@@ -93,66 +93,65 @@ do {                                                \
 #define NOT_EMPTY(head)     ((head)->next != (head))
 #define EMPTY(head)         ((head)->next == (head))
 
-template <class StoreType>
-class linked_list
+template < class StoreType > class linked_list
 {
 protected:
-	StoreType *m_next;
-	StoreType *m_prev;
+  StoreType * m_next;
+  StoreType *m_prev;
 
-	int n_elem;
+  int n_elem;
 public:
-	linked_list()
-	{
-		m_next = ( StoreType * ) this;
-		m_prev = ( StoreType * ) this;
-		n_elem = 0;
-	}
+  linked_list()
+  {
+    m_next = (StoreType *) this;
+    m_prev = (StoreType *) this;
+    n_elem = 0;
+  }
 
-	~linked_list()
-	{
-		n_elem = 0;
-	}
+  ~linked_list()
+  {
+    n_elem = 0;
+  }
 
-	//Getting
-	StoreType *get_first()
-	{
-		return m_next;
-	}
+  //Getting
+  StoreType *get_first()
+  {
+    return m_next;
+  }
 
-	//Setting
-	void append ( StoreType *ptr )
-	{
-		ptr->m_prev = m_prev;
-		ptr->m_next = ( StoreType * ) this;
-		m_prev->m_next = ptr;
-		m_prev = ptr;
-		n_elem++;
-	}
+  //Setting
+  void append(StoreType * ptr)
+  {
+    ptr->m_prev = m_prev;
+    ptr->m_next = (StoreType *) this;
+    m_prev->m_next = ptr;
+    m_prev = ptr;
+    n_elem++;
+  }
 
-	void remove ( StoreType *ptr )
-	{
-		ptr->m_prev->m_next = ptr->m_next;
-		ptr->m_next->m_prev = ptr->m_prev;
-		ptr->m_next = 0;        //These should both be 0
-		ptr->m_prev = 0;        //But stupid MSVC doesn't like a NULL here
-		n_elem--;
-	}
+  void remove(StoreType * ptr)
+  {
+    ptr->m_prev->m_next = ptr->m_next;
+    ptr->m_next->m_prev = ptr->m_prev;
+    ptr->m_next = 0;            //These should both be 0
+    ptr->m_prev = 0;            //But stupid MSVC doesn't like a NULL here
+    n_elem--;
+  }
 
-	StoreType *get_next()
-	{
-		return m_next;
-	}
+  StoreType *get_next()
+  {
+    return m_next;
+  }
 
-	//Querying
-	bool is_end ( StoreType *ptr )
-	{
-		return ( ptr == this );
-	}
-	int get_num_elements()
-	{
-		return n_elem;
-	}
+  //Querying
+  bool is_end(StoreType * ptr)
+  {
+    return (ptr == this);
+  }
+  int get_num_elements()
+  {
+    return n_elem;
+  }
 };
 
 #endif

@@ -9,22 +9,20 @@
 #ifndef _ABOUT_BOX_H
 #define _ABOUT_BOX_H
 
-class dlgAboutBox : public wxDialog
+class dlgAboutBox:public wxDialog
 {
 public:
-	// constructor/destructors
-	dlgAboutBox ( wxWindow *parent );
-	~dlgAboutBox();
+  // constructor/destructors
+  dlgAboutBox(wxWindow * parent);
+  ~dlgAboutBox();
 
-	// event handlers
-	// event functions go here
+  // event handlers
+  // event functions go here
 
 protected:
-	// events
-	DECLARE_EVENT_TABLE()
-
-private:
-	// dialog control stuff goes here
+  // events
+DECLARE_EVENT_TABLE() private:
+  // dialog control stuff goes here
 };
 
 #endif

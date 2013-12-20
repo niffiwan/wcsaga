@@ -21,16 +21,12 @@
 #include <wx/xrc/xmlres.h>
 
 
-BEGIN_EVENT_TABLE ( dlgAsteroidFieldEditor, wxDialog )
-END_EVENT_TABLE()
-
-
-dlgAsteroidFieldEditor::dlgAsteroidFieldEditor ( wxWindow *parent )
-	: wxDialog()
+BEGIN_EVENT_TABLE(dlgAsteroidFieldEditor, wxDialog) END_EVENT_TABLE()dlgAsteroidFieldEditor::dlgAsteroidFieldEditor(wxWindow * parent):wxDialog
+  ()
 {
-	wxXmlResource::Get()->LoadDialog ( this, parent, "dlgAsteroidFieldEditor" );
+  wxXmlResource::Get()->LoadDialog(this, parent, "dlgAsteroidFieldEditor");
 }
 
 dlgAsteroidFieldEditor::~dlgAsteroidFieldEditor()
-{}
-
+{
+}

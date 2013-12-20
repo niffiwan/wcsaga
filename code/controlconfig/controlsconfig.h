@@ -38,15 +38,15 @@
 
 typedef struct config_item
 {
-	short key_default;  // default key bound to action
-	short joy_default;  // default joystick button bound to action
-	char tab;               // what tab (category) it belongs in
-	bool hasXSTR;           // whether we should translate this with an XSTR
-	char *text;             // describes the action in the config screen
-	char type;              // manner control should be checked in
-	short key_id;  // actual key bound to action
-	short joy_id;  // joystick button bound to action
-	int used;               // has control been used yet in mission?  If so, this is the timestamp
+  short key_default;            // default key bound to action
+  short joy_default;            // default joystick button bound to action
+  char tab;                     // what tab (category) it belongs in
+  bool hasXSTR;                 // whether we should translate this with an XSTR
+  char *text;                   // describes the action in the config screen
+  char type;                    // manner control should be checked in
+  short key_id;                 // actual key bound to action
+  short joy_id;                 // joystick button bound to action
+  int used;                     // has control been used yet in mission?  If so, this is the timestamp
 } config_item;
 
 // --------------------------------------------------
@@ -235,21 +235,21 @@ extern char **Joy_button_text;
 void control_config_common_init();
 
 void control_config_init();
-void control_config_do_frame ( float frametime );
+void control_config_do_frame(float frametime);
 void control_config_close();
 
 void control_config_cancel_exit();
 
 void control_config_reset_defaults();
-int translate_key_to_index ( char *key );
-char *translate_key ( char *key );
-char *textify_scancode ( int code );
-float check_control_timef ( int id );
-int check_control ( int id, int key = -1 );
-void control_get_axes_readings ( int *h, int *p, int *b, int *ta, int *tr );
-void control_used ( int id );
+int translate_key_to_index(char *key);
+char *translate_key(char *key);
+char *textify_scancode(int code);
+float check_control_timef(int id);
+int check_control(int id, int key = -1);
+void control_get_axes_readings(int *h, int *p, int *b, int *ta, int *tr);
+void control_used(int id);
 void control_config_clear();
-void clear_key_binding ( short key );
+void clear_key_binding(short key);
 void control_check_indicate();
 void control_config_clear_used_status();
 

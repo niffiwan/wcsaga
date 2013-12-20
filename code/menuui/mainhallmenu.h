@@ -16,10 +16,10 @@
 #define MAIN_HALLS_MAX          10      // Goober5000 - bumped down to 10; don't go above 256 (size of ubyte)
 
 // initialize the main hall proper
-void main_hall_init ( int main_hall_num );
+void main_hall_init(int main_hall_num);
 
 // do a frame for the main hall
-void main_hall_do ( float frametime );
+void main_hall_do(float frametime);
 
 // close the main hall proper
 void main_hall_close();
@@ -31,7 +31,7 @@ void main_hall_start_music();
 void main_hall_stop_music();
 
 // get the music index
-int main_hall_get_music_index ( int main_hall_num );
+int main_hall_get_music_index(int main_hall_num);
 
 // what main hall we're on
 int main_hall_id();

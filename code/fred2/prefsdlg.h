@@ -12,43 +12,45 @@
 /////////////////////////////////////////////////////////////////////////////
 // CPrefsDlg dialog
 
-class CPrefsDlg : public CDialog
+class CPrefsDlg:public CDialog
 {
-	// Construction
+  // Construction
 public:
-	CPrefsDlg ( CWnd *pParent = NULL ); // standard constructor
+  CPrefsDlg(CWnd * pParent = NULL);     // standard constructor
 
-	// Dialog Data
-	//{{AFX_DATA(CPrefsDlg)
-	enum { IDD = IDD_PREFERENCES };
-	BOOL    m_ConfirmDeleting;
-	BOOL    m_ShowCapitalShips;
-	BOOL    m_ShowElevations;
-	BOOL    m_ShowFighters;
-	BOOL    m_ShowGrid;
-	BOOL    m_ShowMiscObjects;
-	BOOL    m_ShowPlanets;
-	BOOL    m_ShowWaypoints;
-	BOOL    m_ShowStarfield;
-	//}}AFX_DATA
+  // Dialog Data
+  //{{AFX_DATA(CPrefsDlg)
+  enum
+  { IDD = IDD_PREFERENCES };
+  BOOL m_ConfirmDeleting;
+  BOOL m_ShowCapitalShips;
+  BOOL m_ShowElevations;
+  BOOL m_ShowFighters;
+  BOOL m_ShowGrid;
+  BOOL m_ShowMiscObjects;
+  BOOL m_ShowPlanets;
+  BOOL m_ShowWaypoints;
+  BOOL m_ShowStarfield;
+  //}}AFX_DATA
 
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPrefsDlg)
+  // Overrides
+  // ClassWizard generated virtual function overrides
+  //{{AFX_VIRTUAL(CPrefsDlg)
 public:
-	virtual BOOL Create ( LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT &rect, CWnd *pParentWnd, UINT nID, CCreateContext *pContext = NULL );
+    virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName,
+                        DWORD dwStyle, const RECT & rect, CWnd * pParentWnd,
+                        UINT nID, CCreateContext * pContext = NULL);
 protected:
-	virtual void DoDataExchange ( CDataExchange *pDX ); // DDX/DDV support
-	//}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange * pDX);   // DDX/DDV support
+  //}}AFX_VIRTUAL
 
-	// Implementation
+  // Implementation
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CPrefsDlg)
-	afx_msg void OnSaveDefaultPrefs();
-	afx_msg void OnClose();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-};
+  // Generated message map functions
+  //{{AFX_MSG(CPrefsDlg)
+    afx_msg void OnSaveDefaultPrefs();
+  afx_msg void OnClose();
+  //}}AFX_MSG
+  DECLARE_MESSAGE_MAP()};

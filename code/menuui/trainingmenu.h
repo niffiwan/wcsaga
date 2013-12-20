@@ -23,6 +23,6 @@
 //
 void training_menu_init();
 void training_menu_close();
-void training_menu_do_frame ( float frametime );
+void training_menu_do_frame(float frametime);
 
 #endif

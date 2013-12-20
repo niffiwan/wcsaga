@@ -25,12 +25,12 @@ struct net_player;
 
 typedef struct ping_struct
 {
-	float ping_start;                                       // time the current ping was sent out, or -1 if none
-	float ping_times[MAX_PINGS];                        // ping times for calculating the average
-	int num_pings;                                          // # of pings in the ping_times array
-	int ping_add;                                           // where to add the next ping
+  float ping_start;             // time the current ping was sent out, or -1 if none
+  float ping_times[MAX_PINGS];  // ping times for calculating the average
+  int num_pings;                // # of pings in the ping_times array
+  int ping_add;                 // where to add the next ping
 
-	int ping_avg;                                           // in ms, this is the only thing we should be concerned with
+  int ping_avg;                 // in ms, this is the only thing we should be concerned with
 } ping_struct;
 
 
@@ -42,27 +42,27 @@ typedef struct ping_struct
 void multi_ping_reset_players();
 
 // initialize the given ping struct
-void multi_ping_reset ( ping_struct *ps );
+void multi_ping_reset(ping_struct * ps);
 
 // start a ping - call this when sending a ping packet
-void multi_ping_start ( ping_struct *ps );
+void multi_ping_start(ping_struct * ps);
 
 // evaluate a pong return on the given struct
-void multi_ping_eval_pong ( ping_struct *ps );
+void multi_ping_eval_pong(ping_struct * ps);
 
 // send a ping to a specific player
-void multi_ping_send ( net_player *p );
+void multi_ping_send(net_player * p);
 
 // send a ping to the specified address
-void multi_ping_send ( net_addr *addr, ping_struct *ps );
+void multi_ping_send(net_addr * addr, ping_struct * ps);
 
 // send a ping to all players
 void multi_ping_send_all();
 
 // get the lowest existing ping in the ping struct, returning -1 if no pings
-int multi_ping_get_lowest ( ping_struct *ps );
+int multi_ping_get_lowest(ping_struct * ps);
 
 // (average ping + lowest ping)/2
-int multi_ping_lowest_avg ( ping_struct *ps );
+int multi_ping_lowest_avg(ping_struct * ps);
 
 #endif

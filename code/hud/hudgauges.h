@@ -50,12 +50,12 @@
 #define HUD_OFFSCREEN_RANGE                 32
 #define HUD_KILLS_GAUGE                         33
 #define HUD_ATTACKING_TARGET_COUNT          34
-#define HUD_TEXT_FLASH                          35                  // (formerly split up among emp, collision, etc)
+#define HUD_TEXT_FLASH                          35      // (formerly split up among emp, collision, etc)
 #define HUD_MESSAGE_BOX                         36
 #define HUD_SUPPORT_GAUGE                       37
 #define HUD_LAG_GAUGE                           38
 
-extern char *HUD_gauge_text[NUM_HUD_GAUGES];                    // defined in sexp.cpp!!!!
+extern char *HUD_gauge_text[NUM_HUD_GAUGES];    // defined in sexp.cpp!!!!
 
 
-#endif  /* __HUD_COMMON_H__ */
+#endif /* __HUD_COMMON_H__ */

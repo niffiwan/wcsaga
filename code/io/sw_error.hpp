@@ -89,27 +89,27 @@ typedef struct _SF_ERROR {
 
 #define DINPUT_DRIVER_ERR_BASE  0x500
 
-#define SUCCESS                 0x00                                        // successful
-#define SFERR_INVALID_OBJECT        MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 1)   // Invalid object ID
-#define SFERR_INVALID_PARAM         DIERR_INVALIDPARAM                      // Invalid parameters
-#define SFERR_NO_SUPPORT            DIERR_UNSUPPORTED                       // Function not supported
-#define SFERR_INVALID_DEVICE        DIERR_DEVICENOTREG                      // Device not found
-#define SFERR_FFDEVICE_MEMORY       DIERR_DEVICEFULL                        // Out of download RAM
-#define SFERR_END_OF_LIST           MAKE_FF_S(DINPUT_DRIVER_ERR_BASE + 6)   // End of the list
-#define SFERR_DEVICE_NACK           MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 7)   // Device NACK received
-#define SFERR_INVALID_STRUCT_SIZE   DIERR_INVALIDPARAM                      // Invalid structure passed
-#define SFERR_EFFECT_NOT_IN_DEVICE  DIERR_NOTDOWNLOADED                 // Effect was not downloaded, so
+#define SUCCESS                 0x00    // successful
+#define SFERR_INVALID_OBJECT        MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 1)       // Invalid object ID
+#define SFERR_INVALID_PARAM         DIERR_INVALIDPARAM  // Invalid parameters
+#define SFERR_NO_SUPPORT            DIERR_UNSUPPORTED   // Function not supported
+#define SFERR_INVALID_DEVICE        DIERR_DEVICENOTREG  // Device not found
+#define SFERR_FFDEVICE_MEMORY       DIERR_DEVICEFULL    // Out of download RAM
+#define SFERR_END_OF_LIST           MAKE_FF_S(DINPUT_DRIVER_ERR_BASE + 6)       // End of the list
+#define SFERR_DEVICE_NACK           MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 7)       // Device NACK received
+#define SFERR_INVALID_STRUCT_SIZE   DIERR_INVALIDPARAM  // Invalid structure passed
+#define SFERR_EFFECT_NOT_IN_DEVICE  DIERR_NOTDOWNLOADED // Effect was not downloaded, so
 // cannot unload.
-#define SFERR_RAW_OUT_DATAEVENT_CREATION    MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 10)  // Could not create Event
-#define SFERR_RAW_OUT_THREAD_CREATION       MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 11)  // Could not create a thread
-#define SFERR_EFFECT_STATUS_BUSY DIERR_EFFECTPLAYING                                // Device busy playing Effect
-#define SFERR_OUT_OF_FF_MEMORY      DIERR_OUTOFMEMORY                               // FF system has run out of memory
+#define SFERR_RAW_OUT_DATAEVENT_CREATION    MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 10)      // Could not create Event
+#define SFERR_RAW_OUT_THREAD_CREATION       MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 11)      // Could not create a thread
+#define SFERR_EFFECT_STATUS_BUSY DIERR_EFFECTPLAYING    // Device busy playing Effect
+#define SFERR_OUT_OF_FF_MEMORY      DIERR_OUTOFMEMORY   // FF system has run out of memory
 //  cannot create new Effect
-#define SFERR_SYSTEM_INIT           MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 14)  // Could not create SWForce
-#define SFERR_DRIVER_ERROR          MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 15)  // Driver error detected
-#define SFERR_NON_FF_DEVICE         MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 16)  // This is a non-FF device, driver not found
-#define SFERR_INVALID_HAL_OBJECT    MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 17)  // HAL cannot emulate this object
-#define SFERR_INVALID_MEMBER_VALUE  DIERR_INVALIDPARAM                      // Data structure has invalid member value
+#define SFERR_SYSTEM_INIT           MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 14)      // Could not create SWForce
+#define SFERR_DRIVER_ERROR          MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 15)      // Driver error detected
+#define SFERR_NON_FF_DEVICE         MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 16)      // This is a non-FF device, driver not found
+#define SFERR_INVALID_HAL_OBJECT    MAKE_FF_E(DINPUT_DRIVER_ERR_BASE + 17)      // HAL cannot emulate this object
+#define SFERR_INVALID_MEMBER_VALUE  DIERR_INVALIDPARAM  // Data structure has invalid member value
 
 // VFX_ error codes
 #define VFX_ERR_BASE                        DINPUT_DRIVER_ERR_BASE + 100
@@ -131,14 +131,13 @@ typedef struct _SF_ERROR {
 
 // SideWinder Driver Error codes
 #define SWDEV_ERR_BASE                      DINPUT_DRIVER_ERR_BASE + 200
-#define SWDEV_ERR_INVALID_ID                MAKE_FF_E(SWDEV_ERR_BASE + 1)  // Invalid Download ID
-#define SWDEV_ERR_INVALID_PARAM             MAKE_FF_E(SWDEV_ERR_BASE + 2)  // Invalid Download Parameter
-#define SWDEV_ERR_CHECKSUM                  MAKE_FF_E(SWDEV_ERR_BASE + 3)  // Invalid Checksum in COMM Packet
-#define SWDEV_ERR_TYPE_FULL                 MAKE_FF_E(SWDEV_ERR_BASE + 4)  // No More RAM space for Effect Type
-#define SWDEV_ERR_UNKNOWN_CMD               MAKE_FF_E(SWDEV_ERR_BASE + 5)  // Unrecognized Device command
-#define SWDEV_ERR_PLAYLIST_FULL             MAKE_FF_E(SWDEV_ERR_BASE + 6)  // Play List is full, cannot play any more Effects
-#define SWDEV_ERR_PROCESSLIST_FULL          MAKE_FF_E(SWDEV_ERR_BASE + 7)  // Process List is full, cannot download 
+#define SWDEV_ERR_INVALID_ID                MAKE_FF_E(SWDEV_ERR_BASE + 1)       // Invalid Download ID
+#define SWDEV_ERR_INVALID_PARAM             MAKE_FF_E(SWDEV_ERR_BASE + 2)       // Invalid Download Parameter
+#define SWDEV_ERR_CHECKSUM                  MAKE_FF_E(SWDEV_ERR_BASE + 3)       // Invalid Checksum in COMM Packet
+#define SWDEV_ERR_TYPE_FULL                 MAKE_FF_E(SWDEV_ERR_BASE + 4)       // No More RAM space for Effect Type
+#define SWDEV_ERR_UNKNOWN_CMD               MAKE_FF_E(SWDEV_ERR_BASE + 5)       // Unrecognized Device command
+#define SWDEV_ERR_PLAYLIST_FULL             MAKE_FF_E(SWDEV_ERR_BASE + 6)       // Play List is full, cannot play any more Effects
+#define SWDEV_ERR_PROCESSLIST_FULL          MAKE_FF_E(SWDEV_ERR_BASE + 7)       // Process List is full, cannot download
 
 
 #endif // of ifndef SW_Error_SEEN
-

@@ -46,11 +46,11 @@ void pause_debug_close();
 
 enum
 {
-	PAUSE_TYPE_NORMAL,
-	PAUSE_TYPE_VIEWER
+  PAUSE_TYPE_NORMAL,
+  PAUSE_TYPE_VIEWER
 };
 
-void pause_set_type ( int type );
+void pause_set_type(int type);
 int pause_get_type();
 
 #endif

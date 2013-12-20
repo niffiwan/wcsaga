@@ -24,20 +24,20 @@
 
 typedef struct Cfile_block
 {
-	int type;               // CFILE_BLOCK_UNUSED, CFILE_BLOCK_USED
-	int dir_type;       // directory location
-	FILE *fp;               // File pointer if opening an individual file
-	void *data;         // Pointer for memory-mapped file access.  NULL if not mem-mapped.
+  int type;                     // CFILE_BLOCK_UNUSED, CFILE_BLOCK_USED
+  int dir_type;                 // directory location
+  FILE *fp;                     // File pointer if opening an individual file
+  void *data;                   // Pointer for memory-mapped file access.  NULL if not mem-mapped.
 #ifdef _WIN32
-	HANDLE  hInFile;            // Handle from CreateFile()
-	HANDLE  hMapFile;       // Handle from CreateFileMapping()
+  HANDLE hInFile;               // Handle from CreateFile()
+  HANDLE hMapFile;              // Handle from CreateFileMapping()
 #else
-	//  int     fd;             // file descriptor
-	size_t data_length; // length of data for mmap
+  //  int     fd;             // file descriptor
+  size_t data_length;           // length of data for mmap
 #endif
-	int lib_offset;
-	int raw_position;
-	int size;               // for packed files
+  int lib_offset;
+  int raw_position;
+  int size;                     // for packed files
 
 } Cfile_block;
 
@@ -46,6 +46,7 @@ extern Cfile_block Cfile_block_list[MAX_CFILE_BLOCKS];
 extern CFILE Cfile_list[MAX_CFILE_BLOCKS];
 
 // Called once to setup the low-level reading code.
-void cf_init_lowlevel_read_code ( CFILE *cfile, int lib_offset, int size, int pos );
+void cf_init_lowlevel_read_code(CFILE * cfile, int lib_offset, int size,
+                                int pos);
 
 #endif

@@ -20,26 +20,26 @@
 
 typedef struct cutscene_info
 {
-	char filename[MAX_FILENAME_LEN];
-	char name[NAME_LENGTH];
-	char *description;
-	int cd;
+  char filename[MAX_FILENAME_LEN];
+  char name[NAME_LENGTH];
+  char *description;
+  int cd;
 } cutscene_info;
 
-extern SCP_vector<cutscene_info> Cutscenes;
+extern SCP_vector < cutscene_info > Cutscenes;
 extern size_t Num_cutscenes;
 extern int Cutscenes_viewable;
 
 // initializa table data
 void cutscene_init();
-int cutscene_get_cd_num ( char *filename );
+int cutscene_get_cd_num(char *filename);
 
 
 void cutscenes_screen_init();
 void cutscenes_screen_close();
 void cutscenes_screen_do_frame();
 
-int cutscenes_validate_cd ( char *mve_name, int prompt_for_cd = 1 );
-void cutscene_mark_viewable ( char *filename );
+int cutscenes_validate_cd(char *mve_name, int prompt_for_cd = 1);
+void cutscene_mark_viewable(char *filename);
 
 #endif

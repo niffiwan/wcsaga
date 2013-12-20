@@ -36,38 +36,36 @@ struct object;
 typedef struct iff_info
 {
 
-	// required stuff
-	char iff_name[NAME_LENGTH];
-	int color_index;                            // treat this as private and use iff_get_color or iff_get_color_by_team
+  // required stuff
+  char iff_name[NAME_LENGTH];
+  int color_index;              // treat this as private and use iff_get_color or iff_get_color_by_team
 
-	// relationships
-	int attackee_bitmask;                       // treat this as private and use iff_get_attackee_mask or iff_x_attacks_y
-	int attackee_bitmask_all_teams_at_war;      // treat this as private and use iff_get_attackee_mask or iff_x_attacks_y
-	int observed_color_index[MAX_IFFS];         // treat this as private and use iff_get_color or iff_get_color_by_team
+  // relationships
+  int attackee_bitmask;         // treat this as private and use iff_get_attackee_mask or iff_x_attacks_y
+  int attackee_bitmask_all_teams_at_war;        // treat this as private and use iff_get_attackee_mask or iff_x_attacks_y
+  int observed_color_index[MAX_IFFS];   // treat this as private and use iff_get_color or iff_get_color_by_team
 
-	// flags
-	int flags;
-	int default_parse_flags;
-	int default_parse_flags2;
+  // flags
+  int flags;
+  int default_parse_flags;
+  int default_parse_flags2;
 
-	// used internally, not parsed
-	int ai_rearm_timestamp;
+  // used internally, not parsed
+  int ai_rearm_timestamp;
 
-	// constructor to initialize everything to 0
-	iff_info()
-		: color_index ( 0 ),
-		  attackee_bitmask ( 0 ),
-		  attackee_bitmask_all_teams_at_war ( 0 ),
-		  flags ( 0 ),
-		  default_parse_flags ( 0 ),
-		  default_parse_flags2 ( 0 ),
-		  ai_rearm_timestamp ( 0 )
-	{
-		memset ( iff_name, 0, sizeof ( iff_name ) );
-		memset ( observed_color_index, 0, sizeof ( observed_color_index ) );
-	}
+  // constructor to initialize everything to 0
+    iff_info():color_index(0),
+    attackee_bitmask(0),
+    attackee_bitmask_all_teams_at_war(0),
+    flags(0),
+    default_parse_flags(0), default_parse_flags2(0), ai_rearm_timestamp(0)
+  {
+    memset(iff_name, 0, sizeof(iff_name));
+    memset(observed_color_index, 0, sizeof(observed_color_index));
+  }
 
-} iff_info;
+}
+iff_info;
 
 
 extern int Num_iffs;
@@ -82,25 +80,27 @@ extern int radar_iff_color[5][2][4];
 extern void iff_init();
 
 // search for iff
-extern int iff_lookup ( char *iff_name );
+extern int iff_lookup(char *iff_name);
 
 // color stuff
-extern int iff_get_alpha_value ( bool is_bright );
-extern int iff_init_color ( int r, int g, int b );
-extern color *iff_get_color ( int color_index, int is_bright );
-extern color *iff_get_color_by_team ( int team, int seen_from_team, int is_bright );
-extern color *iff_get_color_by_team_and_object ( int team, int seen_from_team, int is_bright, object *objp );
+extern int iff_get_alpha_value(bool is_bright);
+extern int iff_init_color(int r, int g, int b);
+extern color *iff_get_color(int color_index, int is_bright);
+extern color *iff_get_color_by_team(int team, int seen_from_team,
+                                    int is_bright);
+extern color *iff_get_color_by_team_and_object(int team, int seen_from_team,
+                                               int is_bright, object * objp);
 
 // attack stuff
 // NB: As far as the differences between I attack him and he attacks me, think of a hidden traitor on your own team.
 // If he fires at you, you don't react unless you are coded to attack him, because you are oblivious.
-extern int iff_get_attackee_mask ( int attacker_team );
-extern int iff_get_attacker_mask ( int attackee_team );
-extern int iff_x_attacks_y ( int team_x, int team_y );
+extern int iff_get_attackee_mask(int attacker_team);
+extern int iff_get_attacker_mask(int attackee_team);
+extern int iff_x_attacks_y(int team_x, int team_y);
 
 // mask stuff
-extern int iff_get_mask ( int team );
-extern int iff_matches_mask ( int team, int mask );
+extern int iff_get_mask(int team);
+extern int iff_matches_mask(int team, int mask);
 
 
 #endif

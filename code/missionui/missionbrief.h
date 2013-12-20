@@ -34,7 +34,7 @@
 
 #define NUM_BRIEFING_REGIONS    (NUM_COMMON_REGIONS + 8)
 
-extern int Brief_multitext_bitmap;  // bitmap for multiplayer chat window
+extern int Brief_multitext_bitmap;      // bitmap for multiplayer chat window
 extern int Brief_background_bitmap;
 extern UI_INPUTBOX Common_multi_text_inputbox[3];
 
@@ -43,20 +43,20 @@ extern UI_INPUTBOX Common_multi_text_inputbox[3];
 extern int Briefing_music_handle;
 extern int Briefing_music_begin_timestamp;
 
-extern int Briefing_paused; // for stopping audio and stage progression
+extern int Briefing_paused;     // for stopping audio and stage progression
 
 struct brief_icon;
 
 void brief_init();
 void brief_close();
-void brief_do_frame ( float frametime );
+void brief_do_frame(float frametime);
 void brief_unhide_buttons();
 brief_icon *brief_get_closeup_icon();
 void brief_turn_off_closeup_icon();
 
 void briefing_stop_music();
 void briefing_start_music();
-void briefing_load_music ( char *fname );
+void briefing_load_music(char *fname);
 void brief_stop_voices();
 
 void brief_pause();

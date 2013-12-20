@@ -21,7 +21,7 @@
 #include <windows.h>
 
 #ifndef PURE
-#   define PURE = 0
+#define PURE = 0
 #endif
 
 /* PUBLIC - use these */
@@ -32,40 +32,45 @@
 class SCP_IDumpHandler abstract
 {
 public:
-	virtual bool ResolveSymbols( ) PURE;
-	virtual void OnBegin( ) PURE;
-	virtual void OnEntry ( void *address, const char *module, const char *symbol ) PURE;
-	virtual void OnError ( const char *error ) PURE;
-	virtual void OnEnd( ) PURE;
+  virtual bool ResolveSymbols() PURE;
+  virtual void OnBegin() PURE;
+  virtual void OnEntry(void *address, const char *module,
+                       const char *symbol) PURE;
+  virtual void OnError(const char *error) PURE;
+  virtual void OnEnd() PURE;
 };
 
-extern HRESULT SCP_DumpStack ( SCP_IDumpHandler *pISH );
+extern HRESULT SCP_DumpStack(SCP_IDumpHandler * pISH);
 
 /* INTERNAL - please don't use these */
 #define SCP_MSPDBCS_MAX_SYMBOL_LENGTH 1000
 #define SCP_MSPDBCS_MAX_MODULE_LENGTH _MAX_PATH
-#define SCP_MSPDBCS_MAX_STACK_FRAMES 100 /* arbitrary */
+#define SCP_MSPDBCS_MAX_STACK_FRAMES 100        /* arbitrary */
 
 struct SCP_mspdbcs_SDumpStackThreadInfo
 {
-	HANDLE hThread;
-	HANDLE hProcess;
-	SCP_IDumpHandler *pIDS;
+  HANDLE hThread;
+  HANDLE hProcess;
+  SCP_IDumpHandler *pIDS;
 };
 
 struct SCP_mspdbcs_SDumpStackSymbolInfo
 {
-	ULONG_PTR dwAddress;
-	DWORD64 dwOffset; /* Will be truncated to DWORD under Win32 */
-	char szModule[ SCP_MSPDBCS_MAX_MODULE_LENGTH ];
-	char szSymbol[ SCP_MSPDBCS_MAX_SYMBOL_LENGTH ];
+  ULONG_PTR dwAddress;
+  DWORD64 dwOffset;             /* Will be truncated to DWORD under Win32 */
+  char szModule[SCP_MSPDBCS_MAX_MODULE_LENGTH];
+  char szSymbol[SCP_MSPDBCS_MAX_SYMBOL_LENGTH];
 };
 
 /* INTERNAL FUNCTIONS */
-extern BOOL SCP_mspdbcs_ResolveSymbol ( HANDLE hProcess, UINT_PTR dwAddress, SCP_mspdbcs_SDumpStackThreadInfo &siSymbol );
-extern LPVOID __stdcall SCP_mspdbcs_FunctionTableAccess ( HANDLE hProcess, DWORD64 dwPCAddress );
-extern DWORD64 __stdcall SCP_mspdbcs_GetModuleBase ( HANDLE hProcess, DWORD64 returnAddress );
-extern DWORD WINAPI SCP_mspdbcs_DumpStackThread ( LPVOID pv );
+extern BOOL SCP_mspdbcs_ResolveSymbol(HANDLE hProcess, UINT_PTR dwAddress,
+                                      SCP_mspdbcs_SDumpStackThreadInfo &
+                                      siSymbol);
+extern LPVOID __stdcall SCP_mspdbcs_FunctionTableAccess(HANDLE hProcess,
+                                                        DWORD64 dwPCAddress);
+extern DWORD64 __stdcall SCP_mspdbcs_GetModuleBase(HANDLE hProcess,
+                                                   DWORD64 returnAddress);
+extern DWORD WINAPI SCP_mspdbcs_DumpStackThread(LPVOID pv);
 
 #endif // PDB_DEBUGGING
 

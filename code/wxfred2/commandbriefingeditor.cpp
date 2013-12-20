@@ -21,16 +21,12 @@
 #include <wx/xrc/xmlres.h>
 
 
-BEGIN_EVENT_TABLE ( dlgCommandBriefingEditor, wxDialog )
-END_EVENT_TABLE()
-
-
-dlgCommandBriefingEditor::dlgCommandBriefingEditor ( wxWindow *parent )
-	: wxDialog()
+BEGIN_EVENT_TABLE(dlgCommandBriefingEditor, wxDialog) END_EVENT_TABLE()dlgCommandBriefingEditor::dlgCommandBriefingEditor(wxWindow * parent):wxDialog
+  ()
 {
-	wxXmlResource::Get()->LoadDialog ( this, parent, "dlgCommandBriefingEditor" );
+  wxXmlResource::Get()->LoadDialog(this, parent, "dlgCommandBriefingEditor");
 }
 
 dlgCommandBriefingEditor::~dlgCommandBriefingEditor()
-{}
-
+{
+}

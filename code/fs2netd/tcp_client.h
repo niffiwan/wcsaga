@@ -26,18 +26,20 @@ struct player;
 struct netgame_info;
 
 
-int FS2NetD_CheckSingleMission ( const char *m_name, uint crc32, bool do_send );
+int FS2NetD_CheckSingleMission(const char *m_name, uint crc32, bool do_send);
 
-int FS2NetD_SendPlayerData ( const char *player_name, player *pl, bool do_send );
-int FS2NetD_GetPlayerData ( const char *player_name, player *pl, bool can_create, bool do_send );
+int FS2NetD_SendPlayerData(const char *player_name, player * pl,
+                           bool do_send);
+int FS2NetD_GetPlayerData(const char *player_name, player * pl,
+                          bool can_create, bool do_send);
 
-int FS2NetD_GetBanList ( SCP_vector<std::string> &mask_list, bool do_send );
+int FS2NetD_GetBanList(SCP_vector < std::string > &mask_list, bool do_send);
 
-int FS2NetD_GetMissionsList ( SCP_vector<file_record> &m_list, bool do_send );
+int FS2NetD_GetMissionsList(SCP_vector < file_record > &m_list, bool do_send);
 
-int FS2NetD_ValidateTableList ( bool do_send );
+int FS2NetD_ValidateTableList(bool do_send);
 
-int FS2NetD_Login ( const char *username, const char *password, bool do_send );
+int FS2NetD_Login(const char *username, const char *password, bool do_send);
 int FS2NetD_CheckValidID();
 void FS2NetD_CheckDuplicateLogin();
 
@@ -47,10 +49,10 @@ void FS2NetD_SendServerDisconnect();
 
 void FS2NetD_RequestServerList();
 
-void FS2NetD_GameCountUpdate ( char *chan_name );
+void FS2NetD_GameCountUpdate(char *chan_name);
 
 void FS2NetD_Ping();
-void FS2NetD_Pong ( int tstamp );
+void FS2NetD_Pong(int tstamp);
 
 
 

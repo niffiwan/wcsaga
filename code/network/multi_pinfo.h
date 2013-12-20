@@ -25,7 +25,7 @@ struct net_player;
 //
 
 // fire up the player info popup
-void multi_pinfo_popup ( net_player *np );
+void multi_pinfo_popup(net_player * np);
 
 // is the pilot info popup currently active?
 int multi_pinfo_popup_active();
@@ -34,6 +34,6 @@ int multi_pinfo_popup_active();
 void multi_pinfo_popup_kill();
 
 // notify the popup that a player has left
-void multi_pinfo_notify_drop ( net_player *np );
+void multi_pinfo_notify_drop(net_player * np);
 
 #endif

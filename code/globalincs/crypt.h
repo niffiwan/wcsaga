@@ -15,6 +15,6 @@
 // define for the length of a crypted string
 #define CRYPT_STRING_LENGTH     17
 
-char *jcrypt ( char *plainstring );
+char *jcrypt(char *plainstring);
 
 #endif

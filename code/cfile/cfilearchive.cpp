@@ -19,7 +19,7 @@
 #include <io.h>
 #include <direct.h>
 #include <windows.h>
-#include <winbase.h>        /* needed for memory mapping of file functions */
+#include <winbase.h>            /* needed for memory mapping of file functions */
 #endif
 
 #include "cfile/cfile.h"
@@ -31,31 +31,32 @@
 
 // Called once to setup the low-level reading code.
 
-void cf_init_lowlevel_read_code ( CFILE *cfile, int lib_offset, int size, int pos )
+void cf_init_lowlevel_read_code(CFILE * cfile, int lib_offset, int size,
+                                int pos)
 {
-	Assert ( cfile != NULL );
+  Assert(cfile != NULL);
 
-	Cfile_block *cb;
-	Assert ( cfile->id >= 0 && cfile->id < MAX_CFILE_BLOCKS );
-	cb = &Cfile_block_list[cfile->id];
+  Cfile_block *cb;
+  Assert(cfile->id >= 0 && cfile->id < MAX_CFILE_BLOCKS);
+  cb = &Cfile_block_list[cfile->id];
 
-	cb->lib_offset = lib_offset;
-	cb->raw_position = pos;
-	cb->size = size;
+  cb->lib_offset = lib_offset;
+  cb->raw_position = pos;
+  cb->size = size;
 
-	if ( cb->fp )
-	{
-		if ( cb->lib_offset )
-		{
-			fseek ( cb->fp, cb->lib_offset, SEEK_SET );
-		}
+  if (cb->fp)
+    {
+      if (cb->lib_offset)
+        {
+          fseek(cb->fp, cb->lib_offset, SEEK_SET);
+        }
 
 #if defined(CHECK_POSITION) && !defined(NDEBUG)
-		int raw_position;
-		raw_position = ftell ( cb->fp ) - cb->lib_offset;
-		Assert ( raw_position == cb->raw_position );
+      int raw_position;
+      raw_position = ftell(cb->fp) - cb->lib_offset;
+      Assert(raw_position == cb->raw_position);
 #endif
-	}
+    }
 }
 
 
@@ -66,39 +67,39 @@ void cf_init_lowlevel_read_code ( CFILE *cfile, int lib_offset, int size, int po
 // past the end of the file. It returns 0 if the current position is not end of file.
 // There is no error return.
 
-int cfeof ( CFILE *cfile )
+int cfeof(CFILE * cfile)
 {
-	Assert ( cfile != NULL );
+  Assert(cfile != NULL);
 
-	Cfile_block *cb;
-	Assert ( cfile->id >= 0 && cfile->id < MAX_CFILE_BLOCKS );
-	cb = &Cfile_block_list[cfile->id];
+  Cfile_block *cb;
+  Assert(cfile->id >= 0 && cfile->id < MAX_CFILE_BLOCKS);
+  cb = &Cfile_block_list[cfile->id];
 
-	int result;
+  int result;
 
-	result = 0;
+  result = 0;
 
-	// cfeof() not supported for memory-mapped files
-	Assert ( !cb->data );
+  // cfeof() not supported for memory-mapped files
+  Assert(!cb->data);
 
-	Assert ( cb->fp != NULL );
+  Assert(cb->fp != NULL);
 
 #if defined(CHECK_POSITION) && !defined(NDEBUG)
-	int raw_position;
-	raw_position = ftell ( cb->fp ) - cb->lib_offset;
-	Assert ( raw_position == cb->raw_position );
+  int raw_position;
+  raw_position = ftell(cb->fp) - cb->lib_offset;
+  Assert(raw_position == cb->raw_position);
 #endif
 
-	if ( cb->raw_position >= cb->size )
-	{
-		result = 1;
-	}
-	else
-	{
-		result = 0;
-	}
+  if (cb->raw_position >= cb->size)
+    {
+      result = 1;
+    }
+  else
+    {
+      result = 0;
+    }
 
-	return result;
+  return result;
 }
 
 // cftell() returns offset into file
@@ -106,25 +107,25 @@ int cfeof ( CFILE *cfile )
 // returns:  success ==> offset into the file
 //           error   ==> -1
 //
-int cftell ( CFILE *cfile )
+int cftell(CFILE * cfile)
 {
-	Assert ( cfile != NULL );
-	Cfile_block *cb;
-	Assert ( cfile->id >= 0 && cfile->id < MAX_CFILE_BLOCKS );
-	cb = &Cfile_block_list[cfile->id];
+  Assert(cfile != NULL);
+  Cfile_block *cb;
+  Assert(cfile->id >= 0 && cfile->id < MAX_CFILE_BLOCKS);
+  cb = &Cfile_block_list[cfile->id];
 
-	// Doesn't work for memory mapped files
-	Assert ( !cb->data );
+  // Doesn't work for memory mapped files
+  Assert(!cb->data);
 
-	Assert ( cb->fp != NULL );
+  Assert(cb->fp != NULL);
 
 #if defined(CHECK_POSITION) && !defined(NDEBUG)
-	int raw_position;
-	raw_position = ftell ( cb->fp ) - cb->lib_offset;
-	Assert ( raw_position == cb->raw_position );
+  int raw_position;
+  raw_position = ftell(cb->fp) - cb->lib_offset;
+  Assert(raw_position == cb->raw_position);
 #endif
 
-	return cb->raw_position;
+  return cb->raw_position;
 }
 
 
@@ -133,49 +134,49 @@ int cftell ( CFILE *cfile )
 // returns:   success ==> 0
 //            error   ==> non-zero
 //
-int cfseek ( CFILE *cfile, int offset, int where )
+int cfseek(CFILE * cfile, int offset, int where)
 {
 
-	Assert ( cfile != NULL );
-	Cfile_block *cb;
-	Assert ( cfile->id >= 0 && cfile->id < MAX_CFILE_BLOCKS );
-	cb = &Cfile_block_list[cfile->id];
+  Assert(cfile != NULL);
+  Cfile_block *cb;
+  Assert(cfile->id >= 0 && cfile->id < MAX_CFILE_BLOCKS);
+  cb = &Cfile_block_list[cfile->id];
 
 
-	// TODO: seek to offset in memory mapped file
-	Assert ( !cb->data );
-	Assert ( cb->fp != NULL );
+  // TODO: seek to offset in memory mapped file
+  Assert(!cb->data);
+  Assert(cb->fp != NULL);
 
-	int goal_position;
+  int goal_position;
 
-	switch ( where )
-	{
-	case CF_SEEK_SET:
-		goal_position = offset + cb->lib_offset;
-		break;
-	case CF_SEEK_CUR:
-	{
-		goal_position = cb->raw_position + offset + cb->lib_offset;
-	}
-	break;
-	case CF_SEEK_END:
-		goal_position = cb->size + offset + cb->lib_offset;
-		break;
-	default:
-		Int3();
-		return 1;
-	}
+  switch (where)
+    {
+    case CF_SEEK_SET:
+      goal_position = offset + cb->lib_offset;
+      break;
+    case CF_SEEK_CUR:
+      {
+        goal_position = cb->raw_position + offset + cb->lib_offset;
+      }
+      break;
+    case CF_SEEK_END:
+      goal_position = cb->size + offset + cb->lib_offset;
+      break;
+    default:
+      Int3();
+      return 1;
+    }
 
-	int result = fseek ( cb->fp, goal_position, SEEK_SET );
-	cb->raw_position = goal_position - cb->lib_offset;
+  int result = fseek(cb->fp, goal_position, SEEK_SET);
+  cb->raw_position = goal_position - cb->lib_offset;
 
 #if defined(CHECK_POSITION) && !defined(NDEBUG)
-	int tmp_offset;
-	tmp_offset = ( int ) ftell ( cb->fp ) - cb->lib_offset;
-	Assert ( tmp_offset == cb->raw_position );
+  int tmp_offset;
+  tmp_offset = (int) ftell(cb->fp) - cb->lib_offset;
+  Assert(tmp_offset == cb->raw_position);
 #endif
 
-	return result;
+  return result;
 }
 
 
@@ -184,79 +185,78 @@ int cfseek ( CFILE *cfile, int offset, int where )
 // returns:   returns the number of full elements read
 //
 //
-int cfread ( void *buf, int elsize, int nelem, CFILE *cfile )
+int cfread(void *buf, int elsize, int nelem, CFILE * cfile)
 {
-	if ( !cf_is_valid ( cfile ) )
-		return 0;
+  if (!cf_is_valid(cfile))
+    return 0;
 
-	int size = elsize * nelem;
+  int size = elsize * nelem;
 
-	if ( buf == NULL || size <= 0 )
-		return 0;
+  if (buf == NULL || size <= 0)
+    return 0;
 
-	Cfile_block *cb = &Cfile_block_list[cfile->id];
+  Cfile_block *cb = &Cfile_block_list[cfile->id];
 
-	// cfread() not supported for memory-mapped files
-	if ( cb->data != NULL )
-	{
-		Warning ( LOCATION, "Writing is not supported for mem-mapped files" );
-		return 0;
-	}
+  // cfread() not supported for memory-mapped files
+  if (cb->data != NULL)
+    {
+      Warning(LOCATION, "Writing is not supported for mem-mapped files");
+      return 0;
+    }
 
-	if ( ( cb->raw_position + size ) > cb->size )
-	{
-		size = cb->size - cb->raw_position;
-		if ( size < 1 )
-		{
-			return 0;
-		}
-		//mprintf(( "CFILE: EOF encountered in file\n" ));
-	}
+  if ((cb->raw_position + size) > cb->size)
+    {
+      size = cb->size - cb->raw_position;
+      if (size < 1)
+        {
+          return 0;
+        }
+      //mprintf(( "CFILE: EOF encountered in file\n" ));
+    }
 
-	int bytes_read = fread ( buf, 1, size, cb->fp );
-	if ( bytes_read > 0 )
-	{
-		cb->raw_position += bytes_read;
-	}
+  int bytes_read = fread(buf, 1, size, cb->fp);
+  if (bytes_read > 0)
+    {
+      cb->raw_position += bytes_read;
+    }
 
 #if defined(CHECK_POSITION) && !defined(NDEBUG)
-	int tmp_offset;
-	tmp_offset = ftell ( cb->fp ) - cb->lib_offset;
-	Assert ( tmp_offset == cb->raw_position );
+  int tmp_offset;
+  tmp_offset = ftell(cb->fp) - cb->lib_offset;
+  Assert(tmp_offset == cb->raw_position);
 #endif
 
-	return bytes_read / elsize;
+  return bytes_read / elsize;
 
 }
 
-int cfread_lua_number ( double *buf, CFILE *cfile )
+int cfread_lua_number(double *buf, CFILE * cfile)
 {
-	if ( !cf_is_valid ( cfile ) )
-		return 0;
+  if (!cf_is_valid(cfile))
+    return 0;
 
-	if ( buf == NULL )
-		return 0;
+  if (buf == NULL)
+    return 0;
 
-	Cfile_block *cb = &Cfile_block_list[cfile->id];
+  Cfile_block *cb = &Cfile_block_list[cfile->id];
 
-	// cfread() not supported for memory-mapped files
-	if ( cb->data != NULL )
-	{
-		Warning ( LOCATION, "Writing is not supported for mem-mapped files" );
-		return 0;
-	}
+  // cfread() not supported for memory-mapped files
+  if (cb->data != NULL)
+    {
+      Warning(LOCATION, "Writing is not supported for mem-mapped files");
+      return 0;
+    }
 
-	long orig_pos = ftell ( cb->fp );
-	int items_read = fscanf ( cb->fp, LUA_NUMBER_SCAN, buf );
-	cb->raw_position += ftell ( cb->fp ) - orig_pos;
+  long orig_pos = ftell(cb->fp);
+  int items_read = fscanf(cb->fp, LUA_NUMBER_SCAN, buf);
+  cb->raw_position += ftell(cb->fp) - orig_pos;
 
 #if defined(CHECK_POSITION) && !defined(NDEBUG)
-	int tmp_offset;
-	tmp_offset = ftell ( cb->fp ) - cb->lib_offset;
-	Assert ( tmp_offset == cb->raw_position );
+  int tmp_offset;
+  tmp_offset = ftell(cb->fp) - cb->lib_offset;
+  Assert(tmp_offset == cb->raw_position);
 #endif
 
-	return items_read;
+  return items_read;
 
 }
-

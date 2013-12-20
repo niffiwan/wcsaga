@@ -6,10 +6,13 @@
 
 void dbugfile_init();
 void dbugfile_deinit();
-void dbugfile_sprintf ( int line, char *file, const char *format, ... );
-void dbugfile_print_matrix_3x3 ( int line, char *file, float *matrix, char *text );
-void dbugfile_print_matrix_4x4 ( int line, char *file, float *matrix, char *text );
-void dbugfile_print_counter ( int line, char *file, int counter_num, char *string );
+void dbugfile_sprintf(int line, char *file, const char *format, ...);
+void dbugfile_print_matrix_3x3(int line, char *file, float *matrix,
+                               char *text);
+void dbugfile_print_matrix_4x4(int line, char *file, float *matrix,
+                               char *text);
+void dbugfile_print_counter(int line, char *file, int counter_num,
+                            char *string);
 
 #ifdef DBUGFILE_ACTIVE
 
@@ -63,4 +66,3 @@ extern int dbugfile_counters[MAX_COUNTERS];
 #endif
 
 #endif
-

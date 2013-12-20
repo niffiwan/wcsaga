@@ -23,7 +23,7 @@
 struct wing;
 struct p_dock_instance;
 
-#define NUM_NEBULAS         3               // how many background nebulas we have altogether
+#define NUM_NEBULAS         3   // how many background nebulas we have altogether
 #define NUM_NEBULA_COLORS   9
 
 // arrival anchor types
@@ -38,14 +38,14 @@ struct p_dock_instance;
 #define MISSION_VERSION 0.10f
 #define FRED_MISSION_VERSION 0.10f
 
-#define WING_PLAYER_BASE    0x80000  // used by Fred to tell ship_index in a wing points to a player
+#define WING_PLAYER_BASE    0x80000     // used by Fred to tell ship_index in a wing points to a player
 
 // mission parse flags used for parse_mission() to tell what kind of information to get from the mission file
 #define MPF_ONLY_MISSION_INFO   (1 << 0)
 #define MPF_IMPORT_FSM          (1 << 1)
 
 // bitfield definitions for missions game types
-#define OLD_MAX_GAME_TYPES              4                   // needed for compatibility
+#define OLD_MAX_GAME_TYPES              4       // needed for compatibility
 #define OLD_GAME_TYPE_SINGLE_ONLY   0
 #define OLD_GAME_TYPE_MULTI_ONLY        1
 #define OLD_GAME_TYPE_SINGLE_MULTI  2
@@ -92,16 +92,16 @@ struct p_dock_instance;
 // Goober5000
 typedef struct support_ship_info
 {
-	int arrival_location;               // arrival location
-	int arrival_anchor;                 // arrival anchor
-	int departure_location;             // departure location
-	int departure_anchor;               // departure anchor
-	float max_hull_repair_val;          // % of a ship's hull that can be repaired -C
-	float max_subsys_repair_val;            // same thing, except for subsystems -C
-	int max_support_ships;              // max number of support ships
-	int ship_class;                     // ship class of support ship
-	int tally;                          // number of support ships so far
-	int support_available_for_species;  // whether support is available for a given species (this is a bitfield)
+  int arrival_location;         // arrival location
+  int arrival_anchor;           // arrival anchor
+  int departure_location;       // departure location
+  int departure_anchor;         // departure anchor
+  float max_hull_repair_val;    // % of a ship's hull that can be repaired -C
+  float max_subsys_repair_val;  // same thing, except for subsystems -C
+  int max_support_ships;        // max number of support ships
+  int ship_class;               // ship class of support ship
+  int tally;                    // number of support ships so far
+  int support_available_for_species;    // whether support is available for a given species (this is a bitfield)
 } support_ship_info;
 
 // movie type defines
@@ -114,99 +114,98 @@ typedef struct support_ship_info
 // defines a mission cutscene.
 typedef struct mission_cutscene
 {
-	int type;
-	char cutscene_name[NAME_LENGTH];
-	bool is_campaign_only;
-	int formula;
+  int type;
+  char cutscene_name[NAME_LENGTH];
+  bool is_campaign_only;
+  int formula;
 
-	mission_cutscene()
-		: type ( 0 ),
-		  is_campaign_only ( false ),
-		  formula ( 1 )
-	{
-		cutscene_name[ 0 ] = NULL;
-	}
+    mission_cutscene():type(0), is_campaign_only(false), formula(1)
+  {
+    cutscene_name[0] = NULL;
+  }
 } mission_cutscene;
 
 typedef struct mission
 {
-	char name[NAME_LENGTH];
-	char author[NAME_LENGTH];
-	float version;
-	char created[DATE_TIME_LENGTH];
-	char modified[DATE_TIME_LENGTH];
-	char notes[NOTES_LENGTH];
-	char mission_desc[MISSION_DESC_LENGTH];
-	int game_type;
-	int flags;
-	int num_players;                                    // valid in multiplayer missions -- number of players supported
-	uint num_respawns;                                  // valid in multiplayer missions -- number of respawns allowed
-	int max_respawn_delay;                                  // valid in multiplayer missions -- number of respawns allowed
-	support_ship_info support_ships;        // Goober5000
-	char squad_filename[MAX_FILENAME_LEN];      // if the player has been reassigned to a squadron, this is the filename of the logo, otherwise empty string
-	char squad_name[NAME_LENGTH];               // if the player has been reassigned to a squadron, this is the name of the squadron, otherwise empty string
-	char loading_screen[GR_NUM_RESOLUTIONS][MAX_FILENAME_LEN];
-	char skybox_model[MAX_FILENAME_LEN];
-	char envmap_name[MAX_FILENAME_LEN];
-	int skybox_flags;
-	int contrail_threshold;
-	int ambient_light_level;
+  char name[NAME_LENGTH];
+  char author[NAME_LENGTH];
+  float version;
+  char created[DATE_TIME_LENGTH];
+  char modified[DATE_TIME_LENGTH];
+  char notes[NOTES_LENGTH];
+  char mission_desc[MISSION_DESC_LENGTH];
+  int game_type;
+  int flags;
+  int num_players;              // valid in multiplayer missions -- number of players supported
+  uint num_respawns;            // valid in multiplayer missions -- number of respawns allowed
+  int max_respawn_delay;        // valid in multiplayer missions -- number of respawns allowed
+  support_ship_info support_ships;      // Goober5000
+  char squad_filename[MAX_FILENAME_LEN];        // if the player has been reassigned to a squadron, this is the filename of the logo, otherwise empty string
+  char squad_name[NAME_LENGTH]; // if the player has been reassigned to a squadron, this is the name of the squadron, otherwise empty string
+  char loading_screen[GR_NUM_RESOLUTIONS][MAX_FILENAME_LEN];
+  char skybox_model[MAX_FILENAME_LEN];
+  char envmap_name[MAX_FILENAME_LEN];
+  int skybox_flags;
+  int contrail_threshold;
+  int ambient_light_level;
 
-	// Goober5000
-	int command_persona;
-	char command_sender[NAME_LENGTH];
+  // Goober5000
+  int command_persona;
+  char command_sender[NAME_LENGTH];
 
-	// Goober5000
-	char event_music_name[NAME_LENGTH];
-	char briefing_music_name[NAME_LENGTH];
-	char substitute_event_music_name[NAME_LENGTH];
-	char substitute_briefing_music_name[NAME_LENGTH];
+  // Goober5000
+  char event_music_name[NAME_LENGTH];
+  char briefing_music_name[NAME_LENGTH];
+  char substitute_event_music_name[NAME_LENGTH];
+  char substitute_briefing_music_name[NAME_LENGTH];
 
-	// Goober5000
-	ai_profile_t *ai_profile;
+  // Goober5000
+  ai_profile_t *ai_profile;
 
-	SCP_vector<mission_cutscene> cutscenes;
+    SCP_vector < mission_cutscene > cutscenes;
 
-	void Reset()
-	{
-		int i = 0;
-		name[ 0 ] = '\0';
-		author[ 0 ] = '\0';
-		version = 0.;
-		created[ 0 ] = '\0';
-		modified[ 0 ] = '\0';
-		notes[ 0 ] = '\0';
-		mission_desc[ 0 ] = '\0';
-		game_type = 0;
-		flags = 0;
-		num_players = 0;
-		num_respawns = 0;
-		max_respawn_delay = 0;
-		memset ( &support_ships, 0, sizeof ( support_ships ) );
-		squad_filename[ 0 ] = '\0';
-		squad_name[ 0 ] = '\0';
-		for ( i = 0; i < GR_NUM_RESOLUTIONS; i++ )
-			loading_screen[ i ][ 0 ] = '\0';
-		skybox_model[ 0 ] = '\0';
-		envmap_name[ 0 ] = '\0';
-		skybox_flags = 0;
-		contrail_threshold = 0;
-		ambient_light_level = 0;
-		command_persona = 0;
-		command_sender[ 0 ] = '\0';
-		event_music_name[ 0 ] = '\0';
-		briefing_music_name[ 0 ] = '\0';
-		substitute_event_music_name[ 0 ] = '\0';
-		substitute_briefing_music_name[ 0 ] = '\0';
-		ai_profile = NULL;
-		cutscenes.clear();
-	}
+  void Reset()
+  {
+    int i = 0;
+      name[0] = '\0';
+      author[0] = '\0';
+      version = 0.;
+      created[0] = '\0';
+      modified[0] = '\0';
+      notes[0] = '\0';
+      mission_desc[0] = '\0';
+      game_type = 0;
+      flags = 0;
+      num_players = 0;
+      num_respawns = 0;
+      max_respawn_delay = 0;
+      memset(&support_ships, 0, sizeof(support_ships));
+      squad_filename[0] = '\0';
+      squad_name[0] = '\0';
+    for (i = 0; i < GR_NUM_RESOLUTIONS; i++)
+        loading_screen[i][0] = '\0';
+      skybox_model[0] = '\0';
+      envmap_name[0] = '\0';
+      skybox_flags = 0;
+      contrail_threshold = 0;
+      ambient_light_level = 0;
+      command_persona = 0;
+      command_sender[0] = '\0';
+      event_music_name[0] = '\0';
+      briefing_music_name[0] = '\0';
+      substitute_event_music_name[0] = '\0';
+      substitute_briefing_music_name[0] = '\0';
+      ai_profile = NULL;
+      cutscenes.clear();
+  }
 
-	mission()
-	{
-		Reset();
-	}
-} mission;
+  mission()
+  {
+    Reset();
+  }
+}
+
+mission;
 
 // cargo defines
 // NOTE: MAX_CARGO MUST REMAIN <= 64 (CARGO_NO_DEPLETE) for NO_DEPLETE to work.
@@ -221,7 +220,7 @@ typedef struct mission
 #define CONTRAIL_THRESHOLD_DEFAULT  45
 
 extern mission The_mission;
-extern char Mission_filename[80];  // filename of mission in The_mission (Fred only)
+extern char Mission_filename[80];       // filename of mission in The_mission (Fred only)
 
 #define MAX_FORMATION_NAMES 3
 #define MAX_STATUS_NAMES        3
@@ -257,9 +256,9 @@ extern int Mission_callsign_count;
 #define MAX_PATH_RESTRICTIONS       10
 typedef struct path_restriction_t
 {
-	int num_paths;
-	int cached_mask;
-	char path_names[MAX_SHIP_BAY_PATHS][MAX_NAME_LEN];
+  int num_paths;
+  int cached_mask;
+  char path_names[MAX_SHIP_BAY_PATHS][MAX_NAME_LEN];
 } path_restriction_t;
 
 extern char *Ship_class_names[MAX_SHIP_CLASSES];
@@ -295,7 +294,7 @@ extern int Num_team_names;
 extern int Num_reinforcement_type_names;
 extern int Player_starts;
 extern fix Entry_delay_time;
-extern int Fred_num_texture_replacements;   // Goober5000
+extern int Fred_num_texture_replacements;       // Goober5000
 extern int Loading_screen_bm_index;
 
 extern int Num_unknown_ship_classes;
@@ -309,44 +308,44 @@ extern int Current_file_length;
 
 typedef struct subsys_status
 {
-	char name[NAME_LENGTH];
-	float percent;  // percent damaged
-	int primary_banks[MAX_SHIP_PRIMARY_BANKS];
-	int primary_ammo[MAX_SHIP_PRIMARY_BANKS];
-	int secondary_banks[MAX_SHIP_SECONDARY_BANKS];
-	int secondary_ammo[MAX_SHIP_SECONDARY_BANKS];
-	int ai_class;
-	int subsys_cargo_name;
+  char name[NAME_LENGTH];
+  float percent;                // percent damaged
+  int primary_banks[MAX_SHIP_PRIMARY_BANKS];
+  int primary_ammo[MAX_SHIP_PRIMARY_BANKS];
+  int secondary_banks[MAX_SHIP_SECONDARY_BANKS];
+  int secondary_ammo[MAX_SHIP_SECONDARY_BANKS];
+  int ai_class;
+  int subsys_cargo_name;
 } subsys_status;
 
 typedef struct texture_replace
 {
-	char ship_name[NAME_LENGTH];
-	char old_texture[MAX_FILENAME_LEN];
-	char new_texture[MAX_FILENAME_LEN];
-	int new_texture_id;
+  char ship_name[NAME_LENGTH];
+  char old_texture[MAX_FILENAME_LEN];
+  char new_texture[MAX_FILENAME_LEN];
+  int new_texture_id;
 
-	texture_replace()
-	{
-		Reset();
-	}
+    texture_replace()
+  {
+    Reset();
+  }
 
-	void Reset()
-	{
-		new_texture_id = -1;
-		ship_name[ 0 ] = NULL;
-		old_texture[ 0 ] = NULL;
-		new_texture[ 0 ] = NULL;
-	}
+  void Reset()
+  {
+    new_texture_id = -1;
+    ship_name[0] = NULL;
+    old_texture[0] = NULL;
+    new_texture[0] = NULL;
+  }
 } texture_replace;
 
 extern texture_replace *Fred_texture_replacements;
 
 typedef struct alt_class
 {
-	int ship_class;
-	int variable_index;         // if set allows the class to be set by a variable
-	bool default_to_this_class;
+  int ship_class;
+  int variable_index;           // if set allows the class to be set by a variable
+  bool default_to_this_class;
 } alt_class;
 
 #define MAX_OBJECT_STATUS   10
@@ -356,188 +355,190 @@ typedef struct alt_class
 // be copied into the real object, ship, etc. structs
 typedef struct p_object
 {
-	char name[NAME_LENGTH];
-	p_object *next, *prev;
+  char name[NAME_LENGTH];
+  p_object *next, *prev;
 
-	vec3d pos;
-	matrix orient;
-	int ship_class;
-	int team;
-	int behavior;                           // ai_class;
-	int ai_goals;                           // sexp of lists of goals that this ship should try and do
-	char cargo1;
+  vec3d pos;
+  matrix orient;
+  int ship_class;
+  int team;
+  int behavior;                 // ai_class;
+  int ai_goals;                 // sexp of lists of goals that this ship should try and do
+  char cargo1;
 
-	int status_count;
-	int status_type[MAX_OBJECT_STATUS];
-	int status[MAX_OBJECT_STATUS];
-	int target[MAX_OBJECT_STATUS];
+  int status_count;
+  int status_type[MAX_OBJECT_STATUS];
+  int status[MAX_OBJECT_STATUS];
+  int target[MAX_OBJECT_STATUS];
 
-	int subsys_index;                       // index into subsys_status array
-	int subsys_count;                       // number of elements used in subsys_status array
-	int initial_velocity;
-	int initial_hull;
-	int initial_shields;
+  int subsys_index;             // index into subsys_status array
+  int subsys_count;             // number of elements used in subsys_status array
+  int initial_velocity;
+  int initial_hull;
+  int initial_shields;
 
-	int arrival_location;
-	int arrival_distance;                   // used when arrival location is near or in front of some ship
-	int arrival_anchor;                     // ship used for anchoring an arrival point
-	int arrival_path_mask;                  // Goober5000
-	int arrival_cue;                        //  Index in Sexp_nodes of this sexp.
-	int arrival_delay;
+  int arrival_location;
+  int arrival_distance;         // used when arrival location is near or in front of some ship
+  int arrival_anchor;           // ship used for anchoring an arrival point
+  int arrival_path_mask;        // Goober5000
+  int arrival_cue;              //  Index in Sexp_nodes of this sexp.
+  int arrival_delay;
 
 
-	int departure_location;
-	int departure_anchor;
-	int departure_path_mask;                // Goober5000
-	int departure_cue;                      //  Index in Sexp_nodes of this sexp.
-	int departure_delay;
+  int departure_location;
+  int departure_anchor;
+  int departure_path_mask;      // Goober5000
+  int departure_cue;            //  Index in Sexp_nodes of this sexp.
+  int departure_delay;
 
-	char misc[NAME_LENGTH];
+  char misc[NAME_LENGTH];
 
-	int wingnum;                            // set to -1 if not in a wing -- Wing array index otherwise
-	int pos_in_wing;                        // Goober5000 - needed for FRED with the new way things work
+  int wingnum;                  // set to -1 if not in a wing -- Wing array index otherwise
+  int pos_in_wing;              // Goober5000 - needed for FRED with the new way things work
 
-	int flags;                              // mission savable flags
-	int flags2;                             // Goober5000
-	int escort_priority;                    // priority in escort list
-	int ai_class;
-	int hotkey;                             // hotkey number (between 0 and 9) -1 means no hotkey
-	int score;
-	float assist_score_pct;                 // percentage of the score which players who gain an assist will get when this ship is killed
-	int orders_accepted;                    // which orders this ship will accept from the player
-	p_dock_instance *dock_list;             // Goober5000 - parse objects this parse object is docked to
-	object *created_object;                 // Goober5000
-	int group;                              // group object is within or -1 if none.
-	int persona_index;
-	float kamikaze_damage;                  // base damage for a kamikaze attack
+  int flags;                    // mission savable flags
+  int flags2;                   // Goober5000
+  int escort_priority;          // priority in escort list
+  int ai_class;
+  int hotkey;                   // hotkey number (between 0 and 9) -1 means no hotkey
+  int score;
+  float assist_score_pct;       // percentage of the score which players who gain an assist will get when this ship is killed
+  int orders_accepted;          // which orders this ship will accept from the player
+  p_dock_instance *dock_list;   // Goober5000 - parse objects this parse object is docked to
+  object *created_object;       // Goober5000
+  int group;                    // group object is within or -1 if none.
+  int persona_index;
+  float kamikaze_damage;        // base damage for a kamikaze attack
 
-	bool use_special_explosion;             // new special explosion/hitpoints system
-	int special_exp_damage;
-	int special_exp_blast;
-	int special_exp_inner;
-	int special_exp_outer;
-	bool use_shockwave;
-	int special_exp_shockwave_speed;
-	int special_hitpoints;
-	int special_shield;
+  bool use_special_explosion;   // new special explosion/hitpoints system
+  int special_exp_damage;
+  int special_exp_blast;
+  int special_exp_inner;
+  int special_exp_outer;
+  bool use_shockwave;
+  int special_exp_shockwave_speed;
+  int special_hitpoints;
+  int special_shield;
 
-	ushort net_signature;                   // network signature this object can have
-	int destroy_before_mission_time;
+  ushort net_signature;         // network signature this object can have
+  int destroy_before_mission_time;
 
-	char wing_status_wing_index;            // wing index (0-4) in wingman status gauge
-	char wing_status_wing_pos;          // wing position (0-5) in wingman status gauge
+  char wing_status_wing_index;  // wing index (0-4) in wingman status gauge
+  char wing_status_wing_pos;    // wing position (0-5) in wingman status gauge
 
-	uint respawn_count;                     // number of respawns for this object.  Applies only to player wing ships in multiplayer
-	int respawn_priority;                   // priority this ship has for controlling respawn points
+  uint respawn_count;           // number of respawns for this object.  Applies only to player wing ships in multiplayer
+  int respawn_priority;         // priority this ship has for controlling respawn points
 
-	char alt_type_index;                    // optional alt type index
-	char callsign_index;                    // optional callsign index
+  char alt_type_index;          // optional alt type index
+  char callsign_index;          // optional callsign index
 
-	float ship_max_hull_strength;
-	float ship_max_shield_strength;
+  float ship_max_hull_strength;
+  float ship_max_shield_strength;
 
-	// Goober5000
-	int num_texture_replacements;
-	texture_replace replacement_textures[MAX_REPLACEMENT_TEXTURES]; // replacement textures - Goober5000
+  // Goober5000
+  int num_texture_replacements;
+  texture_replace replacement_textures[MAX_REPLACEMENT_TEXTURES];       // replacement textures - Goober5000
 
-	SCP_vector<alt_class> alt_classes;
+    SCP_vector < alt_class > alt_classes;
 
-	int alt_iff_color[MAX_IFFS][MAX_IFFS];
+  int alt_iff_color[MAX_IFFS][MAX_IFFS];
 
-	void Reset()
-	{
-		int i = 0;
+  void Reset()
+  {
+    int i = 0;
 
-		name[ 0 ] = '\0';
+      name[0] = '\0';
 
-		next = NULL;
-		prev = NULL;
+      next = NULL;
+      prev = NULL;
 
-		memset ( &pos, 0, sizeof ( pos ) );
-		memset ( &orient, 0, sizeof ( orient ) );
-		ship_class = 0;
-		team = 0;
-		behavior = 0;
-		ai_goals = 0;
-		cargo1 = 0;
+      memset(&pos, 0, sizeof(pos));
+      memset(&orient, 0, sizeof(orient));
+      ship_class = 0;
+      team = 0;
+      behavior = 0;
+      ai_goals = 0;
+      cargo1 = 0;
 
-		status_count = 0;
-		for ( i = 0; i < MAX_OBJECT_STATUS; i++ )
-		{
-			status_type[ i ] = 0;
-			status[ i ] = 0;
-			target[ i ] = 0;
-		}
+      status_count = 0;
+    for (i = 0; i < MAX_OBJECT_STATUS; i++)
+      {
+        status_type[i] = 0;
+        status[i] = 0;
+        target[i] = 0;
+      }
 
-		subsys_index = 0;
-		subsys_count = 0;
-		initial_velocity = 0;
-		initial_hull = 0;
-		initial_shields = 0;
-		arrival_location = 0;
-		arrival_distance = 0;
-		arrival_anchor = 0;
-		arrival_path_mask = 0;
-		arrival_cue = 0;
-		arrival_delay = 0;
-		departure_location = 0;
-		departure_anchor = 0;
-		departure_path_mask = 0;
-		departure_cue = 0;
-		departure_delay = 0;
+    subsys_index = 0;
+    subsys_count = 0;
+    initial_velocity = 0;
+    initial_hull = 0;
+    initial_shields = 0;
+    arrival_location = 0;
+    arrival_distance = 0;
+    arrival_anchor = 0;
+    arrival_path_mask = 0;
+    arrival_cue = 0;
+    arrival_delay = 0;
+    departure_location = 0;
+    departure_anchor = 0;
+    departure_path_mask = 0;
+    departure_cue = 0;
+    departure_delay = 0;
 
-		misc[ 0 ] = '\0';
+    misc[0] = '\0';
 
-		wingnum = 0;
-		pos_in_wing = 0;
+    wingnum = 0;
+    pos_in_wing = 0;
 
-		flags = 0;
-		flags2 = 0;
-		escort_priority = 0;
-		ai_class = 0;
-		hotkey = 0;
-		score = 0;
-		assist_score_pct = 0.;
-		orders_accepted = 0;
-		dock_list = NULL;
-		created_object = NULL;
-		group = 0;
-		persona_index = 0;
-		kamikaze_damage = 0.;
-		use_special_explosion = false;
-		special_exp_damage = -1;
-		special_exp_blast = -1;
-		special_exp_inner = -1;
-		special_exp_outer = -1;
-		use_shockwave = false;
-		special_exp_shockwave_speed = -1;
-		special_hitpoints = 0;
-		special_shield = -1;
-		net_signature = 0;
-		destroy_before_mission_time = 0;
+    flags = 0;
+    flags2 = 0;
+    escort_priority = 0;
+    ai_class = 0;
+    hotkey = 0;
+    score = 0;
+    assist_score_pct = 0.;
+    orders_accepted = 0;
+    dock_list = NULL;
+    created_object = NULL;
+    group = 0;
+    persona_index = 0;
+    kamikaze_damage = 0.;
+    use_special_explosion = false;
+    special_exp_damage = -1;
+    special_exp_blast = -1;
+    special_exp_inner = -1;
+    special_exp_outer = -1;
+    use_shockwave = false;
+    special_exp_shockwave_speed = -1;
+    special_hitpoints = 0;
+    special_shield = -1;
+    net_signature = 0;
+    destroy_before_mission_time = 0;
 
-		wing_status_wing_index = 0;
-		wing_status_wing_pos = 0;
+    wing_status_wing_index = 0;
+    wing_status_wing_pos = 0;
 
-		respawn_count = 0;
-		respawn_priority = 0;
+    respawn_count = 0;
+    respawn_priority = 0;
 
-		alt_type_index = 0;
-		callsign_index = 0;
+    alt_type_index = 0;
+    callsign_index = 0;
 
-		ship_max_hull_strength = 0.;
-		ship_max_shield_strength = 0.;
+    ship_max_hull_strength = 0.;
+    ship_max_shield_strength = 0.;
 
-		num_texture_replacements = 0;
+    num_texture_replacements = 0;
 
-		for ( i = 0; i < MAX_REPLACEMENT_TEXTURES; i++ )
-			replacement_textures[ i ].Reset();
+    for (i = 0; i < MAX_REPLACEMENT_TEXTURES; i++)
+      replacement_textures[i].Reset();
 
-		alt_classes.clear();
+    alt_classes.clear();
 
-		memset ( alt_iff_color, 0, sizeof ( alt_iff_color ) );
-	}
-} p_object;
+    memset(alt_iff_color, 0, sizeof(alt_iff_color));
+  }
+}
+
+p_object;
 
 // defines for flags used for p_objects when they are created.  Used to help create special
 // circumstances for those ships.  This list of bitfield indicators MUST correspond EXACTLY
@@ -573,12 +574,12 @@ typedef struct p_object
 // 24 and 25 are currently unused
 
 // the following parse object flags are used internally by FreeSpace
-#define P_SF_USE_UNIQUE_ORDERS      (1<<26) // tells a newly created ship to use the default orders for that ship
-#define P_SF_DOCK_LEADER            (1<<27) // Goober5000 - a docked parse object that is the leader of its group
-#define P_SF_CANNOT_ARRIVE          (1<<28) // used to indicate that this ship's arrival cue will never be true
-#define P_SF_WARP_BROKEN            (1<<29) // warp engine should be broken for this ship
-#define P_SF_WARP_NEVER             (1<<30) // warp drive is destroyed
-#define P_SF_PLAYER_START_VALID     (1<<31) // this is a valid player start object
+#define P_SF_USE_UNIQUE_ORDERS      (1<<26)     // tells a newly created ship to use the default orders for that ship
+#define P_SF_DOCK_LEADER            (1<<27)     // Goober5000 - a docked parse object that is the leader of its group
+#define P_SF_CANNOT_ARRIVE          (1<<28)     // used to indicate that this ship's arrival cue will never be true
+#define P_SF_WARP_BROKEN            (1<<29)     // warp engine should be broken for this ship
+#define P_SF_WARP_NEVER             (1<<30)     // warp drive is destroyed
+#define P_SF_PLAYER_START_VALID     (1<<31)     // this is a valid player start object
 
 // more parse flags! -- Goober5000
 // same caveat: This list of bitfield indicators MUST correspond EXACTLY
@@ -615,7 +616,7 @@ typedef struct p_object
 
 
 // Goober5000 - this is now dynamic
-extern SCP_vector<p_object> Parse_objects;
+extern SCP_vector < p_object > Parse_objects;
 #define POBJ_INDEX(pobjp) (pobjp - &Parse_objects[0])   // yes, this arithmetic is valid :D
 
 extern p_object Support_ship_pobj, *Arriving_support_ship;
@@ -623,21 +624,21 @@ extern p_object Ship_arrival_list;
 
 typedef struct
 {
-	// ships
-	int default_ship;  // default ship type for player start point (recommended choice)
-	int num_ship_choices; // number of ship choices inside ship_list
-	int loadout_total;  // Total number of ships available of all classes
-	int ship_list[MAX_SHIP_CLASSES];
-	int ship_list_variables[MAX_SHIP_CLASSES];
-	int ship_count[MAX_SHIP_CLASSES];
-	int ship_count_variables[MAX_SHIP_CLASSES];
+  // ships
+  int default_ship;             // default ship type for player start point (recommended choice)
+  int num_ship_choices;         // number of ship choices inside ship_list
+  int loadout_total;            // Total number of ships available of all classes
+  int ship_list[MAX_SHIP_CLASSES];
+  int ship_list_variables[MAX_SHIP_CLASSES];
+  int ship_count[MAX_SHIP_CLASSES];
+  int ship_count_variables[MAX_SHIP_CLASSES];
 
-	// weapons
-	int num_weapon_choices;
-	int weaponry_pool[MAX_WEAPON_TYPES];
-	int weaponry_count[MAX_WEAPON_TYPES];
-	int weaponry_pool_variable[MAX_WEAPON_TYPES];
-	int weaponry_amount_variable[MAX_WEAPON_TYPES];
+  // weapons
+  int num_weapon_choices;
+  int weaponry_pool[MAX_WEAPON_TYPES];
+  int weaponry_count[MAX_WEAPON_TYPES];
+  int weaponry_pool_variable[MAX_WEAPON_TYPES];
+  int weaponry_amount_variable[MAX_WEAPON_TYPES];
 } team_data;
 
 #define MAX_P_WINGS     16
@@ -665,8 +666,8 @@ extern char Player_start_shipname[NAME_LENGTH];
 extern int Player_start_shipnum;
 extern p_object Player_start_pobject;
 
-extern int Mission_palette;  // index of palette file to use for mission
-extern int Nebula_index;  // index into Nebula_filenames[] of nebula to use in mission.
+extern int Mission_palette;     // index of palette file to use for mission
+extern int Nebula_index;        // index into Nebula_filenames[] of nebula to use in mission.
 extern char *Nebula_filenames[NUM_NEBULAS];
 extern char *Nebula_colors[NUM_NEBULA_COLORS];
 extern p_object *Arriving_support_ship;
@@ -674,74 +675,75 @@ extern p_object *Arriving_support_ship;
 extern char Neb2_texture_name[MAX_FILENAME_LEN];
 
 
-int parse_main ( char *mission_name, int flags = 0 );
-p_object *mission_parse_get_arrival_ship ( ushort net_signature );
-p_object *mission_parse_get_arrival_ship ( char *name );
-p_object *mission_parse_get_parse_object ( ushort net_signature );
-p_object *mission_parse_get_parse_object ( char *name );
-int parse_create_object ( p_object *objp );
-void resolve_parse_flags ( object *objp, int parse_flags, int parse_flags2 );
+int parse_main(char *mission_name, int flags = 0);
+p_object *mission_parse_get_arrival_ship(ushort net_signature);
+p_object *mission_parse_get_arrival_ship(char *name);
+p_object *mission_parse_get_parse_object(ushort net_signature);
+p_object *mission_parse_get_parse_object(char *name);
+int parse_create_object(p_object * objp);
+void resolve_parse_flags(object * objp, int parse_flags, int parse_flags2);
 
 void mission_parse_close();
 
 // used in squadmate messaging stuff to create wings from reinforcements.
-int parse_wing_create_ships ( wing *wingp, int num_to_create, int force = 0, int specific_instance = -1 );
+int parse_wing_create_ships(wing * wingp, int num_to_create, int force =
+                            0, int specific_instance = -1);
 
 // function for getting basic mission data without loading whole mission
-int mission_parse_is_multi ( char *filename, char *mission_name );
-int mission_parse_get_multi_mission_info ( char *filename );
+int mission_parse_is_multi(char *filename, char *mission_name);
+int mission_parse_get_multi_mission_info(char *filename);
 
 // called externally from multiplayer code
-int mission_do_departure ( object *objp );
+int mission_do_departure(object * objp);
 
 // called externally from freespace.cpp
-void mission_parse_fixup_players ( void );
+void mission_parse_fixup_players(void);
 
 // get a index to a perminently kept around name of a ship or wing
-int get_parse_name_index ( char *name );
+int get_parse_name_index(char *name);
 
 // called from freespace game level loop
 void mission_parse_eval_stuff();
 
 // function to set the ramaing time left in the mission
-void mission_parse_set_end_time ( int seconds );
+void mission_parse_set_end_time(int seconds);
 
 // code to bring in a repair ship.
-void mission_bring_in_support_ship ( object *requester_objp );
-int mission_is_support_ship_arriving ( void );
-void mission_add_to_arriving_support ( object *requester_objp );
-int mission_is_repair_scheduled ( object *objp );
-int mission_remove_scheduled_repair ( object *objp );
-void mission_parse_support_arrived ( int objnum );
+void mission_bring_in_support_ship(object * requester_objp);
+int mission_is_support_ship_arriving(void);
+void mission_add_to_arriving_support(object * requester_objp);
+int mission_is_repair_scheduled(object * objp);
+int mission_remove_scheduled_repair(object * objp);
+void mission_parse_support_arrived(int objnum);
 
 // alternate name stuff
-int mission_parse_lookup_alt ( char *name );
-void mission_parse_lookup_alt_index ( int index, char *out );
-int mission_parse_add_alt ( char *name );
+int mission_parse_lookup_alt(char *name);
+void mission_parse_lookup_alt_index(int index, char *out);
+int mission_parse_add_alt(char *name);
 void mission_parse_reset_alt();
 
 // callsign stuff
-int mission_parse_lookup_callsign ( char *name );
-void mission_parse_lookup_callsign_index ( int index, char *out );
-int mission_parse_add_callsign ( char *name );
+int mission_parse_lookup_callsign(char *name);
+void mission_parse_lookup_callsign_index(int index, char *out);
+int mission_parse_add_callsign(char *name);
 void mission_parse_reset_callsign();
 
 // code to save/restore mission parse stuff
-int get_mission_info ( char *filename, mission *missionp = NULL, bool basic = true );
+int get_mission_info(char *filename, mission * missionp = NULL, bool basic =
+                     true);
 
 // Goober5000
-void parse_dock_one_docked_object ( p_object *pobjp, p_object *parent_pobjp );
+void parse_dock_one_docked_object(p_object * pobjp, p_object * parent_pobjp);
 
 // Goober5000
 extern int Knossos_warp_ani_used;
 
 // Karajorma
-void swap_parse_object ( p_object *p_obj, int ship_class );
+void swap_parse_object(p_object * p_obj, int ship_class);
 void clear_texture_replacements();
 
 // Goober5000
-subsys_status *parse_get_subsys_status ( p_object *pobjp, char *subsys_name );
+subsys_status *parse_get_subsys_status(p_object * pobjp, char *subsys_name);
 
 
 #endif
-

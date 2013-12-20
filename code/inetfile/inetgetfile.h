@@ -29,24 +29,24 @@
 class InetGetFile
 {
 public:
-	InetGetFile ( char *URL, char *localfile );
-	~InetGetFile();
-	bool IsFileReceived();
-	bool IsFileError();
-	bool IsConnecting();
-	bool IsReceiving();
-	int GetErrorCode();
-	int GetBytesIn();
-	int GetTotalBytes();
-	void AbortGet();
+  InetGetFile(char *URL, char *localfile);
+   ~InetGetFile();
+  bool IsFileReceived();
+  bool IsFileError();
+  bool IsConnecting();
+  bool IsReceiving();
+  int GetErrorCode();
+  int GetBytesIn();
+  int GetTotalBytes();
+  void AbortGet();
 
 protected:
-	CFtpGet *ftp;
-	ChttpGet *http;
-	bool m_bUseHTTP;
-	int m_ErrorCode;
-	int m_State;
-	int m_HardError;
+    CFtpGet * ftp;
+  ChttpGet *http;
+  bool m_bUseHTTP;
+  int m_ErrorCode;
+  int m_State;
+  int m_HardError;
 
 };
 
