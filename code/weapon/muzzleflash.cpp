@@ -23,6 +23,7 @@
 // muzzle flash info - read from a table
 typedef struct mflash_blob_info
 {
+<<<<<<< HEAD
   char name[MAX_FILENAME_LEN];
   int anim_id;
   float offset;
@@ -48,6 +49,36 @@ typedef struct mflash_blob_info
     offset = r.offset;
     radius = r.radius;
   }
+=======
+	char name[MAX_FILENAME_LEN];
+	int anim_id;
+	float offset;
+	float radius;
+
+	mflash_blob_info ( const mflash_blob_info &mbi )
+	{
+		strcpy_s ( name, mbi.name );
+		anim_id = mbi.anim_id;
+		offset = mbi.offset;
+		radius = mbi.radius;
+	}
+
+	mflash_blob_info() :
+		  anim_id ( -1 ),
+		  offset ( 0.0 ),
+		  radius ( 0.0 )
+	{
+		name[ 0 ] = '\0';
+	}
+
+	void operator= ( const mflash_blob_info &r )
+	{
+		strcpy_s ( name, r.name );
+		anim_id = r.anim_id;
+		offset = r.offset;
+		radius = r.radius;
+	}
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 } mflash_blob_info;
 
 typedef struct mflash_info
@@ -202,6 +233,7 @@ void mflash_mark_as_used(int index)
 
 void mflash_page_in(bool load_all)
 {
+<<<<<<< HEAD
   uint i, idx;
   int num_frames, fps;
 
@@ -222,6 +254,26 @@ void mflash_page_in(bool load_all)
           bm_page_in_xparent_texture(Mflash_info[i].blobs[idx].anim_id);
         }
     }
+=======
+	uint i, idx;
+	int num_frames, fps;
+
+	// load up all anims
+	for ( i = 0; i < Mflash_info.size(); i++ )
+	{
+		// skip if it's not used
+		if ( !load_all && !Mflash_info[i].used_this_level )
+			continue;
+
+		// blobs
+		for ( idx = 0; idx < Mflash_info[i].blobs.size(); idx++ )
+		{
+			Mflash_info[i].blobs[idx].anim_id = bm_load_animation ( Mflash_info[i].blobs[idx].name, &num_frames, &fps, NULL, 1 );
+			Assert ( Mflash_info[i].blobs[idx].anim_id >= 0 );
+			bm_page_in_xparent_texture ( Mflash_info[i].blobs[idx].anim_id );
+		}
+	}
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 // initialize muzzle flash stuff for the level

@@ -474,6 +474,7 @@ extern missile_obj Missile_obj_list;
 
 typedef struct weapon_expl_lod
 {
+<<<<<<< HEAD
   char filename[MAX_FILENAME_LEN];
   int bitmap_id;
   int num_frames;
@@ -483,6 +484,18 @@ typedef struct weapon_expl_lod
   {
     filename[0] = NULL;
   }
+=======
+	char filename[MAX_FILENAME_LEN];
+	int bitmap_id;
+	int num_frames;
+	int fps;
+
+	weapon_expl_lod( )
+		: bitmap_id ( -1 ), num_frames ( 0 ), fps ( 0 )
+	{
+		filename[ 0 ] = NULL;
+	}
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 } weapon_expl_lod;
 
 typedef struct weapon_expl_info
@@ -546,12 +559,17 @@ int weapon_create_group_id();
 
 // Passing a group_id of -1 means it isn't in a group.  See weapon_create_group_id for more
 // help on weapon groups.
+<<<<<<< HEAD
 int weapon_create(vec3d * pos, matrix * orient, int weapon_type,
                   int parent_obj, int group_id = -1, int is_locked =
                   0, int is_spawned = 0);
 void weapon_set_tracking_info(int weapon_objnum, int parent_objnum,
                               int target_objnum, int target_is_locked =
                               0, ship_subsys * target_subsys = NULL);
+=======
+int weapon_create ( vec3d *pos, matrix *orient, int weapon_type, int parent_obj, int group_id = -1, int is_locked = 0, int is_spawned = 0 );
+void weapon_set_tracking_info ( int weapon_objnum, int parent_objnum, int target_objnum, int target_is_locked = 0, ship_subsys *target_subsys = NULL );
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 
 // for weapons flagged as particle spewers, spew particles. wheee
 void weapon_maybe_spew_particle(object * obj);
@@ -564,6 +582,7 @@ int cmeasure_name_lookup(char *name);
 void spawn_child_weapons(object * objp);
 
 // call to detonate a weapon. essentially calls weapon_hit() with other_obj as NULL, and sends a packet in multiplayer
+<<<<<<< HEAD
 void weapon_detonate(object * objp);
 
 void weapon_area_apply_blast(vec3d * force_apply_pos, object * ship_objp,
@@ -576,6 +595,16 @@ int weapon_area_calc_damage(object * objp, vec3d * pos, float inner_rad,
 
 void missile_obj_list_rebuild();        // called by save/restore code only
 missile_obj *missile_obj_return_address(int index);
+=======
+void weapon_detonate ( object *objp );
+
+void weapon_area_apply_blast ( vec3d *force_apply_pos, object *ship_objp, vec3d *blast_pos, float blast, int make_shockwave );
+int weapon_area_calc_damage ( object *objp, vec3d *pos, float inner_rad, float outer_rad, float max_blast, float max_damage,
+							float *blast, float *damage, float limit );
+
+void missile_obj_list_rebuild();    // called by save/restore code only
+missile_obj *missile_obj_return_address ( int index );
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 void find_homing_object_cmeasures();
 
 // THE FOLLOWING FUNCTION IS IN SHIP.CPP!!!!

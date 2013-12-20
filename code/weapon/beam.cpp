@@ -142,6 +142,7 @@ int Beam_count = 0;             // how many beams are in use
 
 // octant indices. These are "good" pairs of octants to use for beam target
 #define BEAM_NUM_GOOD_OCTANTS           8
+<<<<<<< HEAD
 int Beam_good_slash_octants[BEAM_NUM_GOOD_OCTANTS][4] = {
   {2, 5, 1, 0},                 // octant, octant, min/max pt, min/max pt
   {7, 0, 1, 0},
@@ -162,6 +163,29 @@ int Beam_good_shot_octants[BEAM_NUM_GOOD_OCTANTS][4] = {
   {6, 2, 1, 0},
   {5, 1, 1, 0},
   {4, 0, 1, 0},
+=======
+int Beam_good_slash_octants[BEAM_NUM_GOOD_OCTANTS][4] =
+{
+	{ 2, 5, 1, 0 },                 // octant, octant, min/max pt, min/max pt
+	{ 7, 0, 1, 0 },
+	{ 1, 6, 1, 0 },
+	{ 6, 1, 0, 1 },
+	{ 5, 2, 0, 1 },
+	{ 0, 7, 0, 1 },
+	{ 7, 1, 1, 0 },
+	{ 6, 0, 1, 0 },
+};
+int Beam_good_shot_octants[BEAM_NUM_GOOD_OCTANTS][4] =
+{
+	{ 5, 0, 1, 0 },                 // octant, octant, min/max pt, min/max pt
+	{ 7, 2, 1, 0 },
+	{ 7, 1, 1, 0 },
+	{ 6, 0, 1, 0 },
+	{ 7, 3, 1, 0 },
+	{ 6, 2, 1, 0 },
+	{ 5, 1, 1, 0 },
+	{ 4, 0, 1, 0 },
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 };
 
 // beam lighting effects
@@ -256,9 +280,13 @@ void beam_type_d_get_status(beam * b, int *shot_index, int *fire_wait);
 void beam_type_e_move(beam * b);
 
 // given a model #, and an object, stuff 2 good world coord points
+<<<<<<< HEAD
 void beam_get_octant_points(int modelnum, object * objp, int oct_index,
                             int oct_array[BEAM_NUM_GOOD_OCTANTS][4],
                             vec3d * v1, vec3d * v2);
+=======
+void beam_get_octant_points ( int modelnum, object *objp, int oct_index, int oct_array[BEAM_NUM_GOOD_OCTANTS][4], vec3d *v1, vec3d *v2 );
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 
 // given an object, return its model num
 int beam_get_model(object * objp);
@@ -373,6 +401,7 @@ void beam_level_close()
 }
 
 // fire a beam, returns nonzero on success. the innards of the code handle all the rest, foo
+<<<<<<< HEAD
 int beam_fire(beam_fire_info * fire_info)
 {
   beam *new_item;
@@ -583,6 +612,196 @@ int beam_fire(beam_fire_info * fire_info)
   beam_start_warmup(new_item);
 
   return objnum;
+=======
+int beam_fire ( beam_fire_info *fire_info )
+{
+	beam *new_item;
+	weapon_info *wip;
+	ship *firing_ship;
+	int objnum;
+
+	// sanity check
+	if ( fire_info == NULL )
+	{
+		Int3();
+		return -1;
+	}
+
+	// if we're out of beams, bail
+	if ( Beam_count >= MAX_BEAMS )
+	{
+		return -1;
+	}
+
+	// for now, only allow ship targets
+	if ( !fire_info->fighter_beam )
+	{
+		if ( ( fire_info->target == NULL ) || ( ( fire_info->target->type != OBJ_SHIP ) && ( fire_info->target->type != OBJ_ASTEROID ) && ( fire_info->target->type != OBJ_DEBRIS ) && ( fire_info->target->type != OBJ_WEAPON ) ) )
+		{
+			return -1;
+		}
+	}
+
+	// make sure the beam_info_index is valid
+	Assert ( ( fire_info->beam_info_index >= 0 ) && ( fire_info->beam_info_index < MAX_WEAPON_TYPES ) && ( Weapon_info[fire_info->beam_info_index].wi_flags & WIF_BEAM ) );
+	if ( ( fire_info->beam_info_index < 0 ) || ( fire_info->beam_info_index >= MAX_WEAPON_TYPES ) || ! ( Weapon_info[fire_info->beam_info_index].wi_flags & WIF_BEAM ) )
+	{
+		return -1;
+	}
+
+	wip = &Weapon_info[fire_info->beam_info_index];
+	// make sure a ship is firing this
+	Assert ( ( fire_info->shooter->type == OBJ_SHIP ) && ( fire_info->shooter->instance >= 0 ) && ( fire_info->shooter->instance < MAX_SHIPS ) );
+	if ( ( fire_info->shooter->type != OBJ_SHIP ) || ( fire_info->shooter->instance < 0 ) || ( fire_info->shooter->instance >= MAX_SHIPS ) )
+	{
+		return -1;
+	}
+	firing_ship = &Ships[fire_info->shooter->instance];
+
+	// get a free beam
+	new_item = GET_FIRST ( &Beam_free_list );
+	Assert ( new_item != &Beam_free_list );     // shouldn't have the dummy element
+	if ( new_item == &Beam_free_list )
+	{
+		return -1;
+	}
+
+	// make sure that our textures are loaded as well
+	extern bool weapon_is_used ( int weapon_index );
+	extern void weapon_load_bitmaps ( int weapon_index );
+	if ( !weapon_is_used ( fire_info->beam_info_index ) )
+	{
+		weapon_load_bitmaps ( fire_info->beam_info_index );
+	}
+
+	// remove from the free list
+	list_remove ( &Beam_free_list, new_item );
+
+	// insert onto the end of used list
+	list_append ( &Beam_used_list, new_item );
+
+	// increment counter
+	Beam_count++;
+
+	// fill in some values
+	new_item->warmup_stamp = -1;
+	new_item->warmdown_stamp = -1;
+	new_item->weapon_info_index = fire_info->beam_info_index;
+	new_item->objp = fire_info->shooter;
+	new_item->sig = fire_info->shooter->signature;
+	new_item->subsys = fire_info->turret;
+	new_item->local_pnt = fire_info->turret->system_info->pnt;
+	new_item->life_left = wip->b_info.beam_life;
+	new_item->life_total = wip->b_info.beam_life;
+	new_item->r_collision_count = 0;
+	new_item->f_collision_count = 0;
+	new_item->target = fire_info->target;
+	new_item->target_subsys = fire_info->target_subsys;
+	new_item->target_sig = ( fire_info->target != NULL ) ? fire_info->target->signature : 0;
+	new_item->beam_sound_loop = -1;
+	new_item->type = wip->b_info.beam_type;
+	new_item->targeting_laser_offset = fire_info->targeting_laser_offset;
+	new_item->framecount = 0;
+	new_item->flags = 0;
+	new_item->shot_index = 0;
+	new_item->shrink = 1.0f;
+	new_item->team = ( char ) firing_ship->team;
+	new_item->range = wip->b_info.range;
+	new_item->damage_threshold = wip->b_info.damage_threshold;
+	new_item->fighter_beam = fire_info->fighter_beam;
+	new_item->bank = fire_info->bank;
+	new_item->Beam_muzzle_stamp = -1;
+	new_item->beam_glow_frame = 0.0f;
+	new_item->firingpoint = fire_info->turret->turret_next_fire_pos;
+	new_item->beam_width = wip->b_info.beam_width;
+
+	for ( int i = 0; i < MAX_BEAM_SECTIONS; i++ )
+		new_item->beam_secion_frame[i] = 0.0f;
+
+	if ( fire_info->fighter_beam )
+	{
+		new_item->type = BEAM_TYPE_C;
+	}
+
+	// if the targeted subsystem is not NULL, force it to be a type A beam
+	if ( new_item->target_subsys != NULL && new_item->type != BEAM_TYPE_C )
+	{
+		new_item->type = BEAM_TYPE_A;
+	}
+
+	// type D weapons can only fire at small ships and missiles
+	if ( new_item->type == BEAM_TYPE_D )
+	{
+		// if its a targeted ship, get the target ship
+		if ( ( fire_info->target != NULL ) && ( fire_info->target->type == OBJ_SHIP ) && ( fire_info->target->instance >= 0 ) )
+		{
+			ship *target_ship = &Ships[fire_info->target->instance];
+
+			// maybe force to be a type A
+			if ( Ship_info[target_ship->ship_info_index].class_type > -1 && ( Ship_types[Ship_info[target_ship->ship_info_index].class_type].weapon_bools & STI_WEAP_BEAMS_EASILY_HIT ) )
+			{
+				new_item->type = BEAM_TYPE_A;
+			}
+		}
+	}
+
+	// ----------------------------------------------------------------------
+	// THIS IS THE CRITICAL POINT FOR MULTIPLAYER
+	// beam_get_binfo(...) determines exactly how the beam will behave over the course of its life
+	// it fills in binfo, which we can pass to clients in multiplayer
+	if ( fire_info->beam_info_override != NULL )
+	{
+		new_item->binfo = *fire_info->beam_info_override;
+	}
+	else
+	{
+		beam_get_binfo ( new_item, fire_info->accuracy, wip->b_info.beam_shots );       // to fill in b_info    - the set of directional aim vectors
+	}
+
+	// create the associated object
+	objnum = obj_create ( OBJ_BEAM, -1, new_item - Beams, &vmd_identity_matrix, &vmd_zero_vector, 1.0f, OF_COLLIDES );
+	if ( objnum < 0 )
+	{
+		beam_delete ( new_item );
+		nprintf ( ( "General", "obj_create() failed for beam weapon! bah!\n" ) );
+		Int3();
+		return -1;
+	}
+	new_item->objnum = objnum;
+
+	// this sets up all info for the first frame the beam fires
+	beam_aim ( new_item );                  // to fill in shot_point, etc.
+
+	// check to see if its legal to fire at this guy
+	if ( beam_ok_to_fire ( new_item ) != 1 )
+	{
+		beam_delete ( new_item );
+		mprintf ( ( "Killing beam at initial fire because of illegal targeting!!!\n" ) );
+		return -1;
+	}
+
+	// if we're a multiplayer master - send a packet
+	if ( MULTIPLAYER_MASTER )
+	{
+		int bank_point = -1;
+
+		if ( fire_info->fighter_beam )
+		{
+			// magic numbers suck, be we need to make sure that we are always below UCHAR_MAX (255)
+			Assert ( fire_info->point <= 25 );
+			Assert ( fire_info->bank <= 5 );
+
+			bank_point = ( fire_info->point * 10 ) + fire_info->bank;
+		}
+
+		send_beam_fired_packet ( fire_info->shooter, fire_info->turret, fire_info->target, fire_info->beam_info_index, &new_item->binfo, ( ubyte ) fire_info->fighter_beam, bank_point );
+	}
+
+	// start the warmup phase
+	beam_start_warmup ( new_item );
+
+	return objnum;
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 // fire a targeting beam, returns objnum on success. a much much simplified version of a beam weapon
@@ -590,6 +809,7 @@ int beam_fire(beam_fire_info * fire_info)
 // this allows it to work smoothly in multiplayer (detect "trigger down". every frame just create a targeting laser firing straight out of the
 // object. this way you get all the advantages of nice rendering and collisions).
 // NOTE : only references beam_info_index and shooter
+<<<<<<< HEAD
 int beam_fire_targeting(fighter_beam_fire_info * fire_info)
 {
   beam *new_item;
@@ -709,6 +929,117 @@ int beam_fire_targeting(fighter_beam_fire_info * fire_info)
   //  Objects[objnum].instance = objnum
 
   return objnum;
+=======
+int beam_fire_targeting ( fighter_beam_fire_info *fire_info )
+{
+	beam *new_item;
+	weapon_info *wip;
+	int objnum;
+	ship *firing_ship;
+
+	// sanity check
+	if ( fire_info == NULL )
+	{
+		Int3();
+		return -1;
+	}
+
+	// if we're out of beams, bail
+	if ( Beam_count >= MAX_BEAMS )
+	{
+		return -1;
+	}
+
+	// make sure the beam_info_index is valid
+	Assert ( ( fire_info->beam_info_index >= 0 ) && ( fire_info->beam_info_index < MAX_WEAPON_TYPES ) && ( Weapon_info[fire_info->beam_info_index].wi_flags & WIF_BEAM ) );
+	if ( ( fire_info->beam_info_index < 0 ) || ( fire_info->beam_info_index >= MAX_WEAPON_TYPES ) || ! ( Weapon_info[fire_info->beam_info_index].wi_flags & WIF_BEAM ) )
+	{
+		return -1;
+	}
+	wip = &Weapon_info[fire_info->beam_info_index];
+
+	// make sure a ship is firing this
+	Assert ( ( fire_info->shooter->type == OBJ_SHIP ) && ( fire_info->shooter->instance >= 0 ) && ( fire_info->shooter->instance < MAX_SHIPS ) );
+	if ( ( fire_info->shooter->type != OBJ_SHIP ) || ( fire_info->shooter->instance < 0 ) || ( fire_info->shooter->instance >= MAX_SHIPS ) )
+	{
+		return -1;
+	}
+	firing_ship = &Ships[fire_info->shooter->instance];
+
+
+	// get a free beam
+	new_item = GET_FIRST ( &Beam_free_list );
+	Assert ( new_item != &Beam_free_list );     // shouldn't have the dummy element
+
+	// remove from the free list
+	list_remove ( &Beam_free_list, new_item );
+
+	// insert onto the end of used list
+	list_append ( &Beam_used_list, new_item );
+
+	// increment counter
+	Beam_count++;
+
+	// maybe allocate some extra data based on the beam type
+	Assert ( wip->b_info.beam_type == BEAM_TYPE_C );
+	if ( wip->b_info.beam_type != BEAM_TYPE_C )
+	{
+		return -1;
+	}
+
+	// fill in some values
+	new_item->warmup_stamp = fire_info->warmup_stamp;
+	new_item->warmdown_stamp = fire_info->warmdown_stamp;
+	new_item->weapon_info_index = fire_info->beam_info_index;
+	new_item->objp = fire_info->shooter;
+	new_item->sig = fire_info->shooter->signature;
+	new_item->subsys = NULL;
+	new_item->life_left = fire_info->life_left;
+	new_item->life_total = fire_info->life_total;
+	new_item->r_collision_count = 0;
+	new_item->f_collision_count = 0;
+	new_item->target = NULL;
+	new_item->target_subsys = NULL;
+	new_item->target_sig = 0;
+	new_item->beam_sound_loop = -1;
+	new_item->type = BEAM_TYPE_C;
+	new_item->targeting_laser_offset = fire_info->targeting_laser_offset;
+	new_item->framecount = 0;
+	new_item->flags = 0;
+	new_item->shot_index = 0;
+	new_item->shrink = 1.0f;
+	new_item->team = ( char ) firing_ship->team;
+	new_item->range = wip->b_info.range;
+	new_item->damage_threshold = wip->b_info.damage_threshold;
+	new_item->beam_width = wip->b_info.beam_width;
+
+	// type c is a very special weapon type - binfo has no meaning
+
+	// create the associated object
+	objnum = obj_create ( OBJ_BEAM, OBJ_INDEX ( fire_info->shooter ), new_item - Beams, &vmd_identity_matrix, &vmd_zero_vector, 1.0f, OF_COLLIDES );
+
+	if ( objnum < 0 )
+	{
+		beam_delete ( new_item );
+		nprintf ( ( "General", "obj_create() failed for beam weapon! bah!\n" ) );
+		Int3();
+		return -1;
+	}
+	new_item->objnum = objnum;
+
+	// this sets up all info for the first frame the beam fires
+	beam_aim ( new_item );                  // to fill in shot_point, etc.
+
+	if ( Beams[Objects[objnum].instance].objnum != objnum )
+	{
+		Int3();
+		return -1;
+	}
+
+	//  Objects[objnum].instance = objnum
+
+	return objnum;
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 // return an object index of the guy who's firing this beam
@@ -880,6 +1211,7 @@ void beam_unpause_sounds()
     }
 }
 
+<<<<<<< HEAD
 void beam_get_global_turret_gun_info(object * objp, ship_subsys * ssp,
                                      vec3d * gpos, vec3d * gvec,
                                      int use_angles, vec3d * targetp,
@@ -888,6 +1220,12 @@ void beam_get_global_turret_gun_info(object * objp, ship_subsys * ssp,
   ship_get_global_turret_gun_info(objp, ssp, gpos, gvec, use_angles, targetp);
   if (fighter_beam)
     *gvec = objp->orient.vec.fvec;
+=======
+void beam_get_global_turret_gun_info ( object *objp, ship_subsys *ssp, vec3d *gpos, vec3d *gvec, int use_angles, vec3d *targetp, bool fighter_beam )
+{
+	ship_get_global_turret_gun_info ( objp, ssp, gpos, gvec, use_angles, targetp );
+	if ( fighter_beam ) *gvec = objp->orient.vec.fvec;
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 // -----------------------------===========================------------------------------
@@ -1372,6 +1710,7 @@ void beam_move_all_post()
 #define STUFF_VERTICES()    do { verts[0]->u = 0.0f; verts[0]->v = 0.0f;    verts[1]->u = 1.0f; verts[1]->v = 0.0f; verts[2]->u = 1.0f; verts[2]->v = 1.0f; verts[3]->u = 0.0f; verts[3]->v = 1.0f; } while(0);
 #define P_VERTICES()        do { for(idx=0; idx<4; idx++){ g3_project_vertex(verts[idx]); } } while(0);
 
+<<<<<<< HEAD
 void beam_render(beam * b, float u_offset)
 {
   int idx, s_idx;
@@ -1509,6 +1848,137 @@ void beam_render(beam * b, float u_offset)
 
   // turn backface culling back on
   gr_set_cull(cull);
+=======
+void beam_render ( beam *b, float u_offset )
+{
+	int idx, s_idx;
+	vertex h1[4];               // halves of a beam section
+	vertex *verts[4] = { &h1[0], &h1[1], &h1[2], &h1[3] };
+	vec3d fvec, top1, bottom1, top2, bottom2;
+	float scale;
+	float u_scale;  // beam tileing -Bobboau
+	float length;   // beam tileing -Bobboau
+	beam_weapon_section_info *bwsi;
+	beam_weapon_info *bwi;
+
+	memset ( h1, 0, sizeof ( vertex ) * 4 );
+
+	// bogus weapon info index
+	if ( ( b == NULL ) || ( b->weapon_info_index < 0 ) )
+		return;
+
+	// if the beam start and endpoints are the same
+	if ( vm_vec_same ( &b->last_start, &b->last_shot ) )
+		return;
+
+	// get beam direction
+	vm_vec_sub ( &fvec, &b->last_shot, &b->last_start );
+	vm_vec_normalize_quick ( &fvec );
+
+	// turn off backface culling
+	int cull = gr_set_cull ( 0 );
+
+	bwi = &Weapon_info[b->weapon_info_index].b_info;
+
+	// draw all sections
+	for ( s_idx = 0; s_idx < bwi->beam_num_sections; s_idx++ )
+	{
+		bwsi = &bwi->sections[s_idx];
+
+		if ( ( bwsi->texture.first_frame < 0 ) || ( bwsi->width <= 0.0f ) )
+			continue;
+
+		// calculate the beam points
+		scale = frand_range ( 1.0f - bwsi->flicker, 1.0f + bwsi->flicker );
+		beam_calc_facing_pts ( &top1, &bottom1, &fvec, &b->last_start, bwsi->width * scale * b->shrink, bwsi->z_add );
+		beam_calc_facing_pts ( &top2, &bottom2, &fvec, &b->last_shot, bwsi->width * scale * scale * b->shrink, bwsi->z_add );
+
+		if ( Cmdline_nohtl )
+		{
+			g3_rotate_vertex ( verts[0], &bottom1 );
+			g3_rotate_vertex ( verts[1], &bottom2 );
+			g3_rotate_vertex ( verts[2], &top2 );
+			g3_rotate_vertex ( verts[3], &top1 );
+		}
+		else
+		{
+			g3_transfer_vertex ( verts[0], &bottom1 );
+			g3_transfer_vertex ( verts[1], &bottom2 );
+			g3_transfer_vertex ( verts[2], &top2 );
+			g3_transfer_vertex ( verts[3], &top1 );
+		}
+
+		P_VERTICES();
+		STUFF_VERTICES();       // stuff the beam with creamy goodness (texture coords)
+
+		length = vm_vec_dist ( &b->last_start, &b->last_shot );                 // beam tileing -Bobboau
+
+		if ( bwsi->tile_type == 1 )
+			u_scale = length / ( bwsi->width / 2 ) / bwsi->tile_factor; // beam tileing, might make a tileing factor in beam index later -Bobboau
+		else
+			u_scale = bwsi->tile_factor;
+
+		verts[1]->u = ( u_scale + ( u_offset * bwsi->translation ) );           // beam tileing -Bobboau
+		verts[2]->u = ( u_scale + ( u_offset * bwsi->translation ) );           // beam tileing -Bobboau
+		verts[3]->u = ( 0 + ( u_offset * bwsi->translation ) );
+		verts[0]->u = ( 0 + ( u_offset * bwsi->translation ) );
+
+		float per = 1.0f;
+		if ( bwi->range )
+			per -= length / bwi->range;
+
+		//this should never happen but, just to be safe
+		CLAMP ( per, 0.0f, 1.0f );
+
+		verts[1]->r = ( ubyte ) ( 255 * per );
+		verts[2]->r = ( ubyte ) ( 255 * per );
+		verts[1]->g = ( ubyte ) ( 255 * per );
+		verts[2]->g = ( ubyte ) ( 255 * per );
+		verts[1]->b = ( ubyte ) ( 255 * per );
+		verts[2]->b = ( ubyte ) ( 255 * per );
+		verts[1]->a = ( ubyte ) ( 255 * per );
+		verts[2]->a = ( ubyte ) ( 255 * per );
+
+		verts[0]->r = 255;
+		verts[3]->r = 255;
+		verts[0]->g = 255;
+		verts[3]->g = 255;
+		verts[0]->b = 255;
+		verts[3]->b = 255;
+		verts[0]->a = 255;
+		verts[3]->a = 255;
+
+		// set the right texture with additive alpha, and draw the poly
+		int framenum = 0;
+
+		if ( bwsi->texture.num_frames > 1 )
+		{
+			b->beam_secion_frame[s_idx] += flFrametime;
+
+			// Sanity checks
+			if ( b->beam_secion_frame[s_idx] < 0.0f )
+				b->beam_secion_frame[s_idx] = 0.0f;
+			if ( b->beam_secion_frame[s_idx] > 100.0f )
+				b->beam_secion_frame[s_idx] = 0.0f;
+
+			while ( b->beam_secion_frame[s_idx] > bwsi->texture.total_time )
+				b->beam_secion_frame[s_idx] -= bwsi->texture.total_time;
+
+			framenum = fl2i ( ( b->beam_secion_frame[s_idx] * bwsi->texture.num_frames ) / bwsi->texture.total_time );
+
+			CLAMP ( framenum, 0, bwsi->texture.num_frames - 1 );
+		}
+
+		gr_set_bitmap ( bwsi->texture.first_frame + framenum, GR_ALPHABLEND_FILTER, GR_BITBLT_MODE_NORMAL, 0.9999f );
+
+		// added TMAP_FLAG_TILED flag for beam texture tileing -Bobboau
+		// added TMAP_FLAG_RGB and TMAP_FLAG_GOURAUD so the beam would apear to fade along it's length-Bobboau
+		g3_draw_poly ( 4, verts, TMAP_FLAG_TEXTURED | TMAP_FLAG_RGB | TMAP_FLAG_GOURAUD | TMAP_FLAG_TILED | TMAP_FLAG_CORRECT | TMAP_HTL_3D_UNLIT );
+	}
+
+	// turn backface culling back on
+	gr_set_cull ( cull );
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 // generate particles for the muzzle glow
@@ -1519,6 +1989,7 @@ DCF(h_time, "")
   hack_time = Dc_arg_int;
 }
 
+<<<<<<< HEAD
 void beam_generate_muzzle_particles(beam * b)
 {
   int particle_count;
@@ -1694,6 +2165,172 @@ void beam_render_muzzle_glow(beam * b)
 
   if (pct > 0.7f)
     g3_draw_bitmap(&pt, 0, rad * 0.25f, tmap_flags, rad * 0.75f);
+=======
+void beam_generate_muzzle_particles ( beam *b )
+{
+	int particle_count;
+	int idx;
+	weapon_info *wip;
+	vec3d turret_norm, turret_pos, particle_pos, particle_dir, p_temp;
+	matrix m;
+	particle_info pinfo;
+
+	// if our hack stamp has expired
+	if ( ! ( ( b->Beam_muzzle_stamp == -1 ) || timestamp_elapsed ( b->Beam_muzzle_stamp ) ) )
+	{
+		return;
+	}
+
+	// never generate anything past about 1/5 of the beam fire time
+	if ( b->warmup_stamp == -1 )
+	{
+		return;
+	}
+
+	// get weapon info
+	wip = &Weapon_info[b->weapon_info_index];
+
+	// no specified particle for this beam weapon
+	if ( wip->b_info.beam_particle_ani.first_frame < 0 )
+		return;
+
+
+	// reset the hack stamp
+	b->Beam_muzzle_stamp = timestamp ( hack_time );
+
+	// randomly generate 10 to 20 particles
+	particle_count = ( int ) frand_range ( 0.0f, ( float ) wip->b_info.beam_particle_count );
+
+	// get turret info - position and normal
+	//  turret_pos = b->last_start;
+	//  vm_vec_sub(&turret_norm, &b->last_start,&b->last_shot);
+	//  vm_vec_normalize(&turret_norm);
+
+	//turret_pos  = b->subsys->system_info->turret_firing_point[b->subsys->turret_next_fire_pos % b->subsys->system_info->turret_num_firing_points];
+	//  turret_pos = b->subsys->system_info->pnt;
+	turret_pos = b->local_pnt;
+	turret_norm = b->subsys->system_info->turret_norm;
+
+	// randomly perturb a vector within a cone around the normal
+	vm_vector_2_matrix ( &m, &turret_norm, NULL, NULL );
+	for ( idx = 0; idx < particle_count; idx++ )
+	{
+		// get a random point in the cone
+		vm_vec_random_cone ( &particle_dir, &turret_norm, wip->b_info.beam_particle_angle, &m );
+		p_temp = turret_pos;
+		vm_vec_scale_add ( &p_temp, &turret_pos, &particle_dir, wip->b_info.beam_muzzle_radius * frand_range ( 0.75f, 0.9f ) );
+
+		// transform into world coords
+		vm_vec_unrotate ( &particle_pos, &p_temp, &b->objp->orient );
+		vm_vec_add2 ( &particle_pos, &b->objp->pos );
+		p_temp = particle_dir;
+		vm_vec_unrotate ( &particle_dir, &p_temp, &b->objp->orient );
+
+		// now generate some interesting values for the particle
+		float p_time_ref = wip->b_info.beam_life + ( ( float ) wip->b_info.beam_warmup / 1000.0f );
+		float p_life = frand_range ( p_time_ref * 0.5f, p_time_ref * 0.7f );
+		float p_vel = ( wip->b_info.beam_muzzle_radius / p_life ) * frand_range ( 0.85f, 1.2f );
+		vm_vec_scale ( &particle_dir, -p_vel );
+		vm_vec_add2 ( &particle_dir, &b->objp->phys_info.vel ); //move along with our parent
+
+		memset ( &pinfo, 0, sizeof ( particle_info ) );
+		pinfo.pos = particle_pos;
+		pinfo.vel = particle_dir;
+		pinfo.lifetime = p_life;
+		pinfo.attached_objnum = -1;
+		pinfo.attached_sig = 0;
+		pinfo.rad = wip->b_info.beam_particle_radius;
+		pinfo.reverse = 1;
+		pinfo.type = PARTICLE_BITMAP;
+		pinfo.optional_data = wip->b_info.beam_particle_ani.first_frame;
+		pinfo.tracer_length = -1.0f;
+		particle_create ( &pinfo );
+	}
+}
+
+// render the muzzle glow for a beam weapon
+void beam_render_muzzle_glow ( beam *b )
+{
+	vertex pt;
+	weapon_info *wip = &Weapon_info[b->weapon_info_index];
+	beam_weapon_info *bwi = &Weapon_info[b->weapon_info_index].b_info;
+	float rad, pct, rand_val;
+	int tmap_flags = TMAP_FLAG_TEXTURED | TMAP_HTL_3D_UNLIT;
+
+	// if we don't have a glow bitmap
+	if ( bwi->beam_glow.first_frame < 0 )
+		return;
+
+	// if the beam is warming up, scale the glow
+	if ( b->warmup_stamp != -1 )
+	{
+		// get warmup pct
+		pct = BEAM_WARMUP_PCT ( b );
+		rand_val = 1.0f;
+	}
+	else
+		// if the beam is warming down
+		if ( b->warmdown_stamp != -1 )
+		{
+			// get warmup pct
+			pct = 1.0f - BEAM_WARMDOWN_PCT ( b );
+			rand_val = 1.0f;
+		}
+	// otherwise the beam is really firing
+		else
+		{
+			pct = 1.0f;
+			rand_val = frand_range ( 0.90f, 1.0f );
+		}
+
+	rad = wip->b_info.beam_muzzle_radius * pct * rand_val;
+
+	// don't bother trying to draw if there is no radius
+	if ( rad <= 0.0f )
+		return;
+
+	// draw the bitmap
+	if ( Cmdline_nohtl )
+		g3_rotate_vertex ( &pt, &b->last_start );
+	else
+		g3_transfer_vertex ( &pt, &b->last_start );
+
+
+	int framenum = 0;
+
+	if ( bwi->beam_glow.num_frames > 1 )
+	{
+		b->beam_glow_frame += flFrametime;
+
+		// Sanity checks
+		if ( b->beam_glow_frame < 0.0f )
+			b->beam_glow_frame = 0.0f;
+		if ( b->beam_glow_frame > 100.0f )
+			b->beam_glow_frame = 0.0f;
+
+		while ( b->beam_glow_frame > bwi->beam_glow.total_time )
+			b->beam_glow_frame -= bwi->beam_glow.total_time;
+
+		framenum = fl2i ( ( b->beam_glow_frame * bwi->beam_glow.num_frames ) / bwi->beam_glow.total_time );
+
+		CLAMP ( framenum, 0, bwi->beam_glow.num_frames - 1 );
+	}
+
+	gr_set_bitmap ( bwi->beam_glow.first_frame + framenum, GR_ALPHABLEND_FILTER, GR_BITBLT_MODE_NORMAL, 0.8f * pct );
+
+	// draw 1 bitmap
+	g3_draw_bitmap ( &pt, 0, rad, tmap_flags );
+
+	// maybe draw more
+	if ( pct > 0.3f )
+		g3_draw_bitmap ( &pt, 0, rad * 0.75f, tmap_flags, rad * 0.25f );
+
+	if ( pct > 0.5f )
+		g3_draw_bitmap ( &pt, 0, rad * 0.45f, tmap_flags, rad * 0.55f );
+
+	if ( pct > 0.7f )
+		g3_draw_bitmap ( &pt, 0, rad * 0.25f, tmap_flags, rad * 0.75f );
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 // render all beam weapons
@@ -1928,6 +2565,7 @@ void beam_add_light(beam * b, int objnum, int source, vec3d * c_point)
 // apply lighting from any beams
 void beam_apply_lighting()
 {
+<<<<<<< HEAD
   int idx;
   beam_light_info *l;
   vec3d pt, dir;
@@ -2009,6 +2647,84 @@ void beam_apply_lighting()
           break;
         }
     }
+=======
+	int idx;
+	beam_light_info *l;
+	vec3d pt, dir;
+	beam_weapon_info *bwi;
+
+	// convert all beam lights into real lights
+	for ( idx = 0; idx < Beam_light_count; idx++ )
+	{
+		// get the light
+		l = &Beam_lights[idx];
+
+		// bad object
+		if ( ( l->objnum < 0 ) || ( l->objnum >= MAX_OBJECTS ) || ( l->bm == NULL ) )
+		{
+			continue;
+		}
+
+		bwi = &Weapon_info[l->bm->weapon_info_index].b_info;
+
+		// different light types
+		switch ( l->source )
+		{
+		// from the muzzle of the gun
+		case 0:
+			// a few meters in from the of muzzle
+			vm_vec_sub ( &dir, &l->bm->last_start, &l->bm->last_shot );
+			vm_vec_normalize_quick ( &dir );
+			vm_vec_scale ( &dir, -0.8f ); // TODO: This probably needs to *not* be stupid. -taylor
+			vm_vec_scale_add ( &pt, &l->bm->last_start, &dir, bwi->beam_muzzle_radius * 5.0f );
+
+			beam_add_light_small ( l->bm, &Objects[l->objnum], &pt );
+			break;
+
+		// from the beam passing by
+		case 1:
+			// object type
+			switch ( Objects[l->objnum].type )
+			{
+			case OBJ_SHIP:
+				Assert ( Objects[l->objnum].instance >= 0 );
+
+				// large ships
+				if ( Ship_info[Ships[Objects[l->objnum].instance].ship_info_index].flags & ( SIF_BIG_SHIP | SIF_HUGE_SHIP ) )
+				{
+					beam_add_light_large ( l->bm, &Objects[l->objnum], &l->bm->last_start, &l->bm->last_shot );
+				}
+				// small ships
+				else
+				{
+					beam_add_light_small ( l->bm, &Objects[l->objnum] );
+				}
+				break;
+
+			// asteroids get small lights
+			case OBJ_ASTEROID:
+				beam_add_light_small ( l->bm, &Objects[l->objnum] );
+				break;
+
+			// debris gets small lights
+			case OBJ_DEBRIS:
+				beam_add_light_small ( l->bm, &Objects[l->objnum] );
+				break;
+			}
+			break;
+
+		// from a collision
+		case 2:
+			// a few meters from the collision point
+			vm_vec_sub ( &dir, &l->bm->last_start, &l->c_point );
+			vm_vec_normalize_quick ( &dir );
+			vm_vec_scale_add ( &pt, &l->c_point, &dir, bwi->beam_muzzle_radius * 5.0f );
+
+			beam_add_light_small ( l->bm, &Objects[l->objnum], &pt );
+			break;
+		}
+	}
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 // -----------------------------===========================------------------------------
@@ -2123,6 +2839,7 @@ void beam_start_warmup(beam * b)
 }
 
 // start the firing phase for the beam, return 0 if the beam failed to start, and should be deleted altogether
+<<<<<<< HEAD
 int beam_start_firing(beam * b)
 {
   // kill the warmup stamp so the rest of the code knows its firing
@@ -2205,6 +2922,80 @@ void beam_start_warmdown(beam * b)
       snd_stop(b->beam_sound_loop);
       b->beam_sound_loop = -1;
     }
+=======
+int beam_start_firing ( beam *b )
+{
+	// kill the warmup stamp so the rest of the code knows its firing
+	b->warmup_stamp = -1;
+
+	// any special stuff for each weapon type
+	switch ( b->type )
+	{
+	// re-aim type A and D beam weapons here, otherwise they tend to miss
+	case BEAM_TYPE_A:
+	case BEAM_TYPE_D:
+		beam_aim ( b );
+		break;
+
+	case BEAM_TYPE_B:
+		break;
+
+	case BEAM_TYPE_C:
+		break;
+
+	case BEAM_TYPE_E:
+		break;
+
+	default:
+		Int3();
+	}
+
+	// determine if we can legitimately start firing, or if we need to take other action
+	switch ( beam_ok_to_fire ( b ) )
+	{
+	case -1 :
+		return 0;
+
+	case 0 :
+		beam_start_warmdown ( b );
+		return 1;
+	}
+
+	// start the beam firing sound now, if we haven't already
+	if ( ( b->beam_sound_loop == -1 ) && ( Weapon_info[b->weapon_info_index].b_info.beam_loop_sound >= 0 ) )
+	{
+		b->beam_sound_loop = snd_play_3d ( &Snds[Weapon_info[b->weapon_info_index].b_info.beam_loop_sound], &b->last_start, &View_position, 0.0f, NULL, 1, 1.0, SND_PRIORITY_SINGLE_INSTANCE, NULL, 1.0f, 1 );
+
+		// "shot" sound
+		if ( Weapon_info[b->weapon_info_index].launch_snd >= 0 )
+			snd_play_3d ( &Snds[Weapon_info[b->weapon_info_index].launch_snd], &b->last_start, &View_position );
+		else
+			snd_play_3d ( &Snds[SND_BEAM_SHOT], &b->last_start, &View_position );
+	}
+
+	// success
+	return 1;
+}
+
+// start the warmdown phase for the beam
+void beam_start_warmdown ( beam *b )
+{
+	// timestamp
+	b->warmdown_stamp = timestamp ( Weapon_info[b->weapon_info_index].b_info.beam_warmdown );
+
+	// start the warmdown sound
+	if ( Weapon_info[b->weapon_info_index].b_info.beam_warmdown_sound >= 0 )
+	{
+		snd_play_3d ( &Snds[Weapon_info[b->weapon_info_index].b_info.beam_warmdown_sound], &b->last_start, &View_position );
+	}
+
+	// kill the beam looping sound
+	if ( b->beam_sound_loop != -1 )
+	{
+		snd_stop ( b->beam_sound_loop );
+		b->beam_sound_loop = -1;
+	}
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 // recalculate beam sounds (looping sounds relative to the player)
@@ -2254,6 +3045,7 @@ void beam_recalc_sounds(beam * b)
 // -----------------------------===========================------------------------------
 
 // fills in binfo
+<<<<<<< HEAD
 void beam_get_binfo(beam * b, float accuracy, int num_shots)
 {
   vec3d p2;
@@ -2564,6 +3356,289 @@ void beam_jitter_aim(beam * b, float aim)
   // get the vector pointing to the circle point
   vm_vec_sub(&forward, &circle, &b->last_start);
   vm_vec_scale_add(&b->last_shot, &b->last_start, &forward, 2.0f);
+=======
+void beam_get_binfo ( beam *b, float accuracy, int num_shots )
+{
+	vec3d p2;
+	int model_num, idx;
+	vec3d oct1, oct2;
+	vec3d turret_point, turret_norm;
+	beam_weapon_info *bwi;
+	int skill_level;
+
+	int temp = b->subsys->turret_next_fire_pos;
+
+	if ( b->fighter_beam == false )
+		b->subsys->turret_next_fire_pos = b->firingpoint;
+
+	// where the shot is originating from (b->last_start gets filled in)
+	beam_get_global_turret_gun_info ( b->objp, b->subsys, &turret_point, &turret_norm, 1, &p2, b->fighter_beam );
+
+	b->subsys->turret_next_fire_pos = temp;
+
+	// get a model # to work with
+	model_num = beam_get_model ( b->target );
+	if ( model_num < 0 )
+	{
+		return;
+	}
+
+	// get beam weapon info
+	Assert ( b->weapon_info_index >= 0 );
+	if ( b->weapon_info_index < 0 )
+	{
+		return;
+	}
+	bwi = &Weapon_info[b->weapon_info_index].b_info;
+
+	// skill level
+	skill_level = Game_skill_level;
+	if ( Game_skill_level >= NUM_SKILL_LEVELS )
+	{
+		skill_level = NUM_SKILL_LEVELS - 1;
+	}
+	if ( Game_skill_level < 0 )
+	{
+		skill_level = 0;
+	}
+
+	// stuff num shots even though its only used for type D weapons
+	b->binfo.shot_count = ( ubyte ) num_shots;
+	if ( b->binfo.shot_count > MAX_BEAM_SHOTS )
+	{
+		b->binfo.shot_count = MAX_BEAM_SHOTS;
+	}
+
+	// generate the proper amount of directional vectors
+	switch ( b->type )
+	{
+	// pick an accuracy. beam will be properly aimed at actual fire time
+	case BEAM_TYPE_A:
+		// all we will do is decide whether or not we will hit - type A beam weapons are re-aimed immediately before firing
+		b->binfo.shot_aim[0] = frand_range ( 0.0f, 1.0f + bwi->beam_miss_factor[skill_level] * accuracy );
+		b->binfo.shot_count = 1;
+
+		// get random model points, this is useful for big ships, because we never miss when shooting at them
+		submodel_get_two_random_points ( model_num, 0, &b->binfo.dir_a, &b->binfo.dir_b );
+		break;
+
+	// just 2 points in the "slash"
+	case BEAM_TYPE_B:
+		beam_get_octant_points ( model_num, b->target, ( int ) frand_range ( 0.0f, BEAM_NUM_GOOD_OCTANTS ), Beam_good_slash_octants, &oct1, &oct2 );
+
+		// point 1
+		vm_vec_sub ( &b->binfo.dir_a, &oct1, &turret_point );
+		vm_vec_normalize ( &b->binfo.dir_a );
+
+		// point 2
+		vm_vec_sub ( &b->binfo.dir_b, &oct2, &turret_point );
+		vm_vec_normalize ( &b->binfo.dir_b );
+
+		// delta angle
+		b->binfo.delta_ang = fl_abs ( vm_vec_delta_ang_norm ( &b->binfo.dir_a, &b->binfo.dir_b, NULL ) );
+		break;
+
+	// nothing for this beam - its very special case
+	case BEAM_TYPE_C:
+		break;
+
+	// type D beams fire at small ship multiple times
+	case BEAM_TYPE_D:
+		// get a bunch of shot aims
+		for ( idx = 0; idx < b->binfo.shot_count; idx++ )
+		{
+			//  MK, 9/3/99: Added pow() function to make increasingly likely to miss with subsequent shots.  30% more likely with each shot.
+			float r = ( ( float ) pow ( 1.3f, idx ) ) * bwi->beam_miss_factor[skill_level] * accuracy;
+			b->binfo.shot_aim[idx] = frand_range ( 0.0f, 1.0f + r );
+		}
+		break;
+
+	// type e beams just fire straight
+	case BEAM_TYPE_E:
+		b->binfo.shot_aim[0] = 0.0000001f;
+		b->binfo.shot_count = 1;
+		b->binfo.dir_a = turret_norm;
+		b->binfo.dir_b = turret_norm;
+		break;
+
+	default:
+		break;
+	}
+}
+
+// aim the beam (setup last_start and last_shot - the endpoints). also recalculates collision pairs
+void beam_aim ( beam *b )
+{
+	vec3d temp, p2;
+	int model_num;
+
+	// type C beam weapons have no target
+	if ( b->target == NULL )
+	{
+		Assert ( b->type == BEAM_TYPE_C );
+		if ( b->type != BEAM_TYPE_C )
+		{
+			return;
+		}
+	}
+	// get a model # to work with
+	else
+	{
+		model_num = beam_get_model ( b->target );
+		if ( model_num < 0 )
+		{
+			return;
+		}
+	}
+
+	int temp_int = b->subsys->turret_next_fire_pos;
+
+	if ( b->fighter_beam == false )
+		b->subsys->turret_next_fire_pos = b->firingpoint;
+
+	// setup our initial shot point and aim direction
+	switch ( b->type )
+	{
+	case BEAM_TYPE_A:
+		// where the shot is originating from (b->last_start gets filled in)
+		beam_get_global_turret_gun_info ( b->objp, b->subsys, &b->last_start, &temp, 1, &p2, b->fighter_beam );
+
+		// if we're targeting a subsystem - shoot directly at it
+		if ( b->target_subsys != NULL )
+		{
+			// unrotate the center of the subsystem
+			//          vm_vec_unrotate(&b->last_shot, &b->local_pnt, &b->target->orient);
+			vm_vec_unrotate ( &b->last_shot, &b->target_subsys->system_info->pnt, &b->target->orient );
+			vm_vec_add2 ( &b->last_shot, &b->target->pos );
+			vm_vec_sub ( &temp, &b->last_shot, &b->last_start );
+
+			vm_vec_scale_add ( &b->last_shot, &b->last_start, &temp, 2.0f );
+			break;
+		}
+
+		// if we're shooting at a big ship - shoot directly at the model
+		if ( ( b->target->type == OBJ_SHIP ) && ( Ship_info[Ships[b->target->instance].ship_info_index].flags & ( SIF_BIG_SHIP | SIF_HUGE_SHIP ) ) )
+		{
+			// rotate into world coords
+			vm_vec_unrotate ( &temp, &b->binfo.dir_a, &b->target->orient );
+			vm_vec_add2 ( &temp, &b->target->pos );
+
+			// get the shot point
+			vm_vec_sub ( &p2, &temp, &b->last_start );
+			vm_vec_scale_add ( &b->last_shot, &b->last_start, &p2, 2.0f );
+			break;
+		}
+
+		// point at the center of the target, then jitter based on shot_aim
+		b->last_shot = b->target->pos;
+		beam_jitter_aim ( b, b->binfo.shot_aim[0] );
+		break;
+
+	case BEAM_TYPE_B:
+		// where the shot is originating from (b->last_start gets filled in)
+		beam_get_global_turret_gun_info ( b->objp, b->subsys, &b->last_start, &temp, 1, &p2, b->fighter_beam );
+
+		// set the shot point
+		vm_vec_scale_add ( &b->last_shot, &b->last_start, &b->binfo.dir_a, b->range );
+		Assert ( is_valid_vec ( &b->last_shot ) );
+		break;
+
+	case BEAM_TYPE_C:
+		// start point
+		temp = b->targeting_laser_offset;
+		vm_vec_unrotate ( &b->last_start, &temp, &b->objp->orient );
+		vm_vec_add2 ( &b->last_start, &b->objp->pos );
+		vm_vec_scale_add ( &b->last_shot, &b->last_start, &b->objp->orient.vec.fvec, b->range );
+		break;
+
+	case BEAM_TYPE_D:
+		// where the shot is originating from (b->last_start gets filled in)
+		beam_get_global_turret_gun_info ( b->objp, b->subsys, &b->last_start, &temp, 1, &p2, b->fighter_beam );
+
+		// point at the center of the target, then jitter based on shot_aim
+		b->last_shot = b->target->pos;
+		beam_jitter_aim ( b, b->binfo.shot_aim[b->shot_index] );
+		nprintf ( ( "AI", "Frame %i: FIRING\n", Framecount ) );
+		break;
+
+	case BEAM_TYPE_E:
+		// where the shot is originating from (b->last_start gets filled in)
+		beam_get_global_turret_gun_info ( b->objp, b->subsys, &b->last_start, &temp, 1, &p2, b->fighter_beam );
+
+		// point directly in the direction of the turret
+		vm_vec_scale_add ( &b->last_shot, &b->last_start, &temp, b->range );
+		break;
+
+	default:
+		Int3();
+	}
+
+	b->subsys->turret_next_fire_pos = temp_int;
+
+	// recalculate object pairs
+	OBJ_RECALC_PAIRS ( ( &Objects[b->objnum] ) );
+}
+
+// given a model #, and an object, stuff 2 good world coord points
+void beam_get_octant_points ( int modelnum, object *objp, int oct_index, int oct_array[BEAM_NUM_GOOD_OCTANTS][4], vec3d *v1, vec3d *v2 )
+{
+	vec3d t1, t2, temp;
+	polymodel *m = model_get ( modelnum );
+
+	// bad bad bad bad bad bad
+	if ( m == NULL )
+	{
+		Int3();
+		return;
+	}
+
+	Assert ( ( oct_index >= 0 ) && ( oct_index < BEAM_NUM_GOOD_OCTANTS ) );
+
+	// randomly pick octants
+	t1 = oct_array[oct_index][2] ? m->octants[oct_array[oct_index][0]].max : m->octants[oct_array[oct_index][0]].min;
+	t2 = oct_array[oct_index][3] ? m->octants[oct_array[oct_index][1]].max : m->octants[oct_array[oct_index][1]].min;
+	Assert ( !vm_vec_same ( &t1, &t2 ) );
+
+	// get them in world coords
+	vm_vec_unrotate ( &temp, &t1, &objp->orient );
+	vm_vec_add ( v1, &temp, &objp->pos );
+	vm_vec_unrotate ( &temp, &t2, &objp->orient );
+	vm_vec_add ( v2, &temp, &objp->pos );
+}
+
+// throw some jitter into the aim - based upon shot_aim
+void beam_jitter_aim ( beam *b, float aim )
+{
+	vec3d forward, circle;
+	matrix m;
+	float subsys_strength;
+
+	// if the weapons subsystem is damaged or destroyed
+	if ( ( b->objp != NULL ) && ( b->objp->signature == b->sig ) && ( b->objp->type == OBJ_SHIP ) && ( b->objp->instance >= 0 ) && ( b->objp->instance < MAX_SHIPS ) )
+	{
+		// get subsytem strength
+		subsys_strength = ship_get_subsystem_strength ( &Ships[b->objp->instance], SUBSYSTEM_WEAPONS );
+
+		// when subsytem strength is 0, double the aim error factor
+		aim += aim * ( 1.0f - subsys_strength );
+	}
+
+	// shot aim is a direct linear factor of the target model's radius.
+	// so, pick a random point on the circle
+	vm_vec_sub ( &forward, &b->last_shot, &b->last_start );
+	vm_vec_normalize_quick ( &forward );
+
+	// vector
+	vm_vector_2_matrix ( &m, &forward, NULL, NULL );
+
+	// get a vector on the circle - this should appear to be pretty random
+	// vm_vec_scale_add(&circle, &b->last_shot, &m.rvec, aim * b->target->radius);
+	vm_vec_random_in_circle ( &circle, &b->last_shot, &m, aim * b->target->radius, 0 );
+
+	// get the vector pointing to the circle point
+	vm_vec_sub ( &forward, &circle, &b->last_start );
+	vm_vec_scale_add ( &b->last_shot, &b->last_start, &forward, 2.0f );
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 
@@ -2572,6 +3647,7 @@ void beam_jitter_aim(beam * b, float aim)
 // -----------------------------===========================------------------------------
 
 // collide a beam with a ship, returns 1 if we can ignore all future collisions between the 2 objects
+<<<<<<< HEAD
 int beam_collide_ship(obj_pair * pair)
 {
   beam *b;
@@ -2629,6 +3705,63 @@ int beam_collide_ship(obj_pair * pair)
       // Int3();
       return 1;
     }
+=======
+int beam_collide_ship ( obj_pair *pair )
+{
+	beam *b;
+	object *ship_objp;
+	ship *shipp;
+	ship_info *sip;
+	weapon_info *bwi;
+	mc_info mc, mc_shield, mc_hull_enter, mc_hull_exit;
+	int model_num;
+	float widest;
+
+	// bogus
+	if ( pair == NULL )
+	{
+		return 0;
+	}
+
+	// get the beam
+	Assert ( pair->a->instance >= 0 );
+	Assert ( pair->a->type == OBJ_BEAM );
+	Assert ( Beams[pair->a->instance].objnum == OBJ_INDEX ( pair->a ) );
+	b = &Beams[pair->a->instance];
+
+	// Don't check collisions for warping out player if past stage 1.
+	if ( Player->control_mode >= PCM_WARPOUT_STAGE1 )
+	{
+		if ( pair->a == Player_obj ) return 0;
+		if ( pair->b == Player_obj ) return 0;
+	}
+
+	// if the "warming up" timestamp has not expired
+	if ( ( b->warmup_stamp != -1 ) || ( b->warmdown_stamp != -1 ) )
+	{
+		return 0;
+	}
+
+	// if the beam is on "safety", don't collide with anything
+	if ( b->flags & BF_SAFETY )
+	{
+		return 0;
+	}
+
+	// if the colliding object is the shooting object, return 1 so this is culled
+	if ( pair->b == b->objp )
+	{
+		return 1;
+	}
+
+	// try and get a model
+	model_num = beam_get_model ( pair->b );
+	if ( model_num < 0 )
+	{
+		// Int3();
+		return 1;
+	}
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 
 #ifndef NDEBUG
   Beam_test_ints++;
@@ -3138,6 +4271,7 @@ int beam_sort_collisions_func(const void *e1, const void *e2)
 }
 
 // handle a hit on a specific object
+<<<<<<< HEAD
 void beam_handle_collisions(beam * b)
 {
   int idx, s_idx;
@@ -3567,6 +4701,342 @@ void beam_handle_collisions(beam * b)
       b->r_collisions[idx] = r_coll[idx];
     }
   b->r_collision_count = r_coll_count;
+=======
+void beam_handle_collisions ( beam *b )
+{
+	int idx, s_idx;
+	beam_collision r_coll[MAX_FRAME_COLLISIONS];
+	int r_coll_count = 0;
+	beam_weapon_info *bwi;
+	weapon_info *wi;
+	float widest;
+
+	// early out if we had no collisions
+	if ( b->f_collision_count <= 0 )
+	{
+		return;
+	}
+
+	// get beam weapon info
+	if ( ( b->weapon_info_index < 0 ) || ( b->weapon_info_index >= Num_weapon_types ) )
+	{
+		Int3();
+		return;
+	}
+	bwi = &Weapon_info[b->weapon_info_index].b_info;
+	wi = &Weapon_info[b->weapon_info_index];
+
+	// get the widest part of the beam
+	widest = beam_get_widest ( b );
+
+	// the first thing we need to do is sort the collisions, from closest to farthest
+	qsort ( b->f_collisions, b->f_collision_count, sizeof ( beam_collision ), beam_sort_collisions_func );
+
+	// now apply all collisions until we reach a ship which "stops" the beam or we reach the end of the list
+	for ( idx = 0; idx < b->f_collision_count; idx++ )
+	{
+		int model_num = -1;
+		int do_damage = 0;
+		int draw_effects = 1;
+		int first_hit = 1;
+		int target = b->f_collisions[idx].c_objnum;
+
+		// if we have an invalid object
+		if ( ( target < 0 ) || ( target >= MAX_OBJECTS ) )
+		{
+			continue;
+		}
+
+		// try and get a model to deal with
+		model_num = beam_get_model ( &Objects[target] );
+		if ( model_num < 0 )
+		{
+			continue;
+		}
+
+		if ( wi->wi_flags & WIF_HUGE )
+		{
+			if ( Objects[target].type & OBJ_SHIP )
+			{
+				ship_type_info *sti;
+				sti = ship_get_type_info ( &Objects[target] );
+				if ( sti->weapon_bools & STI_WEAP_NO_HUGE_IMPACT_EFF )
+					draw_effects = 0;
+			}
+		}
+
+		// add lighting
+		beam_add_light ( b, target, 2, &b->f_collisions[idx].cinfo.hit_point_world );
+
+		// add to the recent collision list
+		r_coll[r_coll_count].c_objnum = target;
+		r_coll[r_coll_count].c_sig = Objects[target].signature;
+		r_coll[r_coll_count].c_stamp = -1;
+		r_coll[r_coll_count].cinfo = b->f_collisions[idx].cinfo;
+
+		// if he was already on the recent collision list, copy his timestamp
+		// also, be sure not to play the impact sound again.
+		for ( s_idx = 0; s_idx < b->r_collision_count; s_idx++ )
+		{
+			if ( ( r_coll[r_coll_count].c_objnum == b->r_collisions[s_idx].c_objnum ) &&  ( r_coll[r_coll_count].c_sig == b->r_collisions[s_idx].c_sig ) )
+			{
+				// timestamp
+				r_coll[r_coll_count].c_stamp = b->r_collisions[s_idx].c_stamp;
+
+				// don't play the impact sound again
+				first_hit = 0;
+			}
+		}
+
+		// if the damage timestamp has expired or is not set yet, apply damage
+		if ( ( r_coll[r_coll_count].c_stamp == -1 ) || timestamp_elapsed ( r_coll[r_coll_count].c_stamp ) )
+		{
+			float time_compression = f2fl ( Game_time_compression );
+			float delay_time = i2fl ( BEAM_DAMAGE_TIME ) / time_compression;
+			do_damage = 1;
+			r_coll[r_coll_count].c_stamp = timestamp ( fl2i ( delay_time ) );
+		}
+
+		// if no damage - don't even indicate it has been hit
+		if ( wi->damage <= 0 )
+		{
+			do_damage = 0;
+		}
+
+		// increment collision count
+		r_coll_count++;
+
+		// play the impact sound
+		if ( first_hit )
+		{
+			snd_play_3d ( &Snds[wi->impact_snd], &b->f_collisions[idx].cinfo.hit_point_world, &Eye_position );
+		}
+
+		// KOMET_EXT -->
+
+		// draw flash, explosion
+		if ( draw_effects && ( ( wi->piercing_impact_explosion_radius > 0 ) || ( wi->flash_impact_explosion_radius > 0 ) ) )
+		{
+			float flash_rad = ( 1.2f + 0.007f * ( float ) ( rand() % 100 ) );
+			float rnd = frand();
+			int do_expl = 0;
+			if ( ( rnd < 0.2f || do_damage ) && wi->impact_weapon_expl_index >= 0 )
+			{
+				do_expl = 1;
+			}
+			float ani_radius;
+			vec3d temp_pos, temp_local_pos;
+
+			vm_vec_sub ( &temp_pos, &b->f_collisions[idx].cinfo.hit_point_world, &Objects[target].pos );
+			vm_vec_rotate ( &temp_local_pos, &temp_pos, &Objects[target].orient );
+
+			if ( wi->flash_impact_explosion_radius > 0 )
+			{
+				ani_radius = wi->flash_impact_explosion_radius * flash_rad;
+				if ( wi->flash_impact_weapon_expl_index > -1 )
+				{
+					int ani_handle = Weapon_explosions.GetAnim ( wi->flash_impact_weapon_expl_index, &b->f_collisions[idx].cinfo.hit_point_world, ani_radius );
+					particle_create ( &temp_local_pos, &vmd_zero_vector, 0.005f * ani_radius, ani_radius, PARTICLE_BITMAP_PERSISTENT, ani_handle, -1, &Objects[target] );
+				}
+				else
+				{
+					particle_create ( &temp_local_pos, &vmd_zero_vector, 0.005f * ani_radius, ani_radius, PARTICLE_SMOKE, 0, -1, &Objects[target] );
+				}
+			}
+			if ( do_expl )
+			{
+				ani_radius = 0.7f * wi->impact_explosion_radius * flash_rad;
+				int ani_handle = Weapon_explosions.GetAnim ( wi->impact_weapon_expl_index, &b->f_collisions[idx].cinfo.hit_point_world, ani_radius );
+				particle_create ( &temp_local_pos, &vmd_zero_vector, 0.0f, ani_radius, PARTICLE_BITMAP_PERSISTENT, ani_handle, -1, &Objects[target] );
+			}
+
+			if ( wi->piercing_impact_explosion_radius > 0 )
+			{
+				vec3d fvec;
+				vm_vec_sub ( &fvec, &b->last_shot, &b->last_start );
+
+				if ( !IS_VEC_NULL ( &fvec ) )
+				{
+					// get beam direction
+
+					int ok_to_draw = 0;
+
+					if ( beam_will_tool_target ( b, &Objects[target] ) )
+					{
+						ok_to_draw = 1;
+
+						if ( Objects[target].type == OBJ_SHIP )
+						{
+							ship *shipp = &Ships[Objects[target].instance];
+
+							if ( shipp->armor_type_idx != -1 )
+							{
+								if ( Armor_types[shipp->armor_type_idx].GetPiercingType ( wi->damage_type_idx ) == SADTF_PIERCING_RETAIL )
+								{
+									ok_to_draw = 0;
+								}
+							}
+						}
+					}
+					else
+					{
+						ok_to_draw = 0;
+
+						if ( Objects[target].type == OBJ_SHIP )
+						{
+							float draw_limit, hull_pct;
+							int dmg_type_idx, piercing_type;
+
+							ship *shipp = &Ships[Objects[target].instance];
+
+							hull_pct = Objects[target].hull_strength / shipp->ship_max_hull_strength;
+							dmg_type_idx = wi->damage_type_idx;
+							draw_limit = Ship_info[shipp->ship_info_index].piercing_damage_draw_limit;
+
+							if ( shipp->armor_type_idx != -1 )
+							{
+								piercing_type = Armor_types[shipp->armor_type_idx].GetPiercingType ( dmg_type_idx );
+								if ( piercing_type == SADTF_PIERCING_DEFAULT )
+								{
+									draw_limit = Armor_types[shipp->armor_type_idx].GetPiercingLimit ( dmg_type_idx );
+								}
+								else if ( ( piercing_type == SADTF_PIERCING_NONE ) || ( piercing_type == SADTF_PIERCING_RETAIL ) )
+								{
+									draw_limit = -1.0f;
+								}
+							}
+
+							if ( ( draw_limit != -1.0f ) && ( hull_pct <= draw_limit ) )
+								ok_to_draw = 1;
+						}
+					}
+
+					if ( ok_to_draw )
+					{
+						vm_vec_normalize_quick ( &fvec );
+
+						// stream of fire for big ships
+						if ( widest <= Objects[target].radius * BEAM_AREA_PERCENT )
+						{
+
+							vec3d expl_vel, expl_splash_vel;
+
+							float flame_size = wi->piercing_impact_explosion_radius * frand_range ( 0.5f, 2.0f );
+							float base_v, back_v;
+							vec3d rnd_vec;
+
+							vm_vec_rand_vec_quick ( &rnd_vec );
+
+							if ( wi->piercing_impact_particle_velocity != 0.0f )
+								base_v = wi->piercing_impact_particle_velocity;
+							else
+								base_v = wi->piercing_impact_explosion_radius;
+
+							if ( wi->piercing_impact_particle_back_velocity != 0.0f )
+								back_v = wi->piercing_impact_particle_back_velocity;
+							else
+								back_v = base_v * ( -0.2f );
+
+							vm_vec_copy_scale ( &expl_vel, &fvec, base_v * frand_range ( 1.0f, 2.0f ) );
+							vm_vec_copy_scale ( &expl_splash_vel, &fvec, back_v * frand_range ( 1.0f, 2.0f ) );
+							vm_vec_scale_add2 ( &expl_vel, &rnd_vec, base_v * wi->piercing_impact_particle_variance );
+							vm_vec_scale_add2 ( &expl_splash_vel, &rnd_vec, back_v * wi->piercing_impact_particle_variance );
+
+							if ( wi->piercing_impact_weapon_expl_index > -1 )
+							{
+								int ani_handle = Weapon_explosions.GetAnim ( wi->piercing_impact_weapon_expl_index, &b->f_collisions[idx].cinfo.hit_point_world, flame_size );
+								particle_create ( &b->f_collisions[idx].cinfo.hit_point_world, &expl_vel, 0.0f, flame_size, PARTICLE_BITMAP_PERSISTENT, ani_handle );
+								particle_create ( &b->f_collisions[idx].cinfo.hit_point_world, &expl_splash_vel, 0.0f, flame_size, PARTICLE_BITMAP_PERSISTENT, ani_handle );
+							}
+							else
+							{
+								particle_create ( &b->f_collisions[idx].cinfo.hit_point_world, &expl_vel, 0.3f, flame_size, PARTICLE_SMOKE );
+								particle_create ( &b->f_collisions[idx].cinfo.hit_point_world, &expl_splash_vel, 0.6f, flame_size, PARTICLE_SMOKE );
+							}
+						}
+					}
+				}
+			}
+			// <-- KOMET_EXT
+		}
+		else
+		{
+			if ( draw_effects && do_damage && !physics_paused )
+			{
+				// maybe draw an explosion, if we aren't hitting shields
+				if ( ( wi->impact_weapon_expl_index >= 0 ) && ( b->f_collisions[idx].quadrant < 0 ) )
+				{
+					int ani_handle = Weapon_explosions.GetAnim ( wi->impact_weapon_expl_index, &b->f_collisions[idx].cinfo.hit_point_world, wi->impact_explosion_radius );
+					particle_create ( &b->f_collisions[idx].cinfo.hit_point_world, &vmd_zero_vector, 0.0f, wi->impact_explosion_radius, PARTICLE_BITMAP_PERSISTENT, ani_handle );
+				}
+			}
+		}
+
+		if ( do_damage && !physics_paused )
+		{
+
+			switch ( Objects[target].type )
+			{
+			case OBJ_DEBRIS:
+				// hit the debris - the debris hit code takes care of checking for MULTIPLAYER_CLIENT, etc
+				debris_hit ( &Objects[target], &Objects[b->objnum], &b->f_collisions[idx].cinfo.hit_point_world, Weapon_info[b->weapon_info_index].damage );
+				break;
+
+			case OBJ_WEAPON:
+				// detonate the missile
+				Assert ( Weapon_info[Weapons[Objects[target].instance].weapon_info_index].subtype == WP_MISSILE );
+
+				if ( ! ( Game_mode & GM_MULTIPLAYER ) || MULTIPLAYER_MASTER )
+				{
+					weapon_hit ( &Objects[target], NULL, &Objects[target].pos );
+				}
+				break;
+
+			case OBJ_ASTEROID:
+				// hit the asteroid
+				if ( ! ( Game_mode & GM_MULTIPLAYER ) || MULTIPLAYER_MASTER )
+				{
+					asteroid_hit ( &Objects[target], &Objects[b->objnum], &b->f_collisions[idx].cinfo.hit_point_world, Weapon_info[b->weapon_info_index].damage );
+				}
+				break;
+			case OBJ_SHIP:
+				// hit the ship - again, the innards of this code handle multiplayer cases
+				// maybe vaporize ship.
+				//only apply damage if the collision is not an exit collision.  this prevents twice the damage from being done, although it probably be more realistic since two holes are being punched in the ship instead of one.
+				if ( !b->f_collisions[idx].is_exit_collision )
+					ship_apply_local_damage ( &Objects[target], &Objects[b->objnum], &b->f_collisions[idx].cinfo.hit_point_world, beam_get_ship_damage ( b, &Objects[target] ), b->f_collisions[idx].quadrant );
+
+				// if this is the first hit on the player ship. whack him
+				if ( do_damage )
+				{
+					// Goober5000 - AGH!  BAD BAD BAD BAD BAD BAD BAD BAD bug!  The whack's hit point is in *local*
+					// coordinates, NOT world coordinates!
+					beam_apply_whack ( b, &Objects[target], &b->f_collisions[idx].cinfo.hit_point );
+				}
+				break;
+			}
+		}
+
+		// if the radius of the target is somewhat close to the radius of the beam, "stop" the beam here
+		// for now : if its smaller than about 1/3 the radius of the ship
+		if ( widest <= ( Objects[target].radius * BEAM_AREA_PERCENT ) && !beam_will_tool_target ( b, &Objects[target] ) )
+		{
+			// set last_shot so we know where to properly draw the beam
+			b->last_shot = b->f_collisions[idx].cinfo.hit_point_world;
+			Assert ( is_valid_vec ( &b->last_shot ) );
+
+			// done wif the beam
+			break;
+		}
+	}
+
+	// store the new recent collisions
+	for ( idx = 0; idx < r_coll_count; idx++ )
+	{
+		b->r_collisions[idx] = r_coll[idx];
+	}
+	b->r_collision_count = r_coll_count;
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 // for a given object, and a firing beam, determine its critical dot product and range
@@ -3647,6 +5117,7 @@ float beam_get_cone_dot(beam * b)
 }
 
 // if it is legal for the beam to fire, or continue firing
+<<<<<<< HEAD
 int beam_ok_to_fire(beam * b)
 {
   // if my own object is invalid, stop firing
@@ -3748,6 +5219,102 @@ int beam_ok_to_fire(beam * b)
 
   // ok to fire/continue firing
   return 1;
+=======
+int beam_ok_to_fire ( beam *b )
+{
+	// if my own object is invalid, stop firing
+	if ( b->objp->signature != b->sig )
+	{
+		mprintf ( ( "BEAM : killing beam because of invalid parent object SIGNATURE!\n" ) );
+		return -1;
+	}
+
+	// if my own object is a ghost
+	if ( b->objp->type != OBJ_SHIP )
+	{
+		mprintf ( ( "BEAM : killing beam because of invalid parent object TYPE!\n" ) );
+		return -1;
+	}
+
+	// type C beams are ok to fire all the time
+	if ( b->type == BEAM_TYPE_C )
+	{
+		ship *shipp = &Ships[b->objp->instance];
+
+		if ( shipp->weapon_energy <= 0.0f )
+		{
+			//  shipp->weapons.next_primary_fire_stamp[b->bank] = timestamp(Weapon_info[shipp->weapons.primary_bank_weapons[b->bank]].b_info.beam_warmdown*2);
+			//  shipp->weapons.next_primary_fire_stamp[b->bank] = timestamp(2000);
+			shipp->weapons.next_primary_fire_stamp[b->bank] = timestamp ( shipp->weapons.next_primary_fire_stamp[b->bank] * 2 );
+
+			if ( OBJ_INDEX ( Player_obj ) == shipp->objnum )
+			{
+				extern int ship_maybe_play_primary_fail_sound();
+				ship_maybe_play_primary_fail_sound();
+			}
+
+			//  mprintf(("killing fighter beam becase it ran out of energy\n"));
+
+			return 0;
+		}
+		else
+		{
+			return 1;
+		}
+	}
+
+	// if the shooting turret is destroyed
+	if ( b->subsys->current_hits <= 0.0f )
+	{
+		mprintf ( ( "BEAM : killing beam because turret has been destroyed!\n" ) );
+		return -1;
+	}
+
+	//kill it if its disrupted
+	if ( ship_subsys_disrupted ( b->subsys ) )
+	{
+		return -1;
+	}
+
+	// if the beam will be firing out of its FOV, power it down
+	vec3d aim_dir;
+	vm_vec_sub ( &aim_dir, &b->last_shot, &b->last_start );
+	vm_vec_normalize ( &aim_dir );
+
+	if ( ! ( The_mission.ai_profile->flags & AIPF_FORCE_BEAM_TURRET_FOV ) )
+	{
+		vec3d turret_dir, turret_pos, temp;
+		beam_get_global_turret_gun_info ( b->objp, b->subsys, &turret_pos, &turret_dir, 1, &temp, b->fighter_beam );
+		if ( vm_vec_dotprod ( &aim_dir, &turret_dir ) < b->subsys->system_info->turret_fov )
+		{
+			nprintf ( ( "BEAM", "BEAM : powering beam down because of FOV condition!\n" ) );
+			return 0;
+		}
+	}
+	else
+	{
+		vec3d turret_normal;
+
+		if ( b->fighter_beam )
+		{
+			turret_normal = b->objp->orient.vec.fvec;
+			b->subsys->system_info->flags &= ~MSS_FLAG_TURRET_ALT_MATH;
+		}
+		else
+		{
+			vm_vec_unrotate ( &turret_normal, &b->subsys->system_info->turret_norm, &b->objp->orient );
+		}
+
+		if ( ! ( turret_fov_test ( b->subsys, &turret_normal, &aim_dir ) ) )
+		{
+			nprintf ( ( "BEAM", "BEAM : powering beam down because of FOV condition!\n" ) );
+			return 0;
+		}
+	}
+
+	// ok to fire/continue firing
+	return 1;
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 // get the width of the widest section of the beam
@@ -3856,6 +5423,7 @@ void beam_apply_whack(beam * b, object * objp, vec3d * hit_point)
 }
 
 // return the amount of damage which should be applied to a ship. basically, filters friendly fire damage
+<<<<<<< HEAD
 float beam_get_ship_damage(beam * b, object * objp)
 {
   // if the beam is on the same team as the object
@@ -3905,6 +5473,52 @@ float beam_get_ship_damage(beam * b, object * objp)
     }
 
   return damage;
+=======
+float beam_get_ship_damage ( beam *b, object *objp )
+{
+	// if the beam is on the same team as the object
+	if ( ( objp == NULL ) || ( b == NULL ) )
+	{
+		Int3();
+		return 0.0f;
+	}
+
+	if ( ( objp->type != OBJ_SHIP ) || ( objp->instance < 0 ) || ( objp->instance >= MAX_SHIPS ) )
+	{
+		Int3();
+		return 0.0f;
+	}
+
+	weapon_info *wip = &Weapon_info[b->weapon_info_index];
+
+	float attenuation = 1.0f;
+
+	if ( ( b->damage_threshold >= 0.0f ) && ( b->damage_threshold < 1.0f ) )
+	{
+		float dist = vm_vec_dist ( &b->last_shot, &b->last_start );
+		float range = b->range;
+		float atten_dist = range * b->damage_threshold;
+		if ( ( range > dist ) && ( atten_dist < dist ) )
+		{
+			attenuation = ( dist - atten_dist ) / ( range - atten_dist );
+		}
+	}
+
+	float damage = 0.0f;
+
+	// same team. yikes
+	if ( ( b->team == Ships[objp->instance].team ) && ( wip->damage > The_mission.ai_profile->beam_friendly_damage_cap[Game_skill_level] ) )
+	{
+		damage = The_mission.ai_profile->beam_friendly_damage_cap[Game_skill_level] * attenuation;
+	}
+	else
+	{
+		// normal damage
+		damage = Weapon_info[b->weapon_info_index].damage * attenuation;
+	}
+
+	return damage;
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
 
 // if the beam is likely to tool a given target before its lifetime expires
@@ -3981,6 +5595,7 @@ DCF(beam_list, "")
         }
     }
 }
+<<<<<<< HEAD
 
 void beam_test(int whee)
 {
@@ -4201,4 +5816,219 @@ void beam_test_new(int whee)
       HUD_printf("Firing %s\n", Weapon_info[f.beam_info_index].name);
       beam_fire(&f);
     }
+=======
+void beam_test ( int whee )
+{
+	int s1, s2;
+	object *orion, *fenris;
+	ship_subsys *orion_turret, *fenris_turret, *fenris_radar, *orion_radar, *lookup;
+	beam_fire_info f;
+
+	nprintf ( ( "General", "Running beam test\n" ) );
+
+	// lookup some stuff
+	s1 = ship_name_lookup ( "GTD Orion 1" );
+	Assert ( s1 >= 0 );
+	orion = &Objects[Ships[s1].objnum];
+	s2 = ship_name_lookup ( "GTC Fenris 2" );
+	Assert ( s2 >= 0 );
+	fenris = &Objects[Ships[s2].objnum];
+
+	// get beam weapons
+	lookup = GET_FIRST ( &Ships[s1].subsys_list );
+	orion_turret = NULL;
+	orion_radar = NULL;
+	while ( lookup != END_OF_LIST ( &Ships[s1].subsys_list ) )
+	{
+		// turret
+		if ( ( lookup->system_info->type == SUBSYSTEM_TURRET ) && !subsystem_stricmp ( lookup->system_info->subobj_name, "turret07" ) )
+		{
+			orion_turret = lookup;
+		}
+
+		// radar
+		if ( lookup->system_info->type == SUBSYSTEM_RADAR )
+		{
+			orion_radar = lookup;
+		}
+
+		lookup = GET_NEXT ( lookup );
+	}
+	Assert ( orion_turret != NULL );
+	Assert ( orion_radar != NULL );
+	lookup = GET_FIRST ( &Ships[s2].subsys_list );
+	fenris_turret = NULL;
+	fenris_radar = NULL;
+	while ( lookup != END_OF_LIST ( &Ships[s2].subsys_list ) )
+	{
+		// turret
+		if ( ( lookup->system_info->type == SUBSYSTEM_TURRET ) && !subsystem_stricmp ( lookup->system_info->subobj_name, "turret07" ) )
+		{
+			fenris_turret = lookup;
+		}
+
+		// radar
+		if ( lookup->system_info->type == SUBSYSTEM_RADAR )
+		{
+			fenris_radar = lookup;
+		}
+
+		lookup = GET_NEXT ( lookup );
+	}
+	Assert ( fenris_turret != NULL );
+	Assert ( fenris_radar != NULL );
+
+	memset ( &f, 0, sizeof ( beam_fire_info ) );
+	f.accuracy = beam_accuracy;
+	f.beam_info_index = -1;
+	f.beam_info_override = NULL;
+	f.shooter = orion;
+	f.target = fenris;
+	f.target_subsys = fenris_turret;
+	f.turret = orion_turret;
+
+	// find the first beam
+	int idx;
+	int beam_first = -1;
+	int beam_count = 0;
+
+	for ( idx = 0; idx < Num_weapon_types; idx++ )
+	{
+		if ( Weapon_info[idx].wi_flags & WIF_BEAM )
+		{
+			beam_count++;
+			if ( beam_count > 1 )
+			{
+				beam_first = idx;
+				break;
+			}
+		}
+	}
+	if ( beam_first < 0 )
+	{
+		return;
+	}
+
+	// maybe fire it, if its valid
+	f.beam_info_index = beam_first + whee - 1;
+	if ( Weapon_info[f.beam_info_index].wi_flags & WIF_BEAM )
+	{
+		HUD_printf ( "Firing %s\n", Weapon_info[f.beam_info_index].name );
+
+		beam_fire ( &f );
+	}
+}
+
+void beam_test_new ( int whee )
+{
+	int s1, s2, s3;
+	object *orion, *fenris, *herc2, *herc3, *herc6, *alpha;
+	ship_subsys *orion_turret, *fenris_turret, *fenris_radar, *orion_radar, *lookup;
+	beam_fire_info f;
+
+	nprintf ( ( "General", "Running beam test\n" ) );
+
+	// lookup some stuff
+	s1 = ship_name_lookup ( "GTD Orion 1" );
+	Assert ( s1 >= 0 );
+	orion = &Objects[Ships[s1].objnum];
+	s2 = ship_name_lookup ( "GTC Fenris 2" );
+	Assert ( s2 >= 0 );
+	fenris = &Objects[Ships[s2].objnum];
+	s3 = ship_name_lookup ( "GTF Hercules 2" );
+	Assert ( s3 >= 0 );
+	herc2 = &Objects[Ships[s3].objnum];
+	s3 = ship_name_lookup ( "GTF Hercules 3" );
+	Assert ( s3 >= 0 );
+	herc3 = &Objects[Ships[s3].objnum];
+	s3 = ship_name_lookup ( "GTF Hercules 6" );
+	Assert ( s3 >= 0 );
+	herc6 = &Objects[Ships[s3].objnum];
+	s3 = ship_name_lookup ( "Alpha 1" );
+	Assert ( s3 >= 0 );
+	alpha = &Objects[Ships[s3].objnum];
+
+	// get beam weapons
+	lookup = GET_FIRST ( &Ships[s1].subsys_list );
+	orion_turret = NULL;
+	orion_radar = NULL;
+	while ( lookup != END_OF_LIST ( &Ships[s1].subsys_list ) )
+	{
+		// turret
+		if ( ( lookup->system_info->type == SUBSYSTEM_TURRET ) && !subsystem_stricmp ( lookup->system_info->subobj_name, "turret07" ) )
+		{
+			orion_turret = lookup;
+		}
+
+		// radar
+		if ( lookup->system_info->type == SUBSYSTEM_RADAR )
+		{
+			orion_radar = lookup;
+		}
+
+		lookup = GET_NEXT ( lookup );
+	}
+	Assert ( orion_turret != NULL );
+	Assert ( orion_radar != NULL );
+	lookup = GET_FIRST ( &Ships[s2].subsys_list );
+	fenris_turret = NULL;
+	fenris_radar = NULL;
+	while ( lookup != END_OF_LIST ( &Ships[s2].subsys_list ) )
+	{
+		// turret
+		if ( ( lookup->system_info->type == SUBSYSTEM_TURRET ) && !subsystem_stricmp ( lookup->system_info->subobj_name, "turret03" ) )
+		{
+			fenris_turret = lookup;
+		}
+
+		// radar
+		if ( lookup->system_info->type == SUBSYSTEM_RADAR )
+		{
+			fenris_radar = lookup;
+		}
+
+		lookup = GET_NEXT ( lookup );
+	}
+	Assert ( fenris_turret != NULL );
+	Assert ( fenris_radar != NULL );
+
+	memset ( &f, 0, sizeof ( beam_fire_info ) );
+	f.accuracy = beam_accuracy;
+	f.beam_info_override = NULL;
+	f.shooter = fenris;
+	f.target = alpha;
+	f.target_subsys = NULL;
+	f.turret = fenris_turret;
+	f.num_shots = 3;
+
+	// find the first beam
+	int idx;
+	int beam_first = -1;
+	int beam_count = 0;
+
+	for ( idx = 0; idx < Num_weapon_types; idx++ )
+	{
+		if ( Weapon_info[idx].wi_flags & WIF_BEAM )
+		{
+			beam_count++;
+			if ( beam_count > 1 )
+			{
+				beam_first = idx;
+				break;
+			}
+		}
+	}
+	if ( beam_first < 0 )
+	{
+		return;
+	}
+
+	// maybe fire it, if its valid
+	f.beam_info_index = beam_first + whee - 1;
+	if ( Weapon_info[f.beam_info_index].wi_flags & WIF_BEAM )
+	{
+		HUD_printf ( "Firing %s\n", Weapon_info[f.beam_info_index].name );
+		beam_fire ( &f );
+	}
+>>>>>>> 7d3993bca3732af9c041d291325bf784ff48f3c7
 }
