@@ -1,6 +1,6 @@
 #include "Frustum.h"
 
-#include "Math/vecmat.h"
+#include "math/vecmat.h"
 
 extern matrix Eye_matrix;
 
