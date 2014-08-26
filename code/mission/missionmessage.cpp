@@ -2049,7 +2049,8 @@ void message_send_builtin_to_player(int type, ship* shipp, int priority, int tim
 	char* who_from;
 	int best_match = -1;
 
-	std::shared_ptr<matching_builtin> current_builtin(new matching_builtin());
+
+	matching_builtin *current_builtin = new matching_builtin(); 
 	SCP_vector<matching_builtin> matching_builtins;
 
 
