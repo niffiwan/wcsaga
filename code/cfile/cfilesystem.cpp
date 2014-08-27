@@ -17,6 +17,7 @@
 #include <errno.h>
 #include <algorithm> // std::transform
 #include <cctype> // std::tolower
+#include <sstream>
 
 #ifdef _WIN32
 #include <io.h>
@@ -93,8 +94,8 @@ typedef struct cf_file
 	int pack_offset;									// For pack files, where it is at.   0 if not in a pack file.  This can be used to tell if in a pack file.
 } cf_file;
 
-#define CF_NUM_FILES_PER_BLOCK   256
-#define CF_MAX_FILE_BLOCKS			128						// Can store 256*128 = 32768 files
+#define CF_NUM_FILES_PER_BLOCK   512
+#define CF_MAX_FILE_BLOCKS			128						// Can store 512*128 = 65536 files
 
 typedef struct cf_file_block
 {
@@ -103,7 +104,7 @@ typedef struct cf_file_block
 
 static int Num_files = 0;
 static cf_file_block* File_blocks[CF_MAX_FILE_BLOCKS];
-static boost::unordered_map<std::string, cf_file*> File_lookup(256);
+static boost::unordered_map<std::string, cf_file*> File_lookup(CF_NUM_FILES_PER_BLOCK);
 
 
 // Return a pointer to to file 'index'.
@@ -118,8 +119,8 @@ cf_file* cf_get_file(int index)
 // Create a new file and return a pointer to it.
 cf_file* cf_create_file()
 {
-	int block = Num_files / CF_NUM_FILES_PER_BLOCK;
-	int offset = Num_files % CF_NUM_FILES_PER_BLOCK;
+	uint block = Num_files / CF_NUM_FILES_PER_BLOCK;
+	uint offset = Num_files % CF_NUM_FILES_PER_BLOCK;
 
 	if (File_blocks[block] == NULL)
 	{
@@ -248,12 +249,9 @@ int cf_packfile_sort_func(const void* elem1, const void* elem2)
 // Go through a root and look for pack files
 void cf_build_pack_list(cf_root* root)
 {
-#if defined _WIN32
 	char filespec[MAX_PATH_LEN];
-	cf_root_sort* rptr_sort;
-#endif
 	int i;
-	cf_root_sort* temp_roots_sort;
+	cf_root_sort *temp_roots_sort, *rptr_sort;
 	int temp_root_count, root_index;
 
 	// determine how many packfiles there are
