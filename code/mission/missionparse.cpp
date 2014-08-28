@@ -1195,8 +1195,8 @@ void parse_music(mission* pm, int flags)
 	if (flags & MPF_IMPORT_FSM)
 	{
 		// no specified music?
-		if (!stricmp(pm->event_music_name, "none"))
-			goto done_event_music;
+		if (stricmp(pm->event_music_name, "none")){
+
 
 		// set the FS1 equivalent as the substitute
 		strcpy_s(pm->substitute_event_music_name, "FS1-");
@@ -1206,7 +1206,6 @@ void parse_music(mission* pm, int flags)
 		if (!stricmp(pm->event_music_name, "7: Marauder") && event_music_get_soundtrack_index("5: Deuteronomy") >= 0)
 		{
 			strcpy_s(pm->event_music_name, "5: Deuteronomy");
-			goto done_event_music;
 		}
 
 		// search for something with the same track number
@@ -1221,44 +1220,41 @@ void parse_music(mission* pm, int flags)
 				if (!strncmp(temp, Soundtracks[i].name, strlen(temp)))
 				{
 					strcpy_s(pm->event_music_name, Soundtracks[i].name);
-					goto done_event_music;
+					break;
 				}
 			}
 		}
-
-		// last resort: pick a random track out of the 7 FS2 soundtracks
-		int num_soundtracks = (Num_soundtracks < 7) ? Num_soundtracks : 7;
-		strcpy_s(pm->event_music_name, Soundtracks[rand() % num_soundtracks].name);
-
-
-done_event_music:
-
+		if(*(ch +1 ) = '\0'){
+			// last resort: pick a random track out of the 7 FS2 soundtracks
+			int num_soundtracks = (Num_soundtracks < 7) ? Num_soundtracks : 7;
+			strcpy_s(pm->event_music_name, Soundtracks[rand() % num_soundtracks].name);
+		}
 
 		// no specified music?
-		if (!stricmp(pm->briefing_music_name, "none"))
-			goto done_briefing_music;
+		if (!stricmp(pm->briefing_music_name, "none")){
 
 		// set the FS1 equivalent as the substitute
 		strcpy_s(pm->substitute_briefing_music_name, "FS1-");
 		strcat_s(pm->substitute_briefing_music_name, pm->briefing_music_name);
 
+		bool skip = false;
 		// Choco Mousse is the FS1 title soundtrack, so use Aquitaine in FS2
 		if (!stricmp(pm->briefing_music_name, "Choco Mousse") && event_music_get_spooled_music_index("Aquitaine") >= 0)
 		{
 			strcpy_s(pm->briefing_music_name, "Aquitaine");
-			goto done_briefing_music;
+			skip == true;
 		}
 
 		// we might have a match with the same track number
-		if (event_music_get_spooled_music_index(pm->briefing_music_name) >= 0)
-			goto done_briefing_music;
+		if (skip && event_music_get_spooled_music_index(pm->briefing_music_name) < 0)
+		{
+			// last resort: pick a random track out of the first 7 FS2 briefings (the regular ones)...
+			int num_soundtracks = (Num_music_files < 7) ? Num_music_files : 7;
+			strcpy_s(pm->briefing_music_name, Spooled_music[rand() % num_soundtracks].name);
+		}
+		}
+	}
 
-		// last resort: pick a random track out of the first 7 FS2 briefings (the regular ones)...
-		num_soundtracks = (Num_music_files < 7) ? Num_music_files : 7;
-		strcpy_s(pm->briefing_music_name, Spooled_music[rand() % num_soundtracks].name);
-
-
-done_briefing_music:/* NO-OP */ ;
 	}
 
 
