@@ -132,14 +132,14 @@ case "$target" in
         echo "using Win32 defines (for $host_os)"
         fs2_os_win32="yes"
 		AC_DEFINE([_MINGW])
-		FS2_LDFLAGS="$FS2_LDFLAGS -lgdi32 -lole32 -lwsock32 -lwinmm -lmsacm32 \
+		FS2_LIBS="$FS2_LIBS -lgdi32 -lole32 -lwsock32 -lwinmm -lmsacm32 \
 					-lcomctl32 -lstrmiids -ldxguid -lddraw -ldinput"
         ;;
     x86_64-*-linux*)
         # linux
         echo "Using 64-bit Unix defines (for $host_os)"
         fs2_os_unix="yes"
-		D_CFLAGS="$D_CFLAGS -m64 -march=athlon64 -ansi -pedantic"
+		D_CFLAGS="$D_CFLAGS -m64 -march=generic -ansi -pedantic"
 		D_CFLAGS="$D_CFLAGS -DLUA_USE_LINUX"
         ;;
 	*-*-linux*)
@@ -202,7 +202,7 @@ if test "$fs2_fred" = "yes" ; then
 	fi
 
 	FS2_CXXFLAGS="$FS2_CXXFLAGS $WX_CXXFLAGS_ONLY"
-	FS2_LDFLAGS="$FS2_LDFLAGS $WX_LIBS"
+	FS2_LIBS="$FS2_LIBS $WX_LIBS"
 fi
 
 if test "$fs2_debug" = "yes" ; then
@@ -336,7 +336,7 @@ fi
 
 dnl add SDL settings to our flags, only CFLAGS are default, libs are game specific
 D_CFLAGS=$D_CFLAGS" $SDL_CFLAGS"
-FS2_LDFLAGS=$FS2_LDFLAGS" $SDL_LIBS"
+FS2_LIBS=$FS2_LIBS" $SDL_LIBS"
 
 dnl OGG/Vorbis/Theora check
 if test "$fs2_os_unix" = "yes" ; then
@@ -348,33 +348,33 @@ fi
 
 dnl add OGG settings to our flags, only CFLAGS are default, libs are game specific
 D_CFLAGS=$D_CFLAGS" $VORBIS_CFLAGS $VORBISFILE_CFLAGS"
-FS2_LDFLAGS=$FS2_LDFLAGS" $VORBIS_LIBS $VORBISFILE_LIBS"
+FS2_LIBS=$FS2_LIBS" $VORBIS_LIBS $VORBISFILE_LIBS"
 D_CFLAGS=$D_CFLAGS" $THEORA_CFLAGS"
-FS2_LDFLAGS=$FS2_LDFLAGS" $THEORA_LIBS"
+FS2_LIBS=$FS2_LIBS" $THEORA_LIBS"
 D_CFLAGS=$D_CFLAGS" $OGG_CFLAGS"
-FS2_LDFLAGS=$FS2_LDFLAGS" $OGG_LIBS"
+FS2_LIBS=$FS2_LIBS" $OGG_LIBS"
 
 dnl DirectX - Win32 only
 if test "$fs2_os_win32" = "yes" ; then
 	FS2_CXXFLAGS=$FS2_CXXFLAGS" -I/c:/dxsdk/include"
-	FS2_LDFLAGS=$FS2_LDFLAGS" -L/c:/dxsdk/lib"
+	FS2_LIBS=$FS2_LIBS" -L/c:/dxsdk/lib"
 fi
 
 dnl libpng
-FS2_LDFLAGS="$FS2_LDFLAGS -lpng"
+FS2_LIBS="$FS2_LIBS -lpng"
 
 dnl OpenGL libs and CFLAGS
 if test "$fs2_os_win32" = "yes" ; then
 	if test "x$fs2_ogl_libs" != "x" ; then
-		FS2_LDFLAGS="$FS2_LDFLAGS -L$fs2_ogl_libs -lopengl32 -lglu32"
+		FS2_LIBS="$FS2_LIBS -L$fs2_ogl_libs -lopengl32 -lglu32"
 	else
-		FS2_LDFLAGS="$FS2_LDFLAGS -lopengl32 -lglu32"
+		FS2_LIBS="$FS2_LIBS -lopengl32 -lglu32"
 	fi
 elif test "$fs2_os_unix" = "yes" ; then
 	if test "x$fs2_ogl_libs" != "x" ; then
-		FS2_LDFLAGS="$FS2_LDFLAGS -L$fs2_ogl_libs -lGL -lGLU"
+		FS2_LIBS="$FS2_LIBS -L$fs2_ogl_libs -lGL -lGLU"
 	else
-		FS2_LDFLAGS="$FS2_LDFLAGS -lGL -lGLU"
+		FS2_LIBS="$FS2_LIBS -lGL -lGLU"
 	fi
 	if test "x$fs2_ogl_incs" != "x" ; then
 		FS2_CXXFLAGS="$FS2_CXXFLAGS -I$fs2_ogl_incs"
@@ -383,7 +383,7 @@ elif test "$fs2_os_unix" = "yes" ; then
 	AC_DEFINE([NO_DIRECT3D])
 elif test "$fs2_os_osx" = "yes" ; then
 	FS2_CXXFLAGS="$FS2_CXXFLAGS -I/System/Library/Frameworks/OpenGL.framework/Headers"
-	FS2_LDFLAGS="$FS2_LDFLAGS -framework OpenGL"
+	FS2_LIBS="$FS2_LIBS -framework OpenGL"
 	AC_DEFINE([SCP_UNIX])
 	AC_DEFINE([NO_DIRECT3D])
 	## don't need the CFLAGS here if recent SDL is used
@@ -392,10 +392,10 @@ fi
 dnl OpenAL
 if test "$fs2_os_unix" = "yes" ; then
 	AC_DEFINE([USE_OPENAL])
-	FS2_LDFLAGS="$FS2_LDFLAGS -lopenal"
+	FS2_LIBS="$FS2_LIBS -lopenal"
 elif test "$fs2_os_osx" = "yes" ; then
 	AC_DEFINE([USE_OPENAL])
-	FS2_LDFLAGS="$FS2_LDFLAGS -framework OpenAL"
+	FS2_LIBS="$FS2_LIBS -framework OpenAL"
 	AC_CHECK_HEADER(/Library/Frameworks/OpenAL.framework/Headers/al.h,
 		FS2_CXXFLAGS="$FS2_CXXFLAGS -I/Library/Frameworks/OpenAL.framework/Headers",
 		[AC_CHECK_HEADER($HOME/Library/Frameworks/OpenAL.framework/Headers/al.h,
@@ -422,6 +422,13 @@ elif test "$fs2_os_osx" = "yes" ; then
 	fi
 fi
 
+dnl Dynamic Linking
+AC_SEARCH_LIBS([dlsym], [dl])
+FS2_LIBS=$FS2_LIBS" -ldl"
+
+dnl Posix Threads
+AC_SEARCH_LIBS([pthread_mutex_timedlock], [pthread])
+FS2_LIBS=$FS2_LIBS" -lpthread"
 
 dnl any extra optimization or warning flags
 if test "$fs2_os_win32" = "yes" ; then
@@ -435,7 +442,7 @@ fi
 
 dnl extra OSX frameworks
 if test "$fs2_os_osx" = "yes" ; then
-	FS2_LDFLAGS="$FS2_LDFLAGS -framework AppKit -framework Foundation"
+	FS2_LIBS="$FS2_LIBS -framework AppKit -framework Foundation"
 fi
 
 

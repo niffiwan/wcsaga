@@ -250,6 +250,8 @@ FS2_SOURCES =	\
 	cutscene/mveplayer.cpp	\
 	cutscene/oggplayer.cpp	\
 	cutscene/oggplayer.h	\
+	cutscene/OggReader.cpp	\
+	cutscene/OggReader.h	\
 	ddsutils/ddsutils.cpp	\
 	ddsutils/ddsutils.h	\
 	debris/debris.cpp	\
