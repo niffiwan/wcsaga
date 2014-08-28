@@ -139,7 +139,7 @@ case "$target" in
         # linux
         echo "Using 64-bit Unix defines (for $host_os)"
         fs2_os_unix="yes"
-		D_CFLAGS="$D_CFLAGS -m64 -march=generic -ansi -pedantic"
+		D_CFLAGS="$D_CFLAGS -m64 -mtune=generic -ansi -pedantic"
 		D_CFLAGS="$D_CFLAGS -DLUA_USE_LINUX"
         ;;
 	*-*-linux*)
