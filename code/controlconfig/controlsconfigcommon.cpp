@@ -1,8 +1,8 @@
 /*
  * Copyright (C) Volition, Inc. 1999.  All rights reserved.
  *
- * All source code herein is the property of Volition, Inc. You may not sell 
- * or otherwise commercially exploit the source or things you created based on the 
+ * All source code herein is the property of Volition, Inc. You may not sell
+ * or otherwise commercially exploit the source or things you created based on the
  * source.
  *
 */
@@ -23,7 +23,7 @@
 
 int Failed_key_index;
 
-// assume control keys are used as modifiers until we find out 
+// assume control keys are used as modifiers until we find out
 int Shift_is_modifier;
 int Ctrl_is_modifier;
 int Alt_is_modifier;
@@ -689,7 +689,7 @@ config_item Control_config[CCFG_MAX + 1] =
 		true,
 		"Transfer Energy Shield->Laser"
 	},
-	//	{                           -1,					-1, -1,				true, "Show Damage Popup Window" },	
+	//	{                           -1,					-1, -1,				true, "Show Damage Popup Window" },
 
 	{
 		-1,
@@ -2076,9 +2076,7 @@ char* textify_scancode(int code)
 // initialize common control config stuff - call at game startup after localization has been initialized
 void control_config_common_init()
 {
-	int layout = get_keyboad_layout();
-
-	if (layout == LCL_GERMAN)
+	if (Lcl_gr)
 	{
 		Scan_code_text = Scan_code_text_german;
 		Joy_button_text = Joy_button_text_german;
@@ -2089,7 +2087,7 @@ void control_config_common_init()
 		Control_config[REVERSE_THRUST].key_default = KEY_Y;
 		Control_config[DISARM_MESSAGE].key_default = KEY_SHIFTED | KEY_Y;
 	}
-	else if (LCL_ENGLISH == LCL_FRENCH)
+	else if (Lcl_fr)
 	{
 		Scan_code_text = Scan_code_text_french;
 		Joy_button_text = Joy_button_text_french;
