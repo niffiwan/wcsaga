@@ -250,6 +250,8 @@ FS2_SOURCES =	\
 	cutscene/mveplayer.cpp	\
 	cutscene/oggplayer.cpp	\
 	cutscene/oggplayer.h	\
+	cutscene/OggReader.cpp	\
+	cutscene/OggReader.h	\
 	ddsutils/ddsutils.cpp	\
 	ddsutils/ddsutils.h	\
 	debris/debris.cpp	\
@@ -819,8 +821,8 @@ fs2_open_INF_d_SOURCES =	\
 fs2_open_INF_r_SOURCES =	\
 	${FS2OPEN_SOURCES}
 
-fs2_open_d_LDADD = libcode.a ../libjpeg/libjpeg.a ../lua/liblua.a
-fs2_open_r_LDADD = libcode.a ../libjpeg/libjpeg.a ../lua/liblua.a
+fs2_open_d_LDADD = libcode.a -ljpeg -llua5.1
+fs2_open_r_LDADD = libcode.a -ljpeg -llua5.1
 fs2_open_INF_d_LDADD = libcode.a ../libjpeg/libjpeg.a ../lua/liblua.a
 fs2_open_INF_r_LDADD = libcode.a ../libjpeg/libjpeg.a ../lua/liblua.a
 
@@ -855,7 +857,7 @@ wxFRED2_INF_r_SOURCES =	\
 	${wxFRED_SOURCES}
 
 wxFRED2_d_LDADD = libcode.a ../libjpeg/libjpeg.a
-wxFRED2_r_LDADD = libcode.a ../libjpeg/libjpeg.a
+wxFRED2_r_LDADD = libcode.a -ljpeg
 wxFRED2_INF_d_LDADD = libcode.a ../libjpeg/libjpeg.a
 wxFRED2_INF_r_LDADD = libcode.a ../libjpeg/libjpeg.a
 

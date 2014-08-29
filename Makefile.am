@@ -2,7 +2,7 @@
 #
 # This file uses GNU Automake to generate makefiles
 
-SUBDIRS = libjpeg lua code
+SUBDIRS = code
 
 
 EXTRA_DIST =	\
@@ -30,7 +30,7 @@ EXTRA_DIST =	\
 
 # D_ variants are defaults and should always be used
 AM_CXXFLAGS = -I./code @D_CFLAGS@
-AM_LDFLAGS = @D_LDFLAGS@
+AM_LDFLAGS = @D_LDFLAGS@ -ljpeg
 
 EXTRA_PROGRAMS = cfilearchiver cfileextractor cryptstring scramble
 
