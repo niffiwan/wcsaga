@@ -13,8 +13,8 @@ AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
 dnl we need at least version 1.6.1 of automake, well it's as far down as has been tested anyway
-AM_INIT_AUTOMAKE([ 1.6.1 no-define dist-bzip2 ])
-
+AM_INIT_AUTOMAKE([ 1.6.1 no-define dist-bzip2 subdir-objects ])
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 AC_DEFINE([NO_CD_CHECK])
 
 dnl Check for programs
@@ -34,6 +34,8 @@ LDFLAGS="$LDFLAGS_save"
 AC_SUBST(CXXFLAGS)
 AC_SUBST(CFLAGS)
 AC_SUBST(LDFLAGS)
+
+PKG_PROG_PKG_CONFIG()
 
 
 dnl The configuration options
@@ -139,13 +141,14 @@ case "$target" in
         # linux
         echo "Using 64-bit Unix defines (for $host_os)"
         fs2_os_unix="yes"
-		D_CFLAGS="$D_CFLAGS -m64 -mtune=generic -ansi -pedantic"
+		D_CFLAGS="$D_CFLAGS -m64 -mtune=generic -msse -msse2 -ansi -pipe -pedantic"
 		D_CFLAGS="$D_CFLAGS -DLUA_USE_LINUX"
         ;;
 	*-*-linux*)
 		# linux
 		echo "Using Unix defines (for $host_os)"
 		fs2_os_unix="yes"
+		D_CFLAGS="$D_CFLAGS -mtune=generic -mfpmath=sse -msse -msse2 -ansi -pipe -pedantic"
 		D_CFLAGS="$D_CFLAGS -DLUA_USE_LINUX"
 		;;
 	*-*-darwin*)
@@ -225,8 +228,8 @@ if test "$fs2_debug" = "yes" ; then
 	fi
 else
 	AC_DEFINE([NDEBUG])
-	D_CFLAGS="$D_CFLAGS -g -Os -Wall -funroll-loops"
-	D_LDFLAGS="$D_LDFLAGS -g"
+	D_CFLAGS="$D_CFLAGS -O2 -Wall -Wno-write-strings -funroll-loops"
+	D_LDFLAGS="$D_LDFLAGS "
 
 	if test "$fs2_fred" = "yes" ; then
 		if test "$fs2_inferno" = "yes" ; then
@@ -360,8 +363,38 @@ if test "$fs2_os_win32" = "yes" ; then
 	FS2_LIBS=$FS2_LIBS" -L/c:/dxsdk/lib"
 fi
 
-dnl libpng
-FS2_LIBS="$FS2_LIBS -lpng"
+dnl PNG libs (libpng, falling back to libpng12)
+PKG_CHECK_MODULES(
+	[PNG],
+	[libpng >= 1.2.20],
+	[], ## do nothing special
+	[PKG_CHECK_MODULES([PNG], [libpng12 >= 1.2.20])]
+	)
+D_CFLAGS=$D_CFLAGS" $PNG_CFLAGS"
+FS2_LIBS=$FS2_LIBS" $PNG_LIBS"
+
+dnl LUA
+## Checking for lua.pc and if that fails lua5.1.pc
+PKG_CHECK_MODULES(
+	[LUA],
+	[lua >= 5.1.3 lua < 5.2],
+	[], ## do nothing special
+	[PKG_CHECK_MODULES([LUA], [lua5.1 >= 5.1.3 lua5.1 < 5.2], [], [
+        PKG_CHECK_MODULES([LUA], [lua-5.1 >= 5.1.3 lua-5.1 < 5.2], [])
+    ])])
+D_CFLAGS=$D_CFLAGS" $LUA_CFLAGS"
+FS2_LIBS=$FS2_LIBS" $LUA_LIBS"
+
+dnl JPEG
+AC_CHECK_LIB(jpeg, jpeg_start_decompress,
+	[AC_CHECK_HEADER(jpeglib.h, ,
+		dnl NOTE: this is failure
+		AC_MSG_ERROR([*** JPEG installation missing or broken!])
+	)],
+	AC_MSG_ERROR([*** JPEG installation missing or broken!])
+)
+FS2_LIBS=$FS2_LIBS" -ljpeg"
+
 
 dnl OpenGL libs and CFLAGS
 if test "$fs2_os_win32" = "yes" ; then
@@ -458,7 +491,7 @@ LIBS="$FS2_LIBS"
 
 
 dnl The makefiles we create
-AC_OUTPUT([Makefile libjpeg/Makefile lua/Makefile code/Makefile])
+AC_OUTPUT([Makefile code/Makefile])
 
 
 echo
